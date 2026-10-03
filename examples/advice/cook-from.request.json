@@ -1,0 +1,71 @@
+{
+ "$kind": "AdviceRequest",
+ "cookwala": "0.1.0",
+ "id": "rq-1",
+ "intent": "cook_from",
+ "text": "I have a chicken, rice, onions, yogurt and some spices. What can I cook for 5?",
+ "asker": {
+  "kind": "robot",
+  "id": "robot:neo-1"
+ },
+ "context": {
+  "lang": "en",
+  "country": "EG",
+  "policyPacks": [
+   "eg.nfsa",
+   "dietary.halal"
+  ],
+  "mode": {
+   "preset": "budget",
+   "budget": {
+    "mode": "low",
+    "period": "meal",
+    "amount": {
+     "amount": 4,
+     "currency": "USD"
+    }
+   }
+  },
+  "constraints": {
+   "timeAvailable": "PT2H",
+   "minLevel": "V1"
+  }
+ },
+ "query": {
+  "ingredients": [
+   {
+    "ingredientId": "cw.ing.chicken_whole",
+    "qty": {
+     "value": 1300,
+     "unit": "g"
+    }
+   },
+   {
+    "ingredientId": "cw.ing.rice_basmati",
+    "qty": {
+     "value": 1000,
+     "unit": "g"
+    }
+   },
+   {
+    "ingredientId": "cw.ing.onion_yellow",
+    "qty": {
+     "value": 4,
+     "unit": "pcs"
+    }
+   },
+   {
+    "ingredientId": "cw.ing.yogurt_plain",
+    "qty": {
+     "value": 500,
+     "unit": "g"
+    },
+    "expires": "2026-10-05",
+    "mustUse": true
+   }
+  ],
+  "allowMissing": 1,
+  "allowSubstitutions": true,
+  "servings": 5
+ }
+}

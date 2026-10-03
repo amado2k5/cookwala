@@ -1,0 +1,46 @@
+{
+ "@context": {
+  "@version": 1.1,
+  "@vocab": "https://cookwala.ai/v1/terms#",
+  "schema": "https://schema.org/",
+  "wd": "http://www.wikidata.org/entity/",
+  "foodon": "http://purl.obolibrary.org/obo/FOODON_",
+  "cw": "https://cookwala.ai/v1/vocab/",
+  "id": "@id",
+  "dish": "schema:about",
+  "names": {
+   "@id": "schema:name",
+   "@container": "@language"
+  },
+  "ingredients": {
+   "@id": "schema:recipeIngredient",
+   "@container": "@list"
+  },
+  "ingredientId": {
+   "@id": "https://cookwala.ai/v1/terms#ingredient",
+   "@type": "@id"
+  },
+  "yield": "schema:recipeYield",
+  "nutrition": "schema:nutrition",
+  "cuisine": "schema:recipeCuisine",
+  "course": "schema:recipeCategory",
+  "process": "https://cookwala.ai/v1/terms#process",
+  "nodes": {
+   "@id": "schema:recipeInstructions",
+   "@container": "@list"
+  },
+  "op": {
+   "@id": "https://cookwala.ai/v1/terms#operation",
+   "@type": "@id"
+  },
+  "license": {
+   "@id": "schema:license",
+   "@type": "@id"
+  },
+  "source": "schema:isBasedOn",
+  "wikidata": {
+   "@id": "schema:sameAs",
+   "@type": "@id"
+  }
+ }
+}

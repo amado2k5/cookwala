@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/order.schema.json",
+  "title": "Cookwala Order Intent",
+  "description": "A shopping list or ready-meal order derived from a plan and the inventory. Cookwala never carries payment credentials. An adapter turns an OrderIntent into a UCP / ACP checkout (grocery or delivery merchant); payment authorization stays with the merchant and AP2-style user mandates. Orders are never placed without an approval record unless the user set a standing budget rule.",
+  "type": "object",
+  "required": [
+    "cookwala",
+    "id",
+    "kitchenId",
+    "kind",
+    "lines",
+    "approval",
+    "state"
+  ],
+  "properties": {
+    "cookwala": {
+      "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "id": {
+      "type": "string"
+    },
+    "kitchenId": {
+      "type": "string"
+    },
+    "sessionId": {
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "groceries",
+        "ready_meal",
+        "meal_kit"
+      ]
+    },
+    "lines": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "ingredientId",
+          "qty"
+        ],
+        "properties": {
+          "ingredientId": {
+            "$ref": "common.schema.json#/$defs/VocabId"
+          },
+          "qty": {
+            "$ref": "common.schema.json#/$defs/Quantity"
+          },
+          "forRecipes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "constraints": {
+            "type": "object",
+            "properties": {
+              "dietary": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "e.g. halal_certified for meat."
+              },
+              "excludeAllergens": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "preferredGtin": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "substitutionAllowed": {
+                "enum": [
+                  "no",
+                  "same_ingredient_any_brand",
+                  "ask"
+                ]
+              },
+              "maxUnitPrice": {
+                "$ref": "common.schema.json#/$defs/Money"
+              }
+            }
+          }
+        }
+      }
+    },
+    "recipeId": {
+      "type": "string",
+      "description": "For ready_meal: the dish to order from a restaurant/delivery merchant."
+    },
+    "deliverBy": {
+      "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "budget": {
+      "$ref": "common.schema.json#/$defs/Money"
+    },
+    "merchantHints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "protocol": {
+            "enum": [
+              "ucp",
+              "acp",
+              "vendor_api",
+              "manual"
+            ]
+          },
+          "merchant": {
+            "type": "string"
+          },
+          "endpoint": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "required": [
+        "mode"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "ask_every_time",
+            "standing_rule",
+            "approved"
+          ]
+        },
+        "rule": {
+          "type": "object",
+          "properties": {
+            "maxTotal": {
+              "$ref": "common.schema.json#/$defs/Money"
+            },
+            "merchants": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "approvedBy": {
+          "$ref": "common.schema.json#/$defs/Actor"
+        },
+        "approvedAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "mandateRef": {
+          "type": "string",
+          "description": "Reference to the payment-protocol mandate (e.g. AP2), never the credential itself."
+        }
+      }
+    },
+    "state": {
+      "enum": [
+        "draft",
+        "awaiting_approval",
+        "approved",
+        "placed",
+        "partially_fulfilled",
+        "delivered",
+        "canceled",
+        "failed"
+      ]
+    },
+    "externalOrderRef": {
+      "type": "string"
+    },
+    "delivery": {
+      "type": "object",
+      "properties": {
+        "eta": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "handoff": {
+          "enum": [
+            "door",
+            "locker",
+            "robot_receive",
+            "concierge"
+          ],
+          "description": "robot_receive: a home robot may receive and put away items (cold chain first)."
+        },
+        "coldChainRequired": {
+          "type": "boolean"
+        }
+      }
+    },
+    "meta": {
+      "$ref": "common.schema.json#/$defs/Meta"
+    }
+  },
+  "patternProperties": {
+    "^x-": {}
+  }
+}

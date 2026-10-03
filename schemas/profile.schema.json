@@ -1,0 +1,1150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/profile.schema.json",
+  "title": "Cookwala Profiles and Operating Modes",
+  "description": "Setup information about everything in the cooking lifecycle (clients/households, diners, kitchens, cookware, robots, organizations) and the Operating Mode that tells planners and advisors how to trade off energy, battery, ingredients, budget, time and quality. Profiles are owned by whoever creates them and can be private (local only), shared, or public, hosted in any catalog. Fields marked sensitive must never leave the owner's hub.",
+  "type": "object",
+  "required": [
+    "cookwala",
+    "id",
+    "kind"
+  ],
+  "properties": {
+    "cookwala": {
+      "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "id": {
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "client",
+        "kitchen",
+        "cookware",
+        "robot",
+        "organization",
+        "mode"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "meta": {
+      "$ref": "common.schema.json#/$defs/Meta"
+    }
+  },
+  "patternProperties": {
+    "^x-": {}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "client"
+          }
+        }
+      },
+      "then": {
+        "$ref": "#/$defs/ClientProfile"
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "kitchen"
+          }
+        }
+      },
+      "then": {
+        "$ref": "#/$defs/KitchenProfile"
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "cookware"
+          }
+        }
+      },
+      "then": {
+        "$ref": "#/$defs/CookwareProfile"
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "robot"
+          }
+        }
+      },
+      "then": {
+        "$ref": "#/$defs/RobotProfile"
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "organization"
+          }
+        }
+      },
+      "then": {
+        "$ref": "#/$defs/OrganizationProfile"
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "mode"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "mode": {
+            "$ref": "#/$defs/OperatingMode"
+          }
+        },
+        "required": [
+          "mode"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "BatteryState": {
+      "type": "object",
+      "properties": {
+        "actorId": {
+          "type": "string"
+        },
+        "level": {
+          "enum": [
+            "full",
+            "high",
+            "medium",
+            "low",
+            "critical"
+          ],
+          "description": "Coarse level; planners map it to work they may assign."
+        },
+        "pct": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "remainingWh": {
+          "type": "number",
+          "minimum": 0
+        },
+        "charging": {
+          "type": "boolean"
+        },
+        "chargeW": {
+          "type": "number"
+        },
+        "minReservePct": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Never plan below this (needed to reach the dock and stay safe)."
+        },
+        "canDockMidSession": {
+          "type": "boolean"
+        }
+      }
+    },
+    "EnergySource": {
+      "type": "object",
+      "required": [
+        "source"
+      ],
+      "properties": {
+        "source": {
+          "enum": [
+            "electric_induction",
+            "electric_resistive",
+            "natural_gas",
+            "propane",
+            "charcoal",
+            "wood",
+            "solar_cooker",
+            "battery"
+          ]
+        },
+        "appliances": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "available": {
+          "type": "boolean",
+          "default": true
+        },
+        "maxW": {
+          "type": "number"
+        },
+        "efficiency": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Heat-to-pot efficiency if known; otherwise the reasoner uses knowledge/energy.json defaults."
+        },
+        "price": {
+          "type": "object",
+          "properties": {
+            "perKWh": {
+              "$ref": "common.schema.json#/$defs/Money"
+            },
+            "perMJ": {
+              "$ref": "common.schema.json#/$defs/Money"
+            },
+            "timeOfUse": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "pattern": "^[0-2][0-9]:[0-5][0-9]$"
+                  },
+                  "to": {
+                    "type": "string"
+                  },
+                  "perKWh": {
+                    "$ref": "common.schema.json#/$defs/Money"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "co2eKgPerKWh": {
+          "type": "number"
+        }
+      }
+    },
+    "OperatingMode": {
+      "type": "object",
+      "description": "How to cook right now. Set per hub, per session, or per request; the most specific wins. Planners turn it into objective weights and hard limits.",
+      "properties": {
+        "preset": {
+          "enum": [
+            "normal",
+            "eco",
+            "budget",
+            "fast",
+            "quiet",
+            "off_grid",
+            "week_saver",
+            "feast",
+            "outage",
+            "battery_saver",
+            "relief"
+          ],
+          "description": "A named bundle of the settings below; explicit fields override the preset."
+        },
+        "energy": {
+          "type": "object",
+          "properties": {
+            "sources": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/EnergySource"
+              }
+            },
+            "prefer": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Preferred sources in order, e.g. [\"electric_induction\", \"natural_gas\"]."
+            },
+            "avoid": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "goal": {
+              "enum": [
+                "normal",
+                "min_energy",
+                "min_cost",
+                "min_carbon",
+                "off_grid"
+              ]
+            },
+            "peakLimitW": {
+              "type": "number",
+              "description": "Household breaker / generator / solar-inverter limit across simultaneous appliances."
+            },
+            "budgetKWh": {
+              "type": "number"
+            },
+            "gridOutage": {
+              "type": "boolean"
+            },
+            "gasAvailable": {
+              "type": "boolean"
+            }
+          }
+        },
+        "robots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BatteryState"
+          }
+        },
+        "conserve": {
+          "type": "object",
+          "properties": {
+            "energy": {
+              "enum": [
+                "off",
+                "some",
+                "max"
+              ]
+            },
+            "water": {
+              "enum": [
+                "off",
+                "some",
+                "max"
+              ]
+            },
+            "cleanup": {
+              "enum": [
+                "off",
+                "some",
+                "max"
+              ],
+              "description": "Fewer pots and tools."
+            },
+            "ingredients": {
+              "type": "object",
+              "description": "Make what's on hand last.",
+              "properties": {
+                "horizon": {
+                  "$ref": "common.schema.json#/$defs/Duration",
+                  "description": "e.g. P7D to make inventory last a week."
+                },
+                "strategy": {
+                  "enum": [
+                    "normal",
+                    "ration",
+                    "stretch",
+                    "use_expiring_first",
+                    "no_waste"
+                  ]
+                },
+                "protect": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Ingredient ids to keep for later in the horizon."
+                },
+                "mealsPerDay": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "minKcalPerPersonDay": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        },
+        "budget": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "very_low",
+                "low",
+                "moderate",
+                "open"
+              ]
+            },
+            "amount": {
+              "$ref": "common.schema.json#/$defs/Money"
+            },
+            "period": {
+              "enum": [
+                "meal",
+                "day",
+                "week",
+                "month",
+                "event"
+              ]
+            },
+            "includeEnergyCost": {
+              "type": "boolean",
+              "default": true
+            },
+            "allowShopping": {
+              "type": "boolean"
+            },
+            "preferPantry": {
+              "type": "boolean"
+            }
+          }
+        },
+        "time": {
+          "enum": [
+            "fastest",
+            "balanced",
+            "relaxed"
+          ]
+        },
+        "quality": {
+          "enum": [
+            "best",
+            "balanced",
+            "economy"
+          ]
+        },
+        "noise": {
+          "enum": [
+            "any",
+            "quiet"
+          ]
+        },
+        "weights": {
+          "type": "object",
+          "description": "Advanced: explicit objective weights (0..1) when presets aren't enough.",
+          "properties": {
+            "time": {
+              "type": "number"
+            },
+            "cost": {
+              "type": "number"
+            },
+            "energy": {
+              "type": "number"
+            },
+            "carbon": {
+              "type": "number"
+            },
+            "battery": {
+              "type": "number"
+            },
+            "waste": {
+              "type": "number"
+            },
+            "quality": {
+              "type": "number"
+            },
+            "humanEffort": {
+              "type": "number"
+            }
+          }
+        },
+        "relief": {
+          "type": "object",
+          "description": "Mass-feeding / no-ability-to-pay mode: maximize people fed per resource while meeting ration standards and safety.",
+          "properties": {
+            "program": {
+              "type": "string"
+            },
+            "ration": {
+              "$ref": "relief.schema.json#/$defs/RationStandard"
+            },
+            "objective": {
+              "enum": [
+                "max_people_fed",
+                "max_nutrition_per_cost",
+                "min_waste",
+                "equity_first"
+              ]
+            },
+            "lowTech": {
+              "type": "boolean",
+              "description": "Plan for no robots/appliances: guided human steps, fuel-efficient methods, minimal water."
+            }
+          }
+        }
+      }
+    },
+    "ClientProfile": {
+      "type": "object",
+      "properties": {
+        "diners": {
+          "type": "array",
+          "items": {
+            "$ref": "advice.schema.json#/$defs/DinerGroup"
+          }
+        },
+        "preferences": {
+          "type": "object",
+          "properties": {
+            "cuisines": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "dislikes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "spice": {
+              "enum": [
+                "none",
+                "mild",
+                "medium",
+                "hot"
+              ]
+            },
+            "portion": {
+              "enum": [
+                "small",
+                "normal",
+                "large"
+              ]
+            },
+            "favorites": {
+              "type": "array",
+              "items": {
+                "$ref": "common.schema.json#/$defs/GlobalRef"
+              }
+            },
+            "sourcing": {
+              "type": "object",
+              "properties": {
+                "organic": {
+                  "enum": [
+                    "no_preference",
+                    "prefer",
+                    "require"
+                  ]
+                },
+                "local": {
+                  "enum": [
+                    "no_preference",
+                    "prefer",
+                    "require"
+                  ]
+                },
+                "seasonal": {
+                  "type": "boolean"
+                },
+                "certifications": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Required verified credentials, e.g. organic, halal_certified."
+                },
+                "maxPremiumPct": {
+                  "type": "number",
+                  "description": "Max extra cost accepted for preferred sourcing."
+                }
+              }
+            }
+          }
+        },
+        "dietary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allergies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "policyPacks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "defaultMode": {
+          "$ref": "#/$defs/OperatingMode"
+        },
+        "schedule": {
+          "type": "object",
+          "properties": {
+            "mealTimes": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "fasting": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "from": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  },
+                  "rule": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "locale": {
+          "type": "object",
+          "properties": {
+            "lang": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "units": {
+              "enum": [
+                "metric",
+                "us",
+                "imperial"
+              ]
+            }
+          }
+        },
+        "consent": {
+          "type": "object",
+          "properties": {
+            "shareReports": {
+              "type": "boolean"
+            },
+            "shareMedia": {
+              "type": "boolean"
+            },
+            "useCloudAdvice": {
+              "type": "boolean"
+            }
+          }
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PersonNutrition"
+          },
+          "description": "Per-person nutrition profiles (sensitive, local-only)."
+        }
+      }
+    },
+    "KitchenProfile": {
+      "type": "object",
+      "properties": {
+        "energy": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EnergySource"
+          }
+        },
+        "appliances": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "Actor ids or capabilities URLs."
+          }
+        },
+        "zones": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "areaCm2": {
+                "type": "number"
+              },
+              "reachableBy": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "storage": {
+          "type": "object",
+          "properties": {
+            "fridgeL": {
+              "type": "number"
+            },
+            "freezerL": {
+              "type": "number"
+            },
+            "pantryL": {
+              "type": "number"
+            }
+          }
+        },
+        "altitudeM": {
+          "type": "number"
+        },
+        "water": {
+          "type": "object",
+          "properties": {
+            "potable": {
+              "type": "boolean"
+            },
+            "hardness": {
+              "enum": [
+                "soft",
+                "medium",
+                "hard"
+              ]
+            }
+          }
+        },
+        "ventilation": {
+          "enum": [
+            "none",
+            "window",
+            "hood",
+            "commercial"
+          ]
+        },
+        "accessibility": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "CookwareItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "class"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "class": {
+          "$ref": "common.schema.json#/$defs/VocabId"
+        },
+        "name": {
+          "type": "string"
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "capacityMl": {
+          "type": "number"
+        },
+        "diameterMm": {
+          "type": "number"
+        },
+        "depthMm": {
+          "type": "number"
+        },
+        "material": {
+          "enum": [
+            "stainless",
+            "cast_iron",
+            "carbon_steel",
+            "aluminium",
+            "copper",
+            "nonstick",
+            "enamel",
+            "ceramic",
+            "glass",
+            "clay",
+            "silicone",
+            "plastic",
+            "wood",
+            "other"
+          ]
+        },
+        "lid": {
+          "type": "boolean"
+        },
+        "inductionCompatible": {
+          "type": "boolean"
+        },
+        "ovenSafeMaxC": {
+          "type": "number"
+        },
+        "microwaveSafe": {
+          "type": "boolean"
+        },
+        "freezerSafe": {
+          "type": "boolean"
+        },
+        "airtight": {
+          "type": "boolean"
+        },
+        "foodGrade": {
+          "type": "boolean"
+        },
+        "dishwasherSafe": {
+          "type": "boolean"
+        },
+        "handle": {
+          "enum": [
+            "long",
+            "two_loop",
+            "none",
+            "robot_adapter"
+          ],
+          "description": "Affects robot grasping."
+        },
+        "massKg": {
+          "type": "number"
+        },
+        "location": {
+          "type": "string"
+        },
+        "dietaryDedicated": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "e.g. halal_only, allergen_free (cross-contact control)."
+        }
+      }
+    },
+    "CookwareProfile": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CookwareItem"
+          }
+        }
+      },
+      "required": [
+        "items"
+      ]
+    },
+    "RobotProfile": {
+      "type": "object",
+      "properties": {
+        "capabilities": {
+          "description": "Inline manifest or URL.",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "capabilities.schema.json"
+            }
+          ]
+        },
+        "battery": {
+          "type": "object",
+          "properties": {
+            "capacityWh": {
+              "type": "number"
+            },
+            "chargeW": {
+              "type": "number"
+            },
+            "drawW": {
+              "type": "object",
+              "description": "Typical draw by activity, e.g. {\"idle\": 40, \"walk\": 250, \"stir\": 120, \"lift\": 300}.",
+              "additionalProperties": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "home": {
+          "type": "object",
+          "properties": {
+            "dock": {
+              "type": "string"
+            },
+            "zones": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "maintenance": {
+          "type": "object",
+          "properties": {
+            "lastCleaned": {
+              "type": "string"
+            },
+            "foodContactParts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "OrganizationProfile": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "household",
+            "restaurant",
+            "cloud_kitchen",
+            "school",
+            "hospital",
+            "care_home",
+            "charity_kitchen",
+            "caterer",
+            "military",
+            "disaster_relief",
+            "other",
+            "food_bank",
+            "humanitarian_org",
+            "community_kitchen",
+            "school_feeding_program",
+            "government_agency"
+          ]
+        },
+        "licenses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "policyPacks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "catalogs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Catalogs this organization publishes or trusts."
+        }
+      }
+    },
+    "NutritionTargets": {
+      "type": "object",
+      "description": "Daily targets for one person. Computed by the nutrition engine from the person's data and reference values, or set by a clinician (clinician values always win).",
+      "properties": {
+        "kcal": {
+          "$ref": "common.schema.json#/$defs/Range"
+        },
+        "proteinG": {
+          "$ref": "common.schema.json#/$defs/Range"
+        },
+        "carbsG": {
+          "$ref": "common.schema.json#/$defs/Range"
+        },
+        "fatG": {
+          "$ref": "common.schema.json#/$defs/Range"
+        },
+        "fiberGMin": {
+          "type": "number"
+        },
+        "sodiumMgMax": {
+          "type": "number"
+        },
+        "freeSugarsGMax": {
+          "type": "number"
+        },
+        "satFatGMax": {
+          "type": "number"
+        },
+        "potassiumMg": {
+          "$ref": "common.schema.json#/$defs/Range"
+        },
+        "phosphorusMgMax": {
+          "type": "number"
+        },
+        "carbsPerMealGMax": {
+          "type": "number",
+          "description": "e.g. carbohydrate budgeting for diabetes, if set by a clinician."
+        },
+        "micronutrients": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "common.schema.json#/$defs/Range"
+          },
+          "description": "e.g. iron_mg, calcium_mg, vitamin_d_ug, folate_ug."
+        },
+        "source": {
+          "enum": [
+            "computed",
+            "clinician",
+            "program_standard",
+            "user_set"
+          ]
+        },
+        "basis": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "References used, e.g. mifflin_st_jeor, who_sodium_2023, dri_tables."
+        }
+      }
+    },
+    "PersonNutrition": {
+      "type": "object",
+      "description": "One person's health and nutrition data. Always sensitive and local-only; never sent to an index or a provider. Cookwala is not a medical service: for medical diets, targets should come from a clinician.",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "alias": {
+          "type": "string",
+          "description": "Display name chosen by the household (e.g. 'Grandpa')."
+        },
+        "ageYears": {
+          "type": "number",
+          "minimum": 0
+        },
+        "sex": {
+          "enum": [
+            "female",
+            "male",
+            "unspecified"
+          ],
+          "description": "Biological sex used only for reference-value equations; 'unspecified' uses averaged values."
+        },
+        "heightCm": {
+          "type": "number"
+        },
+        "weightKg": {
+          "type": "number"
+        },
+        "activity": {
+          "enum": [
+            "sedentary",
+            "light",
+            "moderate",
+            "active",
+            "very_active"
+          ]
+        },
+        "lifeStage": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "infant",
+              "child",
+              "adolescent",
+              "adult",
+              "older_adult",
+              "pregnant_t1",
+              "pregnant_t2",
+              "pregnant_t3",
+              "lactating"
+            ]
+          }
+        },
+        "goals": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "maintain",
+              "lose_weight",
+              "gain_weight",
+              "build_muscle",
+              "lower_sodium",
+              "lower_sugar",
+              "more_fiber",
+              "heart_health",
+              "gut_health",
+              "athletic"
+            ]
+          }
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "e.g. type2_diabetes, hypertension, ckd_stage3, celiac, ibs_low_fodmap, gout, anemia (filters and clinician-set targets only)."
+        },
+        "allergies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "intolerances": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dietary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "iddsiLevel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 7
+        },
+        "medicationsInteractions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Food-drug interaction flags set by a clinician (e.g. vitamin_k_consistent for warfarin, grapefruit_avoid)."
+        },
+        "targets": {
+          "$ref": "#/$defs/NutritionTargets"
+        },
+        "clinician": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "reviewedAt": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        },
+        "appetite": {
+          "enum": [
+            "light",
+            "normal",
+            "hearty"
+          ]
+        }
+      }
+    }
+  }
+}

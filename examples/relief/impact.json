@@ -1,0 +1,29 @@
+{
+ "$kind": "ImpactReport",
+ "cookwala": "0.1.0",
+ "program": "prog-community-kitchens-cairo",
+ "place": {
+  "country": "EG",
+  "admin1": "Cairo"
+ },
+ "period": {
+  "from": "2026-11-01",
+  "to": "2026-11-30"
+ },
+ "meals": 18400,
+ "peopleReached": 2100,
+ "costPerMeal": {
+  "amount": 0.42,
+  "currency": "USD"
+ },
+ "surplusRescuedKg": 5300,
+ "wasteKg": 120,
+ "energyKWhPerMeal": 0.18,
+ "robotShare": 0.35,
+ "foodSafetyIncidents": 0,
+ "gapsUnmet": 2,
+ "hxl": {
+  "meals": "#output+meals",
+  "peopleReached": "#reached"
+ }
+}

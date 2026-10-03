@@ -1,0 +1,2340 @@
+{
+ "name": "ops",
+ "version": "0.1.0",
+ "entries": [
+  {
+   "id": "cw.op.dispense",
+   "label": {
+    "en": "Dispense / measure",
+    "ar": "قياس وإضافة"
+   },
+   "definition": "Measure an ingredient by mass, volume or count and add it to a target.",
+   "classes": [
+    "cw.opfamily.handle"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "precision": {
+      "type": "number"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.mass"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.transfer",
+   "label": {
+    "en": "Transfer",
+    "ar": "نقل"
+   },
+   "definition": "Move food or a vessel's contents from one place to another.",
+   "classes": [
+    "cw.opfamily.handle"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "method": {
+      "enum": [
+       "pour",
+       "scoop",
+       "slide",
+       "lift",
+       "ladle"
+      ]
+     },
+     "keepHot": {
+      "type": "boolean"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.mass"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.wash",
+   "label": {
+    "en": "Wash / rinse",
+    "ar": "غسل"
+   },
+   "definition": "Rinse ingredients under water until clean (or water runs clear for rice/legumes).",
+   "classes": [
+    "cw.opfamily.handle"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "repeats": {
+      "type": "integer"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.water_clarity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.soak",
+   "label": {
+    "en": "Soak",
+    "ar": "نقع"
+   },
+   "definition": "Leave an ingredient in liquid for a time.",
+   "classes": [
+    "cw.opfamily.handle"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "liquid": {
+      "type": "string"
+     },
+     "tempC": {
+      "type": "number"
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.drain",
+   "label": {
+    "en": "Drain / strain",
+    "ar": "تصفية"
+   },
+   "definition": "Separate solids from liquid using a strainer or lid.",
+   "classes": [
+    "cw.opfamily.handle"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "keepLiquid": {
+      "type": "boolean"
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.peel",
+   "label": {
+    "en": "Peel",
+    "ar": "تقشير"
+   },
+   "definition": "Remove skin or shell.",
+   "classes": [
+    "cw.opfamily.handle"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "method": {
+      "enum": [
+       "knife",
+       "peeler",
+       "blanch_and_slip",
+       "hand"
+      ]
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.trim",
+   "label": {
+    "en": "Trim / clean",
+    "ar": "تنظيف وتهذيب"
+   },
+   "definition": "Remove stems, seeds, fat, bones or inedible parts.",
+   "classes": [
+    "cw.opfamily.handle"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "remove": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.crack",
+   "label": {
+    "en": "Crack eggs",
+    "ar": "كسر البيض"
+   },
+   "definition": "Crack eggs into a target, checking for shell fragments.",
+   "classes": [
+    "cw.opfamily.handle"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "placement": {
+      "type": "string"
+     },
+     "separate": {
+      "enum": [
+       "none",
+       "whites",
+       "yolks"
+      ]
+     },
+     "checkShell": {
+      "type": "boolean"
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.cut",
+   "label": {
+    "en": "Cut",
+    "ar": "تقطيع"
+   },
+   "definition": "Cut to a shape and size (dice, slice, julienne, mince, chop...).",
+   "classes": [
+    "cw.opfamily.cut"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "shape": {
+      "type": "string"
+     },
+     "size": {
+      "type": "object"
+     },
+     "remove": {
+      "type": "array"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.vision"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.grate",
+   "label": {
+    "en": "Grate / zest",
+    "ar": "بشر"
+   },
+   "definition": "Grate on a grater or microplane.",
+   "classes": [
+    "cw.opfamily.cut"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "fineness": {
+      "enum": [
+       "fine",
+       "medium",
+       "coarse"
+      ]
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.crush",
+   "label": {
+    "en": "Crush / pound / mash",
+    "ar": "هرس / دق"
+   },
+   "definition": "Crush with a mortar, press or masher.",
+   "classes": [
+    "cw.opfamily.cut"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "texture": {
+      "enum": [
+       "coarse",
+       "fine",
+       "paste",
+       "smooth"
+      ]
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.mix",
+   "label": {
+    "en": "Mix / stir together",
+    "ar": "خلط"
+   },
+   "definition": "Combine ingredients until evenly distributed.",
+   "classes": [
+    "cw.opfamily.combine"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "speed": {
+      "enum": [
+       "gentle",
+       "normal",
+       "fast"
+      ]
+     },
+     "untilEven": {
+      "type": "boolean"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.torque"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.whisk",
+   "label": {
+    "en": "Whisk / beat",
+    "ar": "خفق"
+   },
+   "definition": "Whisk to incorporate air or to a stage (soft/stiff peaks).",
+   "classes": [
+    "cw.opfamily.combine"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "stage": {
+      "enum": [
+       "combined",
+       "frothy",
+       "soft_peaks",
+       "stiff_peaks",
+       "ribbon"
+      ]
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.torque"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.fold",
+   "label": {
+    "en": "Fold",
+    "ar": "تقليب برفق"
+   },
+   "definition": "Gently fold to keep air in.",
+   "classes": [
+    "cw.opfamily.combine"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.knead",
+   "label": {
+    "en": "Knead",
+    "ar": "عجن"
+   },
+   "definition": "Knead dough until smooth and elastic.",
+   "classes": [
+    "cw.opfamily.combine"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "speed": {
+      "type": "string"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.torque"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.blend",
+   "label": {
+    "en": "Blend / puree / grind",
+    "ar": "خلط بالخلاط / طحن"
+   },
+   "definition": "Blend in a blender or food processor to a texture.",
+   "classes": [
+    "cw.opfamily.combine"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "speed": {
+      "type": "string"
+     },
+     "texture": {
+      "type": "string"
+     },
+     "hotLiquid": {
+      "type": "boolean"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.torque"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.emulsify",
+   "label": {
+    "en": "Emulsify",
+    "ar": "استحلاب"
+   },
+   "definition": "Combine fat and liquid into a stable emulsion.",
+   "classes": [
+    "cw.opfamily.combine"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "sensors": [
+    "cw.sense.vision"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.marinate",
+   "label": {
+    "en": "Marinate / coat",
+    "ar": "تتبيل"
+   },
+   "definition": "Coat with marinade or seasoning and rest (refrigerate if perishable).",
+   "classes": [
+    "cw.opfamily.combine"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "refrigerate": {
+      "type": "boolean"
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.season",
+   "label": {
+    "en": "Season / adjust",
+    "ar": "تتبيل وضبط الطعم"
+   },
+   "definition": "Add seasoning; optionally taste and adjust.",
+   "classes": [
+    "cw.opfamily.combine"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "method": {
+      "enum": [
+       "fixed",
+       "taste_adjust"
+      ]
+     },
+     "ingredients": {
+      "type": "array"
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.form",
+   "label": {
+    "en": "Shape / form",
+    "ar": "تشكيل"
+   },
+   "definition": "Shape into balls, patties, logs, sheets or other forms.",
+   "classes": [
+    "cw.opfamily.shape"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "shape": {
+      "type": "string"
+     },
+     "count": {
+      "type": "integer"
+     },
+     "massG": {
+      "type": "number"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.mass"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.roll_out",
+   "label": {
+    "en": "Roll out",
+    "ar": "فرد"
+   },
+   "definition": "Roll dough to a thickness.",
+   "classes": [
+    "cw.opfamily.shape"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "thicknessMm": {
+      "type": "number"
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.stuff",
+   "label": {
+    "en": "Stuff / fill / wrap",
+    "ar": "حشو / لف"
+   },
+   "definition": "Fill vegetables, pastry or leaves; or wrap filling.",
+   "classes": [
+    "cw.opfamily.shape"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "fillRatio": {
+      "type": "number"
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.layer",
+   "label": {
+    "en": "Layer / assemble",
+    "ar": "رص / تجميع"
+   },
+   "definition": "Assemble components in layers or a set arrangement.",
+   "classes": [
+    "cw.opfamily.shape"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "order": {
+      "type": "array"
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.form_wells",
+   "label": {
+    "en": "Make wells",
+    "ar": "عمل تجاويف"
+   },
+   "definition": "Make wells in a sauce, dough or flour mound.",
+   "classes": [
+    "cw.opfamily.shape"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "count": {
+      "type": "integer"
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.heat",
+   "label": {
+    "en": "Heat / preheat",
+    "ar": "تسخين"
+   },
+   "definition": "Bring a vessel, oven, oil or liquid to a target temperature.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.melt",
+   "label": {
+    "en": "Melt",
+    "ar": "إذابة"
+   },
+   "definition": "Melt fat, sugar or chocolate gently.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.saute",
+   "label": {
+    "en": "Sauté / sweat",
+    "ar": "تشويح / تسبيك"
+   },
+   "definition": "Cook in a little fat over moderate heat, stirring, until a food-state cue (translucent, golden).",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.sear",
+   "label": {
+    "en": "Sear / brown",
+    "ar": "تحمير"
+   },
+   "definition": "Brown surfaces over high heat.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.stir_fry",
+   "label": {
+    "en": "Stir-fry",
+    "ar": "قلي سريع مع التقليب"
+   },
+   "definition": "Cook quickly over very high heat with constant motion.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.fry",
+   "label": {
+    "en": "Shallow-fry / pan-fry",
+    "ar": "قلي"
+   },
+   "definition": "Cook in a layer of hot fat, turning once or more.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.deep_fry",
+   "label": {
+    "en": "Deep-fry",
+    "ar": "قلي غزير"
+   },
+   "definition": "Submerge in hot oil. Always attention: continuous and presence_required.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     },
+     "oilTempC": {
+      "type": "number",
+      "maximum": 200
+     },
+     "batchMaxG": {
+      "type": "number"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.boil",
+   "label": {
+    "en": "Boil",
+    "ar": "سلق / غلي"
+   },
+   "definition": "Cook in liquid at a rolling boil.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.simmer",
+   "label": {
+    "en": "Simmer",
+    "ar": "طهي على نار هادئة"
+   },
+   "definition": "Cook in liquid just below the boil (about 85–96 °C).",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.poach",
+   "label": {
+    "en": "Poach",
+    "ar": "سلق خفيف"
+   },
+   "definition": "Cook gently submerged in liquid at 70–85 °C.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.steam",
+   "label": {
+    "en": "Steam",
+    "ar": "طهي على البخار"
+   },
+   "definition": "Cook in steam above or without contact with boiling water.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.braise",
+   "label": {
+    "en": "Braise / stew",
+    "ar": "تسبيك / تطبيخ"
+   },
+   "definition": "Cook covered in a small amount of liquid for a long time.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.pressure_cook",
+   "label": {
+    "en": "Pressure-cook",
+    "ar": "طهي بالضغط"
+   },
+   "definition": "Cook in a sealed pressure vessel. Release method is a param.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     },
+     "pressureKPa": {
+      "type": "number"
+     },
+     "release": {
+      "enum": [
+       "natural",
+       "quick",
+       "timed"
+      ]
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity",
+    "cw.sense.pressure"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.reduce",
+   "label": {
+    "en": "Reduce",
+    "ar": "تسبيك / تقليل"
+   },
+   "definition": "Evaporate liquid to concentrate (by ratio or until coats spoon).",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.caramelize",
+   "label": {
+    "en": "Caramelize",
+    "ar": "كرملة"
+   },
+   "definition": "Cook sugar or vegetables until caramel colour.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.toast",
+   "label": {
+    "en": "Toast (dry)",
+    "ar": "تحميص"
+   },
+   "definition": "Dry-heat nuts, spices, grains or bread until fragrant/golden.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.bake",
+   "label": {
+    "en": "Bake",
+    "ar": "خبز في الفرن"
+   },
+   "definition": "Cook with dry heat in an oven.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     },
+     "ovenMode": {
+      "enum": [
+       "conventional",
+       "fan",
+       "top",
+       "bottom",
+       "grill_fan",
+       "steam_assist"
+      ]
+     },
+     "rack": {
+      "enum": [
+       "low",
+       "middle",
+       "high"
+      ]
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.roast",
+   "label": {
+    "en": "Roast",
+    "ar": "تحمير في الفرن"
+   },
+   "definition": "Cook meat or vegetables in a hot oven, uncovered.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     },
+     "ovenMode": {
+      "type": "string"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.grill",
+   "label": {
+    "en": "Grill / broil",
+    "ar": "شوي"
+   },
+   "definition": "Cook with intense direct radiant heat (grill, broiler, charcoal).",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     },
+     "source": {
+      "enum": [
+       "broiler",
+       "grill_pan",
+       "charcoal",
+       "gas_grill"
+      ]
+     },
+     "turn": {
+      "type": "integer"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.smoke",
+   "label": {
+    "en": "Smoke",
+    "ar": "تدخين"
+   },
+   "definition": "Expose food to smoke (e.g. a hot coal in a covered pot). Flags smokeExpected.",
+   "classes": [
+    "cw.opfamily.heat"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "method": {
+      "type": "string"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.vision"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.rest",
+   "label": {
+    "en": "Rest",
+    "ar": "ترك ليرتاح"
+   },
+   "definition": "Leave food undisturbed for a time (resting meat, dough proof at room temp).",
+   "classes": [
+    "cw.opfamily.cool"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "cover": {
+      "type": "boolean"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.proof",
+   "label": {
+    "en": "Proof / rise",
+    "ar": "تخمير"
+   },
+   "definition": "Let dough rise until a volume ratio or test is met.",
+   "classes": [
+    "cw.opfamily.cool"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "tempC": {
+      "type": "number"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.volume_ratio",
+    "cw.sense.vision"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.cool",
+   "label": {
+    "en": "Cool",
+    "ar": "تبريد"
+   },
+   "definition": "Cool cooked food. Cooling of large batches is a CCP (see policy packs).",
+   "classes": [
+    "cw.opfamily.cool"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "method": {
+      "enum": [
+       "room",
+       "ice_bath",
+       "shallow_tray",
+       "blast"
+      ]
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.chill",
+   "label": {
+    "en": "Chill / refrigerate",
+    "ar": "تبريد في الثلاجة"
+   },
+   "definition": "Refrigerate until set or cold.",
+   "classes": [
+    "cw.opfamily.cool"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "tempC": {
+      "type": "number"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.freeze",
+   "label": {
+    "en": "Freeze",
+    "ar": "تجميد"
+   },
+   "definition": "Freeze until solid or to a texture (granita: scrape every N min).",
+   "classes": [
+    "cw.opfamily.cool"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "scrapeEveryMin": {
+      "type": "number"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.hold",
+   "label": {
+    "en": "Hold hot / warm",
+    "ar": "حفظ ساخن"
+   },
+   "definition": "Keep cooked food at a safe hot-holding temperature (≥ 57 °C typical).",
+   "classes": [
+    "cw.opfamily.cool"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "heat": {
+      "enum": [
+       "very_low",
+       "low",
+       "medium_low",
+       "medium",
+       "medium_high",
+       "high",
+       "max"
+      ]
+     },
+     "target": {
+      "$ref": "https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Target"
+     },
+     "lid": {
+      "enum": [
+       "on",
+       "off",
+       "ajar"
+      ]
+     },
+     "stir": {
+      "type": "object",
+      "properties": {
+       "intervalS": {
+        "type": "number"
+       },
+       "style": {
+        "enum": [
+         "gentle",
+         "normal",
+         "vigorous",
+         "scrape"
+        ]
+       }
+      }
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.core_temp",
+    "cw.sense.liquid_temp",
+    "cw.sense.pan_surface_temp",
+    "cw.sense.oil_temp",
+    "cw.sense.oven_air_temp",
+    "cw.sense.mass",
+    "cw.sense.mass_loss_ratio",
+    "cw.sense.torque",
+    "cw.sense.humidity"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.garnish",
+   "label": {
+    "en": "Garnish",
+    "ar": "تزيين"
+   },
+   "definition": "Add garnish.",
+   "classes": [
+    "cw.opfamily.finish"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "method": {
+      "enum": [
+       "scatter",
+       "drizzle",
+       "place",
+       "dust"
+      ]
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.plate",
+   "label": {
+    "en": "Plate / portion",
+    "ar": "تقديم في أطباق"
+   },
+   "definition": "Portion and arrange on plates.",
+   "classes": [
+    "cw.opfamily.finish"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "portions": {
+      "type": "integer"
+     }
+    }
+   },
+   "sensors": [
+    "cw.sense.mass"
+   ],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.serve",
+   "label": {
+    "en": "Serve",
+    "ar": "تقديم"
+   },
+   "definition": "Hand over for eating within a time window, optionally kept hot/cold.",
+   "classes": [
+    "cw.opfamily.finish"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "serveWithin": {
+      "type": "string"
+     },
+     "keepHot": {
+      "type": "object"
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.wait",
+   "label": {
+    "en": "Wait",
+    "ar": "انتظار"
+   },
+   "definition": "Wait for a duration or external event (no action on food).",
+   "classes": [
+    "cw.opfamily.aux"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {}
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.vent",
+   "label": {
+    "en": "Ventilate",
+    "ar": "تشغيل الشفاط"
+   },
+   "definition": "Run extraction (hood) at a level.",
+   "classes": [
+    "cw.opfamily.aux"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "level": {
+      "enum": [
+       "low",
+       "medium",
+       "high",
+       "boost"
+      ]
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  },
+  {
+   "id": "cw.op.clean",
+   "label": {
+    "en": "Clean up",
+    "ar": "تنظيف"
+   },
+   "definition": "Clean tools/surfaces (allergen cross-contact control).",
+   "classes": [
+    "cw.opfamily.aux"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "array"
+     }
+    }
+   },
+   "sensors": [],
+   "links": {
+    "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   }
+  }
+ ]
+}

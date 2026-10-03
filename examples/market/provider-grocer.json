@@ -1,0 +1,36 @@
+{
+ "$kind": "Provider",
+ "cookwala": "0.1.0",
+ "id": "did:web:greengrocer.example",
+ "name": "Green Grocer Cairo",
+ "roles": [
+  "grocer",
+  "delivery"
+ ],
+ "area": {
+  "countries": [
+   "EG"
+  ],
+  "radiusKm": 15,
+  "center": {
+   "lat": 30.05,
+   "lon": 31.24
+  }
+ },
+ "credentials": [
+  {
+   "type": "halal_certified",
+   "issuer": "did:web:certifier.example",
+   "vc": "https://greengrocer.example/vc/halal.jwt"
+  }
+ ],
+ "endpoints": {
+  "offers": "https://greengrocer.example/cookwala/offers.json",
+  "ucp": "https://greengrocer.example/ucp",
+  "quotes": "https://greengrocer.example/cookwala/quotes"
+ },
+ "standards": [
+  "GS1",
+  "UCP"
+ ]
+}

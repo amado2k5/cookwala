@@ -1,0 +1,56 @@
+{
+ "$kind": "AdviceRequest",
+ "cookwala": "0.1.0",
+ "id": "rq-4",
+ "intent": "team_plan",
+ "text": "I have two other robots that can help. What should each of us do, and in what order?",
+ "asker": {
+  "kind": "robot",
+  "id": "robot:neo-1"
+ },
+ "context": {
+  "mode": {
+   "robots": [
+    {
+     "actorId": "robot:neo-1",
+     "level": "low",
+     "pct": 22,
+     "minReservePct": 15
+    },
+    {
+     "actorId": "robot:arm-1",
+     "level": "high",
+     "pct": 90
+    },
+    {
+     "actorId": "robot:cooker-1",
+     "level": "full"
+    }
+   ],
+   "energy": {
+    "prefer": [
+     "electric_induction"
+    ]
+   }
+  },
+  "humansAvailable": 1,
+  "constraints": {
+   "serveAt": "2026-10-03T19:30:00Z"
+  }
+ },
+ "query": {
+  "recipes": [
+   {
+    "recipeId": "example-shakshuka",
+    "servings": 4
+   }
+  ],
+  "requester": "robot:neo-1",
+  "helpers": [
+   "robot:arm-1",
+   "robot:cooker-1"
+  ],
+  "objective": "on_time",
+  "allowSplitTasks": true
+ }
+}

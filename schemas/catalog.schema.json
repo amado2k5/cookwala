@@ -1,0 +1,602 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/catalog.schema.json",
+  "title": "Cookwala Catalog (index) documents",
+  "description": "Static documents served by any Cookwala index (the reference index at cookwala.ai or a mirror). Use the $defs by name: Discovery (/.well-known/cookwala.json), Manifest (/v1/manifest.json), IndexEntry (items of /v1/index/{lang}/{page}.json), Changes (/v1/changes/{sinceVersion}.json), Vocabulary (/v1/vocab/{name}.json).",
+  "$defs": {
+    "Discovery": {
+      "type": "object",
+      "required": [
+        "cookwala",
+        "name",
+        "versions",
+        "keys",
+        "endpoints",
+        "terms"
+      ],
+      "properties": {
+        "cookwala": {
+          "$ref": "common.schema.json#/$defs/SpecVersion"
+        },
+        "name": {
+          "type": "string"
+        },
+        "operator": {
+          "type": "string"
+        },
+        "versions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "keys": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "kid",
+              "kty",
+              "crv",
+              "x"
+            ],
+            "properties": {
+              "kid": {
+                "type": "string"
+              },
+              "kty": {
+                "const": "OKP"
+              },
+              "crv": {
+                "const": "Ed25519"
+              },
+              "x": {
+                "type": "string"
+              },
+              "use": {
+                "type": "string"
+              },
+              "expires": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "endpoints": {
+          "type": "object",
+          "properties": {
+            "manifest": {
+              "type": "string"
+            },
+            "recipe": {
+              "type": "string"
+            },
+            "index": {
+              "type": "string"
+            },
+            "changes": {
+              "type": "string"
+            },
+            "dump": {
+              "type": "string"
+            },
+            "vocab": {
+              "type": "string"
+            },
+            "policies": {
+              "type": "string"
+            },
+            "schemas": {
+              "type": "string"
+            },
+            "rest": {
+              "type": "string"
+            },
+            "graphql": {
+              "type": "string"
+            },
+            "openapi": {
+              "type": "string"
+            },
+            "mcp": {
+              "type": "string"
+            },
+            "a2a": {
+              "type": "string"
+            },
+            "reports": {
+              "type": "string"
+            }
+          }
+        },
+        "mirrors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "contact": {
+          "type": "string"
+        },
+        "terms": {
+          "type": "string"
+        },
+        "license": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "catalog",
+              "hub",
+              "provider",
+              "registry",
+              "advisor",
+              "marketplace",
+              "mirror"
+            ]
+          }
+        },
+        "visibility": {
+          "enum": [
+            "public",
+            "private",
+            "unlisted"
+          ]
+        },
+        "auth": {
+          "type": "object",
+          "description": "For private catalogs.",
+          "properties": {
+            "schemes": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "none",
+                  "oauth2",
+                  "api_key",
+                  "mtls",
+                  "did_auth"
+                ]
+              }
+            },
+            "tokenUrl": {
+              "type": "string"
+            },
+            "docs": {
+              "type": "string"
+            }
+          }
+        },
+        "federation": {
+          "type": "object",
+          "properties": {
+            "trusts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "catalog": {
+                    "type": "string"
+                  },
+                  "keys": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "priority": {
+                    "type": "integer"
+                  }
+                }
+              }
+            },
+            "registry": {
+              "type": "string"
+            }
+          }
+        },
+        "extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Extension manifests this server supports/serves."
+        },
+        "provider": {
+          "type": "string",
+          "description": "URL of the operator's market Provider document."
+        }
+      }
+    },
+    "Manifest": {
+      "type": "object",
+      "required": [
+        "cookwala",
+        "version",
+        "generatedAt",
+        "counts",
+        "shards"
+      ],
+      "properties": {
+        "cookwala": {
+          "$ref": "common.schema.json#/$defs/SpecVersion"
+        },
+        "version": {
+          "type": "string"
+        },
+        "generatedAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "counts": {
+          "type": "object",
+          "properties": {
+            "recipes": {
+              "type": "integer"
+            },
+            "byLevel": {
+              "type": "object"
+            },
+            "countries": {
+              "type": "integer"
+            },
+            "languages": {
+              "type": "integer"
+            }
+          }
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "shards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "path",
+              "hash"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "hash": {
+                "$ref": "common.schema.json#/$defs/Hash"
+              },
+              "bytes": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "signature": {
+          "$ref": "common.schema.json#/$defs/Signature"
+        }
+      }
+    },
+    "IndexEntry": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "hash",
+        "level"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer"
+        },
+        "hash": {
+          "$ref": "common.schema.json#/$defs/Hash"
+        },
+        "title": {
+          "type": "string"
+        },
+        "cuisine": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "course": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "level": {
+          "enum": [
+            "V0",
+            "V1",
+            "V2",
+            "V3"
+          ]
+        },
+        "totalTimeS": {
+          "type": "integer"
+        },
+        "activeTimeS": {
+          "type": "integer"
+        },
+        "servings": {
+          "type": "number"
+        },
+        "allergens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dietary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ops": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "equipment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sensors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maxTempC": {
+          "type": "number"
+        },
+        "supervision": {
+          "type": "string"
+        },
+        "kcal": {
+          "type": "number"
+        },
+        "thumb": {
+          "type": "string"
+        }
+      }
+    },
+    "Changes": {
+      "type": "object",
+      "required": [
+        "from",
+        "to",
+        "upserted",
+        "removed"
+      ],
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "upserted": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "hash": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "removed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "reason": {
+                "enum": [
+                  "withdrawn",
+                  "safety_recall",
+                  "rights",
+                  "duplicate"
+                ]
+              }
+            }
+          }
+        },
+        "recalls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "Devices must stop executing recalled revisions."
+        }
+      }
+    },
+    "Vocabulary": {
+      "type": "object",
+      "required": [
+        "name",
+        "version",
+        "entries"
+      ],
+      "properties": {
+        "name": {
+          "enum": [
+            "ingredients",
+            "ops",
+            "equipment",
+            "sensors",
+            "hazards",
+            "units",
+            "classes",
+            "incidents",
+            "modes",
+            "roles"
+          ]
+        },
+        "version": {
+          "type": "string"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "label"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "common.schema.json#/$defs/VocabId"
+              },
+              "label": {
+                "$ref": "common.schema.json#/$defs/LangMap"
+              },
+              "definition": {
+                "type": "string"
+              },
+              "classes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "paramsSchema": {
+                "type": "object",
+                "description": "ops only: JSON Schema for node.params."
+              },
+              "sensors": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "ops only: sensors usable in until conditions."
+              },
+              "allergens": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "density": {
+                "type": "number",
+                "description": "ingredients: g/ml for volume conversion."
+              },
+              "links": {
+                "type": "object",
+                "properties": {
+                  "wikidata": {
+                    "type": "string"
+                  },
+                  "foodon": {
+                    "type": "string"
+                  },
+                  "usdaFdc": {
+                    "type": "string"
+                  },
+                  "ieee1872": {
+                    "type": "string"
+                  },
+                  "matter": {
+                    "type": "string"
+                  }
+                }
+              },
+              "deprecated": {
+                "type": "boolean"
+              },
+              "replacedBy": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "RegistryEntry": {
+      "type": "object",
+      "required": [
+        "kind",
+        "url"
+      ],
+      "description": "Item in a registry (/v1/registry.json): anyone can list a catalog, extension, flow, provider, knowledge pack or policy pack hosted anywhere.",
+      "properties": {
+        "kind": {
+          "enum": [
+            "catalog",
+            "extension",
+            "flow",
+            "provider",
+            "knowledge",
+            "policy_pack",
+            "hub",
+            "advisor",
+            "program",
+            "kitchen"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "conformance": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "addedAt": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

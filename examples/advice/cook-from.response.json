@@ -1,0 +1,123 @@
+{
+ "$kind": "AdviceResponse",
+ "cookwala": "0.1.0",
+ "requestId": "rq-1",
+ "responseId": "rs-1",
+ "intent": "cook_from",
+ "status": "answered",
+ "safety": {
+  "verdict": "safe"
+ },
+ "options": [
+  {
+   "id": "o1",
+   "rank": 1,
+   "kind": "recipe_with_changes",
+   "title": {
+    "en": "Smoked Chicken Mandi"
+   },
+   "recipeIds": [
+    "add-001"
+   ],
+   "coverage": {
+    "have": [
+     "cw.ing.chicken_whole",
+     "cw.ing.rice_basmati",
+     "cw.ing.onion_yellow"
+    ],
+    "missing": [],
+    "substituted": [
+     {
+      "from": "cw.ing.saffron",
+      "to": "cw.ing.turmeric",
+      "ratio": 1
+     }
+    ],
+    "automation": 0.8
+   },
+   "impact": {
+    "extraTime": "PT0M",
+    "quality": "minor"
+   },
+   "confidence": 0.82,
+   "safety": {
+    "verdict": "safe_with_conditions",
+    "conditions": [
+     "CCP: chicken core ≥ 74 °C"
+    ]
+   },
+   "evidence": [
+    {
+     "kind": "recipe",
+     "ref": "add-001"
+    },
+    {
+     "kind": "rule",
+     "ref": "cw.knowledge.substitutions.core"
+    }
+   ],
+   "explanation": {
+    "en": "Uses all your chicken and rice; turmeric replaces saffron for colour. Doesn't use the yogurt, so option 2 ranks higher if you want to use it first."
+   }
+  },
+  {
+   "id": "o2",
+   "rank": 2,
+   "kind": "recipe",
+   "title": {
+    "en": "Yogurt-marinated chicken with rice"
+   },
+   "recipeIds": [
+    "cw:fifi.cooking:example-yogurt-chicken"
+   ],
+   "coverage": {
+    "have": [
+     "cw.ing.chicken_whole",
+     "cw.ing.rice_basmati",
+     "cw.ing.onion_yellow",
+     "cw.ing.yogurt_plain"
+    ],
+    "missing": [],
+    "usesFirst": [
+     "cw.ing.yogurt_plain"
+    ],
+    "automation": 0.7
+   },
+   "confidence": 0.74,
+   "safety": {
+    "verdict": "safe_with_conditions",
+    "conditions": [
+     "Marinate in the fridge"
+    ]
+   },
+   "evidence": [
+    {
+     "kind": "recipe",
+     "ref": "cw:fifi.cooking:example-yogurt-chicken"
+    }
+   ]
+  }
+ ],
+ "engine": {
+  "version": "reasoner-0.1",
+  "components": [
+   "matcher",
+   "substitution-graph",
+   "food-safety",
+   "playbooks",
+   "cp-sat"
+  ],
+  "llm": {
+   "used": true,
+   "model": "local",
+   "role": "explain"
+  },
+  "checks": [
+   "schema",
+   "policy",
+   "food_safety",
+   "patch_validation"
+  ]
+ },
+ "generatedAt": "2026-10-03T18:00:00Z"
+}

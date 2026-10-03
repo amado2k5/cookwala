@@ -1,0 +1,78 @@
+{
+ "$kind": "AdviceRequest",
+ "cookwala": "0.1.0",
+ "id": "rq-7",
+ "intent": "personalize",
+ "text": "Portion tonight's lentil soup for the family to fit each person's needs.",
+ "context": {
+  "members": [
+   {
+    "id": "p1",
+    "alias": "Dad",
+    "ageYears": 48,
+    "sex": "male",
+    "heightCm": 178,
+    "weightKg": 92,
+    "activity": "light",
+    "goals": [
+     "lose_weight",
+     "lower_sodium"
+    ],
+    "conditions": [
+     "hypertension"
+    ],
+    "targets": {
+     "sodiumMgMax": 1500,
+     "source": "clinician"
+    }
+   },
+   {
+    "id": "p2",
+    "alias": "Mom",
+    "ageYears": 45,
+    "sex": "female",
+    "heightCm": 163,
+    "weightKg": 64,
+    "activity": "moderate",
+    "goals": [
+     "maintain"
+    ]
+   },
+   {
+    "id": "p3",
+    "alias": "Sara",
+    "ageYears": 9,
+    "sex": "female",
+    "heightCm": 132,
+    "weightKg": 28,
+    "activity": "active",
+    "lifeStage": [
+     "child"
+    ],
+    "allergies": [
+     "sesame"
+    ]
+   }
+  ],
+  "mode": {
+   "budget": {
+    "mode": "moderate"
+   }
+  }
+ },
+ "query": {
+  "personIds": [
+   "p1",
+   "p2",
+   "p3"
+  ],
+  "recipeIds": [
+   "ec-160"
+  ],
+  "optimize": [
+   "nutrition_fit",
+   "waste",
+   "cost"
+  ]
+ }
+}

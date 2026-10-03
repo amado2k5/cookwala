@@ -1,0 +1,679 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/knowledge.schema.json",
+  "title": "Cookwala Knowledge Packs",
+  "description": "Culinary and food-safety knowledge the reasoner uses beyond recipes: recovery playbooks, ingredient functional roles, substitution rules, transformations (repurposing intermediates), storage profiles and energy models. Anyone can publish a knowledge pack (public or private); packs are merged by priority, and safety rules can only be tightened by lower-priority packs, never loosened.",
+  "type": "object",
+  "required": [
+    "cookwala",
+    "id",
+    "version",
+    "kind",
+    "entries"
+  ],
+  "properties": {
+    "cookwala": {
+      "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "playbooks",
+        "roles",
+        "substitutions",
+        "transformations",
+        "storage",
+        "energy",
+        "incidents",
+        "pairings",
+        "scaling",
+        "nutrition"
+      ]
+    },
+    "title": {
+      "$ref": "common.schema.json#/$defs/LangMap"
+    },
+    "reviewStatus": {
+      "enum": [
+        "draft",
+        "community_reviewed",
+        "expert_reviewed"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "disclaimer": {
+      "type": "string"
+    },
+    "meta": {
+      "$ref": "common.schema.json#/$defs/Meta"
+    },
+    "entries": {
+      "type": "array"
+    }
+  },
+  "patternProperties": {
+    "^x-": {}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "playbooks"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "entries": {
+            "items": {
+              "$ref": "#/$defs/Playbook"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "roles"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "entries": {
+            "items": {
+              "$ref": "#/$defs/RoleEntry"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "substitutions"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "entries": {
+            "items": {
+              "$ref": "#/$defs/Substitution"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "transformations"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "entries": {
+            "items": {
+              "$ref": "#/$defs/Transformation"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "storage"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "entries": {
+            "items": {
+              "$ref": "#/$defs/StorageProfile"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "energy"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "entries": {
+            "items": {
+              "$ref": "#/$defs/EnergyModel"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "Cond": {
+      "type": "object",
+      "description": "Condition over the incident/context (same expression language as policy packs: all/any/not/path comparisons).",
+      "additionalProperties": true
+    },
+    "Playbook": {
+      "type": "object",
+      "required": [
+        "id",
+        "incidentTypes",
+        "title",
+        "options"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(cw|x-[a-z0-9-]+)\\.pb\\.[a-z0-9_.]+$"
+        },
+        "incidentTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "title": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "appliesTo": {
+          "type": "object",
+          "properties": {
+            "ops": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ingredientClasses": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "dishTags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "safetyGate": {
+          "type": "array",
+          "description": "Evaluated first. The first matching rule with verdict unsafe_discard ends the playbook: only discard/restart/repurpose-other-food options remain.",
+          "items": {
+            "type": "object",
+            "required": [
+              "when",
+              "verdict",
+              "message"
+            ],
+            "properties": {
+              "when": {
+                "$ref": "#/$defs/Cond"
+              },
+              "verdict": {
+                "enum": [
+                  "unsafe_discard",
+                  "unknown_ask_human",
+                  "safe_with_conditions"
+                ]
+              },
+              "message": {
+                "$ref": "common.schema.json#/$defs/LangMap"
+              },
+              "ruleRef": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "advice.schema.json#/$defs/Question"
+          }
+        },
+        "options": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "title",
+              "kind"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "patch_and_resume",
+                  "repurpose",
+                  "discard_and_restart",
+                  "discard",
+                  "ask_human",
+                  "substitution"
+                ]
+              },
+              "title": {
+                "$ref": "common.schema.json#/$defs/LangMap"
+              },
+              "when": {
+                "$ref": "#/$defs/Cond"
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "$ref": "advice.schema.json#/$defs/PatchOp"
+                },
+                "description": "Patch templates; {placeholders} resolved from the incident and recipe."
+              },
+              "resume": {
+                "enum": [
+                  "same_node",
+                  "next_node",
+                  "restart_node",
+                  "restart_from_input",
+                  "none"
+                ]
+              },
+              "impact": {
+                "type": "object",
+                "properties": {
+                  "extraTimeMin": {
+                    "type": "number"
+                  },
+                  "quality": {
+                    "type": "string"
+                  },
+                  "notes": {
+                    "type": "string"
+                  }
+                }
+              },
+              "priority": {
+                "type": "integer"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "prevention": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "What executors should do to avoid it next time (fed back into recipes)."
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "RoleEntry": {
+      "type": "object",
+      "required": [
+        "subject",
+        "roles"
+      ],
+      "properties": {
+        "subject": {
+          "type": "string",
+          "description": "Ingredient id or class (cw.ing.* / cw.ing.class.*)."
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "role"
+            ],
+            "properties": {
+              "role": {
+                "enum": [
+                  "salt",
+                  "acid",
+                  "sweetener",
+                  "fat",
+                  "umami",
+                  "bitter",
+                  "heat_spice",
+                  "aromatic_base",
+                  "herb_fresh",
+                  "spice_warm",
+                  "binder",
+                  "leavener_chemical",
+                  "leavener_biological",
+                  "thickener_starch",
+                  "thickener_protein",
+                  "gelling",
+                  "emulsifier",
+                  "protein_main",
+                  "bulk_starch",
+                  "liquid_base",
+                  "stock",
+                  "color",
+                  "crunch",
+                  "moisture",
+                  "preservative",
+                  "garnish"
+                ]
+              },
+              "strength": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          }
+        },
+        "saltPct": {
+          "type": "number",
+          "description": "Approximate salt (NaCl) by mass, for salt balancing."
+        },
+        "acidity": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "Substitution": {
+      "type": "object",
+      "required": [
+        "from",
+        "to",
+        "ratio"
+      ],
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "ingredientId",
+              "ratio"
+            ],
+            "properties": {
+              "ingredientId": {
+                "type": "string"
+              },
+              "ratio": {
+                "type": "number"
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "ratio": {
+          "type": "number",
+          "description": "Overall mass ratio to of from (1 = same mass)."
+        },
+        "goodFor": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Contexts/ops where it works (baking, braise, raw, frying...)."
+        },
+        "badFor": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "quality": {
+          "enum": [
+            "same",
+            "minor_loss",
+            "noticeable_loss"
+          ]
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "missing",
+              "allergy",
+              "dietary",
+              "cost",
+              "preference",
+              "budget",
+              "ration"
+            ]
+          }
+        },
+        "adjust": {
+          "type": "array",
+          "items": {
+            "$ref": "advice.schema.json#/$defs/PatchOp"
+          },
+          "description": "Follow-up adjustments (e.g. reduce other liquid)."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "Transformation": {
+      "type": "object",
+      "required": [
+        "id",
+        "from",
+        "to"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "from": {
+          "type": "object",
+          "description": "Intermediate state pattern: {\"class\": \"cooked_rice\", \"issues\": [\"mushy\"]}.",
+          "additionalProperties": true
+        },
+        "to": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "dishTag": {
+                "type": "string"
+              },
+              "recipeId": {
+                "$ref": "common.schema.json#/$defs/GlobalRef"
+              },
+              "title": {
+                "$ref": "common.schema.json#/$defs/LangMap"
+              },
+              "needs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "safety": {
+          "type": "string",
+          "description": "Safety condition that must already hold (e.g. 'rice was cooled to 5 °C within 2 h')."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "StorageProfile": {
+      "type": "object",
+      "required": [
+        "id",
+        "foodClasses"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "foodClasses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fridgeDays": {
+          "type": "object",
+          "properties": {
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            }
+          }
+        },
+        "freezerMonths": {
+          "type": "object",
+          "properties": {
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            }
+          }
+        },
+        "freezeQuality": {
+          "enum": [
+            "good",
+            "fair",
+            "poor"
+          ]
+        },
+        "roomTempMaxHours": {
+          "type": "number"
+        },
+        "cooling": {
+          "type": "string"
+        },
+        "reheatMinC": {
+          "type": "number"
+        },
+        "containers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cookForStorage": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "EnergyModel": {
+      "type": "object",
+      "required": [
+        "id",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "efficiency": {
+          "$ref": "common.schema.json#/$defs/Range",
+          "description": "Approximate fraction of input energy reaching the food."
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tips": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,276 @@
+{
+ "name": "incidents",
+ "version": "0.1.0",
+ "entries": [
+  {
+   "id": "cw.incident.too_salty",
+   "label": {
+    "en": "too salty"
+   }
+  },
+  {
+   "id": "cw.incident.too_spicy",
+   "label": {
+    "en": "too spicy"
+   }
+  },
+  {
+   "id": "cw.incident.too_sour",
+   "label": {
+    "en": "too sour"
+   }
+  },
+  {
+   "id": "cw.incident.too_sweet",
+   "label": {
+    "en": "too sweet"
+   }
+  },
+  {
+   "id": "cw.incident.bland",
+   "label": {
+    "en": "bland"
+   }
+  },
+  {
+   "id": "cw.incident.scorched_bottom",
+   "label": {
+    "en": "scorched bottom"
+   }
+  },
+  {
+   "id": "cw.incident.burnt_smell",
+   "label": {
+    "en": "burnt smell"
+   }
+  },
+  {
+   "id": "cw.incident.burnt_surface",
+   "label": {
+    "en": "burnt surface"
+   }
+  },
+  {
+   "id": "cw.incident.emulsion_broke",
+   "label": {
+    "en": "emulsion broke"
+   }
+  },
+  {
+   "id": "cw.incident.curdled",
+   "label": {
+    "en": "curdled"
+   }
+  },
+  {
+   "id": "cw.incident.too_thin",
+   "label": {
+    "en": "too thin"
+   }
+  },
+  {
+   "id": "cw.incident.too_thick",
+   "label": {
+    "en": "too thick"
+   }
+  },
+  {
+   "id": "cw.incident.undercooked",
+   "label": {
+    "en": "undercooked"
+   }
+  },
+  {
+   "id": "cw.incident.overcooked",
+   "label": {
+    "en": "overcooked"
+   }
+  },
+  {
+   "id": "cw.incident.ccp_failed",
+   "label": {
+    "en": "ccp failed"
+   }
+  },
+  {
+   "id": "cw.incident.time_temp_abuse",
+   "label": {
+    "en": "time temp abuse"
+   }
+  },
+  {
+   "id": "cw.incident.left_out",
+   "label": {
+    "en": "left out"
+   }
+  },
+  {
+   "id": "cw.incident.power_outage",
+   "label": {
+    "en": "power outage"
+   }
+  },
+  {
+   "id": "cw.incident.gas_outage",
+   "label": {
+    "en": "gas outage"
+   }
+  },
+  {
+   "id": "cw.incident.dropped",
+   "label": {
+    "en": "dropped"
+   }
+  },
+  {
+   "id": "cw.incident.foreign_object",
+   "label": {
+    "en": "foreign object"
+   }
+  },
+  {
+   "id": "cw.incident.pest",
+   "label": {
+    "en": "pest"
+   }
+  },
+  {
+   "id": "cw.incident.allergen_cross_contact",
+   "label": {
+    "en": "allergen cross contact"
+   }
+  },
+  {
+   "id": "cw.incident.missing_ingredient",
+   "label": {
+    "en": "missing ingredient"
+   }
+  },
+  {
+   "id": "cw.incident.not_enough",
+   "label": {
+    "en": "not enough"
+   }
+  },
+  {
+   "id": "cw.incident.wrong_ingredient",
+   "label": {
+    "en": "wrong ingredient"
+   }
+  },
+  {
+   "id": "cw.incident.wrong_order",
+   "label": {
+    "en": "wrong order"
+   }
+  },
+  {
+   "id": "cw.incident.dough_too_sticky",
+   "label": {
+    "en": "dough too sticky"
+   }
+  },
+  {
+   "id": "cw.incident.dough_too_dry",
+   "label": {
+    "en": "dough too dry"
+   }
+  },
+  {
+   "id": "cw.incident.underbaked",
+   "label": {
+    "en": "underbaked"
+   }
+  },
+  {
+   "id": "cw.incident.sunk",
+   "label": {
+    "en": "sunk"
+   }
+  },
+  {
+   "id": "cw.incident.boilover",
+   "label": {
+    "en": "boilover"
+   }
+  },
+  {
+   "id": "cw.incident.sensor_failure",
+   "label": {
+    "en": "sensor failure"
+   }
+  },
+  {
+   "id": "cw.incident.actuator_failure",
+   "label": {
+    "en": "actuator failure"
+   }
+  },
+  {
+   "id": "cw.incident.robot_battery_low",
+   "label": {
+    "en": "robot battery low"
+   }
+  },
+  {
+   "id": "cw.incident.robot_stuck",
+   "label": {
+    "en": "robot stuck"
+   }
+  },
+  {
+   "id": "cw.incident.spill",
+   "label": {
+    "en": "spill"
+   }
+  },
+  {
+   "id": "cw.incident.done_early",
+   "label": {
+    "en": "done early"
+   }
+  },
+  {
+   "id": "cw.incident.guests_late",
+   "label": {
+    "en": "guests late"
+   }
+  },
+  {
+   "id": "cw.incident.running_late",
+   "label": {
+    "en": "running late"
+   }
+  },
+  {
+   "id": "cw.incident.equipment_missing",
+   "label": {
+    "en": "equipment missing"
+   }
+  },
+  {
+   "id": "cw.incident.equipment_failure",
+   "label": {
+    "en": "equipment failure"
+   }
+  },
+  {
+   "id": "cw.incident.spoiled_ingredient",
+   "label": {
+    "en": "spoiled ingredient"
+   }
+  },
+  {
+   "id": "cw.incident.texture_wrong",
+   "label": {
+    "en": "texture wrong"
+   }
+  },
+  {
+   "id": "cw.incident.color_wrong",
+   "label": {
+    "en": "color wrong"
+   }
+  }
+ ]
+}

@@ -1,0 +1,60 @@
+{
+ "$kind": "Program",
+ "cookwala": "0.1.0",
+ "id": "prog-community-kitchens-cairo",
+ "name": "Neighbourhood hot meals",
+ "operator": "did:web:foodbank.example",
+ "partners": [
+  "did:web:greengrocer.example",
+  "did:web:robots.example"
+ ],
+ "type": "community_kitchen",
+ "area": [
+  {
+   "country": "EG",
+   "admin1": "Cairo"
+  }
+ ],
+ "period": {
+  "from": "2026-11-01",
+  "to": "2027-04-30"
+ },
+ "rations": {
+  "kcalPerPersonDay": 2100,
+  "groups": [
+   {
+    "group": "child",
+    "kcalPerDay": 1600
+   },
+   {
+    "group": "pregnant_lactating",
+    "kcalPerDay": 2400
+   }
+  ],
+  "standardRef": "sphere-2018"
+ },
+ "policyPacks": [
+  "eg.nfsa",
+  "dietary.halal",
+  "humanitarian.sphere"
+ ],
+ "kitchens": [
+  "https://kitchen-1.foodbank.example",
+  "https://kitchen-2.foodbank.example"
+ ],
+ "catalogs": [
+  "https://cookwala.ai"
+ ],
+ "accepts": [
+  "food",
+  "surplus_food",
+  "kitchen_capacity",
+  "robot_capacity",
+  "transport",
+  "volunteers",
+  "funds"
+ ],
+ "transparency": {
+  "impactFeed": "https://foodbank.example/cookwala/impact.json"
+ }
+}

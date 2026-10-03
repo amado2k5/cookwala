@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/report.schema.json",
+  "title": "Cookwala Execution Report",
+  "description": "Anonymous, opt-in report a hub or device sends to the index after a session (POST /v1/reports). Drives verification levels (V3) and recipe fixes. No personal data, no images unless the user opts in, no location finer than country.",
+  "type": "object",
+  "required": [
+    "cookwala",
+    "reportId",
+    "recipeId",
+    "recipeHash",
+    "outcome",
+    "deviceClasses",
+    "submittedAt"
+  ],
+  "properties": {
+    "cookwala": {
+      "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "reportId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "recipeId": {
+      "type": "string"
+    },
+    "recipeHash": {
+      "$ref": "common.schema.json#/$defs/Hash"
+    },
+    "scale": {
+      "type": "number"
+    },
+    "mode": {
+      "enum": [
+        "guided",
+        "assisted",
+        "autonomous"
+      ]
+    },
+    "outcome": {
+      "enum": [
+        "success",
+        "success_with_interventions",
+        "failed",
+        "aborted_safety",
+        "aborted_user"
+      ]
+    },
+    "deviceClasses": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "Coarse class + vendor, e.g. x-posha.countertop, humanoid.generic, oven.matter."
+      }
+    },
+    "country": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "nodeId",
+          "result"
+        ],
+        "properties": {
+          "nodeId": {
+            "type": "string"
+          },
+          "result": {
+            "enum": [
+              "ok",
+              "retried",
+              "extended",
+              "human_took_over",
+              "skipped",
+              "failed"
+            ]
+          },
+          "durationS": {
+            "type": "number"
+          },
+          "conditionFired": {
+            "type": "string"
+          },
+          "assigneeKind": {
+            "enum": [
+              "human",
+              "robot",
+              "appliance"
+            ]
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ccps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ccpId": {
+            "type": "string"
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "value": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "safetyEvents": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rating": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "submittedAt": {
+      "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "signature": {
+      "$ref": "common.schema.json#/$defs/Signature"
+    },
+    "meta": {
+      "$ref": "common.schema.json#/$defs/Meta"
+    }
+  },
+  "patternProperties": {
+    "^x-": {}
+  }
+}

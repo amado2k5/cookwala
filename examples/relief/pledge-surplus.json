@@ -1,0 +1,36 @@
+{
+ "$kind": "Pledge",
+ "cookwala": "0.1.0",
+ "id": "pl-881",
+ "from": "did:web:greengrocer.example",
+ "kind": "surplus_food",
+ "items": [
+  {
+   "ingredientId": "cw.ing.tomato",
+   "qty": {
+    "value": 120,
+    "unit": "kg"
+   },
+   "useBy": "2026-11-04T00:00:00+02:00",
+   "storage": "ambient"
+  },
+  {
+   "ingredientId": "cw.ing.lentils_red",
+   "qty": {
+    "value": 200,
+    "unit": "kg"
+   },
+   "storage": "ambient"
+  }
+ ],
+ "available": {
+  "from": "2026-11-02T18:00:00+02:00",
+  "to": "2026-11-03T08:00:00+02:00"
+ },
+ "place": {
+  "country": "EG",
+  "admin1": "Cairo",
+  "lat": 30.05,
+  "lon": 31.24
+ }
+}

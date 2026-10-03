@@ -1,0 +1,1316 @@
+{
+ "cookwala": "0.1.0",
+ "id": "cw.knowledge.playbooks.core",
+ "version": "0.1.0",
+ "kind": "playbooks",
+ "title": {
+  "en": "Core recovery playbooks"
+ },
+ "reviewStatus": "draft",
+ "disclaimer": "Draft culinary and food-safety guidance for planning; must be reviewed by qualified experts per jurisdiction. Policy packs can tighten these rules.",
+ "sources": [
+  {
+   "title": "USDA FSIS: Danger Zone 40°F-140°F",
+   "url": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/danger-zone-40f-140f"
+  },
+  {
+   "title": "FoodSafety.gov: Food Safety During Power Outage",
+   "url": "https://www.foodsafety.gov/food-safety-charts/food-safety-during-power-outage"
+  },
+  {
+   "title": "FoodSafety.gov: Safe Minimum Internal Temperatures",
+   "url": "https://www.foodsafety.gov/food-safety-charts/safe-minimum-internal-temperatures"
+  },
+  {
+   "title": "FDA Food Code 2022",
+   "url": "https://www.fda.gov/food/fda-food-code/food-code-2022"
+  }
+ ],
+ "entries": [
+  {
+   "id": "cw.pb.too_salty_liquid",
+   "incidentTypes": [
+    "cw.incident.too_salty"
+   ],
+   "title": {
+    "en": "Too salty: soup, stew, sauce or braise",
+    "ar": "مالح زيادة: شوربة أو طبيخ أو صلصة"
+   },
+   "appliesTo": {
+    "ops": [
+     "cw.op.simmer",
+     "cw.op.braise",
+     "cw.op.boil",
+     "cw.op.reduce",
+     "cw.op.season"
+    ]
+   },
+   "diagnostics": [
+    {
+     "id": "salt_ratio",
+     "text": {
+      "en": "Roughly how much more salt went in than the recipe asks for (e.g. 2 = double)?"
+     },
+     "answerType": "number"
+    },
+    {
+     "id": "can_extend",
+     "text": {
+      "en": "Is there spare pot capacity and unsalted base (water, unsalted stock, tomato, cooked unsalted vegetables or legumes)?"
+     },
+     "answerType": "boolean"
+    }
+   ],
+   "options": [
+    {
+     "id": "dilute_in_pot",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Dilute: scale up every other ingredient"
+     },
+     "when": {
+      "path": "incident.observations.salt_ratio",
+      "lte": 1.6
+     },
+     "actions": [
+      {
+       "op": "scale_all",
+       "factor": "{salt_ratio}",
+       "params": {
+        "exclude": [
+         "cw.ing.class.salt"
+        ]
+       },
+       "text": {
+        "en": "Add the unsalted ingredients again in proportion; keep the salt as is."
+       }
+      },
+      {
+       "op": "note",
+       "text": {
+        "en": "Re-taste after 10 min of simmering before adding anything else salty (stock cubes, soy, cheese)."
+       }
+      }
+     ],
+     "resume": "same_node",
+     "impact": {
+      "extraTimeMin": 15,
+      "quality": "none",
+      "notes": "More servings; freeze the extra."
+     }
+    },
+    {
+     "id": "split_and_dilute",
+     "kind": "patch_and_resume",
+     "priority": 2,
+     "title": {
+      "en": "Split: keep part, dilute it, store the rest as a seasoning base"
+     },
+     "when": {
+      "path": "incident.observations.salt_ratio",
+      "gte": 1.6
+     },
+     "actions": [
+      {
+       "op": "split_batch",
+       "params": {
+        "keepFraction": "1/{salt_ratio}"
+       }
+      },
+      {
+       "op": "scale_all",
+       "target": "kept_batch",
+       "factor": "{salt_ratio}",
+       "params": {
+        "exclude": [
+         "cw.ing.class.salt"
+        ]
+       }
+      }
+     ],
+     "resume": "same_node",
+     "impact": {
+      "extraTimeMin": 20,
+      "quality": "minor",
+      "notes": "Salty remainder can season a later unsalted batch (cool and store per storage rules)."
+     }
+    },
+    {
+     "id": "serve_with_unsalted_starch",
+     "kind": "patch_and_resume",
+     "priority": 3,
+     "title": {
+      "en": "Serve with plenty of unsalted rice, bread or potatoes"
+     },
+     "actions": [
+      {
+       "op": "add_node",
+       "node": {
+        "id": "unsalted_side",
+        "op": "cw.op.boil"
+       }
+      }
+     ],
+     "resume": "next_node",
+     "impact": {
+      "quality": "minor"
+     }
+    },
+    {
+     "id": "balance_perception",
+     "kind": "patch_and_resume",
+     "priority": 4,
+     "title": {
+      "en": "Small fix for slightly salty: a little acid or fat"
+     },
+     "when": {
+      "path": "incident.observations.salt_ratio",
+      "lte": 1.2
+     },
+     "actions": [
+      {
+       "op": "note",
+       "text": {
+        "en": "A squeeze of lemon or a spoon of plain yogurt/cream softens the perception of salt slightly; it does not remove salt."
+       }
+      }
+     ],
+     "resume": "same_node"
+    }
+   ],
+   "prevention": [
+    "Add salt in stages and taste near the end of reduction; reductions concentrate salt."
+   ],
+   "references": [
+    {
+     "title": "Common myth: a raw potato does not meaningfully remove salt; dilution does.",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.scorched_bottom",
+   "incidentTypes": [
+    "cw.incident.scorched_bottom",
+    "cw.incident.burnt_smell"
+   ],
+   "title": {
+    "en": "Scorched bottom of the pot",
+    "ar": "الأكل لزق واتحرق في قاع الحلة"
+   },
+   "appliesTo": {
+    "ops": [
+     "cw.op.simmer",
+     "cw.op.braise",
+     "cw.op.boil",
+     "cw.op.reduce",
+     "cw.op.saute"
+    ]
+   },
+   "diagnostics": [
+    {
+     "id": "smoke_taste",
+     "text": {
+      "en": "Taste from the top: is there a burnt/acrid taste through the dish?"
+     },
+     "answerType": "choice",
+     "choices": [
+      "none",
+      "slight",
+      "strong"
+     ]
+    }
+   ],
+   "options": [
+    {
+     "id": "transfer_top",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Heat off, don't stir, move the unburnt top to a clean pot"
+     },
+     "when": {
+      "path": "answers.smoke_taste",
+      "in": [
+       "none",
+       "slight"
+      ]
+     },
+     "actions": [
+      {
+       "op": "insert_before",
+       "target": "{nodeId}",
+       "node": {
+        "id": "rescue_transfer",
+        "op": "cw.op.transfer",
+        "params": {
+         "method": "ladle",
+         "leaveBottomCm": 1
+        }
+       }
+      },
+      {
+       "op": "update_params",
+       "target": "{nodeId}",
+       "params": {
+        "heat": "low",
+        "stir": {
+         "intervalS": 60,
+         "style": "scrape"
+        }
+       }
+      },
+      {
+       "op": "discard_output",
+       "target": "scorched_layer"
+      }
+     ],
+     "resume": "same_node",
+     "impact": {
+      "extraTimeMin": 5,
+      "quality": "minor"
+     }
+    },
+    {
+     "id": "restart",
+     "kind": "discard_and_restart",
+     "priority": 2,
+     "title": {
+      "en": "Strong burnt taste throughout: discard and restart or choose a quick alternative"
+     },
+     "when": {
+      "path": "answers.smoke_taste",
+      "eq": "strong"
+     },
+     "resume": "none"
+    }
+   ],
+   "prevention": [
+    "Lower heat after boiling; use heavier pots; stir/scrape at the interval in the recipe; add liquid when reduction is below target."
+   ]
+  },
+  {
+   "id": "cw.pb.emulsion_broken",
+   "incidentTypes": [
+    "cw.incident.emulsion_broke"
+   ],
+   "title": {
+    "en": "Broken emulsion (mayonnaise, aioli, hollandaise, beurre blanc)",
+    "ar": "الصوص فصل"
+   },
+   "appliesTo": {
+    "ops": [
+     "cw.op.emulsify",
+     "cw.op.whisk"
+    ]
+   },
+   "options": [
+    {
+     "id": "new_base",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Start a new base and whisk the broken sauce into it drop by drop"
+     },
+     "actions": [
+      {
+       "op": "insert_before",
+       "target": "{nodeId}",
+       "node": {
+        "id": "new_emulsion_base",
+        "op": "cw.op.whisk",
+        "params": {
+         "base": "1 egg yolk, or 1 tsp mustard, or 1 tsp warm water"
+        }
+       }
+      },
+      {
+       "op": "update_params",
+       "target": "{nodeId}",
+       "params": {
+        "addRate": "drop_by_drop_then_thin_stream"
+       }
+      }
+     ],
+     "resume": "same_node",
+     "impact": {
+      "extraTimeMin": 5,
+      "quality": "none"
+     }
+    },
+    {
+     "id": "cool_it",
+     "kind": "patch_and_resume",
+     "priority": 2,
+     "title": {
+      "en": "Warm butter sauces just starting to split: off the heat, whisk in a spoon of cold water"
+     },
+     "when": {
+      "path": "incident.observations.just_started",
+      "eq": true
+     },
+     "actions": [
+      {
+       "op": "update_params",
+       "target": "{nodeId}",
+       "params": {
+        "heat": "off",
+        "add": "1 tbsp cold water"
+       }
+      }
+     ],
+     "resume": "same_node"
+    }
+   ],
+   "prevention": [
+    "Add oil slowly at first; keep butter sauces below ~65 °C."
+   ]
+  },
+  {
+   "id": "cw.pb.sauce_too_thin",
+   "incidentTypes": [
+    "cw.incident.too_thin"
+   ],
+   "title": {
+    "en": "Sauce or stew too thin",
+    "ar": "الصوص خفيف"
+   },
+   "options": [
+    {
+     "id": "reduce",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Reduce uncovered"
+     },
+     "when": {
+      "path": "context.constraints.timeLeftMin",
+      "gte": 10
+     },
+     "actions": [
+      {
+       "op": "update_params",
+       "target": "{nodeId}",
+       "params": {
+        "lid": "off",
+        "heat": "medium"
+       }
+      },
+      {
+       "op": "set_until",
+       "target": "{nodeId}",
+       "until": {
+        "any": [
+         {
+          "vision": "cw.sense.sauce_coats_spoon"
+         }
+        ],
+        "maxTime": "PT15M"
+       }
+      }
+     ],
+     "resume": "same_node",
+     "impact": {
+      "extraTimeMin": 10,
+      "quality": "none"
+     }
+    },
+    {
+     "id": "starch_slurry",
+     "kind": "patch_and_resume",
+     "priority": 2,
+     "title": {
+      "en": "Starch slurry: ~1 tbsp cornstarch in 2 tbsp cold water per 250 ml liquid, simmer 1–2 min"
+     },
+     "actions": [
+      {
+       "op": "add_ingredient",
+       "ingredient": {
+        "ref": "slurry_starch",
+        "ingredientId": "cw.ing.cornstarch",
+        "qty": {
+         "value": 8,
+         "unit": "g"
+        }
+       }
+      },
+      {
+       "op": "insert_after",
+       "target": "{nodeId}",
+       "node": {
+        "id": "thicken",
+        "op": "cw.op.simmer",
+        "params": {
+         "heat": "medium_low"
+        }
+       }
+      }
+     ],
+     "resume": "next_node",
+     "impact": {
+      "extraTimeMin": 3,
+      "quality": "none"
+     }
+    },
+    {
+     "id": "puree_some",
+     "kind": "patch_and_resume",
+     "priority": 3,
+     "title": {
+      "en": "Blend a ladle of the solids and stir back in"
+     },
+     "actions": [
+      {
+       "op": "insert_after",
+       "target": "{nodeId}",
+       "node": {
+        "id": "partial_blend",
+        "op": "cw.op.blend",
+        "params": {
+         "hotLiquid": true
+        }
+       }
+      }
+     ],
+     "resume": "next_node"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.sauce_too_thick",
+   "incidentTypes": [
+    "cw.incident.too_thick"
+   ],
+   "title": {
+    "en": "Too thick or dry",
+    "ar": "تقيل زيادة"
+   },
+   "options": [
+    {
+     "id": "add_warm_liquid",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Add warm liquid (stock/water/milk as in recipe) a little at a time"
+     },
+     "actions": [
+      {
+       "op": "add_ingredient",
+       "ingredient": {
+        "ref": "extra_liquid",
+        "ingredientId": "cw.ing.water",
+        "qty": {
+         "value": 60,
+         "unit": "ml"
+        }
+       }
+      }
+     ],
+     "resume": "same_node"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.undercooked_protein",
+   "incidentTypes": [
+    "cw.incident.undercooked",
+    "cw.incident.ccp_failed"
+   ],
+   "title": {
+    "en": "Meat, poultry, fish or eggs below the safe temperature",
+    "ar": "لحم أو فراخ لسه مستويش"
+   },
+   "safetyGate": [
+    {
+     "when": {
+      "path": "incident.servedAlready",
+      "eq": true
+     },
+     "verdict": "unknown_ask_human",
+     "message": {
+      "en": "Stop serving now and return the rest to the heat. Cookwala is not a medical service: if anyone feels unwell, contact a health professional."
+     },
+     "ruleRef": "cw.safety.served_undercooked"
+    }
+   ],
+   "options": [
+    {
+     "id": "return_to_heat",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Return to heat until the CCP temperature is reached (slice thick pieces to speed up)"
+     },
+     "actions": [
+      {
+       "op": "update_params",
+       "target": "{nodeId}",
+       "params": {
+        "lid": "on"
+       }
+      },
+      {
+       "op": "set_until",
+       "target": "{nodeId}",
+       "until": {
+        "all": [
+         {
+          "sensor": "cw.sense.core_temp",
+          "target": "thickest_part",
+          "gte": "{ccp_limit}",
+          "holdFor": "PT15S"
+         }
+        ],
+        "maxTime": "PT30M"
+       }
+      },
+      {
+       "op": "add_ccp",
+       "target": "{nodeId}"
+      }
+     ],
+     "resume": "same_node",
+     "impact": {
+      "extraTimeMin": 10,
+      "quality": "minor"
+     }
+    }
+   ],
+   "references": [
+    {
+     "title": "FoodSafety.gov: Safe Minimum Internal Temperatures",
+     "url": "https://www.foodsafety.gov/food-safety-charts/safe-minimum-internal-temperatures"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.time_temp_abuse",
+   "incidentTypes": [
+    "cw.incident.time_temp_abuse",
+    "cw.incident.left_out"
+   ],
+   "title": {
+    "en": "Perishable food left in the danger zone",
+    "ar": "أكل اتساب برة التلاجة"
+   },
+   "safetyGate": [
+    {
+     "when": {
+      "any": [
+       {
+        "path": "incident.observations.minutesInDangerZone",
+        "gte": 120
+       },
+       {
+        "all": [
+         {
+          "path": "incident.observations.ambientC",
+          "gte": 32
+         },
+         {
+          "path": "incident.observations.minutesInDangerZone",
+          "gte": 60
+         }
+        ]
+       }
+      ]
+     },
+     "verdict": "unsafe_discard",
+     "message": {
+      "en": "Perishable food above 5 °C (40 °F) and below 57–60 °C (135–140 °F) for more than 2 hours (1 hour above 32 °C/90 °F) should be discarded. Reheating does not make it safe."
+     },
+     "ruleRef": "cw.safety.danger_zone_2h"
+    },
+    {
+     "when": {
+      "not": {
+       "path": "incident.observations.minutesInDangerZone",
+       "exists": true
+      }
+     },
+     "verdict": "unknown_ask_human",
+     "message": {
+      "en": "How long was it out of the fridge/heat? If unknown, discard."
+     },
+     "ruleRef": "cw.safety.unknown_time_discard"
+    }
+   ],
+   "diagnostics": [
+    {
+     "id": "minutesInDangerZone",
+     "text": {
+      "en": "How many minutes was it between 5 °C and 57 °C?"
+     },
+     "answerType": "number"
+    },
+    {
+     "id": "ambientC",
+     "text": {
+      "en": "Room temperature (°C)?"
+     },
+     "answerType": "number",
+     "sensor": "cw.sense.ambient_temp"
+    }
+   ],
+   "options": [
+    {
+     "id": "chill_or_cook_now",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Under the limit: refrigerate now or continue cooking immediately"
+     },
+     "actions": [
+      {
+       "op": "note",
+       "text": {
+        "en": "Continue cooking right away, or chill to ≤5 °C in shallow containers."
+       }
+      }
+     ],
+     "resume": "same_node"
+    },
+    {
+     "id": "discard",
+     "kind": "discard",
+     "priority": 9,
+     "title": {
+      "en": "Over the limit: discard and choose another meal"
+     },
+     "resume": "none"
+    }
+   ],
+   "references": [
+    {
+     "title": "USDA FSIS: Danger Zone 40°F-140°F",
+     "url": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/danger-zone-40f-140f"
+    },
+    {
+     "title": "FDA Food Code 2022",
+     "url": "https://www.fda.gov/food/fda-food-code/food-code-2022"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.power_outage",
+   "incidentTypes": [
+    "cw.incident.power_outage",
+    "cw.incident.gas_outage"
+   ],
+   "title": {
+    "en": "Power or gas cut during cooking",
+    "ar": "الكهربا أو الغاز قطع"
+   },
+   "safetyGate": [
+    {
+     "when": {
+      "path": "incident.observations.minutesWithoutHeat",
+      "gte": 120
+     },
+     "verdict": "unsafe_discard",
+     "message": {
+      "en": "Partially cooked food that sat without heat for over 2 hours should be discarded; never partially cook and finish later."
+     },
+     "ruleRef": "cw.safety.no_partial_cooking"
+    }
+   ],
+   "options": [
+    {
+     "id": "switch_source",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Finish now with another heat source (gas ↔ induction on battery/generator, oven ↔ hob)"
+     },
+     "actions": [
+      {
+       "op": "replace_node",
+       "target": "{nodeId}",
+       "params": {
+        "useAlternative": "{available_source}"
+       }
+      }
+     ],
+     "resume": "same_node",
+     "impact": {
+      "notes": "Uses the node's alternatives[] when present."
+     }
+    },
+    {
+     "id": "protect_cold",
+     "kind": "patch_and_resume",
+     "priority": 2,
+     "title": {
+      "en": "Keep fridge and freezer closed (fridge ~4 h, full freezer ~48 h, half-full ~24 h)"
+     },
+     "actions": [
+      {
+       "op": "note",
+       "text": {
+        "en": "Check food temperatures when power returns; discard perishables above 5 °C for over 2 hours."
+       }
+      }
+     ],
+     "resume": "none"
+    },
+    {
+     "id": "no_cook_meal",
+     "kind": "repurpose",
+     "priority": 3,
+     "title": {
+      "en": "Switch to a no-cook meal from what's safe"
+     },
+     "resume": "none"
+    }
+   ],
+   "references": [
+    {
+     "title": "FoodSafety.gov: Food Safety During Power Outage",
+     "url": "https://www.foodsafety.gov/food-safety-charts/food-safety-during-power-outage"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.contaminated",
+   "incidentTypes": [
+    "cw.incident.dropped",
+    "cw.incident.foreign_object",
+    "cw.incident.pest"
+   ],
+   "title": {
+    "en": "Dropped, contaminated, or foreign object",
+    "ar": "وقع على الأرض أو فيه حاجة غريبة"
+   },
+   "safetyGate": [
+    {
+     "when": {
+      "path": "incident.type",
+      "in": [
+       "cw.incident.dropped",
+       "cw.incident.pest"
+      ]
+     },
+     "verdict": "unsafe_discard",
+     "message": {
+      "en": "Discard food that touched the floor or pests. There is no safe 'five-second rule'."
+     },
+     "ruleRef": "cw.safety.contamination"
+    },
+    {
+     "when": {
+      "path": "incident.observations.object",
+      "in": [
+       "glass",
+       "metal_fragment",
+       "plastic_fragment"
+      ]
+     },
+     "verdict": "unsafe_discard",
+     "message": {
+      "en": "Glass or sharp fragments: discard the whole batch and any open food nearby."
+     },
+     "ruleRef": "cw.safety.physical_hazard"
+    }
+   ],
+   "options": [
+    {
+     "id": "discard_restart",
+     "kind": "discard_and_restart",
+     "priority": 1,
+     "title": {
+      "en": "Discard and restart the affected component"
+     },
+     "resume": "restart_from_input"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.allergen_cross_contact",
+   "incidentTypes": [
+    "cw.incident.allergen_cross_contact"
+   ],
+   "title": {
+    "en": "Allergen got into a dish for an allergic diner",
+    "ar": "حصل تلامس مع مادة بتعمل حساسية"
+   },
+   "safetyGate": [
+    {
+     "when": {
+      "path": "incident.type",
+      "eq": "cw.incident.allergen_cross_contact"
+     },
+     "verdict": "unsafe_discard",
+     "message": {
+      "en": "Cross-contact cannot be cooked out or removed. Do not serve it to anyone with that allergy."
+     },
+     "ruleRef": "cw.safety.allergen"
+    }
+   ],
+   "options": [
+    {
+     "id": "remake_clean",
+     "kind": "discard_and_restart",
+     "priority": 1,
+     "title": {
+      "en": "Remake an allergen-free portion with cleaned equipment"
+     },
+     "actions": [
+      {
+       "op": "insert_before",
+       "target": "{firstNode}",
+       "node": {
+        "id": "allergen_clean",
+        "op": "cw.op.clean",
+        "params": {
+         "target": [
+          "all_used_tools"
+         ]
+        }
+       }
+      }
+     ],
+     "resume": "restart_from_input"
+    },
+    {
+     "id": "label_for_others",
+     "kind": "patch_and_resume",
+     "priority": 2,
+     "title": {
+      "en": "Keep the affected dish only for non-allergic diners, clearly labelled"
+     },
+     "resume": "next_node"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.missing_ingredient",
+   "incidentTypes": [
+    "cw.incident.missing_ingredient",
+    "cw.incident.not_enough"
+   ],
+   "title": {
+    "en": "Ingredient missing or not enough mid-cook",
+    "ar": "مكون ناقص"
+   },
+   "options": [
+    {
+     "id": "substitute",
+     "kind": "substitution",
+     "priority": 1,
+     "title": {
+      "en": "Use a substitution that keeps the ingredient's role"
+     },
+     "resume": "same_node"
+    },
+    {
+     "id": "skip_optional",
+     "kind": "patch_and_resume",
+     "priority": 2,
+     "title": {
+      "en": "Skip it if it is optional or garnish"
+     },
+     "when": {
+      "path": "ingredient.optional",
+      "eq": true
+     },
+     "actions": [
+      {
+       "op": "remove_ingredient",
+       "target": "{ingredientRef}"
+      }
+     ],
+     "resume": "same_node"
+    },
+    {
+     "id": "scale_to_available",
+     "kind": "patch_and_resume",
+     "priority": 3,
+     "title": {
+      "en": "Scale the whole recipe to the amount available"
+     },
+     "actions": [
+      {
+       "op": "scale_all",
+       "factor": "{available_ratio}"
+      }
+     ],
+     "resume": "same_node"
+    },
+    {
+     "id": "quick_order",
+     "kind": "patch_and_resume",
+     "priority": 4,
+     "title": {
+      "en": "Pause at a safe point and order it (if time allows)"
+     },
+     "resume": "same_node"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.mushy_overcooked_starch",
+   "incidentTypes": [
+    "cw.incident.overcooked"
+   ],
+   "title": {
+    "en": "Overcooked rice, pasta or grains",
+    "ar": "الرز أو المكرونة اتهروا"
+   },
+   "appliesTo": {
+    "ingredientClasses": [
+     "cw.ing.class.rice",
+     "cw.ing.class.pasta",
+     "cw.ing.class.grain"
+    ]
+   },
+   "options": [
+    {
+     "id": "dry_out",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Rice slightly wet: spread on a tray or return to very low heat uncovered for a few minutes"
+     },
+     "actions": [
+      {
+       "op": "update_params",
+       "target": "{nodeId}",
+       "params": {
+        "lid": "off",
+        "heat": "very_low"
+       }
+      }
+     ],
+     "resume": "same_node"
+    },
+    {
+     "id": "repurpose",
+     "kind": "repurpose",
+     "priority": 2,
+     "title": {
+      "en": "Turn it into another dish (see transformations)"
+     },
+     "resume": "none"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.dough_texture",
+   "incidentTypes": [
+    "cw.incident.dough_too_sticky",
+    "cw.incident.dough_too_dry"
+   ],
+   "title": {
+    "en": "Dough too sticky or too dry",
+    "ar": "العجينة لزجة أو ناشفة"
+   },
+   "options": [
+    {
+     "id": "rest_then_adjust",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Rest 10 minutes covered first; flour hydrates and stickiness drops"
+     },
+     "actions": [
+      {
+       "op": "insert_before",
+       "target": "{nodeId}",
+       "node": {
+        "id": "autolyse_rest",
+        "op": "cw.op.rest",
+        "params": {
+         "cover": true
+        }
+       }
+      }
+     ],
+     "resume": "same_node"
+    },
+    {
+     "id": "adjust",
+     "kind": "patch_and_resume",
+     "priority": 2,
+     "title": {
+      "en": "Then add flour 1 tbsp at a time (sticky) or water 1 tsp at a time (dry)"
+     },
+     "resume": "same_node"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.bake_underdone_or_sunk",
+   "incidentTypes": [
+    "cw.incident.underbaked",
+    "cw.incident.sunk"
+   ],
+   "title": {
+    "en": "Cake/bread underbaked in the centre or sunk",
+    "ar": "الكيكة مستويتش من النص أو هبطت"
+   },
+   "options": [
+    {
+     "id": "extend_tented",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Still hot and wet inside: back in the oven, tent with foil, test every 5 min"
+     },
+     "when": {
+      "path": "incident.observations.cooled",
+      "eq": false
+     },
+     "actions": [
+      {
+       "op": "set_until",
+       "target": "{nodeId}",
+       "until": {
+        "any": [
+         {
+          "vision": "cw.sense.skewer_clean",
+          "humanConfirm": true
+         },
+         {
+          "sensor": "cw.sense.core_temp",
+          "gte": 95
+         }
+        ],
+        "maxTime": "PT20M"
+       }
+      }
+     ],
+     "resume": "same_node"
+    },
+    {
+     "id": "repurpose",
+     "kind": "repurpose",
+     "priority": 2,
+     "title": {
+      "en": "Already cooled or sunk: trifle, cake crumbs, bread pudding"
+     },
+     "resume": "none"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.curdled_dairy",
+   "incidentTypes": [
+    "cw.incident.curdled"
+   ],
+   "title": {
+    "en": "Dairy or custard curdled",
+    "ar": "اللبن أو الكاسترد اتقطع"
+   },
+   "options": [
+    {
+     "id": "off_heat_blend",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Off the heat immediately; whisk hard or blend; add a spoon of cold cream/milk"
+     },
+     "actions": [
+      {
+       "op": "update_params",
+       "target": "{nodeId}",
+       "params": {
+        "heat": "off"
+       }
+      },
+      {
+       "op": "insert_after",
+       "target": "{nodeId}",
+       "node": {
+        "id": "smooth",
+        "op": "cw.op.blend"
+       }
+      }
+     ],
+     "resume": "next_node",
+     "impact": {
+      "quality": "minor"
+     }
+    }
+   ],
+   "prevention": [
+    "Temper eggs; keep custards below a simmer; add acid to dairy off the heat."
+   ]
+  },
+  {
+   "id": "cw.pb.boilover",
+   "incidentTypes": [
+    "cw.incident.boilover"
+   ],
+   "title": {
+    "en": "Boil-over",
+    "ar": "الأكل فار"
+   },
+   "safetyGate": [
+    {
+     "when": {
+      "all": [
+       {
+        "path": "context.heatSource",
+        "eq": "natural_gas"
+       },
+       {
+        "path": "incident.observations.flameOut",
+        "eq": true
+       }
+      ]
+     },
+     "verdict": "unknown_ask_human",
+     "message": {
+      "en": "Gas flame may be out: turn the burner off, ventilate, check for gas smell before relighting. Raise cookwala.safety.gas_leak if you smell gas."
+     },
+     "ruleRef": "cw.safety.gas_flameout"
+    }
+   ],
+   "options": [
+    {
+     "id": "lower_and_vent_lid",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Lower heat, lid ajar, wipe the hob once safe"
+     },
+     "actions": [
+      {
+       "op": "update_params",
+       "target": "{nodeId}",
+       "params": {
+        "heat": "medium_low",
+        "lid": "ajar"
+       }
+      }
+     ],
+     "resume": "same_node"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.sensor_failure",
+   "incidentTypes": [
+    "cw.incident.sensor_failure"
+   ],
+   "title": {
+    "en": "Probe or camera failed during a step",
+    "ar": "الحساس عطلان"
+   },
+   "safetyGate": [
+    {
+     "when": {
+      "path": "node.ccp",
+      "exists": true
+     },
+     "verdict": "unknown_ask_human",
+     "message": {
+      "en": "A food-safety checkpoint cannot be passed without a reading: use another thermometer or ask a human to check."
+     },
+     "ruleRef": "cw.safety.no_blind_ccp"
+    }
+   ],
+   "options": [
+    {
+     "id": "backup_sensor",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Use a backup sensor or a human check"
+     },
+     "resume": "same_node"
+    },
+    {
+     "id": "time_with_margin",
+     "kind": "patch_and_resume",
+     "priority": 2,
+     "title": {
+      "en": "Non-CCP steps only: continue on the time window with extra margin"
+     },
+     "when": {
+      "not": {
+       "path": "node.ccp",
+       "exists": true
+      }
+     },
+     "resume": "same_node"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.done_too_early",
+   "incidentTypes": [
+    "cw.incident.done_early",
+    "cw.incident.guests_late"
+   ],
+   "title": {
+    "en": "Food is ready too early",
+    "ar": "الأكل خلص بدري"
+   },
+   "options": [
+    {
+     "id": "hot_hold",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Hot-hold at ≥ 57 °C (oven on warm, lid on), quality-limited per dish"
+     },
+     "actions": [
+      {
+       "op": "insert_after",
+       "target": "{nodeId}",
+       "node": {
+        "id": "hold_hot",
+        "op": "cw.op.hold",
+        "params": {
+         "heat": "low"
+        }
+       }
+      }
+     ],
+     "resume": "next_node"
+    },
+    {
+     "id": "cool_and_reheat",
+     "kind": "patch_and_resume",
+     "priority": 2,
+     "title": {
+      "en": "Long delay: cool quickly, refrigerate, reheat to 74 °C before serving"
+     },
+     "resume": "next_node"
+    }
+   ]
+  },
+  {
+   "id": "cw.pb.burnt_surface",
+   "incidentTypes": [
+    "cw.incident.burnt_surface"
+   ],
+   "title": {
+    "en": "Burnt top or edges (bake, roast, toast)",
+    "ar": "الوش اتحرق"
+   },
+   "options": [
+    {
+     "id": "trim",
+     "kind": "patch_and_resume",
+     "priority": 1,
+     "title": {
+      "en": "Trim or scrape off the charred parts if they are limited"
+     },
+     "resume": "next_node"
+    },
+    {
+     "id": "repurpose",
+     "kind": "repurpose",
+     "priority": 2,
+     "title": {
+      "en": "Repurpose the good parts"
+     },
+     "resume": "none"
+    }
+   ]
+  }
+ ]
+}

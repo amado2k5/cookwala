@@ -1,0 +1,17 @@
+{
+ "$kind": "AdviceRequest",
+ "cookwala": "0.1.0",
+ "id": "rq-3",
+ "intent": "recover",
+ "text": "The raw chicken was left on the counter since lunch, can I still cook it?",
+ "query": {
+  "incident": {
+   "type": "cw.incident.time_temp_abuse",
+   "observations": {
+    "minutesInDangerZone": 190,
+    "ambientC": 27
+   },
+   "description": "raw chicken thighs on counter"
+  }
+ }
+}

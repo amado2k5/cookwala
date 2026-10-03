@@ -1,0 +1,489 @@
+"""
+Cookwala GraphQL API.
+
+One schema, two deployments:
+- Index (https://cookwala.ai/v1/graphql): the catalog part of Query only
+  (recipes, search, match, vocab, policies). Public, no auth, persisted queries and
+  complexity limits.
+- Hub (https://cookwala-hub.local:7878/cookwala/v1/graphql): everything, including
+  kitchen state, Mutation and Subscription (graphql-ws over WebSocket). Uses the hub's
+  paired bearer token.
+
+Complex nested documents (process graphs, conditions, policy expressions) are exposed
+both as typed fields and as `JSON` for lossless access. The JSON always validates
+against the matching JSON Schema in /v1/schemas.
+"""
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+scalar JSON
+scalar DateTime
+"ISO 8601 duration, e.g. PT5M"
+scalar Duration
+"sha256:<64 hex>"
+scalar Hash
+
+enum VerificationLevel { V0 V1 V2 V3 }
+enum Supervision { UNATTENDED_OK PRESENCE_REQUIRED HANDS_ON_REQUIRED }
+enum SessionMode { GUIDED ASSISTED AUTONOMOUS }
+enum SessionState { DRAFT PLANNED AWAITING_INGREDIENTS AWAITING_CONFIRMATION RUNNING PAUSED COMPLETED ABORTED FAILED }
+"Matches the A2A task lifecycle plus SCHEDULED and BLOCKED."
+enum TaskState { SCHEDULED BLOCKED SUBMITTED WORKING INPUT_REQUIRED AUTH_REQUIRED COMPLETED FAILED CANCELED REJECTED }
+enum ActorKind { HUMAN ROBOT APPLIANCE AGENT HUB SERVICE SENSOR }
+enum PolicyDecision { ALLOW ALLOW_WITH_WARNINGS DENY }
+enum Severity { INFO LOW MEDIUM HIGH CRITICAL }
+enum SafetyState { NORMAL WARNING ALARM EMERGENCY }
+enum OrderState { DRAFT AWAITING_APPROVAL APPROVED PLACED PARTIALLY_FULFILLED DELIVERED CANCELED FAILED }
+enum Urgency { INFO ACTION_NEEDED TIME_CRITICAL EMERGENCY }
+enum HandoffAction { READY ACKNOWLEDGE COMPLETE REFUSE }
+
+type Query {
+  # ---------- catalog (index + hub cache) ----------
+  recipe(id: ID!, revision: Int, lang: String = "en"): Recipe
+  recipes(ids: [ID!]!, lang: String = "en"): [Recipe!]!
+  search(query: String, filter: RecipeFilter, lang: String = "en", first: Int = 20, after: String): RecipeConnection!
+  "Recipes this set of actors (plus optional humans) can cook, ranked by automation coverage."
+  match(actors: [JSON!]!, inventory: JSON, allowHuman: Boolean = true, policyPacks: [String!], lang: String = "en", first: Int = 20): [MatchResult!]!
+  vocabulary(name: String!): Vocabulary
+  vocabEntry(id: ID!): VocabEntry
+  policies(kind: String, jurisdiction: String): [PolicyPack!]!
+  policy(id: ID!): PolicyPack
+  catalog: CatalogInfo!
+
+  # ---------- kitchen (hub only) ----------
+  hub: Hub
+  devices: [Device!]!
+  device(id: ID!): Device
+  sessions(state: SessionState): [Session!]!
+  session(id: ID!): Session
+  task(id: ID!): Task
+  inventory: Inventory
+  checkInventory(recipes: [RecipeScaleInput!]!): InventoryCheck!
+  orders(state: OrderState): [OrderIntent!]!
+  order(id: ID!): OrderIntent
+  safetyStatus: SafetyStatus
+  activePolicyPacks: [String!]!
+  evaluatePolicy(recipeId: ID!, sessionId: ID, packs: [String!]): PolicyEvaluation!
+}
+
+type Mutation {
+  # devices
+  updateCapabilities(actorId: ID!, manifest: JSON!): Device!
+  unpairDevice(actorId: ID!): Boolean!
+
+  # sessions
+  createSession(input: CreateSessionInput!): Session!
+  replanSession(id: ID!, serveAt: DateTime, excludeActors: [ID!]): Session!
+  confirmSession(id: ID!, acknowledgedRules: [String!]!, overrides: [OverrideInput!]): Session!
+  startSession(id: ID!): Session!
+  pauseSession(id: ID!): Session!
+  resumeSession(id: ID!): Session!
+  abortSession(id: ID!, reason: String): Session!
+
+  # tasks
+  claimTask(taskId: ID!): Task!
+  reportProgress(taskId: ID!, progress: Float, telemetry: JSON, conditionStatus: JSON): Task!
+  completeTask(taskId: ID!, evidence: JSON, ccpReadings: [JSON!]): Task!
+  failTask(taskId: ID!, reason: String!, recoverable: Boolean = true): Task!
+  provideInput(taskId: ID!, answer: JSON!): Task!
+
+  # coordination
+  requestLease(resource: String!, holder: String!, from: DateTime!, until: DateTime!, exclusive: Boolean = true): Lease!
+  releaseLease(id: ID!): Boolean!
+  proposeHandoff(input: HandoffInput!): Handoff!
+  actOnHandoff(id: ID!, action: HandoffAction!): Handoff!
+
+  # inventory & orders
+  patchInventory(upsert: [JSON!], remove: [ID!], consume: [JSON!]): Inventory!
+  createOrderIntent(intent: JSON!): OrderIntent!
+  approveOrder(id: ID!): OrderIntent!
+  cancelOrder(id: ID!): OrderIntent!
+
+  # notifications, policy, safety
+  notify(audience: [String!]!, urgency: Urgency!, message: JSON!, actions: [JSON!], relatesTo: ID): ID!
+  acknowledgeNotification(id: ID!, actionId: String): Boolean!
+  setActivePolicyPacks(packs: [String!]!): [String!]!
+  "Any paired actor. Broadcasts cookwala.safety.estop and aborts every session."
+  emergencyStop(reason: String, zone: String): SafetyStatus!
+  raiseSafetyEvent(event: JSON!): SafetyStatus!
+
+  # feedback to the index
+  submitReport(report: JSON!): Boolean!
+}
+
+type Subscription {
+  "CloudEvents filtered by type prefix (e.g. \"cookwala.task.\"), session or priority."
+  events(types: [String!], sessionId: ID, priority: String): Event!
+  sessionUpdated(id: ID!): Session!
+  taskUpdated(sessionId: ID!): Task!
+  safety: Event!
+  inventoryChanged: Inventory!
+  notifications(audience: String): Event!
+}
+
+# ---------------- catalog types ----------------
+
+type CatalogInfo {
+  version: String!
+  generatedAt: DateTime!
+  recipeCount: Int!
+  languages: [String!]!
+  countsByLevel: JSON
+}
+
+input RecipeFilter {
+  cuisine: [String!]
+  course: String
+  includeIngredients: [ID!]
+  excludeIngredients: [ID!]
+  excludeAllergens: [String!]
+  dietary: [String!]
+  maxTotalTimeSeconds: Int
+  minLevel: VerificationLevel
+  equipmentSubsetOf: [ID!]
+  opsSubsetOf: [ID!]
+  supervision: Supervision
+  maxKcal: Float
+}
+
+type RecipeConnection {
+  total: Int!
+  edges: [RecipeEdge!]!
+  pageInfo: PageInfo!
+  facets: JSON
+}
+type RecipeEdge { cursor: String!, node: Recipe! }
+type PageInfo { hasNextPage: Boolean!, endCursor: String }
+
+type MatchResult {
+  recipe: Recipe!
+  automationCoverage: Float!
+  humanSteps: [String!]!
+  missingIngredients: [ID!]!
+  policyDecision: PolicyDecision!
+}
+
+type Recipe {
+  id: ID!
+  revision: Int!
+  hash: Hash!
+  "Spec version the document conforms to."
+  cookwala: String!
+  level: VerificationLevel!
+  title(lang: String): String!
+  names: JSON!
+  cuisine: [String!]!
+  course: String
+  tags: [String!]!
+  difficulty: String
+  images: [Image!]!
+  servings: Float!
+  scaling: JSON
+  ingredients: [Ingredient!]!
+  equipment: [Equipment!]!
+  nodes: [ProcessNode!]!
+  totalTime: Duration
+  activeTime: Duration
+  hazards: [Hazard!]!
+  ccps: [CCP!]!
+  allergensEU: [String!]!
+  allergensUS: [String!]!
+  dietary: [DietaryClaim!]!
+  supervision: Supervision!
+  nutrition: JSON
+  cost: JSON
+  text(lang: String): JSON
+  source: JSON
+  license: String!
+  legacyDataUrl: String
+  "The complete document, valid against recipe.schema.json."
+  document: JSON!
+}
+
+type Image { url: String!, role: String, width: Int, height: Int }
+
+type Ingredient {
+  ref: ID!
+  ingredient: VocabEntry!
+  quantity: Float!
+  unit: String!
+  tolerance: Float
+  display(lang: String): String
+  prep: JSON
+  optional: Boolean!
+  toTaste: Boolean!
+  allergens: [String!]!
+}
+
+type Equipment { ref: ID!, class: VocabEntry!, optional: Boolean!, constraints: JSON }
+
+type ProcessNode {
+  id: ID!
+  op: VocabEntry!
+  inputs: [ID!]!
+  output: ID
+  equipment: [ID!]!
+  params: JSON
+  until: JSON
+  onTimeout: String
+  attention: String
+  allowedAssignees: [ActorKind!]
+  hazards: [ID!]!
+  ccp: ID
+  text(lang: String): String
+}
+
+type Hazard { id: ID!, type: String!, severity: Severity!, mitigation: [String!]!, limits: JSON }
+type CCP { id: ID!, hazard: String!, node: ID!, criticalLimit: JSON!, monitoring: [String!]!, corrective: String! }
+type DietaryClaim { claim: String!, basis: String!, ruleset: String }
+
+type Vocabulary { name: String!, version: String!, entries: [VocabEntry!]! }
+type VocabEntry {
+  id: ID!
+  label(lang: String): String!
+  definition: String
+  classes: [String!]!
+  paramsSchema: JSON
+  sensors: [String!]
+  allergens: [String!]
+  links: JSON
+  deprecated: Boolean!
+}
+
+type PolicyPack {
+  id: ID!
+  version: String!
+  kind: String!
+  jurisdiction: [String!]!
+  title(lang: String): String!
+  reviewStatus: String
+  effective: String!
+  document: JSON!
+}
+
+type PolicyEvaluation { decision: PolicyDecision!, results: [PolicyResult!]! }
+type PolicyResult { pack: String!, rule: String!, effect: String!, passed: Boolean!, message: String, overriddenBy: String }
+
+# ---------------- kitchen types (hub) ----------------
+
+type Hub {
+  kitchenId: ID!
+  name: String
+  cookwala: String!
+  index: String!
+  agentCard: String
+  mcp: String
+}
+
+type Actor { id: ID!, kind: ActorKind!, name: String, vendor: String, model: String }
+
+type Device {
+  actor: Actor!
+  roles: [String!]!
+  status: String!
+  lastSeen: DateTime
+  currentTask: Task
+  "Full capability manifest (capabilities.schema.json)."
+  manifest: JSON!
+}
+
+input RecipeScaleInput { recipeId: ID!, scale: Float, servings: Float }
+input OverrideInput { rule: String!, reason: String! }
+
+input CreateSessionInput {
+  recipes: [SessionRecipeInput!]!
+  serveAt: DateTime
+  mode: SessionMode = ASSISTED
+  supervision: Supervision
+  participants: [ID!]
+  diners: [JSON!]
+  autoOrderMissing: Boolean = false
+}
+input SessionRecipeInput { recipeId: ID!, scale: Float, servings: Float, variants: JSON }
+
+type Session {
+  id: ID!
+  kitchenId: ID!
+  state: SessionState!
+  mode: SessionMode!
+  serveAt: DateTime
+  recipes: [Recipe!]!
+  participants: [Device!]!
+  tasks(state: TaskState, assignee: ID): [Task!]!
+  leases: [Lease!]!
+  handoffs: [Handoff!]!
+  ccpRecords: [JSON!]!
+  policy: PolicyEvaluation!
+  estimatedEnd: DateTime
+  shoppingList: OrderIntent
+  "Full session document (session.schema.json)."
+  document: JSON!
+}
+
+type Task {
+  id: ID!
+  session: Session!
+  recipeId: ID!
+  node: ProcessNode!
+  assignee: Actor!
+  fallback: [Actor!]!
+  state: TaskState!
+  dependsOn: [ID!]!
+  scheduledStart: DateTime
+  startedAt: DateTime
+  endedAt: DateTime
+  progress: Float
+  telemetry: JSON
+  conditionStatus: JSON
+  message(lang: String): String
+  a2aTaskId: String
+}
+
+type Lease { id: ID!, resource: String!, holder: String!, exclusive: Boolean!, from: DateTime!, until: DateTime!, state: String! }
+
+input HandoffInput { from: ID!, to: ID!, item: String!, location: String, hazards: [String!], requiresAck: Boolean = true }
+type Handoff { id: ID!, from: Actor!, to: Actor!, item: String!, location: String, hazards: [String!]!, state: String! }
+
+type Inventory { updatedAt: DateTime!, items: [InventoryItem!]!, document: JSON! }
+type InventoryItem {
+  id: ID!
+  ingredient: VocabEntry!
+  quantity: Float!
+  unit: String!
+  storage: String
+  expires: String
+  confidence: Float
+  reservedBy: ID
+}
+type InventoryCheck { available: [ID!]!, missing: [JSON!]!, expiring: [ID!]! }
+
+type OrderIntent {
+  id: ID!
+  kind: String!
+  state: OrderState!
+  lines: [JSON!]!
+  deliverBy: DateTime
+  budget: JSON
+  externalOrderRef: String
+  document: JSON!
+}
+
+type SafetyStatus {
+  state: SafetyState!
+  activeEvents: [Event!]!
+  heatSourcesOn: [String!]!
+  humansPresent: Boolean
+}
+
+"A CloudEvents 1.0 event (event.schema.json)."
+type Event {
+  id: ID!
+  type: String!
+  source: String!
+  subject: String
+  time: DateTime!
+  priority: String
+  data: JSON!
+}
+
+# =====================================================================
+# Reasoning, modes, profiles, extensions, flows, teaming, market, relief
+# =====================================================================
+
+enum AdviceIntent {
+  ASK COOK_FROM SUBSTITUTE RECOVER REPURPOSE ADAPT_EQUIPMENT TEAM_PLAN STORE FEED RESCALE RETIME
+  LEFTOVERS DIAGNOSE TEXTURE_MODIFY DIET_MERGE NUTRITION_TARGET SHOPPING_OPTIMIZE PERSONALIZE RELIEF_ALLOCATE CUSTOM
+}
+enum AdviceStatus { ANSWERED NEEDS_INPUT PARTIAL REFUSED UNSUPPORTED }
+enum SafetyVerdict { SAFE SAFE_WITH_CONDITIONS UNSAFE_DISCARD UNKNOWN_ASK_HUMAN NOT_APPLICABLE }
+
+"Answer from the Cookwala reasoner (advice.schema.json#/$defs/AdviceResponse)."
+type AdviceResponse {
+  responseId: ID!
+  intent: AdviceIntent!
+  resolvedIntent: AdviceIntent
+  status: AdviceStatus!
+  safetyVerdict: SafetyVerdict!
+  safety: JSON!
+  options: [AdviceOption!]!
+  questions: [JSON!]!
+  warnings: [JSON!]!
+  document: JSON!
+}
+
+type AdviceOption {
+  id: ID!
+  rank: Int
+  kind: String!
+  title(lang: String): String!
+  explanation(lang: String): String
+  confidence: Float!
+  safetyVerdict: SafetyVerdict!
+  recipeIds: [ID!]!
+  "RecipePatch / TeamPlan / StoragePlan / ProductionPlan / PortionPlan / Allocation as JSON."
+  payload: JSON
+  coverage: JSON
+  impact: JSON
+  evidence: [JSON!]!
+}
+
+type Provider { id: ID!, name: String!, roles: [String!]!, area: JSON, credentials: [JSON!]!, endpoints: JSON, document: JSON! }
+type Offer { id: ID!, provider: ID!, type: String!, title(lang: String): String!, ingredientId: ID, recipeIds: [ID!]!, pricing: JSON, sponsored: Boolean!, credentials: [JSON!]!, document: JSON! }
+type ReliefProgram { id: ID!, name: String!, type: String!, operator: ID!, area: JSON!, rations: JSON, accepts: [String!]!, document: JSON! }
+type ReliefNeed { id: ID!, program: ID!, place: JSON!, window: JSON!, people: Int!, status: String!, priority: String, document: JSON! }
+type ReliefPledge { id: ID!, from: ID!, kind: String!, available: JSON!, document: JSON! }
+type ImpactReport { program: ID!, period: JSON!, meals: Int!, peopleReached: Int, costPerMeal: JSON, surplusRescuedKg: Float, document: JSON! }
+type Extension { id: ID!, name: String!, version: String!, enabled: Boolean!, provides: [JSON!]!, permissions: JSON!, document: JSON! }
+type Flow { id: ID!, name: String!, version: String!, triggers: [JSON!]!, document: JSON! }
+type Profile { id: ID!, kind: String!, name: String, visibility: String, document: JSON! }
+type RegistryEntry { kind: String!, id: ID, url: String!, name: String, tags: [String!]!, verified: Boolean }
+
+extend type Query {
+  "Ask the reasoner. On the public index, requests with personal data are rejected."
+  advise(request: JSON!): AdviceResponse!
+  "Natural-language shortcut for intent ask."
+  ask(text: String!, lang: String, context: JSON): AdviceResponse!
+  registry(kind: String): [RegistryEntry!]!
+  providers(role: String, country: String, credential: String): [Provider!]!
+  offers(type: String, ingredientId: ID, recipeId: ID, country: String, credential: String): [Offer!]!
+  reliefPrograms(country: String, accepts: String): [ReliefProgram!]!
+  reliefNeeds(country: String, priority: String, status: String): [ReliefNeed!]!
+  impact(program: ID): [ImpactReport!]!
+
+  # hub only
+  mode: JSON
+  profiles(kind: String): [Profile!]!
+  profile(id: ID!): Profile
+  extensions: [Extension!]!
+  flows: [Flow!]!
+  reliefPledges: [ReliefPledge!]!
+}
+
+extend type Mutation {
+  "Apply an advice option to a session (patch + resume, team plan, storage plan...)."
+  applyAdvice(responseId: ID!, optionId: ID!, sessionId: ID): Session!
+  setMode(mode: JSON!): JSON!
+  saveProfile(profile: JSON!): Profile!
+  deleteProfile(id: ID!): Boolean!
+  installExtension(url: String!, grant: JSON): Extension!
+  setExtensionEnabled(id: ID!, enabled: Boolean!): Extension!
+  installFlow(url: String, flow: JSON, inputs: JSON): Flow!
+  runFlow(id: ID!, inputs: JSON): ID!
+  "A robot asks for help; returns the awarded team plan."
+  callForProposals(sessionId: ID!, tasks: [ID!], from: ID, bidWindowSeconds: Int = 5, objective: String): JSON!
+  sendQuoteRequest(request: JSON!): ID!
+  createReliefNeed(need: JSON!): ReliefNeed!
+  createReliefPledge(pledge: JSON!): ReliefPledge!
+  allocateRelief(needs: [ID!], pledges: [ID!], objective: String): JSON!
+  publishImpact(report: JSON!): ImpactReport!
+}
+
+extend type Subscription {
+  team(sessionId: ID): Event!
+  relief(program: ID): Event!
+  flowRuns(flowId: ID): Event!
+  modeChanged: JSON!
+}

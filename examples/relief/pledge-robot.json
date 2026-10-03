@@ -1,0 +1,18 @@
+{
+ "$kind": "Pledge",
+ "cookwala": "0.1.0",
+ "id": "pl-882",
+ "from": "did:web:robots.example",
+ "kind": "robot_capacity",
+ "capacity": {
+  "mealsPerHour": 180,
+  "hours": [
+   "08:00-12:00"
+  ],
+  "kitchen": "https://kitchen-1.foodbank.example"
+ },
+ "available": {
+  "from": "2026-11-03T08:00:00+02:00",
+  "to": "2026-11-03T12:00:00+02:00"
+ }
+}

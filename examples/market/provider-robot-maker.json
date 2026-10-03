@@ -1,0 +1,33 @@
+{
+ "$kind": "Provider",
+ "cookwala": "0.1.0",
+ "id": "did:web:robots.example",
+ "name": "Example Robotics",
+ "roles": [
+  "robot_maker",
+  "robot_rental",
+  "repair_service"
+ ],
+ "area": {
+  "online": true,
+  "countries": [
+   "US",
+   "EG",
+   "AE"
+  ]
+ },
+ "credentials": [
+  {
+   "type": "cookwala_conformance:executor",
+   "issuer": "did:web:cookwala.ai"
+  },
+  {
+   "type": "iso_13482",
+   "issuer": "did:web:testlab.example"
+  }
+ ],
+ "endpoints": {
+  "offers": "https://robots.example/cookwala/offers.json",
+  "a2a": "https://robots.example/.well-known/agent-card.json"
+ }
+}

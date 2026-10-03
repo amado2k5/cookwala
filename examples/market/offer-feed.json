@@ -1,0 +1,73 @@
+{
+ "$kind": "OfferFeed",
+ "cookwala": "0.1.0",
+ "provider": {
+  "cookwala": "0.1.0",
+  "id": "did:web:greengrocer.example",
+  "name": "Green Grocer Cairo",
+  "roles": [
+   "grocer"
+  ]
+ },
+ "updatedAt": "2026-10-03T08:00:00Z",
+ "offers": [
+  {
+   "id": "gg-lamb-1kg",
+   "provider": "did:web:greengrocer.example",
+   "type": "ingredient",
+   "title": {
+    "en": "Lamb shoulder, halal, 1 kg"
+   },
+   "ingredientId": "cw.ing.lamb_shoulder",
+   "pack": {
+    "value": 1000,
+    "unit": "g"
+   },
+   "dietary": [
+    "halal_certified"
+   ],
+   "pricing": {
+    "model": "per_unit",
+    "price": {
+     "amount": 11.5,
+     "currency": "USD"
+    },
+    "unit": "kg"
+   },
+   "availability": {
+    "inStock": true,
+    "leadTime": "PT3H"
+   },
+   "fulfillment": [
+    "delivery",
+    "pickup"
+   ],
+   "checkout": {
+    "protocol": "ucp",
+    "url": "https://greengrocer.example/ucp"
+   }
+  },
+  {
+   "id": "gg-koshari-kit",
+   "provider": "did:web:greengrocer.example",
+   "type": "meal_kit",
+   "title": {
+    "en": "Koshari kit for 4"
+   },
+   "recipeIds": [
+    "cw:fifi.cooking:ec-160"
+   ],
+   "pricing": {
+    "model": "per_unit",
+    "price": {
+     "amount": 6,
+     "currency": "USD"
+    }
+   },
+   "fulfillment": [
+    "delivery"
+   ],
+   "sponsored": false
+  }
+ ]
+}

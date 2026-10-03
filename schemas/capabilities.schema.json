@@ -1,0 +1,464 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/capabilities.schema.json",
+  "title": "Cookwala Capability Manifest",
+  "description": "Published by every participant in a Cookwala kitchen (robot, appliance, sensor, hub, agent, service) so a hub can match recipe steps to who can do them. Served by the device at /.well-known/cookwala-device.json, registered with the hub (POST /devices), or provided by the vendor's cloud. Self-declared; the hub treats safety claims as claims.",
+  "type": "object",
+  "required": [
+    "cookwala",
+    "actor",
+    "roles",
+    "capabilities",
+    "safety",
+    "interfaces"
+  ],
+  "properties": {
+    "cookwala": {
+      "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "actor": {
+      "$ref": "common.schema.json#/$defs/Actor"
+    },
+    "firmware": {
+      "type": "string"
+    },
+    "roles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "executor",
+          "appliance",
+          "sensor",
+          "inventory",
+          "orderer",
+          "notifier",
+          "safety_monitor",
+          "planner",
+          "hub",
+          "display",
+          "voice"
+        ]
+      }
+    },
+    "location": {
+      "type": "object",
+      "properties": {
+        "kitchenId": {
+          "type": "string"
+        },
+        "zone": {
+          "type": "string",
+          "description": "e.g. counter-left, hob, sink, fridge."
+        },
+        "mobile": {
+          "type": "boolean"
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "ops": {
+          "type": "array",
+          "description": "Operations this actor can perform, with parameter ranges.",
+          "items": {
+            "type": "object",
+            "required": [
+              "op"
+            ],
+            "properties": {
+              "op": {
+                "$ref": "common.schema.json#/$defs/VocabId"
+              },
+              "params": {
+                "type": "object",
+                "description": "Per-parameter supported ranges/enums, e.g. {\"heat\": [\"low\",\"medium\",\"high\"], \"targetC\": {\"min\": 30, \"max\": 250}}."
+              },
+              "maxMassG": {
+                "type": "number"
+              },
+              "ingredientClasses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Limits, e.g. cut only for cw.ing.class.vegetable_firm."
+              },
+              "reliability": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Self-reported success rate."
+              },
+              "needsHumanFor": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "skill": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "heat": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "class"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "class": {
+                "$ref": "common.schema.json#/$defs/VocabId"
+              },
+              "maxTempC": {
+                "type": "number"
+              },
+              "powerW": {
+                "type": "number"
+              },
+              "modes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "closedLoopTemp": {
+                "type": "boolean"
+              },
+              "remoteStartAllowed": {
+                "type": "boolean",
+                "description": "Whether local regulation/vendor allows remote start."
+              }
+            }
+          }
+        },
+        "vessels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "class": {
+                "type": "string"
+              },
+              "capacityMl": {
+                "type": "number"
+              },
+              "diameterMm": {
+                "type": "number"
+              },
+              "material": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "sensors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "sensor"
+            ],
+            "properties": {
+              "sensor": {
+                "$ref": "common.schema.json#/$defs/VocabId"
+              },
+              "accuracy": {
+                "type": "number"
+              },
+              "unit": {
+                "$ref": "common.schema.json#/$defs/Unit"
+              },
+              "rateHz": {
+                "type": "number"
+              },
+              "visionCues": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "dispensers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "slot": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "solid",
+                  "liquid",
+                  "spice",
+                  "oil",
+                  "water"
+                ]
+              },
+              "capacityG": {
+                "type": "number"
+              },
+              "accuracyG": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "manipulation": {
+          "type": "object",
+          "properties": {
+            "arms": {
+              "type": "integer"
+            },
+            "payloadKg": {
+              "type": "number"
+            },
+            "reachMm": {
+              "type": "number"
+            },
+            "toolChanger": {
+              "type": "boolean"
+            },
+            "canOpen": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "fridge",
+                  "oven",
+                  "drawer",
+                  "cupboard",
+                  "jar",
+                  "can",
+                  "packet"
+                ]
+              }
+            }
+          }
+        },
+        "inventory": {
+          "type": "object",
+          "properties": {
+            "tracks": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "presence",
+                  "quantity",
+                  "expiry",
+                  "temperature",
+                  "door_state"
+                ]
+              }
+            },
+            "method": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "camera",
+                  "weight",
+                  "rfid",
+                  "barcode",
+                  "receipt",
+                  "manual"
+                ]
+              }
+            }
+          }
+        },
+        "notify": {
+          "type": "object",
+          "properties": {
+            "channels": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "screen",
+                  "speaker",
+                  "push",
+                  "sms",
+                  "email",
+                  "matter",
+                  "webhook",
+                  "light",
+                  "haptic"
+                ]
+              }
+            }
+          }
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "safety": {
+      "type": "object",
+      "required": [
+        "certifications",
+        "presenceDetection",
+        "emergencyStop"
+      ],
+      "properties": {
+        "certifications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "standard"
+            ],
+            "properties": {
+              "standard": {
+                "type": "string",
+                "description": "e.g. IEC 60335-1, IEC 60335-2-6, ISO 13482:2026, ISO 10218-1, ISO/TS 15066, ETSI EN 303 645, GB/T (cooking machines), UL 858."
+              },
+              "body": {
+                "type": "string"
+              },
+              "certificate": {
+                "type": "string"
+              },
+              "selfDeclared": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "presenceDetection": {
+          "type": "boolean",
+          "description": "Can detect humans, children or pets in its work zone."
+        },
+        "emergencyStop": {
+          "enum": [
+            "physical",
+            "remote",
+            "both",
+            "none"
+          ]
+        },
+        "unattendedOps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Ops the maker certifies for unattended use."
+        },
+        "policyPacks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Policy packs the device enforces itself."
+        },
+        "minVerificationLevel": {
+          "type": "object",
+          "properties": {
+            "presence_required": {
+              "enum": [
+                "V1",
+                "V2",
+                "V3"
+              ]
+            },
+            "unattended": {
+              "enum": [
+                "V2",
+                "V3"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "interfaces": {
+      "type": "object",
+      "description": "How the hub reaches this actor.",
+      "properties": {
+        "cookwalaHttp": {
+          "type": "string",
+          "description": "Base URL of the actor's Cookwala executor API."
+        },
+        "mqtt": {
+          "type": "object",
+          "properties": {
+            "topicPrefix": {
+              "type": "string"
+            }
+          }
+        },
+        "matter": {
+          "type": "object",
+          "properties": {
+            "nodeId": {
+              "type": "string"
+            },
+            "endpoints": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "endpoint": {
+                    "type": "integer"
+                  },
+                  "deviceType": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ros2": {
+          "type": "object",
+          "properties": {
+            "namespace": {
+              "type": "string"
+            },
+            "actionServer": {
+              "type": "string"
+            }
+          }
+        },
+        "a2a": {
+          "type": "string",
+          "description": "AgentCard URL (/.well-known/agent-card.json)."
+        },
+        "mcp": {
+          "type": "string"
+        },
+        "homeAssistant": {
+          "type": "string",
+          "description": "Entity id prefix if bridged through Home Assistant."
+        },
+        "vendorCloud": {
+          "type": "string"
+        }
+      }
+    },
+    "signature": {
+      "$ref": "common.schema.json#/$defs/Signature"
+    },
+    "meta": {
+      "$ref": "common.schema.json#/$defs/Meta"
+    }
+  },
+  "patternProperties": {
+    "^x-": {}
+  }
+}

@@ -1,0 +1,100 @@
+{
+ "$kind": "AdviceResponse",
+ "cookwala": "0.1.0",
+ "requestId": "rq-7",
+ "intent": "personalize",
+ "status": "answered",
+ "safety": {
+  "verdict": "safe"
+ },
+ "warnings": [
+  {
+   "en": "Nutrition guidance only, not medical advice. Dad's sodium limit comes from his clinician."
+  }
+ ],
+ "options": [
+  {
+   "id": "pp1",
+   "rank": 1,
+   "kind": "portion_plan",
+   "title": {
+    "en": "Cook 0.75× the recipe; salt Dad's bowl less"
+   },
+   "confidence": 0.8,
+   "safety": {
+    "verdict": "safe"
+   },
+   "portionPlan": {
+    "recipeId": "ec-160",
+    "totalCookedG": 1500,
+    "cookQuantityFactor": 0.75,
+    "people": [
+     {
+      "personId": "p1",
+      "grams": 450,
+      "nutrition": {
+       "kcal": 410,
+       "proteinG": 26,
+       "fiberG": 14,
+       "sodiumMg": 480
+      },
+      "modifications": [
+       "Serve before the final salting step; lemon instead of extra salt"
+      ]
+     },
+     {
+      "personId": "p2",
+      "grams": 400,
+      "nutrition": {
+       "kcal": 365,
+       "proteinG": 23,
+       "fiberG": 12,
+       "sodiumMg": 720
+      }
+     },
+     {
+      "personId": "p3",
+      "grams": 300,
+      "nutrition": {
+       "kcal": 275,
+       "proteinG": 17,
+       "fiberG": 9,
+       "sodiumMg": 540
+      },
+      "modifications": [
+       "No sesame garnish"
+      ]
+     }
+    ],
+    "plannedLeftovers": {
+     "grams": 350,
+     "use": "Dad's lunch tomorrow (fridge, ≤3 days)"
+    },
+    "wasteEstimateG": 0,
+    "cost": {
+     "total": {
+      "amount": 2.1,
+      "currency": "USD"
+     }
+    }
+   },
+   "evidence": [
+    {
+     "kind": "rule",
+     "ref": "nutrition.mifflin_st_jeor"
+    },
+    {
+     "kind": "recipe",
+     "ref": "ec-160"
+    }
+   ]
+  }
+ ],
+ "engine": {
+  "version": "reasoner-0.1",
+  "components": [
+   "nutrition",
+   "portioner"
+  ]
+ }
+}

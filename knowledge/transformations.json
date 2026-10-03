@@ -1,0 +1,257 @@
+{
+ "cookwala": "0.1.0",
+ "id": "cw.knowledge.transformations.core",
+ "version": "0.1.0",
+ "kind": "transformations",
+ "title": {
+  "en": "Repurposing intermediates and mistakes"
+ },
+ "reviewStatus": "draft",
+ "entries": [
+  {
+   "id": "cw.tr.rice_mushy",
+   "from": {
+    "class": "cooked_rice",
+    "issues": [
+     "mushy"
+    ]
+   },
+   "to": [
+    {
+     "dishTag": "rice_pudding"
+    },
+    {
+     "dishTag": "congee"
+    },
+    {
+     "dishTag": "rice_patties"
+    },
+    {
+     "dishTag": "arancini"
+    }
+   ],
+   "safety": "Rice must have been cooled to ≤5 °C within 1 hour if not used hot."
+  },
+  {
+   "id": "cw.tr.rice_dayold",
+   "from": {
+    "class": "cooked_rice",
+    "state": "chilled_day_old"
+   },
+   "to": [
+    {
+     "dishTag": "fried_rice"
+    },
+    {
+     "dishTag": "stuffed_vegetables_filling"
+    }
+   ],
+   "safety": "Only rice cooled within 1 hour and refrigerated ≤1 day."
+  },
+  {
+   "id": "cw.tr.bread_stale",
+   "from": {
+    "class": "bread",
+    "issues": [
+     "stale"
+    ]
+   },
+   "to": [
+    {
+     "dishTag": "fattah"
+    },
+    {
+     "dishTag": "fattoush"
+    },
+    {
+     "dishTag": "breadcrumbs"
+    },
+    {
+     "dishTag": "bread_pudding"
+    },
+    {
+     "dishTag": "croutons"
+    },
+    {
+     "dishTag": "um_ali"
+    }
+   ]
+  },
+  {
+   "id": "cw.tr.veg_overcooked",
+   "from": {
+    "class": "cooked_vegetables",
+    "issues": [
+     "overcooked"
+    ]
+   },
+   "to": [
+    {
+     "dishTag": "blended_soup"
+    },
+    {
+     "dishTag": "puree"
+    },
+    {
+     "dishTag": "vegetable_fritters"
+    }
+   ]
+  },
+  {
+   "id": "cw.tr.banana_overripe",
+   "from": {
+    "class": "banana",
+    "issues": [
+     "overripe"
+    ]
+   },
+   "to": [
+    {
+     "dishTag": "banana_bread"
+    },
+    {
+     "dishTag": "smoothie"
+    },
+    {
+     "dishTag": "pancakes"
+    }
+   ]
+  },
+  {
+   "id": "cw.tr.cake_sunk",
+   "from": {
+    "class": "cake",
+    "issues": [
+     "sunk",
+     "broken",
+     "underbaked_center_trimmed"
+    ]
+   },
+   "to": [
+    {
+     "dishTag": "trifle"
+    },
+    {
+     "dishTag": "cake_pops"
+    },
+    {
+     "dishTag": "bread_pudding"
+    }
+   ]
+  },
+  {
+   "id": "cw.tr.pasta_overcooked",
+   "from": {
+    "class": "cooked_pasta",
+    "issues": [
+     "overcooked"
+    ]
+   },
+   "to": [
+    {
+     "dishTag": "baked_pasta"
+    },
+    {
+     "dishTag": "pasta_frittata"
+    },
+    {
+     "dishTag": "soup"
+    }
+   ]
+  },
+  {
+   "id": "cw.tr.stew_too_salty",
+   "from": {
+    "class": "stew",
+    "issues": [
+     "too_salty"
+    ]
+   },
+   "to": [
+    {
+     "dishTag": "larger_batch_with_unsalted_legumes"
+    },
+    {
+     "dishTag": "sauce_base"
+    }
+   ]
+  },
+  {
+   "id": "cw.tr.roast_dry",
+   "from": {
+    "class": "cooked_poultry",
+    "issues": [
+     "dry"
+    ]
+   },
+   "to": [
+    {
+     "dishTag": "shredded_in_sauce"
+    },
+    {
+     "dishTag": "sandwich_filling"
+    },
+    {
+     "dishTag": "soup"
+    },
+    {
+     "dishTag": "stuffed_pastry"
+    }
+   ]
+  },
+  {
+   "id": "cw.tr.meringue_collapsed",
+   "from": {
+    "class": "meringue",
+    "issues": [
+     "collapsed",
+     "cracked"
+    ]
+   },
+   "to": [
+    {
+     "dishTag": "eton_mess_style_dessert"
+    }
+   ]
+  },
+  {
+   "id": "cw.tr.custard_curdled",
+   "from": {
+    "class": "custard",
+    "issues": [
+     "curdled_blended"
+    ]
+   },
+   "to": [
+    {
+     "dishTag": "ice_cream_base"
+    },
+    {
+     "dishTag": "bread_pudding_custard"
+    }
+   ]
+  },
+  {
+   "id": "cw.tr.leftover_cooked_meat",
+   "from": {
+    "class": "cooked_meat",
+    "state": "leftover_properly_chilled"
+   },
+   "to": [
+    {
+     "dishTag": "wraps"
+    },
+    {
+     "dishTag": "sambousek_filling"
+    },
+    {
+     "dishTag": "fried_rice"
+    },
+    {
+     "dishTag": "pasta_sauce"
+    }
+   ],
+   "safety": "Within storage limits; reheat to 74 °C."
+  }
+ ]
+}

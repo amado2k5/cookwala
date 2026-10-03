@@ -1,0 +1,43 @@
+{
+ "$kind": "AdviceRequest",
+ "cookwala": "0.1.0",
+ "id": "rq-2",
+ "intent": "recover",
+ "asker": {
+  "kind": "robot",
+  "id": "robot:arm-1"
+ },
+ "context": {
+  "session": {
+   "sessionId": "s-42",
+   "recipeId": "example-shakshuka",
+   "nodeId": "n7",
+   "completedNodes": [
+    "n1",
+    "n2",
+    "n3",
+    "n4",
+    "n5",
+    "n6"
+   ]
+  },
+  "constraints": {
+   "serveAt": "2026-10-03T19:30:00Z"
+  }
+ },
+ "query": {
+  "incident": {
+   "type": "cw.incident.too_salty",
+   "recipeId": "example-shakshuka",
+   "nodeId": "n7",
+   "ingredientRef": "salt",
+   "observations": {
+    "saltAddedG": 15,
+    "saltExpectedG": 5,
+    "salt_ratio": 3
+   },
+   "noticedAt": "2026-10-03T18:52:00Z"
+  },
+  "goal": "save_this_dish"
+ }
+}

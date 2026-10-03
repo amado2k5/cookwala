@@ -1,0 +1,78 @@
+{
+ "$kind": "AdviceResponse",
+ "cookwala": "0.1.0",
+ "requestId": "rq-3",
+ "intent": "recover",
+ "status": "answered",
+ "safety": {
+  "verdict": "unsafe_discard",
+  "reasons": [
+   "Perishable raw poultry in the danger zone for 190 min (> 120 min). Cooking does not make it safe."
+  ],
+  "rulesApplied": [
+   "cw.safety.danger_zone_2h"
+  ]
+ },
+ "options": [
+  {
+   "id": "discard",
+   "rank": 1,
+   "kind": "discard",
+   "title": {
+    "en": "Discard the chicken"
+   },
+   "confidence": 1,
+   "safety": {
+    "verdict": "unsafe_discard"
+   },
+   "evidence": [
+    {
+     "kind": "playbook",
+     "ref": "cw.pb.time_temp_abuse"
+    }
+   ]
+  },
+  {
+   "id": "alt",
+   "rank": 2,
+   "kind": "recipe",
+   "title": {
+    "en": "Quick alternative from your inventory: lentil soup (35 min)"
+   },
+   "recipeIds": [
+    "ec-160"
+   ],
+   "confidence": 0.6,
+   "safety": {
+    "verdict": "safe"
+   },
+   "evidence": [
+    {
+     "kind": "recipe",
+     "ref": "ec-160"
+    }
+   ]
+  }
+ ],
+ "engine": {
+  "version": "reasoner-0.1",
+  "components": [
+   "matcher",
+   "substitution-graph",
+   "food-safety",
+   "playbooks",
+   "cp-sat"
+  ],
+  "llm": {
+   "used": true,
+   "model": "local",
+   "role": "explain"
+  },
+  "checks": [
+   "schema",
+   "policy",
+   "food_safety",
+   "patch_validation"
+  ]
+ }
+}

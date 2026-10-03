@@ -1,0 +1,39 @@
+{
+ "cookwala": "0.1.0",
+ "id": "cookware-home-1",
+ "kind": "cookware",
+ "meta": {
+  "visibility": "private"
+ },
+ "items": [
+  {
+   "id": "pan-28",
+   "class": "cw.eq.vessel.pan.skillet",
+   "diameterMm": 280,
+   "material": "stainless",
+   "lid": true,
+   "inductionCompatible": true,
+   "ovenSafeMaxC": 260,
+   "handle": "long"
+  },
+  {
+   "id": "pot-8l",
+   "class": "cw.eq.vessel.pot.stock",
+   "capacityMl": 8000,
+   "material": "aluminium",
+   "lid": true,
+   "inductionCompatible": false,
+   "handle": "two_loop"
+  },
+  {
+   "id": "box-500",
+   "class": "cw.eq.container.food",
+   "capacityMl": 500,
+   "material": "glass",
+   "airtight": true,
+   "freezerSafe": true,
+   "microwaveSafe": true,
+   "count": 6
+  }
+ ]
+}

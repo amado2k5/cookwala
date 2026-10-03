@@ -1,0 +1,80 @@
+{
+ "cookwala": "0.1.0",
+ "actor": {
+  "kind": "robot",
+  "id": "robot:arm-1",
+  "vendor": "Example Robotics",
+  "model": "CounterArm 2"
+ },
+ "roles": [
+  "executor"
+ ],
+ "location": {
+  "zone": "counter-left",
+  "mobile": false
+ },
+ "capabilities": {
+  "ops": [
+   {
+    "op": "cw.op.cut",
+    "params": {
+     "shape": [
+      "dice",
+      "slice",
+      "mince",
+      "julienne"
+     ]
+    },
+    "ingredientClasses": [
+     "cw.ing.class.vegetable_firm",
+     "cw.ing.class.herb"
+    ],
+    "reliability": 0.97
+   },
+   {
+    "op": "cw.op.crack",
+    "reliability": 0.95
+   },
+   {
+    "op": "cw.op.transfer",
+    "maxMassG": 3000
+   }
+  ],
+  "sensors": [
+   {
+    "sensor": "cw.sense.vision",
+    "visionCues": [
+     "cw.sense.translucent",
+     "cw.sense.egg_whites_set"
+    ]
+   }
+  ],
+  "manipulation": {
+   "arms": 1,
+   "payloadKg": 3,
+   "reachMm": 850,
+   "toolChanger": true
+  }
+ },
+ "safety": {
+  "certifications": [
+   {
+    "standard": "ISO 10218-1",
+    "selfDeclared": true
+   }
+  ],
+  "presenceDetection": true,
+  "emergencyStop": "both",
+  "minVerificationLevel": {
+   "presence_required": "V1",
+   "unattended": "V3"
+  }
+ },
+ "interfaces": {
+  "cookwalaHttp": "https://arm-1.local:8080/cookwala/v1",
+  "ros2": {
+   "namespace": "/arm1",
+   "actionServer": "/cookwala/execute_node"
+  }
+ }
+}

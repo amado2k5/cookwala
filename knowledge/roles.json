@@ -1,0 +1,369 @@
+{
+ "cookwala": "0.1.0",
+ "id": "cw.knowledge.roles.core",
+ "version": "0.1.0",
+ "kind": "roles",
+ "title": {
+  "en": "Ingredient functional roles"
+ },
+ "reviewStatus": "draft",
+ "disclaimer": "Approximate culinary roles and salt contents for reasoning (substitution, salt balancing).",
+ "entries": [
+  {
+   "subject": "cw.ing.salt",
+   "roles": [
+    {
+     "role": "salt",
+     "strength": 1
+    }
+   ],
+   "saltPct": 99
+  },
+  {
+   "subject": "cw.ing.soy_sauce",
+   "roles": [
+    {
+     "role": "salt",
+     "strength": 0.8
+    },
+    {
+     "role": "umami",
+     "strength": 0.8
+    }
+   ],
+   "saltPct": 14
+  },
+  {
+   "subject": "cw.ing.lemon_juice",
+   "roles": [
+    {
+     "role": "acid",
+     "strength": 0.9
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.vinegar",
+   "roles": [
+    {
+     "role": "acid",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.yogurt_plain",
+   "roles": [
+    {
+     "role": "acid",
+     "strength": 0.4
+    },
+    {
+     "role": "fat",
+     "strength": 0.3
+    },
+    {
+     "role": "thickener_protein",
+     "strength": 0.3
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.sugar",
+   "roles": [
+    {
+     "role": "sweetener",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.honey",
+   "roles": [
+    {
+     "role": "sweetener",
+     "strength": 0.9
+    },
+    {
+     "role": "moisture",
+     "strength": 0.3
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.butter",
+   "roles": [
+    {
+     "role": "fat",
+     "strength": 0.9
+    }
+   ],
+   "saltPct": 1.5
+  },
+  {
+   "subject": "cw.ing.olive_oil",
+   "roles": [
+    {
+     "role": "fat",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.ghee",
+   "roles": [
+    {
+     "role": "fat",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.tomato_paste",
+   "roles": [
+    {
+     "role": "umami",
+     "strength": 0.7
+    },
+    {
+     "role": "color",
+     "strength": 0.6
+    },
+    {
+     "role": "thickener_starch",
+     "strength": 0.2
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.onion_yellow",
+   "roles": [
+    {
+     "role": "aromatic_base",
+     "strength": 0.9
+    },
+    {
+     "role": "sweetener",
+     "strength": 0.2
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.garlic",
+   "roles": [
+    {
+     "role": "aromatic_base",
+     "strength": 0.8
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.egg_chicken_large",
+   "roles": [
+    {
+     "role": "binder",
+     "strength": 0.9
+    },
+    {
+     "role": "emulsifier",
+     "strength": 0.7
+    },
+    {
+     "role": "leavener_chemical",
+     "strength": 0.2
+    },
+    {
+     "role": "protein_main",
+     "strength": 0.4
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.cornstarch",
+   "roles": [
+    {
+     "role": "thickener_starch",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.flour_wheat",
+   "roles": [
+    {
+     "role": "thickener_starch",
+     "strength": 0.6
+    },
+    {
+     "role": "bulk_starch",
+     "strength": 0.8
+    },
+    {
+     "role": "binder",
+     "strength": 0.4
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.baking_powder",
+   "roles": [
+    {
+     "role": "leavener_chemical",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.baking_soda",
+   "roles": [
+    {
+     "role": "leavener_chemical",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.yeast",
+   "roles": [
+    {
+     "role": "leavener_biological",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.gelatin_halal",
+   "roles": [
+    {
+     "role": "gelling",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.agar",
+   "roles": [
+    {
+     "role": "gelling",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.cumin_ground",
+   "roles": [
+    {
+     "role": "spice_warm",
+     "strength": 0.8
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.chili",
+   "roles": [
+    {
+     "role": "heat_spice",
+     "strength": 0.9
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.parsley_flat_leaf",
+   "roles": [
+    {
+     "role": "herb_fresh",
+     "strength": 0.8
+    },
+    {
+     "role": "garnish",
+     "strength": 0.6
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.stock_cube",
+   "roles": [
+    {
+     "role": "stock",
+     "strength": 0.9
+    },
+    {
+     "role": "salt",
+     "strength": 0.7
+    },
+    {
+     "role": "umami",
+     "strength": 0.6
+    }
+   ],
+   "saltPct": 60
+  },
+  {
+   "subject": "cw.ing.lentils_red",
+   "roles": [
+    {
+     "role": "protein_main",
+     "strength": 0.6
+    },
+    {
+     "role": "bulk_starch",
+     "strength": 0.5
+    },
+    {
+     "role": "thickener_starch",
+     "strength": 0.4
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.rice_white",
+   "roles": [
+    {
+     "role": "bulk_starch",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.breadcrumbs",
+   "roles": [
+    {
+     "role": "binder",
+     "strength": 0.6
+    },
+    {
+     "role": "crunch",
+     "strength": 0.7
+    }
+   ]
+  },
+  {
+   "subject": "cw.ing.mustard",
+   "roles": [
+    {
+     "role": "emulsifier",
+     "strength": 0.6
+    },
+    {
+     "role": "acid",
+     "strength": 0.3
+    }
+   ],
+   "saltPct": 5
+  },
+  {
+   "subject": "cw.ing.cheese_feta",
+   "roles": [
+    {
+     "role": "salt",
+     "strength": 0.6
+    },
+    {
+     "role": "fat",
+     "strength": 0.6
+    }
+   ],
+   "saltPct": 2.5
+  }
+ ]
+}

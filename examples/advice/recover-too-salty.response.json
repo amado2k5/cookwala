@@ -1,0 +1,126 @@
+{
+ "$kind": "AdviceResponse",
+ "cookwala": "0.1.0",
+ "requestId": "rq-2",
+ "intent": "recover",
+ "status": "answered",
+ "safety": {
+  "verdict": "safe"
+ },
+ "options": [
+  {
+   "id": "split",
+   "rank": 1,
+   "kind": "patch_and_resume",
+   "title": {
+    "en": "Keep a third, dilute it back to the recipe, freeze the rest as a seasoning base"
+   },
+   "patch": {
+    "base": {
+     "recipeId": "example-shakshuka",
+     "revision": 1
+    },
+    "ops": [
+     {
+      "op": "split_batch",
+      "target": "sauce",
+      "params": {
+       "keepFraction": 0.33
+      }
+     },
+     {
+      "op": "add_ingredient",
+      "target": "sauce",
+      "ingredient": {
+       "ref": "tomato_extra",
+       "ingredientId": "cw.ing.tomato_crushed_canned",
+       "qty": {
+        "value": 530,
+        "unit": "g"
+       }
+      }
+     },
+     {
+      "op": "note",
+      "text": {
+       "en": "Re-add onion, pepper and spices for the extra volume (n5–n6 repeated in a second pan), then combine."
+      }
+     }
+    ],
+    "resumeAt": "n7",
+    "redo": [
+     "n5",
+     "n6"
+    ],
+    "validated": true
+   },
+   "impact": {
+    "extraTime": "PT20M",
+    "quality": "minor",
+    "servingsChange": 0
+   },
+   "requires": {
+    "ingredients": [
+     "cw.ing.tomato_crushed_canned",
+     "cw.ing.onion_yellow",
+     "cw.ing.bell_pepper_red"
+    ],
+    "equipment": [
+     "cw.eq.vessel.pan.skillet"
+    ]
+   },
+   "confidence": 0.8,
+   "safety": {
+    "verdict": "safe"
+   },
+   "evidence": [
+    {
+     "kind": "playbook",
+     "ref": "cw.pb.too_salty_liquid#split_and_dilute"
+    }
+   ]
+  },
+  {
+   "id": "serve_side",
+   "rank": 2,
+   "kind": "patch_and_resume",
+   "title": {
+    "en": "Serve with lots of plain bread; reduce salt elsewhere"
+   },
+   "confidence": 0.5,
+   "impact": {
+    "quality": "noticeable"
+   },
+   "safety": {
+    "verdict": "safe"
+   },
+   "evidence": [
+    {
+     "kind": "playbook",
+     "ref": "cw.pb.too_salty_liquid#serve_with_unsalted_starch"
+    }
+   ]
+  }
+ ],
+ "engine": {
+  "version": "reasoner-0.1",
+  "components": [
+   "matcher",
+   "substitution-graph",
+   "food-safety",
+   "playbooks",
+   "cp-sat"
+  ],
+  "llm": {
+   "used": true,
+   "model": "local",
+   "role": "explain"
+  },
+  "checks": [
+   "schema",
+   "policy",
+   "food_safety",
+   "patch_validation"
+  ]
+ }
+}

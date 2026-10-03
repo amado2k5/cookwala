@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/inventory.schema.json",
+  "title": "Cookwala Inventory",
+  "description": "What food is in the kitchen (fridge, freezer, pantry, robot dispensers). Matter covers fridge state but not contents, so Cookwala defines it. Published by smart fridges, pantry scales, receipt scanners or humans; read by planners to decide what can be cooked and what to order.",
+  "type": "object",
+  "required": [
+    "cookwala",
+    "kitchenId",
+    "updatedAt",
+    "items"
+  ],
+  "properties": {
+    "cookwala": {
+      "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "kitchenId": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "storages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "fridge",
+              "freezer",
+              "pantry",
+              "spice_rack",
+              "dispenser",
+              "counter",
+              "cellar"
+            ]
+          },
+          "tempC": {
+            "type": "number"
+          },
+          "actor": {
+            "$ref": "common.schema.json#/$defs/Actor"
+          }
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Item"
+      }
+    },
+    "meta": {
+      "$ref": "common.schema.json#/$defs/Meta"
+    }
+  },
+  "$defs": {
+    "Item": {
+      "type": "object",
+      "required": [
+        "id",
+        "ingredientId",
+        "qty"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "ingredientId": {
+          "$ref": "common.schema.json#/$defs/VocabId"
+        },
+        "label": {
+          "type": "string"
+        },
+        "gtin": {
+          "type": "string"
+        },
+        "qty": {
+          "$ref": "common.schema.json#/$defs/Quantity"
+        },
+        "storage": {
+          "type": "string"
+        },
+        "openedAt": {
+          "type": "string",
+          "format": "date"
+        },
+        "expires": {
+          "type": "string",
+          "format": "date"
+        },
+        "useWithinDaysAfterOpening": {
+          "type": "number"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "How sure the detector is (camera inventories are approximate)."
+        },
+        "detectedBy": {
+          "enum": [
+            "camera",
+            "weight",
+            "rfid",
+            "barcode",
+            "receipt",
+            "manual",
+            "order"
+          ]
+        },
+        "dietary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "e.g. halal_certified, kosher, organic."
+        },
+        "allergens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reservedBy": {
+          "type": "string",
+          "description": "Session id holding this item for a planned cook."
+        }
+      }
+    }
+  },
+  "patternProperties": {
+    "^x-": {}
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "cookwala": "0.1.0",
+  "name": "Cookwala",
+  "operator": "fifi.cooking",
+  "versions": [
+    "v1"
+  ],
+  "keys": [],
+  "endpoints": {
+    "manifest": "https://cookwala.ai/v1/manifest.json",
+    "recipe": "https://cookwala.ai/v1/recipes/{id}.cookwala.json",
+    "index": "https://cookwala.ai/v1/index/{lang}/{page}.json",
+    "changes": "https://cookwala.ai/v1/changes/{since}.json",
+    "vocab": "https://cookwala.ai/v1/vocab/{name}.json",
+    "policies": "https://cookwala.ai/v1/policies/{id}.json",
+    "schemas": "https://cookwala.ai/v1/schemas/{name}.schema.json",
+    "openapi": "https://cookwala.ai/v1/api/index.openapi.yaml"
+  },
+  "mirrors": [],
+  "contact": "https://github.com/amado2k5/cookwala/issues",
+  "terms": "https://github.com/amado2k5/cookwala#licenses",
+  "license": "Apache-2.0 (code), CC-BY-4.0 (spec), CC0-1.0 (vocabularies)"
+}

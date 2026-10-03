@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cookwala</title>
+  <meta name="description" content="Cookwala: the world's first and largest robot cooking recipes index and CLI. An open, royalty-free standard for recipes robots, appliances and AI agents can execute safely.">
+  <link rel="alternate" type="application/json" href="/.well-known/cookwala.json" title="Cookwala discovery">
+  <style>
+    :root {
+      --bg: #fbfaf7; --fg: #1d1b18; --muted: #6b665e; --card: #ffffff; --line: #e7e2d9;
+      --accent: #c2410c; --accent-soft: #fff1e8; --code: #f4f1ea;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #14130f; --fg: #f1ede6; --muted: #a39d92; --card: #1d1b17; --line: #2f2c26;
+              --accent: #fb923c; --accent-soft: #2a1c12; --code: #22201b; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--fg);
+           font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif; }
+    main { max-width: 880px; margin: 0 auto; padding: 56px 16px 72px; }
+    .badge { display: inline-block; font-size: 13px; font-weight: 600; color: var(--accent);
+             background: var(--accent-soft); border-radius: 999px; padding: 3px 12px; }
+    h1 { font-size: clamp(40px, 8vw, 64px); line-height: 1.05; margin: 18px 0 10px; letter-spacing: -0.02em; }
+    .lede { font-size: clamp(19px, 3vw, 22px); color: var(--muted); margin: 0 0 32px; max-width: 40ch; }
+    h2 { font-size: 22px; margin: 48px 0 14px; }
+    .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+    .card h3 { margin: 0 0 6px; font-size: 17px; }
+    .card p { margin: 0; color: var(--muted); font-size: 15px; }
+    a { color: var(--accent); }
+    ul.links { padding: 0; list-style: none; margin: 0; }
+    ul.links li { padding: 10px 0; border-bottom: 1px solid var(--line); display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; }
+    pre { background: var(--code); border: 1px solid var(--line); border-radius: 12px; padding: 16px; overflow-x: auto; }
+    .muted { color: var(--muted); font-size: 14px; }
+    footer { margin-top: 56px; color: var(--muted); font-size: 14px; }
+  </style>
+</head>
+<body>
+<main>
+  <span class="badge">Draft v0.1 · open standard</span>
+  <h1>Cookwala</h1>
+  <p class="lede">The world's first and largest robot cooking recipes index and CLI.</p>
+  <p><strong>Mission:</strong> help end world hunger and make people healthier, so that everyone eats the right food, cooked the right way, in the right amount, with the least waste.</p>
+  <p>Cookwala is an open, royalty-free standard and a free public index of recipes that robots,
+    smart appliances and AI agents can execute safely, end to end, alone or together with people and
+    other machines.</p>
+
+  <h2>What's in it</h2>
+  <div class="grid">
+    <div class="card"><h3>Executable recipes</h3><p>Typed steps with parameters, measurable end conditions (temperature, food-state cues, time windows) and defined failure paths.</p></div>
+    <div class="card"><h3>Safety as data</h3><p>Hazards, food-safety checkpoints, allergens, supervision levels, abort procedures and kitchen-wide safety events.</p></div>
+    <div class="card"><h3>Local rules</h3><p>Policy packs for food-safety codes, dietary rules such as halal, venues and households, checked before cooking.</p></div>
+    <div class="card"><h3>Kitchen teamwork</h3><p>A local hub protocol for robots, ovens, cooktops, fridges, alarms, people, AI agents, delivery and notifications.</p></div>
+    <div class="card"><h3>Every interface</h3><p>Static JSON, REST, GraphQL, MQTT / WebSocket / SSE events, MCP, A2A and the <code>cookwala</code> CLI.</p></div>
+    <div class="card"><h3>A reasoner, not a database</h3><p>What can I cook, fix my mistake and resume, rescue the meal, store it, feed 40 people, split work across robots: answers a robot can apply.</p></div>
+    <div class="card"><h3>Feeding everyone</h3><p>Programs, needs, pledges and impact reports let food organizations, kitchens, grocers and robots work as one network.</p></div>
+    <div class="card"><h3>Open to everyone</h3><p>No API keys, no membership. Apache-2.0, CC BY 4.0 and CC0, plus a patent non-assertion pledge.</p></div>
+  </div>
+
+  <h2>A recipe step</h2>
+<pre>{
+  "id": "n11", "op": "cw.op.simmer", "params": { "heat": "low", "lid": "on" },
+  "until": { "all": [ { "vision": "cw.sense.egg_whites_set" },
+                      { "sensor": "cw.sense.core_temp", "target": "egg_white", "gte": 63 } ],
+             "minTime": "PT5M", "maxTime": "PT10M" },
+  "onTimeout": "ask_human", "ccp": "ccp_eggs", "attention": "monitor"
+}</pre>
+
+  <h2>For developers</h2>
+  <ul class="links">
+    <li><a href="/.well-known/cookwala.json">/.well-known/cookwala.json</a><span class="muted">discovery</span></li>
+    <li><a href="/v1/recipes/shakshuka.cookwala.json">/v1/recipes/shakshuka.cookwala.json</a><span class="muted">example recipe</span></li>
+    <li><a href="/v1/schemas/recipe.schema.json">/v1/schemas/</a><span class="muted">JSON Schemas</span></li>
+    <li><a href="/v1/vocab/ops.json">/v1/vocab/ops.json</a><span class="muted">operation vocabulary</span></li>
+    <li><a href="/v1/api/index.openapi.yaml">/v1/api/</a><span class="muted">OpenAPI, GraphQL, AsyncAPI</span></li>
+    <li><a href="https://github.com/amado2k5/cookwala">github.com/amado2k5/cookwala</a><span class="muted">specs, plan, RFCs</span></li>
+  </ul>
+
+  <footer>
+    Started by <a href="https://fifi.cooking">fifi.cooking</a>. Cookwala data is provided without warranty;
+    device makers and operators are responsible for safe execution and local law.
+  </footer>
+</main>
+</body>
+</html>

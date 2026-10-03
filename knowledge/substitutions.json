@@ -1,0 +1,363 @@
+{
+ "cookwala": "0.1.0",
+ "id": "cw.knowledge.substitutions.core",
+ "version": "0.1.0",
+ "kind": "substitutions",
+ "title": {
+  "en": "Core substitutions"
+ },
+ "reviewStatus": "draft",
+ "disclaimer": "Standard kitchen conversions; ratios approximate. Substitutions never introduce ingredients forbidden by the active dietary policy packs.",
+ "entries": [
+  {
+   "from": "cw.ing.buttermilk",
+   "to": [
+    {
+     "ingredientId": "cw.ing.milk",
+     "ratio": 0.94
+    },
+    {
+     "ingredientId": "cw.ing.lemon_juice",
+     "ratio": 0.06
+    }
+   ],
+   "ratio": 1,
+   "goodFor": [
+    "baking",
+    "marinade"
+   ],
+   "badFor": [],
+   "quality": "same",
+   "notes": "Stir 1 tbsp lemon juice or vinegar into 1 cup milk; rest 5 min."
+  },
+  {
+   "from": "cw.ing.baking_powder",
+   "to": [
+    {
+     "ingredientId": "cw.ing.baking_soda",
+     "ratio": 0.33
+    },
+    {
+     "ingredientId": "cw.ing.cream_of_tartar",
+     "ratio": 0.67
+    }
+   ],
+   "ratio": 1,
+   "goodFor": [
+    "baking"
+   ],
+   "badFor": [],
+   "quality": "same",
+   "notes": "Per 1 tsp baking powder: 1/4 tsp soda + 1/2 tsp cream of tartar; use immediately."
+  },
+  {
+   "from": "cw.ing.self_raising_flour",
+   "to": [
+    {
+     "ingredientId": "cw.ing.flour_wheat",
+     "ratio": 0.96
+    },
+    {
+     "ingredientId": "cw.ing.baking_powder",
+     "ratio": 0.04
+    }
+   ],
+   "ratio": 1,
+   "goodFor": [
+    "baking"
+   ],
+   "badFor": [],
+   "quality": "same",
+   "notes": "1 cup flour + 1.5 tsp baking powder + 1/4 tsp salt."
+  },
+  {
+   "from": "cw.ing.egg_chicken_large",
+   "to": [
+    {
+     "ingredientId": "cw.ing.flaxseed_ground",
+     "ratio": 0.25
+    },
+    {
+     "ingredientId": "cw.ing.water",
+     "ratio": 0.75
+    }
+   ],
+   "ratio": 0.8,
+   "goodFor": [
+    "binding in muffins, pancakes, meatballs"
+   ],
+   "badFor": [
+    "meringue",
+    "custard",
+    "soufflé",
+    "emulsions"
+   ],
+   "quality": "minor_loss",
+   "notes": "Flax egg: 1 tbsp ground flax + 3 tbsp water, rest 5 min. Binds, does not whip or set custards."
+  },
+  {
+   "from": "cw.ing.sour_cream",
+   "to": [
+    {
+     "ingredientId": "cw.ing.yogurt_greek",
+     "ratio": 1
+    }
+   ],
+   "ratio": 1,
+   "goodFor": [
+    "dips",
+    "baking",
+    "toppings"
+   ],
+   "badFor": [
+    "boiling sauces (may split)"
+   ],
+   "quality": "same",
+   "notes": ""
+  },
+  {
+   "from": "cw.ing.cream_heavy",
+   "to": [
+    {
+     "ingredientId": "cw.ing.milk",
+     "ratio": 0.75
+    },
+    {
+     "ingredientId": "cw.ing.butter",
+     "ratio": 0.25
+    }
+   ],
+   "ratio": 1,
+   "goodFor": [
+    "sauces",
+    "soups",
+    "baking"
+   ],
+   "badFor": [
+    "whipping"
+   ],
+   "quality": "minor_loss",
+   "notes": "Not for whipping."
+  },
+  {
+   "from": "cw.ing.herb_fresh",
+   "to": [
+    {
+     "ingredientId": "cw.ing.herb_dried",
+     "ratio": 1
+    }
+   ],
+   "ratio": 0.33,
+   "goodFor": [
+    "cooked dishes"
+   ],
+   "badFor": [
+    "garnish",
+    "raw salads"
+   ],
+   "quality": "minor_loss",
+   "notes": "1 tbsp fresh ≈ 1 tsp dried."
+  },
+  {
+   "from": "cw.ing.garlic",
+   "to": [
+    {
+     "ingredientId": "cw.ing.garlic_powder",
+     "ratio": 1
+    }
+   ],
+   "ratio": 0.125,
+   "goodFor": [
+    "sauces",
+    "rubs"
+   ],
+   "badFor": [
+    "dishes where garlic is fried as a base"
+   ],
+   "quality": "noticeable_loss",
+   "notes": "1 clove ≈ 1/8 tsp garlic powder."
+  },
+  {
+   "from": "cw.ing.brown_sugar",
+   "to": [
+    {
+     "ingredientId": "cw.ing.sugar",
+     "ratio": 0.94
+    },
+    {
+     "ingredientId": "cw.ing.molasses",
+     "ratio": 0.06
+    }
+   ],
+   "ratio": 1,
+   "goodFor": [
+    "baking",
+    "sauces"
+   ],
+   "badFor": [],
+   "quality": "same",
+   "notes": "1 cup sugar + 1 tbsp molasses."
+  },
+  {
+   "from": "cw.ing.cornstarch",
+   "to": [
+    {
+     "ingredientId": "cw.ing.flour_wheat",
+     "ratio": 1
+    }
+   ],
+   "ratio": 2,
+   "goodFor": [
+    "thickening sauces/stews"
+   ],
+   "badFor": [
+    "gluten-free diets",
+    "clear glazes"
+   ],
+   "quality": "minor_loss",
+   "notes": "Use twice as much flour; cook a few minutes longer."
+  },
+  {
+   "from": "cw.ing.breadcrumbs",
+   "to": [
+    {
+     "ingredientId": "cw.ing.oats_rolled",
+     "ratio": 1
+    }
+   ],
+   "ratio": 1,
+   "goodFor": [
+    "binding meatballs/kofta",
+    "coating"
+   ],
+   "badFor": [],
+   "quality": "minor_loss",
+   "notes": ""
+  },
+  {
+   "from": "cw.ing.beef_minced",
+   "to": [
+    {
+     "ingredientId": "cw.ing.beef_minced",
+     "ratio": 0.67
+    },
+    {
+     "ingredientId": "cw.ing.lentils_cooked",
+     "ratio": 0.33
+    }
+   ],
+   "ratio": 1,
+   "goodFor": [
+    "kofta",
+    "sauces",
+    "stuffed vegetables",
+    "budget",
+    "ration"
+   ],
+   "badFor": [
+    "burgers where texture matters"
+   ],
+   "quality": "minor_loss",
+   "notes": "Stretch minced meat by replacing up to one third with cooked lentils."
+  },
+  {
+   "from": "cw.ing.stock_chicken",
+   "to": [
+    {
+     "ingredientId": "cw.ing.water",
+     "ratio": 0.98
+    },
+    {
+     "ingredientId": "cw.ing.stock_cube",
+     "ratio": 0.02
+    }
+   ],
+   "ratio": 1,
+   "goodFor": [
+    "soups",
+    "rice",
+    "sauces"
+   ],
+   "badFor": [],
+   "quality": "minor_loss",
+   "notes": "Reduce added salt (cubes are salty)."
+  },
+  {
+   "from": "cw.ing.tomato_paste",
+   "to": [
+    {
+     "ingredientId": "cw.ing.tomato_sauce",
+     "ratio": 1
+    }
+   ],
+   "ratio": 3,
+   "goodFor": [
+    "stews",
+    "sauces"
+   ],
+   "badFor": [],
+   "quality": "minor_loss",
+   "notes": "3 tbsp sauce per 1 tbsp paste; reduce a little longer."
+  },
+  {
+   "from": "cw.ing.butter",
+   "to": [
+    {
+     "ingredientId": "cw.ing.vegetable_oil",
+     "ratio": 1
+    }
+   ],
+   "ratio": 0.75,
+   "goodFor": [
+    "muffins",
+    "quick breads",
+    "sautéing"
+   ],
+   "badFor": [
+    "pastry",
+    "buttercream",
+    "shortbread"
+   ],
+   "quality": "noticeable_loss",
+   "notes": "For baking use 3/4 the amount of oil."
+  },
+  {
+   "from": "cw.ing.lemon_juice",
+   "to": [
+    {
+     "ingredientId": "cw.ing.vinegar",
+     "ratio": 1
+    }
+   ],
+   "ratio": 0.5,
+   "goodFor": [
+    "savory dressings",
+    "marinades"
+   ],
+   "badFor": [
+    "desserts",
+    "drinks"
+   ],
+   "quality": "minor_loss",
+   "notes": ""
+  },
+  {
+   "from": "cw.ing.ghee",
+   "to": [
+    {
+     "ingredientId": "cw.ing.butter",
+     "ratio": 1
+    }
+   ],
+   "ratio": 1,
+   "goodFor": [
+    "most cooking"
+   ],
+   "badFor": [
+    "high-heat frying"
+   ],
+   "quality": "minor_loss",
+   "notes": "Butter burns at lower temperature."
+  }
+ ]
+}

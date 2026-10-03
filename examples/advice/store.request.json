@@ -1,0 +1,21 @@
+{
+ "$kind": "AdviceRequest",
+ "cookwala": "0.1.0",
+ "id": "rq-5",
+ "intent": "store",
+ "text": "How can I store this for three days? I haven't cooked it yet.",
+ "query": {
+  "recipeId": "example-shakshuka",
+  "servings": 4,
+  "duration": "P3D",
+  "notCookedYet": true,
+  "storageAvailable": [
+   "fridge",
+   "freezer"
+  ],
+  "reheatAvailable": [
+   "hob",
+   "microwave"
+  ]
+ }
+}

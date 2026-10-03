@@ -1,0 +1,271 @@
+{
+ "cookwala": "0.1.0",
+ "id": "cw.knowledge.storage.core",
+ "version": "0.1.0",
+ "kind": "storage",
+ "title": {
+  "en": "Core storage profiles"
+ },
+ "reviewStatus": "draft",
+ "disclaimer": "Planning guidance from public food-safety agencies; local rules may differ (policy packs win).",
+ "sources": [
+  {
+   "title": "USDA FSIS: Leftovers and Food Safety",
+   "url": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/leftovers-and-food-safety"
+  },
+  {
+   "title": "FoodSafety.gov: Cold Food Storage Chart",
+   "url": "https://www.foodsafety.gov/food-safety-charts/cold-food-storage-charts"
+  },
+  {
+   "title": "NHS: Can reheating rice cause food poisoning?",
+   "url": "https://www.nhs.uk/common-health-questions/food-and-diet/can-reheating-rice-cause-food-poisoning/"
+  }
+ ],
+ "entries": [
+  {
+   "id": "cw.storage.cooked_meat_poultry",
+   "foodClasses": [
+    "cooked_meat",
+    "cooked_poultry",
+    "stews_with_meat",
+    "casseroles"
+   ],
+   "fridgeDays": {
+    "min": 3,
+    "max": 4
+   },
+   "freezerMonths": {
+    "min": 2,
+    "max": 6
+   },
+   "freezeQuality": "good",
+   "roomTempMaxHours": 2,
+   "cooling": "Divide into shallow containers (≤ 5 cm deep); refrigerate within 2 hours of cooking.",
+   "reheatMinC": 74,
+   "containers": [
+    "airtight food-grade glass or BPA-free plastic",
+    "freezer bags with air pressed out"
+   ],
+   "cookForStorage": [
+    "Keep sauce slightly looser; it thickens on reheating."
+   ],
+   "notes": [
+    "Label with name, date cooked, use-by."
+   ],
+   "sources": [
+    "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/leftovers-and-food-safety",
+    "https://www.foodsafety.gov/food-safety-charts/cold-food-storage-charts"
+   ]
+  },
+  {
+   "id": "cw.storage.soups_stews",
+   "foodClasses": [
+    "soup",
+    "stew",
+    "legume_stew"
+   ],
+   "fridgeDays": {
+    "min": 3,
+    "max": 4
+   },
+   "freezerMonths": {
+    "min": 2,
+    "max": 3
+   },
+   "freezeQuality": "good",
+   "roomTempMaxHours": 2,
+   "cooling": "Cool in shallow containers or an ice bath, stirring; refrigerate within 2 hours.",
+   "reheatMinC": 74,
+   "containers": [
+    "airtight containers with 2 cm headspace for freezing"
+   ],
+   "cookForStorage": [
+    "Add cream/dairy and fresh herbs when reheating, not before freezing.",
+    "Undercook pasta or potatoes in soups slightly, or add when serving."
+   ],
+   "sources": [
+    "https://www.foodsafety.gov/food-safety-charts/cold-food-storage-charts"
+   ]
+  },
+  {
+   "id": "cw.storage.cooked_rice",
+   "foodClasses": [
+    "cooked_rice"
+   ],
+   "fridgeDays": {
+    "min": 1,
+    "max": 1
+   },
+   "freezerMonths": {
+    "min": 1,
+    "max": 1
+   },
+   "freezeQuality": "good",
+   "roomTempMaxHours": 1,
+   "cooling": "Cool quickly (spread thin) and refrigerate within 1 hour (Bacillus cereus spores survive cooking).",
+   "reheatMinC": 74,
+   "notes": [
+    "Conservative default from NHS guidance (eat within 1 day, reheat once). Other agencies list longer fridge times; policy packs may differ."
+   ],
+   "sources": [
+    "https://www.nhs.uk/common-health-questions/food-and-diet/can-reheating-rice-cause-food-poisoning/"
+   ]
+  },
+  {
+   "id": "cw.storage.cooked_pasta_grains",
+   "foodClasses": [
+    "cooked_pasta",
+    "cooked_grains"
+   ],
+   "fridgeDays": {
+    "min": 3,
+    "max": 5
+   },
+   "freezerMonths": {
+    "min": 1,
+    "max": 2
+   },
+   "freezeQuality": "fair",
+   "roomTempMaxHours": 2,
+   "cooling": "Toss with a little oil, cool and refrigerate within 2 hours.",
+   "reheatMinC": 74,
+   "cookForStorage": [
+    "Cook 1–2 min less than al dente if it will be reheated in sauce."
+   ],
+   "sources": [
+    "https://www.foodsafety.gov/keep-food-safe/foodkeeper-app"
+   ]
+  },
+  {
+   "id": "cw.storage.cooked_fish",
+   "foodClasses": [
+    "cooked_fish",
+    "cooked_seafood"
+   ],
+   "fridgeDays": {
+    "min": 3,
+    "max": 4
+   },
+   "freezerMonths": {
+    "min": 1,
+    "max": 3
+   },
+   "freezeQuality": "fair",
+   "roomTempMaxHours": 2,
+   "reheatMinC": 74,
+   "notes": [
+    "Quality drops quickly; prefer cooking fish fresh."
+   ],
+   "sources": [
+    "https://www.foodsafety.gov/food-safety-charts/cold-food-storage-charts"
+   ]
+  },
+  {
+   "id": "cw.storage.salads_mayo_based",
+   "foodClasses": [
+    "egg_salad",
+    "chicken_salad",
+    "tuna_salad",
+    "mayo_salads"
+   ],
+   "fridgeDays": {
+    "min": 3,
+    "max": 4
+   },
+   "freezeQuality": "poor",
+   "roomTempMaxHours": 2,
+   "notes": [
+    "Do not freeze."
+   ],
+   "sources": [
+    "https://www.foodsafety.gov/food-safety-charts/cold-food-storage-charts"
+   ]
+  },
+  {
+   "id": "cw.storage.leafy_salads_dressed",
+   "foodClasses": [
+    "dressed_green_salad"
+   ],
+   "fridgeDays": {
+    "min": 0,
+    "max": 1
+   },
+   "freezeQuality": "poor",
+   "cookForStorage": [
+    "Store dressing and leaves separately; dress just before serving."
+   ]
+  },
+  {
+   "id": "cw.storage.fried_crispy",
+   "foodClasses": [
+    "fried_food",
+    "breaded"
+   ],
+   "fridgeDays": {
+    "min": 3,
+    "max": 4
+   },
+   "freezerMonths": {
+    "min": 1,
+    "max": 2
+   },
+   "freezeQuality": "fair",
+   "reheatMinC": 74,
+   "notes": [
+    "Reheat in oven/air fryer on a rack to restore crispness; microwaving makes it soggy."
+   ]
+  },
+  {
+   "id": "cw.storage.custard_cream_desserts",
+   "foodClasses": [
+    "custard",
+    "cream_dessert",
+    "cheesecake"
+   ],
+   "fridgeDays": {
+    "min": 3,
+    "max": 4
+   },
+   "freezeQuality": "fair",
+   "roomTempMaxHours": 2,
+   "notes": [
+    "Keep chilled; set desserts (puddings like muhallabia) keep best covered."
+   ]
+  },
+  {
+   "id": "cw.storage.bread_baked",
+   "foodClasses": [
+    "bread",
+    "flatbread",
+    "cake_plain"
+   ],
+   "fridgeDays": {
+    "min": 0,
+    "max": 0
+   },
+   "freezerMonths": {
+    "min": 2,
+    "max": 3
+   },
+   "freezeQuality": "good",
+   "notes": [
+    "Room temperature 2–3 days, airtight; fridge makes bread stale faster; freeze sliced."
+   ]
+  },
+  {
+   "id": "cw.storage.hard_cooked_eggs",
+   "foodClasses": [
+    "hard_boiled_eggs"
+   ],
+   "fridgeDays": {
+    "min": 7,
+    "max": 7
+   },
+   "freezeQuality": "poor",
+   "sources": [
+    "https://www.foodsafety.gov/food-safety-charts/cold-food-storage-charts"
+   ]
+  }
+ ]
+}

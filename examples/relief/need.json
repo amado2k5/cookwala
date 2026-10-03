@@ -1,0 +1,40 @@
+{
+ "$kind": "Need",
+ "cookwala": "0.1.0",
+ "id": "need-2026-11-03-shubra",
+ "program": "prog-community-kitchens-cairo",
+ "place": {
+  "country": "EG",
+  "admin1": "Cairo",
+  "admin2": "Shubra",
+  "site": "school-12"
+ },
+ "window": {
+  "from": "2026-11-03T11:00:00+02:00",
+  "to": "2026-11-03T14:00:00+02:00"
+ },
+ "people": 650,
+ "groups": [
+  {
+   "group": "child",
+   "count": 420
+  },
+  {
+   "group": "adult",
+   "count": 230
+  }
+ ],
+ "mealsPerDay": 1,
+ "form": "hot_meals",
+ "dietary": [
+  "halal"
+ ],
+ "allergensToAvoid": [
+  "peanuts"
+ ],
+ "constraints": {
+  "servingPoint": "no refrigeration, running water available"
+ },
+ "priority": "high",
+ "status": "open"
+}

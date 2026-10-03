@@ -1,0 +1,102 @@
+{
+ "cookwala": "0.1.0",
+ "id": "flow-weekly-budget",
+ "name": "Weekly budget meal plan",
+ "version": "1.0.0",
+ "description": {
+  "en": "Every Saturday 10:00: plan 7 days of dinners within budget using what's in the fridge first, ask me to approve the grocery order, then batch-cook Sunday."
+ },
+ "inputs": {
+  "type": "object",
+  "properties": {
+   "people": {
+    "type": "integer"
+   },
+   "budget": {
+    "type": "number"
+   }
+  }
+ },
+ "triggers": [
+  {
+   "type": "schedule",
+   "cron": "0 10 * * 6",
+   "timezone": "Africa/Cairo"
+  },
+  {
+   "type": "ask",
+   "phrases": {
+    "en": "plan my week",
+    "ar": "خطط أكل الأسبوع"
+   }
+  }
+ ],
+ "steps": [
+  {
+   "id": "plan",
+   "do": "advise",
+   "with": {
+    "intent": "feed",
+    "query": {
+     "people": "{{inputs.people}}",
+     "meals": 7,
+     "mealTypes": [
+      "dinner"
+     ],
+     "includeStorage": true
+    },
+    "context": {
+     "mode": {
+      "preset": "week_saver",
+      "budget": {
+       "mode": "low",
+       "amount": {
+        "amount": "{{inputs.budget}}",
+        "currency": "USD"
+       },
+       "period": "week"
+      }
+     }
+    }
+   },
+   "output": "plan"
+  },
+  {
+   "id": "order",
+   "do": "order_intent",
+   "with": {
+    "from": "{{steps.plan.output.options[0].productionPlan.shopping}}"
+   },
+   "output": "order"
+  },
+  {
+   "id": "approve",
+   "do": "approve_with_human",
+   "with": {
+    "order": "{{steps.order.output.id}}"
+   },
+   "timeout": "PT12H"
+  },
+  {
+   "id": "cook",
+   "do": "plan_session",
+   "with": {
+    "recipes": "{{steps.plan.output.options[0].productionPlan.menu}}",
+    "serveAt": "next Sunday 14:00"
+   }
+  },
+  {
+   "id": "tell",
+   "do": "notify",
+   "with": {
+    "audience": [
+     "role:household"
+    ],
+    "urgency": "info",
+    "message": {
+     "en": "Your week is planned. Groceries arrive Sunday morning."
+    }
+   }
+  }
+ ]
+}

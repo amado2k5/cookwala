@@ -1,0 +1,59 @@
+name: Validate and publish cookwala.ai
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate specs
+        run: |
+          pip install jsonschema pyyaml graphql-core
+          python tools/validate_specs.py
+      - name: Assemble site
+        run: |
+          set -e
+          mkdir -p _site/v1/schemas _site/v1/vocab _site/v1/api _site/v1/recipes _site/v1/bindings
+          cp -R site/. _site/
+          cp -R schemas/. _site/v1/schemas/
+          cp schemas/context.jsonld _site/v1/context.jsonld
+          cp vocab/*.json _site/v1/vocab/
+          cp api/* _site/v1/api/
+          cp bindings/*.json _site/v1/bindings/
+          cp examples/*.cookwala.json _site/v1/recipes/
+          touch _site/.nojekyll
+          find _site -type f | sort
+      - if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

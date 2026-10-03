@@ -1,0 +1,43 @@
+{
+ "cookwala": "0.1.0",
+ "id": "mode-week-saver",
+ "kind": "mode",
+ "name": "Make it last the week",
+ "mode": {
+  "preset": "week_saver",
+  "conserve": {
+   "energy": "some",
+   "ingredients": {
+    "horizon": "P7D",
+    "strategy": "stretch",
+    "protect": [
+     "cw.ing.beef_minced"
+    ],
+    "mealsPerDay": 2,
+    "minKcalPerPersonDay": 1800
+   }
+  },
+  "budget": {
+   "mode": "very_low",
+   "allowShopping": false
+  },
+  "energy": {
+   "goal": "min_cost",
+   "prefer": [
+    "natural_gas",
+    "electric_induction"
+   ]
+  },
+  "robots": [
+   {
+    "actorId": "robot:neo-1",
+    "level": "low",
+    "pct": 25,
+    "minReservePct": 15,
+    "canDockMidSession": true
+   }
+  ],
+  "time": "relaxed",
+  "quality": "economy"
+ }
+}

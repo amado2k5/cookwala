@@ -1,0 +1,592 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/market.schema.json",
+  "title": "Cookwala Market (providers, offers, quotes)",
+  "description": "Lets grocers, ingredient suppliers, restaurants, meal-kit makers, robot and cookware makers, chefs and recipe publishers, certifiers, repairers, energy and delivery services, and extension/AI vendors publish who they are and what they offer, so kitchens, robots and agents can discover them through the protocol. Cookwala defines discovery and description only: price negotiation, checkout and payment go through the provider's own systems or open commerce protocols (UCP, ACP, AP2). No payment credentials ever travel in Cookwala documents. Use $defs Provider, Offer, OfferFeed, QuoteRequest, Quote.",
+  "$defs": {
+    "Role": {
+      "enum": [
+        "grocer",
+        "ingredient_supplier",
+        "farm",
+        "butcher",
+        "fishmonger",
+        "bakery",
+        "restaurant",
+        "cloud_kitchen",
+        "caterer",
+        "meal_kit",
+        "robot_maker",
+        "appliance_maker",
+        "cookware_maker",
+        "robot_rental",
+        "robot_operator",
+        "repair_service",
+        "recipe_publisher",
+        "chef",
+        "nutritionist",
+        "cooking_school",
+        "certifier",
+        "food_safety_auditor",
+        "lab",
+        "delivery",
+        "energy_provider",
+        "extension_vendor",
+        "ai_model_vendor",
+        "hub_vendor",
+        "catalog_host",
+        "marketplace_operator",
+        "other",
+        "food_bank",
+        "humanitarian_org",
+        "community_kitchen",
+        "school_feeding_program",
+        "donor",
+        "volunteer_group",
+        "government_agency",
+        "logistics"
+      ]
+    },
+    "Credential": {
+      "type": "object",
+      "required": [
+        "type",
+        "issuer"
+      ],
+      "description": "A claim such as halal/kosher/organic certification, food business license or safety certification, ideally as a W3C Verifiable Credential.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "e.g. halal_certified, kosher_certified, organic, food_business_license, iso_22000, haccp, iec_60335, iso_13482, cookwala_conformance:executor."
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "validFrom": {
+          "type": "string",
+          "format": "date"
+        },
+        "validUntil": {
+          "type": "string",
+          "format": "date"
+        },
+        "vc": {
+          "type": "string",
+          "description": "URL of a W3C Verifiable Credential (JWT or JSON-LD) proving the claim."
+        },
+        "verified": {
+          "type": "boolean",
+          "description": "Set by the index/hub after checking the VC; never trusted from the provider itself."
+        }
+      }
+    },
+    "Area": {
+      "type": "object",
+      "properties": {
+        "countries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "postalCodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "radiusKm": {
+          "type": "number"
+        },
+        "center": {
+          "type": "object",
+          "properties": {
+            "lat": {
+              "type": "number"
+            },
+            "lon": {
+              "type": "number"
+            }
+          }
+        },
+        "online": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Pricing": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "enum": [
+            "free",
+            "one_time",
+            "per_unit",
+            "per_use",
+            "subscription",
+            "quote",
+            "donation"
+          ]
+        },
+        "price": {
+          "$ref": "common.schema.json#/$defs/Money"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "period": {
+          "type": "string"
+        },
+        "validUntil": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "taxIncluded": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Provider": {
+      "type": "object",
+      "required": [
+        "cookwala",
+        "id",
+        "name",
+        "roles"
+      ],
+      "properties": {
+        "cookwala": {
+          "$ref": "common.schema.json#/$defs/SpecVersion"
+        },
+        "id": {
+          "type": "string",
+          "description": "Stable id, ideally a domain or DID (did:web:grocer.example)."
+        },
+        "name": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Role"
+          }
+        },
+        "description": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "url": {
+          "type": "string"
+        },
+        "contact": {
+          "type": "string"
+        },
+        "area": {
+          "$ref": "#/$defs/Area"
+        },
+        "credentials": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Credential"
+          }
+        },
+        "endpoints": {
+          "type": "object",
+          "description": "How to reach the provider's own systems.",
+          "properties": {
+            "offers": {
+              "type": "string",
+              "description": "OfferFeed URL."
+            },
+            "ucp": {
+              "type": "string"
+            },
+            "acp": {
+              "type": "string"
+            },
+            "a2a": {
+              "type": "string"
+            },
+            "mcp": {
+              "type": "string"
+            },
+            "catalog": {
+              "type": "string",
+              "description": "Cookwala recipe catalog the provider publishes (chefs, meal kits, restaurants)."
+            },
+            "quotes": {
+              "type": "string"
+            },
+            "support": {
+              "type": "string"
+            }
+          }
+        },
+        "standards": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Other standards they follow (GS1, schema.org/Product, Matter, UCP...), to help bridging."
+        },
+        "meta": {
+          "$ref": "common.schema.json#/$defs/Meta"
+        }
+      },
+      "patternProperties": {
+        "^x-": {}
+      }
+    },
+    "Offer": {
+      "type": "object",
+      "required": [
+        "id",
+        "provider",
+        "type",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "ingredient",
+            "grocery_bundle",
+            "meal_kit",
+            "ready_meal",
+            "recipe_pack",
+            "cooking_class",
+            "robot",
+            "robot_rental",
+            "robot_service",
+            "appliance",
+            "cookware",
+            "spare_part",
+            "repair",
+            "extension",
+            "ai_model",
+            "hub",
+            "catalog_hosting",
+            "certification",
+            "audit",
+            "delivery",
+            "energy_plan",
+            "other",
+            "surplus_food",
+            "donated_meal",
+            "sponsored_meal",
+            "kitchen_capacity",
+            "volunteer_service",
+            "cold_storage"
+          ]
+        },
+        "title": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "description": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "ingredientId": {
+          "type": "string",
+          "description": "For ingredients: the cw.ing id this product fulfils."
+        },
+        "gtin": {
+          "type": "string"
+        },
+        "pack": {
+          "$ref": "common.schema.json#/$defs/Quantity"
+        },
+        "recipeIds": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/GlobalRef"
+          },
+          "description": "Meal kits, ready meals and recipe packs map to Cookwala recipes, so a kitchen can choose cook-it-yourself vs buy-it-ready."
+        },
+        "deviceClasses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "For robots/appliances/cookware: classes and the capability manifest they ship with."
+        },
+        "capabilities": {
+          "type": "string",
+          "description": "URL of the product's capability manifest (robots/appliances)."
+        },
+        "cookware": {
+          "$ref": "profile.schema.json#/$defs/CookwareItem"
+        },
+        "dietary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allergens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "credentials": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Credential"
+          }
+        },
+        "pricing": {
+          "$ref": "#/$defs/Pricing"
+        },
+        "availability": {
+          "type": "object",
+          "properties": {
+            "inStock": {
+              "type": "boolean"
+            },
+            "qty": {
+              "type": "number"
+            },
+            "leadTime": {
+              "$ref": "common.schema.json#/$defs/Duration"
+            },
+            "slots": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "area": {
+          "$ref": "#/$defs/Area"
+        },
+        "fulfillment": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "delivery",
+              "pickup",
+              "robot_receive",
+              "digital",
+              "on_site"
+            ]
+          }
+        },
+        "sustainability": {
+          "type": "object",
+          "properties": {
+            "co2eKg": {
+              "type": "number"
+            },
+            "local": {
+              "type": "boolean"
+            },
+            "packaging": {
+              "type": "string"
+            }
+          }
+        },
+        "license": {
+          "type": "string",
+          "description": "For recipe packs/extensions/models: usage license (may be proprietary)."
+        },
+        "sponsored": {
+          "type": "boolean",
+          "description": "Must be true when placement was paid; indexes must disclose it."
+        },
+        "checkout": {
+          "type": "object",
+          "properties": {
+            "protocol": {
+              "enum": [
+                "ucp",
+                "acp",
+                "provider_site",
+                "quote",
+                "free"
+              ]
+            },
+            "url": {
+              "type": "string"
+            }
+          }
+        },
+        "meta": {
+          "$ref": "common.schema.json#/$defs/Meta"
+        }
+      },
+      "patternProperties": {
+        "^x-": {}
+      }
+    },
+    "OfferFeed": {
+      "type": "object",
+      "required": [
+        "cookwala",
+        "provider",
+        "updatedAt",
+        "offers"
+      ],
+      "properties": {
+        "cookwala": {
+          "$ref": "common.schema.json#/$defs/SpecVersion"
+        },
+        "provider": {
+          "$ref": "#/$defs/Provider"
+        },
+        "updatedAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "offers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Offer"
+          }
+        },
+        "next": {
+          "type": "string"
+        },
+        "signature": {
+          "$ref": "common.schema.json#/$defs/Signature"
+        }
+      }
+    },
+    "QuoteRequest": {
+      "type": "object",
+      "required": [
+        "cookwala",
+        "id",
+        "need"
+      ],
+      "description": "A kitchen/agent asks providers for prices without revealing personal data (e.g. catering for 80 people, halal lamb 5 kg, robot rental for an event).",
+      "properties": {
+        "cookwala": {
+          "$ref": "common.schema.json#/$defs/SpecVersion"
+        },
+        "id": {
+          "type": "string"
+        },
+        "need": {
+          "type": "object",
+          "properties": {
+            "offerTypes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "lines": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "ingredientId": {
+                    "type": "string"
+                  },
+                  "recipeId": {
+                    "type": "string"
+                  },
+                  "qty": {
+                    "$ref": "common.schema.json#/$defs/Quantity"
+                  },
+                  "servings": {
+                    "type": "number"
+                  },
+                  "constraints": {
+                    "type": "object"
+                  }
+                }
+              }
+            },
+            "by": {
+              "$ref": "common.schema.json#/$defs/DateTime"
+            },
+            "area": {
+              "$ref": "#/$defs/Area"
+            },
+            "budget": {
+              "$ref": "common.schema.json#/$defs/Money"
+            },
+            "credentialsRequired": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "replyTo": {
+          "type": "string"
+        },
+        "expires": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        }
+      }
+    },
+    "Quote": {
+      "type": "object",
+      "required": [
+        "cookwala",
+        "requestId",
+        "provider",
+        "lines",
+        "total"
+      ],
+      "properties": {
+        "cookwala": {
+          "$ref": "common.schema.json#/$defs/SpecVersion"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "offerId": {
+                "type": "string"
+              },
+              "qty": {
+                "type": "number"
+              },
+              "price": {
+                "$ref": "common.schema.json#/$defs/Money"
+              }
+            }
+          }
+        },
+        "total": {
+          "$ref": "common.schema.json#/$defs/Money"
+        },
+        "validUntil": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "checkout": {
+          "type": "object",
+          "properties": {
+            "protocol": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          }
+        },
+        "signature": {
+          "$ref": "common.schema.json#/$defs/Signature"
+        }
+      }
+    }
+  }
+}

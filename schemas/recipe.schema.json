@@ -1,0 +1,1305 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/recipe.schema.json",
+  "title": "Cookwala Recipe",
+  "description": "A recipe a machine can plan, check against local policy, execute and verify. Media type application/vnd.cookwala+json; file extension .cookwala.json. Layers: L0 semantics (dish, yield, ingredients, equipment, nutrition, cost, text), L1 process graph, L2 bindings, L3 safety. L4 policies live in policy.schema.json documents.",
+  "type": "object",
+  "required": [
+    "cookwala",
+    "id",
+    "revision",
+    "verification",
+    "dish",
+    "yield",
+    "ingredients",
+    "equipment",
+    "process",
+    "safety",
+    "text",
+    "license"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "@context": {
+      "description": "Optional JSON-LD context (https://cookwala.ai/v1/context.jsonld) mapping Cookwala terms to schema.org, FoodOn, Wikidata and IEEE 1872.1."
+    },
+    "cookwala": {
+      "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,63}$",
+      "description": "Same as the site recipe id (e.g. fah-234, w-ma-001)."
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "updated": {
+      "type": "string",
+      "format": "date"
+    },
+    "hash": {
+      "$ref": "common.schema.json#/$defs/Hash"
+    },
+    "signature": {
+      "$ref": "common.schema.json#/$defs/Signature"
+    },
+    "legacy": {
+      "type": "object",
+      "description": "Links back to the existing fifi.cooking representations.",
+      "properties": {
+        "dataUrl": {
+          "type": "string",
+          "description": "/data/recipes/{id}.json"
+        },
+        "pageUrl": {
+          "type": "string"
+        },
+        "schemaOrg": {
+          "type": "string",
+          "description": "URL of the schema.org Recipe JSON-LD."
+        }
+      }
+    },
+    "verification": {
+      "$ref": "#/$defs/Verification"
+    },
+    "dish": {
+      "$ref": "#/$defs/Dish"
+    },
+    "yield": {
+      "$ref": "#/$defs/Yield"
+    },
+    "ingredients": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Ingredient"
+      }
+    },
+    "equipment": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Equipment"
+      }
+    },
+    "process": {
+      "$ref": "#/$defs/Process"
+    },
+    "safety": {
+      "$ref": "#/$defs/Safety"
+    },
+    "requires": {
+      "$ref": "#/$defs/Requirements"
+    },
+    "nutrition": {
+      "$ref": "#/$defs/Nutrition"
+    },
+    "cost": {
+      "$ref": "#/$defs/Cost"
+    },
+    "storage": {
+      "$ref": "#/$defs/Storage"
+    },
+    "text": {
+      "type": "object",
+      "description": "Human-readable text per language. Machines must not rely on it for control.",
+      "propertyNames": {
+        "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/Text"
+      }
+    },
+    "bindings": {
+      "type": "object",
+      "description": "Optional device-class hints, keyed by x-<namespace>. Unknown keys must be ignored.",
+      "propertyNames": {
+        "pattern": "^x-[a-z0-9.-]+$"
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "name",
+        "url"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "citation": {
+          "type": "string"
+        },
+        "collection": {
+          "type": "string"
+        }
+      }
+    },
+    "license": {
+      "type": "string",
+      "description": "SPDX id, e.g. CC-BY-4.0."
+    },
+    "textSidecars": {
+      "type": "object",
+      "description": "Other languages are served as sidecar files to keep the core document small: {\"languages\": [...], \"url\": \"/v1/recipes/{id}/text/{lang}.json\"}. Each sidecar validates against #/$defs/Text.",
+      "properties": {
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "meta": {
+      "$ref": "common.schema.json#/$defs/Meta"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "Verification": {
+      "type": "object",
+      "required": [
+        "level"
+      ],
+      "properties": {
+        "level": {
+          "enum": [
+            "V0",
+            "V1",
+            "V2",
+            "V3"
+          ],
+          "description": "V0 described · V1 structured · V2 simulated + reviewed · V3 field-verified."
+        },
+        "evidence": {
+          "type": "object",
+          "properties": {
+            "simulatorRuns": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "humanReviews": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "fieldReports": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "deviceClasses": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "incidents": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "reviewedBy": {
+          "type": "string"
+        },
+        "generatedBy": {
+          "type": "string",
+          "description": "Tool/model that produced the process graph, for audit."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "Dish": {
+      "type": "object",
+      "required": [
+        "names"
+      ],
+      "properties": {
+        "names": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "localName": {
+          "type": "string"
+        },
+        "cuisine": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "description": "ISO 3166-1 alpha-2 countries."
+        },
+        "course": {
+          "enum": [
+            "breakfast",
+            "starter",
+            "soup",
+            "salad",
+            "main",
+            "side",
+            "bread",
+            "dessert",
+            "snack",
+            "drink",
+            "sauce",
+            "condiment",
+            "baby",
+            "other"
+          ]
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "difficulty": {
+          "enum": [
+            "easy",
+            "medium",
+            "hard"
+          ]
+        },
+        "wikidata": {
+          "type": "string",
+          "pattern": "^Q[0-9]+$"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "url"
+            ],
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "role": {
+                "enum": [
+                  "banner",
+                  "thumb",
+                  "step",
+                  "reference_done"
+                ]
+              },
+              "width": {
+                "type": "integer"
+              },
+              "height": {
+                "type": "integer"
+              },
+              "node": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Yield": {
+      "type": "object",
+      "required": [
+        "servings"
+      ],
+      "properties": {
+        "servings": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "totalMass": {
+          "$ref": "common.schema.json#/$defs/Quantity"
+        },
+        "scaling": {
+          "type": "object",
+          "properties": {
+            "minScale": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "maxScale": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "timeExponent": {
+              "type": "number",
+              "description": "How cooking time scales with mass (0 = constant, 0.66 typical for roasts)."
+            },
+            "note": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "Prep": {
+      "type": "object",
+      "properties": {
+        "op": {
+          "type": "string"
+        },
+        "shape": {
+          "enum": [
+            "whole",
+            "halve",
+            "quarter",
+            "slice",
+            "dice",
+            "brunoise",
+            "julienne",
+            "chop",
+            "chop_fine",
+            "mince",
+            "grate",
+            "crush",
+            "puree",
+            "cube",
+            "strip",
+            "wedge",
+            "ring",
+            "peel_only",
+            "zest",
+            "juice"
+          ]
+        },
+        "size": {
+          "$ref": "common.schema.json#/$defs/Quantity"
+        },
+        "remove": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "soak": {
+          "type": "object",
+          "properties": {
+            "liquid": {
+              "type": "string"
+            },
+            "duration": {
+              "$ref": "common.schema.json#/$defs/Duration"
+            }
+          }
+        }
+      }
+    },
+    "Ingredient": {
+      "type": "object",
+      "required": [
+        "ref",
+        "ingredientId",
+        "qty"
+      ],
+      "properties": {
+        "ref": {
+          "$ref": "common.schema.json#/$defs/LocalRef"
+        },
+        "ingredientId": {
+          "$ref": "common.schema.json#/$defs/VocabId"
+        },
+        "legacyId": {
+          "type": "string",
+          "description": "masterIngredients[].id in the site data."
+        },
+        "qty": {
+          "$ref": "common.schema.json#/$defs/Quantity"
+        },
+        "display": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "prep": {
+          "$ref": "#/$defs/Prep"
+        },
+        "startTemp": {
+          "enum": [
+            "frozen",
+            "fridge",
+            "room",
+            "warm",
+            "hot"
+          ]
+        },
+        "scaling": {
+          "enum": [
+            "linear",
+            "sublinear",
+            "fixed"
+          ],
+          "default": "linear"
+        },
+        "toTaste": {
+          "type": "boolean"
+        },
+        "optional": {
+          "type": "boolean"
+        },
+        "substitutions": {
+          "type": "array",
+          "description": "Equivalents that keep the dish the same. Never used to bypass dietary rules.",
+          "items": {
+            "type": "object",
+            "required": [
+              "ingredientId",
+              "qty"
+            ],
+            "properties": {
+              "ingredientId": {
+                "$ref": "common.schema.json#/$defs/VocabId"
+              },
+              "qty": {
+                "$ref": "common.schema.json#/$defs/Quantity"
+              },
+              "note": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "gtin": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]{8,14}$"
+          },
+          "description": "Optional example GS1 product codes for ordering."
+        },
+        "allergens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Computed from the vocabulary; repeated here for offline use."
+        },
+        "economy": {
+          "type": "object",
+          "description": "Budget/ration hints.",
+          "properties": {
+            "costClass": {
+              "enum": [
+                "cheap",
+                "moderate",
+                "expensive"
+              ]
+            },
+            "stretchable": {
+              "type": "boolean",
+              "description": "Can be reduced or bulked out without changing the dish's identity."
+            },
+            "minRatio": {
+              "type": "number",
+              "description": "Lowest fraction of qty that still gives an acceptable dish."
+            },
+            "bulkWith": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Ingredient ids that can extend it (e.g. lentils for minced meat)."
+            }
+          }
+        }
+      }
+    },
+    "Equipment": {
+      "type": "object",
+      "required": [
+        "ref",
+        "class"
+      ],
+      "properties": {
+        "ref": {
+          "$ref": "common.schema.json#/$defs/LocalRef"
+        },
+        "class": {
+          "$ref": "common.schema.json#/$defs/VocabId"
+        },
+        "optional": {
+          "type": "boolean"
+        },
+        "constraints": {
+          "type": "object",
+          "properties": {
+            "diameterMm": {
+              "$ref": "common.schema.json#/$defs/Range"
+            },
+            "capacityMl": {
+              "$ref": "common.schema.json#/$defs/Range"
+            },
+            "powerW": {
+              "$ref": "common.schema.json#/$defs/Range"
+            },
+            "maxTempC": {
+              "type": "number"
+            },
+            "lid": {
+              "type": "boolean"
+            },
+            "material": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "inductionCompatible": {
+              "type": "boolean"
+            },
+            "ovenSafe": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "Node": {
+      "type": "object",
+      "required": [
+        "id",
+        "op"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/LocalRef"
+        },
+        "op": {
+          "$ref": "common.schema.json#/$defs/VocabId"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/LocalRef"
+          },
+          "description": "Ingredient refs or outputs of earlier nodes."
+        },
+        "output": {
+          "$ref": "common.schema.json#/$defs/LocalRef"
+        },
+        "into": {
+          "$ref": "common.schema.json#/$defs/LocalRef",
+          "description": "Container/intermediate the inputs are added to."
+        },
+        "equipment": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/LocalRef"
+          }
+        },
+        "params": {
+          "type": "object",
+          "description": "Validated against the op's param schema in vocab/ops."
+        },
+        "until": {
+          "$ref": "common.schema.json#/$defs/Condition"
+        },
+        "onTimeout": {
+          "$ref": "common.schema.json#/$defs/FailureAction"
+        },
+        "onFail": {
+          "$ref": "common.schema.json#/$defs/FailureAction"
+        },
+        "retry": {
+          "type": "object",
+          "properties": {
+            "max": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "extendBy": {
+              "$ref": "common.schema.json#/$defs/Duration"
+            }
+          }
+        },
+        "attention": {
+          "enum": [
+            "none",
+            "periodic",
+            "monitor",
+            "continuous"
+          ],
+          "description": "How closely the executor must watch this step."
+        },
+        "assignment": {
+          "type": "object",
+          "description": "Who may do this step. A hub assigns concrete actors at plan time.",
+          "properties": {
+            "allowed": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "human",
+                  "robot",
+                  "appliance",
+                  "any"
+                ]
+              }
+            },
+            "preferred": {
+              "enum": [
+                "human",
+                "robot",
+                "appliance"
+              ]
+            },
+            "reason": {
+              "type": "string"
+            }
+          }
+        },
+        "humanOptional": {
+          "type": "boolean",
+          "description": "A human may do or confirm this step (e.g. tasting)."
+        },
+        "timing": {
+          "type": "object",
+          "properties": {
+            "startAfter": {
+              "$ref": "common.schema.json#/$defs/Duration"
+            },
+            "nextWithin": {
+              "$ref": "common.schema.json#/$defs/Duration",
+              "description": "Following dependent node must start within this time."
+            },
+            "notBefore": {
+              "type": "string",
+              "description": "Relative anchor, e.g. serve-PT30M."
+            },
+            "canPause": {
+              "type": "boolean"
+            }
+          }
+        },
+        "hazards": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/LocalRef"
+          }
+        },
+        "ccp": {
+          "$ref": "common.schema.json#/$defs/LocalRef"
+        },
+        "optional": {
+          "type": "boolean"
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "label": {
+                "$ref": "common.schema.json#/$defs/LangMap"
+              },
+              "params": {
+                "type": "object"
+              },
+              "until": {
+                "$ref": "common.schema.json#/$defs/ConditionOrCheck"
+              },
+              "maxTime": {
+                "$ref": "common.schema.json#/$defs/Duration"
+              }
+            }
+          }
+        },
+        "skill": {
+          "type": "string",
+          "description": "Optional reference to a learned skill/policy id for robots that have one (vendor namespace)."
+        },
+        "notes": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "sourceSteps": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "description": "Original step numbers (fifi.cooking uniqueInstructions.stepNumber) this node was derived from, for traceability and translation reuse."
+        },
+        "energy": {
+          "$ref": "common.schema.json#/$defs/EnergyEstimate"
+        },
+        "alternatives": {
+          "type": "array",
+          "description": "Other ways to do this step (different heat source, equipment, or effort) with their trade-offs, used by planners for energy/budget/battery modes and missing equipment.",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "op"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "op": {
+                "$ref": "common.schema.json#/$defs/VocabId"
+              },
+              "equipment": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "params": {
+                "type": "object"
+              },
+              "until": {
+                "$ref": "common.schema.json#/$defs/Condition"
+              },
+              "energy": {
+                "$ref": "common.schema.json#/$defs/EnergyEstimate"
+              },
+              "timeFactor": {
+                "type": "number",
+                "description": "Duration relative to the main method (0.4 = 60% faster)."
+              },
+              "quality": {
+                "enum": [
+                  "better",
+                  "same",
+                  "minor_loss",
+                  "noticeable_loss"
+                ]
+              },
+              "when": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Mode tags where this is preferred: energy_saver, battery_low, budget_low, no_oven, gas_only, quiet, fast."
+              },
+              "label": {
+                "$ref": "common.schema.json#/$defs/LangMap"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Process": {
+      "type": "object",
+      "required": [
+        "nodes"
+      ],
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Node"
+          }
+        },
+        "edges": {
+          "oneOf": [
+            {
+              "const": "implicit-from-inputs"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "from",
+                  "to"
+                ],
+                "properties": {
+                  "from": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "enum": [
+                      "finish_to_start",
+                      "start_to_start",
+                      "finish_to_finish"
+                    ]
+                  },
+                  "lag": {
+                    "$ref": "common.schema.json#/$defs/Duration"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "parallelGroups": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "activeTime": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "totalTime": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "makeAhead": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "until": {
+                "type": "string"
+              },
+              "maxAdvance": {
+                "$ref": "common.schema.json#/$defs/Duration"
+              },
+              "storage": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Hazard": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "severity"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/LocalRef"
+        },
+        "type": {
+          "$ref": "common.schema.json#/$defs/VocabId"
+        },
+        "severity": {
+          "$ref": "common.schema.json#/$defs/Severity"
+        },
+        "mitigation": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limits": {
+          "type": "object",
+          "description": "Hard envelope, e.g. {\"oilTempMaxC\": 200, \"maxFillPct\": 50}."
+        }
+      }
+    },
+    "CCP": {
+      "type": "object",
+      "required": [
+        "id",
+        "hazard",
+        "node",
+        "criticalLimit",
+        "monitoring",
+        "corrective"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/LocalRef"
+        },
+        "hazard": {
+          "type": "string",
+          "description": "e.g. pathogen.salmonella, pathogen.clostridium_perfringens (cooling), toxin.bacillus_cereus (rice)."
+        },
+        "node": {
+          "$ref": "common.schema.json#/$defs/LocalRef"
+        },
+        "criticalLimit": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "limit": {
+          "$ref": "common.schema.json#/$defs/ConditionOrCheck",
+          "description": "Machine-checkable form of the critical limit."
+        },
+        "monitoring": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "corrective": {
+          "type": "string"
+        },
+        "record": {
+          "type": "boolean",
+          "default": true,
+          "description": "Executor must log readings to the session record."
+        }
+      }
+    },
+    "Safety": {
+      "type": "object",
+      "required": [
+        "hazards",
+        "allergens",
+        "supervision",
+        "abort"
+      ],
+      "properties": {
+        "hazards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Hazard"
+          }
+        },
+        "ccps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CCP"
+          }
+        },
+        "allergens": {
+          "type": "object",
+          "properties": {
+            "eu14": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "cereals_gluten",
+                  "crustaceans",
+                  "eggs",
+                  "fish",
+                  "peanuts",
+                  "soybeans",
+                  "milk",
+                  "nuts",
+                  "celery",
+                  "mustard",
+                  "sesame",
+                  "sulphites",
+                  "lupin",
+                  "molluscs"
+                ]
+              }
+            },
+            "us9": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "milk",
+                  "eggs",
+                  "fish",
+                  "crustacean_shellfish",
+                  "tree_nuts",
+                  "peanuts",
+                  "wheat",
+                  "soybeans",
+                  "sesame"
+                ]
+              }
+            },
+            "mayContain": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "dietary": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "claim",
+              "basis"
+            ],
+            "properties": {
+              "claim": {
+                "enum": [
+                  "halal",
+                  "kosher",
+                  "vegetarian",
+                  "vegan",
+                  "gluten_free",
+                  "dairy_free",
+                  "nut_free",
+                  "low_sodium",
+                  "diabetic_friendly",
+                  "pregnancy_safe",
+                  "infant_safe"
+                ]
+              },
+              "basis": {
+                "enum": [
+                  "ingredients",
+                  "certified"
+                ]
+              },
+              "ruleset": {
+                "type": "string"
+              },
+              "certificate": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "supervision": {
+          "type": "object",
+          "required": [
+            "default"
+          ],
+          "properties": {
+            "default": {
+              "enum": [
+                "unattended_ok",
+                "presence_required",
+                "hands_on_required"
+              ]
+            },
+            "reasons": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "abort": {
+          "type": "object",
+          "required": [
+            "steps"
+          ],
+          "properties": {
+            "steps": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "heat_off",
+                  "lid_on",
+                  "vent_on",
+                  "move_pan_to_cool_zone_if_capable",
+                  "retract_arm",
+                  "stop_motion",
+                  "unlock_doors",
+                  "alert_user",
+                  "alert_emergency_contact",
+                  "call_emergency_services_if_fire"
+                ]
+              }
+            },
+            "neverLeave": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Nodes during which the executor must not leave the cooking zone unattended."
+            }
+          }
+        },
+        "environment": {
+          "type": "object",
+          "properties": {
+            "ventilation": {
+              "enum": [
+                "none",
+                "recommended",
+                "required"
+              ]
+            },
+            "openFlame": {
+              "type": "boolean"
+            },
+            "smokeExpected": {
+              "type": "boolean",
+              "description": "Lets smoke alarms/hubs distinguish expected searing smoke from fire (never disables alarms)."
+            },
+            "childrenPetsKeepAway": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "Requirements": {
+      "type": "object",
+      "description": "Derived summary for fast capability matching.",
+      "properties": {
+        "ops": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "equipment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sensors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maxTempC": {
+          "type": "number"
+        },
+        "minHumanSkill": {
+          "enum": [
+            "none",
+            "basic",
+            "intermediate",
+            "advanced"
+          ]
+        }
+      }
+    },
+    "Nutrition": {
+      "type": "object",
+      "properties": {
+        "perServing": {
+          "type": "object",
+          "properties": {
+            "kcal": {
+              "type": "number"
+            },
+            "protein": {
+              "type": "number"
+            },
+            "fat": {
+              "type": "number"
+            },
+            "carbs": {
+              "type": "number"
+            },
+            "fiber": {
+              "type": "number"
+            },
+            "sugar": {
+              "type": "number"
+            },
+            "sodiumMg": {
+              "type": "number"
+            }
+          }
+        },
+        "basis": {
+          "type": "string"
+        }
+      }
+    },
+    "Cost": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "priceYear": {
+          "type": "integer"
+        },
+        "region": {
+          "type": "string"
+        },
+        "total": {
+          "type": "number"
+        },
+        "buckets": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "Storage": {
+      "type": "object",
+      "properties": {
+        "fridgeDays": {
+          "type": "number"
+        },
+        "freezerDays": {
+          "type": "number"
+        },
+        "reheat": {
+          "type": "object",
+          "properties": {
+            "minCoreC": {
+              "type": "number"
+            },
+            "method": {
+              "type": "string"
+            }
+          }
+        },
+        "coolingRequired": {
+          "type": "boolean",
+          "description": "If true, leftover cooling is a CCP (see policy packs)."
+        }
+      }
+    },
+    "Text": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "intro": {
+          "type": "string"
+        },
+        "culturalNotes": {
+          "type": "string"
+        },
+        "steps": {
+          "type": "object",
+          "description": "Node id → human instruction.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "tips": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "legacySteps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Original human steps in order, as published on the source site."
+        }
+      }
+    }
+  },
+  "patternProperties": {
+    "^x-": {
+      "description": "Extension fields (see docs/EXTENSIBILITY.md). Unknown x- fields must be preserved and ignored."
+    }
+  }
+}

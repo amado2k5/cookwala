@@ -1,0 +1,520 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/event.schema.json",
+  "title": "Cookwala Event",
+  "description": "Every message on the kitchen event bus (MQTT, WebSocket, SSE, webhooks) is a CloudEvents 1.0 JSON event with a type from the cookwala catalog below. Safety events have priority and must be delivered to every participant.",
+  "type": "object",
+  "required": [
+    "specversion",
+    "id",
+    "source",
+    "type",
+    "time",
+    "data"
+  ],
+  "properties": {
+    "specversion": {
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string",
+      "description": "URI of the emitter, e.g. cookwala://kitchen-123/robot/neo-1."
+    },
+    "type": {
+      "$ref": "#/$defs/EventType"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Session/task/device id the event is about."
+    },
+    "time": {
+      "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "datacontenttype": {
+      "const": "application/json"
+    },
+    "dataschema": {
+      "type": "string"
+    },
+    "cookwalapriority": {
+      "enum": [
+        "safety",
+        "high",
+        "normal",
+        "low"
+      ],
+      "description": "CloudEvents extension attribute."
+    },
+    "cookwalakitchen": {
+      "type": "string",
+      "description": "CloudEvents extension attribute: kitchen id."
+    },
+    "cookwalasession": {
+      "type": "string"
+    },
+    "cookwalasig": {
+      "type": "string",
+      "description": "Optional detached signature for safety-critical events."
+    },
+    "data": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "pattern": "^cookwala\\.safety\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "cookwalapriority": {
+            "const": "safety"
+          },
+          "data": {
+            "$ref": "#/$defs/SafetyData"
+          }
+        },
+        "required": [
+          "cookwalapriority"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "pattern": "^cookwala\\.task\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "#/$defs/TaskData"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "pattern": "^cookwala\\.telemetry\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "#/$defs/TelemetryData"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "pattern": "^cookwala\\.inventory\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "#/$defs/InventoryData"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "pattern": "^cookwala\\.notify\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "#/$defs/NotifyData"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "pattern": "^cookwala\\.team\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "#/$defs/TeamData"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "EventType": {
+      "anyOf": [
+        {
+          "enum": [
+            "cookwala.session.created",
+            "cookwala.session.planned",
+            "cookwala.session.state_changed",
+            "cookwala.session.completed",
+            "cookwala.session.aborted",
+            "cookwala.policy.evaluated",
+            "cookwala.policy.acknowledged",
+            "cookwala.task.assigned",
+            "cookwala.task.started",
+            "cookwala.task.progress",
+            "cookwala.task.condition_met",
+            "cookwala.task.input_required",
+            "cookwala.task.completed",
+            "cookwala.task.failed",
+            "cookwala.task.reassigned",
+            "cookwala.lease.requested",
+            "cookwala.lease.granted",
+            "cookwala.lease.released",
+            "cookwala.lease.revoked",
+            "cookwala.handoff.proposed",
+            "cookwala.handoff.ready",
+            "cookwala.handoff.acknowledged",
+            "cookwala.handoff.completed",
+            "cookwala.handoff.refused",
+            "cookwala.ccp.recorded",
+            "cookwala.ccp.failed",
+            "cookwala.telemetry.reading",
+            "cookwala.device.online",
+            "cookwala.device.offline",
+            "cookwala.device.fault",
+            "cookwala.device.capabilities_changed",
+            "cookwala.inventory.changed",
+            "cookwala.inventory.low",
+            "cookwala.inventory.expiring",
+            "cookwala.inventory.reserved",
+            "cookwala.order.intent_created",
+            "cookwala.order.approval_required",
+            "cookwala.order.placed",
+            "cookwala.order.status",
+            "cookwala.order.delivered",
+            "cookwala.notify.request",
+            "cookwala.notify.delivered",
+            "cookwala.notify.acknowledged",
+            "cookwala.human.presence",
+            "cookwala.human.confirmation",
+            "cookwala.human.override",
+            "cookwala.safety.estop",
+            "cookwala.safety.smoke",
+            "cookwala.safety.co",
+            "cookwala.safety.gas_leak",
+            "cookwala.safety.fire",
+            "cookwala.safety.overtemp",
+            "cookwala.safety.boilover",
+            "cookwala.safety.spill",
+            "cookwala.safety.intrusion_zone",
+            "cookwala.safety.child_or_pet_in_zone",
+            "cookwala.safety.unattended_heat",
+            "cookwala.safety.water_leak",
+            "cookwala.safety.power_loss",
+            "cookwala.safety.cleared",
+            "cookwala.team.cfp",
+            "cookwala.team.bid",
+            "cookwala.team.award",
+            "cookwala.team.decline",
+            "cookwala.team.plan",
+            "cookwala.team.replan",
+            "cookwala.advice.requested",
+            "cookwala.advice.answered",
+            "cookwala.advice.applied",
+            "cookwala.mode.changed",
+            "cookwala.device.battery",
+            "cookwala.market.quote_requested",
+            "cookwala.market.quote",
+            "cookwala.market.offer_changed",
+            "cookwala.flow.started",
+            "cookwala.flow.step",
+            "cookwala.flow.completed",
+            "cookwala.flow.failed",
+            "cookwala.relief.need_opened",
+            "cookwala.relief.need_updated",
+            "cookwala.relief.pledge_offered",
+            "cookwala.relief.allocated",
+            "cookwala.relief.dispatched",
+            "cookwala.relief.delivered",
+            "cookwala.relief.impact",
+            "cookwala.relief.surplus_available"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^x-[a-z0-9-]+\\.[a-z0-9_.]+$",
+          "description": "Extension event types."
+        }
+      ]
+    },
+    "SafetyData": {
+      "type": "object",
+      "required": [
+        "level",
+        "action"
+      ],
+      "properties": {
+        "level": {
+          "enum": [
+            "warning",
+            "alarm",
+            "emergency"
+          ]
+        },
+        "action": {
+          "enum": [
+            "none",
+            "pause_all",
+            "heat_off_all",
+            "abort_session",
+            "evacuate"
+          ],
+          "description": "Required response from every participant."
+        },
+        "zone": {
+          "type": "string"
+        },
+        "reading": {
+          "type": "object"
+        },
+        "detectedBy": {
+          "$ref": "common.schema.json#/$defs/Actor"
+        },
+        "expected": {
+          "type": "boolean",
+          "description": "True when the hub matched it to recipe safety.environment.smokeExpected; never suppresses alarms, only adds context for humans."
+        }
+      }
+    },
+    "TaskData": {
+      "type": "object",
+      "required": [
+        "taskId",
+        "state"
+      ],
+      "properties": {
+        "taskId": {
+          "type": "string"
+        },
+        "nodeId": {
+          "type": "string"
+        },
+        "recipeId": {
+          "type": "string"
+        },
+        "state": {
+          "$ref": "session.schema.json#/$defs/TaskState"
+        },
+        "assignee": {
+          "$ref": "common.schema.json#/$defs/Actor"
+        },
+        "progress": {
+          "type": "number"
+        },
+        "message": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "TelemetryData": {
+      "type": "object",
+      "required": [
+        "readings"
+      ],
+      "properties": {
+        "taskId": {
+          "type": "string"
+        },
+        "readings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "sensor",
+              "value"
+            ],
+            "properties": {
+              "sensor": {
+                "type": "string"
+              },
+              "value": {},
+              "unit": {
+                "type": "string"
+              },
+              "target": {
+                "type": "string"
+              },
+              "confidence": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "InventoryData": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "inventory.schema.json#/$defs/Item"
+          }
+        },
+        "storage": {
+          "type": "string"
+        }
+      }
+    },
+    "NotifyData": {
+      "type": "object",
+      "required": [
+        "audience",
+        "urgency",
+        "message"
+      ],
+      "properties": {
+        "audience": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "Actor ids or roles: human:primary, role:household, role:emergency_contact."
+          }
+        },
+        "urgency": {
+          "enum": [
+            "info",
+            "action_needed",
+            "time_critical",
+            "emergency"
+          ]
+        },
+        "message": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "label": {
+                "$ref": "common.schema.json#/$defs/LangMap"
+              }
+            }
+          }
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expiresAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "relatesTo": {
+          "type": "string"
+        }
+      }
+    },
+    "TeamData": {
+      "type": "object",
+      "description": "Contract-net style teaming: a robot (or the hub) issues a call for proposals for tasks; helpers bid with capability, ETA, battery and cost; the hub awards.",
+      "properties": {
+        "cfpId": {
+          "type": "string"
+        },
+        "sessionId": {
+          "type": "string"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "type": "string"
+        },
+        "bid": {
+          "type": "object",
+          "properties": {
+            "actorId": {
+              "type": "string"
+            },
+            "canDo": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "etaS": {
+              "type": "number"
+            },
+            "durationS": {
+              "type": "number"
+            },
+            "batteryAfterPct": {
+              "type": "number"
+            },
+            "energyWh": {
+              "type": "number"
+            },
+            "confidence": {
+              "type": "number"
+            },
+            "constraints": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "award": {
+          "type": "object",
+          "properties": {
+            "actorId": {
+              "type": "string"
+            },
+            "tasks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "deadline": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        }
+      }
+    }
+  }
+}

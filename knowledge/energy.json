@@ -1,0 +1,122 @@
+{
+ "cookwala": "0.1.0",
+ "id": "cw.knowledge.energy.core",
+ "version": "0.1.0",
+ "kind": "energy",
+ "title": {
+  "en": "Heat-source energy models"
+ },
+ "reviewStatus": "draft",
+ "disclaimer": "Approximate efficiency ranges for planning; actual values vary by appliance.",
+ "entries": [
+  {
+   "id": "cw.energy.induction",
+   "source": "electric_induction",
+   "efficiency": {
+    "min": 0.8,
+    "max": 0.9
+   },
+   "tips": [
+    "Fastest boiling on electricity; match pan base to zone size.",
+    "Needs magnetic cookware (cookware.inductionCompatible)."
+   ],
+   "sources": [
+    "https://www.energystar.gov/products/residential_induction_cooking_tops"
+   ]
+  },
+  {
+   "id": "cw.energy.electric_resistive",
+   "source": "electric_resistive",
+   "efficiency": {
+    "min": 0.65,
+    "max": 0.8
+   },
+   "tips": [
+    "Use residual heat: switch off a few minutes early for simmering steps."
+   ]
+  },
+  {
+   "id": "cw.energy.natural_gas",
+   "source": "natural_gas",
+   "efficiency": {
+    "min": 0.3,
+    "max": 0.45
+   },
+   "tips": [
+    "Keep flames under the pan base; lids on; ventilate (combustion by-products)."
+   ],
+   "notes": [
+    "Raise ventilation and watch for flame-out (safety)."
+   ]
+  },
+  {
+   "id": "cw.energy.propane",
+   "source": "propane",
+   "efficiency": {
+    "min": 0.3,
+    "max": 0.45
+   },
+   "tips": [
+    "Same as natural gas; track cylinder level as a finite budget."
+   ]
+  },
+  {
+   "id": "cw.energy.microwave",
+   "source": "electric_resistive",
+   "efficiency": {
+    "min": 0.5,
+    "max": 0.65
+   },
+   "tips": [
+    "Efficient for small portions, reheating and steaming vegetables."
+   ]
+  },
+  {
+   "id": "cw.energy.oven",
+   "source": "electric_resistive",
+   "efficiency": {
+    "min": 0.1,
+    "max": 0.2
+   },
+   "tips": [
+    "Batch several dishes per bake; skip preheat for long braises; avoid opening the door."
+   ],
+   "notes": [
+    "Ovens heat air and walls; low share reaches food."
+   ]
+  },
+  {
+   "id": "cw.energy.pressure_cooker",
+   "source": "any",
+   "efficiency": {
+    "min": 0.5,
+    "max": 0.9
+   },
+   "tips": [
+    "Cuts cooking time for legumes, tough meats and stocks substantially; strong choice for eco and budget modes."
+   ]
+  },
+  {
+   "id": "cw.energy.kettle",
+   "source": "electric_resistive",
+   "efficiency": {
+    "min": 0.8,
+    "max": 0.9
+   },
+   "tips": [
+    "Boil water in a kettle, then transfer to the pot."
+   ]
+  },
+  {
+   "id": "cw.energy.solar_cooker",
+   "source": "solar_cooker",
+   "efficiency": {
+    "min": 0.2,
+    "max": 0.4
+   },
+   "notes": [
+    "Weather-dependent; slow; good for off-grid stews and rice."
+   ]
+  }
+ ]
+}

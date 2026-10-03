@@ -1,0 +1,2223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/advice.schema.json",
+  "title": "Cookwala Advice (reasoning requests and responses)",
+  "description": "Questions a robot, appliance, agent or person asks the Cookwala reasoner (what can I cook, how do I fix this mistake, how do we split the work, how do I store it, what should I cook for N people), and the structured, safety-checked answers. Served statelessly by the index (POST /v1/advise/{intent}) and with full kitchen context by a hub (POST /cookwala/v1/advise/{intent}). Use $defs AdviceRequest and AdviceResponse.",
+  "$defs": {
+    "Intent": {
+      "enum": [
+        "ask",
+        "cook_from",
+        "substitute",
+        "recover",
+        "repurpose",
+        "adapt_equipment",
+        "team_plan",
+        "store",
+        "feed",
+        "rescale",
+        "retime",
+        "leftovers",
+        "diagnose",
+        "texture_modify",
+        "diet_merge",
+        "nutrition_target",
+        "shopping_optimize",
+        "custom",
+        "relief_allocate",
+        "personalize"
+      ]
+    },
+    "IngredientInput": {
+      "type": "object",
+      "properties": {
+        "ingredientId": {
+          "$ref": "common.schema.json#/$defs/VocabId"
+        },
+        "name": {
+          "type": "string",
+          "description": "Free text when the id is unknown; the reasoner resolves it."
+        },
+        "qty": {
+          "$ref": "common.schema.json#/$defs/Quantity"
+        },
+        "state": {
+          "type": "string",
+          "description": "e.g. raw, cooked, frozen, overripe, stale."
+        },
+        "expires": {
+          "type": "string",
+          "format": "date"
+        },
+        "mustUse": {
+          "type": "boolean"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "ingredientId"
+          ]
+        },
+        {
+          "required": [
+            "name"
+          ]
+        }
+      ]
+    },
+    "DinerGroup": {
+      "type": "object",
+      "required": [
+        "count"
+      ],
+      "properties": {
+        "count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "ageGroup": {
+          "enum": [
+            "infant",
+            "child",
+            "teen",
+            "adult",
+            "senior"
+          ]
+        },
+        "allergies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dietary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "iddsiLevel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 7,
+          "description": "IDDSI texture level for swallowing needs."
+        },
+        "appetite": {
+          "enum": [
+            "light",
+            "normal",
+            "hearty"
+          ]
+        },
+        "medical": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "e.g. low_sodium, diabetic, renal (used only for filtering, never stored)."
+        }
+      }
+    },
+    "Constraints": {
+      "type": "object",
+      "properties": {
+        "serveAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "startEarliest": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "timeAvailable": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "maxActiveTime": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "budget": {
+          "$ref": "common.schema.json#/$defs/Money"
+        },
+        "cuisines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "courses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dietary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excludeAllergens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "avoidIngredients": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "useFirst": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Inventory item ids or ingredient ids to prioritise (expiring)."
+        },
+        "equipmentUnavailable": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skill": {
+          "enum": [
+            "none",
+            "basic",
+            "intermediate",
+            "advanced"
+          ]
+        },
+        "authenticity": {
+          "enum": [
+            "strict",
+            "flexible",
+            "creative"
+          ]
+        },
+        "minLevel": {
+          "enum": [
+            "V0",
+            "V1",
+            "V2",
+            "V3"
+          ]
+        },
+        "supervision": {
+          "enum": [
+            "unattended",
+            "presence",
+            "hands_on"
+          ]
+        },
+        "nutrition": {
+          "type": "object",
+          "properties": {
+            "kcalPerServing": {
+              "$ref": "common.schema.json#/$defs/Range"
+            },
+            "proteinGMin": {
+              "type": "number"
+            },
+            "sodiumMgMax": {
+              "type": "number"
+            },
+            "sugarGMax": {
+              "type": "number"
+            }
+          }
+        },
+        "energy": {
+          "enum": [
+            "any",
+            "low",
+            "no_oven",
+            "no_power"
+          ]
+        },
+        "noise": {
+          "enum": [
+            "any",
+            "quiet"
+          ]
+        },
+        "minimizeWaste": {
+          "type": "boolean"
+        },
+        "holdMax": {
+          "$ref": "common.schema.json#/$defs/Duration",
+          "description": "Longest acceptable time between done and served."
+        },
+        "servingStyle": {
+          "enum": [
+            "plated",
+            "family",
+            "buffet",
+            "packed",
+            "delivery"
+          ]
+        }
+      }
+    },
+    "Context": {
+      "type": "object",
+      "description": "What the asker knows about its kitchen. A hub fills this automatically; robots asking the index directly send what they have.",
+      "properties": {
+        "kitchenId": {
+          "type": "string"
+        },
+        "lang": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "altitudeM": {
+          "type": "number",
+          "description": "Affects boiling point, baking and pressure-cooking times."
+        },
+        "policyPacks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "inventory": {
+          "$ref": "inventory.schema.json"
+        },
+        "actors": {
+          "type": "array",
+          "items": {
+            "$ref": "capabilities.schema.json"
+          }
+        },
+        "humansAvailable": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "session": {
+          "type": "object",
+          "properties": {
+            "sessionId": {
+              "type": "string"
+            },
+            "recipeId": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "integer"
+            },
+            "nodeId": {
+              "type": "string"
+            },
+            "taskId": {
+              "type": "string"
+            },
+            "completedNodes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "telemetry": {
+              "type": "object"
+            },
+            "startedAt": {
+              "$ref": "common.schema.json#/$defs/DateTime"
+            }
+          }
+        },
+        "diners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DinerGroup"
+          }
+        },
+        "constraints": {
+          "$ref": "#/$defs/Constraints"
+        },
+        "mode": {
+          "$ref": "profile.schema.json#/$defs/OperatingMode"
+        },
+        "profiles": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/GlobalRef"
+          },
+          "description": "Client, kitchen, cookware, robot and organization profiles to apply (resolved by the hub; private profiles never leave it)."
+        },
+        "catalogs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Recipe catalogs to search, in priority order (public, private, local)."
+        },
+        "extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Extension ids to apply to this request (filters, rankers, advisors)."
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "profile.schema.json#/$defs/PersonNutrition"
+          },
+          "description": "Only when asking a local hub/advisor; the public index rejects requests containing person data."
+        }
+      }
+    },
+    "Incident": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "$ref": "common.schema.json#/$defs/VocabId",
+          "description": "From vocab/incidents (cw.incident.*), e.g. cw.incident.too_salty, cw.incident.scorched_bottom, cw.incident.emulsion_broke, cw.incident.time_temp_abuse."
+        },
+        "description": {
+          "type": "string"
+        },
+        "recipeId": {
+          "type": "string"
+        },
+        "nodeId": {
+          "type": "string"
+        },
+        "ingredientRef": {
+          "type": "string"
+        },
+        "observations": {
+          "type": "object",
+          "description": "Measurements and cues, e.g. {\"saltAddedG\": 20, \"saltExpectedG\": 8, \"minutesBetween5and57C\": 150, \"coreTempC\": 48, \"smell\": \"acrid\", \"visual\": [\"black_flecks\"]}.",
+          "additionalProperties": true
+        },
+        "noticedAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "elapsedSince": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "servedAlready": {
+          "type": "boolean"
+        },
+        "media": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Local references to photos/frames (kept local unless the user opts in)."
+        }
+      }
+    },
+    "Query": {
+      "type": "object",
+      "description": "Intent-specific parameters. See the per-intent definitions below.",
+      "additionalProperties": true
+    },
+    "CookFromQuery": {
+      "type": "object",
+      "required": [
+        "ingredients"
+      ],
+      "properties": {
+        "ingredients": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IngredientInput"
+          }
+        },
+        "useInventory": {
+          "type": "boolean",
+          "default": true
+        },
+        "pantryStaplesAssumed": {
+          "type": "boolean",
+          "default": true,
+          "description": "Assume salt, pepper, oil, water, common spices."
+        },
+        "allowMissing": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 2
+        },
+        "allowSubstitutions": {
+          "type": "boolean",
+          "default": true
+        },
+        "allowShopping": {
+          "type": "boolean",
+          "default": false
+        },
+        "servings": {
+          "type": "number"
+        }
+      }
+    },
+    "SubstituteQuery": {
+      "type": "object",
+      "required": [
+        "recipeId"
+      ],
+      "properties": {
+        "recipeId": {
+          "type": "string"
+        },
+        "ingredientRef": {
+          "type": "string"
+        },
+        "equipmentRef": {
+          "type": "string"
+        },
+        "reason": {
+          "enum": [
+            "missing",
+            "allergy",
+            "dietary",
+            "cost",
+            "preference",
+            "spoiled",
+            "not_enough"
+          ]
+        },
+        "qtyAvailable": {
+          "$ref": "common.schema.json#/$defs/Quantity"
+        }
+      }
+    },
+    "RecoverQuery": {
+      "type": "object",
+      "required": [
+        "incident"
+      ],
+      "properties": {
+        "incident": {
+          "$ref": "#/$defs/Incident"
+        },
+        "goal": {
+          "enum": [
+            "save_this_dish",
+            "any_good_meal",
+            "safest",
+            "fastest"
+          ],
+          "default": "save_this_dish"
+        }
+      }
+    },
+    "RepurposeQuery": {
+      "type": "object",
+      "required": [
+        "intermediate"
+      ],
+      "properties": {
+        "intermediate": {
+          "type": "object",
+          "properties": {
+            "fromRecipeId": {
+              "type": "string"
+            },
+            "fromNodeId": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "ingredients": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/IngredientInput"
+              }
+            },
+            "state": {
+              "type": "object",
+              "description": "e.g. {\"cooked\": true, \"texture\": \"mushy\", \"flavorIssues\": [\"too_salty\"]}."
+            },
+            "qty": {
+              "$ref": "common.schema.json#/$defs/Quantity"
+            }
+          }
+        },
+        "incident": {
+          "$ref": "#/$defs/Incident"
+        }
+      }
+    },
+    "AdaptEquipmentQuery": {
+      "type": "object",
+      "required": [
+        "recipeId",
+        "missingEquipment"
+      ],
+      "properties": {
+        "recipeId": {
+          "type": "string"
+        },
+        "missingEquipment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "availableEquipment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "TeamPlanQuery": {
+      "type": "object",
+      "required": [
+        "recipes"
+      ],
+      "properties": {
+        "recipes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "recipeId"
+            ],
+            "properties": {
+              "recipeId": {
+                "type": "string"
+              },
+              "servings": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "requester": {
+          "type": "string",
+          "description": "Actor id of the robot asking (it gets the coordinator role if no hub)."
+        },
+        "helpers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Actor ids that offered help (from cookwala.team.bid)."
+        },
+        "objective": {
+          "enum": [
+            "on_time",
+            "min_makespan",
+            "min_hold",
+            "min_energy",
+            "balanced",
+            "min_human_work"
+          ],
+          "default": "on_time"
+        },
+        "allowSplitTasks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Split divisible work (chopping 2 kg onions) across actors."
+        }
+      }
+    },
+    "StoreQuery": {
+      "type": "object",
+      "properties": {
+        "recipeId": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "qty": {
+          "$ref": "common.schema.json#/$defs/Quantity"
+        },
+        "servings": {
+          "type": "number"
+        },
+        "duration": {
+          "$ref": "common.schema.json#/$defs/Duration",
+          "description": "How long it must keep, e.g. P3D."
+        },
+        "notCookedYet": {
+          "type": "boolean",
+          "description": "True: also advise how to cook it for storage (cook-for-storage changes)."
+        },
+        "storageAvailable": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "fridge",
+              "freezer",
+              "pantry",
+              "cooler_with_ice",
+              "none"
+            ]
+          }
+        },
+        "containersAvailable": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reheatAvailable": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "microwave",
+              "oven",
+              "hob",
+              "steamer",
+              "none"
+            ]
+          }
+        },
+        "transport": {
+          "type": "boolean",
+          "description": "Food will travel (lunch boxes, delivery)."
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "recipeId"
+          ]
+        },
+        {
+          "required": [
+            "description"
+          ]
+        }
+      ]
+    },
+    "FeedQuery": {
+      "type": "object",
+      "required": [
+        "people"
+      ],
+      "properties": {
+        "people": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "meals": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Number of meals to cover (e.g. 9 for three days × three meals)."
+        },
+        "mealTypes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "breakfast",
+              "lunch",
+              "dinner",
+              "snack",
+              "iftar",
+              "suhoor"
+            ]
+          }
+        },
+        "dishCount": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Variety per meal."
+        },
+        "includeStorage": {
+          "type": "boolean",
+          "description": "Plan make-ahead + storage for later meals."
+        }
+      }
+    },
+    "RescaleQuery": {
+      "type": "object",
+      "required": [
+        "recipeId"
+      ],
+      "properties": {
+        "recipeId": {
+          "type": "string"
+        },
+        "targetServings": {
+          "type": "number"
+        },
+        "targetMass": {
+          "$ref": "common.schema.json#/$defs/Quantity"
+        },
+        "limitingIngredient": {
+          "$ref": "#/$defs/IngredientInput",
+          "description": "Scale to what I have of this."
+        }
+      }
+    },
+    "RetimeQuery": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string"
+        },
+        "newServeAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "runningLate": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "guestsLate": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        }
+      }
+    },
+    "DiagnoseQuery": {
+      "type": "object",
+      "required": [
+        "anomalies"
+      ],
+      "properties": {
+        "sessionId": {
+          "type": "string"
+        },
+        "taskId": {
+          "type": "string"
+        },
+        "anomalies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sensor": {
+                "type": "string"
+              },
+              "expected": {},
+              "observed": {},
+              "since": {
+                "$ref": "common.schema.json#/$defs/Duration"
+              }
+            }
+          }
+        }
+      }
+    },
+    "AdviceRequest": {
+      "type": "object",
+      "required": [
+        "cookwala",
+        "intent"
+      ],
+      "properties": {
+        "cookwala": {
+          "$ref": "common.schema.json#/$defs/SpecVersion"
+        },
+        "id": {
+          "type": "string"
+        },
+        "intent": {
+          "$ref": "#/$defs/Intent"
+        },
+        "text": {
+          "type": "string",
+          "description": "Natural-language question (required for intent=ask; optional extra context otherwise)."
+        },
+        "asker": {
+          "$ref": "common.schema.json#/$defs/Actor"
+        },
+        "context": {
+          "$ref": "#/$defs/Context"
+        },
+        "query": {
+          "$ref": "#/$defs/Query"
+        },
+        "maxOptions": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20,
+          "default": 5
+        },
+        "explain": {
+          "type": "boolean",
+          "default": true
+        },
+        "answersTo": {
+          "type": "object",
+          "description": "Answers to questions from a previous needs_input response: {questionId: value}.",
+          "additionalProperties": true
+        },
+        "previousResponseId": {
+          "type": "string"
+        },
+        "customIntent": {
+          "type": "string",
+          "description": "For intent=custom: an extension-defined intent (x-namespace.name)."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "ask"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "text"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "cook_from"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "query": {
+                "$ref": "#/$defs/CookFromQuery"
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "substitute"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "query": {
+                "$ref": "#/$defs/SubstituteQuery"
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "recover"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "query": {
+                "$ref": "#/$defs/RecoverQuery"
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "repurpose"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "query": {
+                "$ref": "#/$defs/RepurposeQuery"
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "adapt_equipment"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "query": {
+                "$ref": "#/$defs/AdaptEquipmentQuery"
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "team_plan"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "query": {
+                "$ref": "#/$defs/TeamPlanQuery"
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "store"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "query": {
+                "$ref": "#/$defs/StoreQuery"
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "feed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "query": {
+                "$ref": "#/$defs/FeedQuery"
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "rescale"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "query": {
+                "$ref": "#/$defs/RescaleQuery"
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "retime"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "query": {
+                "$ref": "#/$defs/RetimeQuery"
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "diagnose"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "query": {
+                "$ref": "#/$defs/DiagnoseQuery"
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "custom"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "customIntent"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "relief_allocate"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "query"
+            ],
+            "properties": {
+              "query": {
+                "type": "object",
+                "required": [
+                  "needs"
+                ],
+                "properties": {
+                  "needs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "pledges": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "programs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "horizon": {
+                    "$ref": "common.schema.json#/$defs/Duration"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "intent": {
+                "const": "personalize"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "query": {
+                "$ref": "#/$defs/PersonalizeQuery"
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        }
+      ]
+    },
+    "SafetyVerdict": {
+      "type": "object",
+      "required": [
+        "verdict"
+      ],
+      "properties": {
+        "verdict": {
+          "enum": [
+            "safe",
+            "safe_with_conditions",
+            "unsafe_discard",
+            "unknown_ask_human",
+            "not_applicable"
+          ]
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rulesApplied": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Policy-pack rule ids and knowledge ids (e.g. cw.safety.tcs_4h, us.fda-food-code-2022/3-501.19)."
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "PatchOp": {
+      "type": "object",
+      "required": [
+        "op"
+      ],
+      "properties": {
+        "op": {
+          "enum": [
+            "add_node",
+            "replace_node",
+            "remove_node",
+            "insert_before",
+            "insert_after",
+            "update_params",
+            "set_until",
+            "add_ingredient",
+            "scale_ingredient",
+            "replace_ingredient",
+            "remove_ingredient",
+            "scale_all",
+            "split_batch",
+            "merge_batches",
+            "discard_output",
+            "add_hazard",
+            "add_ccp",
+            "set_supervision",
+            "note"
+          ]
+        },
+        "target": {
+          "type": "string",
+          "description": "Node id, ingredient ref or intermediate ref."
+        },
+        "node": {
+          "$ref": "recipe.schema.json#/$defs/Node"
+        },
+        "ingredient": {
+          "$ref": "recipe.schema.json#/$defs/Ingredient"
+        },
+        "params": {
+          "type": "object"
+        },
+        "factor": {
+          "anyOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "type": "string",
+              "pattern": "^\\{[A-Za-z_.]+\\}$",
+              "description": "Template placeholder, only in playbooks; resolved before a patch is applied."
+            }
+          ]
+        },
+        "until": {
+          "$ref": "common.schema.json#/$defs/Condition"
+        },
+        "text": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        }
+      },
+      "description": "One semantic change. In knowledge playbooks, string values may contain {placeholders} (e.g. {nodeId}, {salt_ratio}) that the reasoner resolves from the incident, answers and recipe."
+    },
+    "RecipePatch": {
+      "type": "object",
+      "description": "A semantic, validated change to a recipe's process graph (not raw JSON Patch), applied by the hub to the running session.",
+      "required": [
+        "base",
+        "ops"
+      ],
+      "properties": {
+        "base": {
+          "type": "object",
+          "required": [
+            "recipeId"
+          ],
+          "properties": {
+            "recipeId": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "integer"
+            },
+            "hash": {
+              "$ref": "common.schema.json#/$defs/Hash"
+            }
+          }
+        },
+        "ops": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PatchOp"
+          }
+        },
+        "resumeAt": {
+          "type": "string",
+          "description": "Node id to continue from after the patch."
+        },
+        "redo": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Completed nodes whose outputs are invalidated and must be redone."
+        },
+        "validated": {
+          "type": "boolean",
+          "description": "Patched graph passed schema + semantic validation + policy."
+        }
+      }
+    },
+    "PlannedTask": {
+      "type": "object",
+      "required": [
+        "ref",
+        "start",
+        "end"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string",
+          "description": "recipeId#nodeId, or recipeId#nodeId/part-k for split tasks."
+        },
+        "op": {
+          "type": "string"
+        },
+        "start": {
+          "$ref": "common.schema.json#/$defs/Duration",
+          "description": "Offset from plan start."
+        },
+        "end": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "handoffTo": {
+          "type": "string"
+        },
+        "attention": {
+          "type": "string"
+        },
+        "instructions": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        }
+      }
+    },
+    "TeamPlan": {
+      "type": "object",
+      "required": [
+        "assignments",
+        "makespan"
+      ],
+      "properties": {
+        "assignments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "actorId",
+              "tasks"
+            ],
+            "properties": {
+              "actorId": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "tasks": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/PlannedTask"
+                }
+              },
+              "utilization": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "makespan": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "startAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "serveAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "criticalPath": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "handoffs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "from": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              },
+              "item": {
+                "type": "string"
+              },
+              "at": {
+                "$ref": "common.schema.json#/$defs/Duration"
+              }
+            }
+          }
+        },
+        "leases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "resource": {
+                "type": "string"
+              },
+              "holder": {
+                "type": "string"
+              },
+              "from": {
+                "type": "string"
+              },
+              "until": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "humanTasks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "slack": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "solver": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "optimal",
+                "feasible",
+                "infeasible",
+                "timeout"
+              ]
+            },
+            "objective": {
+              "type": "string"
+            },
+            "seconds": {
+              "type": "number"
+            }
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "StoragePlan": {
+      "type": "object",
+      "required": [
+        "feasible"
+      ],
+      "properties": {
+        "feasible": {
+          "type": "boolean"
+        },
+        "method": {
+          "enum": [
+            "fridge",
+            "freezer",
+            "fridge_then_freezer",
+            "freezer_then_fridge_thaw",
+            "pantry_shelf_stable",
+            "hot_hold",
+            "not_storable"
+          ]
+        },
+        "keepsFor": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "qualityBestWithin": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "cooling": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "type": "string"
+            },
+            "maxDepthCm": {
+              "type": "number"
+            },
+            "stages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "fromC": {
+                    "type": "number"
+                  },
+                  "toC": {
+                    "type": "number"
+                  },
+                  "within": {
+                    "$ref": "common.schema.json#/$defs/Duration"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "portioning": {
+          "type": "object",
+          "properties": {
+            "portions": {
+              "type": "integer"
+            },
+            "massPerPortionG": {
+              "type": "number"
+            }
+          }
+        },
+        "containers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "material": {
+                "type": "string"
+              },
+              "sizeMl": {
+                "type": "number"
+              },
+              "count": {
+                "type": "integer"
+              },
+              "fillMaxPct": {
+                "type": "number"
+              },
+              "headspaceMm": {
+                "type": "number"
+              },
+              "airtight": {
+                "type": "boolean"
+              },
+              "freezerSafe": {
+                "type": "boolean"
+              },
+              "microwaveSafe": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "separateComponents": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Store apart (sauce, crispy toppings, dressing, garnish)."
+        },
+        "cookForStorage": {
+          "$ref": "#/$defs/RecipePatch",
+          "description": "Changes when cooking specifically for storage (undercook pasta, hold back garnish...)."
+        },
+        "label": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "What to write on the label: name, date cooked, use-by, allergens, reheat instructions."
+        },
+        "thaw": {
+          "type": "string"
+        },
+        "reheat": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "type": "string"
+            },
+            "minCoreC": {
+              "type": "number"
+            },
+            "onlyOnce": {
+              "type": "boolean"
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "discardIf": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "method": {
+                "type": "string"
+              },
+              "keepsFor": {
+                "type": "string"
+              },
+              "tradeoffs": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ProductionPlan": {
+      "type": "object",
+      "properties": {
+        "menu": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "recipeId": {
+                "type": "string"
+              },
+              "servings": {
+                "type": "number"
+              },
+              "scale": {
+                "type": "number"
+              },
+              "batches": {
+                "type": "integer"
+              },
+              "meal": {
+                "type": "string"
+              },
+              "cookDay": {
+                "type": "integer"
+              },
+              "serveDay": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "schedule": {
+          "$ref": "#/$defs/TeamPlan"
+        },
+        "shopping": {
+          "$ref": "order.schema.json"
+        },
+        "storage": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StoragePlan"
+          }
+        },
+        "equipmentLoad": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "resource": {
+                "type": "string"
+              },
+              "utilization": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "costTotal": {
+          "$ref": "common.schema.json#/$defs/Money"
+        },
+        "perPerson": {
+          "type": "object"
+        },
+        "constraintsMet": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "constraintsRelaxed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Option": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "title",
+        "confidence",
+        "safety"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "rank": {
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "recipe",
+            "recipe_with_changes",
+            "patch_and_resume",
+            "repurpose",
+            "discard_and_restart",
+            "discard",
+            "substitution",
+            "equipment_adaptation",
+            "team_plan",
+            "storage_plan",
+            "production_plan",
+            "timing_plan",
+            "shopping",
+            "ask_human",
+            "allocation",
+            "portion_plan"
+          ]
+        },
+        "title": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "summary": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "recipeIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "patch": {
+          "$ref": "#/$defs/RecipePatch"
+        },
+        "teamPlan": {
+          "$ref": "#/$defs/TeamPlan"
+        },
+        "storagePlan": {
+          "$ref": "#/$defs/StoragePlan"
+        },
+        "productionPlan": {
+          "$ref": "#/$defs/ProductionPlan"
+        },
+        "orderIntent": {
+          "$ref": "order.schema.json"
+        },
+        "coverage": {
+          "type": "object",
+          "description": "For cook_from: how the recipe matches what's available.",
+          "properties": {
+            "have": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "missing": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "substituted": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  },
+                  "ratio": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "usesFirst": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "automation": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "impact": {
+          "type": "object",
+          "properties": {
+            "extraTime": {
+              "$ref": "common.schema.json#/$defs/Duration"
+            },
+            "extraCost": {
+              "$ref": "common.schema.json#/$defs/Money"
+            },
+            "quality": {
+              "enum": [
+                "better",
+                "none",
+                "minor",
+                "noticeable",
+                "major"
+              ]
+            },
+            "servingsChange": {
+              "type": "number"
+            },
+            "notes": {
+              "$ref": "common.schema.json#/$defs/LangMap"
+            }
+          }
+        },
+        "requires": {
+          "type": "object",
+          "properties": {
+            "ingredients": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "equipment": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "actors": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "human": {
+              "type": "boolean"
+            }
+          }
+        },
+        "safety": {
+          "$ref": "#/$defs/SafetyVerdict"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "ref"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "playbook",
+                  "rule",
+                  "recipe",
+                  "simulation",
+                  "solver",
+                  "field_reports",
+                  "llm",
+                  "reference"
+                ]
+              },
+              "ref": {
+                "type": "string"
+              },
+              "detail": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "explanation": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "allocation": {
+          "$ref": "relief.schema.json#/$defs/Allocation"
+        },
+        "portionPlan": {
+          "$ref": "#/$defs/PortionPlan"
+        }
+      }
+    },
+    "Question": {
+      "type": "object",
+      "required": [
+        "id",
+        "text",
+        "answerType"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "text": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "answerType": {
+          "enum": [
+            "boolean",
+            "number",
+            "choice",
+            "text",
+            "measurement",
+            "photo"
+          ]
+        },
+        "choices": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sensor": {
+          "type": "string",
+          "description": "A robot can answer by measuring this sensor instead of asking a human."
+        },
+        "why": {
+          "type": "string"
+        }
+      }
+    },
+    "AdviceResponse": {
+      "type": "object",
+      "required": [
+        "cookwala",
+        "requestId",
+        "intent",
+        "status",
+        "safety",
+        "options"
+      ],
+      "properties": {
+        "cookwala": {
+          "$ref": "common.schema.json#/$defs/SpecVersion"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "responseId": {
+          "type": "string"
+        },
+        "intent": {
+          "$ref": "#/$defs/Intent"
+        },
+        "resolvedIntent": {
+          "$ref": "#/$defs/Intent",
+          "description": "For intent=ask: what the question was understood as."
+        },
+        "resolvedQuery": {
+          "$ref": "#/$defs/Query"
+        },
+        "status": {
+          "enum": [
+            "answered",
+            "needs_input",
+            "partial",
+            "refused",
+            "unsupported"
+          ]
+        },
+        "safety": {
+          "$ref": "#/$defs/SafetyVerdict",
+          "description": "Overall verdict. If unsafe_discard, no option may keep the unsafe food."
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Option"
+          }
+        },
+        "questions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Question"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/LangMap"
+          }
+        },
+        "engine": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "components": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "llm": {
+              "type": "object",
+              "properties": {
+                "used": {
+                  "type": "boolean"
+                },
+                "model": {
+                  "type": "string"
+                },
+                "role": {
+                  "enum": [
+                    "parse",
+                    "propose",
+                    "explain",
+                    "none"
+                  ]
+                }
+              }
+            },
+            "checks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "generatedAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        }
+      }
+    },
+    "PortionPlan": {
+      "type": "object",
+      "description": "Right amount for each person from a dish or menu, so everyone meets their targets and nothing is wasted.",
+      "properties": {
+        "recipeId": {
+          "type": "string"
+        },
+        "totalCookedG": {
+          "type": "number"
+        },
+        "people": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "personId",
+              "grams"
+            ],
+            "properties": {
+              "personId": {
+                "type": "string"
+              },
+              "grams": {
+                "type": "number"
+              },
+              "components": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "description": "Grams per component (e.g. rice 120, stew 220)."
+              },
+              "nutrition": {
+                "type": "object",
+                "properties": {
+                  "kcal": {
+                    "type": "number"
+                  },
+                  "proteinG": {
+                    "type": "number"
+                  },
+                  "carbsG": {
+                    "type": "number"
+                  },
+                  "fatG": {
+                    "type": "number"
+                  },
+                  "fiberG": {
+                    "type": "number"
+                  },
+                  "sodiumMg": {
+                    "type": "number"
+                  }
+                }
+              },
+              "dayProgress": {
+                "type": "object",
+                "description": "Share of the person's daily targets covered after this meal (0..1 per nutrient).",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "modifications": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "e.g. 'serve before adding salt', 'IDDSI 5 minced', 'no sauce'."
+              }
+            }
+          }
+        },
+        "cookQuantityFactor": {
+          "type": "number",
+          "description": "Scale to cook so total portions + planned leftovers are exact."
+        },
+        "plannedLeftovers": {
+          "type": "object",
+          "properties": {
+            "grams": {
+              "type": "number"
+            },
+            "use": {
+              "type": "string"
+            }
+          }
+        },
+        "wasteEstimateG": {
+          "type": "number"
+        },
+        "cost": {
+          "type": "object",
+          "properties": {
+            "total": {
+              "$ref": "common.schema.json#/$defs/Money"
+            },
+            "perPerson": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "common.schema.json#/$defs/Money"
+              }
+            }
+          }
+        }
+      }
+    },
+    "PersonalizeQuery": {
+      "type": "object",
+      "properties": {
+        "personIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Members of the client profile (resolved locally by the hub)."
+        },
+        "recipeIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Portion these dishes; omit to get a meal plan."
+        },
+        "days": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "mealTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "optimize": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "nutrition_fit",
+              "cost",
+              "waste",
+              "organic",
+              "local",
+              "variety",
+              "prep_time",
+              "energy"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

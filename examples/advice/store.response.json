@@ -1,0 +1,144 @@
+{
+ "$kind": "AdviceResponse",
+ "cookwala": "0.1.0",
+ "requestId": "rq-5",
+ "intent": "store",
+ "status": "answered",
+ "safety": {
+  "verdict": "safe_with_conditions",
+  "conditions": [
+   "Cool sauce to ≤ 5 °C within 2 h",
+   "Reheat sauce to ≥ 74 °C"
+  ]
+ },
+ "options": [
+  {
+   "id": "sauce_ahead",
+   "rank": 1,
+   "kind": "storage_plan",
+   "title": {
+    "en": "Make and store the sauce; cook eggs fresh each day"
+   },
+   "confidence": 0.85,
+   "safety": {
+    "verdict": "safe_with_conditions"
+   },
+   "storagePlan": {
+    "feasible": true,
+    "method": "fridge",
+    "keepsFor": "P3D",
+    "qualityBestWithin": "P3D",
+    "cooling": {
+     "method": "shallow containers, uncovered until cool",
+     "maxDepthCm": 5,
+     "stages": [
+      {
+       "fromC": 57,
+       "toC": 21,
+       "within": "PT2H"
+      },
+      {
+       "fromC": 21,
+       "toC": 5,
+       "within": "PT4H"
+      }
+     ]
+    },
+    "portioning": {
+     "portions": 3,
+     "massPerPortionG": 360
+    },
+    "containers": [
+     {
+      "type": "rectangular food container",
+      "material": "glass",
+      "sizeMl": 500,
+      "count": 3,
+      "fillMaxPct": 90,
+      "airtight": true,
+      "microwaveSafe": true
+     }
+    ],
+    "separateComponents": [
+     "parsley garnish",
+     "eggs (cook fresh)"
+    ],
+    "cookForStorage": {
+     "base": {
+      "recipeId": "example-shakshuka"
+     },
+     "ops": [
+      {
+       "op": "remove_node",
+       "target": "n9"
+      },
+      {
+       "op": "remove_node",
+       "target": "n10"
+      },
+      {
+       "op": "remove_node",
+       "target": "n11"
+      },
+      {
+       "op": "note",
+       "text": {
+        "en": "Stop after n8; cool and portion the sauce. Each day: reheat a portion in a small pan, then do n9–n11 with 2 fresh eggs."
+       }
+      }
+     ]
+    },
+    "label": [
+     "Shakshuka sauce",
+     "date cooked",
+     "use by +3 days",
+     "allergens: none in sauce (eggs added fresh)",
+     "reheat to 74 °C"
+    ],
+    "reheat": {
+     "method": "hob, small pan, until bubbling",
+     "minCoreC": 74,
+     "onlyOnce": true
+    },
+    "discardIf": [
+     "kept more than 3 days",
+     "sour smell or bubbles before reheating"
+    ],
+    "alternatives": [
+     {
+      "method": "freezer",
+      "keepsFor": "P2M",
+      "tradeoffs": "Thaw overnight in fridge; texture unchanged for tomato sauce."
+     }
+    ]
+   },
+   "evidence": [
+    {
+     "kind": "reference",
+     "ref": "cw.storage.soups_stews"
+    }
+   ]
+  }
+ ],
+ "engine": {
+  "version": "reasoner-0.1",
+  "components": [
+   "matcher",
+   "substitution-graph",
+   "food-safety",
+   "playbooks",
+   "cp-sat"
+  ],
+  "llm": {
+   "used": true,
+   "model": "local",
+   "role": "explain"
+  },
+  "checks": [
+   "schema",
+   "policy",
+   "food_safety",
+   "patch_validation"
+  ]
+ }
+}

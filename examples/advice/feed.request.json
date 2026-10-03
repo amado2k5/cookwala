@@ -1,0 +1,74 @@
+{
+ "$kind": "AdviceRequest",
+ "cookwala": "0.1.0",
+ "id": "rq-6",
+ "intent": "feed",
+ "text": "Feed 40 people dinner in 3 hours on a low budget. Gas only, my robot battery is at medium.",
+ "context": {
+  "country": "EG",
+  "policyPacks": [
+   "eg.nfsa",
+   "dietary.halal"
+  ],
+  "humansAvailable": 2,
+  "mode": {
+   "preset": "budget",
+   "energy": {
+    "sources": [
+     {
+      "source": "natural_gas",
+      "appliances": [
+       "hob-4-burner"
+      ]
+     }
+    ],
+    "avoid": [
+     "electric_resistive"
+    ]
+   },
+   "robots": [
+    {
+     "actorId": "robot:neo-1",
+     "level": "medium",
+     "pct": 55
+    }
+   ],
+   "budget": {
+    "mode": "low",
+    "amount": {
+     "amount": 60,
+     "currency": "USD"
+    },
+    "period": "event"
+   }
+  },
+  "diners": [
+   {
+    "count": 30,
+    "ageGroup": "adult"
+   },
+   {
+    "count": 10,
+    "ageGroup": "child",
+    "allergies": [
+     "peanuts"
+    ]
+   }
+  ],
+  "constraints": {
+   "timeAvailable": "PT3H",
+   "servingStyle": "buffet",
+   "excludeAllergens": [
+    "peanuts"
+   ]
+  }
+ },
+ "query": {
+  "people": 40,
+  "meals": 1,
+  "mealTypes": [
+   "dinner"
+  ],
+  "dishCount": 3
+ }
+}

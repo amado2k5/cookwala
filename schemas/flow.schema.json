@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/flow.schema.json",
+  "title": "Cookwala Flow",
+  "description": "A declarative, shareable workflow that strings Cookwala capabilities together: triggers (events, schedules, questions), steps (advise, plan, session, order, notify, wait for human, call an agent/tool/extension), branches and loops. Examples: 'every Sunday plan a week of halal meals under a budget, ask me to approve groceries, batch-cook Monday', 'when the fridge reports expiring items, suggest a dinner that uses them', 'restaurant: on order received, schedule robots and hold times'. Flows run inside a hub (or any compatible flow runner) and never bypass approvals or safety.",
+  "type": "object",
+  "required": ["cookwala", "id", "name", "version", "triggers", "steps"],
+  "properties": {
+    "cookwala": { "$ref": "common.schema.json#/$defs/SpecVersion" },
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "version": { "type": "string" },
+    "description": { "$ref": "common.schema.json#/$defs/LangMap" },
+    "inputs": { "type": "object", "description": "JSON Schema of parameters the user sets when installing (budget, people, cuisines...)." },
+    "mode": { "$ref": "profile.schema.json#/$defs/OperatingMode" },
+    "triggers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": { "enum": ["schedule", "event", "ask", "manual", "webhook"] },
+          "cron": { "type": "string" },
+          "timezone": { "type": "string" },
+          "eventTypes": { "type": "array", "items": { "type": "string" } },
+          "filter": { "type": "object", "description": "Expression over the event (policy expression language)." },
+          "phrases": { "$ref": "common.schema.json#/$defs/LangMap", "description": "For ask: example utterances that start this flow." }
+        }
+      }
+    },
+    "steps": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Step" } },
+    "onError": { "enum": ["stop", "notify_and_stop", "skip", "ask_human"], "default": "notify_and_stop" },
+    "meta": { "$ref": "common.schema.json#/$defs/Meta" }
+  },
+  "patternProperties": { "^x-": {} },
+  "$defs": {
+    "Step": {
+      "type": "object",
+      "required": ["id", "do"],
+      "properties": {
+        "id": { "type": "string" },
+        "do": {
+          "enum": ["advise", "plan_session", "start_session", "confirm_with_human", "order_intent", "approve_with_human", "notify", "wait", "wait_for_event", "branch", "foreach", "set", "call_tool", "call_agent", "call_extension", "store_profile", "publish_recipe", "end"]
+        },
+        "with": { "type": "object", "description": "Arguments; values may reference earlier outputs with {{steps.<id>.output...}} and inputs with {{inputs.<name>}}." },
+        "if": { "type": "object", "description": "Run only when this expression is true." },
+        "branches": { "type": "array", "items": { "type": "object", "properties": { "when": { "type": "object" }, "goto": { "type": "string" } } } },
+        "items": { "type": "string" },
+        "steps": { "type": "array", "items": { "$ref": "#/$defs/Step" } },
+        "timeout": { "$ref": "common.schema.json#/$defs/Duration" },
+        "output": { "type": "string", "description": "Name to store the result under." },
+        "next": { "type": "string" }
+      }
+    }
+  }
+}

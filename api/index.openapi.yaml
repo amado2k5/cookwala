@@ -1,0 +1,1016 @@
+openapi: 3.1.0
+info:
+  title: Cookwala Index API
+  version: 1.0.0-draft
+  summary: Free, public, read-only recipe index for robots, appliances and AI agents.
+  description: 'The global Cookwala index. Everything under `/v1/recipes`, `/v1/index`, `/v1/vocab`,
+
+    `/v1/policies`, `/v1/schemas`, `/v1/changes` and `/v1/dumps` is a static, CDN-cached,
+
+    immutable-per-version file (no auth, CORS `*`). `/v1/search`, `/v1/match`, `/v1/plan-preview`
+
+    and `/v1/reports` are served by an edge worker.
+
+
+    Integrity: every recipe has `hash`; `/v1/manifest.json` lists every shard hash and is
+
+    signed (Ed25519, detached JWS over RFC 8785 canonical JSON). Keys are published in
+
+    `/.well-known/cookwala.json`. Clients executing recipes MUST verify the manifest signature
+
+    and the recipe hash before cooking.
+
+    '
+  license:
+    name: Apache-2.0
+    identifier: Apache-2.0
+  contact:
+    url: https://github.com/amado2k5/cookwala
+servers:
+- url: https://cookwala.ai
+  description: Reference index (operated by fifi.cooking)
+tags:
+- name: discovery
+- name: recipes
+- name: search
+- name: vocab
+- name: policies
+- name: sync
+- name: feedback
+- name: advise
+- name: registry
+- name: market
+- name: relief
+paths:
+  /.well-known/cookwala.json:
+    get:
+      tags:
+      - discovery
+      operationId: getDiscovery
+      summary: Discovery document (versions, keys, endpoints, mirrors, terms)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/Discovery
+  /v1/manifest.json:
+    get:
+      tags:
+      - sync
+      operationId: getManifest
+      summary: Signed catalog manifest
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/Manifest
+  /v1/manifest.json.sig:
+    get:
+      tags:
+      - sync
+      operationId: getManifestSignature
+      summary: Detached JWS signature of the manifest
+      responses:
+        '200':
+          description: OK
+          content:
+            application/jose:
+              schema:
+                type: string
+  /v1/recipes/{id}.cookwala.json:
+    get:
+      tags:
+      - recipes
+      operationId: getRecipe
+      summary: One recipe (current revision)
+      parameters:
+      - $ref: '#/components/parameters/RecipeId'
+      - name: v
+        in: query
+        description: Catalog version for immutable caching.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.cookwala+json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/recipe.schema.json
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '410':
+          description: Withdrawn or recalled. Body explains why; devices must not execute it.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /v1/recipes/{id}/revisions/{revision}.cookwala.json:
+    get:
+      tags:
+      - recipes
+      operationId: getRecipeRevision
+      parameters:
+      - $ref: '#/components/parameters/RecipeId'
+      - name: revision
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.cookwala+json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/recipe.schema.json
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/index/{lang}/{page}.json:
+    get:
+      tags:
+      - recipes
+      operationId: getIndexPage
+      summary: Paged compact index (500 entries per page)
+      parameters:
+      - $ref: '#/components/parameters/Lang'
+      - name: page
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - page
+                - pageCount
+                - items
+                properties:
+                  page:
+                    type: integer
+                  pageCount:
+                    type: integer
+                  items:
+                    type: array
+                    items:
+                      $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/IndexEntry
+  /v1/search:
+    get:
+      tags:
+      - search
+      operationId: search
+      summary: Full-text and faceted search
+      parameters:
+      - name: q
+        in: query
+        schema:
+          type: string
+        description: Dish, ingredient, country or free text in any supported language.
+      - $ref: '#/components/parameters/LangQuery'
+      - name: cuisine
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        style: form
+        explode: false
+        description: ISO 3166-1 alpha-2 codes.
+      - name: course
+        in: query
+        schema:
+          type: string
+      - name: include_ingredients
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        style: form
+        explode: false
+      - name: exclude_ingredients
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        style: form
+        explode: false
+      - name: exclude_allergens
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        style: form
+        explode: false
+      - name: dietary
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        style: form
+        explode: false
+      - name: max_total_time
+        in: query
+        schema:
+          type: integer
+        description: Seconds.
+      - name: min_level
+        in: query
+        schema:
+          type: string
+          enum:
+          - V0
+          - V1
+          - V2
+          - V3
+      - name: equipment
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        style: form
+        explode: false
+        description: Only recipes needing a subset of this equipment.
+      - name: ops
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        style: form
+        explode: false
+        description: Only recipes using a subset of these ops.
+      - name: supervision
+        in: query
+        schema:
+          type: string
+          enum:
+          - unattended_ok
+          - presence_required
+          - hands_on_required
+      - name: max_kcal
+        in: query
+        schema:
+          type: number
+      - name: cursor
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/match:
+    post:
+      tags:
+      - search
+      operationId: matchCapabilities
+      summary: What can this kitchen cook?
+      description: 'Send one or more capability manifests (and optionally an inventory and diner
+
+        constraints). Returns recipes whose every node can be assigned to a listed actor, or
+
+        to a human when `allowHuman` is true, ranked by automation coverage and inventory fit.
+
+        Nothing is stored.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - actors
+              properties:
+                actors:
+                  type: array
+                  items:
+                    $ref: https://cookwala.ai/v1/schemas/capabilities.schema.json
+                inventory:
+                  $ref: https://cookwala.ai/v1/schemas/inventory.schema.json
+                allowHuman:
+                  type: boolean
+                  default: true
+                policyPacks:
+                  type: array
+                  items:
+                    type: string
+                lang:
+                  type: string
+                limit:
+                  type: integer
+                  maximum: 100
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        entry:
+                          $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/IndexEntry
+                        automationCoverage:
+                          type: number
+                          minimum: 0
+                          maximum: 1
+                        humanSteps:
+                          type: array
+                          items:
+                            type: string
+                        missingIngredients:
+                          type: array
+                          items:
+                            type: string
+                        policyDecision:
+                          type: string
+                          enum:
+                          - allow
+                          - allow_with_warnings
+                          - deny
+  /v1/plan-preview:
+    post:
+      tags:
+      - search
+      operationId: planPreview
+      summary: Dry-run planning and policy evaluation for a recipe against given actors (stateless)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - recipeId
+              - actors
+              properties:
+                recipeId:
+                  type: string
+                scale:
+                  type: number
+                serveAt:
+                  type: string
+                  format: date-time
+                actors:
+                  type: array
+                  items:
+                    $ref: https://cookwala.ai/v1/schemas/capabilities.schema.json
+                policyPacks:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: A draft session (state = draft) with plan, leases and policy results.
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/session.schema.json
+  /v1/changes/{since}.json:
+    get:
+      tags:
+      - sync
+      operationId: getChanges
+      summary: Incremental changes since a catalog version (includes recalls)
+      parameters:
+      - name: since
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/Changes
+  /v1/dumps/cookwala-all-{version}.ndjson.gz:
+    get:
+      tags:
+      - sync
+      operationId: getDump
+      summary: Full offline bundle, one recipe per line
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/gzip:
+              schema:
+                type: string
+                format: binary
+  /v1/vocab/{name}.json:
+    get:
+      tags:
+      - vocab
+      operationId: getVocabulary
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - ingredients
+          - ops
+          - equipment
+          - sensors
+          - hazards
+          - units
+          - classes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/Vocabulary
+  /v1/policies/index.json:
+    get:
+      tags:
+      - policies
+      operationId: listPolicies
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    kind:
+                      type: string
+                    jurisdiction:
+                      type: array
+                      items:
+                        type: string
+                    version:
+                      type: string
+                    reviewStatus:
+                      type: string
+  /v1/policies/{id}.json:
+    get:
+      tags:
+      - policies
+      operationId: getPolicy
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/policy.schema.json
+  /v1/schemas/{name}.schema.json:
+    get:
+      tags:
+      - vocab
+      operationId: getSchema
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/schema+json:
+              schema:
+                type: object
+  /v1/reports:
+    post:
+      tags:
+      - feedback
+      operationId: submitReport
+      summary: Submit an anonymous execution report (opt-in)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/report.schema.json
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/safety-reports:
+    post:
+      tags:
+      - feedback
+      operationId: submitSafetyReport
+      summary: Report a safety problem with a recipe (triaged within 24 h; may trigger a recall)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - recipeId
+              - description
+              properties:
+                recipeId:
+                  type: string
+                revision:
+                  type: integer
+                nodeId:
+                  type: string
+                description:
+                  type: string
+                contact:
+                  type: string
+                  description: Optional.
+      responses:
+        '202':
+          description: Accepted
+  /v1/advise/{intent}:
+    post:
+      tags:
+      - advise
+      operationId: adviseStateless
+      summary: Ask the reasoner (stateless; no personal data)
+      description: What can I cook, fix a mistake, rescue a meal, store it, feed N people, plan a team, etc. The
+        public index rejects requests containing context.members or sensitive profiles (use a hub for those). See
+        docs/REASONING.md.
+      parameters:
+      - name: intent
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - ask
+          - cook_from
+          - substitute
+          - recover
+          - repurpose
+          - adapt_equipment
+          - team_plan
+          - store
+          - feed
+          - rescale
+          - retime
+          - leftovers
+          - diagnose
+          - texture_modify
+          - diet_merge
+          - nutrition_target
+          - shopping_optimize
+          - personalize
+          - relief_allocate
+          - custom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/advice.schema.json#/$defs/AdviceRequest
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/advice.schema.json#/$defs/AdviceResponse
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '422':
+          description: Contains personal data or unsupported intent
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/advise/ask:
+    post:
+      tags:
+      - advise
+      operationId: askText
+      summary: Natural-language question in any language
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - text
+              properties:
+                text:
+                  type: string
+                lang:
+                  type: string
+                context:
+                  $ref: https://cookwala.ai/v1/schemas/advice.schema.json#/$defs/Context
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/advice.schema.json#/$defs/AdviceResponse
+  /v1/registry.json:
+    get:
+      tags:
+      - registry
+      operationId: getRegistry
+      summary: Catalogs, extensions, flows, providers, knowledge, policy packs, programs and kitchens hosted anywhere
+      parameters:
+      - name: kind
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/RegistryEntry
+  /v1/registry/submissions:
+    post:
+      tags:
+      - registry
+      operationId: submitRegistryEntry
+      summary: Propose a registry entry (reviewed; also possible by GitHub PR)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/RegistryEntry
+      responses:
+        '202':
+          description: Queued for review
+  /v1/extensions/{id}.json:
+    get:
+      tags:
+      - registry
+      operationId: getExtension
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/extension.schema.json
+  /v1/flows/{id}.json:
+    get:
+      tags:
+      - registry
+      operationId: getFlow
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/flow.schema.json
+  /v1/knowledge/{id}.json:
+    get:
+      tags:
+      - registry
+      operationId: getKnowledgePack
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/knowledge.schema.json
+  /v1/market/providers:
+    get:
+      tags:
+      - market
+      operationId: searchProviders
+      parameters:
+      - name: role
+        in: query
+        schema:
+          type: string
+      - name: country
+        in: query
+        schema:
+          type: string
+      - name: credential
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/market.schema.json#/$defs/Provider
+  /v1/market/offers:
+    get:
+      tags:
+      - market
+      operationId: searchOffers
+      summary: Search offers aggregated from provider feeds (sponsored offers are labelled)
+      parameters:
+      - name: type
+        in: query
+        schema:
+          type: string
+      - name: ingredientId
+        in: query
+        schema:
+          type: string
+      - name: recipeId
+        in: query
+        schema:
+          type: string
+      - name: deviceClass
+        in: query
+        schema:
+          type: string
+      - name: country
+        in: query
+        schema:
+          type: string
+      - name: postalCode
+        in: query
+        schema:
+          type: string
+      - name: credential
+        in: query
+        schema:
+          type: string
+      - name: maxPrice
+        in: query
+        schema:
+          type: string
+      - name: currency
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/market.schema.json#/$defs/Offer
+  /v1/market/quote-requests:
+    post:
+      tags:
+      - market
+      operationId: routeQuoteRequest
+      summary: Find providers able to quote (returns their quote endpoints; no personal data)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/market.schema.json#/$defs/QuoteRequest
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    provider:
+                      type: string
+                    quotes:
+                      type: string
+  /v1/relief/programs:
+    get:
+      tags:
+      - relief
+      operationId: listPrograms
+      parameters:
+      - name: country
+        in: query
+        schema:
+          type: string
+      - name: accepts
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/relief.schema.json#/$defs/Program
+  /v1/relief/needs:
+    get:
+      tags:
+      - relief
+      operationId: listOpenNeeds
+      summary: Public board of open, aggregated needs (programs choose what to publish)
+      parameters:
+      - name: country
+        in: query
+        schema:
+          type: string
+      - name: priority
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/relief.schema.json#/$defs/Need
+  /v1/relief/impact:
+    get:
+      tags:
+      - relief
+      operationId: listImpact
+      summary: Open impact reports (HXL-exportable)
+      parameters:
+      - name: program
+        in: query
+        schema:
+          type: string
+      - name: format
+        in: query
+        schema:
+          type: string
+          enum:
+          - json
+          - hxl-csv
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/relief.schema.json#/$defs/ImpactReport
+components:
+  parameters:
+    RecipeId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^[a-z0-9][a-z0-9-]{1,63}$
+    Lang:
+      name: lang
+      in: path
+      required: true
+      schema:
+        type: string
+    LangQuery:
+      name: lang
+      in: query
+      schema:
+        type: string
+        default: en
+  schemas:
+    Problem:
+      type: object
+      description: RFC 9457 problem details
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+    SearchResult:
+      type: object
+      required:
+      - items
+      properties:
+        total:
+          type: integer
+        nextCursor:
+          type: string
+        facets:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: integer
+        items:
+          type: array
+          items:
+            $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/IndexEntry
+  responses:
+    NotFound:
+      description: Not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    RateLimited:
+      description: Too many requests (dynamic endpoints only). Use dumps and changes for bulk access.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'

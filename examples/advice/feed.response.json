@@ -1,0 +1,87 @@
+{
+ "$kind": "AdviceResponse",
+ "cookwala": "0.1.0",
+ "requestId": "rq-6",
+ "intent": "feed",
+ "status": "answered",
+ "safety": {
+  "verdict": "safe_with_conditions",
+  "conditions": [
+   "Hot-hold buffet dishes at ≥ 57 °C",
+   "Peanut-free kitchen for this event"
+  ]
+ },
+ "options": [
+  {
+   "id": "menu-a",
+   "rank": 1,
+   "kind": "production_plan",
+   "title": {
+    "en": "Koshari-style lentils & rice, tomato sauce, salad: 4 burners, 2 humans + NEO"
+   },
+   "confidence": 0.7,
+   "safety": {
+    "verdict": "safe_with_conditions"
+   },
+   "productionPlan": {
+    "menu": [
+     {
+      "recipeId": "ec-160",
+      "servings": 40,
+      "scale": 8,
+      "batches": 2
+     },
+     {
+      "recipeId": "salad-02",
+      "servings": 40,
+      "scale": 10,
+      "batches": 1
+     }
+    ],
+    "equipmentLoad": [
+     {
+      "resource": "hob-4-burner",
+      "utilization": 0.85
+     }
+    ],
+    "costTotal": {
+     "amount": 52,
+     "currency": "USD"
+    },
+    "constraintsMet": [
+     "budget ≤ 60 USD",
+     "ready in 2 h 40 min",
+     "peanut-free",
+     "gas only"
+    ],
+    "constraintsRelaxed": [
+     "3rd dish replaced by bread (no oven on gas-only setup)"
+    ]
+   },
+   "explanation": {
+    "en": "Legume-and-grain dishes scale cheaply and hold well hot; large-pot boiling on gas is efficient per serving. NEO at 55% handles fetching and plating, not long stirring."
+   }
+  }
+ ],
+ "engine": {
+  "version": "reasoner-0.1",
+  "components": [
+   "matcher",
+   "substitution-graph",
+   "food-safety",
+   "playbooks",
+   "cp-sat"
+  ],
+  "llm": {
+   "used": true,
+   "model": "local",
+   "role": "explain"
+  },
+  "checks": [
+   "schema",
+   "policy",
+   "food_safety",
+   "patch_validation"
+  ]
+ }
+}

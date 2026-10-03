@@ -1,0 +1,446 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/common.schema.json",
+  "title": "Cookwala common definitions",
+  "description": "Shared types used by every Cookwala schema. Units follow UCUM codes; durations are ISO 8601; language keys are BCP 47 tags.",
+  "$defs": {
+    "SpecVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "VocabId": {
+      "type": "string",
+      "description": "Id from an Cookwala vocabulary, e.g. cw.op.simmer, cw.ing.onion_yellow, cw.eq.vessel.pan.skillet, cw.sense.core_temp, cw.hz.burn.hot_oil. Vendor extensions use x-<vendor>.<name>.",
+      "pattern": "^(cw|x-[a-z0-9-]+)\\.[a-z0-9_.-]+$"
+    },
+    "LocalRef": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+      "description": "Reference to an id defined elsewhere in the same document."
+    },
+    "Uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "Hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "SHA-256 of the RFC 8785 canonical JSON of the document with its hash and signature fields removed."
+    },
+    "Duration": {
+      "type": "string",
+      "pattern": "^P(?!$)(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
+    },
+    "DateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "LangMap": {
+      "type": "object",
+      "description": "Text per language (BCP 47).",
+      "propertyNames": {
+        "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$"
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "Unit": {
+      "description": "UCUM-style unit. pcs = countable pieces.",
+      "enum": [
+        "g",
+        "kg",
+        "mg",
+        "ml",
+        "l",
+        "pcs",
+        "degC",
+        "degF",
+        "W",
+        "kW",
+        "mm",
+        "cm",
+        "rpm",
+        "Pa",
+        "kPa",
+        "pct",
+        "s"
+      ]
+    },
+    "Quantity": {
+      "type": "object",
+      "required": [
+        "value",
+        "unit"
+      ],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        },
+        "tolerance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Acceptable relative deviation (0.1 = ±10%)."
+        },
+        "pieces": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Human count when value is a mass (e.g. 1 onion)."
+        },
+        "massPerPiece": {
+          "$ref": "#/$defs/Quantity"
+        }
+      }
+    },
+    "Range": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        }
+      }
+    },
+    "Target": {
+      "type": "object",
+      "required": [
+        "sensor",
+        "value",
+        "unit"
+      ],
+      "properties": {
+        "sensor": {
+          "$ref": "#/$defs/VocabId"
+        },
+        "value": {
+          "type": "number"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        },
+        "tolerance": {
+          "type": "number",
+          "minimum": 0
+        },
+        "target": {
+          "type": "string",
+          "description": "What the sensor measures, e.g. egg_yolk, thickest_part."
+        }
+      }
+    },
+    "Comparison": {
+      "type": "object",
+      "description": "A single sensor or vision check.",
+      "properties": {
+        "sensor": {
+          "$ref": "#/$defs/VocabId"
+        },
+        "vision": {
+          "$ref": "#/$defs/VocabId"
+        },
+        "target": {
+          "type": "string"
+        },
+        "gte": {
+          "type": "number"
+        },
+        "lte": {
+          "type": "number"
+        },
+        "eq": {},
+        "between": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        },
+        "holdFor": {
+          "$ref": "#/$defs/Duration",
+          "description": "Condition must hold continuously this long (e.g. 63 °C for 15 s)."
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Minimum classifier confidence for vision cues."
+        },
+        "optional": {
+          "type": "boolean",
+          "description": "Use if the device has this sensor; otherwise rely on the rest of the condition."
+        },
+        "humanConfirm": {
+          "type": "boolean",
+          "description": "A human may confirm this cue instead of a sensor."
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "sensor"
+          ]
+        },
+        {
+          "required": [
+            "vision"
+          ]
+        }
+      ]
+    },
+    "Condition": {
+      "type": "object",
+      "description": "End condition for a step: boolean tree of checks plus a time window. Satisfied when the tree is true AND minTime has elapsed; maxTime triggers onTimeout.",
+      "properties": {
+        "all": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ConditionOrCheck"
+          }
+        },
+        "any": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ConditionOrCheck"
+          }
+        },
+        "not": {
+          "$ref": "#/$defs/ConditionOrCheck"
+        },
+        "minTime": {
+          "$ref": "#/$defs/Duration"
+        },
+        "maxTime": {
+          "$ref": "#/$defs/Duration"
+        },
+        "nominalTime": {
+          "$ref": "#/$defs/Duration",
+          "description": "Typical duration for planning and timers."
+        }
+      }
+    },
+    "ConditionOrCheck": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Condition"
+        },
+        {
+          "$ref": "#/$defs/Comparison"
+        }
+      ]
+    },
+    "FailureAction": {
+      "enum": [
+        "retry",
+        "extend",
+        "ask_human",
+        "handoff_human",
+        "skip_optional",
+        "abort_safe"
+      ]
+    },
+    "Severity": {
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "Signature": {
+      "type": "object",
+      "required": [
+        "alg",
+        "kid",
+        "sig"
+      ],
+      "properties": {
+        "alg": {
+          "const": "EdDSA"
+        },
+        "kid": {
+          "type": "string",
+          "description": "Key id listed in /.well-known/cookwala.json."
+        },
+        "sig": {
+          "type": "string",
+          "description": "Base64url detached JWS over the canonical JSON (RFC 8785 JCS)."
+        }
+      }
+    },
+    "Actor": {
+      "type": "object",
+      "required": [
+        "kind",
+        "id"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "human",
+            "robot",
+            "appliance",
+            "agent",
+            "hub",
+            "service",
+            "sensor"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "description": "Stable id within a kitchen, e.g. robot:neo-1, appliance:oven-main, human:primary."
+        },
+        "name": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        }
+      }
+    },
+    "Money": {
+      "type": "object",
+      "required": [
+        "amount",
+        "currency"
+      ],
+      "properties": {
+        "amount": {
+          "type": "number"
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        }
+      }
+    },
+    "Meta": {
+      "type": "object",
+      "description": "Who owns a document, where it lives and who may see it. Any Cookwala document may carry meta.",
+      "properties": {
+        "owner": {
+          "type": "string",
+          "description": "Person, org or device id (e.g. did:web:acme.example, github:amado2k5, cookwala.ai)."
+        },
+        "catalog": {
+          "type": "string",
+          "description": "Base URL of the catalog that publishes it (public, private or local)."
+        },
+        "visibility": {
+          "enum": [
+            "public",
+            "unlisted",
+            "shared",
+            "private",
+            "local_only"
+          ]
+        },
+        "sharedWith": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sensitive": {
+          "type": "boolean",
+          "description": "Contains personal or health data: never send to an index, never log in reports."
+        },
+        "createdAt": {
+          "$ref": "#/$defs/DateTime"
+        },
+        "updatedAt": {
+          "$ref": "#/$defs/DateTime"
+        },
+        "derivedFrom": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Global refs of documents this one forks or extends."
+        },
+        "extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Extension ids whose x- fields appear in this document."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "GlobalRef": {
+      "type": "string",
+      "description": "Global reference to a document in any catalog: '<catalog base URL>#<id>' or 'cw:<authority>:<id>' (authority = catalog domain or x-namespace). Bare ids refer to the current catalog.",
+      "pattern": "^(https?://[^#\\s]+#[A-Za-z0-9._:-]+|cw:[a-z0-9.-]+:[A-Za-z0-9._:-]+|[A-Za-z0-9._-]+)$"
+    },
+    "EnergyEstimate": {
+      "type": "object",
+      "description": "Estimated energy for a step or plan; values are estimates for planning, not measurements.",
+      "properties": {
+        "source": {
+          "enum": [
+            "electric_induction",
+            "electric_resistive",
+            "natural_gas",
+            "propane",
+            "charcoal",
+            "wood",
+            "solar_cooker",
+            "battery",
+            "any"
+          ]
+        },
+        "kWh": {
+          "type": "number",
+          "minimum": 0
+        },
+        "gasMJ": {
+          "type": "number",
+          "minimum": 0
+        },
+        "peakW": {
+          "type": "number",
+          "minimum": 0
+        },
+        "robotWh": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Robot battery energy for manipulation/motion."
+        },
+        "waterL": {
+          "type": "number",
+          "minimum": 0
+        },
+        "co2eKg": {
+          "type": "number",
+          "minimum": 0
+        },
+        "basis": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

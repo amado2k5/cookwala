@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/policy.schema.json",
+  "title": "Cookwala Policy Pack",
+  "description": "Machine-checkable local rules (food safety, allergen disclosure, dietary, venue, appliance/robot operation). Evaluated by a hub or device against a recipe + session + capability set. Informational and best-effort: packs cite their legal sources and are not legal advice.",
+  "type": "object",
+  "required": [
+    "cookwala",
+    "id",
+    "version",
+    "kind",
+    "title",
+    "rules",
+    "sources",
+    "effective",
+    "disclaimer"
+  ],
+  "properties": {
+    "cookwala": {
+      "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(\\.[a-z0-9-]+)+$",
+      "description": "e.g. us.fda-food-code-2022, eu.reg-852-2004, sa.sfda, dietary.halal, venue.school, household.default, robot.unattended-default."
+    },
+    "version": {
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "jurisdiction",
+        "dietary",
+        "venue",
+        "household",
+        "device",
+        "organization"
+      ]
+    },
+    "jurisdiction": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "ISO 3166-1/2 codes, e.g. US, US-CA, EU, SA, AE, EG."
+      }
+    },
+    "title": {
+      "$ref": "common.schema.json#/$defs/LangMap"
+    },
+    "extends": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Rule"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "title",
+          "url"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "section": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "effective": {
+      "type": "string",
+      "format": "date"
+    },
+    "reviewedBy": {
+      "type": "string"
+    },
+    "reviewStatus": {
+      "enum": [
+        "draft",
+        "community_reviewed",
+        "expert_reviewed"
+      ]
+    },
+    "disclaimer": {
+      "type": "string"
+    },
+    "signature": {
+      "$ref": "common.schema.json#/$defs/Signature"
+    },
+    "meta": {
+      "$ref": "common.schema.json#/$defs/Meta"
+    }
+  },
+  "$defs": {
+    "Rule": {
+      "type": "object",
+      "required": [
+        "id",
+        "effect",
+        "when",
+        "message"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "effect": {
+          "enum": [
+            "deny",
+            "require",
+            "warn",
+            "inform",
+            "adjust"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "recipe",
+            "node",
+            "ingredient",
+            "session",
+            "device",
+            "inventory",
+            "order"
+          ]
+        },
+        "when": {
+          "$ref": "#/$defs/Expr",
+          "description": "Rule applies when this is true."
+        },
+        "then": {
+          "$ref": "#/$defs/Expr",
+          "description": "For require: this must also be true, else the rule fails."
+        },
+        "adjust": {
+          "type": "object",
+          "description": "For adjust: values to tighten (never loosen), e.g. {\"ccp.minCoreC\": 74}."
+        },
+        "message": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "severity": {
+          "$ref": "common.schema.json#/$defs/Severity"
+        },
+        "overridable": {
+          "enum": [
+            "no",
+            "by_user",
+            "by_operator"
+          ],
+          "default": "no"
+        },
+        "source": {
+          "type": "string"
+        }
+      }
+    },
+    "Expr": {
+      "description": "A small, side-effect-free expression language over JSON paths. Paths start at the evaluation context: recipe, node, ingredient, session, device, policyContext (venue, ageGroups, time, location).",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "all"
+          ],
+          "properties": {
+            "all": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Expr"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "any"
+          ],
+          "properties": {
+            "any": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Expr"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "not"
+          ],
+          "properties": {
+            "not": {
+              "$ref": "#/$defs/Expr"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "path"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "JSONPath-like, e.g. recipe.ingredients[*].ingredientId, node.op, session.supervision, device.safety.presenceDetection."
+            },
+            "eq": {},
+            "ne": {},
+            "in": {
+              "type": "array"
+            },
+            "contains": {},
+            "containsAny": {
+              "type": "array"
+            },
+            "gte": {
+              "type": "number"
+            },
+            "lte": {
+              "type": "number"
+            },
+            "exists": {
+              "type": "boolean"
+            },
+            "inClass": {
+              "type": "string",
+              "description": "Ingredient/op belongs to a vocabulary class, e.g. cw.ing.class.pork."
+            }
+          }
+        }
+      ]
+    }
+  },
+  "patternProperties": {
+    "^x-": {}
+  }
+}

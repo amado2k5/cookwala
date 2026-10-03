@@ -1,0 +1,168 @@
+{
+ "$comment": "Cookwala op → Matter mapping (Matter 1.3+ cooking device types). Temperatures in Matter TemperatureControl are in hundredths of a degree C. Draft; verify against the current Matter spec before shipping.",
+ "deviceTypes": {
+  "oven": "Oven",
+  "cookSurface": "Cook Surface",
+  "cooktop": "Cooktop",
+  "microwave": "Microwave Oven",
+  "hood": "Extractor Hood",
+  "refrigerator": "Refrigerator",
+  "smokeCo": "Smoke CO Alarm"
+ },
+ "ops": {
+  "cw.op.heat": [
+   {
+    "device": "oven",
+    "when": {
+     "target.sensor": "cw.sense.oven_air_temp"
+    },
+    "commands": [
+     {
+      "cluster": "Oven Mode",
+      "command": "ChangeToMode",
+      "mode": "Bake"
+     },
+     {
+      "cluster": "Temperature Control",
+      "command": "SetTemperature",
+      "targetTemperature": "{target.value*100}"
+     },
+     {
+      "cluster": "Oven Cavity Operational State",
+      "command": "Start"
+     }
+    ],
+    "done": {
+     "event": "Temperature Control reached setpoint OR cw.sense.oven_air_temp >= target"
+    }
+   }
+  ],
+  "cw.op.bake": [
+   {
+    "device": "oven",
+    "commands": [
+     {
+      "cluster": "Oven Mode",
+      "command": "ChangeToMode",
+      "mode": "{ovenMode→Bake|Convection}"
+     },
+     {
+      "cluster": "Temperature Control",
+      "command": "SetTemperature",
+      "targetTemperature": "{target.value*100}"
+     },
+     {
+      "cluster": "Oven Cavity Operational State",
+      "command": "Start"
+     }
+    ],
+    "stop": [
+     {
+      "cluster": "Oven Cavity Operational State",
+      "command": "Stop"
+     }
+    ]
+   }
+  ],
+  "cw.op.roast": [
+   {
+    "device": "oven",
+    "same_as": "cw.op.bake",
+    "mode": "Roast"
+   }
+  ],
+  "cw.op.grill": [
+   {
+    "device": "oven",
+    "same_as": "cw.op.bake",
+    "mode": "Grill"
+   }
+  ],
+  "cw.op.simmer": [
+   {
+    "device": "cookSurface",
+    "commands": [
+     {
+      "cluster": "Temperature Control",
+      "command": "SetTemperature",
+      "targetTemperature": "{target.value*100}"
+     },
+     {
+      "cluster": "On/Off",
+      "command": "On"
+     }
+    ],
+    "note": "Induction cook surfaces only; stirring/adding needs a robot or human."
+   }
+  ],
+  "cw.op.boil": [
+   {
+    "device": "cookSurface",
+    "same_as": "cw.op.simmer",
+    "heatLevel": "max"
+   }
+  ],
+  "cw.op.hold": [
+   {
+    "device": "oven",
+    "mode": "Warm"
+   },
+   {
+    "device": "cookSurface",
+    "heatLevel": "low"
+   }
+  ],
+  "cw.op.vent": [
+   {
+    "device": "hood",
+    "commands": [
+     {
+      "cluster": "Fan Control",
+      "attribute": "FanMode",
+      "value": "{level}"
+     }
+    ]
+   }
+  ],
+  "cw.op.chill": [
+   {
+    "device": "refrigerator",
+    "note": "Placement is a robot/human transfer; the fridge reports cabinet temperature via Temperature Measurement."
+   }
+  ]
+ },
+ "safety": {
+  "cw.safety.estop": [
+   {
+    "device": "oven",
+    "commands": [
+     {
+      "cluster": "Oven Cavity Operational State",
+      "command": "Stop"
+     }
+    ]
+   },
+   {
+    "device": "cookSurface",
+    "commands": [
+     {
+      "cluster": "On/Off",
+      "command": "Off"
+     }
+    ]
+   },
+   {
+    "device": "microwave",
+    "commands": [
+     {
+      "cluster": "Operational State",
+      "command": "Stop"
+     }
+    ]
+   }
+  ],
+  "sources": {
+   "smokeCo": "Smoke CO Alarm cluster SmokeAlarm/COAlarm events → cookwala.safety.smoke / cookwala.safety.co (action heat_off_all)"
+  }
+ }
+}

@@ -1,0 +1,547 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/session.schema.json",
+  "title": "Cookwala Cook Session",
+  "description": "One execution of one or more recipes in one kitchen, coordinated by a Cookwala Hub. It holds the plan (who does what, when, with which resources), live task states, resource leases, handoffs, CCP records and policy decisions. Task states match the A2A task lifecycle so agents can follow along.",
+  "type": "object",
+  "required": [
+    "cookwala",
+    "id",
+    "kitchenId",
+    "state",
+    "recipes",
+    "participants",
+    "plan",
+    "policy"
+  ],
+  "properties": {
+    "cookwala": {
+      "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "id": {
+      "type": "string"
+    },
+    "kitchenId": {
+      "type": "string"
+    },
+    "createdBy": {
+      "$ref": "common.schema.json#/$defs/Actor"
+    },
+    "createdAt": {
+      "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "state": {
+      "$ref": "#/$defs/SessionState"
+    },
+    "serveAt": {
+      "$ref": "common.schema.json#/$defs/DateTime",
+      "description": "Target time the food should be ready; the planner schedules backwards."
+    },
+    "mode": {
+      "enum": [
+        "guided",
+        "assisted",
+        "autonomous"
+      ],
+      "description": "guided: humans do the steps with prompts; assisted: mixed team; autonomous: machines do everything allowed."
+    },
+    "supervision": {
+      "enum": [
+        "unattended",
+        "presence",
+        "hands_on"
+      ]
+    },
+    "recipes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "recipeId",
+          "hash"
+        ],
+        "properties": {
+          "recipeId": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "hash": {
+            "$ref": "common.schema.json#/$defs/Hash"
+          },
+          "scale": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "servings": {
+            "type": "number"
+          },
+          "variants": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "nodeId → chosen variant id."
+          },
+          "exclusions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional ingredients the diner chose to skip."
+          }
+        }
+      }
+    },
+    "diners": {
+      "type": "array",
+      "description": "Optional, privacy-minimal diner profile used only for policy evaluation.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ageGroup": {
+            "enum": [
+              "infant",
+              "child",
+              "adult",
+              "senior"
+            ]
+          },
+          "allergies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dietary": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pregnant": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "participants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "actor",
+          "roles"
+        ],
+        "properties": {
+          "actor": {
+            "$ref": "common.schema.json#/$defs/Actor"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "capabilitiesUrl": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "available",
+              "busy",
+              "offline",
+              "fault",
+              "paused"
+            ]
+          }
+        }
+      }
+    },
+    "plan": {
+      "type": "object",
+      "required": [
+        "tasks"
+      ],
+      "properties": {
+        "generatedBy": {
+          "type": "string"
+        },
+        "estimatedStart": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "estimatedEnd": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Task"
+          }
+        },
+        "unassignable": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "nodeId": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "leases": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Lease"
+      }
+    },
+    "handoffs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Handoff"
+      }
+    },
+    "ccpRecords": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "ccpId",
+          "taskId",
+          "at",
+          "reading",
+          "passed"
+        ],
+        "properties": {
+          "ccpId": {
+            "type": "string"
+          },
+          "taskId": {
+            "type": "string"
+          },
+          "at": {
+            "$ref": "common.schema.json#/$defs/DateTime"
+          },
+          "reading": {
+            "type": "object"
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "by": {
+            "$ref": "common.schema.json#/$defs/Actor"
+          },
+          "corrective": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "packs",
+        "decision"
+      ],
+      "properties": {
+        "packs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "decision": {
+          "enum": [
+            "allow",
+            "allow_with_warnings",
+            "deny"
+          ]
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pack": {
+                "type": "string"
+              },
+              "rule": {
+                "type": "string"
+              },
+              "effect": {
+                "type": "string"
+              },
+              "passed": {
+                "type": "boolean"
+              },
+              "message": {
+                "type": "string"
+              },
+              "overriddenBy": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "acknowledgedBy": {
+          "$ref": "common.schema.json#/$defs/Actor"
+        },
+        "acknowledgedAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        }
+      }
+    },
+    "shoppingList": {
+      "type": "string",
+      "description": "Id of an order.schema.json OrderIntent generated for missing ingredients."
+    },
+    "abort": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string"
+        },
+        "by": {
+          "$ref": "common.schema.json#/$defs/Actor"
+        },
+        "at": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "stepsExecuted": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "meta": {
+      "$ref": "common.schema.json#/$defs/Meta"
+    },
+    "operatingMode": {
+      "$ref": "profile.schema.json#/$defs/OperatingMode"
+    }
+  },
+  "$defs": {
+    "SessionState": {
+      "enum": [
+        "draft",
+        "planned",
+        "awaiting_ingredients",
+        "awaiting_confirmation",
+        "running",
+        "paused",
+        "completed",
+        "aborted",
+        "failed"
+      ]
+    },
+    "TaskState": {
+      "description": "Matches A2A task states plus 'scheduled' and 'blocked'.",
+      "enum": [
+        "scheduled",
+        "blocked",
+        "submitted",
+        "working",
+        "input_required",
+        "auth_required",
+        "completed",
+        "failed",
+        "canceled",
+        "rejected"
+      ]
+    },
+    "Task": {
+      "type": "object",
+      "required": [
+        "id",
+        "recipeId",
+        "nodeId",
+        "assignee",
+        "state"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "recipeId": {
+          "type": "string"
+        },
+        "nodeId": {
+          "type": "string"
+        },
+        "op": {
+          "type": "string"
+        },
+        "assignee": {
+          "$ref": "common.schema.json#/$defs/Actor"
+        },
+        "fallback": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/Actor"
+          },
+          "description": "Who takes over on failure, in order (usually ends with a human)."
+        },
+        "state": {
+          "$ref": "#/$defs/TaskState"
+        },
+        "dependsOn": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "leases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scheduledStart": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "startedAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "endedAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "params": {
+          "type": "object",
+          "description": "Resolved params after scaling and policy adjustments."
+        },
+        "progress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "telemetry": {
+          "type": "object",
+          "description": "Latest readings, e.g. {\"cw.sense.core_temp\": 61.5}."
+        },
+        "conditionStatus": {
+          "type": "object",
+          "description": "Which until-checks are satisfied."
+        },
+        "attempts": {
+          "type": "integer"
+        },
+        "message": {
+          "$ref": "common.schema.json#/$defs/LangMap",
+          "description": "What to show/say to humans for this task."
+        },
+        "a2aTaskId": {
+          "type": "string"
+        }
+      }
+    },
+    "Lease": {
+      "type": "object",
+      "description": "Exclusive or shared hold on a physical resource, so two actors never use the same burner, pan or counter zone at once (modelled on Open-RMF resource scheduling).",
+      "required": [
+        "id",
+        "resource",
+        "holder",
+        "mode",
+        "from",
+        "until"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string",
+          "description": "e.g. appliance:hob-1/zone-2, vessel:pan-28, zone:counter-left, appliance:oven-main/cavity-1, robot:neo-1/arm-right."
+        },
+        "holder": {
+          "type": "string",
+          "description": "Task id or actor id."
+        },
+        "mode": {
+          "enum": [
+            "exclusive",
+            "shared_read"
+          ]
+        },
+        "from": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "until": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "state": {
+          "enum": [
+            "requested",
+            "granted",
+            "released",
+            "expired",
+            "revoked"
+          ]
+        }
+      }
+    },
+    "Handoff": {
+      "type": "object",
+      "description": "Transfer of an intermediate or a task between actors (robot→human, appliance→robot, robot→robot).",
+      "required": [
+        "id",
+        "from",
+        "to",
+        "item",
+        "state"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "from": {
+          "$ref": "common.schema.json#/$defs/Actor"
+        },
+        "to": {
+          "$ref": "common.schema.json#/$defs/Actor"
+        },
+        "item": {
+          "type": "string",
+          "description": "Intermediate ref (e.g. sauce) or task id."
+        },
+        "location": {
+          "type": "string"
+        },
+        "hazards": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "e.g. hot_vessel; the receiver must acknowledge."
+        },
+        "state": {
+          "enum": [
+            "proposed",
+            "ready",
+            "acknowledged",
+            "completed",
+            "refused",
+            "timed_out"
+          ]
+        },
+        "requiresAck": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  },
+  "patternProperties": {
+    "^x-": {}
+  }
+}

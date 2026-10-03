@@ -1,0 +1,37 @@
+{
+ "cookwala": "0.1.0",
+ "id": "kitchen-home-1",
+ "kind": "kitchen",
+ "name": "Home kitchen",
+ "meta": {
+  "owner": "github:amado2k5",
+  "visibility": "private"
+ },
+ "energy": [
+  {
+   "source": "natural_gas",
+   "appliances": [
+    "hob-4-burner"
+   ],
+   "price": {
+    "perMJ": {
+     "amount": 0.012,
+     "currency": "USD"
+    }
+   }
+  },
+  {
+   "source": "electric_induction",
+   "appliances": [
+    "induction-1"
+   ],
+   "maxW": 3500
+  }
+ ],
+ "storage": {
+  "fridgeL": 350,
+  "freezerL": 120
+ },
+ "altitudeM": 75,
+ "ventilation": "hood"
+}

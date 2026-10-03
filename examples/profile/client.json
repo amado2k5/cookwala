@@ -1,0 +1,59 @@
+{
+ "cookwala": "0.1.0",
+ "id": "client-family-1",
+ "kind": "client",
+ "meta": {
+  "visibility": "local_only",
+  "sensitive": true
+ },
+ "diners": [
+  {
+   "count": 2,
+   "ageGroup": "adult"
+  },
+  {
+   "count": 2,
+   "ageGroup": "child",
+   "allergies": [
+    "sesame"
+   ]
+  }
+ ],
+ "dietary": [
+  "halal"
+ ],
+ "preferences": {
+  "cuisines": [
+   "EG",
+   "MA"
+  ],
+  "spice": "mild"
+ },
+ "defaultMode": {
+  "preset": "normal",
+  "budget": {
+   "mode": "moderate",
+   "period": "week",
+   "amount": {
+    "amount": 120,
+    "currency": "USD"
+   }
+  }
+ },
+ "schedule": {
+  "mealTimes": {
+   "dinner": "19:30"
+  },
+  "fasting": [
+   {
+    "name": "Ramadan",
+    "rule": "iftar at sunset, suhoor before dawn"
+   }
+  ]
+ },
+ "consent": {
+  "shareReports": true,
+  "shareMedia": false,
+  "useCloudAdvice": true
+ }
+}

@@ -1,0 +1,53 @@
+{
+ "$kind": "Allocation",
+ "cookwala": "0.1.0",
+ "id": "alloc-77",
+ "need": "need-2026-11-03-shubra",
+ "assignments": [
+  {
+   "pledge": "pl-881",
+   "to": "https://kitchen-1.foodbank.example",
+   "pickupAt": "2026-11-02T19:00:00+02:00",
+   "deliverBy": "2026-11-02T21:00:00+02:00",
+   "transport": "volunteer-van-3"
+  },
+  {
+   "pledge": "pl-882",
+   "to": "https://kitchen-1.foodbank.example"
+  }
+ ],
+ "production": [
+  {
+   "menu": [
+    {
+     "recipeId": "ec-160",
+     "servings": 650,
+     "scale": 130,
+     "batches": 6
+    }
+   ],
+   "constraintsMet": [
+    "halal",
+    "peanut-free",
+    "ready by 11:00",
+    "~750 kcal per child meal"
+   ]
+  }
+ ],
+ "coverage": {
+  "meals": 650,
+  "pct": 100
+ },
+ "gaps": [
+  {
+   "what": "bread",
+   "qty": 650,
+   "unit": "pcs"
+  }
+ ],
+ "solver": {
+  "name": "min-cost-flow + cp-sat",
+  "status": "feasible",
+  "objective": "max_people_fed"
+ }
+}

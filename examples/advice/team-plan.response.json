@@ -1,0 +1,216 @@
+{
+ "$kind": "AdviceResponse",
+ "cookwala": "0.1.0",
+ "requestId": "rq-4",
+ "intent": "team_plan",
+ "status": "answered",
+ "safety": {
+  "verdict": "safe_with_conditions",
+  "conditions": [
+   "Human present during hot-oil steps n4–n6"
+  ]
+ },
+ "options": [
+  {
+   "id": "plan-a",
+   "rank": 1,
+   "kind": "team_plan",
+   "title": {
+    "en": "Arm cuts, cooker cooks, NEO fetches and plates (low battery: short walking tasks only)"
+   },
+   "confidence": 0.78,
+   "safety": {
+    "verdict": "safe_with_conditions"
+   },
+   "teamPlan": {
+    "startAt": "2026-10-03T18:58:00Z",
+    "serveAt": "2026-10-03T19:30:00Z",
+    "makespan": "PT32M",
+    "slack": "PT0M",
+    "assignments": [
+     {
+      "actorId": "robot:neo-1",
+      "role": "fetch_and_finish",
+      "utilization": 0.35,
+      "tasks": [
+       {
+        "ref": "example-shakshuka#fetch",
+        "op": "cw.op.transfer",
+        "start": "PT0S",
+        "end": "PT3M",
+        "instructions": {
+         "en": "Bring onion, pepper, garlic, eggs, tomatoes to zone:counter-left"
+        }
+       },
+       {
+        "ref": "example-shakshuka#n12",
+        "op": "cw.op.garnish",
+        "start": "PT29M",
+        "end": "PT30M"
+       },
+       {
+        "ref": "example-shakshuka#n13",
+        "op": "cw.op.serve",
+        "start": "PT30M",
+        "end": "PT32M"
+       }
+      ]
+     },
+     {
+      "actorId": "robot:arm-1",
+      "role": "prep",
+      "utilization": 0.4,
+      "tasks": [
+       {
+        "ref": "example-shakshuka#n1",
+        "op": "cw.op.cut",
+        "start": "PT3M",
+        "end": "PT6M",
+        "resources": [
+         "zone:counter-left",
+         "tool:knife-1"
+        ],
+        "handoffTo": "robot:cooker-1"
+       },
+       {
+        "ref": "example-shakshuka#n2",
+        "op": "cw.op.cut",
+        "start": "PT6M",
+        "end": "PT9M",
+        "handoffTo": "robot:cooker-1"
+       },
+       {
+        "ref": "example-shakshuka#n3",
+        "op": "cw.op.cut",
+        "start": "PT9M",
+        "end": "PT10M"
+       },
+       {
+        "ref": "example-shakshuka#n10",
+        "op": "cw.op.crack",
+        "start": "PT21M",
+        "end": "PT22M"
+       }
+      ]
+     },
+     {
+      "actorId": "robot:cooker-1",
+      "role": "heat",
+      "utilization": 0.8,
+      "tasks": [
+       {
+        "ref": "example-shakshuka#n4",
+        "op": "cw.op.heat",
+        "start": "PT4M",
+        "end": "PT6M",
+        "resources": [
+         "appliance:hob-1/zone-1",
+         "vessel:pan-28"
+        ]
+       },
+       {
+        "ref": "example-shakshuka#n5",
+        "op": "cw.op.saute",
+        "start": "PT6M",
+        "end": "PT14M"
+       },
+       {
+        "ref": "example-shakshuka#n6",
+        "op": "cw.op.saute",
+        "start": "PT14M",
+        "end": "PT15M"
+       },
+       {
+        "ref": "example-shakshuka#n7",
+        "op": "cw.op.simmer",
+        "start": "PT15M",
+        "end": "PT21M"
+       },
+       {
+        "ref": "example-shakshuka#n11",
+        "op": "cw.op.simmer",
+        "start": "PT22M",
+        "end": "PT29M"
+       }
+      ]
+     },
+     {
+      "actorId": "human:primary",
+      "role": "supervise",
+      "tasks": [
+       {
+        "ref": "example-shakshuka#n8",
+        "op": "cw.op.season",
+        "start": "PT20M",
+        "end": "PT21M",
+        "instructions": {
+         "en": "Taste and adjust salt"
+        }
+       }
+      ]
+     }
+    ],
+    "criticalPath": [
+     "n4",
+     "n5",
+     "n6",
+     "n7",
+     "n9",
+     "n10",
+     "n11",
+     "n13"
+    ],
+    "handoffs": [
+     {
+      "from": "robot:arm-1",
+      "to": "robot:cooker-1",
+      "item": "onion_diced",
+      "at": "PT6M"
+     }
+    ],
+    "leases": [
+     {
+      "resource": "appliance:hob-1/zone-1",
+      "holder": "robot:cooker-1",
+      "from": "PT4M",
+      "until": "PT29M"
+     }
+    ],
+    "humanTasks": [
+     "n8"
+    ],
+    "solver": {
+     "name": "cp-sat",
+     "status": "optimal",
+     "objective": "on_time",
+     "seconds": 0.4
+    },
+    "assumptions": [
+     "NEO kept above 15% battery: no long walks; docks after serving",
+     "Simmer n7 shortened to 6 min (lower bound of window) to be on time"
+    ]
+   }
+  }
+ ],
+ "engine": {
+  "version": "reasoner-0.1",
+  "components": [
+   "matcher",
+   "substitution-graph",
+   "food-safety",
+   "playbooks",
+   "cp-sat"
+  ],
+  "llm": {
+   "used": true,
+   "model": "local",
+   "role": "explain"
+  },
+  "checks": [
+   "schema",
+   "policy",
+   "food_safety",
+   "patch_validation"
+  ]
+ }
+}

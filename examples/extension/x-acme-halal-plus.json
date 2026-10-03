@@ -1,0 +1,88 @@
+{
+ "cookwala": "0.1.0",
+ "id": "x-acme",
+ "name": "ACME Halal Plus",
+ "version": "1.0.0",
+ "publisher": {
+  "name": "ACME Foods Ltd",
+  "url": "https://acme.example"
+ },
+ "license": "proprietary",
+ "description": {
+  "en": "Stricter halal checks with a certifier-backed ingredient list, a vision model that spots alcohol-containing products by label, and a ranking that prefers certified local suppliers."
+ },
+ "provides": [
+  {
+   "type": "policy_pack",
+   "id": "x-acme.halal-strict",
+   "data": "https://acme.example/cookwala/policy/halal-strict.json",
+   "hooks": [
+    "policy.evaluate"
+   ]
+  },
+  {
+   "type": "filter",
+   "id": "x-acme.certified-only",
+   "hooks": [
+    "catalog.search_filter",
+    "reasoner.filter"
+   ]
+  },
+  {
+   "type": "model",
+   "id": "x-acme.label-reader",
+   "hooks": [
+    "inventory.ingest",
+    "sense.classify"
+   ],
+   "model": {
+    "roles": [
+     "vision_cue"
+    ],
+    "cues": [
+     "x-acme.sense.alcohol_on_label"
+    ],
+    "accuracy": {
+     "x-acme.sense.alcohol_on_label": 0.96
+    },
+    "local": true
+   }
+  },
+  {
+   "type": "fields",
+   "id": "x-acme.certificate",
+   "attachesTo": [
+    "ingredient",
+    "offer"
+   ],
+   "schema": "https://acme.example/cookwala/fields.schema.json"
+  }
+ ],
+ "permissions": {
+  "read": [
+   "recipes",
+   "inventory"
+  ],
+  "write": [
+   "advice"
+  ],
+  "network": [
+   "acme.example"
+  ],
+  "actuate": false
+ },
+ "runtime": {
+  "kind": "wasm",
+  "entry": "https://acme.example/cookwala/halal-plus.wasm",
+  "timeoutMs": 200,
+  "offline": true
+ },
+ "pricing": {
+  "model": "subscription",
+  "price": {
+   "amount": 3,
+   "currency": "USD"
+  },
+  "period": "month"
+ }
+}

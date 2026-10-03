@@ -1,0 +1,285 @@
+asyncapi: 3.1.0
+info:
+  title: Cookwala Kitchen Event Bus
+  version: 1.0.0-draft
+  description: "Event bus of a Cookwala kitchen. The same CloudEvents (schemas/event.schema.json) flow over\nMQTT\
+    \ 5 (hub-embedded or existing broker), WebSocket (`/cookwala/v1/events/ws`) and SSE\n(`GET /cookwala/v1/events`).\
+    \ Topic layout:\n\n    cookwala/{kitchenId}/{category}/{subject}\n\n- category = the second segment of the event\
+    \ type (session, task, lease, handoff, ccp,\n  telemetry, device, inventory, order, notify, human, safety, policy)\n\
+    - subject = session id, task id, actor id or zone\n\nQoS: safety = 2 and retained until cleared; task/lease/handoff/ccp\
+    \ = 1; telemetry = 0.\nEvery participant MUST subscribe to `cookwala/{kitchenId}/safety/#` and react to\n`data.action`\
+    \ within 1 second, whatever else it is doing.\n"
+  license:
+    name: Apache-2.0
+defaultContentType: application/cloudevents+json
+servers:
+  hubMqtt:
+    host: cookwala-hub.local:8883
+    protocol: mqtts
+    description: Broker embedded in the hub (or the household's existing broker). Client auth with the paired token
+      as MQTT password.
+  hubWs:
+    host: cookwala-hub.local:7878
+    pathname: /cookwala/v1/events/ws
+    protocol: wss
+channels:
+  safety:
+    address: cookwala/{kitchenId}/safety/{zone}
+    parameters:
+      kitchenId: {}
+      zone: {}
+    messages:
+      safetyEvent:
+        $ref: '#/components/messages/SafetyEvent'
+  task:
+    address: cookwala/{kitchenId}/task/{taskId}
+    parameters:
+      kitchenId: {}
+      taskId: {}
+    messages:
+      taskEvent:
+        $ref: '#/components/messages/CookwalaEvent'
+  session:
+    address: cookwala/{kitchenId}/session/{sessionId}
+    parameters:
+      kitchenId: {}
+      sessionId: {}
+    messages:
+      sessionEvent:
+        $ref: '#/components/messages/CookwalaEvent'
+  coordination:
+    address: cookwala/{kitchenId}/{kind}/{id}
+    description: kind = lease | handoff | ccp
+    parameters:
+      kitchenId: {}
+      kind:
+        enum:
+        - lease
+        - handoff
+        - ccp
+      id: {}
+    messages:
+      coordinationEvent:
+        $ref: '#/components/messages/CookwalaEvent'
+  telemetry:
+    address: cookwala/{kitchenId}/telemetry/{actorId}
+    parameters:
+      kitchenId: {}
+      actorId: {}
+    messages:
+      telemetryEvent:
+        $ref: '#/components/messages/CookwalaEvent'
+  device:
+    address: cookwala/{kitchenId}/device/{actorId}
+    parameters:
+      kitchenId: {}
+      actorId: {}
+    messages:
+      deviceEvent:
+        $ref: '#/components/messages/CookwalaEvent'
+  inventory:
+    address: cookwala/{kitchenId}/inventory/{storage}
+    parameters:
+      kitchenId: {}
+      storage: {}
+    messages:
+      inventoryEvent:
+        $ref: '#/components/messages/CookwalaEvent'
+  order:
+    address: cookwala/{kitchenId}/order/{orderId}
+    parameters:
+      kitchenId: {}
+      orderId: {}
+    messages:
+      orderEvent:
+        $ref: '#/components/messages/CookwalaEvent'
+  notify:
+    address: cookwala/{kitchenId}/notify/{audience}
+    parameters:
+      kitchenId: {}
+      audience: {}
+    messages:
+      notifyEvent:
+        $ref: '#/components/messages/CookwalaEvent'
+  human:
+    address: cookwala/{kitchenId}/human/{actorId}
+    parameters:
+      kitchenId: {}
+      actorId: {}
+    messages:
+      humanEvent:
+        $ref: '#/components/messages/CookwalaEvent'
+  team:
+    address: cookwala/{kitchenId}/team/{sessionId}
+    description: 'Contract-net teaming: team.cfp → team.bid → team.award / team.decline → team.plan / team.replan'
+    parameters:
+      kitchenId: {}
+      sessionId: {}
+    messages:
+      teamEvent: &id001
+        $ref: '#/components/messages/CookwalaEvent'
+  mode:
+    address: cookwala/{kitchenId}/mode/{scope}
+    description: Operating-mode changes (energy, battery, budget, conserve); robots publish cookwala.device.battery
+      here too
+    parameters:
+      kitchenId: {}
+      scope: {}
+    messages:
+      modeEvent: *id001
+  flow:
+    address: cookwala/{kitchenId}/flow/{flowId}
+    description: 'Flow runs: started, step, completed, failed'
+    parameters:
+      kitchenId: {}
+      flowId: {}
+    messages:
+      flowEvent: *id001
+  advice:
+    address: cookwala/{kitchenId}/advice/{requestId}
+    description: Advice requested/answered/applied (audit trail)
+    parameters:
+      kitchenId: {}
+      requestId: {}
+    messages:
+      adviceEvent: *id001
+  market:
+    address: cookwala/{kitchenId}/market/{requestId}
+    description: Quote requests and quotes
+    parameters:
+      kitchenId: {}
+      requestId: {}
+    messages:
+      marketEvent: *id001
+  relief:
+    address: cookwala/relief/{programId}/{kind}
+    description: 'Coordinator bus for relief programs: need_opened/updated, pledge_offered, allocated, dispatched,
+      delivered, impact, surplus_available'
+    parameters:
+      programId: {}
+      kind: {}
+    messages:
+      reliefEvent: *id001
+operations:
+  publishSafety:
+    action: send
+    channel:
+      $ref: '#/channels/safety'
+    summary: Detectors, cameras, security systems, robots or the hub raise hazards.
+  receiveSafety:
+    action: receive
+    channel:
+      $ref: '#/channels/safety'
+    summary: Every participant reacts to data.action (pause_all, heat_off_all, abort_session, evacuate).
+  receiveTasks:
+    action: receive
+    channel:
+      $ref: '#/channels/task'
+    summary: Executors, UIs and agents follow task lifecycle.
+  publishTaskProgress:
+    action: send
+    channel:
+      $ref: '#/channels/task'
+  publishTelemetry:
+    action: send
+    channel:
+      $ref: '#/channels/telemetry'
+  receiveSession:
+    action: receive
+    channel:
+      $ref: '#/channels/session'
+  coordinate:
+    action: send
+    channel:
+      $ref: '#/channels/coordination'
+  receiveCoordination:
+    action: receive
+    channel:
+      $ref: '#/channels/coordination'
+  publishDevice:
+    action: send
+    channel:
+      $ref: '#/channels/device'
+  publishInventory:
+    action: send
+    channel:
+      $ref: '#/channels/inventory'
+  receiveOrders:
+    action: receive
+    channel:
+      $ref: '#/channels/order'
+  receiveNotify:
+    action: receive
+    channel:
+      $ref: '#/channels/notify'
+    summary: Notification bridges (push, SMS, speakers, Matter, wearables) deliver to humans.
+  publishHuman:
+    action: send
+    channel:
+      $ref: '#/channels/human'
+    summary: Presence sensors and apps report human presence, confirmations and overrides.
+  send_team:
+    action: send
+    channel:
+      $ref: '#/channels/team'
+  receive_team:
+    action: receive
+    channel:
+      $ref: '#/channels/team'
+  send_mode:
+    action: send
+    channel:
+      $ref: '#/channels/mode'
+  receive_mode:
+    action: receive
+    channel:
+      $ref: '#/channels/mode'
+  send_flow:
+    action: send
+    channel:
+      $ref: '#/channels/flow'
+  receive_flow:
+    action: receive
+    channel:
+      $ref: '#/channels/flow'
+  send_advice:
+    action: send
+    channel:
+      $ref: '#/channels/advice'
+  receive_advice:
+    action: receive
+    channel:
+      $ref: '#/channels/advice'
+  send_market:
+    action: send
+    channel:
+      $ref: '#/channels/market'
+  receive_market:
+    action: receive
+    channel:
+      $ref: '#/channels/market'
+  send_relief:
+    action: send
+    channel:
+      $ref: '#/channels/relief'
+  receive_relief:
+    action: receive
+    channel:
+      $ref: '#/channels/relief'
+components:
+  messages:
+    CookwalaEvent:
+      name: CookwalaEvent
+      contentType: application/cloudevents+json
+      payload:
+        schemaFormat: application/schema+json;version=draft-2020-12
+        schema:
+          $ref: https://cookwala.ai/v1/schemas/event.schema.json
+    SafetyEvent:
+      name: SafetyEvent
+      contentType: application/cloudevents+json
+      summary: type starts with cookwala.safety., cookwalapriority = safety
+      payload:
+        schemaFormat: application/schema+json;version=draft-2020-12
+        schema:
+          $ref: https://cookwala.ai/v1/schemas/event.schema.json

@@ -1,0 +1,1639 @@
+openapi: 3.1.0
+info:
+  title: Cookwala Hub API
+  version: 1.0.0-draft
+  summary: Local coordination API for a kitchen (robots, appliances, sensors, humans, agents, services).
+  description: "A **Cookwala Hub** coordinates one kitchen. It can run on a robot, a smart-home hub (e.g.\na Home\
+    \ Assistant add-on), a phone, a fridge screen or a small server. It runs on the\nlocal network on purpose: safety-critical\
+    \ coordination must keep working when the\ninternet is down. The hub fetches recipes from any Cookwala index\
+    \ and caches them.\n\nTwo roles are specified here:\n- **Hub endpoints** (`/cookwala/v1/...` on the hub): sessions,\
+    \ planning, devices,\n  leases, handoffs, inventory, orders, notifications, policy, safety, events.\n- **Executor\
+    \ endpoints** (tag `executor`, served *by each robot/appliance adapter*): the\n  hub pushes tasks to executors;\
+    \ executors report back via events or the task endpoints.\n\nTransport: HTTPS on the LAN (mDNS service type\
+    \ `_cookwala._tcp`). Events: SSE,\nWebSocket or MQTT (see `events.asyncapi.yaml`). The GraphQL equivalent is\
+    \ in\n`schema.graphql`.\n\nAuth: devices pair once (OAuth 2.0 Device Authorization Grant, RFC 8628, approved\
+    \ by a\nhousehold admin on a screen or phone) and get a token with scopes. **`POST /safety/estop`\naccepts any\
+    \ paired actor's token, never needs elevated scope, and must also be\nreachable without a token from the local\
+    \ physical controls of the hub.**\n"
+  license:
+    name: Apache-2.0
+    identifier: Apache-2.0
+servers:
+- url: https://{hub}:7878/cookwala/v1
+  variables:
+    hub:
+      default: cookwala-hub.local
+security:
+- pairedToken: []
+tags:
+- name: hub
+- name: devices
+- name: sessions
+- name: tasks
+- name: coordination
+  description: Leases and handoffs between actors
+- name: inventory
+- name: orders
+- name: notifications
+- name: policy
+- name: safety
+- name: events
+- name: executor
+  description: Served by robot/appliance adapters, called by the hub
+- name: advise
+- name: profiles
+- name: mode
+- name: extensions
+- name: flows
+- name: team
+- name: market
+- name: relief
+paths:
+  /hub:
+    get:
+      tags:
+      - hub
+      operationId: getHub
+      security: []
+      summary: Hub identity, version, kitchen id, connected index, A2A AgentCard and MCP URLs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cookwala:
+                    type: string
+                  kitchenId:
+                    type: string
+                  name:
+                    type: string
+                  index:
+                    type: string
+                    description: Upstream index base URL.
+                  agentCard:
+                    type: string
+                  mcp:
+                    type: string
+                  graphql:
+                    type: string
+                  events:
+                    type: object
+                    properties:
+                      sse:
+                        type: string
+                      ws:
+                        type: string
+                      mqtt:
+                        type: string
+                  activePolicyPacks:
+                    type: array
+                    items:
+                      type: string
+  /pair:
+    post:
+      tags:
+      - hub
+      operationId: startPairing
+      security: []
+      summary: Start device pairing (RFC 8628 device code flow)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - manifest
+              properties:
+                manifest:
+                  $ref: https://cookwala.ai/v1/schemas/capabilities.schema.json
+                requestedScopes:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Scope'
+      responses:
+        '200':
+          description: Show user_code to the household admin
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  device_code:
+                    type: string
+                  user_code:
+                    type: string
+                  verification_uri:
+                    type: string
+                  interval:
+                    type: integer
+                  expires_in:
+                    type: integer
+  /devices:
+    get:
+      tags:
+      - devices
+      operationId: listDevices
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeviceStatus'
+  /devices/{actorId}:
+    parameters:
+    - $ref: '#/components/parameters/ActorId'
+    get:
+      tags:
+      - devices
+      operationId: getDevice
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceStatus'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - devices
+      operationId: updateCapabilities
+      summary: Replace the actor's capability manifest (emits cookwala.device.capabilities_changed)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/capabilities.schema.json
+      responses:
+        '204':
+          description: Updated
+    delete:
+      tags:
+      - devices
+      operationId: unpairDevice
+      responses:
+        '204':
+          description: Removed
+  /sessions:
+    get:
+      tags:
+      - sessions
+      operationId: listSessions
+      parameters:
+      - name: state
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/session.schema.json
+    post:
+      tags:
+      - sessions
+      operationId: createSession
+      summary: Create a cook session; the hub fetches/verifies recipes, plans and evaluates policy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - recipes
+              properties:
+                recipes:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - recipeId
+                    properties:
+                      recipeId:
+                        type: string
+                      scale:
+                        type: number
+                      servings:
+                        type: number
+                      variants:
+                        type: object
+                        additionalProperties:
+                          type: string
+                serveAt:
+                  type: string
+                  format: date-time
+                mode:
+                  type: string
+                  enum:
+                  - guided
+                  - assisted
+                  - autonomous
+                supervision:
+                  type: string
+                  enum:
+                  - unattended
+                  - presence
+                  - hands_on
+                participants:
+                  type: array
+                  items:
+                    type: string
+                  description: Actor ids to use; default all available.
+                diners:
+                  type: array
+                  items:
+                    type: object
+                autoOrderMissing:
+                  type: boolean
+                  default: false
+      responses:
+        '201':
+          description: Created (state planned, awaiting_ingredients or awaiting_confirmation)
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/session.schema.json
+        '409':
+          description: Policy deny or no feasible plan; problem details list reasons
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /sessions/{sessionId}:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    get:
+      tags:
+      - sessions
+      operationId: getSession
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/session.schema.json
+  /sessions/{sessionId}/replan:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      tags:
+      - sessions
+      operationId: replanSession
+      summary: Re-plan (e.g. a robot went offline, or serveAt changed)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serveAt:
+                  type: string
+                  format: date-time
+                excludeActors:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/session.schema.json
+  /sessions/{sessionId}/confirm:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      tags:
+      - sessions
+      operationId: confirmSession
+      summary: A human acknowledges allergens, hazards and policy warnings (required before start)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                acknowledgedRules:
+                  type: array
+                  items:
+                    type: string
+                overrides:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      rule:
+                        type: string
+                      reason:
+                        type: string
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Override not permitted by policy
+  /sessions/{sessionId}/start:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      tags:
+      - sessions
+      operationId: startSession
+      responses:
+        '202':
+          description: Started
+        '409':
+          description: Not confirmed, missing ingredients, or required presence not detected
+  /sessions/{sessionId}/pause:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      tags:
+      - sessions
+      operationId: pauseSession
+      summary: Pause at the next safe point (heat to hold or off per recipe)
+      responses:
+        '202':
+          description: Pausing
+  /sessions/{sessionId}/resume:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      tags:
+      - sessions
+      operationId: resumeSession
+      responses:
+        '202':
+          description: Resuming
+  /sessions/{sessionId}/abort:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      tags:
+      - sessions
+      operationId: abortSession
+      summary: Run every recipe's abort procedure and stop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+      responses:
+        '202':
+          description: Aborting
+  /sessions/{sessionId}/tasks:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    get:
+      tags:
+      - tasks
+      operationId: listTasks
+      parameters:
+      - name: assignee
+        in: query
+        schema:
+          type: string
+      - name: state
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/session.schema.json#/$defs/Task
+  /tasks/{taskId}:
+    parameters:
+    - $ref: '#/components/parameters/TaskId'
+    get:
+      tags:
+      - tasks
+      operationId: getTask
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/session.schema.json#/$defs/Task
+  /tasks/{taskId}/claim:
+    parameters:
+    - $ref: '#/components/parameters/TaskId'
+    post:
+      tags:
+      - tasks
+      operationId: claimTask
+      summary: An eligible actor (or a human via an app) takes a task
+      responses:
+        '200':
+          description: Claimed
+        '409':
+          description: Already assigned or actor not capable
+  /tasks/{taskId}/progress:
+    parameters:
+    - $ref: '#/components/parameters/TaskId'
+    post:
+      tags:
+      - tasks
+      operationId: reportProgress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                progress:
+                  type: number
+                telemetry:
+                  type: object
+                conditionStatus:
+                  type: object
+      responses:
+        '204':
+          description: Recorded
+  /tasks/{taskId}/complete:
+    parameters:
+    - $ref: '#/components/parameters/TaskId'
+    post:
+      tags:
+      - tasks
+      operationId: completeTask
+      description: Hub verifies the node's until-condition and CCP records before accepting.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                evidence:
+                  type: object
+                ccpReadings:
+                  type: array
+                  items:
+                    type: object
+      responses:
+        '200':
+          description: Accepted
+        '422':
+          description: End condition or CCP not satisfied; task stays working
+  /tasks/{taskId}/fail:
+    parameters:
+    - $ref: '#/components/parameters/TaskId'
+    post:
+      tags:
+      - tasks
+      operationId: failTask
+      summary: Report failure; hub applies onFail (retry, reassign to fallback, ask human, abort)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                recoverable:
+                  type: boolean
+      responses:
+        '200':
+          description: Handled
+  /tasks/{taskId}/input:
+    parameters:
+    - $ref: '#/components/parameters/TaskId'
+    post:
+      tags:
+      - tasks
+      operationId: provideInput
+      summary: A human answers an input_required task (e.g. "is the white set?", "taste and adjust salt done")
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                answer: {}
+                by:
+                  type: string
+      responses:
+        '200':
+          description: Accepted
+  /leases:
+    post:
+      tags:
+      - coordination
+      operationId: requestLease
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/session.schema.json#/$defs/Lease
+      responses:
+        '201':
+          description: Granted
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/session.schema.json#/$defs/Lease
+        '409':
+          description: Conflict; response lists the earliest free slot
+  /leases/{leaseId}:
+    delete:
+      tags:
+      - coordination
+      operationId: releaseLease
+      parameters:
+      - name: leaseId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Released
+  /handoffs:
+    post:
+      tags:
+      - coordination
+      operationId: proposeHandoff
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/session.schema.json#/$defs/Handoff
+      responses:
+        '201':
+          description: Proposed
+  /handoffs/{handoffId}/{action}:
+    post:
+      tags:
+      - coordination
+      operationId: actOnHandoff
+      parameters:
+      - name: handoffId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: action
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - ready
+          - acknowledge
+          - complete
+          - refuse
+      responses:
+        '200':
+          description: OK
+  /inventory:
+    get:
+      tags:
+      - inventory
+      operationId: getInventory
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/inventory.schema.json
+    patch:
+      tags:
+      - inventory
+      operationId: patchInventory
+      summary: Add/remove/update items (from a fridge camera, scale, receipt or a human)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                upsert:
+                  type: array
+                  items:
+                    $ref: https://cookwala.ai/v1/schemas/inventory.schema.json#/$defs/Item
+                remove:
+                  type: array
+                  items:
+                    type: string
+                consume:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      itemId:
+                        type: string
+                      qty:
+                        type: object
+      responses:
+        '200':
+          description: Updated
+  /inventory/check:
+    post:
+      tags:
+      - inventory
+      operationId: checkInventory
+      summary: Which ingredients for these recipes are missing, low or expiring
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recipes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      recipeId:
+                        type: string
+                      scale:
+                        type: number
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  available:
+                    type: array
+                    items:
+                      type: string
+                  missing:
+                    type: array
+                    items:
+                      type: object
+                  expiring:
+                    type: array
+                    items:
+                      type: string
+  /orders:
+    post:
+      tags:
+      - orders
+      operationId: createOrderIntent
+      summary: Create an order intent (from a session's missing items or explicit lines)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/order.schema.json
+      responses:
+        '201':
+          description: Created (awaiting_approval unless a standing rule covers it)
+  /orders/{orderId}:
+    get:
+      tags:
+      - orders
+      operationId: getOrder
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/order.schema.json
+  /orders/{orderId}/{action}:
+    post:
+      tags:
+      - orders
+      operationId: actOnOrder
+      description: approve requires scope order:approve and a human actor; the hub hands off to the configured UCP/ACP
+        adapter.
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: action
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - approve
+          - cancel
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Not a human approver
+  /notify:
+    post:
+      tags:
+      - notifications
+      operationId: notify
+      summary: Ask the hub to notify humans (routes to screens, speakers, phones, Matter, webhooks)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/event.schema.json#/$defs/NotifyData
+      responses:
+        '202':
+          description: Queued
+  /notifications/{notificationId}/ack:
+    post:
+      tags:
+      - notifications
+      operationId: ackNotification
+      parameters:
+      - name: notificationId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                actionId:
+                  type: string
+      responses:
+        '204':
+          description: Acknowledged
+  /policy/active:
+    get:
+      tags:
+      - policy
+      operationId: getActivePolicies
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+    put:
+      tags:
+      - policy
+      operationId: setActivePolicies
+      description: Requires scope admin. Jurisdiction packs default from the hub's configured country.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        '204':
+          description: Updated
+  /policy/evaluate:
+    post:
+      tags:
+      - policy
+      operationId: evaluatePolicy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recipeId:
+                  type: string
+                sessionId:
+                  type: string
+                packs:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  decision:
+                    type: string
+                    enum:
+                    - allow
+                    - allow_with_warnings
+                    - deny
+                  results:
+                    type: array
+                    items:
+                      type: object
+  /safety/estop:
+    post:
+      tags:
+      - safety
+      operationId: emergencyStop
+      summary: Emergency stop for the whole kitchen (any paired actor; physical button on the hub)
+      description: Broadcasts cookwala.safety.estop with action heat_off_all, then every executor runs its abort
+        procedure. Idempotent.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                zone:
+                  type: string
+      responses:
+        '202':
+          description: Broadcast
+  /safety/events:
+    post:
+      tags:
+      - safety
+      operationId: raiseSafetyEvent
+      summary: Smoke/CO/gas/leak detectors, cameras and security systems report hazards here (or via MQTT/Matter
+        bridge)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/event.schema.json
+      responses:
+        '202':
+          description: Accepted
+  /safety/status:
+    get:
+      tags:
+      - safety
+      operationId: getSafetyStatus
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  state:
+                    type: string
+                    enum:
+                    - normal
+                    - warning
+                    - alarm
+                    - emergency
+                  activeEvents:
+                    type: array
+                    items:
+                      type: object
+                  heatSourcesOn:
+                    type: array
+                    items:
+                      type: string
+                  humansPresent:
+                    type: boolean
+  /events:
+    get:
+      tags:
+      - events
+      operationId: streamEvents
+      summary: Server-Sent Events stream of CloudEvents (filter by type prefix, session, priority)
+      parameters:
+      - name: types
+        in: query
+        schema:
+          type: string
+        description: Comma-separated prefixes, e.g. cookwala.task.,cookwala.safety.
+      - name: session
+        in: query
+        schema:
+          type: string
+      - name: Last-Event-ID
+        in: header
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Event stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+  /subscriptions:
+    post:
+      tags:
+      - events
+      operationId: createWebhook
+      summary: Webhook subscription for cloud services (notification, delivery, security providers)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - url
+              - types
+              properties:
+                url:
+                  type: string
+                types:
+                  type: array
+                  items:
+                    type: string
+                secret:
+                  type: string
+                  description: HMAC-SHA256 signing secret for X-Cookwala-Signature.
+      responses:
+        '201':
+          description: Created
+  /executor/tasks:
+    post:
+      tags:
+      - executor
+      operationId: executorReceiveTask
+      summary: Hub → executor. Execute one task (node with resolved params, until-condition, CCP, hazards, abort)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - task
+              - node
+              - recipeHash
+              - abort
+              properties:
+                task:
+                  $ref: https://cookwala.ai/v1/schemas/session.schema.json#/$defs/Task
+                node:
+                  $ref: https://cookwala.ai/v1/schemas/recipe.schema.json#/$defs/Node
+                recipeHash:
+                  type: string
+                hazards:
+                  type: array
+                  items:
+                    type: object
+                ccp:
+                  type: object
+                abort:
+                  type: object
+                leases:
+                  type: array
+                  items:
+                    type: object
+                callback:
+                  type: string
+                  description: Hub task URL for progress/complete/fail.
+      responses:
+        '202':
+          description: Accepted
+        '409':
+          description: Busy
+        '422':
+          description: Cannot perform (capability mismatch); include reason
+  /executor/tasks/{taskId}/cancel:
+    post:
+      tags:
+      - executor
+      operationId: executorCancelTask
+      parameters:
+      - $ref: '#/components/parameters/TaskId'
+      responses:
+        '202':
+          description: Cancelling safely
+  /executor/abort:
+    post:
+      tags:
+      - executor
+      operationId: executorAbort
+      summary: Hub → executor. Run the safe-shutdown procedure now (also triggered by cookwala.safety.estop)
+      security: []
+      responses:
+        '202':
+          description: Aborting
+  /advise/{intent}:
+    post:
+      tags:
+      - advise
+      operationId: advise
+      summary: Ask the reasoner with full kitchen context (inventory, actors, profiles, mode, session filled in
+        by the hub)
+      parameters:
+      - name: intent
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - ask
+          - cook_from
+          - substitute
+          - recover
+          - repurpose
+          - adapt_equipment
+          - team_plan
+          - store
+          - feed
+          - rescale
+          - retime
+          - leftovers
+          - diagnose
+          - texture_modify
+          - diet_merge
+          - nutrition_target
+          - shopping_optimize
+          - personalize
+          - relief_allocate
+          - custom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/advice.schema.json#/$defs/AdviceRequest
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/advice.schema.json#/$defs/AdviceResponse
+  /advise/{responseId}/apply:
+    post:
+      tags:
+      - advise
+      operationId: applyAdvice
+      summary: Apply an option to the running session (patch + resume, team plan, storage plan...); goes through
+        normal confirmation rules
+      parameters:
+      - name: responseId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - optionId
+              properties:
+                optionId:
+                  type: string
+                sessionId:
+                  type: string
+      responses:
+        '200':
+          description: Applied
+        '409':
+          description: Session state changed; re-ask
+        '403':
+          description: Needs human confirmation
+  /profiles:
+    get:
+      tags:
+      - profiles
+      operationId: listProfiles
+      parameters:
+      - name: kind
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/profile.schema.json
+    post:
+      tags:
+      - profiles
+      operationId: createProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/profile.schema.json
+      responses:
+        '201':
+          description: Created (sensitive profiles encrypted at rest)
+  /profiles/{id}:
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - profiles
+      operationId: getProfile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/profile.schema.json
+    put:
+      tags:
+      - profiles
+      operationId: updateProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/profile.schema.json
+      responses:
+        '204':
+          description: Updated
+    delete:
+      tags:
+      - profiles
+      operationId: deleteProfile
+      responses:
+        '204':
+          description: Deleted
+  /mode:
+    get:
+      tags:
+      - mode
+      operationId: getMode
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/profile.schema.json#/$defs/OperatingMode
+    put:
+      tags:
+      - mode
+      operationId: setMode
+      summary: Set the hub-wide operating mode (emits cookwala.mode.changed; running plans re-optimize)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/profile.schema.json#/$defs/OperatingMode
+      responses:
+        '204':
+          description: Updated
+  /extensions:
+    get:
+      tags:
+      - extensions
+      operationId: listExtensions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    manifest:
+                      $ref: https://cookwala.ai/v1/schemas/extension.schema.json
+                    enabled:
+                      type: boolean
+                    grants:
+                      type: object
+    post:
+      tags:
+      - extensions
+      operationId: installExtension
+      summary: Install from a manifest URL; admin approves permissions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - url
+              properties:
+                url:
+                  type: string
+                grant:
+                  type: object
+      responses:
+        '201':
+          description: Installed (disabled until approved)
+  /extensions/{id}/{action}:
+    post:
+      tags:
+      - extensions
+      operationId: actOnExtension
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: action
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - enable
+          - disable
+          - uninstall
+      responses:
+        '200':
+          description: OK
+  /flows:
+    get:
+      tags:
+      - flows
+      operationId: listFlows
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/flow.schema.json
+    post:
+      tags:
+      - flows
+      operationId: installFlow
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                flow:
+                  $ref: https://cookwala.ai/v1/schemas/flow.schema.json
+                inputs:
+                  type: object
+      responses:
+        '201':
+          description: Installed
+  /flows/{id}/run:
+    post:
+      tags:
+      - flows
+      operationId: runFlow
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                inputs:
+                  type: object
+      responses:
+        '202':
+          description: Started; follow cookwala.flow.* events
+  /team/cfp:
+    post:
+      tags:
+      - team
+      operationId: callForProposals
+      summary: 'A robot asks for help: broadcasts cookwala.team.cfp, collects bids, returns the awarded TeamPlan'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - sessionId
+              properties:
+                sessionId:
+                  type: string
+                tasks:
+                  type: array
+                  items:
+                    type: string
+                from:
+                  type: string
+                bidWindowS:
+                  type: integer
+                  default: 5
+                objective:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/advice.schema.json#/$defs/TeamPlan
+  /market/quote-requests:
+    post:
+      tags:
+      - market
+      operationId: sendQuoteRequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/market.schema.json#/$defs/QuoteRequest
+      responses:
+        '202':
+          description: Sent; quotes arrive as cookwala.market.quote events
+  /market/offers:
+    get:
+      tags:
+      - market
+      operationId: searchOffersLocal
+      summary: Offers from trusted provider feeds (cached), filtered by the kitchen area and policies
+      parameters:
+      - name: ingredientId
+        in: query
+        schema:
+          type: string
+      - name: type
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/market.schema.json#/$defs/Offer
+  /relief/programs:
+    get:
+      tags:
+      - relief
+      operationId: list_programs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/relief.schema.json#/$defs/Program
+    post:
+      tags:
+      - relief
+      operationId: create_programs
+      summary: 'Coordinator hubs: create a Program'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/relief.schema.json#/$defs/Program
+      responses:
+        '201':
+          description: Created
+  /relief/needs:
+    get:
+      tags:
+      - relief
+      operationId: list_needs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/relief.schema.json#/$defs/Need
+    post:
+      tags:
+      - relief
+      operationId: create_needs
+      summary: 'Coordinator hubs: create a Need'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/relief.schema.json#/$defs/Need
+      responses:
+        '201':
+          description: Created
+  /relief/pledges:
+    get:
+      tags:
+      - relief
+      operationId: list_pledges
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/relief.schema.json#/$defs/Pledge
+    post:
+      tags:
+      - relief
+      operationId: create_pledges
+      summary: 'Coordinator hubs: create a Pledge'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/relief.schema.json#/$defs/Pledge
+      responses:
+        '201':
+          description: Created
+  /relief/allocate:
+    post:
+      tags:
+      - relief
+      operationId: reliefAllocate
+      summary: Run the relief allocator over needs and pledges (min-cost flow + MILP + per-kitchen CP-SAT)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                needs:
+                  type: array
+                  items:
+                    type: string
+                pledges:
+                  type: array
+                  items:
+                    type: string
+                objective:
+                  type: string
+                  enum:
+                  - max_people_fed
+                  - max_nutrition_per_cost
+                  - min_waste
+                  - equity_first
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/relief.schema.json#/$defs/Allocation
+  /relief/impact:
+    post:
+      tags:
+      - relief
+      operationId: publishImpact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/relief.schema.json#/$defs/ImpactReport
+      responses:
+        '201':
+          description: Published to the program impact feed
+components:
+  securitySchemes:
+    pairedToken:
+      type: http
+      scheme: bearer
+      description: 'Token issued after pairing (OAuth 2.0 Device Authorization Grant, RFC 8628:
+
+        POST /pair, then poll POST /token). Scopes: read, cook, inventory, order:create,
+
+        order:approve (human actors only), notify, safety, admin.
+
+        '
+  parameters:
+    ActorId:
+      name: actorId
+      in: path
+      required: true
+      schema:
+        type: string
+    SessionId:
+      name: sessionId
+      in: path
+      required: true
+      schema:
+        type: string
+    TaskId:
+      name: taskId
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    Scope:
+      type: string
+      enum:
+      - read
+      - cook
+      - inventory
+      - order:create
+      - order:approve
+      - notify
+      - safety
+      - admin
+    DeviceStatus:
+      type: object
+      properties:
+        manifest:
+          $ref: https://cookwala.ai/v1/schemas/capabilities.schema.json
+        status:
+          type: string
+          enum:
+          - available
+          - busy
+          - offline
+          - fault
+          - paused
+        lastSeen:
+          type: string
+          format: date-time
+        currentTask:
+          type: string
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        reasons:
+          type: array
+          items:
+            type: object
+  responses:
+    NotFound:
+      description: Not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
