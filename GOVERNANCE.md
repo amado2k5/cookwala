@@ -28,8 +28,19 @@ at most two seats per organization. The TSC includes:
 - a representative from a low- or middle-income country;
 - a labour or consumer voice.
 
-Decisions use lazy consensus. Votes are a simple majority of seats; changes to Core
-normative rules need two thirds.
+Decisions use lazy consensus. Where a vote is needed, the numbers are:
+
+- **Quorum:** 51 % of seats.
+- **Voting window:** 7 days; a vote that does not reach quorum stays open for at most 4 weeks.
+- **Simple majority** of votes cast for ordinary decisions; **two thirds of all seats** for
+  changes to Core normative rules, to this document, or to the licences.
+- **Employer cap:** no more than one third of seats held by people from one organization or
+  its affiliates.
+- **Attendance:** a seat that casts no vote for 3 months is vacated and refilled.
+- **Terms:** 24 months, staggered so that no more than half the seats change at once.
+- **Safety veto:** the food-safety and privacy seats may each block a safety-relevant RFC
+  until a named qualified reviewer has reviewed it; the block is public and reasoned.
+- **Votes** are cast on public issues; the record is the issue.
 
 ## Later: a neutral home
 

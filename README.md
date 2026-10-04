@@ -1,77 +1,52 @@
 # Cookwala
 
-**The world's first and largest robot cooking recipes index and CLI.**
+**The open standard for cooking safely: people, kitchens and robots.**
 
-**Mission:** help end world hunger and make people healthier. See [docs/MISSION.md](docs/MISSION.md) and [docs/HEALTH.md](docs/HEALTH.md).
+A Cookwala recipe says three things a machine can check: **what to make**, **when it's done**,
+and **what must never happen**. Devices dry-run a recipe before heating anything and refuse rather
+than guess; safety limits are enforced on the device and cannot be raised by any recipe, agent or
+message; records are hashed and signed; AI agents act only under a signed mandate and treat all
+text as data. A Humanitarian Profile lets food banks rescue surplus food safely by SMS and
+spreadsheet, with no personal data. A Household Context Profile keeps a home's facts at home.
 
-Cookwala is an open, royalty-free standard and a free public index of recipes that robots,
-smart appliances and AI agents can execute safely, end to end, alone or together with
-people and other machines.
+**Mission:** help end hunger, make people healthier, and put robots to work for people.
+Hunger has many causes; Cookwala's part is real and partial: less waste, safer rescue, cheaper
+and healthier meals, machines that can feed people who cannot cook for themselves, and food
+organizations acting as one network. Evidence, with labels, is in [docs/IMPACT.md](docs/IMPACT.md).
 
-- **Recipes a machine can run:** every step is a typed operation with parameters, an end
-  condition it can measure (core temperature, a food-state cue, a time window) and a defined
-  failure path.
-- **Safety as data:** hazards, food-safety checkpoints (HACCP CCPs), allergens, supervision
-  levels, abort procedures and kitchen-wide safety events.
-- **Local rules:** policy packs for food-safety codes, dietary rules (e.g. halal), venues
-  and households, evaluated before cooking.
-- **Kitchen teamwork:** a local hub protocol coordinates robots, ovens, cooktops, fridges,
-  sensors, alarms, people, AI agents, grocery delivery and notifications.
-- **Every interface:** static JSON, REST, GraphQL, MQTT/WebSocket/SSE events, MCP, A2A and the
-  `cookwala` CLI.
-- **A reasoner, not just a database:** "what can I cook with this", "I over-salted it, fix it and
-  resume", "rescue this meal", "store it for 3 days", "feed 40 people in 3 hours on $60",
-  "three robots, who does what", "the right portion for each person", all returned as actions a
-  robot can apply, behind a food-safety gate.
-- **Operating modes:** gas, electric or induction; robot battery high, medium or low; save energy
-  or make ingredients last a week; low or open budget.
-- **Customizable in every way:** your own recipes, fields, rules, filters, AI models, agents and
-  flows, in public or private catalogs hosted anywhere.
-- **An ecosystem:** grocers, restaurants, robot and cookware makers, chefs, certifiers, delivery
-  and food organizations all have a defined place.
-- **Open to everyone:** no API keys, no membership, Apache-2.0 / CC BY 4.0 / CC0, with a
-  patent non-assertion pledge.
+Cookwala started as "the world's first and largest robot cooking recipes index and CLI", from
+one family's Egyptian recipes on fifi.cooking. The index and the CLI are here; "largest" is a goal,
+not a claim. Everything is open, royalty-free, model-neutral and device-neutral.
 
-Status: **draft v0.1**. Specs are here; tools and the live index come next (see the
-roadmap).
+**Status:** Core 0.2 is a draft under public review; everything else is a draft or experimental
+profile. Live at [cookwala.ai](https://cookwala.ai). Nothing is deployed in the field yet.
 
 ## Start here
 
-| | |
+| You want to… | Go to |
 |---|---|
-| **Try it: virtual kitchen simulator** | [cookwala.ai/sim](https://cookwala.ai/sim/) · [docs/SIMULATION.md](docs/SIMULATION.md) · [findings](docs/SIM-FINDINGS.md) |
-| **Try it: country, one-year simulator** | [cookwala.ai/sim/country](https://cookwala.ai/sim/country/) · [docs/COUNTRY-SIMULATION.md](docs/COUNTRY-SIMULATION.md) |
-| **Start here** | [Quickstart (5 minutes)](docs/QUICKSTART.md) · [cookwala.ai/docs](https://cookwala.ai/docs/) · [Strategy](docs/STRATEGY.md) |
-| **Robots, ROS 2, datasets, traces** | [docs/ROBOTICS.md](docs/ROBOTICS.md) · [bindings/ros2](bindings/ros2) · `tools/execlog_export.py` |
-| **Agent-safety benchmark** | [evals/kitchen-agent-safety](evals/kitchen-agent-safety) (promptfoo) |
-| **Registry** | [docs/REGISTRY.md](docs/REGISTRY.md) |
-| **Cookwala Core 0.2 (normative)** | The small core devices implement first: [docs/CORE.md](docs/CORE.md) · [api/core.openapi.yaml](api/core.openapi.yaml) · [conformance/](conformance) |
-| **Action plan** | How Cookwala answers its critics, reviewers and partners: [docs/ACTION-PLAN.md](docs/ACTION-PLAN.md) |
-| **Humanitarian Profile (draft)** | Personal-data-free food rescue for food banks and kitchens: [docs/HUMANITARIAN-PROFILE.md](docs/HUMANITARIAN-PROFILE.md) |
-| **Try it: world, five-year simulator** | [cookwala.ai/sim/world](https://cookwala.ai/sim/world/) · [docs/WORLD-SIMULATION.md](docs/WORLD-SIMULATION.md) |
-| **Try it: two-city, one-month simulator** | [cookwala.ai/sim/city](https://cookwala.ai/sim/city/) · [docs/CITY-SIMULATION.md](docs/CITY-SIMULATION.md) |
-| **The Cookwala Protocol: missions, context, swarm coordination** | [docs/PROTOCOL.md](docs/PROTOCOL.md) |
-| Decisions, commitments, budgets, degraded operation | [docs/DECISIONS.md](docs/DECISIONS.md) |
-| Recipe format (R1–R4 layers) | [docs/RECIPE-FORMAT.md](docs/RECIPE-FORMAT.md) |
-| Prior art, parallels, novelty | [docs/PRIOR-ART.md](docs/PRIOR-ART.md) |
-| Plan, principles, roadmap | [docs/PLAN.md](docs/PLAN.md) |
-| Landscape research (universities, companies, governments) | [docs/RESEARCH.md](docs/RESEARCH.md) |
-| How robots, appliances, humans and services work together | [docs/INTEROP.md](docs/INTEROP.md) |
-| APIs (REST, GraphQL, events, MCP, A2A) | [docs/API.md](docs/API.md) |
-| CLI | [docs/CLI.md](docs/CLI.md) |
-| Mission (zero hunger) and health | [docs/MISSION.md](docs/MISSION.md), [docs/HEALTH.md](docs/HEALTH.md) |
-| Reasoning (course-direct and course-correct) | [docs/REASONING.md](docs/REASONING.md) |
-| Extensibility, federation, profiles | [docs/EXTENSIBILITY.md](docs/EXTENSIBILITY.md) |
-| Ecosystem and marketplace | [docs/ECOSYSTEM.md](docs/ECOSYSTEM.md) |
-| Full implementation plan | [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md) |
-| Knowledge packs | [knowledge/](knowledge) |
-| Exporting fifi.cooking recipes | [docs/EXPORT-FIFI.md](docs/EXPORT-FIFI.md) |
-| Patent landscape (preliminary, not legal advice) | [docs/PATENT-LANDSCAPE.md](docs/PATENT-LANDSCAPE.md) |
-| JSON Schemas | [schemas/](schemas) |
-| OpenAPI / GraphQL / AsyncAPI | [api/](api) |
-| Operation vocabulary | [vocab/ops.json](vocab/ops.json) |
-| Matter mapping | [bindings/matter.json](bindings/matter.json) |
-| Examples (recipe, advice, profiles, extension, flow, market, relief) | [examples/](examples) |
+| See it work in 2 minutes | [Live dry run](https://cookwala.ai/#demo) · `cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/robot-arm.json` |
+| Read the standard | [docs/CORE.md](docs/CORE.md) (normative) · [whitepaper](docs/WHITEPAPER.md) · [RFCs](rfcs/) |
+| Build a device, hub or agent | [Quickstart](docs/QUICKSTART.md) · [Robots, ROS 2, datasets](docs/ROBOTICS.md) · [reference hub](hub/) · [MCP server](sdk/mcp/) · [Python](sdk/python/) · [TypeScript](sdk/typescript/) · [conformance](conformance/) |
+| Rescue food with phones and spreadsheets | [Humanitarian Profile 0.2](docs/HUMANITARIAN-PROFILE.md) · [four worked flows](examples/humanitarian/flows/) · [pilot protocol](docs/humanitarian/PILOT-PROTOCOL.md) · [concept note](docs/humanitarian/CONCEPT-NOTE.md) |
+| Review nutrition and food-safety rules | [rule packs](profiles/humanitarian/) · [review template](docs/health/REVIEW-TEMPLATE.md) · [claims policy](docs/health/CLAIMS-POLICY.md) |
+| Understand what a household robot may know | [Household Context Profile](docs/HOUSEHOLD-CONTEXT.md) · [facet registry](vocab/facets.json) · [RFC-0001](rfcs/0001-household-context-profile.md) |
+| Publish or find things | [Registry and directory](docs/REGISTRY.md) · [federation](docs/FEDERATION.md) · [certification path](docs/CERTIFICATION.md) |
+| Teach, research, legislate, think | [lesson kit](docs/education/LESSON-KIT.md) · [research topics](docs/education/RESEARCH-TOPICS.md) · [policy brief](docs/policy/BRIEF.md) · [model language](docs/policy/MODEL-LANGUAGE.md) · [essays](docs/essays/) |
+| Play the simulators | [home](https://cookwala.ai/sim/) · [city](https://cookwala.ai/sim/city/) · [country](https://cookwala.ai/sim/country/) · [world](https://cookwala.ai/sim/world/) (illustrative models, not forecasts) |
+| See every stakeholder's path | [docs/STAKEHOLDERS.md](docs/STAKEHOLDERS.md) · [messaging rules](docs/MESSAGING.md) · [roadmap](docs/ROADMAP.md) |
+| Read the hard questions | [critiques](docs/CRITIQUES.md) · [action plan](docs/ACTION-PLAN.md) · [backstory and gaps](docs/research/BACKSTORY.md) |
+| Everything else | [strategy](docs/STRATEGY.md) · [protocol and Missions (experimental)](docs/PROTOCOL.md) · [kitchens and fleets](docs/KITCHENS-AND-FLEETS.md) · [supply signals](docs/SUPPLY-SIGNALS.md) · [prior art](docs/PRIOR-ART.md) · [patent landscape](docs/PATENT-LANDSCAPE.md) · [governance](GOVERNANCE.md) · [security](SECURITY.md) · [contributing](CONTRIBUTING.md) |
+
+## Checks
+
+```bash
+python -m venv .venv && .venv/bin/pip install jsonschema pyyaml graphql-core cryptography
+.venv/bin/python tools/validate_specs.py      # schemas, examples, vocabularies, facet registry, APIs
+.venv/bin/python tools/run_conformance.py     # 101 vectors (Core and profiles); --report writes a ConformanceReport
+node sim/run.mjs                              # the four simulators
+bash tools/build_site.sh _site                # the website
+```
 
 ## A recipe step, the Cookwala way
 

@@ -1,8 +1,11 @@
 # Cookwala strategy: message, product, website, docs, developer experience
 
-**Status:** proposal, 2026-10-04. Covers the mission, vision, story, standard, website,
+**Status:** revised 2026-10-04 (v2). Covers the mission, vision, story, standard, website,
 documentation, API and SDK, demos, community and metrics. It builds on the action plan
-(`ACTION-PLAN.md`), which answers the critics, and on a study of the sites listed in section 1.
+(`ACTION-PLAN.md`), the backstory and gap list (`research/BACKSTORY.md`), the architecture review
+(`research/ARCHITECTURE-REVIEW.md`), the 23-site benchmark (`research/WEB-BENCHMARK.md`), the
+stakeholder design (`STAKEHOLDERS.md`) and the messaging rules (`MESSAGING.md`). Section 1's table
+is the first-pass study; the benchmark supersedes it where they differ.
 
 ---
 
@@ -184,19 +187,30 @@ to check all three on the device.
 ### 6.1 Sitemap
 
 ```
-/                 Home: one-liner, triad, live demo, paths, loop, proof, now/next/later
-/start            5-minute quickstart (pick your path)
-/docs/            Documentation (section 7)
-/playground/      Dry run in the browser, simulators, example recipes and devices
-/sim/…            Home, city, country, world simulators
-/recipes/         Index browser (next: fifi corpus)
-/contribute/      Contributor network: cooks, kitchens, devices, reviewers, translators
-/humanitarian/    Food banks and kitchens: profile, SMS demo, pilot
-/trust/           Safety, privacy, security, governance status, critiques, conformance
-/whitepaper/      The whitepaper (people) + 2-page summary (funders)
-/roadmap/         Now / next / later, gates, what we will not do
-/.well-known/     cookwala.json, security.txt
-/llms.txt         AI-readable map of the docs
+/                 Home: one sentence, triad, live dry run, pathfinder, loop, proof, now/next/later
+/why/             Why Cookwala: the problem, the story, the three goals told honestly
+/impact/          Hunger, health, environment, economy, culture; every number labelled; what we don't know
+/for/<group>/     One page per stakeholder group (developers, companies, providers, food, humanitarian,
+                  health, education, government, capital, thought, everyone): message, options, first
+                  success, flow, how it advances their work and society
+/developers/      Quickstart, docs, API reference, SDKs, CLI, conformance, bindings, evals
+/docs/            Documentation (rendered pages; /docs/?p=NAME keeps working)
+/playground/      Live dry run with a device builder and shareable results, envelope explorer, simulators explained
+/sim/...          Home, city, country, world simulators (unchanged URLs)
+/registry/        Browse recipes, devices, rule packs, extensions, benchmarks; publish flow; directory of organizations (empty-state ready)
+/humanitarian/    Food banks and kitchens: profile, SMS walkthrough, four flows, pilot protocol, concept note
+/farmers/         Surplus by SMS; fair signals (next, after counsel review)
+/education/       Lesson kit, research topics, open problems
+/policy/          Brief and model language
+/investors/       Opportunity, timing, business model, roadmap, risks, governance; no financial promises
+/whitepaper/      Web and PDF
+/deck/            12 to 15 slides, keyboard-navigable, shareable
+/ideas/           Essays for thinkers
+/trust/           Safety, privacy, security, governance, critiques, conformance, status
+/roadmap/         Now / next / later with a status on every item
+/contribute/      RFCs, translation, vectors, recipes, reviews; community; contact
+/ar/...           Every page above in Arabic, right-to-left
+/.well-known/     cookwala.json, security.txt · /llms.txt · /v1/...
 ```
 
 ### 6.2 Home page, top to bottom
@@ -325,6 +339,9 @@ Organized by the Diátaxis framework, so each page has one job:
 ---
 
 ## 12. Roadmap
+
+The maintained roadmap with a status per item is [`ROADMAP.md`](ROADMAP.md). The table below is the
+original 180-day plan, kept for the record.
 
 | When | Website and story | Developer experience | Standard and safety | Community |
 |---|---|---|---|---|
