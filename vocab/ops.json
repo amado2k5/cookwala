@@ -929,7 +929,7 @@
    "id": "cw.op.saute",
    "label": {
     "en": "Sauté / sweat",
-    "ar": "تشويح / تسبيك"
+    "ar": "تشويح"
    },
    "definition": "Cook in a little fat over moderate heat, stirring, until a food-state cue (translucent, golden).",
    "classes": [
@@ -1767,7 +1767,7 @@
    "id": "cw.op.braise",
    "label": {
     "en": "Braise / stew",
-    "ar": "تسبيك / تطبيخ"
+    "ar": "طهي بطيء مغطّى"
    },
    "definition": "Cook covered in a small amount of liquid for a long time.",
    "classes": [
@@ -1967,7 +1967,7 @@
    "id": "cw.op.reduce",
    "label": {
     "en": "Reduce",
-    "ar": "تسبيك / تقليل"
+    "ar": "تكثيف / تسبيك"
    },
    "definition": "Evaporate liquid to concentrate (by ratio or until coats spoon).",
    "classes": [

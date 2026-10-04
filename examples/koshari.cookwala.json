@@ -246,13 +246,13 @@
    "ref": "cumin",
    "ingredientId": "cw.ing.cumin_ground",
    "qty": {
-    "value": 4,
+    "value": 2,
     "unit": "g",
     "tolerance": 0.3
    },
    "display": {
-    "en": "2 tsp ground cumin",
-    "ar": "2 ملعقة صغيرة كمون"
+    "en": "1 tsp cumin, for the sauce",
+    "ar": "ملعقة صغيرة كمون للصلصة"
    },
    "scaling": "sublinear"
   },
@@ -289,13 +289,13 @@
    "ref": "salt",
    "ingredientId": "cw.ing.salt",
    "qty": {
-    "value": 12,
+    "value": 4,
     "unit": "g",
     "tolerance": 0.3
    },
    "display": {
-    "en": "2 tsp salt, divided",
-    "ar": "2 ملعقة صغيرة ملح مقسمة"
+    "en": "1 tsp salt, for the pasta water",
+    "ar": "ملعقة صغيرة ملح لماء المكرونة"
    },
    "scaling": "sublinear",
    "toTaste": true
@@ -337,6 +337,63 @@
    "display": {
     "en": "60 ml water for the daqqa",
     "ar": "60 مل ماء للدقة"
+   }
+  },
+  {
+   "ref": "salt_rice",
+   "ingredientId": "cw.ing.salt",
+   "qty": {
+    "value": 4,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1 tsp salt, for the rice",
+    "ar": "ملعقة صغيرة ملح للأرز"
+   },
+   "scaling": "sublinear",
+   "toTaste": true
+  },
+  {
+   "ref": "salt_sauce",
+   "ingredientId": "cw.ing.salt",
+   "qty": {
+    "value": 4,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1 tsp salt, for the sauce",
+    "ar": "ملعقة صغيرة ملح للصلصة"
+   },
+   "scaling": "sublinear",
+   "toTaste": true
+  },
+  {
+   "ref": "cumin_daqqa",
+   "ingredientId": "cw.ing.cumin_ground",
+   "qty": {
+    "value": 2,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1 tsp cumin, for the daqqa",
+    "ar": "ملعقة صغيرة كمون للدقة"
+   },
+   "scaling": "sublinear"
+  },
+  {
+   "ref": "oil_spice",
+   "ingredientId": "cw.ing.vegetable_oil",
+   "qty": {
+    "value": 15,
+    "unit": "ml",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1 tbsp of the hot frying oil",
+    "ar": "ملعقة كبيرة من زيت القلي الساخن"
    }
   }
  ],
@@ -698,7 +755,7 @@
      "vermicelli_golden",
      "rice",
      "water_rice",
-     "salt"
+     "salt_rice"
     ],
     "output": "rice_boiling",
     "params": {
@@ -907,6 +964,7 @@
     "id": "n16",
     "op": "cw.op.saute",
     "inputs": [
+     "oil_spice",
      "garlic_crushed",
      "cumin",
      "coriander",
@@ -954,7 +1012,7 @@
      "spice_base",
      "tomato",
      "vinegar",
-     "salt"
+     "salt_sauce"
     ],
     "output": "sauce",
     "params": {
@@ -997,7 +1055,7 @@
      "garlic_daqqa",
      "vinegar_daqqa",
      "water_daqqa",
-     "cumin"
+     "cumin_daqqa"
     ],
     "output": "daqqa",
     "equipment": [
@@ -1342,5 +1400,5 @@
    "en": "Everything is cooked separately and assembled at the table or in the bowl; the crisp onions are what make it koshari."
   }
  },
- "hash": "sha256:f60a7758d131968018a56d172c2bb89d5e1bbca8a97acb69106111912ff7a54b"
+ "hash": "sha256:f7fc3745af51465fb7a849faa5b5927eeaa44030a703318bb293381fef8b3f45"
 }

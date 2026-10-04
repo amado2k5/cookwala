@@ -57,7 +57,7 @@ write('registry', reg + regv)
 # ---- RFC-0003 SMS grammar
 sms = ['OFFER 36KG YOGURT C 4C UB0511', 'OFFER 36KG YOGURT CUPS C T4.6C UB0511', 'FARM 120KG TOMATO A BB0411', 'offer 18kg cooked rice trays h t66c',
        'CLAIM A7K ALL', 'CLAIM A7K 20', 'CLAIM A7K 20KG', 'HAND A7K 36 T4.6', 'HAND A7K 0 REJ 18 TEMP T52', 'DIST 410 MEALS 410 PEOPLE 96KG',
-       'MENU D12 KCAL650 SODIUM540 FV95', 'HELP', 'CANCEL A7K', 'OFFER YOGURT C', 'OFFER 36KG YOGURT', 'OFFER 36KG YOGURT C UB3213', 'DIST 410 MEALS', 'hello there', '']
+       'MENU D12 KCAL650 SODIUM540 FV95', 'HELP', 'CANCEL A7K', 'HAND 012 74 REJ 6 PACK T4.4', 'HAND A7K 36 REJ 2 BADWORD', 'FARM ١٢٠KG TOMATO A HV0411', 'OFFER 36KG YOGURT A', 'HAND A7K 36 REJ', 'OFFER YOGURT C', 'OFFER 36KG YOGURT', 'OFFER 36KG YOGURT C UB3213', 'DIST 410 MEALS', 'hello there', '']
 write('sms', [vec(f'sms-{i}', 'sms_parse', 'humanitarian', '0003', f'Parse {t!r}.', {'text': t}, ref.parse_sms(t)) for i, t in enumerate(sms)])
 
 # ---- RFC-0007 signal policy

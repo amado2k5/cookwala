@@ -309,7 +309,7 @@
     ],
     "attention": "continuous",
     "notes": {
-     "en": "Lift the chicken out and keep it hot; the stock stays in the pot. Measure 1.5 l of stock."
+     "en": "Lift the chicken out into a covered pot kept hot (step n12); the stock stays in the pot. Measure 1.5 l of stock."
     }
    },
    {
@@ -509,10 +509,50 @@
     "attention": "periodic"
    },
    {
+    "id": "n12",
+    "op": "cw.op.hold",
+    "inputs": [
+     "chicken_cooked"
+    ],
+    "output": "chicken_hot",
+    "equipment": [
+     "pot",
+     "hob"
+    ],
+    "params": {
+     "heat": "very_low",
+     "lid": "on",
+     "target": {
+      "sensor": "cw.sense.core_temp",
+      "value": 68,
+      "unit": "degC",
+      "tolerance": 6
+     }
+    },
+    "until": {
+     "all": [
+      {
+       "sensor": "cw.sense.core_temp",
+       "gte": 60
+      }
+     ],
+     "maxTime": "PT45M"
+    },
+    "onTimeout": "ask_human",
+    "hazards": [
+     "hz_hot_liquid"
+    ],
+    "attention": "monitor",
+    "notes": {
+     "en": "Keep the chicken pieces at or above 60 °C core until serving; discard after 2 hours out of temperature control."
+    }
+   },
+   {
     "id": "n11",
     "op": "cw.op.serve",
     "inputs": [
-     "molokhia_hot"
+     "molokhia_hot",
+     "chicken_hot"
     ],
     "params": {
      "serveWithin": "PT30M",
@@ -692,7 +732,8 @@
     "n8": "Pour the sizzling taqliya into the molokhia. It will spit; stir once.",
     "n9": "Taste; add salt if needed.",
     "n10": "Keep hot, at or above 60 °C, until serving.",
-    "n11": "Serve with the chicken and rice with vermicelli."
+    "n11": "Serve with the chicken and rice with vermicelli.",
+    "n12": "Keep the chicken pieces hot, at or above 60 °C, until serving."
    }
   },
   "ar": {
@@ -709,7 +750,8 @@
     "n8": "اسكبي التقلية وهي تصدر صوتًا على الملوخية؛ ستطرطش، فقلّبي مرة واحدة.",
     "n9": "تذوّقي وأضيفي الملح إذا لزم.",
     "n10": "احتفظي بها ساخنة عند 60 درجة أو أكثر حتى التقديم.",
-    "n11": "قدّميها مع الفراخ والأرز بالشعرية."
+    "n11": "قدّميها مع الفراخ والأرز بالشعرية.",
+    "n12": "احفظي قطع الدجاج ساخنة، عند 60 درجة أو أكثر، حتى التقديم."
    }
   }
  },
@@ -742,5 +784,5 @@
    "en": "The pour of the taqliya and its sound are part of the dish; stir only once so the leaves stay suspended."
   }
  },
- "hash": "sha256:d06c52a4599e2adf8154315556b99ef88ab42ad2f173178cc79f7b64794d0a02"
+ "hash": "sha256:c6d0c0679eea22001414f60ff4121367908ca3ddd260c37eb7a35c4ff16a8e6b"
 }

@@ -313,7 +313,8 @@
     "op": "cw.op.transfer",
     "inputs": [
      "batter",
-     "tahini"
+     "tahini",
+     "almonds"
     ],
     "output": "batter_in_tray",
     "equipment": [
@@ -331,8 +332,7 @@
     "id": "n5",
     "op": "cw.op.rest",
     "inputs": [
-     "batter_in_tray",
-     "almonds"
+     "batter_in_tray"
     ],
     "output": "batter_rested",
     "params": {
@@ -789,5 +789,5 @@
    "en": "Syrup goes on hot cake; the ratio of syrup decides whether it is soft or sticky."
   }
  },
- "hash": "sha256:7a7c41c703b8c6146e146ad35c14965bbe2b86ac5d64d4a5e7e44efc17b5b297"
+ "hash": "sha256:e185f8bc7ea557648a9e2de8d5ec19cb640f23104b6fa2a11109b537b35c1955"
 }

@@ -189,9 +189,10 @@ Use the CSV templates in `profiles/humanitarian/templates/`. Their second row ho
 
 ```
 OFFER 36KG YOGURT C 4C UB0511          → reply: OFFER A7K open until 08:00
-FARM 120KG TOMATO A BB0411             → an offer with origin farm (0.2)
+FARM 120KG TOMATO A HV0411             → an offer with origin farm, harvested 4 November (0.2)
 CLAIM A7K ALL                          → reply: CLAIMED A7K pickup by 20:30
 HAND A7K 36 T4.6                       → accepted 36 kg at 4.6 °C
+HAND A7K 30 REJ 6 PACK T4.6            → accepted 30 kg, rejected 6 kg, packaging_damaged (0.2)
 HAND A7K 0 REJ 18 TEMP T52             → rejected 18 kg, temp_out_of_range
 DIST 410 MEALS 410 PEOPLE 96KG          → distribution for today at the sender's site
 MENU D12 KCAL650 SODIUM540 FV95         → per-meal nutrients for distribution D12 (0.2)
@@ -199,10 +200,28 @@ HELP · CANCEL A7K
 ```
 
 The grammar is implemented in `tools/cookwala_ref.py` (`parse_sms`) and tested by
-`conformance/profiles/sms.json`.
+`conformance/profiles/sms.json`. Keywords are English; Arabic-Indic (٠-٩) and Persian (۰-۹)
+digits are accepted wherever a digit is, so a phone set to either keyboard works.
 
 Storage codes: `A` ambient, `C` chilled, `F` frozen, `H` hot-held. Date marks: `UB` use-by,
-`BB` best-before, as `DDMM`. The gateway maps the sender's registered number to an
+`BB` best-before, `HV` harvested, as `DDMM`. Reject reason codes: `TEMP` temp_out_of_range,
+`DATE` past_use_by, `PACK` packaging_damaged, `ALLERG` allergen_unlabelled, `QTY`
+quantity_mismatch, `PEST` pests_or_contamination, `SPACE` no_capacity, `TRANSPORT`
+no_transport, `LATE` arrived_late, `OTHER`; any other word is recorded as `other`. The `HELP`
+reply MUST be one example per command, plain ASCII, under 160 characters.
+
+A gateway MUST apply these checks before it writes a document (`sms_storage_findings` in the
+reference; ids are block findings):
+
+| Finding | When |
+|---|---|
+| `safety.temp_not_recorded` | a `HAND` on a chilled, frozen or hot-held line carries no `T` reading: reply asking for it, write nothing |
+| `safety.hot_hold_min` | an `OFFER` with storage `H` below 60 °C: refuse to list it |
+| `safety.storage_class_mismatch` | the item words imply dairy, meat, poultry, fish, egg or cooked food and storage is `A`: refuse to list it |
+| `safety.chilled_max`, `safety.frozen_max` | readings above 5 °C or above −18 °C on offer or handover |
+
+Offers of hot-held food close after two hours (one hour for cooked rice); a gateway never
+stores a placeholder reading. The gateway maps the sender's registered number to an
 organization, never to a person in the documents.
 
 ## 9. Interoperability

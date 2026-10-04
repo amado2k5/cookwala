@@ -11,7 +11,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 ops = json.loads((ROOT / 'vocab' / 'ops.json').read_text())['entries']
-vectors = sum(len(json.loads(p.read_text())) for p in (ROOT / 'conformance').glob('*.json'))
+vectors = sum(len(json.loads(p.read_text())) for p in list((ROOT / 'conformance').glob('*.json')) + list((ROOT / 'conformance' / 'profiles').glob('*.json')))
 schemas = len(list((ROOT / 'schemas').glob('*.schema.json')))
 recipes = list((ROOT / 'examples').glob('*.cookwala.json'))
 langs = set()

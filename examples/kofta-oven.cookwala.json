@@ -323,10 +323,10 @@
     ],
     "params": {
      "heat": "high",
-     "tempC": 220,
+     "tempC": 200,
      "target": {
       "sensor": "cw.sense.oven_temp",
-      "value": 220,
+      "value": 200,
       "unit": "degC",
       "tolerance": 10
      }
@@ -335,7 +335,7 @@
      "all": [
       {
        "sensor": "cw.sense.oven_temp",
-       "gte": 210
+       "gte": 190
       }
      ],
      "minTime": "PT8M",
@@ -345,9 +345,9 @@
     "hazards": [
      "hz_oven"
     ],
-    "attention": "none",
+    "attention": "monitor",
     "notes": {
-     "en": "Preheat the oven to 220 °C with the oiled tray inside."
+     "en": "Preheat the oven to 200 °C with the empty tray inside; brush the hot tray with the oil only when loading the kofta (olive oil smokes near 200 °C)."
     }
    },
    {
@@ -364,12 +364,12 @@
     ],
     "params": {
      "heat": "high",
-     "tempC": 220,
+     "tempC": 200,
      "ovenMode": "conventional",
      "rack": "middle",
      "target": {
       "sensor": "cw.sense.oven_temp",
-      "value": 220,
+      "value": 200,
       "unit": "degC",
       "tolerance": 10
      }
@@ -559,7 +559,7 @@
     "n4": "Mix the beef with the onion, parsley, garlic and spices until even. Wash everything that touched raw meat.",
     "n5": "Shape into 12 fingers of about 70 g each.",
     "n6": "Chill for 20 minutes so they hold their shape (no more than 2 hours).",
-    "n7": "Preheat the oven to 220 °C with the oiled tray inside.",
+    "n7": "Preheat the oven to 200 °C with the empty tray inside; brush the tray with the oil just before loading.",
     "n8": "Bake on the middle rack until the thickest piece reads 71 °C at the centre (14 to 22 minutes).",
     "n9": "Rest 3 minutes, covered.",
     "n10": "Serve hot with rice, salad and tahini."
@@ -575,7 +575,7 @@
     "n4": "اخلطي اللحم مع البصل والبقدونس والثوم والبهارات حتى يتجانس. اغسلي كل ما لمس اللحم النيء.",
     "n5": "شكّلي 12 أصبعًا بوزن 70 جم تقريبًا.",
     "n6": "ضعيها في الثلاجة 20 دقيقة لتثبت (لا تتجاوز ساعتين).",
-    "n7": "سخّني الفرن إلى 220 درجة مع الصاج المدهون بداخله.",
+    "n7": "سخّني الفرن إلى 200 درجة والصينية فارغة بداخله؛ وادهني الصينية بالزيت قبل الرص مباشرة.",
     "n8": "اخبزيها على الرف الأوسط حتى يصل مركز أكبر قطعة إلى 71 درجة (14 إلى 22 دقيقة).",
     "n9": "اتركيها 3 دقائق مغطاة.",
     "n10": "قدّميها ساخنة مع الأرز والسلطة والطحينة."
@@ -611,5 +611,5 @@
    "en": "Street kofta is grilled over charcoal; this oven version is written so a device can check doneness."
   }
  },
- "hash": "sha256:68b30055eeac55484e208a1ff44ead9b261eac2a1ef1e47b56e4cdea3d74feae"
+ "hash": "sha256:932c364ad759aa2d27905c30c198be08ea9a7ac80ac3b60068895818cbdb4720"
 }

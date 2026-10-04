@@ -424,18 +424,64 @@ def check_signal(signal, min_sources=20, min_delay_days=7, fine_region_min_sourc
 _STORAGE = {'A': 'ambient', 'C': 'chilled', 'F': 'frozen', 'H': 'hot_held'}
 
 
+_DIGITS = {ord(c): str(i) for digits in ('٠١٢٣٤٥٦٧٨٩', '۰۱۲۳۴۵۶۷۸۹') for i, c in enumerate(digits)}
+_REASONS = {'TEMP': 'temp_out_of_range', 'DATE': 'past_use_by', 'PACK': 'packaging_damaged', 'ALLERG': 'allergen_unlabelled',
+            'QTY': 'quantity_mismatch', 'PEST': 'pests_or_contamination', 'SPACE': 'no_capacity', 'TRANSPORT': 'no_transport',
+            'LATE': 'arrived_late', 'OTHER': 'other'}
+# Item words that imply a food class the rule packs care about (RFC-0003 section 8.3). Deliberately small; a gateway
+# may extend it per language. Classes drive storage checks: a chilled-class item offered as ambient is a block finding.
+_SMS_CLASSES = [
+    (('YOGURT', 'YOGHURT', 'MILK', 'CHEESE', 'LABNEH', 'CREAM', 'BUTTER', 'ZABADI'), 'dairy'),
+    (('CHICKEN', 'POULTRY', 'TURKEY'), 'poultry'),
+    (('MEAT', 'BEEF', 'LAMB', 'KOFTA', 'MINCE', 'LIVER'), 'meat'),
+    (('FISH', 'SHRIMP', 'PRAWN', 'TUNA', 'SARDINE'), 'fish'),
+    (('EGG', 'EGGS'), 'egg'),
+    (('COOKED', 'HOT', 'MEALS', 'MEAL', 'TRAYS', 'SOUP', 'STEW', 'KOSHARI'), 'cooked_food'),
+    (('RICE',), 'cooked_rice'),
+]
+_CHILL_CLASSES = ('dairy', 'poultry', 'meat', 'fish', 'egg', 'cooked_food', 'cooked_rice')
+
+def sms_food_classes(item):
+    """Food classes implied by the item words of an OFFER (gateway hint; the donor's storage code is still recorded)."""
+    words = set(item.upper().split())
+    out = [cls for keys, cls in _SMS_CLASSES if words & set(keys)]
+    if 'cooked_rice' in out and 'cooked_food' not in out and not (words & {'COOKED', 'HOT', 'TRAYS', 'MEALS', 'MEAL'}): out.remove('cooked_rice')
+    return out
+
+def sms_storage_findings(cmd):
+    """Gateway-side checks on a parsed OFFER/HAND: missing temperature on a temperature-controlled line, hot food already
+    below 60 °C, and a chilled-class item declared ambient. Returns rule ids (safety.* are block findings)."""
+    f = []
+    st = cmd.get('storage'); t = cmd.get('tempC')
+    if cmd.get('command') == 'OFFER':
+        if st == 'ambient' and any(c in _CHILL_CLASSES for c in cmd.get('foodClasses', [])): f.append('safety.storage_class_mismatch')
+        if st == 'hot_held' and t is not None and t < 60: f.append('safety.hot_hold_min')
+        if st == 'chilled' and t is not None and t > 5: f.append('safety.chilled_max')
+        if st == 'frozen' and t is not None and t > -18: f.append('safety.frozen_max')
+    if cmd.get('command') == 'HAND' and st in ('chilled', 'frozen', 'hot_held'):
+        if t is None: f.append('safety.temp_not_recorded')
+        elif st == 'chilled' and t > 5: f.append('safety.chilled_max')
+        elif st == 'hot_held' and t < 60: f.append('safety.hot_hold_min')
+        elif st == 'frozen' and t > -18: f.append('safety.frozen_max')
+    return f
+
 def parse_sms(text, today=None):
     """Parse one SMS into a structured command. Returns {'ok': True, 'command': ..., ...} or {'ok': False, 'error': ...}.
 
     OFFER <kg>KG <item words> <A|C|F|H> [T<temp>C] [UB<ddmm>|BB<ddmm>]
     FARM  <kg>KG <item words> <A|C|F|H> [BB<ddmm>]          (an OFFER with origin farm)
     CLAIM <offer> ALL | <kg>
-    HAND  <offer> <kg accepted> [T<temp>] | <offer> 0 REJ <kg> <REASON> [T<temp>]
+    HAND  <offer> <kg accepted> [REJ <kg rejected> <REASON>] [T<temp>]   (REJ with 0 accepted = all rejected)
     DIST  <meals> MEALS <people> PEOPLE <kg>KG
     MENU  <distribution> KCAL<n> SODIUM<mg> FV<g>
     HELP · CANCEL <id>
+
+    Arabic-Indic (٠-٩) and Persian (۰-۹) digits are accepted everywhere a digit is. FARM and OFFER
+    accept HV<ddmm> (harvested on). Reason codes: TEMP, DATE, PACK, ALLERG, QTY, PEST, SPACE,
+    TRANSPORT, LATE, OTHER (RFC-0003 section 8.3); unknown codes become 'other'.
     """
     if not isinstance(text, str) or not text.strip(): return {'ok': False, 'error': 'empty'}
+    text = text.translate(_DIGITS)
     toks = text.strip().upper().split()
     cmd = toks[0]
     def kg(tok):
@@ -445,10 +491,11 @@ def parse_sms(text, today=None):
         m = _re.fullmatch(r'T(-?\d+(?:\.\d+)?)C?', tok) or _re.fullmatch(r'(-?\d+(?:\.\d+)?)C', tok)
         return float(m.group(1)) if m else None
     def datemark(tok):
-        m = _re.fullmatch(r'(UB|BB)(\d{2})(\d{2})', tok)
+        m = _re.fullmatch(r'(UB|BB|HV)(\d{2})(\d{2})', tok)
         if not m: return None
         day, month = int(m.group(2)), int(m.group(3))
         if not (1 <= day <= 31 and 1 <= month <= 12): return 'bad_date'
+        if m.group(1) == 'HV': return {'harvested': f'{day:02d}-{month:02d}'}
         return {'kind': 'use_by' if m.group(1) == 'UB' else 'best_before', 'dayMonth': f'{day:02d}-{month:02d}'}
     if cmd == 'HELP': return {'ok': True, 'command': 'HELP'}
     if cmd == 'CANCEL':
@@ -457,18 +504,22 @@ def parse_sms(text, today=None):
     if cmd in ('OFFER', 'FARM'):
         if len(toks) < 4 or kg(toks[1]) is None: return {'ok': False, 'error': 'usage'}
         rest = toks[2:]
-        storage = None; t = None; dm = None; words = []
+        storage = None; t = None; dm = None; hv = None; words = []
         for tok in rest:
             if tok in _STORAGE and storage is None: storage = _STORAGE[tok]; continue
             if temp(tok) is not None and t is None: t = temp(tok); continue
             d = datemark(tok)
             if d == 'bad_date': return {'ok': False, 'error': 'bad_date'}
+            if d and 'harvested' in d: hv = d['harvested']; continue
             if d: dm = d; continue
             words.append(tok)
         if storage is None or not words: return {'ok': False, 'error': 'usage'}
         out = {'ok': True, 'command': 'OFFER', 'kg': kg(toks[1]), 'item': ' '.join(words).lower(), 'storage': storage, 'origin': 'farm' if cmd == 'FARM' else None}
         if t is not None: out['tempC'] = t
         if dm: out['dateMark'] = dm
+        if hv: out['harvested'] = hv
+        classes = sms_food_classes(out['item'])
+        if classes: out['foodClasses'] = classes
         if out['origin'] is None: out.pop('origin')
         return out
     if cmd == 'CLAIM':
@@ -480,14 +531,13 @@ def parse_sms(text, today=None):
     if cmd == 'HAND':
         if len(toks) < 3: return {'ok': False, 'error': 'usage'}
         out = {'ok': True, 'command': 'HAND', 'offer': toks[1]}
-        if len(toks) >= 5 and toks[2] == '0' and toks[3] == 'REJ':
-            k = float(toks[4]) if _re.fullmatch(r'\d+(?:\.\d+)?', toks[4]) else None
-            if k is None or len(toks) < 6: return {'ok': False, 'error': 'usage'}
-            out.update({'kgAccepted': 0.0, 'kgRejected': k, 'reason': toks[5]})
-            rest = toks[6:]
-        else:
-            if not _re.fullmatch(r'\d+(?:\.\d+)?', toks[2]): return {'ok': False, 'error': 'usage'}
-            out['kgAccepted'] = float(toks[2]); rest = toks[3:]
+        if not _re.fullmatch(r'\d+(?:\.\d+)?', toks[2]): return {'ok': False, 'error': 'usage'}
+        out['kgAccepted'] = float(toks[2]); rest = toks[3:]
+        if rest and rest[0] == 'REJ':
+            k = float(rest[1]) if len(rest) >= 2 and _re.fullmatch(r'\d+(?:\.\d+)?', rest[1]) else None
+            if k is None or len(rest) < 3: return {'ok': False, 'error': 'usage'}
+            out.update({'kgRejected': k, 'reason': _REASONS.get(rest[2], 'other'), 'reasonCode': rest[2]})
+            rest = rest[3:]
         for tok in rest:
             if temp(tok) is not None: out['tempC'] = temp(tok)
         return out

@@ -18,7 +18,10 @@
    "dateMark": {
     "kind": "use_by",
     "dayMonth": "05-11"
-   }
+   },
+   "foodClasses": [
+    "dairy"
+   ]
   }
  },
  {
@@ -40,7 +43,10 @@
    "dateMark": {
     "kind": "use_by",
     "dayMonth": "05-11"
-   }
+   },
+   "foodClasses": [
+    "dairy"
+   ]
   }
  },
  {
@@ -80,7 +86,11 @@
    "kg": 18.0,
    "item": "cooked rice trays",
    "storage": "hot_held",
-   "tempC": 66.0
+   "tempC": 66.0,
+   "foodClasses": [
+    "cooked_food",
+    "cooked_rice"
+   ]
   }
  },
  {
@@ -163,7 +173,8 @@
    "offer": "A7K",
    "kgAccepted": 0.0,
    "kgRejected": 18.0,
-   "reason": "TEMP",
+   "reason": "temp_out_of_range",
+   "reasonCode": "TEMP",
    "tempC": 52.0
   }
  },
@@ -238,6 +249,98 @@
   "kind": "sms_parse",
   "profile": "humanitarian",
   "rfc": "0003",
+  "description": "Parse 'HAND 012 74 REJ 6 PACK T4.4'.",
+  "input": {
+   "text": "HAND 012 74 REJ 6 PACK T4.4"
+  },
+  "expected": {
+   "ok": true,
+   "command": "HAND",
+   "offer": "012",
+   "kgAccepted": 74.0,
+   "kgRejected": 6.0,
+   "reason": "packaging_damaged",
+   "reasonCode": "PACK",
+   "tempC": 4.4
+  }
+ },
+ {
+  "id": "sms-14",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'HAND A7K 36 REJ 2 BADWORD'.",
+  "input": {
+   "text": "HAND A7K 36 REJ 2 BADWORD"
+  },
+  "expected": {
+   "ok": true,
+   "command": "HAND",
+   "offer": "A7K",
+   "kgAccepted": 36.0,
+   "kgRejected": 2.0,
+   "reason": "other",
+   "reasonCode": "BADWORD"
+  }
+ },
+ {
+  "id": "sms-15",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'FARM ١٢٠KG TOMATO A HV0411'.",
+  "input": {
+   "text": "FARM ١٢٠KG TOMATO A HV0411"
+  },
+  "expected": {
+   "ok": true,
+   "command": "OFFER",
+   "kg": 120.0,
+   "item": "tomato",
+   "storage": "ambient",
+   "origin": "farm",
+   "harvested": "04-11"
+  }
+ },
+ {
+  "id": "sms-16",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'OFFER 36KG YOGURT A'.",
+  "input": {
+   "text": "OFFER 36KG YOGURT A"
+  },
+  "expected": {
+   "ok": true,
+   "command": "OFFER",
+   "kg": 36.0,
+   "item": "yogurt",
+   "storage": "ambient",
+   "foodClasses": [
+    "dairy"
+   ]
+  }
+ },
+ {
+  "id": "sms-17",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'HAND A7K 36 REJ'.",
+  "input": {
+   "text": "HAND A7K 36 REJ"
+  },
+  "expected": {
+   "ok": false,
+   "error": "usage"
+  }
+ },
+ {
+  "id": "sms-18",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
   "description": "Parse 'OFFER YOGURT C'.",
   "input": {
    "text": "OFFER YOGURT C"
@@ -248,7 +351,7 @@
   }
  },
  {
-  "id": "sms-14",
+  "id": "sms-19",
   "kind": "sms_parse",
   "profile": "humanitarian",
   "rfc": "0003",
@@ -262,7 +365,7 @@
   }
  },
  {
-  "id": "sms-15",
+  "id": "sms-20",
   "kind": "sms_parse",
   "profile": "humanitarian",
   "rfc": "0003",
@@ -276,7 +379,7 @@
   }
  },
  {
-  "id": "sms-16",
+  "id": "sms-21",
   "kind": "sms_parse",
   "profile": "humanitarian",
   "rfc": "0003",
@@ -290,7 +393,7 @@
   }
  },
  {
-  "id": "sms-17",
+  "id": "sms-22",
   "kind": "sms_parse",
   "profile": "humanitarian",
   "rfc": "0003",
@@ -304,7 +407,7 @@
   }
  },
  {
-  "id": "sms-18",
+  "id": "sms-23",
   "kind": "sms_parse",
   "profile": "humanitarian",
   "rfc": "0003",

@@ -99,7 +99,15 @@ and AI change: a better planner produces a better R4 from the same recipe.
   Recipe **patches** (from playbooks or feedback) are proposed as diffs and promoted only
   after review and evidence.
 
-## 6. Why this stays future-proof
+## 6. Language of the step text
+
+Step sentences are written for a person first and parsed by a machine second. The Arabic step
+text in the example recipes uses the feminine imperative (قطّعي، سخّني), which is the common
+Egyptian cookbook convention; it is a deliberate choice, not an oversight, and a publisher may
+use the gender-neutral passive (تُقطَّع البصلة) instead. The `op`, `params` and `until` fields
+carry the meaning; the sentence is for the cook.
+
+## 7. Why this stays future-proof
 
 - Recipes describe **food outcomes and constraints, not motions**. New robots and new AI
   produce better R4 plans from the same R3.

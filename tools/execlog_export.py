@@ -3,7 +3,7 @@
     python tools/execlog_export.py lerobot RECIPE.json LOG.json OUT_DIR [--lang en]
     python tools/execlog_export.py otel    RECIPE.json LOG.json OUT.json
 
-lerobot  Writes the Cookwala side of a LeRobotDataset (v3) episode:
+lerobot  Writes the Cookwala side of a LeRobotDataset episode (v2.1-style tasks.jsonl; v3 parquet is next):
          meta/tasks.jsonl (one natural-language task per recipe step, for task-conditioned
          policies) and meta/cookwala/<log id>.json (recipe ref and hash, per-step segments with
          times, sensor-ladder rung, envelope result and consent). Robot video and actions come

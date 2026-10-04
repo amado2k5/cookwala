@@ -81,13 +81,13 @@
    "ref": "water",
    "ingredientId": "cw.ing.water",
    "qty": {
-    "value": 700,
+    "value": 600,
     "unit": "ml",
     "tolerance": 0.1
    },
    "display": {
-    "en": "700 ml hot water",
-    "ar": "700 مل ماء ساخن"
+    "en": "600 ml hot water (adjust once for your rice)",
+    "ar": "600 مل ماء ساخن (عدّلي مرة واحدة حسب أرزك)"
    }
   },
   {
@@ -554,5 +554,5 @@
    "en": "The ratio of water to rice is set by the rice; adjust once for your brand and keep it."
   }
  },
- "hash": "sha256:9533e7d866091243e9007af99962e8205d0c4eaf5321f2eaee825f82fb78f123"
+ "hash": "sha256:d9c6e818f6b1bfda38f28a632d376fa80cd90ca2f51d94da0c81355848413242"
 }

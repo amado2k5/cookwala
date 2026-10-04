@@ -668,6 +668,11 @@
        "$ref": "#/$defs/Count"
       },
       "elderly": {
+       "$ref": "#/$defs/Count",
+       "deprecated": true,
+       "description": "Deprecated in 0.2; write older_adults. Kept so 0.1 documents still validate."
+      },
+      "older_adults": {
        "$ref": "#/$defs/Count"
       },
       "female": {

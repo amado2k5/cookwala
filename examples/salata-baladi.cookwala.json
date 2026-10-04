@@ -203,10 +203,23 @@
     "inputs": [
      "tomato",
      "cucumber",
-     "pepper",
-     "parsley"
+     "pepper"
     ],
     "output": "veg_washed",
+    "equipment": [
+     "colander"
+    ],
+    "params": {
+     "repeats": 2
+    }
+   },
+   {
+    "id": "n8",
+    "op": "cw.op.wash",
+    "inputs": [
+     "parsley"
+    ],
+    "output": "parsley_washed",
     "equipment": [
      "colander"
     ],
@@ -240,8 +253,26 @@
      "hz_knife"
     ],
     "notes": {
-     "en": "Tomato, cucumber and pepper to 8 mm dice; parsley finely chopped."
+     "en": "Tomato, cucumber and pepper to 8 mm dice."
     }
+   },
+   {
+    "id": "n9",
+    "op": "cw.op.cut",
+    "inputs": [
+     "parsley_washed"
+    ],
+    "output": "parsley_minced",
+    "equipment": [
+     "knife",
+     "board"
+    ],
+    "params": {
+     "shape": "mince"
+    },
+    "hazards": [
+     "hz_knife"
+    ]
    },
    {
     "id": "n3",
@@ -289,6 +320,7 @@
     "inputs": [
      "veg_diced",
      "onion_fine",
+     "parsley_minced",
      "dressing"
     ],
     "output": "salad",
@@ -414,12 +446,14 @@
    "intro": "The fresh chopped salad on every Egyptian table: tomato, cucumber, onion and parsley with lemon and olive oil. No heat, so a robot arm with a camera can make it on its own.",
    "steps": {
     "n1": "Wash the vegetables and the parsley well.",
-    "n2": "Dice the tomato, cucumber and pepper small; chop the parsley finely.",
+    "n2": "Dice the tomato, cucumber and pepper small.",
     "n3": "Chop the onion very fine.",
     "n4": "Whisk the lemon juice, olive oil, salt and cumin.",
     "n5": "Toss everything together gently.",
     "n6": "Chill for a few minutes if there is time.",
-    "n7": "Serve within half an hour, before the tomato weeps."
+    "n7": "Serve within half an hour, before the tomato weeps.",
+    "n8": "Wash the parsley.",
+    "n9": "Chop the parsley finely."
    }
   },
   "ar": {
@@ -427,12 +461,14 @@
    "intro": "السلطة الطازجة على كل مائدة مصرية: طماطم وخيار وبصل وبقدونس بالليمون وزيت الزيتون. بلا نار، فيستطيع ذراع آلي بكاميرا إعدادها وحده.",
    "steps": {
     "n1": "اغسلي الخضار والبقدونس جيدًا.",
-    "n2": "قطّعي الطماطم والخيار والفلفل مكعبات صغيرة، وافرمي البقدونس ناعمًا.",
+    "n2": "قطّعي الطماطم والخيار والفلفل مكعبات صغيرة.",
     "n3": "افرمي البصل ناعمًا جدًا.",
     "n4": "اخفقي عصير الليمون وزيت الزيتون والملح والكمون.",
     "n5": "اخلطي كل شيء بلطف.",
     "n6": "ضعيها في الثلاجة بضع دقائق إن توفر الوقت.",
-    "n7": "قدّميها خلال نصف ساعة قبل أن تُخرج الطماطم ماءها."
+    "n7": "قدّميها خلال نصف ساعة قبل أن تُخرج الطماطم ماءها.",
+    "n8": "اغسلي البقدونس.",
+    "n9": "افرمي البقدونس ناعمًا."
    }
   }
  },
@@ -466,5 +502,5 @@
    "en": "Chopped small, dressed just before eating."
   }
  },
- "hash": "sha256:eb9304feb1aaae5ae5b87a25185f2e44ab1c42df9677f426c500d99ba8d723ba"
+ "hash": "sha256:e66abffe5df3dcf83ec7aae24f68988379e59bea58ba4bf9d3c374f5e1b59884"
 }
