@@ -1,0 +1,103 @@
+{
+ "profile": "0.2.0",
+ "kind": "ImpactSummary",
+ "id": "impact-school-meals-example-2026-11-01-2026-11-30",
+ "org": "did:web:school-meals.example",
+ "period": {
+  "from": "2026-11-01",
+  "to": "2026-11-30"
+ },
+ "measures": {
+  "kgRescued": {
+   "value": 40,
+   "unit": "kg",
+   "method": "measured",
+   "source": "sum of Handover.lines.kgAccepted",
+   "n": 1
+  },
+  "kgRejected": {
+   "value": 5,
+   "unit": "kg",
+   "method": "measured",
+   "source": "sum of Handover.lines.kgRejected",
+   "n": 1
+  },
+  "mealsServed": {
+   "value": 520,
+   "unit": "meals",
+   "method": "measured",
+   "source": "sum of Distribution.meals",
+   "n": 1
+  },
+  "peopleReached": {
+   "value": 520,
+   "unit": "people",
+   "method": "measured",
+   "source": "sum of Distribution.people.total; <10 suppressed",
+   "n": 1
+  },
+  "nutritionPassRate": {
+   "value": 0.0,
+   "unit": "ratio",
+   "method": "measured",
+   "source": "distributions with a menu and no nutrition findings / distributions with a menu",
+   "n": 1
+  },
+  "costPerMeal": {
+   "value": 5.15,
+   "unit": "EGP",
+   "method": "measured",
+   "source": "sum of Distribution.cost / sum of meals, where both exist",
+   "n": 1
+  },
+  "timeToClaimMinutesMedian": {
+   "value": 11.0,
+   "unit": "min",
+   "method": "measured",
+   "source": "median of Claim.claimedAt - Offer.createdAt",
+   "n": 1
+  },
+  "claimRate": {
+   "value": 1.0,
+   "unit": "ratio",
+   "method": "measured",
+   "source": "offers with a claim / offers",
+   "n": 1
+  },
+  "safetyBlockFindings": {
+   "value": 1,
+   "unit": "findings",
+   "method": "measured",
+   "source": "safety.* and care.* findings on handovers",
+   "n": 1
+  },
+  "safetyIncidents": {
+   "value": 0,
+   "unit": "incidents",
+   "method": "measured",
+   "source": "sum of Distribution.safetyIncidents",
+   "n": 1
+  },
+  "volunteerMinutesPer100Kg": {
+   "value": 0.0,
+   "unit": "min",
+   "method": "measured",
+   "source": "volunteerMinutes / (kgUsed / 100)",
+   "n": 1
+  }
+ },
+ "documents": {
+  "offers": 1,
+  "claims": 1,
+  "handovers": 1,
+  "distributions": 1
+ },
+ "whatWentWrong": [
+  "5 kg rejected at handover"
+ ],
+ "unknowns": [
+  "Cost excludes volunteer time.",
+  "Nutrition pass rate covers only distributions that recorded a menu."
+ ],
+ "rulePack": "who-codex-basic@0.1.0, care-vulnerable-groups@0.1.0, school-meals-basic@0.1.0, sodium-reduction@0.1.0"
+}

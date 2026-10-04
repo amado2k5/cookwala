@@ -1,0 +1,320 @@
+[
+ {
+  "id": "sms-0",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'OFFER 36KG YOGURT C 4C UB0511'.",
+  "input": {
+   "text": "OFFER 36KG YOGURT C 4C UB0511"
+  },
+  "expected": {
+   "ok": true,
+   "command": "OFFER",
+   "kg": 36.0,
+   "item": "yogurt",
+   "storage": "chilled",
+   "tempC": 4.0,
+   "dateMark": {
+    "kind": "use_by",
+    "dayMonth": "05-11"
+   }
+  }
+ },
+ {
+  "id": "sms-1",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'OFFER 36KG YOGURT CUPS C T4.6C UB0511'.",
+  "input": {
+   "text": "OFFER 36KG YOGURT CUPS C T4.6C UB0511"
+  },
+  "expected": {
+   "ok": true,
+   "command": "OFFER",
+   "kg": 36.0,
+   "item": "yogurt cups",
+   "storage": "chilled",
+   "tempC": 4.6,
+   "dateMark": {
+    "kind": "use_by",
+    "dayMonth": "05-11"
+   }
+  }
+ },
+ {
+  "id": "sms-2",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'FARM 120KG TOMATO A BB0411'.",
+  "input": {
+   "text": "FARM 120KG TOMATO A BB0411"
+  },
+  "expected": {
+   "ok": true,
+   "command": "OFFER",
+   "kg": 120.0,
+   "item": "tomato",
+   "storage": "ambient",
+   "origin": "farm",
+   "dateMark": {
+    "kind": "best_before",
+    "dayMonth": "04-11"
+   }
+  }
+ },
+ {
+  "id": "sms-3",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'offer 18kg cooked rice trays h t66c'.",
+  "input": {
+   "text": "offer 18kg cooked rice trays h t66c"
+  },
+  "expected": {
+   "ok": true,
+   "command": "OFFER",
+   "kg": 18.0,
+   "item": "cooked rice trays",
+   "storage": "hot_held",
+   "tempC": 66.0
+  }
+ },
+ {
+  "id": "sms-4",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'CLAIM A7K ALL'.",
+  "input": {
+   "text": "CLAIM A7K ALL"
+  },
+  "expected": {
+   "ok": true,
+   "command": "CLAIM",
+   "offer": "A7K",
+   "all": true
+  }
+ },
+ {
+  "id": "sms-5",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'CLAIM A7K 20'.",
+  "input": {
+   "text": "CLAIM A7K 20"
+  },
+  "expected": {
+   "ok": true,
+   "command": "CLAIM",
+   "offer": "A7K",
+   "kg": 20.0
+  }
+ },
+ {
+  "id": "sms-6",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'CLAIM A7K 20KG'.",
+  "input": {
+   "text": "CLAIM A7K 20KG"
+  },
+  "expected": {
+   "ok": true,
+   "command": "CLAIM",
+   "offer": "A7K",
+   "kg": 20.0
+  }
+ },
+ {
+  "id": "sms-7",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'HAND A7K 36 T4.6'.",
+  "input": {
+   "text": "HAND A7K 36 T4.6"
+  },
+  "expected": {
+   "ok": true,
+   "command": "HAND",
+   "offer": "A7K",
+   "kgAccepted": 36.0,
+   "tempC": 4.6
+  }
+ },
+ {
+  "id": "sms-8",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'HAND A7K 0 REJ 18 TEMP T52'.",
+  "input": {
+   "text": "HAND A7K 0 REJ 18 TEMP T52"
+  },
+  "expected": {
+   "ok": true,
+   "command": "HAND",
+   "offer": "A7K",
+   "kgAccepted": 0.0,
+   "kgRejected": 18.0,
+   "reason": "TEMP",
+   "tempC": 52.0
+  }
+ },
+ {
+  "id": "sms-9",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'DIST 410 MEALS 410 PEOPLE 96KG'.",
+  "input": {
+   "text": "DIST 410 MEALS 410 PEOPLE 96KG"
+  },
+  "expected": {
+   "ok": true,
+   "command": "DIST",
+   "meals": 410,
+   "people": 410,
+   "kg": 96.0
+  }
+ },
+ {
+  "id": "sms-10",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'MENU D12 KCAL650 SODIUM540 FV95'.",
+  "input": {
+   "text": "MENU D12 KCAL650 SODIUM540 FV95"
+  },
+  "expected": {
+   "ok": true,
+   "command": "MENU",
+   "distribution": "D12",
+   "perMeal": {
+    "energyKcal": 650.0,
+    "sodiumMg": 540.0,
+    "fruitVegG": 95.0
+   }
+  }
+ },
+ {
+  "id": "sms-11",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'HELP'.",
+  "input": {
+   "text": "HELP"
+  },
+  "expected": {
+   "ok": true,
+   "command": "HELP"
+  }
+ },
+ {
+  "id": "sms-12",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'CANCEL A7K'.",
+  "input": {
+   "text": "CANCEL A7K"
+  },
+  "expected": {
+   "ok": true,
+   "command": "CANCEL",
+   "id": "A7K"
+  }
+ },
+ {
+  "id": "sms-13",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'OFFER YOGURT C'.",
+  "input": {
+   "text": "OFFER YOGURT C"
+  },
+  "expected": {
+   "ok": false,
+   "error": "usage"
+  }
+ },
+ {
+  "id": "sms-14",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'OFFER 36KG YOGURT'.",
+  "input": {
+   "text": "OFFER 36KG YOGURT"
+  },
+  "expected": {
+   "ok": false,
+   "error": "usage"
+  }
+ },
+ {
+  "id": "sms-15",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'OFFER 36KG YOGURT C UB3213'.",
+  "input": {
+   "text": "OFFER 36KG YOGURT C UB3213"
+  },
+  "expected": {
+   "ok": false,
+   "error": "bad_date"
+  }
+ },
+ {
+  "id": "sms-16",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'DIST 410 MEALS'.",
+  "input": {
+   "text": "DIST 410 MEALS"
+  },
+  "expected": {
+   "ok": false,
+   "error": "usage"
+  }
+ },
+ {
+  "id": "sms-17",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse 'hello there'.",
+  "input": {
+   "text": "hello there"
+  },
+  "expected": {
+   "ok": false,
+   "error": "unknown_command"
+  }
+ },
+ {
+  "id": "sms-18",
+  "kind": "sms_parse",
+  "profile": "humanitarian",
+  "rfc": "0003",
+  "description": "Parse ''.",
+  "input": {
+   "text": ""
+  },
+  "expected": {
+   "ok": false,
+   "error": "empty"
+  }
+ }
+]

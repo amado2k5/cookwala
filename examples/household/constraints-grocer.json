@@ -1,0 +1,10 @@
+{
+ "kind": "DerivedConstraint",
+ "type": "delivery_window",
+ "value": {"from": "2026-10-04T17:00:00+03:00", "to": "2026-10-04T18:00:00+03:00", "point": "front_door", "receivedBy": "robot"},
+ "recipientRole": "grocer",
+ "derivedFrom": ["cw.facet.commerce.receiving_rules"],
+ "issuedAt": "2026-10-04T16:10:00+03:00",
+ "validFrom": "2026-10-04T17:00:00+03:00",
+ "validTo": "2026-10-04T18:00:00+03:00"
+}

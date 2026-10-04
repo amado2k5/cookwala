@@ -59,7 +59,9 @@
  "volunteerMinutes": 1260,
  "rulePack": "who-codex-basic@0.1.0",
  "findings": [
-  "nutrition.sodium_per_meal"
+  "nutrition.sodium_per_meal",
+  "sodium.per_meal_block",
+  "sodium.per_meal_warn"
  ],
  "safetyIncidents": 0
 }

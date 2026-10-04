@@ -4,7 +4,11 @@ Validates documents against schemas/humanitarian.schema.json and applies a rule 
 handovers and distributions, printing which rules pass, warn or block. Also exposes the offer
 state machine. Usage:
 
-    python tools/humanitarian_check.py [--pack profiles/humanitarian/who-codex-basic.rulepack.json] FILE...
+    python tools/humanitarian_check.py [--pack PACK.json ...] FILE...
+    python tools/humanitarian_check.py --summary DIR --org did:web:... --from 2026-11-01 --to 2026-11-30 [--out summary.json]
+
+--pack may be given several times (0.2: care-vulnerable-groups, school-meals-basic, sodium-reduction extend who-codex-basic).
+--summary computes an ImpactSummary (RFC-0003) from every Offer, Claim, Handover and Distribution in DIR.
 """
 import argparse
 import datetime as dt
@@ -66,13 +70,27 @@ def temperature_findings(doc, pack):
                     out.append((rule, f"line {line_id}: {chk['dateKind']} {item['dateMark']['date']}"))
             if k == 'allergen' and 'unknown' in item.get('allergens', []):
                 out.append((rule, f'line {line_id}: allergens not declared'))
+            if k == 'food_class' and chk.get('foodClass') in item.get('foodClasses', []) and rule_applies_to_audience(rule, doc.get('audienceGroups')):
+                out.append((rule, f"line {line_id}: contains {chk['foodClass']}"))
     return out
+
+
+def rule_applies_to_audience(rule, audience_groups):
+    """A rule with an audienceGroup applies when the distribution serves that group (or the rule is for all)."""
+    group = rule.get('audienceGroup', 'all')
+    if group == 'all':
+        return True
+    return group in (audience_groups or [])
 
 
 def menu_findings(doc, pack):
     out = []
     menu = doc.get('menu', {})
     for rule in pack['rules']:
+        if not rule_applies_to_audience(rule, doc.get('audienceGroups')):
+            continue
+        if rule['kind'] == 'food_class' and rule['check'].get('foodClass') in menu.get('foodClasses', []):
+            out.append((rule, f"menu contains {rule['check']['foodClass']}")); continue
         scope = {'menu_per_person_day': 'perPersonDay', 'menu_per_meal': 'perMeal'}.get(rule['applies'])
         if not scope or scope not in menu:
             continue
@@ -93,7 +111,7 @@ def menu_findings(doc, pack):
 def check_file(path, pack):
     doc = json.loads(pathlib.Path(path).read_text())
     kind = doc.get('kind')
-    if kind not in ('Offer', 'Claim', 'Handover', 'Distribution', 'RulePack', 'Manifest'):
+    if kind not in ('Offer', 'Claim', 'Handover', 'Distribution', 'RulePack', 'Manifest', 'ImpactSummary'):
         print(f'{path}: unknown kind {kind!r}'); return 1
     errors = list(validator(kind).iter_errors(doc))
     for e in errors[:20]:
@@ -119,13 +137,103 @@ def check_file(path, pack):
     return 1 if errors else 0
 
 
+def merge_packs(paths):
+    """Several packs act as one; later packs extend earlier ones (RFC-0004 'extends')."""
+    rules, ids = [], set()
+    for path in paths:
+        pack = json.loads(pathlib.Path(path).read_text())
+        errs = list(validator('RulePack').iter_errors(pack))
+        for e in errs[:10]:
+            print(f'  {path} {list(e.path)}: {e.message[:160]}')
+        if errs:
+            raise SystemExit(f'{path}: invalid rule pack')
+        if pack.get('status') == 'reviewed' and not any(r.get('outcome', '').startswith('approved') for r in pack.get('reviews', [])):
+            raise SystemExit(f"{path}: status 'reviewed' needs at least one approved review")
+        for r in pack['rules']:
+            if r['id'] not in ids:
+                rules.append(r); ids.add(r['id'])
+    return {'rules': rules}
+
+
+def summarize(folder, org, start, end, pack_ids):
+    """Compute an ImpactSummary from the documents in a folder. Every measure says how it was obtained."""
+    docs = [json.loads(p.read_text()) for p in sorted(pathlib.Path(folder).rglob('*.json'))]
+    by = lambda k: [d for d in docs if d.get('kind') == k]
+    offers, claims, handovers, dists = by('Offer'), by('Claim'), by('Handover'), by('Distribution')
+    in_period = lambda s: start <= s[:10] <= end
+    handovers = [h for h in handovers if in_period(h['at'])]
+    dists = [d for d in dists if in_period(d['date'])]
+    first_leg = [h for h in handovers if h.get('leg', 1) == 1]
+    kg_rescued = sum(l.get('kgAccepted', 0) for h in first_leg for l in h['lines'])
+    kg_rejected = sum(l.get('kgRejected', 0) for h in handovers for l in h['lines'])
+    meals = sum(d.get('meals', 0) for d in dists)
+    people_vals = [d.get('people', {}).get('total') for d in dists]
+    people = None if not people_vals else (sum(v for v in people_vals if isinstance(v, int)) if all(isinstance(v, int) for v in people_vals) else '<10' if all(v == '<10' for v in people_vals) else sum(v for v in people_vals if isinstance(v, int)))
+    with_menu = [d for d in dists if d.get('menu')]
+    nutrition_pass = None if not with_menu else round(sum(1 for d in with_menu if not any(f.startswith('nutrition.') or f.startswith('school.') or f.startswith('sodium.') for f in d.get('findings', []))) / len(with_menu), 3)
+    costs = [(sum(float(v['amount']) for v in d.get('cost', {}).values()), d.get('meals', 0), next(iter(d.get('cost', {}).values()), {}).get('currency')) for d in dists if d.get('cost') and d.get('meals')]
+    cost_per_meal = None if not costs else round(sum(c for c, _, _ in costs) / sum(m for _, m, _ in costs), 2)
+    currency = costs[0][2] if costs else None
+    claim_times = []
+    for c in claims:
+        o = next((o for o in offers if o['id'] == c['offer']), None)
+        if o and o.get('createdAt') and c.get('claimedAt'):
+            claim_times.append((parse_time(c['claimedAt']) - parse_time(o['createdAt'])).total_seconds() / 60)
+    claim_times.sort()
+    ttc = None if not claim_times else claim_times[len(claim_times) // 2]
+    claim_rate = None if not offers else round(len({c['offer'] for c in claims}) / len(offers), 3)
+    blocks = sum(1 for h in handovers for f in h.get('findings', []) if f.startswith('safety.') or f.startswith('care.'))
+    incidents = sum(d.get('safetyIncidents', 0) for d in dists)
+    vol = sum(d.get('volunteerMinutes', 0) for d in dists); kg_used = sum(d.get('kgUsed', 0) for d in dists)
+    M = lambda v, unit, method, source, n=None: {'value': v, **({'unit': unit} if unit else {}), 'method': method if v is not None else 'not_recorded', 'source': source, **({'n': n} if n is not None else {})}
+    return {
+        'profile': '0.2.0', 'kind': 'ImpactSummary', 'id': f'impact-{org.split(":")[-1]}-{start}-{end}'.lower().replace('.', '-'), 'org': org,
+        'period': {'from': start, 'to': end},
+        'measures': {
+            'kgRescued': M(round(kg_rescued, 1), 'kg', 'measured', 'sum of Handover.lines.kgAccepted', len(handovers)),
+            'kgRejected': M(round(kg_rejected, 1), 'kg', 'measured', 'sum of Handover.lines.kgRejected', len(handovers)),
+            'mealsServed': M(meals, 'meals', 'measured', 'sum of Distribution.meals', len(dists)),
+            'peopleReached': M(people, 'people', 'measured', 'sum of Distribution.people.total; <10 suppressed', len(dists)),
+            'nutritionPassRate': M(nutrition_pass, 'ratio', 'measured', 'distributions with a menu and no nutrition findings / distributions with a menu', len(with_menu)),
+            'costPerMeal': M(cost_per_meal, currency, 'measured', 'sum of Distribution.cost / sum of meals, where both exist', len(costs)),
+            'timeToClaimMinutesMedian': M(ttc, 'min', 'measured', 'median of Claim.claimedAt - Offer.createdAt', len(claim_times)),
+            'claimRate': M(claim_rate, 'ratio', 'measured', 'offers with a claim / offers', len(offers)),
+            'safetyBlockFindings': M(blocks, 'findings', 'measured', 'safety.* and care.* findings on handovers', len(handovers)),
+            'safetyIncidents': M(incidents, 'incidents', 'measured', 'sum of Distribution.safetyIncidents', len(dists)),
+            'volunteerMinutesPer100Kg': M(None if not kg_used else round(vol / (kg_used / 100), 1), 'min', 'measured', 'volunteerMinutes / (kgUsed / 100)', len(dists)),
+        },
+        'documents': {'offers': len(offers), 'claims': len(claims), 'handovers': len(handovers), 'distributions': len(dists)},
+        'whatWentWrong': [f'{kg_rejected:.0f} kg rejected at handover' if kg_rejected else 'nothing recorded yet'] + ([f'{incidents} safety incident(s) recorded'] if incidents else []),
+        'unknowns': ['Cost excludes volunteer time.', 'Nutrition pass rate covers only distributions that recorded a menu.'] + (['No claim timestamps: time to claim not computable.'] if ttc is None else []),
+        'rulePack': ', '.join(pack_ids),
+    }
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument('--pack', default=str(DEFAULT_PACK))
-    ap.add_argument('files', nargs='+')
+    ap.add_argument('--pack', action='append', default=None)
+    ap.add_argument('--summary', help='folder of documents to summarize into an ImpactSummary')
+    ap.add_argument('--org', default='did:web:example.org')
+    ap.add_argument('--from', dest='start', default='0000-01-01')
+    ap.add_argument('--to', dest='end', default='9999-12-31')
+    ap.add_argument('--out')
+    ap.add_argument('files', nargs='*')
     args = ap.parse_args()
-    pack = json.loads(pathlib.Path(args.pack).read_text())
-    failures = 0 if not list(validator('RulePack').iter_errors(pack)) else 1
+    pack_paths = args.pack or [str(DEFAULT_PACK)]
+    pack = merge_packs(pack_paths)
+    pack_ids = [f"{json.loads(pathlib.Path(p).read_text())['id']}@{json.loads(pathlib.Path(p).read_text())['version']}" for p in pack_paths]
+    failures = 0
+    if args.summary:
+        summary = summarize(args.summary, args.org, args.start, args.end, pack_ids)
+        errs = list(validator('ImpactSummary').iter_errors(summary))
+        for e in errs[:10]:
+            print(f'  summary {list(e.path)}: {e.message[:160]}')
+        failures += len(errs)
+        text = json.dumps(summary, indent=1, ensure_ascii=False) + '\n'
+        if args.out:
+            pathlib.Path(args.out).write_text(text); print(f'ImpactSummary -> {args.out}')
+        else:
+            print(text)
     failures += sum(check_file(f, pack) for f in args.files)
     assert can_transition('offered', 'claimed') and not can_transition('distributed', 'offered')
     sys.exit(1 if failures else 0)

@@ -1,0 +1,145 @@
+[
+ {
+  "id": "relay-verifies-with-issuer-key",
+  "kind": "signature",
+  "profile": "federation",
+  "rfc": "0006",
+  "description": "A recall republished by a mirror still verifies with the issuer key. Relay provenance travels outside the signed document (for example in the feed entry), so the body is byte-for-byte the issuer's.",
+  "input": {
+   "document": {
+    "core": "0.2.0",
+    "kind": "Recall",
+    "id": "rc-100",
+    "issuedAt": "2026-10-04T10:00:00Z",
+    "issuer": "catalog.example",
+    "targets": [
+     {
+      "ref": "cw:catalog.example:r-9"
+     }
+    ],
+    "severity": "high",
+    "reason": "food_safety",
+    "action": "block",
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "https://catalog.example#k1",
+     "sig": "tRM99KjokuAF-a5B7IOAu2WJM09pFn42dGSxyY2rLhnnQ6nbswPscHqaovoXukjzmuT8F_HUqNaobqY-N8rYCw",
+     "signedAt": "2026-10-04T10:00:00Z"
+    }
+   },
+   "keys": [
+    {
+     "kid": "https://catalog.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "catalog.example",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "https://mirror.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "mirror.example",
+     "validFrom": "2026-01-01T00:00:00Z"
+    }
+   ]
+  },
+  "expected": {
+   "ok": true,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "relay-key-proves-nothing",
+  "kind": "signature",
+  "profile": "federation",
+  "rfc": "0006",
+  "description": "The same recall re-signed by the mirror with its own key is not the issuer's recall: unknown_key when only the issuer is trusted.",
+  "input": {
+   "document": {
+    "core": "0.2.0",
+    "kind": "Recall",
+    "id": "rc-100",
+    "issuedAt": "2026-10-04T10:00:00Z",
+    "issuer": "catalog.example",
+    "targets": [
+     {
+      "ref": "cw:catalog.example:r-9"
+     }
+    ],
+    "severity": "high",
+    "reason": "food_safety",
+    "action": "block",
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "https://mirror.example#k1",
+     "sig": "BwAHqxw8o8wWmepoz_t4q0McKwYjwWwmJPXzpQLB7gwp82q4jTsZV4kokg5P0-rQZcO8WL9WU5D4NK4xZdf2BQ",
+     "signedAt": "2026-10-04T11:00:00Z"
+    }
+   },
+   "keys": [
+    {
+     "kid": "https://catalog.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "catalog.example",
+     "validFrom": "2026-01-01T00:00:00Z"
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "unknown_key"
+  }
+ },
+ {
+  "id": "relay-cannot-alter",
+  "kind": "signature",
+  "profile": "federation",
+  "rfc": "0006",
+  "description": "A mirror that edits the recall (changing block to warn) breaks the issuer signature.",
+  "input": {
+   "document": {
+    "core": "0.2.0",
+    "kind": "Recall",
+    "id": "rc-100",
+    "issuedAt": "2026-10-04T10:00:00Z",
+    "issuer": "catalog.example",
+    "targets": [
+     {
+      "ref": "cw:catalog.example:r-9"
+     }
+    ],
+    "severity": "high",
+    "reason": "food_safety",
+    "action": "warn",
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "https://catalog.example#k1",
+     "sig": "tRM99KjokuAF-a5B7IOAu2WJM09pFn42dGSxyY2rLhnnQ6nbswPscHqaovoXukjzmuT8F_HUqNaobqY-N8rYCw",
+     "signedAt": "2026-10-04T10:00:00Z"
+    }
+   },
+   "keys": [
+    {
+     "kid": "https://catalog.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "catalog.example",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "https://mirror.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "mirror.example",
+     "validFrom": "2026-01-01T00:00:00Z"
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "bad_signature"
+  }
+ }
+]

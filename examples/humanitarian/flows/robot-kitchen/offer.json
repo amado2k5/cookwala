@@ -1,0 +1,35 @@
+{
+ "profile": "0.2.0",
+ "kind": "Offer",
+ "id": "of-2026-11-20-rk-002",
+ "donor": "did:web:farmcoop.example",
+ "createdAt": "2026-11-20T05:30:00+02:00",
+ "items": [
+  {
+   "lineId": "1",
+   "name": "Tomatoes",
+   "ingredientId": "cw.ing.tomato",
+   "kg": 120,
+   "storage": "ambient",
+   "origin": "farm",
+   "harvestedAt": "2026-11-19",
+   "dateMark": {
+    "kind": "best_before",
+    "date": "2026-11-24"
+   },
+   "allergens": []
+  }
+ ],
+ "window": {
+  "from": "2026-11-20T06:00:00+02:00",
+  "to": "2026-11-20T12:00:00+02:00"
+ },
+ "site": {
+  "country": "EG",
+  "admin1": "Beheira",
+  "siteName": "Cooperative packing shed"
+ },
+ "state": "distributed",
+ "version": 5,
+ "note": "SMS: FARM 120KG TOMATO A BB2411"
+}

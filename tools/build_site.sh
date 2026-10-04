@@ -14,7 +14,7 @@ cp vocab/*.json "$OUT"/v1/vocab/
 cp api/* "$OUT"/v1/api/
 cp -R bindings/. "$OUT"/v1/bindings/
 cp examples/*.cookwala.json "$OUT"/v1/recipes/
-cp -R profiles/humanitarian profiles/core profiles/mission "$OUT"/v1/profiles/
+cp -R profiles/humanitarian profiles/core profiles/mission profiles/household "$OUT"/v1/profiles/
 cp -R conformance "$OUT"/v1/conformance
 cp -R sim/index.html sim/app.js sim/style.css sim/engine sim/city sim/country sim/world "$OUT"/sim/
 python3 tools/bundle_schemas.py "$OUT"/v1/schemas/bundle.json

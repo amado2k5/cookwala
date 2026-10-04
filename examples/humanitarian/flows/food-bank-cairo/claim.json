@@ -1,0 +1,27 @@
+{
+ "profile": "0.2.0",
+ "kind": "Claim",
+ "id": "cl-2026-11-09-012",
+ "offer": "of-2026-11-09-012",
+ "claimant": "did:web:foodbank.example",
+ "claimantRole": "food_bank",
+ "claimedAt": "2026-11-09T18:02:00+02:00",
+ "lines": [
+  {
+   "lineId": "1",
+   "kg": 80
+  },
+  {
+   "lineId": "2",
+   "kg": 24
+  },
+  {
+   "lineId": "3",
+   "kg": 30
+  }
+ ],
+ "pickupBy": "2026-11-09T20:30:00+02:00",
+ "transporter": "did:web:foodbank.example",
+ "vehicle": "refrigerated",
+ "note": "SMS: CLAIM 012 ALL"
+}

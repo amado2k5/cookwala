@@ -1,934 +1,1165 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cookwala.ai/v1/schemas/catalog.schema.json",
-  "title": "Cookwala Catalog (index) documents",
-  "x-cookwala-status": "core",
-  "description": "Static documents served by any Cookwala index (the reference index at cookwala.ai or a mirror). Use the $defs by name: Discovery (/.well-known/cookwala.json), Manifest (/v1/manifest.json), IndexEntry (items of /v1/index/{lang}/{page}.json), Changes (/v1/changes/{sinceVersion}.json), Vocabulary (/v1/vocab/{name}.json).",
-  "$defs": {
-    "Discovery": {
-      "type": "object",
-      "required": [
-        "cookwala",
-        "name",
-        "versions",
-        "keys",
-        "endpoints",
-        "terms"
-      ],
-      "properties": {
-        "cookwala": {
-          "$ref": "common.schema.json#/$defs/SpecVersion"
-        },
-        "name": {
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://cookwala.ai/v1/schemas/catalog.schema.json",
+ "title": "Cookwala Catalog (index) documents",
+ "x-cookwala-status": "core",
+ "description": "Static documents served by any Cookwala index (the reference index at cookwala.ai or a mirror). Use the $defs by name: Discovery (/.well-known/cookwala.json), Manifest (/v1/manifest.json), IndexEntry (items of /v1/index/{lang}/{page}.json), Changes (/v1/changes/{sinceVersion}.json), Vocabulary (/v1/vocab/{name}.json).",
+ "$defs": {
+  "Discovery": {
+   "type": "object",
+   "required": [
+    "cookwala",
+    "name",
+    "versions",
+    "keys",
+    "endpoints",
+    "terms"
+   ],
+   "properties": {
+    "cookwala": {
+     "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "name": {
+     "type": "string"
+    },
+    "operator": {
+     "type": "string"
+    },
+    "versions": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "keys": {
+     "type": "array",
+     "items": {
+      "$ref": "common.schema.json#/$defs/KeyRecord"
+     },
+     "description": "Public keys of the catalog, with validity and revocation. Verifiers cache them for offline use."
+    },
+    "endpoints": {
+     "type": "object",
+     "properties": {
+      "manifest": {
+       "type": "string"
+      },
+      "recipe": {
+       "type": "string"
+      },
+      "index": {
+       "type": "string"
+      },
+      "changes": {
+       "type": "string"
+      },
+      "dump": {
+       "type": "string"
+      },
+      "vocab": {
+       "type": "string"
+      },
+      "policies": {
+       "type": "string"
+      },
+      "schemas": {
+       "type": "string"
+      },
+      "rest": {
+       "type": "string"
+      },
+      "graphql": {
+       "type": "string"
+      },
+      "openapi": {
+       "type": "string"
+      },
+      "mcp": {
+       "type": "string"
+      },
+      "a2a": {
+       "type": "string"
+      },
+      "reports": {
+       "type": "string"
+      },
+      "coreApi": {
+       "type": "string",
+       "description": "Core API description (api/core.openapi.yaml)."
+      },
+      "recalls": {
+       "type": "string",
+       "description": "Recall feed (GET, ?since=)."
+      },
+      "incidents": {
+       "type": "string",
+       "description": "Anonymous incident reports (POST)."
+      },
+      "schemaBundle": {
+       "type": "string",
+       "description": "All schemas in one file for offline validation."
+      },
+      "conformance": {
+       "type": "string",
+       "description": "Conformance vectors."
+      },
+      "safetyLimits": {
+       "type": "string",
+       "description": "Default safety-limits pack."
+      }
+     },
+     "unevaluatedProperties": false,
+     "patternProperties": {
+      "^x-": {}
+     }
+    },
+    "mirrors": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "contact": {
+     "type": "string"
+    },
+    "terms": {
+     "type": "string"
+    },
+    "license": {
+     "type": "string"
+    },
+    "roles": {
+     "type": "array",
+     "items": {
+      "enum": [
+       "catalog",
+       "hub",
+       "provider",
+       "registry",
+       "advisor",
+       "marketplace",
+       "mirror"
+      ]
+     }
+    },
+    "visibility": {
+     "enum": [
+      "public",
+      "private",
+      "unlisted"
+     ]
+    },
+    "auth": {
+     "type": "object",
+     "description": "For private catalogs.",
+     "properties": {
+      "schemes": {
+       "type": "array",
+       "items": {
+        "enum": [
+         "none",
+         "oauth2",
+         "api_key",
+         "mtls",
+         "did_auth"
+        ]
+       }
+      },
+      "tokenUrl": {
+       "type": "string"
+      },
+      "docs": {
+       "type": "string"
+      }
+     },
+     "unevaluatedProperties": false,
+     "patternProperties": {
+      "^x-": {}
+     }
+    },
+    "federation": {
+     "type": "object",
+     "properties": {
+      "trusts": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "catalog": {
           "type": "string"
-        },
-        "operator": {
-          "type": "string"
-        },
-        "versions": {
+         },
+         "keys": {
           "type": "array",
           "items": {
-            "type": "string"
+           "type": "string"
           }
+         },
+         "priority": {
+          "type": "integer"
+         }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+         "^x-": {}
+        }
+       }
+      },
+      "registry": {
+       "type": "string"
+      },
+      "feeds": {
+       "type": "object",
+       "unevaluatedProperties": false,
+       "patternProperties": {
+        "^x-": {}
+       },
+       "description": "Signed feeds this node publishes. Readers verify every item against its ISSUER's KeyRecord, never the relaying node's (RFC-0006).",
+       "properties": {
+        "recalls": {
+         "type": "string",
+         "format": "uri"
+        },
+        "incidents": {
+         "type": "string",
+         "format": "uri"
+        },
+        "registry": {
+         "type": "string",
+         "format": "uri"
         },
         "keys": {
-          "type": "array",
-          "items": {
-            "$ref": "common.schema.json#/$defs/KeyRecord"
-          },
-          "description": "Public keys of the catalog, with validity and revocation. Verifiers cache them for offline use."
+         "type": "string",
+         "format": "uri"
+        }
+       }
+      },
+      "peers": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "format": "uri"
+       },
+       "description": "Catalogs or registries this node suggests; a hub may ignore them."
+      },
+      "relays": {
+       "type": "boolean",
+       "description": "True if this node republishes other issuers' signed items unchanged, with x-relay provenance."
+      }
+     },
+     "unevaluatedProperties": false,
+     "patternProperties": {
+      "^x-": {}
+     }
+    },
+    "extensions": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "Extension manifests this server supports/serves."
+    },
+    "provider": {
+     "type": "string",
+     "description": "URL of the operator's market Provider document."
+    }
+   },
+   "unevaluatedProperties": false,
+   "patternProperties": {
+    "^x-": {}
+   }
+  },
+  "Manifest": {
+   "type": "object",
+   "required": [
+    "cookwala",
+    "version",
+    "generatedAt",
+    "counts",
+    "shards"
+   ],
+   "properties": {
+    "cookwala": {
+     "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "version": {
+     "type": "string"
+    },
+    "generatedAt": {
+     "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "counts": {
+     "type": "object",
+     "properties": {
+      "recipes": {
+       "type": "integer"
+      },
+      "byLevel": {
+       "type": "object"
+      },
+      "countries": {
+       "type": "integer"
+      },
+      "languages": {
+       "type": "integer"
+      }
+     },
+     "unevaluatedProperties": false,
+     "patternProperties": {
+      "^x-": {}
+     }
+    },
+    "languages": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "shards": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": [
+       "path",
+       "hash"
+      ],
+      "properties": {
+       "path": {
+        "type": "string"
+       },
+       "hash": {
+        "$ref": "common.schema.json#/$defs/Hash"
+       },
+       "bytes": {
+        "type": "integer"
+       }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+       "^x-": {}
+      }
+     }
+    },
+    "signature": {
+     "$ref": "common.schema.json#/$defs/Signature"
+    }
+   },
+   "unevaluatedProperties": false,
+   "patternProperties": {
+    "^x-": {}
+   }
+  },
+  "IndexEntry": {
+   "type": "object",
+   "required": [
+    "id",
+    "title",
+    "hash",
+    "level"
+   ],
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "revision": {
+     "type": "integer"
+    },
+    "hash": {
+     "$ref": "common.schema.json#/$defs/Hash"
+    },
+    "title": {
+     "type": "string"
+    },
+    "cuisine": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "course": {
+     "type": "string"
+    },
+    "tags": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "level": {
+     "enum": [
+      "V0",
+      "V1",
+      "V2",
+      "V3"
+     ]
+    },
+    "totalTimeS": {
+     "type": "integer"
+    },
+    "activeTimeS": {
+     "type": "integer"
+    },
+    "servings": {
+     "type": "number"
+    },
+    "allergens": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "dietary": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "ops": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "equipment": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "sensors": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "maxTempC": {
+     "type": "number"
+    },
+    "supervision": {
+     "type": "string"
+    },
+    "kcal": {
+     "type": "number"
+    },
+    "thumb": {
+     "type": "string"
+    }
+   },
+   "unevaluatedProperties": false,
+   "patternProperties": {
+    "^x-": {}
+   }
+  },
+  "Changes": {
+   "type": "object",
+   "required": [
+    "from",
+    "to",
+    "upserted",
+    "removed"
+   ],
+   "properties": {
+    "from": {
+     "type": "string"
+    },
+    "to": {
+     "type": "string"
+    },
+    "upserted": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "properties": {
+       "id": {
+        "type": "string"
+       },
+       "hash": {
+        "type": "string"
+       }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+       "^x-": {}
+      }
+     }
+    },
+    "removed": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "properties": {
+       "id": {
+        "type": "string"
+       },
+       "reason": {
+        "enum": [
+         "withdrawn",
+         "safety_recall",
+         "rights",
+         "duplicate"
+        ]
+       }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+       "^x-": {}
+      }
+     }
+    },
+    "recalls": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "properties": {
+       "id": {
+        "type": "string"
+       },
+       "severity": {
+        "type": "string"
+       },
+       "message": {
+        "type": "string"
+       }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+       "^x-": {}
+      }
+     },
+     "description": "Devices must stop executing recalled revisions."
+    }
+   },
+   "unevaluatedProperties": false,
+   "patternProperties": {
+    "^x-": {}
+   }
+  },
+  "Vocabulary": {
+   "type": "object",
+   "required": [
+    "name",
+    "version",
+    "entries"
+   ],
+   "properties": {
+    "name": {
+     "enum": [
+      "ingredients",
+      "ops",
+      "equipment",
+      "sensors",
+      "hazards",
+      "units",
+      "classes",
+      "incidents",
+      "modes",
+      "roles",
+      "facets"
+     ]
+    },
+    "version": {
+     "type": "string"
+    },
+    "entries": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": [
+       "id",
+       "label"
+      ],
+      "properties": {
+       "id": {
+        "$ref": "common.schema.json#/$defs/VocabId"
+       },
+       "label": {
+        "$ref": "common.schema.json#/$defs/LangMap"
+       },
+       "definition": {
+        "type": "string"
+       },
+       "classes": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "paramsSchema": {
+        "type": "object",
+        "description": "ops only: JSON Schema for node.params."
+       },
+       "sensors": {
+        "type": "array",
+        "items": {
+         "type": "string"
         },
-        "endpoints": {
-          "type": "object",
-          "properties": {
-            "manifest": {
-              "type": "string"
-            },
-            "recipe": {
-              "type": "string"
-            },
-            "index": {
-              "type": "string"
-            },
-            "changes": {
-              "type": "string"
-            },
-            "dump": {
-              "type": "string"
-            },
-            "vocab": {
-              "type": "string"
-            },
-            "policies": {
-              "type": "string"
-            },
-            "schemas": {
-              "type": "string"
-            },
-            "rest": {
-              "type": "string"
-            },
-            "graphql": {
-              "type": "string"
-            },
-            "openapi": {
-              "type": "string"
-            },
-            "mcp": {
-              "type": "string"
-            },
-            "a2a": {
-              "type": "string"
-            },
-            "reports": {
-              "type": "string"
-            },
-            "coreApi": {
-              "type": "string",
-              "description": "Core API description (api/core.openapi.yaml)."
-            },
-            "recalls": {
-              "type": "string",
-              "description": "Recall feed (GET, ?since=)."
-            },
-            "incidents": {
-              "type": "string",
-              "description": "Anonymous incident reports (POST)."
-            },
-            "schemaBundle": {
-              "type": "string",
-              "description": "All schemas in one file for offline validation."
-            },
-            "conformance": {
-              "type": "string",
-              "description": "Conformance vectors."
-            },
-            "safetyLimits": {
-              "type": "string",
-              "description": "Default safety-limits pack."
-            }
-          },
-          "unevaluatedProperties": false,
-          "patternProperties": {
-            "^x-": {}
-          }
-        },
-        "mirrors": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "contact": {
+        "description": "ops only: sensors usable in until conditions."
+       },
+       "allergens": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "density": {
+        "type": "number",
+        "description": "ingredients: g/ml for volume conversion."
+       },
+       "links": {
+        "type": "object",
+        "properties": {
+         "wikidata": {
           "type": "string"
-        },
-        "terms": {
+         },
+         "foodon": {
           "type": "string"
-        },
-        "license": {
+         },
+         "usdaFdc": {
           "type": "string"
+         },
+         "ieee1872": {
+          "type": "string"
+         },
+         "matter": {
+          "type": "string"
+         }
         },
-        "roles": {
-          "type": "array",
-          "items": {
-            "enum": [
-              "catalog",
-              "hub",
-              "provider",
-              "registry",
-              "advisor",
-              "marketplace",
-              "mirror"
-            ]
-          }
+        "unevaluatedProperties": false,
+        "patternProperties": {
+         "^x-": {}
+        }
+       },
+       "deprecated": {
+        "type": "boolean"
+       },
+       "replacedBy": {
+        "type": "string"
+       },
+       "envelope": {
+        "type": "object",
+        "unevaluatedProperties": false,
+        "patternProperties": {
+         "^x-": {}
         },
-        "visibility": {
+        "description": "ops only: the physical meaning of the operation. Executors must keep the medium inside tempC (and pressureKPa) unless the recipe sets a narrower target inside it; conformance vectors in testMethod check this.",
+        "properties": {
+         "medium": {
           "enum": [
-            "public",
-            "private",
-            "unlisted"
+           "water",
+           "oil",
+           "air",
+           "steam",
+           "pan_surface",
+           "product",
+           "ambient",
+           "pressure",
+           "radiant",
+           "none"
           ]
-        },
-        "auth": {
-          "type": "object",
-          "description": "For private catalogs.",
-          "properties": {
-            "schemes": {
-              "type": "array",
-              "items": {
-                "enum": [
-                  "none",
-                  "oauth2",
-                  "api_key",
-                  "mtls",
-                  "did_auth"
-                ]
-              }
-            },
-            "tokenUrl": {
-              "type": "string"
-            },
-            "docs": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false,
-          "patternProperties": {
-            "^x-": {}
-          }
-        },
-        "federation": {
-          "type": "object",
-          "properties": {
-            "trusts": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "catalog": {
-                    "type": "string"
-                  },
-                  "keys": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "priority": {
-                    "type": "integer"
-                  }
-                },
-                "unevaluatedProperties": false,
-                "patternProperties": {
-                  "^x-": {}
-                }
-              }
-            },
-            "registry": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false,
-          "patternProperties": {
-            "^x-": {}
-          }
-        },
-        "extensions": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Extension manifests this server supports/serves."
-        },
-        "provider": {
-          "type": "string",
-          "description": "URL of the operator's market Provider document."
-        }
-      },
-      "unevaluatedProperties": false,
-      "patternProperties": {
-        "^x-": {}
-      }
-    },
-    "Manifest": {
-      "type": "object",
-      "required": [
-        "cookwala",
-        "version",
-        "generatedAt",
-        "counts",
-        "shards"
-      ],
-      "properties": {
-        "cookwala": {
-          "$ref": "common.schema.json#/$defs/SpecVersion"
-        },
-        "version": {
-          "type": "string"
-        },
-        "generatedAt": {
-          "$ref": "common.schema.json#/$defs/DateTime"
-        },
-        "counts": {
-          "type": "object",
-          "properties": {
-            "recipes": {
-              "type": "integer"
-            },
-            "byLevel": {
-              "type": "object"
-            },
-            "countries": {
-              "type": "integer"
-            },
-            "languages": {
-              "type": "integer"
-            }
-          },
-          "unevaluatedProperties": false,
-          "patternProperties": {
-            "^x-": {}
-          }
-        },
-        "languages": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "shards": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "path",
-              "hash"
-            ],
-            "properties": {
-              "path": {
-                "type": "string"
-              },
-              "hash": {
-                "$ref": "common.schema.json#/$defs/Hash"
-              },
-              "bytes": {
-                "type": "integer"
-              }
-            },
-            "unevaluatedProperties": false,
-            "patternProperties": {
-              "^x-": {}
-            }
-          }
-        },
-        "signature": {
-          "$ref": "common.schema.json#/$defs/Signature"
-        }
-      },
-      "unevaluatedProperties": false,
-      "patternProperties": {
-        "^x-": {}
-      }
-    },
-    "IndexEntry": {
-      "type": "object",
-      "required": [
-        "id",
-        "title",
-        "hash",
-        "level"
-      ],
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "revision": {
-          "type": "integer"
-        },
-        "hash": {
-          "$ref": "common.schema.json#/$defs/Hash"
-        },
-        "title": {
-          "type": "string"
-        },
-        "cuisine": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "course": {
-          "type": "string"
-        },
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "level": {
-          "enum": [
-            "V0",
-            "V1",
-            "V2",
-            "V3"
-          ]
-        },
-        "totalTimeS": {
-          "type": "integer"
-        },
-        "activeTimeS": {
-          "type": "integer"
-        },
-        "servings": {
-          "type": "number"
-        },
-        "allergens": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "dietary": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "ops": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "equipment": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "sensors": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "maxTempC": {
-          "type": "number"
-        },
-        "supervision": {
-          "type": "string"
-        },
-        "kcal": {
-          "type": "number"
-        },
-        "thumb": {
-          "type": "string"
-        }
-      },
-      "unevaluatedProperties": false,
-      "patternProperties": {
-        "^x-": {}
-      }
-    },
-    "Changes": {
-      "type": "object",
-      "required": [
-        "from",
-        "to",
-        "upserted",
-        "removed"
-      ],
-      "properties": {
-        "from": {
-          "type": "string"
-        },
-        "to": {
-          "type": "string"
-        },
-        "upserted": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "hash": {
-                "type": "string"
-              }
-            },
-            "unevaluatedProperties": false,
-            "patternProperties": {
-              "^x-": {}
-            }
-          }
-        },
-        "removed": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "reason": {
-                "enum": [
-                  "withdrawn",
-                  "safety_recall",
-                  "rights",
-                  "duplicate"
-                ]
-              }
-            },
-            "unevaluatedProperties": false,
-            "patternProperties": {
-              "^x-": {}
-            }
-          }
-        },
-        "recalls": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "severity": {
-                "type": "string"
-              },
-              "message": {
-                "type": "string"
-              }
-            },
-            "unevaluatedProperties": false,
-            "patternProperties": {
-              "^x-": {}
-            }
-          },
-          "description": "Devices must stop executing recalled revisions."
-        }
-      },
-      "unevaluatedProperties": false,
-      "patternProperties": {
-        "^x-": {}
-      }
-    },
-    "Vocabulary": {
-      "type": "object",
-      "required": [
-        "name",
-        "version",
-        "entries"
-      ],
-      "properties": {
-        "name": {
-          "enum": [
-            "ingredients",
-            "ops",
-            "equipment",
-            "sensors",
-            "hazards",
-            "units",
-            "classes",
-            "incidents",
-            "modes",
-            "roles"
-          ]
-        },
-        "version": {
-          "type": "string"
-        },
-        "entries": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "id",
-              "label"
-            ],
-            "properties": {
-              "id": {
-                "$ref": "common.schema.json#/$defs/VocabId"
-              },
-              "label": {
-                "$ref": "common.schema.json#/$defs/LangMap"
-              },
-              "definition": {
-                "type": "string"
-              },
-              "classes": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "paramsSchema": {
-                "type": "object",
-                "description": "ops only: JSON Schema for node.params."
-              },
-              "sensors": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "description": "ops only: sensors usable in until conditions."
-              },
-              "allergens": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "density": {
-                "type": "number",
-                "description": "ingredients: g/ml for volume conversion."
-              },
-              "links": {
-                "type": "object",
-                "properties": {
-                  "wikidata": {
-                    "type": "string"
-                  },
-                  "foodon": {
-                    "type": "string"
-                  },
-                  "usdaFdc": {
-                    "type": "string"
-                  },
-                  "ieee1872": {
-                    "type": "string"
-                  },
-                  "matter": {
-                    "type": "string"
-                  }
-                },
-                "unevaluatedProperties": false,
-                "patternProperties": {
-                  "^x-": {}
-                }
-              },
-              "deprecated": {
-                "type": "boolean"
-              },
-              "replacedBy": {
-                "type": "string"
-              },
-              "envelope": {
-                "type": "object",
-                "unevaluatedProperties": false,
-                "patternProperties": {
-                  "^x-": {}
-                },
-                "description": "ops only: the physical meaning of the operation. Executors must keep the medium inside tempC (and pressureKPa) unless the recipe sets a narrower target inside it; conformance vectors in testMethod check this.",
-                "properties": {
-                  "medium": {
-                    "enum": [
-                      "water",
-                      "oil",
-                      "air",
-                      "steam",
-                      "pan_surface",
-                      "product",
-                      "ambient",
-                      "pressure",
-                      "radiant",
-                      "none"
-                    ]
-                  },
-                  "tempC": {
-                    "type": "object",
-                    "required": [
-                      "min",
-                      "max"
-                    ],
-                    "unevaluatedProperties": false,
-                    "properties": {
-                      "min": {
-                        "type": "number"
-                      },
-                      "max": {
-                        "type": "number"
-                      }
-                    }
-                  },
-                  "pressureKPa": {
-                    "type": "object",
-                    "required": [
-                      "min",
-                      "max"
-                    ],
-                    "unevaluatedProperties": false,
-                    "properties": {
-                      "min": {
-                        "type": "number"
-                      },
-                      "max": {
-                        "type": "number"
-                      }
-                    }
-                  },
-                  "agitation": {
-                    "enum": [
-                      "none",
-                      "occasional",
-                      "frequent",
-                      "continuous"
-                    ]
-                  },
-                  "lid": {
-                    "enum": [
-                      "on",
-                      "off",
-                      "any"
-                    ]
-                  },
-                  "sensorLadder": {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "pattern": "^(cw\\.sense\\.[a-z0-9_]+|x-[a-z0-9-]+\\.[a-z0-9_.-]+|model|time|human)$"
-                    },
-                    "description": "Ways to verify the step, best first. model = a logged estimate; time = nominal time only; human = a person confirms. If the ladder has no entry the executor can satisfy, the step must not run."
-                  },
-                  "attention": {
-                    "enum": [
-                      "none",
-                      "periodic",
-                      "monitor",
-                      "continuous"
-                    ]
-                  },
-                  "unattended": {
-                    "type": "boolean"
-                  },
-                  "hazards": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "note": {
-                    "type": "string"
-                  },
-                  "testMethod": {
-                    "type": "string"
-                  }
-                }
-              },
-              "convert": {
-                "type": "object",
-                "required": [
-                  "to",
-                  "factor"
-                ],
-                "unevaluatedProperties": false,
-                "properties": {
-                  "to": {
-                    "type": "string"
-                  },
-                  "factor": {
-                    "type": "number",
-                    "exclusiveMinimum": 0
-                  }
-                },
-                "description": "units only: exact conversion to a base unit."
-              },
-              "surfaceTempC": {
-                "type": "object",
-                "required": [
-                  "min",
-                  "max"
-                ],
-                "unevaluatedProperties": false,
-                "properties": {
-                  "min": {
-                    "type": "number"
-                  },
-                  "max": {
-                    "type": "number"
-                  }
-                },
-                "description": "heat levels only."
-              }
-            },
-            "unevaluatedProperties": false,
-            "patternProperties": {
-              "^x-": {}
-            }
-          }
-        }
-      },
-      "unevaluatedProperties": false,
-      "patternProperties": {
-        "^x-": {}
-      }
-    },
-    "RegistryEntry": {
-      "type": "object",
-      "required": [
-        "kind",
-        "url"
-      ],
-      "description": "Item in a registry (/v1/registry.json): anyone can list a catalog, recipe collection, extension, flow, provider, knowledge pack, policy or rule pack hosted anywhere. Modelled on the MCP Registry: verified namespaces, pinned versions, integrity hashes and a lifecycle status (docs/REGISTRY.md).",
-      "properties": {
-        "kind": {
-          "enum": [
-            "advisor",
-            "benchmark",
-            "catalog",
-            "device",
-            "extension",
-            "flow",
-            "hub",
-            "kitchen",
-            "knowledge",
-            "policy_pack",
-            "program",
-            "provider",
-            "recipe_collection",
-            "rule_pack",
-            "safety_limits"
-          ]
-        },
-        "id": {
-          "type": "string"
-        },
-        "url": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-z0-9.-]+/[a-z0-9._-]+$",
-          "minLength": 3,
-          "maxLength": 200,
-          "description": "<namespace>/<name>. The namespace is a reverse-DNS domain the publisher proved control of (org.fifi-cooking/egyptian-home) or a code-host account (io.github.amado2k5/recipes)."
-        },
-        "description": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 100,
-          "description": "One clear sentence, 100 characters at most."
-        },
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "verified": {
-          "type": "boolean"
-        },
-        "conformance": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "addedAt": {
-          "type": "string"
-        },
-        "version": {
-          "type": "string",
-          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9A-Za-z.-]+)?$",
-          "description": "An exact version. Ranges (^1.2, ~1.2, >=1, 1.x) are rejected."
-        },
-        "status": {
-          "enum": [
-            "active",
-            "deprecated",
-            "recalled",
-            "deleted"
-          ],
-          "description": "recalled entries also appear in the recall feed; deleted entries stay listed as tombstones so ids are never reused."
-        },
-        "verification": {
+         },
+         "tempC": {
           "type": "object",
           "required": [
-            "method",
-            "verifiedAt"
+           "min",
+           "max"
           ],
           "unevaluatedProperties": false,
           "properties": {
-            "method": {
-              "enum": [
-                "dns_txt",
-                "http_well_known",
-                "github_oidc",
-                "gitlab_oidc",
-                "signature"
-              ]
-            },
-            "verifiedAt": {
-              "$ref": "common.schema.json#/$defs/DateTime"
-            },
-            "by": {
-              "type": "string",
-              "description": "Registry that verified it."
-            }
+           "min": {
+            "type": "number"
+           },
+           "max": {
+            "type": "number"
+           }
           }
-        },
-        "repository": {
+         },
+         "pressureKPa": {
           "type": "object",
+          "required": [
+           "min",
+           "max"
+          ],
           "unevaluatedProperties": false,
           "properties": {
-            "url": {
-              "type": "string",
-              "format": "uri"
-            },
-            "source": {
-              "enum": [
-                "github",
-                "gitlab",
-                "codeberg",
-                "other"
-              ]
-            },
-            "id": {
-              "type": "string",
-              "description": "Stable id from the code host; changes if the repository is deleted and recreated (resurrection attacks)."
-            },
-            "subfolder": {
-              "type": "string"
-            }
+           "min": {
+            "type": "number"
+           },
+           "max": {
+            "type": "number"
+           }
           }
-        },
-        "sha256": {
-          "type": "string",
-          "pattern": "^[a-f0-9]{64}$",
-          "description": "Hash of the published artifact; clients verify before use."
-        },
-        "icons": {
+         },
+         "agitation": {
+          "enum": [
+           "none",
+           "occasional",
+           "frequent",
+           "continuous"
+          ]
+         },
+         "lid": {
+          "enum": [
+           "on",
+           "off",
+           "any"
+          ]
+         },
+         "sensorLadder": {
           "type": "array",
           "items": {
-            "type": "object",
-            "required": [
-              "src"
-            ],
-            "unevaluatedProperties": false,
-            "properties": {
-              "src": {
-                "type": "string",
-                "format": "uri",
-                "pattern": "^https://"
-              },
-              "mimeType": {
-                "enum": [
-                  "image/png",
-                  "image/jpeg",
-                  "image/svg+xml",
-                  "image/webp"
-                ]
-              },
-              "sizes": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "pattern": "^([0-9]+x[0-9]+|any)$"
-                }
-              },
-              "theme": {
-                "enum": [
-                  "light",
-                  "dark"
-                ]
-              }
-            }
+           "type": "string",
+           "pattern": "^(cw\\.sense\\.[a-z0-9_]+|x-[a-z0-9-]+\\.[a-z0-9_.-]+|model|time|human)$"
+          },
+          "description": "Ways to verify the step, best first. model = a logged estimate; time = nominal time only; human = a person confirms. If the ladder has no entry the executor can satisfy, the step must not run."
+         },
+         "attention": {
+          "enum": [
+           "none",
+           "periodic",
+           "monitor",
+           "continuous"
+          ]
+         },
+         "unattended": {
+          "type": "boolean"
+         },
+         "hazards": {
+          "type": "array",
+          "items": {
+           "type": "string"
           }
-        },
-        "publishedAt": {
-          "$ref": "common.schema.json#/$defs/DateTime"
-        },
-        "coreVersion": {
-          "type": "string",
-          "description": "Cookwala Core version this entry targets."
+         },
+         "note": {
+          "type": "string"
+         },
+         "testMethod": {
+          "type": "string"
+         }
         }
+       },
+       "convert": {
+        "type": "object",
+        "required": [
+         "to",
+         "factor"
+        ],
+        "unevaluatedProperties": false,
+        "properties": {
+         "to": {
+          "type": "string"
+         },
+         "factor": {
+          "type": "number",
+          "exclusiveMinimum": 0
+         }
+        },
+        "description": "units only: exact conversion to a base unit."
+       },
+       "surfaceTempC": {
+        "type": "object",
+        "required": [
+         "min",
+         "max"
+        ],
+        "unevaluatedProperties": false,
+        "properties": {
+         "min": {
+          "type": "number"
+         },
+         "max": {
+          "type": "number"
+         }
+        },
+        "description": "heat levels only."
+       },
+       "family": {
+        "type": "string",
+        "pattern": "^[a-z_.]+$",
+        "description": "facets only: facet family (self, mandate, household.people, household.pets, household.culture, household.tastes, household.health, household.behavior, household.economics, space, space.environment, devices, resources, commerce, service, history)."
+       },
+       "privacy": {
+        "enum": [
+         "public",
+         "household",
+         "sensitive",
+         "secret"
+        ],
+        "description": "facets only: default privacy class. Implementations may raise it, never lower it (RFC-0001)."
+       },
+       "travel": {
+        "enum": [
+         "never",
+         "derived",
+         "consented"
+        ],
+        "description": "facets only: whether the raw fact may leave the home: never; only as a derived constraint; or as a selective disclosure after explicit consent."
+       },
+       "derivesTo": {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "pattern": "^[a-z_]+$"
+        },
+        "description": "facets only: DerivedConstraint types this facet may produce (household.schema.json)."
+       },
+       "sources": {
+        "type": "array",
+        "items": {
+         "enum": [
+          "declared",
+          "observed",
+          "reported",
+          "inferred"
+         ]
+        },
+        "description": "facets only: who may assert this fact."
+       },
+       "valueHint": {
+        "type": "string",
+        "maxLength": 200,
+        "description": "facets only: shape of the value in plain words."
+       },
+       "safetyUse": {
+        "enum": [
+         "allowed",
+         "never"
+        ],
+        "description": "facets only: whether a safety decision may rely on this fact. Inferred facts are never allowed."
+       }
       },
       "unevaluatedProperties": false,
       "patternProperties": {
-        "^x-": {}
+       "^x-": {}
       }
+     }
     }
+   },
+   "unevaluatedProperties": false,
+   "patternProperties": {
+    "^x-": {}
+   }
+  },
+  "RegistryEntry": {
+   "type": "object",
+   "required": [
+    "kind",
+    "url"
+   ],
+   "description": "Item in a registry (/v1/registry.json): anyone can list a catalog, recipe collection, extension, flow, provider, knowledge pack, policy or rule pack hosted anywhere. Modelled on the MCP Registry: verified namespaces, pinned versions, integrity hashes and a lifecycle status (docs/REGISTRY.md).",
+   "properties": {
+    "kind": {
+     "enum": [
+      "advisor",
+      "benchmark",
+      "catalog",
+      "device",
+      "extension",
+      "flow",
+      "hub",
+      "kitchen",
+      "knowledge",
+      "policy_pack",
+      "program",
+      "provider",
+      "recipe_collection",
+      "rule_pack",
+      "safety_limits"
+     ]
+    },
+    "id": {
+     "type": "string"
+    },
+    "url": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string",
+     "pattern": "^[a-z0-9.-]+/[a-z0-9._-]+$",
+     "minLength": 3,
+     "maxLength": 200,
+     "description": "<namespace>/<name>. The namespace is a reverse-DNS domain the publisher proved control of (org.fifi-cooking/egyptian-home) or a code-host account (io.github.amado2k5/recipes)."
+    },
+    "description": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 100,
+     "description": "One clear sentence, 100 characters at most."
+    },
+    "tags": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "verified": {
+     "type": "boolean"
+    },
+    "conformance": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "addedAt": {
+     "type": "string"
+    },
+    "version": {
+     "type": "string",
+     "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9A-Za-z.-]+)?$",
+     "description": "An exact version. Ranges (^1.2, ~1.2, >=1, 1.x) are rejected."
+    },
+    "status": {
+     "enum": [
+      "active",
+      "deprecated",
+      "recalled",
+      "deleted"
+     ],
+     "description": "recalled entries also appear in the recall feed; deleted entries stay listed as tombstones so ids are never reused."
+    },
+    "verification": {
+     "type": "object",
+     "required": [
+      "method",
+      "verifiedAt"
+     ],
+     "unevaluatedProperties": false,
+     "properties": {
+      "method": {
+       "enum": [
+        "dns_txt",
+        "http_well_known",
+        "github_oidc",
+        "gitlab_oidc",
+        "signature"
+       ]
+      },
+      "verifiedAt": {
+       "$ref": "common.schema.json#/$defs/DateTime"
+      },
+      "by": {
+       "type": "string",
+       "description": "Registry that verified it."
+      }
+     }
+    },
+    "repository": {
+     "type": "object",
+     "unevaluatedProperties": false,
+     "properties": {
+      "url": {
+       "type": "string",
+       "format": "uri"
+      },
+      "source": {
+       "enum": [
+        "github",
+        "gitlab",
+        "codeberg",
+        "other"
+       ]
+      },
+      "id": {
+       "type": "string",
+       "description": "Stable id from the code host; changes if the repository is deleted and recreated (resurrection attacks)."
+      },
+      "subfolder": {
+       "type": "string"
+      }
+     }
+    },
+    "sha256": {
+     "type": "string",
+     "pattern": "^[a-f0-9]{64}$",
+     "description": "Hash of the published artifact; clients verify before use."
+    },
+    "icons": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": [
+       "src"
+      ],
+      "unevaluatedProperties": false,
+      "properties": {
+       "src": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://"
+       },
+       "mimeType": {
+        "enum": [
+         "image/png",
+         "image/jpeg",
+         "image/svg+xml",
+         "image/webp"
+        ]
+       },
+       "sizes": {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "pattern": "^([0-9]+x[0-9]+|any)$"
+        }
+       },
+       "theme": {
+        "enum": [
+         "light",
+         "dark"
+        ]
+       }
+      }
+     }
+    },
+    "publishedAt": {
+     "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "coreVersion": {
+     "type": "string",
+     "description": "Cookwala Core version this entry targets."
+    }
+   },
+   "unevaluatedProperties": false,
+   "patternProperties": {
+    "^x-": {}
+   }
+  },
+  "DirectoryEntry": {
+   "type": "object",
+   "required": [
+    "kind",
+    "id",
+    "name",
+    "roles",
+    "country",
+    "status",
+    "addedAt"
+   ],
+   "unevaluatedProperties": false,
+   "patternProperties": {
+    "^x-": {}
+   },
+   "description": "An organization that takes part in Cookwala, listed at its own request in a directory (/v1/directory.json). Never a person. Listing means the organization asked to be listed and its namespace was checked; it does not mean endorsement, certification or partnership (RFC-0002).",
+   "properties": {
+    "kind": {
+     "const": "DirectoryEntry"
+    },
+    "id": {
+     "type": "string",
+     "pattern": "^(did:web:[a-z0-9.-]+|org:[a-z0-9-]+\\.[a-z0-9.-]+|gln:[0-9]{13})$"
+    },
+    "name": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 120
+    },
+    "description": {
+     "type": "string",
+     "maxLength": 200
+    },
+    "roles": {
+     "type": "array",
+     "minItems": 1,
+     "uniqueItems": true,
+     "items": {
+      "enum": [
+       "device_maker",
+       "appliance_maker",
+       "agent_builder",
+       "catalog",
+       "registry",
+       "hub_vendor",
+       "food_bank",
+       "community_kitchen",
+       "school_program",
+       "relief_program",
+       "farm_or_cooperative",
+       "grocer_or_retailer",
+       "restaurant_or_food_service",
+       "recipe_publisher",
+       "certifier",
+       "research_lab",
+       "health_body",
+       "government",
+       "insurer",
+       "translator_community",
+       "other"
+      ]
+     }
+    },
+    "country": {
+     "type": "string",
+     "pattern": "^[A-Z]{2}$"
+    },
+    "url": {
+     "type": "string",
+     "format": "uri",
+     "pattern": "^https://"
+    },
+    "contact": {
+     "type": "string",
+     "maxLength": 200,
+     "description": "A role address or page, never a person's name or number."
+    },
+    "conformance": {
+     "type": "array",
+     "items": {
+      "$ref": "common.schema.json#/$defs/Hash"
+     },
+     "description": "Hashes of published ConformanceReport documents (conformance.schema.json)."
+    },
+    "humanitarianLevels": {
+     "type": "array",
+     "uniqueItems": true,
+     "items": {
+      "enum": [
+       "H0",
+       "H1",
+       "H2",
+       "H3"
+      ]
+     }
+    },
+    "verification": {
+     "type": "object",
+     "required": [
+      "method",
+      "verifiedAt",
+      "by"
+     ],
+     "unevaluatedProperties": false,
+     "properties": {
+      "method": {
+       "enum": [
+        "dns_txt",
+        "well_known",
+        "code_host_oidc",
+        "vouched_by_program",
+        "none"
+       ]
+      },
+      "verifiedAt": {
+       "$ref": "common.schema.json#/$defs/DateTime"
+      },
+      "by": {
+       "type": "string",
+       "description": "Registry or program that checked it."
+      }
+     }
+    },
+    "status": {
+     "enum": [
+      "active",
+      "inactive",
+      "deleted"
+     ]
+    },
+    "addedAt": {
+     "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "updatedAt": {
+     "$ref": "common.schema.json#/$defs/DateTime"
+    }
+   }
   }
+ }
 }

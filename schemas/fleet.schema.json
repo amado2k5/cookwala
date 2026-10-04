@@ -1,0 +1,186 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://cookwala.ai/v1/schemas/fleet.schema.json",
+ "title": "Cookwala Kitchens and Production Runs (fleets)",
+ "x-cookwala-status": "experimental",
+ "description": "RFC-0005. A Kitchen is an organization's kitchen (restaurant, community, school, disaster, care home, central production or robot kitchen) with stations and devices. A ProductionRun is many batches of recipes for a serve window, with assignments per step to a device, a person or either, the critical control points to record, and the Core execution logs it produced. A run that serves a program emits a Humanitarian Distribution. Staff appear as counts by role, never names. Fleet dispatch (Open-RMF, vendor fleet managers) is outside this profile.",
+ "$defs": {
+  "Version": {"type": "string", "pattern": "^0\\.1\\.[0-9]+$"},
+  "Id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._:-]{2,95}$"},
+  "OrgId": {"type": "string", "pattern": "^(did:web:[a-z0-9.-]+|gln:[0-9]{13}|org:[a-z0-9-]+\\.[a-z0-9.-]+)$"},
+  "Station": {
+   "type": "object",
+   "required": ["id", "kind"],
+   "unevaluatedProperties": false,
+   "patternProperties": {"^x-": {}},
+   "properties": {
+    "id": {"$ref": "#/$defs/Id"},
+    "kind": {"enum": ["prep", "hob", "oven", "fryer", "grill", "steam", "kettle", "robot_cell", "plating", "packing", "hot_hold", "cooling", "cold_store", "wash"]},
+    "heatSources": {"type": "array", "items": {"enum": ["gas", "electric", "induction", "steam", "charcoal", "solar", "none"]}},
+    "devices": {"type": "array", "items": {"type": "string", "maxLength": 200}, "description": "Capability document references (URL or id) of robots and appliances at this station."},
+    "capacityPerHour": {"type": "integer", "minimum": 0, "description": "Portions per hour this station can process."},
+    "sensors": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/VocabId"}}
+   }
+  },
+  "Kitchen": {
+   "type": "object",
+   "required": ["profile", "kind", "id", "organization", "type", "stations", "capacityMealsPerHour", "rulePacks"],
+   "unevaluatedProperties": false,
+   "patternProperties": {"^x-": {}},
+   "properties": {
+    "profile": {"$ref": "#/$defs/Version"},
+    "kind": {"const": "Kitchen"},
+    "id": {"$ref": "#/$defs/Id"},
+    "organization": {"$ref": "#/$defs/OrgId"},
+    "name": {"type": "string", "maxLength": 120},
+    "type": {"enum": ["restaurant", "community", "school", "disaster", "care_home", "central_production", "robot", "caterer", "food_factory"]},
+    "site": {
+     "type": "object",
+     "required": ["country"],
+     "unevaluatedProperties": false,
+     "properties": {
+      "country": {"type": "string", "pattern": "^[A-Z]{2}$"},
+      "admin1": {"type": "string", "maxLength": 80},
+      "pcode": {"type": "string", "maxLength": 20},
+      "altitudeM": {"type": "number"}
+     }
+    },
+    "stations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/Station"}},
+    "capacityMealsPerHour": {"type": "integer", "minimum": 0},
+    "hotHold": {"type": "object", "unevaluatedProperties": false, "properties": {"units": {"type": "integer", "minimum": 0}, "minTempC": {"type": "number"}}},
+    "cooling": {"type": "object", "unevaluatedProperties": false, "properties": {"blastChiller": {"type": "boolean"}, "iceBath": {"type": "boolean"}, "coldStoreKg": {"type": "number", "minimum": 0}}},
+    "rulePacks": {"type": "array", "items": {"type": "string", "pattern": "^[a-z0-9._-]+@[0-9]+\\.[0-9]+\\.[0-9]+$"}, "description": "Humanitarian rule packs in force, id@version."},
+    "safetyLimits": {"type": "string", "description": "SafetyLimits pack id@version enforced by the kitchen's devices."},
+    "staff": {"type": "array", "items": {"type": "object", "required": ["role", "count"], "unevaluatedProperties": false, "properties": {"role": {"enum": ["head_cook", "cook", "assistant", "volunteer", "robot_technician", "food_safety_lead", "server", "driver"]}, "count": {"type": "integer", "minimum": 0}}}, "description": "Counts by role, never names."},
+    "operatingHours": {"type": "array", "items": {"type": "object", "required": ["days", "from", "to"], "unevaluatedProperties": false, "properties": {"days": {"type": "string", "maxLength": 40}, "from": {"type": "string", "pattern": "^[0-2][0-9]:[0-5][0-9]$"}, "to": {"type": "string", "pattern": "^[0-2][0-9]:[0-5][0-9]$"}}}},
+    "meta": {"$ref": "common.schema.json#/$defs/Meta"}
+   }
+  },
+  "Assignment": {
+   "type": "object",
+   "required": ["recipe", "node", "station", "actor"],
+   "unevaluatedProperties": false,
+   "properties": {
+    "recipe": {"$ref": "common.schema.json#/$defs/GlobalRef"},
+    "node": {"type": "string", "maxLength": 40, "description": "Recipe node id."},
+    "station": {"$ref": "#/$defs/Id"},
+    "actor": {"enum": ["device", "person", "either"]},
+    "device": {"type": "string", "maxLength": 200},
+    "role": {"enum": ["head_cook", "cook", "assistant", "volunteer", "robot_technician", "food_safety_lead", "server"]},
+    "plannedStart": {"$ref": "common.schema.json#/$defs/DateTime"},
+    "plannedEnd": {"$ref": "common.schema.json#/$defs/DateTime"}
+   }
+  },
+  "CcpRecord": {
+   "type": "object",
+   "required": ["id", "kind", "limit", "unit"],
+   "unevaluatedProperties": false,
+   "properties": {
+    "id": {"$ref": "#/$defs/Id"},
+    "kind": {"enum": ["cook_core_temp", "hot_hold_temp", "cooling_stage_1", "cooling_stage_2", "reheat_core_temp", "chilled_storage_temp", "allergen_segregation"]},
+    "recipe": {"$ref": "common.schema.json#/$defs/GlobalRef"},
+    "batch": {"type": "integer", "minimum": 1},
+    "limit": {"type": "number"},
+    "unit": {"enum": ["degC", "min", "h"]},
+    "observed": {"type": "number"},
+    "at": {"$ref": "common.schema.json#/$defs/DateTime"},
+    "method": {"enum": ["probe", "device_log", "logger", "visual", "not_measured"]},
+    "pass": {"type": "boolean"},
+    "action": {"type": "string", "maxLength": 200, "description": "Corrective action when the record fails."}
+   }
+  },
+  "ProductionRun": {
+   "type": "object",
+   "required": ["profile", "kind", "id", "kitchen", "serveWindow", "recipes", "state"],
+   "unevaluatedProperties": false,
+   "patternProperties": {"^x-": {}},
+   "properties": {
+    "profile": {"$ref": "#/$defs/Version"},
+    "kind": {"const": "ProductionRun"},
+    "id": {"$ref": "#/$defs/Id"},
+    "kitchen": {"$ref": "#/$defs/Id"},
+    "program": {"type": "string", "maxLength": 96, "description": "Humanitarian Program or Distribution id when the run serves a program."},
+    "purpose": {"enum": ["service", "school_meals", "community_meals", "disaster_response", "care_home_meals", "event", "donation", "retail"]},
+    "serveWindow": {
+     "type": "object",
+     "required": ["from", "to"],
+     "unevaluatedProperties": false,
+     "properties": {"from": {"$ref": "common.schema.json#/$defs/DateTime"}, "to": {"$ref": "common.schema.json#/$defs/DateTime"}}
+    },
+    "recipes": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "required": ["recipe", "recipeHash", "batches", "servingsPerBatch"],
+      "unevaluatedProperties": false,
+      "properties": {
+       "recipe": {"$ref": "common.schema.json#/$defs/GlobalRef"},
+       "recipeHash": {"$ref": "common.schema.json#/$defs/Hash"},
+       "batches": {"type": "integer", "minimum": 1},
+       "servingsPerBatch": {"type": "number", "exclusiveMinimum": 0},
+       "scale": {"type": "number", "exclusiveMinimum": 0, "description": "Scale factor per batch relative to the recipe yield; must respect yield.scaling."}
+      }
+     }
+    },
+    "dietRules": {"type": "array", "items": {"type": "string", "maxLength": 40}, "description": "Diet rules in force for this run (e.g. halal, vegetarian)."},
+    "allergenBlocks": {"type": "array", "items": {"type": "string", "maxLength": 40}},
+    "assignments": {"type": "array", "items": {"$ref": "#/$defs/Assignment"}},
+    "ccps": {"type": "array", "items": {"$ref": "#/$defs/CcpRecord"}},
+    "executions": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": ["device", "executionId"],
+      "unevaluatedProperties": false,
+      "properties": {
+       "device": {"type": "string", "maxLength": 200},
+       "executionId": {"type": "string", "maxLength": 96},
+       "logHash": {"$ref": "common.schema.json#/$defs/Hash"},
+       "outcome": {"enum": ["served", "partial", "aborted_safe", "refused", "failed"]}
+      }
+     },
+     "description": "Core executions (ExecutionLog) that device steps produced."
+    },
+    "state": {"enum": ["planned", "in_progress", "completed", "aborted"]},
+    "outcome": {
+     "type": "object",
+     "unevaluatedProperties": false,
+     "properties": {
+      "mealsProduced": {"type": "integer", "minimum": 0},
+      "mealsServed": {"type": "integer", "minimum": 0},
+      "kgWaste": {"type": "number", "minimum": 0},
+      "kgRescuedUsed": {"type": "number", "minimum": 0},
+      "ccpFailures": {"type": "integer", "minimum": 0},
+      "safetyIncidents": {"type": "integer", "minimum": 0},
+      "findings": {"type": "array", "items": {"type": "string", "pattern": "^[a-z0-9._-]+$"}},
+      "distribution": {"type": "string", "maxLength": 96, "description": "Humanitarian Distribution id emitted for this run."},
+      "energyKwh": {"type": "number", "minimum": 0},
+      "gasM3": {"type": "number", "minimum": 0},
+      "cost": {"type": "object", "unevaluatedProperties": false, "properties": {"food": {"$ref": "common.schema.json#/$defs/Money"}, "energy": {"$ref": "common.schema.json#/$defs/Money"}, "staff": {"$ref": "common.schema.json#/$defs/Money"}}}
+     }
+    },
+    "note": {"$ref": "common.schema.json#/$defs/UntrustedText"},
+    "meta": {"$ref": "common.schema.json#/$defs/Meta"}
+   }
+  },
+  "StationLease": {
+   "type": "object",
+   "required": ["kind", "id", "kitchen", "station", "holder", "from", "to"],
+   "unevaluatedProperties": false,
+   "patternProperties": {"^x-": {}},
+   "description": "Exclusive use of a station by a device or a role for a time. Two robots cannot hold the same hob.",
+   "properties": {
+    "kind": {"const": "StationLease"},
+    "id": {"$ref": "#/$defs/Id"},
+    "kitchen": {"$ref": "#/$defs/Id"},
+    "run": {"$ref": "#/$defs/Id"},
+    "station": {"$ref": "#/$defs/Id"},
+    "holder": {"type": "string", "maxLength": 200, "description": "Device id or staff role."},
+    "from": {"$ref": "common.schema.json#/$defs/DateTime"},
+    "to": {"$ref": "common.schema.json#/$defs/DateTime"},
+    "releasedAt": {"$ref": "common.schema.json#/$defs/DateTime"}
+   }
+  }
+ }
+}

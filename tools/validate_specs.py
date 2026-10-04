@@ -52,13 +52,48 @@ for folder, ref in EXAMPLE_SCHEMAS.items():
         kind = doc.pop('$kind', None)
         check(doc, BASE + ref.format(kind=kind), f'examples/{folder}/{path.name}')
 for folder in ('examples/humanitarian', 'profiles/humanitarian'):
-    for path in sorted((ROOT / folder).glob('*.json')):
+    for path in sorted((ROOT / folder).rglob('*.json')):
         doc = json.loads(path.read_text())
         check(doc, BASE + f"humanitarian.schema.json#/$defs/{doc['kind']}", f'{folder}/{path.name}')
+for folder, schema_name in (('examples/household', 'household'), ('profiles/household', 'household'), ('examples/registry', 'catalog'), ('examples/fleet', 'fleet'), ('examples/supply', 'supply'), ('examples/conformance', 'conformance')):
+    for path in sorted((ROOT / folder).glob('*.json')) if (ROOT / folder).exists() else []:
+        doc = json.loads(path.read_text())
+        check(doc, BASE + f"{schema_name}.schema.json#/$defs/{doc['kind']}", f'{folder}/{path.name}')
 for folder in ('examples/core', 'profiles/core'):
     for path in sorted((ROOT / folder).glob('*.json')):
         doc = json.loads(path.read_text())
         check(doc, BASE + f"core.schema.json#/$defs/{doc['kind']}", f'{folder}/{path.name}')
+
+
+# ---- facet registry integrity (RFC-0001): ids unique, families known, inferred facts never safety-relevant,
+#      derivesTo types exist, recipient roles only name existing types
+FACETS = json.loads((ROOT / 'vocab' / 'facets.json').read_text())
+HH = json.loads((ROOT / 'schemas' / 'household.schema.json').read_text())
+ctypes = set(HH['$defs']['ConstraintType']['enum'])
+fam_ok = {'self', 'mandate', 'household.people', 'household.pets', 'household.culture', 'household.tastes', 'household.health', 'household.behavior', 'household.economics', 'space', 'space.environment', 'devices', 'resources', 'commerce', 'service', 'history'}
+fproblems = []
+seen = set()
+for e in FACETS['entries']:
+    if e['id'] in seen: fproblems.append(f"duplicate {e['id']}")
+    seen.add(e['id'])
+    for k in ('family', 'privacy', 'travel', 'sources', 'safetyUse'):
+        if k not in e: fproblems.append(f"{e['id']} missing {k}")
+    if e.get('family') not in fam_ok: fproblems.append(f"{e['id']} unknown family {e.get('family')}")
+    if 'inferred' in e.get('sources', []) and e.get('safetyUse') != 'never': fproblems.append(f"{e['id']} inferred facts must have safetyUse never")
+    if e.get('travel') == 'never' and e.get('derivesTo'): fproblems.append(f"{e['id']} travel never cannot derive")
+    if e.get('travel') == 'derived' and not e.get('derivesTo'): fproblems.append(f"{e['id']} travel derived needs derivesTo")
+    for t in e.get('derivesTo', []):
+        if t not in ctypes: fproblems.append(f"{e['id']} unknown constraint type {t}")
+    if e.get('family') in ('household.people', 'household.health') and e['id'].split('.')[-1] in ('children', 'schedule', 'conditions', 'medications', 'clinician_targets', 'pregnancy') and e.get('privacy') != 'secret':
+        fproblems.append(f"{e['id']} must be secret")
+roles = json.loads((ROOT / 'profiles' / 'household' / 'recipient-roles.json').read_text())['roles']
+for role, types in roles.items():
+    for t in types:
+        if t not in ctypes: fproblems.append(f'recipient role {role}: unknown constraint type {t}')
+if roles.get('program') or roles.get('dataset'): fproblems.append('program and dataset roles must receive nothing')
+for m in fproblems: print(f'  facets: {m}')
+failures += len(fproblems)
+print(f"facets registry: {len(FACETS['entries'])} entries, {'ok' if not fproblems else f'{len(fproblems)} problems'}")
 
 
 # ---- recipe semantics: op params, envelopes, no template placeholders

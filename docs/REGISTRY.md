@@ -54,8 +54,10 @@ The registry runs the same validation as `POST /v1/registry/validate`: schema, r
 semantics (operation envelopes, temperatures), hashes and namespace proof. Every issue
 comes back as a structured list, so CI can show it.
 
-> The publish and validate endpoints are specified here and come in the registry service;
-> today entries are added by pull request to `site/v1/registry.json`.
+> The API is described in [`api/registry.openapi.yaml`](../api/registry.openapi.yaml) (RFC-0002). The
+> service comes later; today entries are added by pull request to `site/v1/registry.json`, which lists
+> only what exists in this repository. Name and version rules are tested by
+> `conformance/profiles/registry.json`.
 
 ## 5. Entry
 
@@ -75,3 +77,14 @@ See `catalog.schema.json#/$defs/RegistryEntry`:
   "repository": { "url": "https://github.com/amado2k5/cookwala", "source": "github", "id": "…" }
 }
 ```
+
+## 6. Directory of organizations
+
+`/v1/directory.json` lists organizations that **asked** to be listed
+(`catalog.schema.json#/$defs/DirectoryEntry`): device makers, catalogs, registries, food banks,
+community kitchens, school and relief programs, farms and cooperatives, grocers, restaurants,
+recipe publishers, certifiers, research labs, health bodies, governments, insurers, translator
+communities. Each entry has roles, a country, a URL, a verification record and, where it
+claims conformance, the hashes of its published `ConformanceReport`s
+(`docs/CERTIFICATION.md`). Listing is not endorsement, certification or partnership. Today the
+directory has one entry, the operator of this site, because nobody else has asked yet.

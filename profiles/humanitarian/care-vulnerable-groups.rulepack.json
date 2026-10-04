@@ -1,0 +1,203 @@
+{
+ "profile": "0.2.0",
+ "kind": "RulePack",
+ "id": "care-vulnerable-groups",
+ "version": "0.1.0",
+ "title": "Care rules for children under five, pregnancy, older adults and immunocompromised people",
+ "status": "draft",
+ "extends": "who-codex-basic@0.1.0",
+ "jurisdiction": "Global default from public guidance; national rules replace it",
+ "rules": [
+  {
+   "id": "care.raw_egg",
+   "kind": "food_class",
+   "applies": "item_any",
+   "check": {
+    "foodClass": "raw_egg"
+   },
+   "severity": "block",
+   "audienceGroup": "all",
+   "audience": "children under 5, pregnant people, older adults, immunocompromised people",
+   "message": "Raw or undercooked egg dishes are not served to vulnerable groups.",
+   "source": "WHO Five Keys to Safer Food (cook thoroughly); national food-safety agencies' advice for vulnerable groups"
+  },
+  {
+   "id": "care.undercooked_egg",
+   "kind": "food_class",
+   "applies": "item_any",
+   "check": {
+    "foodClass": "undercooked_egg"
+   },
+   "severity": "block",
+   "audienceGroup": "all",
+   "message": "Eggs for vulnerable groups are cooked until yolk and white are firm.",
+   "source": "WHO Five Keys to Safer Food"
+  },
+  {
+   "id": "care.raw_meat_fish",
+   "kind": "food_class",
+   "applies": "item_any",
+   "check": {
+    "foodClass": "raw_meat"
+   },
+   "severity": "block",
+   "audienceGroup": "all",
+   "message": "Raw meat preparations are not served to vulnerable groups.",
+   "source": "WHO Five Keys to Safer Food"
+  },
+  {
+   "id": "care.raw_fish",
+   "kind": "food_class",
+   "applies": "item_any",
+   "check": {
+    "foodClass": "raw_fish"
+   },
+   "severity": "block",
+   "audienceGroup": "all",
+   "message": "Raw fish is not served to vulnerable groups.",
+   "source": "WHO Five Keys to Safer Food"
+  },
+  {
+   "id": "care.unpasteurized_dairy",
+   "kind": "food_class",
+   "applies": "item_any",
+   "check": {
+    "foodClass": "unpasteurized_dairy"
+   },
+   "severity": "block",
+   "audienceGroup": "all",
+   "message": "Unpasteurized milk and soft cheeses made from it are not served to vulnerable groups.",
+   "source": "WHO Five Keys to Safer Food; Codex Code of Hygienic Practice for Milk and Milk Products (CXC 57)"
+  },
+  {
+   "id": "care.raw_sprouts",
+   "kind": "food_class",
+   "applies": "item_any",
+   "check": {
+    "foodClass": "raw_sprouts"
+   },
+   "severity": "warn",
+   "audienceGroup": "all",
+   "message": "Raw sprouts carry a higher risk; cook them for vulnerable groups.",
+   "source": "National food-safety agencies' advice on sprouted seeds"
+  },
+  {
+   "id": "care.high_mercury_fish",
+   "kind": "food_class",
+   "applies": "item_any",
+   "check": {
+    "foodClass": "high_mercury_fish"
+   },
+   "severity": "warn",
+   "audienceGroup": "pregnant",
+   "message": "Limit high-mercury fish in pregnancy and for young children.",
+   "source": "WHO and FAO Joint Expert Committee on Food Additives guidance on methylmercury"
+  },
+  {
+   "id": "care.honey_under_1",
+   "kind": "food_class",
+   "applies": "item_any",
+   "check": {
+    "foodClass": "honey"
+   },
+   "severity": "block",
+   "audienceGroup": "children_under_5",
+   "audience": "infants under 12 months in particular",
+   "message": "No honey for infants under one year (infant botulism).",
+   "source": "WHO and national paediatric guidance"
+  },
+  {
+   "id": "care.whole_nuts_under_5",
+   "kind": "food_class",
+   "applies": "item_any",
+   "check": {
+    "foodClass": "whole_nuts"
+   },
+   "severity": "block",
+   "audienceGroup": "children_under_5",
+   "message": "No whole nuts or hard candy for children under five (choking).",
+   "source": "National paediatric choking-prevention guidance"
+  },
+  {
+   "id": "care.hard_candy_under_5",
+   "kind": "food_class",
+   "applies": "item_any",
+   "check": {
+    "foodClass": "hard_candy"
+   },
+   "severity": "block",
+   "audienceGroup": "children_under_5",
+   "message": "No hard candy for children under five (choking).",
+   "source": "National paediatric choking-prevention guidance"
+  },
+  {
+   "id": "care.cooked_rice_time",
+   "kind": "time",
+   "applies": "item_cooked",
+   "check": {
+    "max": 1,
+    "unit": "hours"
+   },
+   "severity": "block",
+   "audienceGroup": "all",
+   "message": "Cooked rice out of temperature control for more than 1 hour is not served to vulnerable groups (stricter than the 2-hour general rule).",
+   "source": "Derived from WHO Five Keys (keep food at safe temperatures) and national guidance on Bacillus cereus in cooked rice"
+  },
+  {
+   "id": "care.hot_hold_min",
+   "kind": "temperature",
+   "applies": "item_hot_held",
+   "check": {
+    "min": 63,
+    "unit": "degC"
+   },
+   "severity": "block",
+   "audienceGroup": "all",
+   "message": "Hot-held food for vulnerable groups stays at or above 63 °C.",
+   "source": "Tightened from WHO 60 °C guidance to match several national codes"
+  },
+  {
+   "id": "care.chilled_max",
+   "kind": "temperature",
+   "applies": "item_chilled",
+   "check": {
+    "max": 5,
+    "unit": "degC"
+   },
+   "severity": "block",
+   "audienceGroup": "all",
+   "message": "Chilled food at or below 5 °C.",
+   "source": "WHO Five Keys to Safer Food"
+  },
+  {
+   "id": "care.sodium_per_meal_older_adults",
+   "kind": "nutrient",
+   "applies": "menu_per_meal",
+   "check": {
+    "nutrient": "sodiumMg",
+    "max": 600,
+    "unit": "mg"
+   },
+   "severity": "warn",
+   "audienceGroup": "older_adults",
+   "message": "Sodium above 600 mg in one meal for older adults (about 2 g per day over three meals).",
+   "source": "Derived from the WHO sodium guideline (2012): under 2 g sodium per day"
+  },
+  {
+   "id": "care.energy_per_meal_older_adults",
+   "kind": "nutrient",
+   "applies": "menu_per_meal",
+   "check": {
+    "nutrient": "energyKcal",
+    "min": 500,
+    "unit": "kcal"
+   },
+   "severity": "warn",
+   "audienceGroup": "older_adults",
+   "message": "A main meal for older adults under 500 kcal risks undernutrition.",
+   "source": "Derived from Sphere minimum ration planning figures (about 2,100 kcal per person per day) divided over meals; to be confirmed by a dietitian"
+  }
+ ],
+ "reviews": [],
+ "disclaimer": "DRAFT derived from public guidance. Not medical advice. Excludes infant formula, therapeutic feeding and condition-specific diets, which need clinicians. Must be reviewed by a registered dietitian and a food-safety officer before adoption; record reviews in 'reviews' and set status to 'reviewed'."
+}

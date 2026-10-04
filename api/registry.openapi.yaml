@@ -1,0 +1,291 @@
+openapi: 3.1.0
+info:
+  title: Cookwala Registry and Directory API
+  version: 0.1.0
+  summary: Find and publish pointers to recipes, devices, rule packs, extensions and benchmarks, and list the organizations that take part.
+  description: |
+    RFC-0002. A registry stores pointers and metadata, never content. Names are
+    <namespace>/<name> with a proven namespace (reverse-DNS domain or code-host account);
+    versions are exact; entries are never reused; withdrawn entries stay as tombstones.
+    Anyone may run a registry; cookwala.ai runs one at /v1/registry.json. Readers verify every
+    artifact's hash and, where present, its signature against the ISSUER's keys.
+
+    The directory lists organizations that asked to be listed. Listing is not endorsement,
+    certification or partnership. Conformance claims point to ConformanceReport hashes
+    (conformance.schema.json), never to badges.
+  license:
+    name: Apache-2.0
+    identifier: Apache-2.0
+servers:
+  - url: https://cookwala.ai
+    description: The reference registry (one of many)
+paths:
+  /v1/registry.json:
+    get:
+      operationId: getRegistry
+      summary: The whole registry as one static file
+      responses:
+        '200':
+          description: Registry
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [cookwala, generatedAt, entries]
+                properties:
+                  cookwala:
+                    type: string
+                  generatedAt:
+                    type: string
+                    format: date-time
+                  registry:
+                    type: string
+                    description: Base URL of this registry.
+                  entries:
+                    type: array
+                    items:
+                      $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/RegistryEntry
+  /v1/registry/entries:
+    get:
+      operationId: searchEntries
+      summary: Search entries by kind, text and status
+      parameters:
+        - name: kind
+          in: query
+          schema:
+            type: string
+        - name: q
+          in: query
+          schema:
+            type: string
+            maxLength: 200
+        - name: status
+          in: query
+          schema:
+            enum: [active, deprecated, recalled, deleted]
+        - name: include_deleted
+          in: query
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Matching entries, newest first
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/RegistryEntry
+  /v1/registry/entries/{namespace}/{name}:
+    get:
+      operationId: getEntry
+      summary: One entry by name, all versions
+      parameters:
+        - name: namespace
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Versions of the entry, including tombstones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/RegistryEntry
+        '404':
+          $ref: '#/components/responses/Problem'
+  /v1/registry/validate:
+    post:
+      operationId: validateEntry
+      summary: Run the publish checks without publishing
+      description: Schema, name rules, exact version, hash present and well-formed, recipe semantics for recipe collections (operation envelopes), namespace proof status. Returns structured issues so CI can show them.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/RegistryEntry
+      responses:
+        '200':
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+  /v1/registry/publish:
+    post:
+      operationId: publishEntry
+      summary: Publish an entry under a namespace you have proven
+      security:
+        - publishToken: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/RegistryEntry
+      responses:
+        '201':
+          description: Published
+        '409':
+          description: Name and version already exist (versions are immutable)
+        '422':
+          description: Validation failed; body is a ValidationResult
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+  /v1/registry/entries/{namespace}/{name}/status:
+    patch:
+      operationId: setStatus
+      summary: Deprecate, recall or delete (tombstone) an entry
+      security:
+        - publishToken: []
+      parameters:
+        - name: namespace
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  enum: [active, deprecated, recalled, deleted]
+                version:
+                  type: string
+                  description: One version, or all versions when omitted.
+                message:
+                  type: string
+                  maxLength: 500
+      responses:
+        '200':
+          description: Updated; a recalled entry is also published in the recall feed
+  /v1/directory.json:
+    get:
+      operationId: getDirectory
+      summary: Organizations that asked to be listed
+      responses:
+        '200':
+          description: Directory
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [cookwala, generatedAt, entries]
+                properties:
+                  cookwala:
+                    type: string
+                  generatedAt:
+                    type: string
+                    format: date-time
+                  entries:
+                    type: array
+                    items:
+                      $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/DirectoryEntry
+  /v1/directory/validate:
+    post:
+      operationId: validateDirectoryEntry
+      summary: Check a directory entry without publishing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/DirectoryEntry
+      responses:
+        '200':
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+  /v1/directory/publish:
+    post:
+      operationId: publishDirectoryEntry
+      summary: Ask to be listed (organizations only)
+      security:
+        - publishToken: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/DirectoryEntry
+      responses:
+        '201':
+          description: Listed with verification status
+components:
+  securitySchemes:
+    publishToken:
+      type: http
+      scheme: bearer
+      description: Token issued after namespace proof (DNS TXT or /.well-known/cookwala-verify record, or a code-host OIDC token). Bound to the namespaces it may publish under.
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 128
+  schemas:
+    ValidationResult:
+      type: object
+      required: [valid, issues]
+      properties:
+        valid:
+          type: boolean
+        issues:
+          type: array
+          items:
+            type: object
+            required: [code, path, message]
+            properties:
+              code:
+                type: string
+                description: schema, name, version, hash, semantics, namespace_unproven, duplicate
+              path:
+                type: string
+              message:
+                type: string
+  responses:
+    Problem:
+      description: RFC 9457 problem details
+      content:
+        application/problem+json:
+          schema:
+            type: object
+            required: [type, title]
+            properties:
+              type:
+                type: string
+              title:
+                type: string
+              detail:
+                type: string

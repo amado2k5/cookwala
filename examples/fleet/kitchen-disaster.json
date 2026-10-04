@@ -1,0 +1,23 @@
+{
+ "profile": "0.1.0",
+ "kind": "Kitchen",
+ "id": "kitchen-relief-east-1",
+ "organization": "did:web:relief.example",
+ "name": "Relief kitchen, eastern district (example)",
+ "type": "disaster",
+ "site": {"country": "EG", "admin1": "Example province", "altitudeM": 20},
+ "stations": [
+  {"id": "st-prep-1", "kind": "prep", "capacityPerHour": 400, "sensors": ["cw.sense.vision"]},
+  {"id": "st-kettle-1", "kind": "kettle", "heatSources": ["gas"], "capacityPerHour": 350, "sensors": ["cw.sense.liquid_temp", "cw.sense.core_temp"]},
+  {"id": "st-kettle-2", "kind": "kettle", "heatSources": ["gas"], "capacityPerHour": 350, "sensors": ["cw.sense.liquid_temp", "cw.sense.core_temp"]},
+  {"id": "st-hothold-1", "kind": "hot_hold", "heatSources": ["electric"], "capacityPerHour": 700, "sensors": ["cw.sense.core_temp"]},
+  {"id": "st-pack-1", "kind": "packing", "capacityPerHour": 500}
+ ],
+ "capacityMealsPerHour": 350,
+ "hotHold": {"units": 4, "minTempC": 60},
+ "cooling": {"blastChiller": false, "iceBath": true, "coldStoreKg": 300},
+ "rulePacks": ["who-codex-basic@0.1.0", "care-vulnerable-groups@0.1.0"],
+ "staff": [{"role": "head_cook", "count": 1}, {"role": "cook", "count": 3}, {"role": "volunteer", "count": 8}, {"role": "food_safety_lead", "count": 1}],
+ "operatingHours": [{"days": "daily", "from": "06:00", "to": "15:00"}],
+ "meta": {"visibility": "shared", "sensitive": false}
+}

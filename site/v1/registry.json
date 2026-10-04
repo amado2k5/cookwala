@@ -1,0 +1,111 @@
+{
+ "cookwala": "0.2.0",
+ "generatedAt": "2026-10-04T12:00:00Z",
+ "registry": "https://cookwala.ai",
+ "note": "Pointers only. Everything listed exists in the amado2k5/cookwala repository; nothing here is a third-party product. Anyone may run a registry (RFC-0002, RFC-0006).",
+ "entries": [
+  {
+   "kind": "catalog",
+   "name": "ai.cookwala/reference-catalog",
+   "description": "The reference Cookwala catalog: schemas, vocabularies, example recipes and feeds.",
+   "version": "0.2.0",
+   "status": "active",
+   "url": "https://cookwala.ai/.well-known/cookwala.json",
+   "coreVersion": "0.2.0",
+   "verification": {
+    "method": "dns_txt",
+    "verifiedAt": "2026-10-04T12:00:00Z",
+    "by": "cookwala.ai"
+   },
+   "repository": {
+    "url": "https://github.com/amado2k5/cookwala",
+    "source": "github"
+   },
+   "publishedAt": "2026-10-04T12:00:00Z",
+   "tags": [
+    "reference"
+   ]
+  },
+  {
+   "kind": "recipe_collection",
+   "name": "ai.cookwala/examples",
+   "description": "Example recipes used by the specification and the dry run. Verification level V1 or V2; not field-verified.",
+   "version": "0.2.0",
+   "status": "active",
+   "url": "https://cookwala.ai/v1/recipes/",
+   "coreVersion": "0.2.0",
+   "verification": {
+    "method": "dns_txt",
+    "verifiedAt": "2026-10-04T12:00:00Z",
+    "by": "cookwala.ai"
+   },
+   "repository": {
+    "url": "https://github.com/amado2k5/cookwala",
+    "source": "github",
+    "subfolder": "examples"
+   },
+   "publishedAt": "2026-10-04T12:00:00Z",
+   "tags": [
+    "examples",
+    "egyptian",
+    "home-cooking"
+   ]
+  },
+  {
+   "kind": "safety_limits",
+   "name": "ai.cookwala/safety-limits-default",
+   "description": "Draft default on-device safety limits for planning and conformance tests; makers tighten them.",
+   "version": "0.2.0",
+   "status": "active",
+   "url": "https://cookwala.ai/v1/profiles/core/safety-limits.default.json",
+   "sha256": "75ab08ca1988e3b7c462cae7a9f8ed0c4705fae80e4fa4ad213f3332bf4cd3c0",
+   "coreVersion": "0.2.0",
+   "verification": {
+    "method": "dns_txt",
+    "verifiedAt": "2026-10-04T12:00:00Z",
+    "by": "cookwala.ai"
+   },
+   "publishedAt": "2026-10-04T12:00:00Z"
+  },
+  {
+   "kind": "rule_pack",
+   "name": "ai.cookwala/who-codex-basic",
+   "description": "Draft nutrition and food-safety rules derived from public WHO, Codex and Sphere guidance. Needs professional review.",
+   "version": "0.1.0",
+   "status": "active",
+   "url": "https://cookwala.ai/v1/profiles/humanitarian/who-codex-basic.rulepack.json",
+   "sha256": "f2484c49a28d7950d716b4ba5575ace3051a26add559387e976da9d1b771bbec",
+   "coreVersion": "0.2.0",
+   "verification": {
+    "method": "dns_txt",
+    "verifiedAt": "2026-10-04T12:00:00Z",
+    "by": "cookwala.ai"
+   },
+   "publishedAt": "2026-10-04T12:00:00Z",
+   "tags": [
+    "humanitarian",
+    "draft"
+   ]
+  },
+  {
+   "kind": "benchmark",
+   "name": "ai.cookwala/kitchen-agent-safety",
+   "description": "Ten promptfoo test cases for AI agents acting in kitchens (Core section 6 rules). Draft 0.1.",
+   "version": "0.1.0",
+   "status": "active",
+   "url": "https://github.com/amado2k5/cookwala/tree/main/evals/kitchen-agent-safety",
+   "coreVersion": "0.2.0",
+   "verification": {
+    "method": "dns_txt",
+    "verifiedAt": "2026-10-04T12:00:00Z",
+    "by": "cookwala.ai"
+   },
+   "publishedAt": "2026-10-04T12:00:00Z",
+   "tags": [
+    "agents",
+    "safety",
+    "draft"
+   ]
+  }
+ ]
+}

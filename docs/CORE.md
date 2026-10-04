@@ -181,7 +181,13 @@ bundle so that devices validate offline. Implementations MUST NOT fetch schemas 
 | Profile | Status | Notes |
 |---|---|---|
 | Core (this document) | **draft, normative** | Target for the first device implementations |
-| Humanitarian (`HUMANITARIAN-PROFILE.md`) | draft | No personal data; works by SMS and CSV |
+| Humanitarian 0.2 (`HUMANITARIAN-PROFILE.md`) | draft | No personal data; works by SMS and CSV; surplus to plate, impact summaries, care rule packs (RFC-0003, RFC-0004) |
+| Household Context (`HOUSEHOLD-CONTEXT.md`) | draft | Local-first household facts; only derived constraints travel (RFC-0001) |
+| Registry and Directory (`REGISTRY.md`) | draft | Proven namespaces, exact versions, tombstones; organizations by request (RFC-0002) |
+| Conformance reports (`CERTIFICATION.md`) | draft | Signed reports behind every conformance claim (RFC-0008) |
+| Federation (`FEDERATION.md`) | draft | Feeds and relays; verify against the issuer (RFC-0006) |
+| Kitchens and production runs (`KITCHENS-AND-FLEETS.md`) | experimental | Restaurants, community, school, disaster and robot kitchens (RFC-0005) |
+| Supply signals (`SUPPLY-SIGNALS.md`) | experimental | Aggregated, delayed, class-level demand and supply signals; gated on competition-law review (RFC-0007) |
 | Mission and Protocol (`MISSION.md`, `PROTOCOL.md`, `DECISIONS.md`) | experimental | Event log + projection, transitions in `profiles/mission/transitions.json` |
 | Sessions and multi-device hub (`session.schema.json`, `hub.openapi.yaml`) | experimental | |
 | Market and ecosystem | experimental | Needs a competition-law review before production use |
@@ -197,11 +203,12 @@ and it has real users.
 | Tool | What it does |
 |---|---|
 | `tools/validate_specs.py` | Checks schemas, examples, recipe semantics (envelopes, op parameters, no template placeholders), strictness, and that API references resolve |
-| `tools/run_conformance.py` | Runs `conformance/*.json`: hashing (including the RFC 8785 example), signatures (including an RFC 8032 key), revocation, disclosure, event chains and checkpoints, units, envelopes, sensor ladders, state machines |
+| `tools/run_conformance.py` | Runs `conformance/*.json` and `conformance/profiles/*.json`, and writes a ConformanceReport with `--report`: hashing (including the RFC 8785 example), signatures (including an RFC 8032 key), revocation, disclosure, event chains and checkpoints, units, envelopes, sensor ladders, state machines |
 | `tools/cookwala_ref.py` | Reference library and CLI: `hash`, `verify`, `chain` |
 | `tools/make_conformance.py` | Regenerates the vectors (review the diff) |
 | `tools/bundle_schemas.py` | Offline schema bundle |
-| `tools/humanitarian_check.py` | Humanitarian Profile rule-pack checker |
+| `tools/humanitarian_check.py` | Humanitarian Profile rule-pack checker and impact summaries |
+| `tools/make_profile_vectors.py` | Regenerates the profile vectors in `conformance/profiles/` |
 
 ## 12. Changes from 0.1
 

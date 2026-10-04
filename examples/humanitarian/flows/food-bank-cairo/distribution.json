@@ -1,0 +1,62 @@
+{
+ "profile": "0.2.0",
+ "kind": "Distribution",
+ "id": "di-2026-11-10-kitchen-7",
+ "org": "did:web:kitchen7.example",
+ "orgRole": "community_kitchen",
+ "site": {
+  "country": "EG",
+  "admin1": "Cairo",
+  "admin2": "Ain Shams",
+  "siteName": "Community kitchen 7"
+ },
+ "date": "2026-11-10",
+ "form": "hot_meals",
+ "meals": 380,
+ "people": {
+  "total": 380,
+  "children": 120,
+  "adults": 220,
+  "elderly": 40
+ },
+ "kgUsed": 110,
+ "kgRescuedUsed": 94,
+ "offers": [
+  "of-2026-11-09-012"
+ ],
+ "menu": {
+  "recipes": [
+   "cw:cookwala.ai:example-lentil-soup",
+   "cw:cookwala.ai:example-salata-baladi"
+  ],
+  "perMeal": {
+   "energyKcal": 620,
+   "proteinG": 22,
+   "fatG": 16,
+   "saturatedFatG": 3,
+   "freeSugarsG": 4,
+   "sodiumMg": 580,
+   "fruitVegG": 160,
+   "fibreG": 11
+  }
+ },
+ "cost": {
+  "food": {
+   "amount": "1680.00",
+   "currency": "EGP"
+  },
+  "transport": {
+   "amount": "300.00",
+   "currency": "EGP"
+  }
+ },
+ "volunteerMinutes": 1140,
+ "rulePack": "who-codex-basic@0.1.0",
+ "findings": [],
+ "safetyIncidents": 0,
+ "audienceGroups": [
+  "children",
+  "older_adults"
+ ],
+ "note": "SMS: DIST 380 MEALS 380 PEOPLE 110KG; MENU D7 KCAL620 SODIUM580 FV160"
+}

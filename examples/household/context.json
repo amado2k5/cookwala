@@ -1,0 +1,162 @@
+{
+ "profile": "0.1.0",
+ "kind": "HouseholdContext",
+ "id": "hh-ctx-example-1",
+ "holder": "hub:home-example",
+ "meta": {
+  "visibility": "local_only",
+  "sensitive": true,
+  "createdAt": "2026-10-01T18:00:00+03:00",
+  "updatedAt": "2026-10-04T17:00:00+03:00"
+ },
+ "facets": [
+  {
+   "id": "f-allergy-1",
+   "facet": "cw.facet.household.health.allergies",
+   "subject": "child_member_1",
+   "value": {"allergens": ["peanuts"], "severity": "severe"},
+   "summary": "One child has a severe peanut allergy.",
+   "source": {"kind": "declared", "actor": "owner"},
+   "observedAt": "2026-10-01T18:00:00+03:00",
+   "privacy": "sensitive"
+  },
+  {
+   "id": "f-diet-1",
+   "facet": "cw.facet.household.health.diets",
+   "subject": "household",
+   "value": {"diets": ["halal"]},
+   "source": {"kind": "declared", "actor": "owner"},
+   "observedAt": "2026-10-01T18:00:00+03:00",
+   "privacy": "sensitive"
+  },
+  {
+   "id": "f-meds-1",
+   "facet": "cw.facet.household.health.medications",
+   "subject": "adult_member_2",
+   "value": {"avoidWithFood": ["grapefruit"], "timing": "take 30 min before dinner"},
+   "source": {"kind": "declared", "actor": "adult_member"},
+   "observedAt": "2026-10-01T18:00:00+03:00",
+   "privacy": "secret"
+  },
+  {
+   "id": "f-schedule-1",
+   "facet": "cw.facet.household.people.schedule",
+   "subject": "household",
+   "value": {"weekday": {"adults_home_from": "17:30", "children_home_from": "15:00"}},
+   "source": {"kind": "declared", "actor": "owner"},
+   "observedAt": "2026-10-01T18:00:00+03:00",
+   "validFor": "P90D",
+   "privacy": "secret"
+  },
+  {
+   "id": "f-traffic-1",
+   "facet": "cw.facet.space.environment.foot_traffic",
+   "subject": "zone:hallway",
+   "value": {"busy": [{"from": "15:00", "to": "15:30", "days": "weekdays"}]},
+   "summary": "Hallway is busy when the children come home.",
+   "source": {"kind": "observed", "actor": "robot:neo-1", "evidence": ["local:traffic-stats-2026-09"]},
+   "observedAt": "2026-09-30T20:00:00+03:00",
+   "validFor": "P30D",
+   "confidence": 0.85,
+   "privacy": "secret"
+  },
+  {
+   "id": "f-pets-1",
+   "facet": "cw.facet.household.pets.animals",
+   "subject": "household",
+   "value": {"dogs": 1},
+   "source": {"kind": "declared", "actor": "owner"},
+   "observedAt": "2026-10-01T18:00:00+03:00",
+   "privacy": "household"
+  },
+  {
+   "id": "f-receiving-1",
+   "facet": "cw.facet.commerce.receiving_rules",
+   "subject": "household",
+   "value": {"window": {"from": "17:00", "to": "18:00"}, "point": "front_door", "robotReceives": true},
+   "source": {"kind": "declared", "actor": "owner"},
+   "observedAt": "2026-10-01T18:00:00+03:00",
+   "privacy": "secret"
+  },
+  {
+   "id": "f-budget-1",
+   "facet": "cw.facet.household.economics.budget_posture",
+   "subject": "household",
+   "value": {"posture": "moderate", "perMealCap": {"amount": "18.00", "currency": "USD"}},
+   "source": {"kind": "declared", "actor": "owner"},
+   "observedAt": "2026-10-01T18:00:00+03:00",
+   "privacy": "sensitive"
+  },
+  {
+   "id": "f-appliances-1",
+   "facet": "cw.facet.space.appliances",
+   "subject": "zone:kitchen",
+   "value": {"hob": "induction_4_zone", "oven": "electric", "slowZone": "zone_2"},
+   "source": {"kind": "observed", "actor": "robot:neo-1"},
+   "observedAt": "2026-10-03T19:00:00+03:00",
+   "validFor": "P180D",
+   "privacy": "household"
+  },
+  {
+   "id": "f-battery-1",
+   "facet": "cw.facet.self.battery",
+   "subject": "robot:neo-1",
+   "value": {"pct": 62, "healthPct": 82, "reservePct": 15},
+   "source": {"kind": "reported", "actor": "robot:neo-1"},
+   "observedAt": "2026-10-04T17:00:00+03:00",
+   "validFor": "PT30M",
+   "privacy": "household"
+  },
+  {
+   "id": "f-firmware-1",
+   "facet": "cw.facet.self.firmware",
+   "subject": "robot:neo-1",
+   "value": {"version": "2.4.1", "patches": ["2026-09-12-grip"]},
+   "source": {"kind": "reported", "actor": "robot:neo-1"},
+   "observedAt": "2026-10-04T17:00:00+03:00",
+   "privacy": "household",
+   "consent": ["cg-maker-1"]
+  },
+  {
+   "id": "f-spice-1",
+   "facet": "cw.facet.household.tastes.spice",
+   "subject": "household",
+   "value": {"level": "mild"},
+   "source": {"kind": "inferred", "actor": "robot:neo-1", "evidence": ["local:feedback-2026-09"]},
+   "observedAt": "2026-10-02T20:00:00+03:00",
+   "confidence": 0.6,
+   "privacy": "household"
+  }
+ ],
+ "consents": [
+  {
+   "id": "cg-maker-1",
+   "grantedBy": "owner",
+   "scope": {"families": ["self"]},
+   "recipientRole": "device_maker",
+   "recipient": "did:web:robots.example",
+   "purpose": "Warranty support and recall handling for robot neo-1",
+   "grantedAt": "2026-10-01T18:05:00+03:00",
+   "expiresAt": "2027-10-01T00:00:00+03:00",
+   "withdrawable": true
+  }
+ ],
+ "incidents": [
+  {
+   "id": "li-2026-09-21",
+   "date": "2026-09-21",
+   "category": "cw.incident.spill",
+   "involved": ["robot", "pet"],
+   "note": "The dog bumped the robot while it carried a bowl of sauce; the bowl was dropped and the floor cleaned.",
+   "lesson": "Keep the dog out of the kitchen zone while the robot carries liquids.",
+   "escalatedTo": "none",
+   "resolved": true
+  }
+ ],
+ "retention": {
+  "facetsDays": 365,
+  "incidentsDays": 730,
+  "erasureWindowDays": 7
+ },
+ "erasures": []
+}

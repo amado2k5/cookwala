@@ -1,0 +1,42 @@
+{
+ "profile": "0.1.0",
+ "kind": "ProductionRun",
+ "id": "run-2026-11-03-lunch",
+ "kitchen": "kitchen-relief-east-1",
+ "program": "prog-relief-east-2026",
+ "purpose": "disaster_response",
+ "serveWindow": {"from": "2026-11-03T11:30:00+02:00", "to": "2026-11-03T13:30:00+02:00"},
+ "recipes": [
+  {"recipe": "cw:cookwala.ai:example-lentil-soup", "recipeHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "batches": 6, "servingsPerBatch": 60, "scale": 10},
+  {"recipe": "cw:cookwala.ai:example-rice-vermicelli", "recipeHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "batches": 5, "servingsPerBatch": 70, "scale": 12}
+ ],
+ "dietRules": ["halal"],
+ "allergenBlocks": ["peanuts"],
+ "assignments": [
+  {"recipe": "cw:cookwala.ai:example-lentil-soup", "node": "n1", "station": "st-prep-1", "actor": "person", "role": "volunteer", "plannedStart": "2026-11-03T07:00:00+02:00", "plannedEnd": "2026-11-03T08:00:00+02:00"},
+  {"recipe": "cw:cookwala.ai:example-lentil-soup", "node": "n4", "station": "st-kettle-1", "actor": "either", "role": "cook", "plannedStart": "2026-11-03T08:00:00+02:00", "plannedEnd": "2026-11-03T10:30:00+02:00"},
+  {"recipe": "cw:cookwala.ai:example-rice-vermicelli", "node": "n3", "station": "st-kettle-2", "actor": "person", "role": "cook", "plannedStart": "2026-11-03T09:00:00+02:00", "plannedEnd": "2026-11-03T10:45:00+02:00"}
+ ],
+ "ccps": [
+  {"id": "ccp-soup-cook-b1", "kind": "cook_core_temp", "recipe": "cw:cookwala.ai:example-lentil-soup", "batch": 1, "limit": 75, "unit": "degC", "observed": 94, "at": "2026-11-03T10:05:00+02:00", "method": "probe", "pass": true},
+  {"id": "ccp-hold-1", "kind": "hot_hold_temp", "recipe": "cw:cookwala.ai:example-lentil-soup", "batch": 1, "limit": 60, "unit": "degC", "observed": 63, "at": "2026-11-03T12:30:00+02:00", "method": "probe", "pass": true},
+  {"id": "ccp-hold-2", "kind": "hot_hold_temp", "recipe": "cw:cookwala.ai:example-rice-vermicelli", "batch": 5, "limit": 60, "unit": "degC", "observed": 56, "at": "2026-11-03T13:10:00+02:00", "method": "probe", "pass": false, "action": "Batch 5 rice reheated to 75 °C core before serving; hot-hold unit 4 flagged for repair."},
+  {"id": "ccp-cool-1", "kind": "cooling_stage_1", "recipe": "cw:cookwala.ai:example-lentil-soup", "batch": 6, "limit": 120, "unit": "min", "observed": 95, "at": "2026-11-03T15:20:00+02:00", "method": "probe", "pass": true}
+ ],
+ "executions": [],
+ "state": "completed",
+ "outcome": {
+  "mealsProduced": 710,
+  "mealsServed": 650,
+  "kgWaste": 9.5,
+  "kgRescuedUsed": 61,
+  "ccpFailures": 1,
+  "safetyIncidents": 0,
+  "findings": [],
+  "distribution": "di-2026-11-03-relief-east",
+  "gasM3": 21.4,
+  "cost": {"food": {"amount": "3120.00", "currency": "EGP"}, "energy": {"amount": "190.00", "currency": "EGP"}}
+ },
+ "note": "Illustrative example built to exercise the schema. No real kitchen, program or event is described.",
+ "meta": {"visibility": "shared", "sensitive": false}
+}

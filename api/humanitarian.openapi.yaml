@@ -1,0 +1,224 @@
+openapi: 3.1.0
+info:
+  title: Cookwala Humanitarian Profile API (level H1)
+  version: 0.2.0
+  summary: Offer surplus food, claim it, record each handover with a cold-chain check, report what was served. No personal data.
+  description: |
+    docs/HUMANITARIAN-PROFILE.md section 8.1, formalized (RFC-0003). Every party is an
+    organization. Documents validate against schemas/humanitarian.schema.json and carry no
+    names, phone numbers, ids, health, religion or nationality of any person.
+
+    Rules:
+    - Every POST carries an Idempotency-Key; servers keep keys for at least 24 h.
+    - State changes carry If-Match with the offer version; a mismatch returns 409 with the
+      allowed transitions.
+    - Offers expire automatically at window.to; claims lapse at pickupBy plus the program's grace.
+    - Webhooks (offer.created, offer.claimed, offer.expired, handover.recorded) are at least
+      once, with an event id and a per-offer sequence number.
+    - Authentication: OAuth 2.1 client credentials, one client per organization.
+  license:
+    name: Apache-2.0
+    identifier: Apache-2.0
+servers:
+  - url: https://rescue.example/cookwala/h
+    description: A program's or food bank's rescue service
+security:
+  - oauth: []
+paths:
+  /offers:
+    post:
+      operationId: createOffer
+      summary: Offer surplus food for collection
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/Offer
+      responses:
+        '201':
+          description: Created with state offered and version 1
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/Offer
+        '422':
+          description: Validation or rule-pack block findings
+    get:
+      operationId: listOffers
+      summary: Open offers near a receiver
+      parameters:
+        - name: status
+          in: query
+          schema:
+            $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/OfferState
+        - name: admin1
+          in: query
+          schema:
+            type: string
+        - name: admin2
+          in: query
+          schema:
+            type: string
+        - name: storage
+          in: query
+          schema:
+            $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/Storage
+        - name: origin
+          in: query
+          schema:
+            $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/Origin
+      responses:
+        '200':
+          description: Offers, soonest expiring first
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/Offer
+  /offers/{id}/claims:
+    post:
+      operationId: claimOffer
+      summary: Claim all or part of an offer
+      parameters:
+        - $ref: '#/components/parameters/OfferId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/Claim
+      responses:
+        '201':
+          description: Claimed; the offer moves to claimed
+        '409':
+          description: Already claimed, or version mismatch; body lists allowed transitions
+  /offers/{id}/transitions:
+    post:
+      operationId: transitionOffer
+      summary: Move an offer to its next state
+      parameters:
+        - $ref: '#/components/parameters/OfferId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [to]
+              properties:
+                to:
+                  $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/OfferState
+                note:
+                  $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/Note
+      responses:
+        '200':
+          description: New state and version
+        '409':
+          description: Illegal transition or version mismatch
+  /handovers:
+    post:
+      operationId: recordHandover
+      summary: Record a custody transfer with temperature readings
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/Handover
+      responses:
+        '201':
+          description: Recorded, with rule findings
+  /distributions:
+    post:
+      operationId: recordDistribution
+      summary: Record aggregate meals and people served at a site on a day
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/Distribution
+      responses:
+        '201':
+          description: Recorded, with menu findings
+  /reports:
+    get:
+      operationId: getReport
+      summary: Aggregates for a period as an ImpactSummary
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: to
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Computed from the documents, each measure with its method
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/ImpactSummary
+  /.well-known/cookwala-humanitarian.json:
+    get:
+      operationId: getManifest
+      summary: Capabilities and data-protection declaration of this participant
+      security: []
+      responses:
+        '200':
+          description: Manifest
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/Manifest
+components:
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://rescue.example/oauth/token
+          scopes:
+            offers: create and manage offers
+            claims: claim offers
+            records: record handovers and distributions
+  parameters:
+    OfferId:
+      name: id
+      in: path
+      required: true
+      schema:
+        $ref: https://cookwala.ai/v1/schemas/humanitarian.schema.json#/$defs/Id
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 128
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      description: The offer version the caller last saw.
+      schema:
+        type: string

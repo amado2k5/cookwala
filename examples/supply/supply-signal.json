@@ -1,0 +1,14 @@
+{
+ "profile": "0.1.0",
+ "kind": "SupplySignal",
+ "id": "ss-eg-beheira-2026w41-tomato-glut",
+ "publisher": "did:web:coop.example",
+ "region": {"country": "EG", "admin1": "Beheira"},
+ "period": {"weekStart": "2026-10-05"},
+ "ingredientClass": "cw.ing.class.vegetable_fruit",
+ "availability": "glut",
+ "quantityKg": {"low": 40000, "high": 60000, "method": "assumed"},
+ "harvestWindow": {"from": "2026-10-05", "to": "2026-10-18"},
+ "openToAll": true,
+ "publishedAt": "2026-10-04T09:00:00+02:00"
+}

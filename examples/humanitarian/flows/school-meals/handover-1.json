@@ -1,0 +1,43 @@
+{
+ "profile": "0.2.0",
+ "kind": "Handover",
+ "id": "ho-2026-11-16-sch-001-1",
+ "offer": "of-2026-11-16-sch-001",
+ "claim": "cl-2026-11-16-sch-001",
+ "leg": 1,
+ "from": "did:web:bakery.example",
+ "to": "did:web:schoolmeals.example",
+ "at": "2026-11-16T08:05:00+02:00",
+ "audienceGroups": [
+  "children",
+  "children_under_5"
+ ],
+ "readings": [
+  {
+   "at": "2026-11-16T08:05:00+02:00",
+   "tempC": 21,
+   "method": "infrared",
+   "lineId": "1"
+  }
+ ],
+ "lines": [
+  {
+   "lineId": "1",
+   "kgAccepted": 40
+  },
+  {
+   "lineId": "2",
+   "kgAccepted": 0,
+   "kgRejected": 5,
+   "reason": "other"
+  }
+ ],
+ "outcome": "partly_accepted",
+ "checkedBy": "trained_staff",
+ "rulePack": "school-meals-basic@0.1.0",
+ "findings": [
+  "care.whole_nuts_under_5",
+  "school.whole_nuts_young"
+ ],
+ "note": "Whole nuts refused: the program serves children under five."
+}

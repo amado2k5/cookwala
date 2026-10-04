@@ -1,0 +1,31 @@
+{
+ "cookwala": "0.2.0",
+ "generatedAt": "2026-10-04T12:00:00Z",
+ "note": "Organizations that asked to be listed. Listing is not endorsement, certification or partnership. The list has one entry because no other organization has asked yet.",
+ "entries": [
+  {
+   "kind": "DirectoryEntry",
+   "id": "did:web:cookwala.ai",
+   "name": "Cookwala reference catalog and registry (operated by fifi.cooking)",
+   "description": "Operator of the reference catalog, the first registry and the specification repository.",
+   "roles": [
+    "catalog",
+    "registry",
+    "recipe_publisher"
+   ],
+   "country": "EG",
+   "url": "https://cookwala.ai",
+   "contact": "https://github.com/amado2k5/cookwala/issues",
+   "conformance": [
+    "sha256:26a02859cae03b7f04401904a9c7902d0f3559ef085c66b2b6815844d465811d"
+   ],
+   "verification": {
+    "method": "dns_txt",
+    "verifiedAt": "2026-10-04T12:00:00Z",
+    "by": "cookwala.ai"
+   },
+   "status": "active",
+   "addedAt": "2026-10-04T12:00:00Z"
+  }
+ ]
+}

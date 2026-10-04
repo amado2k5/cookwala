@@ -1,0 +1,277 @@
+[
+ {
+  "id": "signal-ok",
+  "kind": "signal_policy",
+  "profile": "supply",
+  "rfc": "0007",
+  "description": "A class-level, delayed, aggregated demand signal with no prices passes.",
+  "input": {
+   "signal": {
+    "kind": "DemandSignal",
+    "publisher": "did:web:foodbank.example",
+    "region": {
+     "country": "EG",
+     "admin1": "Cairo"
+    },
+    "period": {
+     "weekStart": "2026-11-02"
+    },
+    "ingredientClass": "cw.ing.class.legume",
+    "quantityKg": {
+     "low": 1800,
+     "high": 2400,
+     "method": "modelled"
+    },
+    "contributingSources": 42,
+    "delayDays": 9,
+    "basis": "distributions",
+    "prices": "none"
+   }
+  },
+  "expected": {
+   "ok": true,
+   "reasons": []
+  }
+ },
+ {
+  "id": "signal-too-few-sources",
+  "kind": "signal_policy",
+  "profile": "supply",
+  "rfc": "0007",
+  "description": "Fewer than 20 contributing sources is rejected.",
+  "input": {
+   "signal": {
+    "kind": "DemandSignal",
+    "publisher": "did:web:foodbank.example",
+    "region": {
+     "country": "EG",
+     "admin1": "Cairo"
+    },
+    "period": {
+     "weekStart": "2026-11-02"
+    },
+    "ingredientClass": "cw.ing.class.legume",
+    "quantityKg": {
+     "low": 1800,
+     "high": 2400,
+     "method": "modelled"
+    },
+    "contributingSources": 12,
+    "delayDays": 9,
+    "basis": "distributions",
+    "prices": "none"
+   }
+  },
+  "expected": {
+   "ok": false,
+   "reasons": [
+    "too_few_sources"
+   ]
+  }
+ },
+ {
+  "id": "signal-delay-too-short",
+  "kind": "signal_policy",
+  "profile": "supply",
+  "rfc": "0007",
+  "description": "Less than 7 days of delay is rejected.",
+  "input": {
+   "signal": {
+    "kind": "DemandSignal",
+    "publisher": "did:web:foodbank.example",
+    "region": {
+     "country": "EG",
+     "admin1": "Cairo"
+    },
+    "period": {
+     "weekStart": "2026-11-02"
+    },
+    "ingredientClass": "cw.ing.class.legume",
+    "quantityKg": {
+     "low": 1800,
+     "high": 2400,
+     "method": "modelled"
+    },
+    "contributingSources": 42,
+    "delayDays": 2,
+    "basis": "distributions",
+    "prices": "none"
+   }
+  },
+  "expected": {
+   "ok": false,
+   "reasons": [
+    "delay_too_short"
+   ]
+  }
+ },
+ {
+  "id": "signal-prices",
+  "kind": "signal_policy",
+  "profile": "supply",
+  "rfc": "0007",
+  "description": "Any price field is rejected.",
+  "input": {
+   "signal": {
+    "kind": "DemandSignal",
+    "publisher": "did:web:foodbank.example",
+    "region": {
+     "country": "EG",
+     "admin1": "Cairo"
+    },
+    "period": {
+     "weekStart": "2026-11-02"
+    },
+    "ingredientClass": "cw.ing.class.legume",
+    "quantityKg": {
+     "low": 1800,
+     "high": 2400,
+     "method": "modelled"
+    },
+    "contributingSources": 42,
+    "delayDays": 9,
+    "basis": "distributions",
+    "prices": "none",
+    "priceRange": {
+     "low": "3.20",
+     "high": "4.10"
+    }
+   }
+  },
+  "expected": {
+   "ok": false,
+   "reasons": [
+    "prices_not_allowed"
+   ]
+  }
+ },
+ {
+  "id": "signal-product-level",
+  "kind": "signal_policy",
+  "profile": "supply",
+  "rfc": "0007",
+  "description": "Product-level signals are rejected; class level only.",
+  "input": {
+   "signal": {
+    "kind": "DemandSignal",
+    "publisher": "did:web:foodbank.example",
+    "region": {
+     "country": "EG",
+     "admin1": "Cairo"
+    },
+    "period": {
+     "weekStart": "2026-11-02"
+    },
+    "ingredientClass": "cw.ing.lentils_red",
+    "quantityKg": {
+     "low": 1800,
+     "high": 2400,
+     "method": "modelled"
+    },
+    "contributingSources": 42,
+    "delayDays": 9,
+    "basis": "distributions",
+    "prices": "none"
+   }
+  },
+  "expected": {
+   "ok": false,
+   "reasons": [
+    "class_level_required"
+   ]
+  }
+ },
+ {
+  "id": "signal-region-too-fine",
+  "kind": "signal_policy",
+  "profile": "supply",
+  "rfc": "0007",
+  "description": "A region finer than admin1 needs at least 100 sources.",
+  "input": {
+   "signal": {
+    "kind": "DemandSignal",
+    "publisher": "did:web:foodbank.example",
+    "region": {
+     "country": "EG",
+     "admin1": "Cairo",
+     "admin2": "Nasr City"
+    },
+    "period": {
+     "weekStart": "2026-11-02"
+    },
+    "ingredientClass": "cw.ing.class.legume",
+    "quantityKg": {
+     "low": 1800,
+     "high": 2400,
+     "method": "modelled"
+    },
+    "contributingSources": 42,
+    "delayDays": 9,
+    "basis": "distributions",
+    "prices": "none"
+   }
+  },
+  "expected": {
+   "ok": false,
+   "reasons": [
+    "region_too_fine"
+   ]
+  }
+ },
+ {
+  "id": "signal-supply-ok",
+  "kind": "signal_policy",
+  "profile": "supply",
+  "rfc": "0007",
+  "description": "A supply signal open to all passes.",
+  "input": {
+   "signal": {
+    "kind": "SupplySignal",
+    "publisher": "did:web:coop.example",
+    "region": {
+     "country": "EG",
+     "admin1": "Beheira"
+    },
+    "period": {
+     "weekStart": "2026-10-05"
+    },
+    "ingredientClass": "cw.ing.class.vegetable_fruit",
+    "availability": "glut",
+    "openToAll": true
+   }
+  },
+  "expected": {
+   "ok": true,
+   "reasons": []
+  }
+ },
+ {
+  "id": "signal-supply-closed",
+  "kind": "signal_policy",
+  "profile": "supply",
+  "rfc": "0007",
+  "description": "A supply signal not open to all is rejected.",
+  "input": {
+   "signal": {
+    "kind": "SupplySignal",
+    "publisher": "did:web:coop.example",
+    "region": {
+     "country": "EG",
+     "admin1": "Beheira"
+    },
+    "period": {
+     "weekStart": "2026-10-05"
+    },
+    "ingredientClass": "cw.ing.class.vegetable_fruit",
+    "availability": "glut",
+    "openToAll": false
+   }
+  },
+  "expected": {
+   "ok": false,
+   "reasons": [
+    "must_be_open_to_all"
+   ]
+  }
+ }
+]

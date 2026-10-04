@@ -34,8 +34,10 @@ jobs:
           python tools/validate_specs.py
       - name: Run Core conformance vectors
         run: python tools/run_conformance.py
-      - name: Check humanitarian examples against the rule pack
-        run: python tools/humanitarian_check.py examples/humanitarian/*.json
+      - name: Check humanitarian examples against the rule packs
+        run: |
+          python tools/humanitarian_check.py --pack profiles/humanitarian/who-codex-basic.rulepack.json --pack profiles/humanitarian/care-vulnerable-groups.rulepack.json --pack profiles/humanitarian/school-meals-basic.rulepack.json --pack profiles/humanitarian/sodium-reduction.rulepack.json examples/humanitarian/*.json examples/humanitarian/flows/*/*.json
+          python tools/run_conformance.py --report /tmp/report.json
       - name: Assemble site
         run: bash tools/build_site.sh _site && find _site -type f | sort
       - if: github.event_name != 'pull_request'

@@ -1,0 +1,21 @@
+{
+ "profile": "0.2.0",
+ "kind": "Claim",
+ "id": "cl-2026-11-16-sch-001",
+ "offer": "of-2026-11-16-sch-001",
+ "claimant": "did:web:schoolmeals.example",
+ "claimantRole": "school",
+ "claimedAt": "2026-11-16T06:41:00+02:00",
+ "lines": [
+  {
+   "lineId": "1",
+   "kg": 40
+  },
+  {
+   "lineId": "2",
+   "kg": 5
+  }
+ ],
+ "pickupBy": "2026-11-16T08:30:00+02:00",
+ "vehicle": "ambient"
+}

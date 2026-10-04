@@ -1,0 +1,59 @@
+{
+ "profile": "0.2.0",
+ "kind": "Distribution",
+ "id": "di-2026-11-16-school-12",
+ "org": "did:web:schoolmeals.example",
+ "orgRole": "school",
+ "site": {
+  "country": "EG",
+  "admin1": "Giza",
+  "siteName": "Primary school 12"
+ },
+ "date": "2026-11-16",
+ "form": "school_meals",
+ "meals": 520,
+ "people": {
+  "total": 520,
+  "children": 520
+ },
+ "kgUsed": 140,
+ "kgRescuedUsed": 40,
+ "offers": [
+  "of-2026-11-16-sch-001"
+ ],
+ "menu": {
+  "recipes": [
+   "cw:cookwala.ai:example-ful-medames",
+   "cw:cookwala.ai:example-salata-baladi"
+  ],
+  "perMeal": {
+   "energyKcal": 540,
+   "proteinG": 19,
+   "fatG": 14,
+   "saturatedFatG": 2.5,
+   "freeSugarsG": 9,
+   "sodiumMg": 640,
+   "fruitVegG": 110,
+   "fibreG": 12
+  },
+  "foodClasses": []
+ },
+ "cost": {
+  "food": {
+   "amount": "2080.00",
+   "currency": "EGP"
+  },
+  "staff": {
+   "amount": "600.00",
+   "currency": "EGP"
+  }
+ },
+ "rulePack": "school-meals-basic@0.1.0",
+ "findings": [
+  "school.sodium_per_meal"
+ ],
+ "safetyIncidents": 0,
+ "audienceGroups": [
+  "children"
+ ]
+}

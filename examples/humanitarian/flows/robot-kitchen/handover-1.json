@@ -1,0 +1,31 @@
+{
+ "profile": "0.2.0",
+ "kind": "Handover",
+ "id": "ho-2026-11-20-rk-002-1",
+ "offer": "of-2026-11-20-rk-002",
+ "claim": "cl-2026-11-20-rk-002",
+ "leg": 1,
+ "from": "did:web:farmcoop.example",
+ "to": "did:web:robotkitchen.example",
+ "at": "2026-11-20T08:30:00+02:00",
+ "readings": [
+  {
+   "at": "2026-11-20T08:30:00+02:00",
+   "tempC": 19,
+   "method": "infrared",
+   "lineId": "1"
+  }
+ ],
+ "lines": [
+  {
+   "lineId": "1",
+   "kgAccepted": 118,
+   "kgRejected": 2,
+   "reason": "pests_or_contamination"
+  }
+ ],
+ "outcome": "partly_accepted",
+ "checkedBy": "trained_staff",
+ "rulePack": "who-codex-basic@0.1.0",
+ "findings": []
+}

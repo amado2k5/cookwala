@@ -1,0 +1,83 @@
+{
+ "profile": "0.1.0",
+ "kind": "ConformanceReport",
+ "id": "report-2026-10-04-reference",
+ "core": "0.2.0",
+ "claim": "verifier",
+ "subject": {
+  "name": "cookwala_ref.py",
+  "vendor": "cookwala.ai",
+  "version": "0.2.0"
+ },
+ "suites": [
+  {
+   "suite": "disclosure",
+   "total": 2,
+   "passed": 2
+  },
+  {
+   "suite": "envelope",
+   "total": 14,
+   "passed": 14
+  },
+  {
+   "suite": "hash",
+   "total": 3,
+   "passed": 3
+  },
+  {
+   "suite": "ledger",
+   "total": 4,
+   "passed": 4
+  },
+  {
+   "suite": "signature",
+   "total": 5,
+   "passed": 5
+  },
+  {
+   "suite": "transitions",
+   "total": 11,
+   "passed": 11
+  },
+  {
+   "suite": "units",
+   "total": 5,
+   "passed": 5
+  },
+  {
+   "suite": "profiles/disclosure_policy",
+   "total": 8,
+   "passed": 8
+  },
+  {
+   "suite": "profiles/federation",
+   "total": 3,
+   "passed": 3
+  },
+  {
+   "suite": "profiles/registry",
+   "total": 19,
+   "passed": 19
+  },
+  {
+   "suite": "profiles/signal",
+   "total": 8,
+   "passed": 8
+  },
+  {
+   "suite": "profiles/sms",
+   "total": 19,
+   "passed": 19
+  }
+ ],
+ "vectorsHash": "sha256:f4bf6963f4ae801809011343542f932fafbb9fbaf1dc922078d2ac1a2a4e9ea0",
+ "tool": {
+  "name": "run_conformance.py",
+  "version": "0.2.0",
+  "commit": "05c186f7ff4ffbdff0fb4801f6339e19eb455c92"
+ },
+ "date": "2026-10-04",
+ "status": "self_declared",
+ "hash": "sha256:26a02859cae03b7f04401904a9c7902d0f3559ef085c66b2b6815844d465811d"
+}

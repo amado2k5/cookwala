@@ -1,0 +1,721 @@
+[
+ {
+  "id": "disclosure-grocer",
+  "kind": "disclosure_policy",
+  "profile": "household",
+  "rfc": "0001",
+  "description": "A grocer gets delivery window, access point, allergen block, labelling and a budget cap; never the schedule, children, conditions or layout.",
+  "input": {
+   "facets": [
+    {
+     "facet": "cw.facet.household.health.allergies",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.schedule",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.children",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.commerce.receiving_rules",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.self.firmware",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.economics.budget_posture",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.tastes.spice",
+     "value": "local"
+    }
+   ],
+   "recipientRole": "grocer"
+  },
+  "expected": {
+   "constraints": [
+    {
+     "type": "allergen_block",
+     "derivedFrom": [
+      "cw.facet.household.health.allergies"
+     ]
+    },
+    {
+     "type": "labeling_required",
+     "derivedFrom": [
+      "cw.facet.household.health.allergies"
+     ]
+    },
+    {
+     "type": "delivery_window",
+     "derivedFrom": [
+      "cw.facet.commerce.receiving_rules"
+     ]
+    },
+    {
+     "type": "access_point",
+     "derivedFrom": [
+      "cw.facet.commerce.receiving_rules"
+     ]
+    },
+    {
+     "type": "budget_cap",
+     "derivedFrom": [
+      "cw.facet.household.economics.budget_posture"
+     ]
+    }
+   ],
+   "disclosed": [],
+   "withheld": [
+    {
+     "facet": "cw.facet.household.people.schedule",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.people.children",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.self.firmware",
+     "reason": "no_consent"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "reason": "never_travels"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "reason": "never_travels"
+    },
+    {
+     "facet": "cw.facet.household.tastes.spice",
+     "reason": "not_allowed_for_role"
+    }
+   ]
+  }
+ },
+ {
+  "id": "disclosure-planner",
+  "kind": "disclosure_policy",
+  "profile": "household",
+  "rfc": "0001",
+  "description": "A planner gets diet and allergen constraints, a budget cap and household movement constraints; health conditions and layout never travel.",
+  "input": {
+   "facets": [
+    {
+     "facet": "cw.facet.household.health.allergies",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.schedule",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.children",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.commerce.receiving_rules",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.self.firmware",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.economics.budget_posture",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.tastes.spice",
+     "value": "local"
+    }
+   ],
+   "recipientRole": "planner"
+  },
+  "expected": {
+   "constraints": [
+    {
+     "type": "allergen_block",
+     "derivedFrom": [
+      "cw.facet.household.health.allergies"
+     ]
+    },
+    {
+     "type": "no_movement_zone",
+     "derivedFrom": [
+      "cw.facet.household.people.schedule"
+     ]
+    },
+    {
+     "type": "serve_window",
+     "derivedFrom": [
+      "cw.facet.household.people.schedule"
+     ]
+    },
+    {
+     "type": "child_safe_zones",
+     "derivedFrom": [
+      "cw.facet.household.people.children"
+     ]
+    },
+    {
+     "type": "presence_required",
+     "derivedFrom": [
+      "cw.facet.household.people.children"
+     ]
+    },
+    {
+     "type": "budget_cap",
+     "derivedFrom": [
+      "cw.facet.household.economics.budget_posture"
+     ]
+    },
+    {
+     "type": "spice_level",
+     "derivedFrom": [
+      "cw.facet.household.tastes.spice"
+     ]
+    }
+   ],
+   "disclosed": [],
+   "withheld": [
+    {
+     "facet": "cw.facet.commerce.receiving_rules",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.self.firmware",
+     "reason": "no_consent"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "reason": "never_travels"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "reason": "never_travels"
+    }
+   ]
+  }
+ },
+ {
+  "id": "disclosure-device-maker-no-consent",
+  "kind": "disclosure_policy",
+  "profile": "household",
+  "rfc": "0001",
+  "description": "Without consent, device facets (firmware) are withheld and household facets are not allowed for the role.",
+  "input": {
+   "facets": [
+    {
+     "facet": "cw.facet.household.health.allergies",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.schedule",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.children",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.commerce.receiving_rules",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.self.firmware",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.economics.budget_posture",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.tastes.spice",
+     "value": "local"
+    }
+   ],
+   "recipientRole": "device_maker"
+  },
+  "expected": {
+   "constraints": [],
+   "disclosed": [],
+   "withheld": [
+    {
+     "facet": "cw.facet.household.health.allergies",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.people.schedule",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.people.children",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.commerce.receiving_rules",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.self.firmware",
+     "reason": "no_consent"
+    },
+    {
+     "facet": "cw.facet.household.economics.budget_posture",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "reason": "never_travels"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "reason": "never_travels"
+    },
+    {
+     "facet": "cw.facet.household.tastes.spice",
+     "reason": "not_allowed_for_role"
+    }
+   ]
+  }
+ },
+ {
+  "id": "disclosure-device-maker-consented",
+  "kind": "disclosure_policy",
+  "profile": "household",
+  "rfc": "0001",
+  "description": "With a consent grant for the self family, firmware is disclosed; household facets stay withheld.",
+  "input": {
+   "facets": [
+    {
+     "facet": "cw.facet.household.health.allergies",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.schedule",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.children",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.commerce.receiving_rules",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.self.firmware",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.economics.budget_posture",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.tastes.spice",
+     "value": "local"
+    }
+   ],
+   "recipientRole": "device_maker",
+   "consents": [
+    {
+     "id": "cg-1",
+     "recipientRole": "device_maker",
+     "scope": {
+      "families": [
+       "self"
+      ]
+     }
+    }
+   ]
+  },
+  "expected": {
+   "constraints": [],
+   "disclosed": [
+    "cw.facet.self.firmware"
+   ],
+   "withheld": [
+    {
+     "facet": "cw.facet.household.health.allergies",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.people.schedule",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.people.children",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.commerce.receiving_rules",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.economics.budget_posture",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "reason": "never_travels"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "reason": "never_travels"
+    },
+    {
+     "facet": "cw.facet.household.tastes.spice",
+     "reason": "not_allowed_for_role"
+    }
+   ]
+  }
+ },
+ {
+  "id": "disclosure-consent-withdrawn",
+  "kind": "disclosure_policy",
+  "profile": "household",
+  "rfc": "0001",
+  "description": "A withdrawn consent grant disclosess nothing.",
+  "input": {
+   "facets": [
+    {
+     "facet": "cw.facet.household.health.allergies",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.schedule",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.children",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.commerce.receiving_rules",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.self.firmware",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.economics.budget_posture",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.tastes.spice",
+     "value": "local"
+    }
+   ],
+   "recipientRole": "device_maker",
+   "consents": [
+    {
+     "id": "cg-1",
+     "recipientRole": "device_maker",
+     "scope": {
+      "families": [
+       "self"
+      ]
+     },
+     "withdrawnAt": "2026-10-04T00:00:00Z"
+    }
+   ]
+  },
+  "expected": {
+   "constraints": [],
+   "disclosed": [],
+   "withheld": [
+    {
+     "facet": "cw.facet.household.health.allergies",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.people.schedule",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.people.children",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.commerce.receiving_rules",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.self.firmware",
+     "reason": "no_consent"
+    },
+    {
+     "facet": "cw.facet.household.economics.budget_posture",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "reason": "never_travels"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "reason": "never_travels"
+    },
+    {
+     "facet": "cw.facet.household.tastes.spice",
+     "reason": "not_allowed_for_role"
+    }
+   ]
+  }
+ },
+ {
+  "id": "disclosure-program-nothing",
+  "kind": "disclosure_policy",
+  "profile": "household",
+  "rfc": "0001",
+  "description": "A humanitarian program receives nothing from households.",
+  "input": {
+   "facets": [
+    {
+     "facet": "cw.facet.household.health.allergies",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.schedule",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.children",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.commerce.receiving_rules",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.self.firmware",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.economics.budget_posture",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.tastes.spice",
+     "value": "local"
+    }
+   ],
+   "recipientRole": "program"
+  },
+  "expected": {
+   "constraints": [],
+   "disclosed": [],
+   "withheld": [
+    {
+     "facet": "cw.facet.household.health.allergies",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.people.schedule",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.people.children",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.commerce.receiving_rules",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.self.firmware",
+     "reason": "no_consent"
+    },
+    {
+     "facet": "cw.facet.household.economics.budget_posture",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "reason": "never_travels"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "reason": "never_travels"
+    },
+    {
+     "facet": "cw.facet.household.tastes.spice",
+     "reason": "not_allowed_for_role"
+    }
+   ]
+  }
+ },
+ {
+  "id": "disclosure-dataset-nothing",
+  "kind": "disclosure_policy",
+  "profile": "household",
+  "rfc": "0001",
+  "description": "A dataset receives nothing from household facets (execution logs carry no personal data).",
+  "input": {
+   "facets": [
+    {
+     "facet": "cw.facet.household.health.allergies",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.schedule",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.people.children",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.commerce.receiving_rules",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.self.firmware",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.economics.budget_posture",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "value": "local"
+    },
+    {
+     "facet": "cw.facet.household.tastes.spice",
+     "value": "local"
+    }
+   ],
+   "recipientRole": "dataset"
+  },
+  "expected": {
+   "constraints": [],
+   "disclosed": [],
+   "withheld": [
+    {
+     "facet": "cw.facet.household.health.allergies",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.people.schedule",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.people.children",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.commerce.receiving_rules",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.self.firmware",
+     "reason": "no_consent"
+    },
+    {
+     "facet": "cw.facet.household.economics.budget_posture",
+     "reason": "not_allowed_for_role"
+    },
+    {
+     "facet": "cw.facet.household.health.conditions",
+     "reason": "never_travels"
+    },
+    {
+     "facet": "cw.facet.space.layout",
+     "reason": "never_travels"
+    },
+    {
+     "facet": "cw.facet.household.tastes.spice",
+     "reason": "not_allowed_for_role"
+    }
+   ]
+  }
+ },
+ {
+  "id": "disclosure-unknown-facet",
+  "kind": "disclosure_policy",
+  "profile": "household",
+  "rfc": "0001",
+  "description": "An unknown facet type is withheld, never guessed.",
+  "input": {
+   "facets": [
+    {
+     "facet": "cw.facet.nothing.here",
+     "value": "local"
+    }
+   ],
+   "recipientRole": "planner"
+  },
+  "expected": {
+   "constraints": [],
+   "disclosed": [],
+   "withheld": [
+    {
+     "facet": "cw.facet.nothing.here",
+     "reason": "unknown_facet"
+    }
+   ]
+  }
+ }
+]

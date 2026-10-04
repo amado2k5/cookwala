@@ -1,0 +1,51 @@
+{
+ "profile": "0.2.0",
+ "kind": "Offer",
+ "id": "of-2026-11-16-sch-001",
+ "donor": "did:web:bakery.example",
+ "createdAt": "2026-11-16T06:30:00+02:00",
+ "items": [
+  {
+   "lineId": "1",
+   "name": "Whole-wheat bread",
+   "kg": 40,
+   "storage": "ambient",
+   "origin": "food_service",
+   "dateMark": {
+    "kind": "best_before",
+    "date": "2026-11-17"
+   },
+   "allergens": [
+    "cereals_gluten"
+   ]
+  },
+  {
+   "lineId": "2",
+   "name": "Mixed nuts (whole)",
+   "kg": 5,
+   "storage": "ambient",
+   "origin": "retail",
+   "dateMark": {
+    "kind": "best_before",
+    "date": "2027-02-01"
+   },
+   "allergens": [
+    "tree_nuts"
+   ],
+   "foodClasses": [
+    "whole_nuts"
+   ]
+  }
+ ],
+ "window": {
+  "from": "2026-11-16T07:00:00+02:00",
+  "to": "2026-11-16T10:00:00+02:00"
+ },
+ "site": {
+  "country": "EG",
+  "admin1": "Giza",
+  "siteName": "Bakery back door"
+ },
+ "state": "distributed",
+ "version": 4
+}

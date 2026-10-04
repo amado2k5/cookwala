@@ -1,4 +1,4 @@
-# Cookwala Humanitarian Profile (draft 0.1)
+# Cookwala Humanitarian Profile (draft 0.2)
 
 **Status:** draft for review by food banks, relief programs and food-safety and nutrition
 professionals. It is not reviewed or endorsed by WFP, WHO, FAO, the Global FoodBanking
@@ -8,9 +8,23 @@ Network or any other organization named here.
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule pack: [`profiles/humanitarian/who-codex-basic.rulepack.json`](../profiles/humanitarian/who-codex-basic.rulepack.json)
+- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (all), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; all drafts awaiting professional review, see [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
+- worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank in Cairo, school meals, disaster kitchen, robot kitchen), each with a computed `ImpactSummary`
+- pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
 - spreadsheet and SMS templates: [`profiles/humanitarian/templates/`](../profiles/humanitarian/templates)
 - reference checker: [`tools/humanitarian_check.py`](../tools/humanitarian_check.py)
+
+## 0. What 0.2 adds (RFC-0003, RFC-0004)
+
+Additive over 0.1; readers accept both.
+
+- **Farm to plate:** `Item.origin` (`farm`, `processor`, `wholesale`, `retail`, `food_service`, `kitchen`) and `Item.harvestedAt`; roles `farm`, `caterer`, `robot_kitchen`; the SMS word `FARM`.
+- **Care rules:** `Item.foodClasses` and `Distribution.menu.foodClasses` (raw egg, unpasteurized dairy, whole nuts, cooked rice…), rule kind `food_class`, `Rule.audienceGroup`, `Distribution.audienceGroups`; three new draft packs.
+- **Reviews:** `RulePack.reviews` records the profession, organization, date, scope and outcome of each review; `status: reviewed` needs an approved review.
+- **Impact:** `ImpactSummary` with nine measures, each carrying `method` (measured, modelled, assumed, not recorded), computed by `tools/humanitarian_check.py --summary`.
+- **Time to claim:** `Offer.createdAt`, `Claim.claimedAt`; `Handover.leg` so kilograms rescued count once.
+- **Program types** on the `Manifest`.
 
 ## 1. Purpose
 
@@ -175,11 +189,17 @@ Use the CSV templates in `profiles/humanitarian/templates/`. Their second row ho
 
 ```
 OFFER 36KG YOGURT C 4C UB0511          → reply: OFFER A7K open until 08:00
+FARM 120KG TOMATO A BB0411             → an offer with origin farm (0.2)
 CLAIM A7K ALL                          → reply: CLAIMED A7K pickup by 20:30
 HAND A7K 36 T4.6                       → accepted 36 kg at 4.6 °C
 HAND A7K 0 REJ 18 TEMP T52             → rejected 18 kg, temp_out_of_range
 DIST 410 MEALS 410 PEOPLE 96KG          → distribution for today at the sender's site
+MENU D12 KCAL650 SODIUM540 FV95         → per-meal nutrients for distribution D12 (0.2)
+HELP · CANCEL A7K
 ```
+
+The grammar is implemented in `tools/cookwala_ref.py` (`parse_sms`) and tested by
+`conformance/profiles/sms.json`.
 
 Storage codes: `A` ambient, `C` chilled, `F` frozen, `H` hot-held. Date marks: `UB` use-by,
 `BB` best-before, as `DDMM`. The gateway maps the sender's registered number to an
@@ -198,6 +218,8 @@ organization, never to a person in the documents.
 | Core Cookwala | `Item.ingredientId` and `menu.recipes` link to the recipe index; `relief.ImpactReport` sums `Distribution`s |
 
 ## 10. Pilot metrics (defined so sites can be compared)
+
+Computed into an `ImpactSummary` by `python tools/humanitarian_check.py --summary DIR`. How a pilot is run and judged: [`humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md).
 
 | Metric | Definition |
 |---|---|

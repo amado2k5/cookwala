@@ -55,6 +55,7 @@
  "checkedBy": "trained_staff",
  "rulePack": "who-codex-basic@0.1.0",
  "findings": [
+  "care.hot_hold_min",
   "safety.hot_hold_min"
  ]
 }

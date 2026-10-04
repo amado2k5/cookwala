@@ -1,0 +1,76 @@
+{
+ "profile": "0.2.0",
+ "kind": "Offer",
+ "id": "of-2026-11-09-012",
+ "donor": "did:web:supermarket.example",
+ "createdAt": "2026-11-09T17:40:00+02:00",
+ "items": [
+  {
+   "lineId": "1",
+   "name": "Tomatoes",
+   "ingredientId": "cw.ing.tomato",
+   "kg": 80,
+   "storage": "ambient",
+   "origin": "retail",
+   "dateMark": {
+    "kind": "best_before",
+    "date": "2026-11-11"
+   },
+   "allergens": []
+  },
+  {
+   "lineId": "2",
+   "name": "Yogurt cups",
+   "gtin": "6221234567890",
+   "kg": 24,
+   "units": 160,
+   "storage": "chilled",
+   "origin": "retail",
+   "dateMark": {
+    "kind": "use_by",
+    "date": "2026-11-12"
+   },
+   "allergens": [
+    "milk"
+   ]
+  },
+  {
+   "lineId": "3",
+   "name": "Bread",
+   "kg": 30,
+   "storage": "ambient",
+   "origin": "retail",
+   "dateMark": {
+    "kind": "best_before",
+    "date": "2026-11-10"
+   },
+   "allergens": [
+    "cereals_gluten"
+   ]
+  }
+ ],
+ "window": {
+  "from": "2026-11-09T18:00:00+02:00",
+  "to": "2026-11-10T08:00:00+02:00"
+ },
+ "site": {
+  "country": "EG",
+  "admin1": "Cairo",
+  "admin2": "Nasr City",
+  "siteName": "Supermarket loading bay"
+ },
+ "readings": [
+  {
+   "at": "2026-11-09T17:35:00+02:00",
+   "tempC": 3.8,
+   "method": "fridge_display",
+   "lineId": "2"
+  }
+ ],
+ "needs": [
+  "refrigerated_vehicle"
+ ],
+ "state": "distributed",
+ "version": 5,
+ "note": "Sent by SMS: OFFER 80KG TOMATOES A BB1111; OFFER 24KG YOGURT C 3.8C UB1211; OFFER 30KG BREAD A BB1011. Gateway grouped them under one offer id."
+}

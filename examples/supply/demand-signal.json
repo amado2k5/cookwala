@@ -1,0 +1,15 @@
+{
+ "profile": "0.1.0",
+ "kind": "DemandSignal",
+ "id": "ds-eg-cairo-2026w45-legume",
+ "publisher": "did:web:foodbank.example",
+ "region": {"country": "EG", "admin1": "Cairo"},
+ "period": {"weekStart": "2026-11-02"},
+ "ingredientClass": "cw.ing.class.legume",
+ "quantityKg": {"low": 1800, "high": 2400, "method": "modelled"},
+ "contributingSources": 42,
+ "delayDays": 9,
+ "basis": "distributions",
+ "prices": "none",
+ "publishedAt": "2026-11-18T09:00:00+02:00"
+}

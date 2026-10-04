@@ -1,0 +1,46 @@
+{
+ "profile": "0.2.0",
+ "kind": "Handover",
+ "id": "ho-2026-11-09-012-1",
+ "offer": "of-2026-11-09-012",
+ "claim": "cl-2026-11-09-012",
+ "leg": 1,
+ "from": "did:web:supermarket.example",
+ "to": "did:web:foodbank.example",
+ "at": "2026-11-09T19:50:00+02:00",
+ "site": {
+  "country": "EG",
+  "admin1": "Cairo",
+  "admin2": "Nasr City",
+  "siteName": "Supermarket loading bay"
+ },
+ "readings": [
+  {
+   "at": "2026-11-09T19:48:00+02:00",
+   "tempC": 4.4,
+   "method": "probe",
+   "lineId": "2"
+  }
+ ],
+ "lines": [
+  {
+   "lineId": "1",
+   "kgAccepted": 74,
+   "kgRejected": 6,
+   "reason": "packaging_damaged"
+  },
+  {
+   "lineId": "2",
+   "kgAccepted": 24
+  },
+  {
+   "lineId": "3",
+   "kgAccepted": 30
+  }
+ ],
+ "outcome": "partly_accepted",
+ "checkedBy": "trained_staff",
+ "rulePack": "who-codex-basic@0.1.0",
+ "findings": [],
+ "note": "SMS: HAND 012 128 T4.4"
+}

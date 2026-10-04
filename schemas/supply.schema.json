@@ -1,0 +1,81 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://cookwala.ai/v1/schemas/supply.schema.json",
+ "title": "Cookwala supply signals (experimental)",
+ "x-cookwala-status": "experimental",
+ "description": "RFC-0007. Aggregated, delayed, class-level demand and supply signals so farms, cooperatives, programs and stores can plan with less waste. No prices, no products or brands, no region finer than admin1 without at least 100 sources, at least 20 contributing sources, at least 7 days of delay. Gated on competition-law review before any production use. Surplus rescue itself uses the Humanitarian Profile (a farm is a donor).",
+ "$defs": {
+  "Version": {"type": "string", "pattern": "^0\\.1\\.[0-9]+$"},
+  "OrgId": {"type": "string", "pattern": "^(did:web:[a-z0-9.-]+|gln:[0-9]{13}|org:[a-z0-9-]+\\.[a-z0-9.-]+)$"},
+  "Region": {
+   "type": "object",
+   "required": ["country", "admin1"],
+   "unevaluatedProperties": false,
+   "properties": {
+    "country": {"type": "string", "pattern": "^[A-Z]{2}$"},
+    "admin1": {"type": "string", "maxLength": 80},
+    "admin2": {"type": "string", "maxLength": 80, "description": "Allowed only with at least 100 contributing sources."},
+    "pcode": {"type": "string", "maxLength": 20}
+   }
+  },
+  "Period": {
+   "type": "object",
+   "required": ["weekStart"],
+   "unevaluatedProperties": false,
+   "properties": {"weekStart": {"type": "string", "format": "date", "description": "Monday of the ISO week."}}
+  },
+  "QuantityRange": {
+   "type": "object",
+   "required": ["low", "high", "method"],
+   "unevaluatedProperties": false,
+   "properties": {
+    "low": {"type": "number", "minimum": 0},
+    "high": {"type": "number", "minimum": 0},
+    "method": {"enum": ["measured", "modelled", "assumed"]}
+   }
+  },
+  "DemandSignal": {
+   "type": "object",
+   "required": ["profile", "kind", "id", "publisher", "region", "period", "ingredientClass", "quantityKg", "contributingSources", "delayDays", "basis", "prices", "publishedAt"],
+   "unevaluatedProperties": false,
+   "patternProperties": {"^x-": {}},
+   "properties": {
+    "profile": {"$ref": "#/$defs/Version"},
+    "kind": {"const": "DemandSignal"},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._:-]{2,95}$"},
+    "publisher": {"$ref": "#/$defs/OrgId"},
+    "region": {"$ref": "#/$defs/Region"},
+    "period": {"$ref": "#/$defs/Period"},
+    "ingredientClass": {"type": "string", "pattern": "^(cw\\.ing\\.class\\.[a-z0-9_]+|x-[a-z0-9-]+\\.[a-z0-9_.]+)$", "description": "A class (legume, leafy vegetable, poultry), never a product or brand."},
+    "quantityKg": {"$ref": "#/$defs/QuantityRange"},
+    "contributingSources": {"type": "integer", "minimum": 20, "description": "Kitchens, programs or households whose plans were aggregated. At least 20."},
+    "delayDays": {"type": "integer", "minimum": 7, "description": "Days between the end of the period and publication. At least 7."},
+    "basis": {"enum": ["planned_meals", "distributions", "orders", "production_runs"]},
+    "prices": {"const": "none"},
+    "publishedAt": {"$ref": "common.schema.json#/$defs/DateTime"},
+    "signature": {"$ref": "common.schema.json#/$defs/Signature"}
+   }
+  },
+  "SupplySignal": {
+   "type": "object",
+   "required": ["profile", "kind", "id", "publisher", "region", "period", "ingredientClass", "availability", "openToAll", "publishedAt"],
+   "unevaluatedProperties": false,
+   "patternProperties": {"^x-": {}},
+   "properties": {
+    "profile": {"$ref": "#/$defs/Version"},
+    "kind": {"const": "SupplySignal"},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._:-]{2,95}$"},
+    "publisher": {"$ref": "#/$defs/OrgId", "description": "A cooperative, program or market operator, never a single person."},
+    "region": {"$ref": "#/$defs/Region"},
+    "period": {"$ref": "#/$defs/Period"},
+    "ingredientClass": {"type": "string", "pattern": "^(cw\\.ing\\.class\\.[a-z0-9_]+|x-[a-z0-9-]+\\.[a-z0-9_.]+)$"},
+    "availability": {"enum": ["glut", "normal", "short"]},
+    "quantityKg": {"$ref": "#/$defs/QuantityRange"},
+    "harvestWindow": {"type": "object", "required": ["from", "to"], "unevaluatedProperties": false, "properties": {"from": {"type": "string", "format": "date"}, "to": {"type": "string", "format": "date"}}},
+    "openToAll": {"const": true, "description": "Published signals are public, free and identical for every reader."},
+    "publishedAt": {"$ref": "common.schema.json#/$defs/DateTime"},
+    "signature": {"$ref": "common.schema.json#/$defs/Signature"}
+   }
+  }
+ }
+}

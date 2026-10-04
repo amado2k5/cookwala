@@ -1,0 +1,43 @@
+{
+ "profile": "0.2.0",
+ "kind": "Handover",
+ "id": "ho-2026-11-10-012-2",
+ "offer": "of-2026-11-09-012",
+ "claim": "cl-2026-11-09-012",
+ "leg": 2,
+ "from": "did:web:foodbank.example",
+ "to": "did:web:kitchen7.example",
+ "at": "2026-11-10T07:30:00+02:00",
+ "site": {
+  "country": "EG",
+  "admin1": "Cairo",
+  "admin2": "Ain Shams",
+  "siteName": "Community kitchen 7"
+ },
+ "readings": [
+  {
+   "at": "2026-11-10T07:28:00+02:00",
+   "tempC": 4.9,
+   "method": "probe",
+   "lineId": "2"
+  }
+ ],
+ "lines": [
+  {
+   "lineId": "1",
+   "kgAccepted": 40
+  },
+  {
+   "lineId": "2",
+   "kgAccepted": 24
+  },
+  {
+   "lineId": "3",
+   "kgAccepted": 30
+  }
+ ],
+ "outcome": "accepted",
+ "checkedBy": "trained_staff",
+ "rulePack": "who-codex-basic@0.1.0",
+ "findings": []
+}

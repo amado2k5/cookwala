@@ -1,0 +1,2424 @@
+{
+ "name": "facets",
+ "version": "0.1.0",
+ "x-cookwala-rfc": "0001",
+ "x-cookwala-note": "Registry of household and device context facts (RFC-0001). privacy is the default class (raise only); travel says whether the raw fact may leave the home: never, only as a derived constraint, or as a selective disclosure after consent. derivesTo lists the DerivedConstraint types the fact may produce; profiles/household/recipient-roles.json says which types each recipient role may receive. Facts from inferred sources are never used for safety decisions.",
+ "entries": [
+  {
+   "id": "cw.facet.self.identity",
+   "label": {
+    "en": "Device identity",
+    "ar": "هوية الجهاز"
+   },
+   "family": "self",
+   "privacy": "household",
+   "travel": "consented",
+   "sources": [
+    "declared",
+    "reported"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "vendor, model, serial reference"
+  },
+  {
+   "id": "cw.facet.self.firmware",
+   "label": {
+    "en": "Firmware and patches",
+    "ar": "البرمجيات الثابتة والتحديثات"
+   },
+   "family": "self",
+   "privacy": "household",
+   "travel": "consented",
+   "sources": [
+    "reported"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "version, patch list, dates"
+  },
+  {
+   "id": "cw.facet.self.extensions",
+   "label": {
+    "en": "Extensions and modifications",
+    "ar": "الإضافات والتعديلات"
+   },
+   "family": "self",
+   "privacy": "household",
+   "travel": "consented",
+   "sources": [
+    "declared",
+    "reported"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "installed extensions, hardware mods"
+  },
+  {
+   "id": "cw.facet.self.licenses",
+   "label": {
+    "en": "Licences and upgrades",
+    "ar": "التراخيص والترقيات"
+   },
+   "family": "self",
+   "privacy": "household",
+   "travel": "consented",
+   "sources": [
+    "reported"
+   ],
+   "safetyUse": "never",
+   "valueHint": "active licences, tier"
+  },
+  {
+   "id": "cw.facet.self.subscriptions",
+   "label": {
+    "en": "Subscriptions and service tier",
+    "ar": "الاشتراكات ومستوى الخدمة"
+   },
+   "family": "self",
+   "privacy": "household",
+   "travel": "consented",
+   "sources": [
+    "reported"
+   ],
+   "safetyUse": "never",
+   "valueHint": "services, tier, renewal dates"
+  },
+  {
+   "id": "cw.facet.self.warranty",
+   "label": {
+    "en": "Warranty and maintainer",
+    "ar": "الضمان وجهة الصيانة"
+   },
+   "family": "self",
+   "privacy": "household",
+   "travel": "consented",
+   "sources": [
+    "declared",
+    "reported"
+   ],
+   "safetyUse": "never",
+   "valueHint": "warranty until, maintaining company"
+  },
+  {
+   "id": "cw.facet.self.insurance",
+   "label": {
+    "en": "Insurance cover",
+    "ar": "التغطية التأمينية"
+   },
+   "family": "self",
+   "privacy": "sensitive",
+   "travel": "consented",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "valueHint": "policy exists, what it covers"
+  },
+  {
+   "id": "cw.facet.self.recalls",
+   "label": {
+    "en": "Open recalls on this device",
+    "ar": "سحوبات مفتوحة على هذا الجهاز"
+   },
+   "family": "self",
+   "privacy": "public",
+   "travel": "consented",
+   "sources": [
+    "reported"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "device_fault_summary"
+   ],
+   "valueHint": "recall ids and status"
+  },
+  {
+   "id": "cw.facet.self.battery",
+   "label": {
+    "en": "Battery level and health",
+    "ar": "مستوى البطارية وحالتها"
+   },
+   "family": "self",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "reported",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "robot_runtime_minutes"
+   ],
+   "valueHint": "percent, health percent, reserve"
+  },
+  {
+   "id": "cw.facet.self.health",
+   "label": {
+    "en": "Device health and faults",
+    "ar": "حالة الجهاز والأعطال"
+   },
+   "family": "self",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "reported",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "device_fault_summary"
+   ],
+   "valueHint": "fault codes, degraded parts"
+  },
+  {
+   "id": "cw.facet.self.maintenance",
+   "label": {
+    "en": "Last maintenance and calibration",
+    "ar": "آخر صيانة ومعايرة"
+   },
+   "family": "self",
+   "privacy": "household",
+   "travel": "consented",
+   "sources": [
+    "reported",
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "dates, what was done"
+  },
+  {
+   "id": "cw.facet.self.sensor_quality",
+   "label": {
+    "en": "Sensor quality and limits",
+    "ar": "جودة الحساسات وحدودها"
+   },
+   "family": "self",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "reported",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "caution_level",
+    "presence_required"
+   ],
+   "valueHint": "vision blurry in glare, probe drift"
+  },
+  {
+   "id": "cw.facet.self.hygiene",
+   "label": {
+    "en": "Food-contact hygiene state",
+    "ar": "حالة نظافة الأسطح الملامسة للطعام"
+   },
+   "family": "self",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "observed",
+    "reported"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "last clean, contact parts state"
+  },
+  {
+   "id": "cw.facet.self.account_standing",
+   "label": {
+    "en": "Account standing and unpaid services",
+    "ar": "حالة الحساب والخدمات غير المدفوعة"
+   },
+   "family": "self",
+   "privacy": "sensitive",
+   "travel": "never",
+   "sources": [
+    "reported"
+   ],
+   "safetyUse": "never",
+   "valueHint": "services at risk of stopping"
+  },
+  {
+   "id": "cw.facet.self.capability_limits",
+   "label": {
+    "en": "Current capability limits",
+    "ar": "حدود القدرات الحالية"
+   },
+   "family": "self",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "reported",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "equipment_available",
+    "caution_level"
+   ],
+   "valueHint": "what it cannot do right now"
+  },
+  {
+   "id": "cw.facet.mandate.allowed_tasks",
+   "label": {
+    "en": "Allowed tasks",
+    "ar": "المهام المسموح بها"
+   },
+   "family": "mandate",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "serving_form"
+   ],
+   "valueHint": "cook, clean, fetch, open door, trash, serve, deliver to rooms"
+  },
+  {
+   "id": "cw.facet.mandate.allowed_zones",
+   "label": {
+    "en": "Allowed rooms and zones",
+    "ar": "الغرف والمناطق المسموح بها"
+   },
+   "family": "mandate",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "no_movement_zone"
+   ],
+   "valueHint": "zones, stairs, floors"
+  },
+  {
+   "id": "cw.facet.mandate.hard_nos",
+   "label": {
+    "en": "Hard rules that may never be broken",
+    "ar": "قواعد لا يجوز تجاوزها"
+   },
+   "family": "mandate",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "avoid_ingredient",
+    "caution_level"
+   ],
+   "valueHint": "owner-set prohibitions"
+  },
+  {
+   "id": "cw.facet.mandate.may_ask_owner",
+   "label": {
+    "en": "When the robot may ask a person",
+    "ar": "متى يجوز للروبوت أن يسأل شخصًا"
+   },
+   "family": "mandate",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "ask, wait, default actions"
+  },
+  {
+   "id": "cw.facet.mandate.caution_level",
+   "label": {
+    "en": "Caution level",
+    "ar": "مستوى الحذر"
+   },
+   "family": "mandate",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "caution_level"
+   ],
+   "valueHint": "extra slow, normal, relaxed in defined cases"
+  },
+  {
+   "id": "cw.facet.mandate.authority",
+   "label": {
+    "en": "Who may instruct the robot",
+    "ar": "من يملك سلطة توجيه الروبوت"
+   },
+   "family": "mandate",
+   "privacy": "secret",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "authority ranking by role"
+  },
+  {
+   "id": "cw.facet.mandate.maker_guidance",
+   "label": {
+    "en": "Maker guidance for unknowns",
+    "ar": "إرشادات الصانع للحالات غير المعروفة"
+   },
+   "family": "mandate",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "reported"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "service-level guidance for critical situations"
+  },
+  {
+   "id": "cw.facet.mandate.emergency_powers",
+   "label": {
+    "en": "Emergency actions allowed",
+    "ar": "الإجراءات الطارئة المسموح بها"
+   },
+   "family": "mandate",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "may call emergency services, may unlock door"
+  },
+  {
+   "id": "cw.facet.mandate.time_windows",
+   "label": {
+    "en": "When cooking and movement are allowed",
+    "ar": "أوقات السماح بالطهي والحركة"
+   },
+   "family": "mandate",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "quiet_hours",
+    "serve_window"
+   ],
+   "valueHint": "allowed hours per task"
+  },
+  {
+   "id": "cw.facet.household.people.composition",
+   "label": {
+    "en": "Household composition by role",
+    "ar": "تكوين الأسرة بحسب الدور"
+   },
+   "family": "household.people",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "portion_count"
+   ],
+   "valueHint": "counts by age group and role, no names"
+  },
+  {
+   "id": "cw.facet.household.people.children",
+   "label": {
+    "en": "Children and infants present",
+    "ar": "وجود أطفال ورضع"
+   },
+   "family": "household.people",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "child_safe_zones",
+    "presence_required"
+   ],
+   "valueHint": "age bands only"
+  },
+  {
+   "id": "cw.facet.household.people.older_adults",
+   "label": {
+    "en": "Older adults present",
+    "ar": "وجود مسنين"
+   },
+   "family": "household.people",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "texture_level",
+    "serving_form"
+   ],
+   "valueHint": "count, needs by role"
+  },
+  {
+   "id": "cw.facet.household.people.disability",
+   "label": {
+    "en": "Accessibility needs",
+    "ar": "احتياجات الوصول"
+   },
+   "family": "household.people",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "serving_form",
+    "texture_level"
+   ],
+   "valueHint": "wheelchair, feeding help, by role"
+  },
+  {
+   "id": "cw.facet.household.people.schedule",
+   "label": {
+    "en": "Arrivals and departures",
+    "ar": "مواعيد الحضور والمغادرة"
+   },
+   "family": "household.people",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "no_movement_zone",
+    "serve_window"
+   ],
+   "valueHint": "who is home when, by role"
+  },
+  {
+   "id": "cw.facet.household.people.workers",
+   "label": {
+    "en": "Workers and visitors schedule",
+    "ar": "مواعيد العمال والزوار"
+   },
+   "family": "household.people",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "no_movement_zone"
+   ],
+   "valueHint": "housekeeper, babysitter, repair, garden, delivery"
+  },
+  {
+   "id": "cw.facet.household.people.guests",
+   "label": {
+    "en": "Guests expected",
+    "ar": "ضيوف متوقعون"
+   },
+   "family": "household.people",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "portion_count"
+   ],
+   "valueHint": "count and known or unknown"
+  },
+  {
+   "id": "cw.facet.household.people.pet_handlers",
+   "label": {
+    "en": "Who handles the pets",
+    "ar": "من يتولى الحيوانات الأليفة"
+   },
+   "family": "household.people",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "role"
+  },
+  {
+   "id": "cw.facet.household.pets.animals",
+   "label": {
+    "en": "Pets",
+    "ar": "الحيوانات الأليفة"
+   },
+   "family": "household.pets",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "pet_safe_storage"
+   ],
+   "valueHint": "species, count"
+  },
+  {
+   "id": "cw.facet.household.pets.behaviour",
+   "label": {
+    "en": "Pet behaviour around the kitchen",
+    "ar": "سلوك الحيوانات حول المطبخ"
+   },
+   "family": "household.pets",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "jumps, knocks things, begs"
+  },
+  {
+   "id": "cw.facet.household.pets.toxic_foods_rule",
+   "label": {
+    "en": "Pet-toxic foods never left within reach",
+    "ar": "أطعمة سامة للحيوانات لا تُترك في متناولها"
+   },
+   "family": "household.pets",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "pet_safe_storage"
+   ],
+   "valueHint": "onion, garlic, chocolate, grapes, xylitol, cooked bones"
+  },
+  {
+   "id": "cw.facet.household.culture.religious_practice",
+   "label": {
+    "en": "Religious practice",
+    "ar": "الممارسة الدينية"
+   },
+   "family": "household.culture",
+   "privacy": "sensitive",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "diet_rule",
+    "serve_window"
+   ],
+   "valueHint": "declared by the household only"
+  },
+  {
+   "id": "cw.facet.household.culture.prayer_windows",
+   "label": {
+    "en": "Prayer and quiet windows",
+    "ar": "أوقات الصلاة والهدوء"
+   },
+   "family": "household.culture",
+   "privacy": "sensitive",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "serve_window",
+    "quiet_hours"
+   ],
+   "valueHint": "times when serving or noise should pause"
+  },
+  {
+   "id": "cw.facet.household.culture.fasting",
+   "label": {
+    "en": "Fasting calendar",
+    "ar": "تقويم الصيام"
+   },
+   "family": "household.culture",
+   "privacy": "sensitive",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "serve_window"
+   ],
+   "valueHint": "fast days, iftar and suhoor times"
+  },
+  {
+   "id": "cw.facet.household.culture.eating_style",
+   "label": {
+    "en": "Eating style",
+    "ar": "أسلوب تناول الطعام"
+   },
+   "family": "household.culture",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "serving_form"
+   ],
+   "valueHint": "by hand, utensils, shared platters"
+  },
+  {
+   "id": "cw.facet.household.culture.rituals",
+   "label": {
+    "en": "Rituals before and during meals",
+    "ar": "عادات قبل الأكل وأثناءه"
+   },
+   "family": "household.culture",
+   "privacy": "sensitive",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "valueHint": "prayer, holding hands, music"
+  },
+  {
+   "id": "cw.facet.household.culture.modesty_norms",
+   "label": {
+    "en": "Serving and modesty norms",
+    "ar": "أعراف التقديم والاحتشام"
+   },
+   "family": "household.culture",
+   "privacy": "sensitive",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "valueHint": "who serves whom, rooms"
+  },
+  {
+   "id": "cw.facet.household.culture.language",
+   "label": {
+    "en": "Language and tone",
+    "ar": "اللغة وأسلوب الكلام"
+   },
+   "family": "household.culture",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "serving_form"
+   ],
+   "valueHint": "languages, formality"
+  },
+  {
+   "id": "cw.facet.household.culture.offensive_items",
+   "label": {
+    "en": "Things to avoid",
+    "ar": "أمور يجب تجنبها"
+   },
+   "family": "household.culture",
+   "privacy": "sensitive",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "avoid_ingredient"
+   ],
+   "valueHint": "ingredients, words, images"
+  },
+  {
+   "id": "cw.facet.household.culture.openness",
+   "label": {
+    "en": "Openness to new dishes",
+    "ar": "الانفتاح على أطباق جديدة"
+   },
+   "family": "household.culture",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "cuisine_preference"
+   ],
+   "valueHint": "routine or variety"
+  },
+  {
+   "id": "cw.facet.household.tastes.cuisines",
+   "label": {
+    "en": "Preferred cuisines",
+    "ar": "المطابخ المفضلة"
+   },
+   "family": "household.tastes",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "inferred"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "cuisine_preference"
+   ],
+   "valueHint": "cuisine codes"
+  },
+  {
+   "id": "cw.facet.household.tastes.spice",
+   "label": {
+    "en": "Spice tolerance",
+    "ar": "تحمل التوابل الحارة"
+   },
+   "family": "household.tastes",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "inferred"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "spice_level"
+   ],
+   "valueHint": "mild to hot, by role"
+  },
+  {
+   "id": "cw.facet.household.tastes.dislikes",
+   "label": {
+    "en": "Dislikes",
+    "ar": "ما لا يحبونه"
+   },
+   "family": "household.tastes",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "inferred"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "avoid_ingredient"
+   ],
+   "valueHint": "ingredients, textures"
+  },
+  {
+   "id": "cw.facet.household.tastes.presentation",
+   "label": {
+    "en": "Presentation preferences",
+    "ar": "تفضيلات التقديم"
+   },
+   "family": "household.tastes",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "serving_form"
+   ],
+   "valueHint": "colours, plate and table layout"
+  },
+  {
+   "id": "cw.facet.household.tastes.temperature",
+   "label": {
+    "en": "Serving temperature preferences",
+    "ar": "تفضيلات حرارة التقديم"
+   },
+   "family": "household.tastes",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "serving_form"
+   ],
+   "valueHint": "hot, warm, cold, by dish"
+  },
+  {
+   "id": "cw.facet.household.tastes.timing",
+   "label": {
+    "en": "Eat immediately or later",
+    "ar": "الأكل فورًا أم لاحقًا"
+   },
+   "family": "household.tastes",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "serve_window"
+   ],
+   "valueHint": "habits per meal"
+  },
+  {
+   "id": "cw.facet.household.tastes.reheat_habits",
+   "label": {
+    "en": "Reheating and leftovers habits",
+    "ar": "عادات إعادة التسخين وبواقي الطعام"
+   },
+   "family": "household.tastes",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "never",
+   "valueHint": "microwave, fresh only, leftovers use"
+  },
+  {
+   "id": "cw.facet.household.tastes.drinks",
+   "label": {
+    "en": "Drinks and coffee habits",
+    "ar": "عادات المشروبات والقهوة"
+   },
+   "family": "household.tastes",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "never",
+   "valueHint": "who prepares, iced or hot, same or varied"
+  },
+  {
+   "id": "cw.facet.household.tastes.extras",
+   "label": {
+    "en": "Extras, sauces and sides",
+    "ar": "الإضافات والصلصات والأطباق الجانبية"
+   },
+   "family": "household.tastes",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "serving_form"
+   ],
+   "valueHint": "standing items on the table"
+  },
+  {
+   "id": "cw.facet.household.tastes.snacks",
+   "label": {
+    "en": "Snacking habits and locations",
+    "ar": "عادات الوجبات الخفيفة وأماكنها"
+   },
+   "family": "household.tastes",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "never",
+   "valueHint": "where snacks are left"
+  },
+  {
+   "id": "cw.facet.household.tastes.portions",
+   "label": {
+    "en": "Portion norms by role",
+    "ar": "معايير الحصص بحسب الدور"
+   },
+   "family": "household.tastes",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "portion_count"
+   ],
+   "valueHint": "small, normal, large"
+  },
+  {
+   "id": "cw.facet.household.health.allergies",
+   "label": {
+    "en": "Allergies",
+    "ar": "الحساسيات"
+   },
+   "family": "household.health",
+   "privacy": "sensitive",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "allergen_block",
+    "labeling_required"
+   ],
+   "valueHint": "allergens by role; a block, never a substitution"
+  },
+  {
+   "id": "cw.facet.household.health.intolerances",
+   "label": {
+    "en": "Intolerances",
+    "ar": "عدم التحمل الغذائي"
+   },
+   "family": "household.health",
+   "privacy": "sensitive",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "avoid_ingredient"
+   ],
+   "valueHint": "lactose, gluten, by role"
+  },
+  {
+   "id": "cw.facet.household.health.diets",
+   "label": {
+    "en": "Diets",
+    "ar": "الأنظمة الغذائية"
+   },
+   "family": "household.health",
+   "privacy": "sensitive",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "diet_rule"
+   ],
+   "valueHint": "halal, vegetarian, vegan, kosher..."
+  },
+  {
+   "id": "cw.facet.household.health.conditions",
+   "label": {
+    "en": "Health conditions",
+    "ar": "الحالات الصحية"
+   },
+   "family": "household.health",
+   "privacy": "secret",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "valueHint": "declared conditions; local use only"
+  },
+  {
+   "id": "cw.facet.household.health.medications",
+   "label": {
+    "en": "Medication timing and interactions",
+    "ar": "مواعيد الأدوية وتداخلاتها"
+   },
+   "family": "household.health",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "avoid_ingredient",
+    "serve_window"
+   ],
+   "valueHint": "before or after food, foods to avoid; shared only as a constraint"
+  },
+  {
+   "id": "cw.facet.household.health.swallowing",
+   "label": {
+    "en": "Swallowing and texture needs",
+    "ar": "احتياجات البلع والقوام"
+   },
+   "family": "household.health",
+   "privacy": "sensitive",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "texture_level"
+   ],
+   "valueHint": "IDDSI level by role"
+  },
+  {
+   "id": "cw.facet.household.health.pregnancy",
+   "label": {
+    "en": "Pregnancy or breastfeeding",
+    "ar": "الحمل أو الرضاعة"
+   },
+   "family": "household.health",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "avoid_ingredient",
+    "diet_rule"
+   ],
+   "valueHint": "care variant rules apply"
+  },
+  {
+   "id": "cw.facet.household.health.clinician_targets",
+   "label": {
+    "en": "Clinician-set targets",
+    "ar": "أهداف يحددها الطبيب"
+   },
+   "family": "household.health",
+   "privacy": "secret",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "entered locally; override computed targets"
+  },
+  {
+   "id": "cw.facet.household.behavior.waste",
+   "label": {
+    "en": "Food left over and wasted",
+    "ar": "الطعام المتبقي والمهدر"
+   },
+   "family": "household.behavior",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "observed",
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "portion_count"
+   ],
+   "valueHint": "patterns by dish, no per-person scoring"
+  },
+  {
+   "id": "cw.facet.household.behavior.finish_signals",
+   "label": {
+    "en": "Signs a meal is finished",
+    "ar": "إشارات انتهاء الوجبة"
+   },
+   "family": "household.behavior",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "never",
+   "valueHint": "dishes stacked, table left"
+  },
+  {
+   "id": "cw.facet.household.behavior.pace",
+   "label": {
+    "en": "Eating pace",
+    "ar": "سرعة تناول الطعام"
+   },
+   "family": "household.behavior",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "observed"
+   ],
+   "safetyUse": "never",
+   "valueHint": "typical durations"
+  },
+  {
+   "id": "cw.facet.household.behavior.dishes_return",
+   "label": {
+    "en": "Dishes returned to the kitchen",
+    "ar": "إرجاع الأطباق إلى المطبخ"
+   },
+   "family": "household.behavior",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "never",
+   "valueHint": "who clears"
+  },
+  {
+   "id": "cw.facet.household.behavior.disruption",
+   "label": {
+    "en": "Disruption patterns",
+    "ar": "أنماط الفوضى والاضطراب"
+   },
+   "family": "household.behavior",
+   "privacy": "secret",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "running, throwing, arguments; used only for safety at home"
+  },
+  {
+   "id": "cw.facet.household.behavior.feedback",
+   "label": {
+    "en": "Feedback and complaints",
+    "ar": "الملاحظات والشكاوى"
+   },
+   "family": "household.behavior",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "valueHint": "what was asked, applied or not"
+  },
+  {
+   "id": "cw.facet.household.behavior.owner_cooks",
+   "label": {
+    "en": "When people cook themselves",
+    "ar": "متى يطبخ أهل البيت بأنفسهم"
+   },
+   "family": "household.behavior",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "serve_window"
+   ],
+   "valueHint": "days and reasons"
+  },
+  {
+   "id": "cw.facet.household.economics.budget_posture",
+   "label": {
+    "en": "Budget posture",
+    "ar": "الموقف من الميزانية"
+   },
+   "family": "household.economics",
+   "privacy": "sensitive",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "budget_cap"
+   ],
+   "valueHint": "owner-set: tight, moderate, open. Never inferred."
+  },
+  {
+   "id": "cw.facet.household.economics.budget_period",
+   "label": {
+    "en": "Budget per meal, week or event",
+    "ar": "الميزانية لكل وجبة أو أسبوع أو مناسبة"
+   },
+   "family": "household.economics",
+   "privacy": "sensitive",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "budget_cap"
+   ],
+   "valueHint": "amount and period"
+  },
+  {
+   "id": "cw.facet.household.economics.discounts",
+   "label": {
+    "en": "Preference for discounts and offers",
+    "ar": "تفضيل الخصومات والعروض"
+   },
+   "family": "household.economics",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "valueHint": "seek sales, brand flexibility"
+  },
+  {
+   "id": "cw.facet.space.layout",
+   "label": {
+    "en": "Kitchen and home layout",
+    "ar": "تخطيط المطبخ والمنزل"
+   },
+   "family": "space",
+   "privacy": "secret",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "zones, paths, distances"
+  },
+  {
+   "id": "cw.facet.space.tool_positions",
+   "label": {
+    "en": "Where tools and utensils are",
+    "ar": "مواضع الأدوات والأواني"
+   },
+   "family": "space",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "observed",
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "positions, drawers"
+  },
+  {
+   "id": "cw.facet.space.appliances",
+   "label": {
+    "en": "Appliances and their state",
+    "ar": "الأجهزة وحالتها"
+   },
+   "family": "space",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed",
+    "reported"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "heat_sources",
+    "equipment_available"
+   ],
+   "valueHint": "type, smart or not, fullness, faults"
+  },
+  {
+   "id": "cw.facet.space.fridge_contents",
+   "label": {
+    "en": "Fridge, freezer and pantry contents",
+    "ar": "محتويات الثلاجة والمجمد والمخزن"
+   },
+   "family": "space",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "observed",
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "equipment_available"
+   ],
+   "valueHint": "inventory items and positions"
+  },
+  {
+   "id": "cw.facet.space.fridge_notes",
+   "label": {
+    "en": "Fridge notes",
+    "ar": "ملاحظات عن الثلاجة"
+   },
+   "family": "space",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "device_fault_summary"
+   ],
+   "valueHint": "leaking seal, cold spots, overstacking, time to fetch"
+  },
+  {
+   "id": "cw.facet.space.leftover_space",
+   "label": {
+    "en": "Space for leftovers",
+    "ar": "مساحة لبواقي الطعام"
+   },
+   "family": "space",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "observed",
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "containers and shelf space"
+  },
+  {
+   "id": "cw.facet.space.distances",
+   "label": {
+    "en": "Distances kitchen to table and rooms",
+    "ar": "المسافات من المطبخ إلى المائدة والغرف"
+   },
+   "family": "space",
+   "privacy": "secret",
+   "travel": "never",
+   "sources": [
+    "observed",
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "metres, stairs"
+  },
+  {
+   "id": "cw.facet.space.seating",
+   "label": {
+    "en": "Where people sit and are served",
+    "ar": "أماكن الجلوس والتقديم"
+   },
+   "family": "space",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "serving_form"
+   ],
+   "valueHint": "table, seats, rooms"
+  },
+  {
+   "id": "cw.facet.space.garden",
+   "label": {
+    "en": "Garden or indoor produce",
+    "ar": "منتجات الحديقة أو الزراعة الداخلية"
+   },
+   "family": "space",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "equipment_available"
+   ],
+   "valueHint": "what can be picked"
+  },
+  {
+   "id": "cw.facet.space.access_points",
+   "label": {
+    "en": "Doors, garage and delivery points",
+    "ar": "الأبواب والجراج ونقاط التسليم"
+   },
+   "family": "space",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "access_point"
+   ],
+   "valueHint": "shared only as \"front door\" or \"lobby\""
+  },
+  {
+   "id": "cw.facet.space.child_locks",
+   "label": {
+    "en": "Child locks and safe zones for hot items",
+    "ar": "أقفال الأطفال ومناطق آمنة للأشياء الساخنة"
+   },
+   "family": "space",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "child_safe_zones"
+   ],
+   "valueHint": "locks, zones"
+  },
+  {
+   "id": "cw.facet.space.environment.ventilation",
+   "label": {
+    "en": "Ventilation and airflow",
+    "ar": "التهوية وتدفق الهواء"
+   },
+   "family": "space.environment",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "equipment_available"
+   ],
+   "valueHint": "hood, windows, airflow"
+  },
+  {
+   "id": "cw.facet.space.environment.climate",
+   "label": {
+    "en": "Temperature and humidity",
+    "ar": "الحرارة والرطوبة"
+   },
+   "family": "space.environment",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "typical ranges"
+  },
+  {
+   "id": "cw.facet.space.environment.floor_level",
+   "label": {
+    "en": "Floor level and space size",
+    "ar": "الطابق ومساحة المكان"
+   },
+   "family": "space.environment",
+   "privacy": "secret",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "basement, upper floor, tight or wide"
+  },
+  {
+   "id": "cw.facet.space.environment.foot_traffic",
+   "label": {
+    "en": "Foot traffic by zone and time",
+    "ar": "حركة الأشخاص بحسب المكان والوقت"
+   },
+   "family": "space.environment",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "observed",
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "no_movement_zone"
+   ],
+   "valueHint": "busy hallway at 15:00"
+  },
+  {
+   "id": "cw.facet.space.environment.lighting",
+   "label": {
+    "en": "Lighting and glare",
+    "ar": "الإضاءة والوهج"
+   },
+   "family": "space.environment",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "observed",
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "caution_level",
+    "presence_required"
+   ],
+   "valueHint": "low light evenings, direct sun"
+  },
+  {
+   "id": "cw.facet.space.environment.construction",
+   "label": {
+    "en": "Construction, repairs and damage",
+    "ar": "أعمال بناء وإصلاحات وأضرار"
+   },
+   "family": "space.environment",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "no_movement_zone"
+   ],
+   "valueHint": "areas to avoid"
+  },
+  {
+   "id": "cw.facet.space.environment.power",
+   "label": {
+    "en": "Power outlets and limits",
+    "ar": "منافذ الكهرباء وحدودها"
+   },
+   "family": "space.environment",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "heat_sources"
+   ],
+   "valueHint": "outlet positions, breaker limits"
+  },
+  {
+   "id": "cw.facet.space.environment.connectivity",
+   "label": {
+    "en": "Wi-Fi and internet strength per location",
+    "ar": "قوة الواي فاي والإنترنت بحسب المكان"
+   },
+   "family": "space.environment",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "signal by zone, speed"
+  },
+  {
+   "id": "cw.facet.space.environment.noise_limits",
+   "label": {
+    "en": "Noise limits",
+    "ar": "حدود الضوضاء"
+   },
+   "family": "space.environment",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "quiet_hours"
+   ],
+   "valueHint": "quiet hours, sleeping baby"
+  },
+  {
+   "id": "cw.facet.space.environment.fire_safety",
+   "label": {
+    "en": "Smoke detectors, extinguisher, exits",
+    "ar": "كواشف الدخان والطفاية والمخارج"
+   },
+   "family": "space.environment",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "observed",
+    "reported"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "locations, working or beeping"
+  },
+  {
+   "id": "cw.facet.space.environment.water",
+   "label": {
+    "en": "Water quality and pressure",
+    "ar": "جودة الماء وضغطه"
+   },
+   "family": "space.environment",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "potable, pressure"
+  },
+  {
+   "id": "cw.facet.devices.other_robots",
+   "label": {
+    "en": "Other robots in the home",
+    "ar": "روبوتات أخرى في المنزل"
+   },
+   "family": "devices",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "reported"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "equipment_available"
+   ],
+   "valueHint": "model, skills, same model or not"
+  },
+  {
+   "id": "cw.facet.devices.cleaning_robots",
+   "label": {
+    "en": "Cleaning robots and their schedules",
+    "ar": "روبوتات التنظيف ومواعيدها"
+   },
+   "family": "devices",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "reported"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "no_movement_zone"
+   ],
+   "valueHint": "vacuum schedule, commandable or not"
+  },
+  {
+   "id": "cw.facet.devices.smart_appliances",
+   "label": {
+    "en": "Smart appliances and interfaces",
+    "ar": "الأجهزة الذكية وواجهاتها"
+   },
+   "family": "devices",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "reported"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "equipment_available",
+    "heat_sources"
+   ],
+   "valueHint": "Matter, vendor API, data or physical only"
+  },
+  {
+   "id": "cw.facet.devices.status",
+   "label": {
+    "en": "Device status and health",
+    "ar": "حالة الأجهزة وصحتها"
+   },
+   "family": "devices",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "reported",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "device_fault_summary"
+   ],
+   "valueHint": "online, faults, response times"
+  },
+  {
+   "id": "cw.facet.devices.issues",
+   "label": {
+    "en": "Known device issues",
+    "ar": "مشكلات معروفة في الأجهزة"
+   },
+   "family": "devices",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "reported",
+    "observed",
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "device_fault_summary"
+   ],
+   "valueHint": "self-reported and observed"
+  },
+  {
+   "id": "cw.facet.devices.recalls",
+   "label": {
+    "en": "Device recalls",
+    "ar": "سحوبات على الأجهزة"
+   },
+   "family": "devices",
+   "privacy": "public",
+   "travel": "derived",
+   "sources": [
+    "reported"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "device_fault_summary"
+   ],
+   "valueHint": "open recalls and risk"
+  },
+  {
+   "id": "cw.facet.devices.alarm_history",
+   "label": {
+    "en": "Alarm history",
+    "ar": "سجل الإنذارات"
+   },
+   "family": "devices",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "reported",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "smoke alarm events"
+  },
+  {
+   "id": "cw.facet.devices.ownership",
+   "label": {
+    "en": "Who owns and controls each device",
+    "ar": "من يملك كل جهاز ويتحكم فيه"
+   },
+   "family": "devices",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "may this robot command it"
+  },
+  {
+   "id": "cw.facet.devices.interference",
+   "label": {
+    "en": "Shared paths and interference",
+    "ar": "المسارات المشتركة والتداخل"
+   },
+   "family": "devices",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "observed",
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "no_movement_zone"
+   ],
+   "valueHint": "two robots needing one path"
+  },
+  {
+   "id": "cw.facet.resources.power_quota",
+   "label": {
+    "en": "Electricity quota and peak limit",
+    "ar": "حصة الكهرباء وحد الذروة"
+   },
+   "family": "resources",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "heat_sources"
+   ],
+   "valueHint": "kWh per day, W peak"
+  },
+  {
+   "id": "cw.facet.resources.gas_quota",
+   "label": {
+    "en": "Gas quota and cylinder level",
+    "ar": "حصة الغاز ومستوى الأنبوبة"
+   },
+   "family": "resources",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "heat_sources"
+   ],
+   "valueHint": "m3 or cylinder percent"
+  },
+  {
+   "id": "cw.facet.resources.water_limits",
+   "label": {
+    "en": "Water limits",
+    "ar": "حدود استهلاك الماء"
+   },
+   "family": "resources",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "litres per day"
+  },
+  {
+   "id": "cw.facet.resources.tariffs",
+   "label": {
+    "en": "Energy tariffs and time of use",
+    "ar": "تعرفة الطاقة وأوقات الاستهلاك"
+   },
+   "family": "resources",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "reported"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "heat_sources",
+    "serve_window"
+   ],
+   "valueHint": "peak and off-peak"
+  },
+  {
+   "id": "cw.facet.resources.backup_power",
+   "label": {
+    "en": "Generator, solar or battery",
+    "ar": "مولد أو طاقة شمسية أو بطارية"
+   },
+   "family": "resources",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "heat_sources"
+   ],
+   "valueHint": "availability and capacity"
+  },
+  {
+   "id": "cw.facet.resources.outages",
+   "label": {
+    "en": "Outage likelihood",
+    "ar": "احتمال انقطاع الكهرباء أو الغاز"
+   },
+   "family": "resources",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "heat_sources"
+   ],
+   "valueHint": "frequency, typical hours"
+  },
+  {
+   "id": "cw.facet.resources.cooking_time_rules",
+   "label": {
+    "en": "When and how long cooking may run",
+    "ar": "أوقات الطهي المسموح بها ومددها"
+   },
+   "family": "resources",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "quiet_hours",
+    "serve_window"
+   ],
+   "valueHint": "hours, max duration"
+  },
+  {
+   "id": "cw.facet.resources.kitchen_sharing",
+   "label": {
+    "en": "Kitchen sharing schedule",
+    "ar": "جدول مشاركة المطبخ"
+   },
+   "family": "resources",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "no_movement_zone",
+    "serve_window"
+   ],
+   "valueHint": "when people or other robots use the kitchen"
+  },
+  {
+   "id": "cw.facet.commerce.shopping_mode",
+   "label": {
+    "en": "How groceries are bought",
+    "ar": "طريقة شراء البقالة"
+   },
+   "family": "commerce",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "valueHint": "self, delivery, mixed, by robot"
+  },
+  {
+   "id": "cw.facet.commerce.ordering_method",
+   "label": {
+    "en": "How orders are placed",
+    "ar": "طريقة تقديم الطلبات"
+   },
+   "family": "commerce",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "valueHint": "automated, phone, robot"
+  },
+  {
+   "id": "cw.facet.commerce.cadence",
+   "label": {
+    "en": "Ordering cadence",
+    "ar": "وتيرة الطلب"
+   },
+   "family": "commerce",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "never",
+   "valueHint": "daily to monthly"
+  },
+  {
+   "id": "cw.facet.commerce.preferred_providers",
+   "label": {
+    "en": "Preferred stores, apps and providers",
+    "ar": "المتاجر والتطبيقات والمزودون المفضلون"
+   },
+   "family": "commerce",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "valueHint": "list of providers"
+  },
+  {
+   "id": "cw.facet.commerce.exclusions",
+   "label": {
+    "en": "Excluded brands and ingredients",
+    "ar": "ماركات ومكونات مستبعدة"
+   },
+   "family": "commerce",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "avoid_ingredient"
+   ],
+   "valueHint": "brands, ingredients"
+  },
+  {
+   "id": "cw.facet.commerce.bundled_services",
+   "label": {
+    "en": "Bundled services",
+    "ar": "الخدمات المجمعة"
+   },
+   "family": "commerce",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "reported"
+   ],
+   "safetyUse": "never",
+   "valueHint": "grocery, utensils, appliance maintenance"
+  },
+  {
+   "id": "cw.facet.commerce.delivery_subscriptions",
+   "label": {
+    "en": "Delivery subscriptions",
+    "ar": "اشتراكات التوصيل"
+   },
+   "family": "commerce",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "reported"
+   ],
+   "safetyUse": "never",
+   "valueHint": "services and tiers"
+  },
+  {
+   "id": "cw.facet.commerce.payment_authority",
+   "label": {
+    "en": "Spending authority for the robot",
+    "ar": "سلطة الإنفاق الممنوحة للروبوت"
+   },
+   "family": "commerce",
+   "privacy": "sensitive",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "budget_cap"
+   ],
+   "valueHint": "caps per order and period; the AgentMandate carries them"
+  },
+  {
+   "id": "cw.facet.commerce.receiving_rules",
+   "label": {
+    "en": "Rules for receiving deliveries",
+    "ar": "قواعد استلام الطلبات"
+   },
+   "family": "commerce",
+   "privacy": "secret",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "delivery_window",
+    "access_point"
+   ],
+   "valueHint": "who may open the door, when, where to leave"
+  },
+  {
+   "id": "cw.facet.commerce.packaging",
+   "label": {
+    "en": "Packaging preferences",
+    "ar": "تفضيلات التغليف"
+   },
+   "family": "commerce",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "packaging_preference"
+   ],
+   "valueHint": "reusable containers, no plastic"
+  },
+  {
+   "id": "cw.facet.service.purpose",
+   "label": {
+    "en": "Purpose of the meal",
+    "ar": "الغرض من الوجبة"
+   },
+   "family": "service",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "serving_form",
+    "portion_count"
+   ],
+   "valueHint": "dining, breakfast, school box, event, donation, shipping"
+  },
+  {
+   "id": "cw.facet.service.diners",
+   "label": {
+    "en": "Number eating and groups",
+    "ar": "عدد الآكلين ومجموعاتهم"
+   },
+   "family": "service",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "portion_count"
+   ],
+   "valueHint": "counts by age band"
+  },
+  {
+   "id": "cw.facet.service.serving_mode",
+   "label": {
+    "en": "Pick up, serve to table or to rooms",
+    "ar": "الاستلام أو التقديم على المائدة أو في الغرف"
+   },
+   "family": "service",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "serving_form"
+   ],
+   "valueHint": "counter, table, rooms"
+  },
+  {
+   "id": "cw.facet.service.reminders",
+   "label": {
+    "en": "Reminders before and after serving",
+    "ar": "تنبيهات قبل التقديم وبعده"
+   },
+   "family": "service",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "valueHint": "minutes before ready, at ready, after"
+  },
+  {
+   "id": "cw.facet.service.table_setting",
+   "label": {
+    "en": "Table setting and layout",
+    "ar": "إعداد المائدة وترتيبها"
+   },
+   "family": "service",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "derivesTo": [
+    "serving_form"
+   ],
+   "valueHint": "utensils, layout per person or family"
+  },
+  {
+   "id": "cw.facet.service.containers",
+   "label": {
+    "en": "Plates, containers, wraps, boxes",
+    "ar": "أطباق أو علب أو أغلفة أو صناديق"
+   },
+   "family": "service",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "serving_form",
+    "packaging_preference"
+   ],
+   "valueHint": "per purpose"
+  },
+  {
+   "id": "cw.facet.service.labeling",
+   "label": {
+    "en": "Labelling needs",
+    "ar": "احتياجات وضع الملصقات"
+   },
+   "family": "service",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "labeling_required"
+   ],
+   "valueHint": "allergens, dates, names of dishes"
+  },
+  {
+   "id": "cw.facet.service.delivery_temperature",
+   "label": {
+    "en": "Temperature at delivery",
+    "ar": "الحرارة عند التسليم"
+   },
+   "family": "service",
+   "privacy": "household",
+   "travel": "derived",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "derivesTo": [
+    "serving_form"
+   ],
+   "valueHint": "hot, chilled, by dish"
+  },
+  {
+   "id": "cw.facet.history.incidents",
+   "label": {
+    "en": "Past incidents at home",
+    "ar": "حوادث سابقة في المنزل"
+   },
+   "family": "history",
+   "privacy": "secret",
+   "travel": "never",
+   "sources": [
+    "observed",
+    "declared"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "LocalIncident records"
+  },
+  {
+   "id": "cw.facet.history.conflicts",
+   "label": {
+    "en": "Conflicts and how they were resolved",
+    "ar": "الخلافات وكيفية حلها"
+   },
+   "family": "history",
+   "privacy": "secret",
+   "travel": "never",
+   "sources": [
+    "declared",
+    "observed"
+   ],
+   "safetyUse": "never",
+   "valueHint": "robot with people or devices, lessons"
+  },
+  {
+   "id": "cw.facet.history.escalations",
+   "label": {
+    "en": "Escalations to maker support",
+    "ar": "التصعيد إلى دعم الصانع"
+   },
+   "family": "history",
+   "privacy": "household",
+   "travel": "consented",
+   "sources": [
+    "declared",
+    "reported"
+   ],
+   "safetyUse": "never",
+   "valueHint": "dates and outcomes"
+  },
+  {
+   "id": "cw.facet.history.overrides",
+   "label": {
+    "en": "Overrides, forced restarts, shutdowns",
+    "ar": "التجاوزات وإعادة التشغيل القسري والإيقاف"
+   },
+   "family": "history",
+   "privacy": "household",
+   "travel": "consented",
+   "sources": [
+    "reported",
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "counts and dates"
+  },
+  {
+   "id": "cw.facet.history.give_ups",
+   "label": {
+    "en": "Tasks given up and who helped",
+    "ar": "مهام تم التخلي عنها ومن ساعد"
+   },
+   "family": "history",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "task, retries, helper role"
+  },
+  {
+   "id": "cw.facet.history.task_stats",
+   "label": {
+    "en": "Success statistics per task",
+    "ar": "إحصاءات النجاح لكل مهمة"
+   },
+   "family": "history",
+   "privacy": "household",
+   "travel": "consented",
+   "sources": [
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "rates, no personal data"
+  },
+  {
+   "id": "cw.facet.history.near_misses",
+   "label": {
+    "en": "Near misses",
+    "ar": "حوادث كادت تقع"
+   },
+   "family": "history",
+   "privacy": "secret",
+   "travel": "never",
+   "sources": [
+    "observed"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "what almost happened; may be reported anonymously as an IncidentReport"
+  },
+  {
+   "id": "cw.facet.history.recall_handling",
+   "label": {
+    "en": "Recall and repair scheduling",
+    "ar": "التعامل مع السحوبات ومواعيد الإصلاح"
+   },
+   "family": "history",
+   "privacy": "household",
+   "travel": "consented",
+   "sources": [
+    "declared",
+    "reported"
+   ],
+   "safetyUse": "allowed",
+   "valueHint": "accepted, scheduled, done"
+  },
+  {
+   "id": "cw.facet.history.lessons",
+   "label": {
+    "en": "Lessons the household agreed on",
+    "ar": "دروس اتفق عليها أهل البيت"
+   },
+   "family": "history",
+   "privacy": "household",
+   "travel": "never",
+   "sources": [
+    "declared"
+   ],
+   "safetyUse": "never",
+   "valueHint": "coarse onions fine, firm yolks not"
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+{
+ "kind": "DerivedConstraint",
+ "type": "allergen_block",
+ "value": {"allergens": ["peanuts"]},
+ "recipientRole": "planner",
+ "derivedFrom": ["cw.facet.household.health.allergies"],
+ "issuedAt": "2026-10-04T16:10:00+03:00"
+}

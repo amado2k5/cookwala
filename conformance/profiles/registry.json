@@ -1,0 +1,268 @@
+[
+ {
+  "id": "name-0",
+  "kind": "registry_name",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Registry name 'org.fifi-cooking/egyptian-home' is valid.",
+  "input": {
+   "name": "org.fifi-cooking/egyptian-home"
+  },
+  "expected": {
+   "valid": true,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "name-1",
+  "kind": "registry_name",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Registry name 'io.github.amado2k5/recipes' is valid.",
+  "input": {
+   "name": "io.github.amado2k5/recipes"
+  },
+  "expected": {
+   "valid": true,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "name-2",
+  "kind": "registry_name",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Registry name 'ai.cookwala/reference-catalog' is valid.",
+  "input": {
+   "name": "ai.cookwala/reference-catalog"
+  },
+  "expected": {
+   "valid": true,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "name-3",
+  "kind": "registry_name",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Registry name 'Org.Fifi/x' is invalid.",
+  "input": {
+   "name": "Org.Fifi/x"
+  },
+  "expected": {
+   "valid": false,
+   "reason": "not_lower_case"
+  }
+ },
+ {
+  "id": "name-4",
+  "kind": "registry_name",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Registry name 'nodots/name' is invalid.",
+  "input": {
+   "name": "nodots/name"
+  },
+  "expected": {
+   "valid": false,
+   "reason": "bad_format"
+  }
+ },
+ {
+  "id": "name-5",
+  "kind": "registry_name",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Registry name 'org.fifi-cooking/egyptian/home' is invalid.",
+  "input": {
+   "name": "org.fifi-cooking/egyptian/home"
+  },
+  "expected": {
+   "valid": false,
+   "reason": "one_slash_required"
+  }
+ },
+ {
+  "id": "name-6",
+  "kind": "registry_name",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Registry name 'org.fifi-cooking/' is invalid.",
+  "input": {
+   "name": "org.fifi-cooking/"
+  },
+  "expected": {
+   "valid": false,
+   "reason": "bad_format"
+  }
+ },
+ {
+  "id": "name-7",
+  "kind": "registry_name",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Registry name 'a/b' is invalid.",
+  "input": {
+   "name": "a/b"
+  },
+  "expected": {
+   "valid": false,
+   "reason": "bad_format"
+  }
+ },
+ {
+  "id": "name-8",
+  "kind": "registry_name",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Registry name 'org.example/with space' is invalid.",
+  "input": {
+   "name": "org.example/with space"
+  },
+  "expected": {
+   "valid": false,
+   "reason": "bad_format"
+  }
+ },
+ {
+  "id": "version-0",
+  "kind": "registry_version",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Version '1.4.2' is exact.",
+  "input": {
+   "version": "1.4.2"
+  },
+  "expected": {
+   "exact": true,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "version-1",
+  "kind": "registry_version",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Version '0.2.0' is exact.",
+  "input": {
+   "version": "0.2.0"
+  },
+  "expected": {
+   "exact": true,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "version-2",
+  "kind": "registry_version",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Version '1.0.0-rc.1' is exact.",
+  "input": {
+   "version": "1.0.0-rc.1"
+  },
+  "expected": {
+   "exact": true,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "version-3",
+  "kind": "registry_version",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Version '^1.4' is rejected.",
+  "input": {
+   "version": "^1.4"
+  },
+  "expected": {
+   "exact": false,
+   "reason": "range_not_allowed"
+  }
+ },
+ {
+  "id": "version-4",
+  "kind": "registry_version",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Version '1.x' is rejected.",
+  "input": {
+   "version": "1.x"
+  },
+  "expected": {
+   "exact": false,
+   "reason": "range_not_allowed"
+  }
+ },
+ {
+  "id": "version-5",
+  "kind": "registry_version",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Version 'latest' is rejected.",
+  "input": {
+   "version": "latest"
+  },
+  "expected": {
+   "exact": false,
+   "reason": "tag_not_allowed"
+  }
+ },
+ {
+  "id": "version-6",
+  "kind": "registry_version",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Version '1.4' is rejected.",
+  "input": {
+   "version": "1.4"
+  },
+  "expected": {
+   "exact": false,
+   "reason": "not_semver"
+  }
+ },
+ {
+  "id": "version-7",
+  "kind": "registry_version",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Version 'v1.4.2' is rejected.",
+  "input": {
+   "version": "v1.4.2"
+  },
+  "expected": {
+   "exact": false,
+   "reason": "not_semver"
+  }
+ },
+ {
+  "id": "version-8",
+  "kind": "registry_version",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Version '>=1.0.0' is rejected.",
+  "input": {
+   "version": ">=1.0.0"
+  },
+  "expected": {
+   "exact": false,
+   "reason": "range_not_allowed"
+  }
+ },
+ {
+  "id": "version-9",
+  "kind": "registry_version",
+  "profile": "registry",
+  "rfc": "0002",
+  "description": "Version '*' is rejected.",
+  "input": {
+   "version": "*"
+  },
+  "expected": {
+   "exact": false,
+   "reason": "tag_not_allowed"
+  }
+ }
+]

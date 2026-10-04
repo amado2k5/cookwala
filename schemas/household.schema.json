@@ -1,0 +1,187 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://cookwala.ai/v1/schemas/household.schema.json",
+ "title": "Cookwala Household Context Profile",
+ "x-cookwala-status": "profile-draft",
+ "description": "RFC-0001. The full picture of a home stays at home. A HouseholdContext is local-only and sensitive; providers and agents receive only DerivedConstraints. Facet types, their privacy classes and their travel rules come from vocab/facets.json. Raw facets never leave the device; inferred facets are never used for safety decisions; no behavioural score of any person exists; everything is erasable.",
+ "$defs": {
+  "Version": {"type": "string", "pattern": "^0\\.1\\.[0-9]+$"},
+  "Id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._:-]{2,95}$"},
+  "FacetId": {"type": "string", "pattern": "^(cw|x-[a-z0-9-]+)\\.facet\\.[a-z0-9_.]+$"},
+  "RecipientRole": {"enum": ["grocer", "delivery", "planner", "device_maker", "program", "dataset", "insurer", "other_robot"]},
+  "ConstraintType": {
+   "enum": ["delivery_window", "access_point", "no_movement_zone", "quiet_hours", "avoid_ingredient", "allergen_block", "diet_rule", "serve_window", "budget_cap", "heat_sources", "equipment_available", "texture_level", "portion_count", "presence_required", "caution_level", "robot_runtime_minutes", "serving_form", "labeling_required", "cuisine_preference", "spice_level", "packaging_preference", "pet_safe_storage", "child_safe_zones", "device_fault_summary"]
+  },
+  "Facet": {
+   "type": "object",
+   "required": ["facet", "subject", "value", "source", "observedAt", "privacy"],
+   "unevaluatedProperties": false,
+   "patternProperties": {"^x-": {}},
+   "description": "One typed fact about the home. The same shape as a Mission facet; the type must exist in vocab/facets.json.",
+   "properties": {
+    "id": {"$ref": "#/$defs/Id"},
+    "facet": {"$ref": "#/$defs/FacetId"},
+    "subject": {"type": "string", "maxLength": 120, "description": "What the fact is about: a device id, a zone, a role such as 'adult_member_2'. Never a legal name."},
+    "value": {},
+    "summary": {"$ref": "common.schema.json#/$defs/UntrustedText"},
+    "source": {
+     "type": "object",
+     "required": ["kind"],
+     "unevaluatedProperties": false,
+     "patternProperties": {"^x-": {}},
+     "properties": {
+      "kind": {"enum": ["declared", "observed", "reported", "inferred"]},
+      "actor": {"type": "string", "maxLength": 120},
+      "evidence": {"type": "array", "items": {"type": "string", "maxLength": 200}, "description": "Local references (frames, logs) kept on the device."}
+     }
+    },
+    "observedAt": {"$ref": "common.schema.json#/$defs/DateTime"},
+    "validFor": {"$ref": "common.schema.json#/$defs/Duration"},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "privacy": {"enum": ["public", "household", "sensitive", "secret"], "description": "May be raised above the registry default, never lowered below it."},
+    "consent": {"type": "array", "items": {"$ref": "#/$defs/Id"}, "description": "ConsentGrant ids that cover this facet."}
+   }
+  },
+  "ConsentGrant": {
+   "type": "object",
+   "required": ["id", "grantedBy", "scope", "recipientRole", "purpose", "grantedAt", "withdrawable"],
+   "unevaluatedProperties": false,
+   "patternProperties": {"^x-": {}},
+   "description": "Permission for facets with travel 'consented' to leave the home as selective disclosures. Granted by a role, never a named person.",
+   "properties": {
+    "id": {"$ref": "#/$defs/Id"},
+    "grantedBy": {"enum": ["owner", "adult_member", "guardian", "organization"], "description": "A role. Children cannot grant consent."},
+    "scope": {
+     "type": "object",
+     "unevaluatedProperties": false,
+     "properties": {
+      "facets": {"type": "array", "items": {"$ref": "#/$defs/FacetId"}},
+      "families": {"type": "array", "items": {"type": "string", "pattern": "^[a-z_.]+$"}}
+     },
+     "minProperties": 1
+    },
+    "recipientRole": {"$ref": "#/$defs/RecipientRole"},
+    "recipient": {"type": "string", "maxLength": 200, "description": "Specific organization (did:web) when the grant is not for a whole role."},
+    "purpose": {"type": "string", "maxLength": 200},
+    "grantedAt": {"$ref": "common.schema.json#/$defs/DateTime"},
+    "expiresAt": {"$ref": "common.schema.json#/$defs/DateTime"},
+    "withdrawnAt": {"$ref": "common.schema.json#/$defs/DateTime"},
+    "withdrawable": {"const": true}
+   }
+  },
+  "DerivedConstraint": {
+   "type": "object",
+   "required": ["kind", "type", "value", "recipientRole", "derivedFrom", "issuedAt"],
+   "unevaluatedProperties": false,
+   "patternProperties": {"^x-": {}},
+   "description": "The only household-originated object a provider or agent ever receives. Names the facet TYPES it came from, never their values.",
+   "properties": {
+    "kind": {"const": "DerivedConstraint"},
+    "type": {"$ref": "#/$defs/ConstraintType"},
+    "value": {},
+    "recipientRole": {"$ref": "#/$defs/RecipientRole"},
+    "derivedFrom": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/FacetId"}},
+    "issuedAt": {"$ref": "common.schema.json#/$defs/DateTime"},
+    "validFrom": {"$ref": "common.schema.json#/$defs/DateTime"},
+    "validTo": {"$ref": "common.schema.json#/$defs/DateTime"},
+    "disclosure": {"$ref": "common.schema.json#/$defs/Disclosure", "description": "Present only for 'consented' facets sent as a selective disclosure."}
+   }
+  },
+  "LocalIncident": {
+   "type": "object",
+   "required": ["id", "date", "category", "involved", "resolved"],
+   "unevaluatedProperties": false,
+   "patternProperties": {"^x-": {}},
+   "description": "The household's own memory of what went wrong and what was learnt. Never exported. The public, anonymous record is core.schema.json IncidentReport.",
+   "properties": {
+    "id": {"$ref": "#/$defs/Id"},
+    "date": {"type": "string", "format": "date"},
+    "category": {"$ref": "common.schema.json#/$defs/VocabId", "description": "From vocab/incidents.json."},
+    "involved": {"type": "array", "minItems": 1, "items": {"enum": ["robot", "other_robot", "appliance", "utensil", "alarm", "adult", "child", "pet", "visitor", "worker", "provider", "network", "power"]}},
+    "note": {"$ref": "common.schema.json#/$defs/UntrustedText"},
+    "lesson": {"$ref": "common.schema.json#/$defs/UntrustedText"},
+    "escalatedTo": {"enum": ["none", "household", "maker_support", "emergency_services"]},
+    "resolved": {"type": "boolean"}
+   }
+  },
+  "HouseholdContext": {
+   "type": "object",
+   "required": ["profile", "kind", "id", "holder", "meta", "facets", "consents", "retention"],
+   "unevaluatedProperties": false,
+   "patternProperties": {"^x-": {}},
+   "description": "Local-only document held by the home's hub or robot. meta.visibility MUST be local_only and meta.sensitive MUST be true.",
+   "properties": {
+    "profile": {"$ref": "#/$defs/Version"},
+    "kind": {"const": "HouseholdContext"},
+    "id": {"$ref": "#/$defs/Id"},
+    "holder": {"type": "string", "maxLength": 120, "description": "Device or hub id that holds the document."},
+    "meta": {
+     "type": "object",
+     "required": ["visibility", "sensitive"],
+     "unevaluatedProperties": false,
+     "patternProperties": {"^x-": {}},
+     "properties": {
+      "visibility": {"const": "local_only"},
+      "sensitive": {"const": true},
+      "createdAt": {"$ref": "common.schema.json#/$defs/DateTime"},
+      "updatedAt": {"$ref": "common.schema.json#/$defs/DateTime"}
+     }
+    },
+    "facets": {"type": "array", "items": {"$ref": "#/$defs/Facet"}},
+    "consents": {"type": "array", "items": {"$ref": "#/$defs/ConsentGrant"}},
+    "incidents": {"type": "array", "items": {"$ref": "#/$defs/LocalIncident"}},
+    "retention": {
+     "type": "object",
+     "required": ["erasureWindowDays"],
+     "unevaluatedProperties": false,
+     "properties": {
+      "facetsDays": {"type": "integer", "minimum": 1, "maximum": 3650, "description": "Observed facets older than this are dropped unless re-observed."},
+      "incidentsDays": {"type": "integer", "minimum": 1, "maximum": 3650},
+      "erasureWindowDays": {"type": "integer", "minimum": 1, "maximum": 30, "description": "An erasure request completes within this many days. Default 7."}
+     }
+    },
+    "erasures": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": ["requestedAt", "scope", "completedAt"],
+      "unevaluatedProperties": false,
+      "properties": {
+       "requestedAt": {"$ref": "common.schema.json#/$defs/DateTime"},
+       "scope": {"enum": ["all", "facets", "incidents", "family", "facet"]},
+       "target": {"type": "string", "maxLength": 120},
+       "completedAt": {"$ref": "common.schema.json#/$defs/DateTime"}
+      }
+     },
+     "description": "Local log that erasure happened, kept without the erased content."
+    }
+   }
+  },
+  "RecipientRoles": {
+   "type": "object",
+   "required": ["profile", "kind", "roles"],
+   "unevaluatedProperties": false,
+   "patternProperties": {"^x-": {}},
+   "description": "Which DerivedConstraint types each recipient role may receive. Closed list in 0.1 (RFC-0001 open question 1).",
+   "properties": {
+    "profile": {"$ref": "#/$defs/Version"},
+    "kind": {"const": "RecipientRoles"},
+    "roles": {
+     "type": "object",
+     "unevaluatedProperties": false,
+     "properties": {
+      "grocer": {"$ref": "#/$defs/ConstraintTypeList"},
+      "delivery": {"$ref": "#/$defs/ConstraintTypeList"},
+      "planner": {"$ref": "#/$defs/ConstraintTypeList"},
+      "device_maker": {"$ref": "#/$defs/ConstraintTypeList"},
+      "program": {"$ref": "#/$defs/ConstraintTypeList"},
+      "dataset": {"$ref": "#/$defs/ConstraintTypeList"},
+      "insurer": {"$ref": "#/$defs/ConstraintTypeList"},
+      "other_robot": {"$ref": "#/$defs/ConstraintTypeList"}
+     }
+    }
+   }
+  },
+  "ConstraintTypeList": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/ConstraintType"}}
+ }
+}

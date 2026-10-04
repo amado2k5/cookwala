@@ -1,0 +1,56 @@
+{
+ "profile": "0.2.0",
+ "kind": "RulePack",
+ "id": "sodium-reduction",
+ "version": "0.1.0",
+ "title": "Sodium reduction rules for programs that adopt them",
+ "status": "draft",
+ "extends": "who-codex-basic@0.1.0",
+ "jurisdiction": "Global default derived from the WHO sodium guideline",
+ "rules": [
+  {
+   "id": "sodium.per_meal_warn",
+   "kind": "nutrient",
+   "applies": "menu_per_meal",
+   "check": {
+    "nutrient": "sodiumMg",
+    "max": 700,
+    "unit": "mg"
+   },
+   "severity": "warn",
+   "audienceGroup": "all",
+   "message": "Sodium above 700 mg in one meal (about a third of the 2 g daily guideline).",
+   "source": "WHO sodium intake guideline (2012): under 2 g sodium (5 g salt) per day"
+  },
+  {
+   "id": "sodium.per_meal_block",
+   "kind": "nutrient",
+   "applies": "menu_per_meal",
+   "check": {
+    "nutrient": "sodiumMg",
+    "max": 1000,
+    "unit": "mg"
+   },
+   "severity": "block",
+   "audienceGroup": "all",
+   "message": "A single meal with more than 1 g of sodium is half the daily guideline; programs that adopt this pack do not serve it.",
+   "source": "Derived from the WHO sodium intake guideline (2012)"
+  },
+  {
+   "id": "sodium.per_day",
+   "kind": "nutrient",
+   "applies": "menu_per_person_day",
+   "check": {
+    "nutrient": "sodiumMg",
+    "max": 2000,
+    "unit": "mg"
+   },
+   "severity": "warn",
+   "audienceGroup": "all",
+   "message": "Sodium above 2 g per person per day.",
+   "source": "WHO sodium intake guideline (2012)"
+  }
+ ],
+ "reviews": [],
+ "disclaimer": "DRAFT derived from public guidance. Not medical advice. Population-level rules only; people with clinician-set sodium targets are handled locally through PersonNutrition, never through this pack. Must be reviewed by a registered dietitian before adoption."
+}

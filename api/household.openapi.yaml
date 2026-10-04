@@ -1,0 +1,183 @@
+openapi: 3.1.0
+info:
+  title: Cookwala Household Context API (local)
+  version: 0.1.0
+  summary: The home's own picture of itself, served only on the home network.
+  description: |
+    RFC-0001. A hub or robot holds one HouseholdContext document. This API never leaves the
+    local network and is never exposed to a provider. Providers and agents receive only
+    DerivedConstraint documents produced by POST /household/constraints.
+
+    Rules (schemas/household.schema.json):
+    - Raw facets never leave the device. Facets with travel "never" are not even derived.
+    - Inferred facets are never used for safety decisions.
+    - A recipient role receives only the constraint types listed for it in
+      profiles/household/recipient-roles.json.
+    - Erasure completes within retention.erasureWindowDays and is logged without content.
+    - Authentication: the hub's pairing flow; only owner and adult_member roles may change
+      consents or request erasure.
+  license:
+    name: Apache-2.0
+    identifier: Apache-2.0
+servers:
+  - url: https://hub.local/cookwala
+    description: The kitchen hub on the home network only
+security:
+  - paired: []
+paths:
+  /household/context:
+    get:
+      operationId: getHouseholdContext
+      summary: Read the local context (owner and adult members only)
+      responses:
+        '200':
+          description: The document
+          content:
+            application/vnd.cookwala+json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/household.schema.json#/$defs/HouseholdContext
+  /household/facets:
+    put:
+      operationId: putFacets
+      summary: Add or replace facets by id
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/vnd.cookwala+json:
+            schema:
+              type: array
+              items:
+                $ref: https://cookwala.ai/v1/schemas/household.schema.json#/$defs/Facet
+      responses:
+        '204':
+          description: Stored locally
+        '422':
+          description: A facet type is not in vocab/facets.json, or its privacy class is lower than the registry default
+  /household/facets/{id}:
+    delete:
+      operationId: deleteFacet
+      summary: Erase one facet now
+      parameters:
+        - $ref: '#/components/parameters/FacetId'
+      responses:
+        '204':
+          description: Erased and logged
+  /household/consents:
+    post:
+      operationId: grantConsent
+      summary: Grant consent for consented facets to travel to a recipient role
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/vnd.cookwala+json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/household.schema.json#/$defs/ConsentGrant
+      responses:
+        '201':
+          description: Granted
+        '403':
+          description: Only owner, adult_member or guardian roles may grant
+  /household/consents/{id}:
+    delete:
+      operationId: withdrawConsent
+      summary: Withdraw a consent grant
+      parameters:
+        - $ref: '#/components/parameters/FacetId'
+      responses:
+        '204':
+          description: Withdrawn; later disclosures stop immediately
+  /household/constraints:
+    post:
+      operationId: deriveConstraints
+      summary: Derive the constraints a recipient role may receive for a purpose
+      description: The only output of this API that ever leaves the home. Facts with travel "never" are withheld; "derived" facts become constraint types allowed for the role; "consented" facts need a matching ConsentGrant.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [recipientRole, purpose]
+              properties:
+                recipientRole:
+                  $ref: https://cookwala.ai/v1/schemas/household.schema.json#/$defs/RecipientRole
+                recipient:
+                  type: string
+                purpose:
+                  type: string
+                  maxLength: 200
+      responses:
+        '200':
+          description: Constraints and what was withheld
+          content:
+            application/vnd.cookwala+json:
+              schema:
+                type: object
+                required: [constraints, withheld]
+                properties:
+                  constraints:
+                    type: array
+                    items:
+                      $ref: https://cookwala.ai/v1/schemas/household.schema.json#/$defs/DerivedConstraint
+                  disclosed:
+                    type: array
+                    items:
+                      type: string
+                  withheld:
+                    type: array
+                    items:
+                      type: object
+                      required: [facet, reason]
+                      properties:
+                        facet:
+                          type: string
+                        reason:
+                          enum: [never_travels, no_consent, not_allowed_for_role]
+  /household/erase:
+    post:
+      operationId: eraseHousehold
+      summary: Erase everything, or a family or scope, within the erasure window
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [scope]
+              properties:
+                scope:
+                  enum: [all, facets, incidents, family, facet]
+                target:
+                  type: string
+      responses:
+        '202':
+          description: Erasure scheduled; completion is logged in erasures[]
+components:
+  securitySchemes:
+    paired:
+      type: http
+      scheme: bearer
+      description: Token from the hub's pairing flow, bound to a household role.
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 128
+    FacetId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string

@@ -17,6 +17,7 @@ CLI:
     python tools/cookwala_ref.py verify FILE --keys KEYS.json
     python tools/cookwala_ref.py chain EVENTS.json [--keys KEYS.json]
     python tools/cookwala_ref.py dryrun RECIPE.json --device CAPABILITIES.json [--human-present] [--no-model]
+    python tools/cookwala_ref.py sms OFFER 36KG YOGURT C T4C UB0511
 """
 import base64
 import datetime as dt
@@ -328,13 +329,193 @@ def dry_run(recipe, capabilities, human_present=False, allow_model=True):
     return {'state': 'accepted', 'plan': plan}
 
 
+# ---------------------------------------------------------------- profiles (RFC-0001, 0002, 0003, 0007)
+
+import re as _re
+
+
+def _registry_facets():
+    return {e['id']: e for e in json.loads((ROOT / 'vocab' / 'facets.json').read_text())['entries']}
+
+
+def _recipient_roles():
+    return json.loads((ROOT / 'profiles' / 'household' / 'recipient-roles.json').read_text())['roles']
+
+
+def derive_constraints(facets, role, consents=None, registry=None, roles=None):
+    """RFC-0001: what a recipient role may receive from a list of household facets.
+
+    Returns {'constraints': [{'type', 'derivedFrom': [facet ids]}], 'disclosed': [facet ids],
+    'withheld': [{'facet', 'reason'}]}. Raw facets never appear in the output. Facets with travel
+    'never' are withheld; 'derived' facets produce only the constraint types allowed for the role;
+    'consented' facets need a ConsentGrant covering the facet (or its family) for that role.
+    """
+    registry = registry or _registry_facets(); roles = roles if roles is not None else _recipient_roles()
+    allowed = set(roles.get(role, []))
+    consents = [c for c in (consents or []) if c.get('recipientRole') == role and not c.get('withdrawnAt')]
+    out = {'constraints': [], 'disclosed': [], 'withheld': []}
+    by_type = {}
+    for f in facets:
+        fid = f['facet']; entry = registry.get(fid)
+        if entry is None:
+            out['withheld'].append({'facet': fid, 'reason': 'unknown_facet'}); continue
+        travel = entry['travel']
+        if travel == 'never':
+            out['withheld'].append({'facet': fid, 'reason': 'never_travels'}); continue
+        if travel == 'consented':
+            fam = entry['family']
+            ok = any(fid in c.get('scope', {}).get('facets', []) or fam in c.get('scope', {}).get('families', []) for c in consents)
+            if ok: out['disclosed'].append(fid)
+            else: out['withheld'].append({'facet': fid, 'reason': 'no_consent'})
+            continue
+        types = [t for t in entry.get('derivesTo', []) if t in allowed]
+        if not types:
+            out['withheld'].append({'facet': fid, 'reason': 'not_allowed_for_role'}); continue
+        for t in types:
+            by_type.setdefault(t, [])
+            if fid not in by_type[t]: by_type[t].append(fid)
+    out['constraints'] = [{'type': t, 'derivedFrom': ids} for t, ids in by_type.items()]
+    return out
+
+
+_NAME = _re.compile(r'^[a-z0-9]+(\.[a-z0-9-]+)+/[a-z0-9][a-z0-9._-]{0,99}$')
+_SEMVER = _re.compile(r'^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?$')
+
+
+def registry_name_valid(name):
+    """RFC-0002: <reverse-dns-namespace>/<name>, lower case, 3..200 chars, namespace has at least one dot."""
+    if not isinstance(name, str) or not 3 <= len(name) <= 200: return False, 'length'
+    if name != name.lower(): return False, 'not_lower_case'
+    if name.count('/') != 1: return False, 'one_slash_required'
+    if not _NAME.match(name): return False, 'bad_format'
+    return True, 'ok'
+
+
+def version_exact(version):
+    """RFC-0002: exact semver only; ranges and tags are rejected."""
+    if not isinstance(version, str): return False, 'not_a_string'
+    if version in ('latest', '*'): return False, 'tag_not_allowed'
+    if any(ch in version for ch in '^~<>=x*') or version.endswith('.'): return False, 'range_not_allowed'
+    if not _SEMVER.match(version): return False, 'not_semver'
+    return True, 'ok'
+
+
+def check_signal(signal, min_sources=20, min_delay_days=7, fine_region_min_sources=100):
+    """RFC-0007: policy check for an aggregated demand or supply signal. Returns (ok, reasons)."""
+    reasons = []
+    if signal.get('kind') not in ('DemandSignal', 'SupplySignal'): reasons.append('unknown_kind')
+    if signal.get('kind') == 'DemandSignal':
+        if signal.get('contributingSources', 0) < min_sources: reasons.append('too_few_sources')
+        if signal.get('delayDays', 0) < min_delay_days: reasons.append('delay_too_short')
+        if signal.get('prices', 'none') != 'none': reasons.append('prices_not_allowed')
+    for key in ('price', 'prices', 'unitPrice', 'priceRange'):
+        v = signal.get(key)
+        if v not in (None, 'none'): reasons.append('prices_not_allowed')
+    cls = signal.get('ingredientClass', '')
+    if not cls.startswith('cw.ing.class.') and not cls.startswith('x-'): reasons.append('class_level_required')
+    region = signal.get('region', {})
+    if (region.get('admin2') or region.get('pcode')) and signal.get('contributingSources', 0) < fine_region_min_sources: reasons.append('region_too_fine')
+    if signal.get('kind') == 'SupplySignal' and signal.get('openToAll') is not True: reasons.append('must_be_open_to_all')
+    reasons = sorted(set(reasons))
+    return (not reasons), reasons
+
+
+# SMS grammar for the Humanitarian Profile (docs/HUMANITARIAN-PROFILE.md section 8.3, RFC-0003).
+_STORAGE = {'A': 'ambient', 'C': 'chilled', 'F': 'frozen', 'H': 'hot_held'}
+
+
+def parse_sms(text, today=None):
+    """Parse one SMS into a structured command. Returns {'ok': True, 'command': ..., ...} or {'ok': False, 'error': ...}.
+
+    OFFER <kg>KG <item words> <A|C|F|H> [T<temp>C] [UB<ddmm>|BB<ddmm>]
+    FARM  <kg>KG <item words> <A|C|F|H> [BB<ddmm>]          (an OFFER with origin farm)
+    CLAIM <offer> ALL | <kg>
+    HAND  <offer> <kg accepted> [T<temp>] | <offer> 0 REJ <kg> <REASON> [T<temp>]
+    DIST  <meals> MEALS <people> PEOPLE <kg>KG
+    MENU  <distribution> KCAL<n> SODIUM<mg> FV<g>
+    HELP · CANCEL <id>
+    """
+    if not isinstance(text, str) or not text.strip(): return {'ok': False, 'error': 'empty'}
+    toks = text.strip().upper().split()
+    cmd = toks[0]
+    def kg(tok):
+        m = _re.fullmatch(r'(\d+(?:\.\d+)?)KG', tok); return float(m.group(1)) if m else None
+    def temp(tok):
+        # T4.6, T4.6C or 4C (a C suffix or a T prefix is required so plain numbers stay kilograms)
+        m = _re.fullmatch(r'T(-?\d+(?:\.\d+)?)C?', tok) or _re.fullmatch(r'(-?\d+(?:\.\d+)?)C', tok)
+        return float(m.group(1)) if m else None
+    def datemark(tok):
+        m = _re.fullmatch(r'(UB|BB)(\d{2})(\d{2})', tok)
+        if not m: return None
+        day, month = int(m.group(2)), int(m.group(3))
+        if not (1 <= day <= 31 and 1 <= month <= 12): return 'bad_date'
+        return {'kind': 'use_by' if m.group(1) == 'UB' else 'best_before', 'dayMonth': f'{day:02d}-{month:02d}'}
+    if cmd == 'HELP': return {'ok': True, 'command': 'HELP'}
+    if cmd == 'CANCEL':
+        if len(toks) != 2: return {'ok': False, 'error': 'usage'}
+        return {'ok': True, 'command': 'CANCEL', 'id': toks[1]}
+    if cmd in ('OFFER', 'FARM'):
+        if len(toks) < 4 or kg(toks[1]) is None: return {'ok': False, 'error': 'usage'}
+        rest = toks[2:]
+        storage = None; t = None; dm = None; words = []
+        for tok in rest:
+            if tok in _STORAGE and storage is None: storage = _STORAGE[tok]; continue
+            if temp(tok) is not None and t is None: t = temp(tok); continue
+            d = datemark(tok)
+            if d == 'bad_date': return {'ok': False, 'error': 'bad_date'}
+            if d: dm = d; continue
+            words.append(tok)
+        if storage is None or not words: return {'ok': False, 'error': 'usage'}
+        out = {'ok': True, 'command': 'OFFER', 'kg': kg(toks[1]), 'item': ' '.join(words).lower(), 'storage': storage, 'origin': 'farm' if cmd == 'FARM' else None}
+        if t is not None: out['tempC'] = t
+        if dm: out['dateMark'] = dm
+        if out['origin'] is None: out.pop('origin')
+        return out
+    if cmd == 'CLAIM':
+        if len(toks) != 3: return {'ok': False, 'error': 'usage'}
+        if toks[2] == 'ALL': return {'ok': True, 'command': 'CLAIM', 'offer': toks[1], 'all': True}
+        k = kg(toks[2]) if toks[2].endswith('KG') else (float(toks[2]) if _re.fullmatch(r'\d+(?:\.\d+)?', toks[2]) else None)
+        if k is None: return {'ok': False, 'error': 'usage'}
+        return {'ok': True, 'command': 'CLAIM', 'offer': toks[1], 'kg': k}
+    if cmd == 'HAND':
+        if len(toks) < 3: return {'ok': False, 'error': 'usage'}
+        out = {'ok': True, 'command': 'HAND', 'offer': toks[1]}
+        if len(toks) >= 5 and toks[2] == '0' and toks[3] == 'REJ':
+            k = float(toks[4]) if _re.fullmatch(r'\d+(?:\.\d+)?', toks[4]) else None
+            if k is None or len(toks) < 6: return {'ok': False, 'error': 'usage'}
+            out.update({'kgAccepted': 0.0, 'kgRejected': k, 'reason': toks[5]})
+            rest = toks[6:]
+        else:
+            if not _re.fullmatch(r'\d+(?:\.\d+)?', toks[2]): return {'ok': False, 'error': 'usage'}
+            out['kgAccepted'] = float(toks[2]); rest = toks[3:]
+        for tok in rest:
+            if temp(tok) is not None: out['tempC'] = temp(tok)
+        return out
+    if cmd == 'DIST':
+        m = _re.fullmatch(r'DIST (\d+) MEALS (\d+) PEOPLE (\d+(?:\.\d+)?)KG', ' '.join(toks))
+        if not m: return {'ok': False, 'error': 'usage'}
+        return {'ok': True, 'command': 'DIST', 'meals': int(m.group(1)), 'people': int(m.group(2)), 'kg': float(m.group(3))}
+    if cmd == 'MENU':
+        if len(toks) < 3: return {'ok': False, 'error': 'usage'}
+        out = {'ok': True, 'command': 'MENU', 'distribution': toks[1], 'perMeal': {}}
+        for tok in toks[2:]:
+            m = _re.fullmatch(r'(KCAL|SODIUM|FV|PROTEIN)(\d+(?:\.\d+)?)', tok)
+            if not m: return {'ok': False, 'error': 'usage'}
+            out['perMeal'][{'KCAL': 'energyKcal', 'SODIUM': 'sodiumMg', 'FV': 'fruitVegG', 'PROTEIN': 'proteinG'}[m.group(1)]] = float(m.group(2))
+        return out
+    return {'ok': False, 'error': 'unknown_command'}
+
+
 # ---------------------------------------------------------------- CLI
 
 
 def main(argv):
     if len(argv) < 3:
         print(__doc__); return 2
-    cmd, path = argv[1], pathlib.Path(argv[2])
+    cmd = argv[1]
+    if cmd == 'sms':
+        print(json.dumps(parse_sms(' '.join(argv[2:])), ensure_ascii=False)); return 0
+    path = pathlib.Path(argv[2])
     doc = json.loads(path.read_text())
     keys = []
     if '--keys' in argv: keys = json.loads(pathlib.Path(argv[argv.index('--keys') + 1]).read_text())
@@ -346,6 +527,8 @@ def main(argv):
         dev = json.loads(pathlib.Path(argv[argv.index('--device') + 1]).read_text())
         res = dry_run(doc, dev, '--human-present' in argv, '--no-model' not in argv)
         print(json.dumps(res, indent=1, ensure_ascii=False)); return 0 if res['state'] == 'accepted' else 1
+    if cmd == 'sms':
+        print(json.dumps(parse_sms(' '.join(argv[2:])), ensure_ascii=False)); return 0
     if cmd == 'chain':
         ok, why, head = verify_chain(doc, keys if keys else None); print(why, head or ''); return 0 if ok else 1
     print(__doc__); return 2

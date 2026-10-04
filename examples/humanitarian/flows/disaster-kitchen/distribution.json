@@ -1,0 +1,77 @@
+{
+ "profile": "0.2.0",
+ "kind": "Distribution",
+ "id": "di-2026-11-03-relief-east",
+ "org": "did:web:relief.example",
+ "orgRole": "relief_program",
+ "site": {
+  "country": "EG",
+  "admin1": "Example province",
+  "pcode": "EG00EX",
+  "siteName": "Relief kitchen, eastern district"
+ },
+ "date": "2026-11-03",
+ "form": "hot_meals",
+ "meals": 650,
+ "people": {
+  "total": 650,
+  "children": 210,
+  "adults": 360,
+  "elderly": 80
+ },
+ "kgUsed": 230,
+ "kgRescuedUsed": 61,
+ "offers": [
+  "of-2026-11-03-rel-004"
+ ],
+ "menu": {
+  "recipes": [
+   "cw:cookwala.ai:example-lentil-soup",
+   "cw:cookwala.ai:example-rice-vermicelli"
+  ],
+  "perPersonDay": {
+   "energyKcal": 2150,
+   "proteinG": 62,
+   "fatG": 58,
+   "saturatedFatG": 14,
+   "freeSugarsG": 20,
+   "sodiumMg": 1900,
+   "fruitVegG": 180,
+   "fibreG": 28
+  },
+  "perMeal": {
+   "energyKcal": 780,
+   "proteinG": 26,
+   "fatG": 18,
+   "saturatedFatG": 4,
+   "freeSugarsG": 3,
+   "sodiumMg": 620,
+   "fruitVegG": 60,
+   "fibreG": 12
+  }
+ },
+ "cost": {
+  "food": {
+   "amount": "3120.00",
+   "currency": "EGP"
+  },
+  "energy": {
+   "amount": "190.00",
+   "currency": "EGP"
+  }
+ },
+ "volunteerMinutes": 2400,
+ "rulePack": "care-vulnerable-groups@0.1.0",
+ "findings": [
+  "care.sodium_per_meal_older_adults",
+  "nutrition.fruit_veg",
+  "school.fruit_veg_per_meal",
+  "school.sodium_per_meal"
+ ],
+ "safetyIncidents": 0,
+ "audienceGroups": [
+  "children",
+  "older_adults"
+ ],
+ "note": "One hot-hold unit read 56 C at 13:10; batch reheated to 75 C before serving (see the ProductionRun example). Findings include school-meal rules because the program applies the school pack for the children it serves."
+}

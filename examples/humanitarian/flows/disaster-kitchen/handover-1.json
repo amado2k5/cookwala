@@ -1,0 +1,47 @@
+{
+ "profile": "0.2.0",
+ "kind": "Handover",
+ "id": "ho-2026-11-02-rel-004-1",
+ "offer": "of-2026-11-03-rel-004",
+ "claim": "cl-2026-11-03-rel-004",
+ "leg": 1,
+ "from": "did:web:wholesaler.example",
+ "to": "did:web:relief.example",
+ "at": "2026-11-02T18:40:00+02:00",
+ "audienceGroups": [
+  "children",
+  "older_adults"
+ ],
+ "readings": [
+  {
+   "at": "2026-11-02T18:38:00+02:00",
+   "tempC": 49,
+   "method": "probe",
+   "lineId": "3"
+  }
+ ],
+ "lines": [
+  {
+   "lineId": "1",
+   "kgAccepted": 200
+  },
+  {
+   "lineId": "2",
+   "kgAccepted": 150
+  },
+  {
+   "lineId": "3",
+   "kgAccepted": 0,
+   "kgRejected": 18,
+   "reason": "temp_out_of_range"
+  }
+ ],
+ "outcome": "partly_accepted",
+ "checkedBy": "trained_staff",
+ "rulePack": "care-vulnerable-groups@0.1.0",
+ "findings": [
+  "care.hot_hold_min",
+  "safety.hot_hold_min"
+ ],
+ "note": "Cooked rice at 49 C after 5 h: refused and discarded. Dry goods accepted."
+}

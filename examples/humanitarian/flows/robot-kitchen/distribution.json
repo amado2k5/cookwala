@@ -1,0 +1,60 @@
+{
+ "profile": "0.2.0",
+ "kind": "Distribution",
+ "id": "di-2026-11-20-robot-kitchen",
+ "org": "did:web:robotkitchen.example",
+ "orgRole": "robot_kitchen",
+ "site": {
+  "country": "EG",
+  "admin1": "Alexandria",
+  "siteName": "Central production kitchen"
+ },
+ "date": "2026-11-20",
+ "form": "food_parcels",
+ "meals": 900,
+ "people": {
+  "total": 450
+ },
+ "kgUsed": 310,
+ "kgRescuedUsed": 118,
+ "offers": [
+  "of-2026-11-20-rk-002"
+ ],
+ "menu": {
+  "recipes": [
+   "cw:cookwala.ai:example-shakshuka",
+   "cw:cookwala.ai:example-koshari"
+  ],
+  "perMeal": {
+   "energyKcal": 690,
+   "proteinG": 21,
+   "fatG": 20,
+   "saturatedFatG": 4.5,
+   "freeSugarsG": 5,
+   "sodiumMg": 560,
+   "fruitVegG": 150,
+   "fibreG": 10
+  }
+ },
+ "cost": {
+  "food": {
+   "amount": "4100.00",
+   "currency": "EGP"
+  },
+  "energy": {
+   "amount": "380.00",
+   "currency": "EGP"
+  },
+  "staff": {
+   "amount": "900.00",
+   "currency": "EGP"
+  }
+ },
+ "rulePack": "who-codex-basic@0.1.0",
+ "findings": [],
+ "safetyIncidents": 0,
+ "audienceGroups": [
+  "all"
+ ],
+ "note": "Device steps ran as Core executions; their logs are referenced from the ProductionRun (fleet profile). No personal data; parcels counted, not people named."
+}

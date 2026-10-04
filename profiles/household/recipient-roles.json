@@ -1,0 +1,14 @@
+{
+ "profile": "0.1.0",
+ "kind": "RecipientRoles",
+ "roles": {
+  "grocer": ["delivery_window", "access_point", "allergen_block", "budget_cap", "labeling_required", "packaging_preference"],
+  "delivery": ["delivery_window", "access_point", "packaging_preference"],
+  "planner": ["allergen_block", "diet_rule", "avoid_ingredient", "serve_window", "budget_cap", "heat_sources", "equipment_available", "texture_level", "portion_count", "presence_required", "caution_level", "robot_runtime_minutes", "serving_form", "cuisine_preference", "spice_level", "quiet_hours", "no_movement_zone", "pet_safe_storage", "child_safe_zones"],
+  "device_maker": ["robot_runtime_minutes", "device_fault_summary"],
+  "program": [],
+  "dataset": [],
+  "insurer": ["device_fault_summary"],
+  "other_robot": ["no_movement_zone", "quiet_hours", "child_safe_zones", "pet_safe_storage", "equipment_available"]
+ }
+}

@@ -1,0 +1,136 @@
+{
+ "profile": "0.2.0",
+ "kind": "RulePack",
+ "id": "school-meals-basic",
+ "version": "0.1.0",
+ "title": "Basic school-meal nutrition rules per meal",
+ "status": "draft",
+ "extends": "who-codex-basic@0.1.0",
+ "jurisdiction": "Global default from public guidance; national standards replace it",
+ "rules": [
+  {
+   "id": "school.fruit_veg_per_meal",
+   "kind": "nutrient",
+   "applies": "menu_per_meal",
+   "check": {
+    "nutrient": "fruitVegG",
+    "min": 80,
+    "unit": "g"
+   },
+   "severity": "warn",
+   "audienceGroup": "children",
+   "message": "A school meal should carry at least one 80 g portion of fruit or vegetables.",
+   "source": "WHO Healthy diet fact sheet (at least 400 g of fruit and vegetables a day) spread over meals; 80 g portion convention"
+  },
+  {
+   "id": "school.sodium_per_meal",
+   "kind": "nutrient",
+   "applies": "menu_per_meal",
+   "check": {
+    "nutrient": "sodiumMg",
+    "max": 600,
+    "unit": "mg"
+   },
+   "severity": "warn",
+   "audienceGroup": "children",
+   "message": "Sodium above 600 mg in one school meal.",
+   "source": "Derived from the WHO sodium guideline (2012), scaled down for children by energy needs"
+  },
+  {
+   "id": "school.free_sugars_per_meal",
+   "kind": "energy_share",
+   "applies": "menu_per_meal",
+   "check": {
+    "nutrient": "freeSugarsG",
+    "max": 10,
+    "unit": "pct_energy"
+   },
+   "severity": "warn",
+   "audienceGroup": "children",
+   "message": "Free sugars above 10 % of the meal's energy.",
+   "source": "WHO guideline: sugars intake for adults and children (2015)"
+  },
+  {
+   "id": "school.saturated_fat_per_meal",
+   "kind": "energy_share",
+   "applies": "menu_per_meal",
+   "check": {
+    "nutrient": "saturatedFatG",
+    "max": 10,
+    "unit": "pct_energy"
+   },
+   "severity": "warn",
+   "audienceGroup": "children",
+   "message": "Saturated fat above 10 % of the meal's energy.",
+   "source": "WHO guideline: saturated fatty acid and trans-fatty acid intake (2023)"
+  },
+  {
+   "id": "school.energy_per_meal_min",
+   "kind": "nutrient",
+   "applies": "menu_per_meal",
+   "check": {
+    "nutrient": "energyKcal",
+    "min": 450,
+    "unit": "kcal"
+   },
+   "severity": "warn",
+   "audienceGroup": "children",
+   "message": "A school lunch under 450 kcal is likely too small for school-age children.",
+   "source": "Derived as about a third of daily energy for school-age children; national tables replace this default"
+  },
+  {
+   "id": "school.energy_per_meal_max",
+   "kind": "nutrient",
+   "applies": "menu_per_meal",
+   "check": {
+    "nutrient": "energyKcal",
+    "max": 800,
+    "unit": "kcal"
+   },
+   "severity": "warn",
+   "audienceGroup": "children",
+   "message": "A school lunch over 800 kcal is likely too large for most school-age children.",
+   "source": "Derived as about a third of daily energy for school-age children; national tables replace this default"
+  },
+  {
+   "id": "school.protein_per_meal",
+   "kind": "nutrient",
+   "applies": "menu_per_meal",
+   "check": {
+    "nutrient": "proteinG",
+    "min": 12,
+    "unit": "g"
+   },
+   "severity": "warn",
+   "audienceGroup": "children",
+   "message": "A school lunch should supply at least 12 g of protein.",
+   "source": "Derived from reference intakes for school-age children divided over meals; to be confirmed by a dietitian"
+  },
+  {
+   "id": "school.whole_nuts_young",
+   "kind": "food_class",
+   "applies": "item_any",
+   "check": {
+    "foodClass": "whole_nuts"
+   },
+   "severity": "block",
+   "audienceGroup": "children_under_5",
+   "message": "No whole nuts in meals for children under five.",
+   "source": "National paediatric choking-prevention guidance"
+  },
+  {
+   "id": "school.allergen_unlabelled",
+   "kind": "allergen",
+   "applies": "item_any",
+   "check": {
+    "allergen": "unknown"
+   },
+   "severity": "block",
+   "audienceGroup": "children",
+   "message": "Food with undeclared allergens is not served in schools.",
+   "source": "Codex General Standard for the Labelling of Prepackaged Foods (CXS 1-1985)"
+  }
+ ],
+ "reviews": [],
+ "disclaimer": "DRAFT derived from public guidance. Not medical advice. Energy and protein bounds are global defaults by age band and must be replaced by national school-meal standards. Must be reviewed by a registered dietitian before adoption."
+}
