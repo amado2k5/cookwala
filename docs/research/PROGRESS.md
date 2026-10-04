@@ -2,6 +2,27 @@
 
 Newest first. Each entry: date, phase, what was done, what is next, blockers.
 
+## 2026-10-04 · P5 to P8: story, design system, site build, pages, verification
+
+- Story documents committed (stakeholders, messaging, impact, whitepaper in English and
+  Arabic, roadmap, concept note, pilot protocol, lesson kit, research topics, policy brief and
+  model language, five essays, governance numbers).
+- Site v2: `site/DESIGN.md`; a standard-library generator (`tools/build_site.py`) with a
+  Markdown renderer (`tools/md.py`); one layout, docs layout and deck layout; bilingual
+  strings; 17 content pages in English and the same 17 in Arabic (right-to-left); 11
+  stakeholder pages per language generated from `site/content/for.json`; 70 rendered
+  documents under `/docs/<ID>/` with `?p=` kept working; whitepaper web and PDF in both
+  languages; five essays; a 14-slide keyboard deck in both languages; `llms.txt`, sitemap,
+  robots.
+- Interactive: dry run with nine recipes, five presets, a device builder and shareable URLs;
+  envelope explorer (drag a trace, altitude, targets); SMS walkthrough with an in-browser
+  gateway and summary; pathfinder; registry and directory browser reading the static files.
+- Verification: 138 pages, zero broken internal links, one h1 and a skip link on every page
+  (simulators patched), no console errors on home, playground, humanitarian, docs; no
+  horizontal overflow at 375 px in English or Arabic after fixing the demo controls;
+  screenshots in `docs/research/screenshots/` (light, dark, phone, desktop, Arabic).
+- Next: P9 self-critique from nine viewpoints, fixes, then the pull request.
+
 ## 2026-10-04 · P3 Standard and P4 SDKs, hub, recipes
 
 - Standard (commit ed04550): facets registry (139 types), household schema and local API,

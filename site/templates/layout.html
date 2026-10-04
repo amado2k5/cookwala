@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="{{lang}}" dir="{{dir}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{{title}}</title>
+  <meta name="description" content="{{description}}">
+  <link rel="canonical" href="{{canonical}}">
+  <link rel="alternate" hreflang="{{alt_lang}}" href="{{alt_url}}">
+  <link rel="alternate" hreflang="{{lang}}" href="{{canonical}}">
+  <link rel="alternate" type="application/json" href="/.well-known/cookwala.json" title="Cookwala discovery">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Docs for AI readers">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f7f8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1113" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="{{title}}">
+  <meta property="og:description" content="{{description}}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{canonical}}">
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="{{font_link}}">
+  <link rel="stylesheet" href="/assets/site.css">
+  <script>try{var q=new URLSearchParams(location.search).get('theme');var t=q||localStorage.getItem('cw-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body class="{{body_class}}">
+<a class="skip" href="#main">{{skip}}</a>
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="{{home}}" aria-label="{{brand}}"><span class="mark" aria-hidden="true"></span>{{brand}}</a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">{{menu}}</button>
+    <nav id="menu" aria-label="Main">
+      {{nav}}
+      <details class="more"><summary>{{more_label}}</summary><div class="more-list">{{more}}</div></details>
+      <a class="lang" href="{{alt_href}}" hreflang="{{alt_lang}}" lang="{{alt_lang}}">{{alt_label}}</a>
+      <button class="theme-btn" type="button" aria-label="{{theme}}" title="{{theme}}"><span aria-hidden="true">◐</span></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+{{content}}
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <p class="foot-tagline">{{tagline}}</p>
+    <p>{{footer_origin}}</p>
+    <p class="foot-licences">{{footer_licences}}</p>
+    <p class="foot-links">{{footer_links}}</p>
+  </div>
+</footer>
+<script src="/assets/nav.js" defer></script>
+{{scripts}}
+</body>
+</html>

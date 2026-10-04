@@ -1,0 +1,65 @@
+<!--meta {"title": "Trust: safety, privacy, security, governance, critiques, status", "description": "How Cookwala keeps kitchens safe and data at home: safety enforced on the device, refusal before heat, signed records, agents under mandate, no personal data in the humanitarian layer, published critiques, open governance, and the honest status of everything.", "path": "/trust/"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Trust</p>
+  <h1>Trust is a number with a unit, a record you can check, and a list of what we got wrong</h1>
+  <p class="lead">This page gathers the safety model, the privacy rules, the security policy, the governance, the critiques and the status of every part of Cookwala. Nothing here promises zero harm; a standard that did would be lying.</p>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>The safety sheet</h2>
+    <div class="two">
+      <dl class="sheet">
+        <dt>Safety limits</dt><dd>enforced on the device; stricter always wins; no recipe, agent, message, extension or update can raise one</dd>
+        <dt>Local stop</dt><dd>motion stops within 0.5 s, heat cuts within 1 s, with or without a network; never refused for authorization</dd>
+        <dt>Refusal</dt><dd>before heat, with the step and the reason; deep frying has one rung: an oil thermometer</dd>
+        <dt>Unattended operations</dt><dd>cutting, sautéing, searing, frying, reducing never run without a person present or reachable within one minute</dd>
+        <dt>Minimum core temperatures (defaults)</dt><dd>poultry 74 °C · ground meat 71 °C · reheating 75 °C · hot-holding at or above 60 °C · two-stage cooling</dd>
+        <dt>Allergen blocks</dt><dd>refuse; no substitution around a block</dd>
+        <dt>Text</dt><dd>data, never instructions; attempts are logged as incidents</dd>
+        <dt>Agents</dt><dd>act only under a signed mandate; irreversible actions and safety overrides always need confirmation; the second is never granted</dd>
+        <dt>Recalls</dt><dd>signed feed; executors refuse recalled revisions; block_and_stop_running stops running executions safely</dd>
+        <dt>Incidents</dt><dd>anonymous, date only, modelled on aviation's confidential reporting</dd>
+      </dl>
+      <div><p>The default limits pack is a <b>draft for planning and conformance tests</b>; device makers replace or tighten it from their own safety case, and no authority has reviewed it. <a href="/v1/profiles/core/safety-limits.default.json">safety-limits.default.json</a> · <a href="/docs/CORE/">Core section 6</a></p><p class="note">What the standard cannot prevent: hardware failure, a maker that lies about what it enforces, a person who overrides a limit on a device that allows it. Conformance and certification make these detectable, not impossible.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div>
+    <h2>Privacy</h2>
+    <ul class="ticks"><li>Execution logs carry no personal data and leave the device only with opt-in, withdrawable consent; open datasets coarsen times to the day.</li><li>The Humanitarian Profile carries no personal data at all: organizations, aggregates, sites.</li><li>The Household Context Profile keeps a home's facts at home: 139 facet types with a privacy class and a travel rule; 45 never leave in any form; providers receive derived constraints only; no behavioural score of anyone; income never inferred; everything erasable within a stated window.</li><li>No analytics, no cookies, no tracking on this site.</li></ul>
+    <p><a href="/docs/HOUSEHOLD-CONTEXT/">Household Context Profile</a> · <a href="/ideas/what-a-household-robot-may-know/">The essay</a> · <span class="status">next</span> a data-protection impact assessment with a reviewer</p>
+  </div>
+  <div>
+    <h2>Security</h2>
+    <ul class="ticks"><li>Hashes over RFC 8785 canonical JSON; Ed25519 signatures (P-256 for hardware keys); key records with validity and revocation; selective disclosure; event logs with one sequencer and witnessed checkpoints, so a rewrite is detectable; relayed items verify against the issuer, never the relay.</li><li>Report vulnerabilities privately; safety problems are security problems. Acknowledged within 3 working days; 90-day default disclosure.</li></ul>
+    <p><a href="/docs/SECURITY/">Security policy</a> · <a href="/.well-known/security.txt">security.txt</a> · <a href="/v1/conformance/signature.json">signature vectors</a></p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>Conformance and certification</h2>
+      <p>101 public vectors. A claim is a signed report: self-declared → verified by a registry operator → certified by an independent certifier. Reports, never badges. No certifier is engaged. <a href="/docs/CERTIFICATION/">The path</a> · <a href="https://github.com/amado2k5/cookwala/blob/main/examples/conformance/report-reference.json" rel="noopener">the reference report</a></p>
+      <h2>Governance</h2>
+      <p>One editor today, in public with written reasons; RFCs with 30-day comment periods and named reviewers for safety; a steering committee with published numbers and seats for the people affected; a neutral foundation later; a patent non-assertion pledge; Contributor Covenant. <a href="/docs/GOVERNANCE/">Governance</a> · <a href="/docs/RFCS/">RFCs</a></p>
+    </div>
+    <div>
+      <h2>Critiques we published</h2>
+      <p>We asked a red team, a technical reviewer, and reviewers in the voice of a demanding adopter, an AI lab, the WFP and the WHO to prove this would not work, and published what they said with our responses and the status of each concern. We then changed the one-liner, made the schemas strict, redesigned the ledger and the simulators' baselines. <a href="/docs/CRITIQUES/">Critiques</a> · <a href="/docs/ACTION-PLAN/">Concern register, 30 items</a> · <a href="/docs/BACKSTORY/">The gap list</a></p>
+      <h2>Status of everything</h2>
+      <div class="table-wrap"><table><thead><tr><th>Part</th><th>Status</th></tr></thead><tbody>
+        <tr><td>Core 0.2</td><td><span class="status core">core</span> normative, draft under review</td></tr>
+        <tr><td>Humanitarian 0.2, Household Context, Registry, Conformance reports, Federation</td><td><span class="status">draft</span> profiles</td></tr>
+        <tr><td>Kitchens and runs, Supply signals, Mission, Market, Reasoning, Health personalization, Extensions</td><td><span class="status">exp</span> experimental</td></tr>
+        <tr><td>Rule packs</td><td><span class="status">draft</span> none professionally reviewed yet</td></tr>
+        <tr><td>Simulators</td><td><span class="status model">model</span> illustrative, not forecasts</td></tr>
+        <tr><td>Pilots, partners, certifier, foundation</td><td><span class="status">planned</span> none exist</td></tr>
+        <tr><td>Hosted services (registry publish, status page)</td><td><span class="status">planned</span> static files today</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>

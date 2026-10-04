@@ -1,0 +1,32 @@
+<!--meta {"title": "Farmers and supply: list a glut by SMS, fair signals later", "description": "A farm with surplus lists it by SMS and reaches a kitchen the same day. Later, aggregated and delayed demand and supply signals that treat every producer the same, after competition-law review.", "path": "/farmers/", "status": "exp"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Farmers and supply</p>
+  <h1>A glut should become meals, not waste</h1>
+  <p class="lead">Two things a farmer or a cooperative can get from a food standard: a way to list surplus before it rots that reaches a kitchen the same day, and a fair signal of what will be needed where. The first exists now. The second is designed, experimental, and waits for a competition-law review.</p>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>Now: surplus by SMS</h2>
+      <p>A farm is a donor in the Humanitarian Profile, an organization like any other, never a person. One message to a program's gateway:</p>
+      <pre class="code"><code>FARM 120KG TOMATO A BB0411</code></pre>
+      <div class="output">OFFER OF-002 open for 14 h · origin: farm · best before 11 April</div>
+      <p>A food bank or kitchen claims it; the handover records the temperature and the kilograms accepted; the distribution counts the meals; the summary shows the kilograms rescued with the method. <a href="/humanitarian/#sms">Try it in the walkthrough</a>.</p>
+      <p class="note">Where a program runs the profile, this works with a basic phone today. No program runs it yet; the grammar, the parser and the conformance vectors exist, and the <a href="/docs/CONCEPT-NOTE/">concept note</a> is how a program starts.</p>
+    </div>
+    <div>
+      <h2>Next: fair demand and supply signals</h2>
+      <p>If cooking is planned, the amounts grown and moved can match what is needed. The country and world simulators show the size of the effect under their assumptions <span class="kind modelled">modelled</span>. The standard's smallest honest step is two experimental documents:</p>
+      <ul><li><b>DemandSignal:</b> in region R, in week W, kitchens and programs planned to use between L and H kg of ingredient <em>class</em> C (legume, leafy vegetable, poultry), never a product or brand.</li><li><b>SupplySignal:</b> in region R, in week W, class C is in glut, normal or short supply, with a harvest window.</li></ul>
+      <p><b>Rules, checked by code:</b> at least 20 contributing sources; published at least 7 days after the week ends; no prices; no region finer than a province without 100 sources; open to all, identical for every reader, free. A small producer sees exactly what a large buyer sees. <a href="/docs/SUPPLY-SIGNALS/">Supply signals</a> · <a href="/docs/RFC-0007/">RFC-0007</a></p>
+      <p class="note"><span class="status">gated</span> Sharing forecasts between competitors is what competition authorities warn about. These rules are designed to keep the signal useful for planting and useless for pricing; counsel sets the final thresholds. Nothing is published until then.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>What stays out of the standard</h2>
+  <p>Prices. Contracts. Who gets food when there is not enough (that is a program's accountable decision). A perfectly lean supply chain: the signal design says reserves are part of the plan, because a food system tuned exactly to demand is one shock from an empty shelf.</p>
+  <div class="cta"><a class="btn primary" href="/for/food/">Your page: farmers, cooks, chefs</a><a class="btn" href="/humanitarian/">Humanitarian</a><a class="btn" href="/sim/country/">The country simulator</a></div>
+</section>

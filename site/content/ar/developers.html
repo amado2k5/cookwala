@@ -1,0 +1,75 @@
+<!--meta {"title": "المطوّرون: البداية السريعة وحزم SDK والواجهة والمطابقة", "description": "من تجربة جافة في متصفحك إلى تقرير مطابقة: حزمة بايثون وسطر الأوامر، وأنواع TypeScript، وخادم MCP، والموزّع المرجعي، وواجهات ROS 2، وواجهة النواة، و101 متّجه اختبار عام.", "path": "/developers/", "status": "core"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/ar/">كوكوالا</a> / المطوّرون</p>
+  {{chip}}
+  <h1>من تجربة جافة إلى تقرير مطابقة</h1>
+  <p class="lead">مسار أول واحد موصى به، ثم حزم SDK والواجهة والارتباطات والتقييمات. كل ما يلي يعمل اليوم؛ وما لم يوجد بعد يقول ذلك. الوثائق التقنية بالإنجليزية.</p>
+  <div class="cta"><a class="btn primary" href="#quickstart">البداية السريعة</a><a class="btn" href="/docs/CORE/">مرجع النواة 0.2</a><a class="btn" href="/v1/api/core.openapi.yaml">واجهة النواة (OpenAPI)</a></div>
+</section>
+
+<section class="band" id="quickstart">
+  <div class="wrap">
+    <h2>البداية السريعة: خمس دقائق، بلا عتاد</h2>
+    <ol class="steps">
+      <li><p><b>احصل على الأدوات.</b></p><pre class="code"><code>git clone https://github.com/amado2k5/cookwala &amp;&amp; cd cookwala
+pip install -e sdk/python            # المكتبة القياسية فقط؛ أضف [full] للتحقق من المخططات والتوقيعات</code></pre></li>
+      <li><p><b>احسب بصمة وصفة.</b> يطبخ المنفّذ هذه المراجعة بالضبط ويرفض عند عدم التطابق.</p><pre class="code"><code>cookwala hash examples/koshari.cookwala.json</code></pre><div class="output">sha256:00f79f91d4e40…</div></li>
+      <li><p><b>هل يستطيع هذا الجهاز طهيها؟</b> لا يُنفَّذ شيء؛ تأتي الإجابة قبل التسخين.</p><pre class="code"><code>cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/robot-arm.json</code></pre><div class="output">{"state": "refused", "refusal": {"reason": "missing_capability", "node": "n1", "detail": "device cannot perform cw.op.boil and no person is present to do it"}}</div><pre class="code"><code>cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/robot-arm.json --human-present</code></pre><div class="output">{"state": "accepted", "plan": [{"node": "n1", "op": "cw.op.boil", "by": "human", "verifiedBy": "human"}, …]}</div></li>
+      <li><p><b>افحص أثر حرارة مقابل نطاق آمن.</b> 99 درجة غليان لا نار هادئة.</p><pre class="code"><code>python -c "import cookwala as cw; print(cw.check_envelope('cw.op.simmer', [{'t':0,'tempC':60},{'t':60,'tempC':94},{'t':90,'tempC':99}]))"</code></pre><div class="output">{'envelopeOk': False, 'targetOk': None, 'reason': 'left_envelope'}</div></li>
+      <li><p><b>شغّل متّجهات المطابقة واكتب تقريرًا.</b> التقرير هو الوثيقة وراء أي ادعاء.</p><pre class="code"><code>cookwala conformance --report report.json</code></pre><div class="output">conformance: 101/101 passed (7 core suites, 5 profile suites)
+report -&gt; report.json</div></li>
+      <li><p><b>شغّل الموزّع المرجعي واطبخ عبر واجهة النواة.</b></p><pre class="code"><code>cookwala hub --port 7878
+curl -s localhost:7878/v1/safety-limits | head</code></pre><p class="note">ثم <code>POST /v1/executions</code> كما في <a href="/docs/HUB/">ملف الموزّع</a>: مرفوض بلا شخص حاضر، مقبول معه، و<code>stop</code> يعمل دائمًا، والسجل بلا بيانات شخصية.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>حزم SDK والأدوات</h2>
+  <div class="cards">
+    <a class="card" href="/docs/PYTHON/"><h3>حزمة بايثون وسطر الأوامر</h3><p><code>pip install -e sdk/python</code>. hash وverify وdryrun وenvelope وconvert وsms وconstraints وvalidate وconformance وhumanitarian وexport وinit وhub وmcp. المكتبة القياسية فقط.</p><span class="go">الآن · تثبيت قابل للتحرير؛ عجلة PyPI لاحقًا ←</span></a>
+    <a class="card" href="/docs/TYPESCRIPT/"><h3>أنواع TypeScript</h3><p>أنواع لكل المخططات الـ24، مولَّدة ومفحوصة الأنواع؛ والتجربة الجافة للمتصفح كوحدة. فضاء أسماء لكل مخطط.</p><span class="go">الآن · حزمة مصدر؛ npm لاحقًا ←</span></a>
+    <a class="card" href="/docs/MCP/"><h3>خادم MCP</h3><p>ثماني أدوات لأي عميل MCP: بحث، جلب، تجربة جافة، شرح خطوة، فحص مظروف، فحص تفويض، تحليل رسالة، قائمة العمليات. لا يطبخ أبدًا.</p><span class="go">الآن ←</span></a>
+    <a class="card" href="/docs/HUB/"><h3>الموزّع المرجعي</h3><p>واجهة النواة بجهاز محاكى: تجربة جافة قبل التسخين، وآلة حالات على ساعة، واحترام المظاريف، والإيقاف يعمل دائمًا. صورة Docker.</p><span class="go">الآن ←</span></a>
+    <a class="card" href="/docs/ROS2/"><h3>واجهات ROS 2</h3><p><code>cookwala_msgs</code>: إجراءا ExecuteRecipe وExecuteNode؛ الإلغاء إيقاف آمن؛ لا يستطيع أي حقل هدف رفع حد.</p><span class="go">الآن · عقدة الجسر مساهمة أولى جيدة ←</span></a>
+    <a class="card" href="/docs/ROBOTICS/"><h3>مصدّرا LeRobot وOpenTelemetry</h3><p>تصبح سجلات التنفيذ مهام LeRobotDataset v3 وآثار OTLP، بموافقة الأسرة فقط.</p><span class="go">الآن ←</span></a>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>واجهة النواة</h2>
+      <p>واجهة واحدة ينفّذها كل منفّذ: <code>POST /v1/executions</code>، والحالة، والإيقاف، والاستئناف، والسجل، وحدود السلامة، والقدرات؛ وتضيف الكتالوجات السحوبات والحوادث. مفاتيح تكرار على كل POST، و<code>If-Match</code> على التغييرات، والرفض إجابة عادية، والإيقاف لا يُرفض أبدًا لأسباب الصلاحية.</p>
+      <p><a href="/v1/api/core.openapi.yaml">core.openapi.yaml</a> · <a href="/v1/api/registry.openapi.yaml">registry.openapi.yaml</a> · <a href="/v1/api/humanitarian.openapi.yaml">humanitarian.openapi.yaml</a> · <a href="/v1/api/household.openapi.yaml">household.openapi.yaml (محلي)</a> · <a href="/v1/schemas/bundle.json">كل المخططات في حزمة واحدة</a></p>
+      <h3>الإصدارات</h3><p>ترقيم دلالي لكل مواصفة؛ الإصدارات الفرعية إضافية؛ الإصدارات الكبرى تُعلن قبل 12 شهرًا؛ يخدم الفهرس كل إصدار كبير 3 سنوات. النواة 0.2.x؛ وتُرقَّم الملفات مستقلة وتعلن إصدار النواة الذي تحتاجه. <a href="/docs/GOVERNANCE/">الحوكمة</a></p>
+    </div>
+    <div>
+      <h2>المطابقة</h2>
+      <p>101 متّجه عام: البصمات (ومنها مثال RFC 8785)، والتوقيعات (ومنها مفتاح RFC 8032)، والإلغاء، والإفصاح الانتقائي، وسلاسل الأحداث ونقاط التحقق المشهودة، والوحدات، والمظاريف وسلالم الحساسات، وآلات الحالات، وسياسة الإفصاح، وقواعد السجل، وقواعد الرسائل، وسياسة الإشارات، والتحقق من الوسطاء.</p>
+      <p>الادعاء تقرير <code>ConformanceReport</code> موقّع: إعلان ذاتي ← تحقق مشغّل سجل ← اعتماد جهة مستقلة (لم تُشرك أي جهة بعد). تقارير لا شارات. <a href="/docs/CERTIFICATION/">المسار</a> · <a href="/v1/conformance/hash.json">المتّجهات</a></p>
+      <h3>تقييمات الوكلاء</h3><p>عشر حالات promptfoo تفحص اتباع الوكيل لقواعد النواة: النص غير الموثوق، والتفويضات والحدود، وحظر مسببات الحساسية، وحدود السلامة، والعمليات بلا مراقبة، والسحوبات، والرفض المفرط. أضف مزوّدين لمقارنة النماذج؛ وانشر مع معرّف النموذج والتاريخ وبصمة الإعداد. <a href="/docs/AGENT-SAFETY/">المعيار</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>المفاهيم في جدول واحد</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>المصطلح</th><th>ما هو</th><th>ما ليس هو</th></tr></thead>
+    <tbody>
+      <tr><td>مظروف العملية</td><td>المعنى الفيزيائي للعملية: الوسط، ونطاق الحرارة، والانتباه، والسماح بلا مراقبة، وسلّم الحساسات، والمخاطر</td><td>إعداد في وصفة؛ تضيّقه الوصفات ولا توسّعه أبدًا</td></tr>
+      <tr><td>سلّم الحساسات</td><td>طرق التحقق من خطوة، الأفضل أولًا: حساس، تقدير مسجّل، وقت، شخص. لا درجة متاحة يعني الرفض</td><td>تراجع إلى التخمين</td></tr>
+      <tr><td>حد السلامة</td><td>يُفرض على الجهاز؛ الأشد يفوز دائمًا؛ لا تستطيع رسالة رفعه</td><td>حقل في وصفة أو طلب</td></tr>
+      <tr><td>تفويض الوكيل</td><td>نطاقات وحدود ومزوّدون مسموحون وانتهاء وقائمة «أكّد قبل»، يوقّعه الموكِّل</td><td>موجّه نصي</td></tr>
+      <tr><td>القيد المشتق</td><td>الشيء الوحيد الآتي من المنزل الذي يتلقاه مزوّد («التسليم من 17:00 إلى 18:00، ملصق للفول السوداني»)</td><td>حقيقة منزلية</td></tr>
+      <tr><td>تقرير المطابقة</td><td>سجل موقّع بأي المتّجهات شُغّلت وبأي أداة ومتى وعلى ماذا</td><td>شارة</td></tr>
+    </tbody></table></div>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div><h2>مشكلات شائعة</h2><ul><li><b>كل شيء مرفوض بسبب needs_human_present:</b> التقطيع والتشويح والقلي لا تعمل بلا مراقبة؛ مرّر <code>--human-present</code> أو أعطِ الجهاز حساس حضور.</li><li><b>مرفوض بـ missing_sensor_no_fallback في القلي الغزير:</b> للقلي الغزير درجة واحدة، ترمومتر زيت؛ هذا هو المعيار يعمل.</li><li><b>البصمة لا تتطابق:</b> تستثني البصمة <code>hash</code> و<code>signature</code> فقط؛ أي تغيير آخر مراجعة جديدة.</li><li><b>يقول التحقق إن درجة الحرارة خارج المظروف:</b> يجب أن يقع هدف الوصفة داخل نطاق العملية؛ غيّر العملية أو الهدف.</li><li><b>بايثون لا يستورد cookwala:</b> ثبّت من نسخة المستودع أو اضبط <code>COOKWALA_ROOT</code>.</li></ul></div>
+    <div><h2>ساهم</h2><p>نفّذ واجهة النواة على جهاز أو موزّع وانشر تقريرًا؛ اكتب عقدة جسر ROS 2؛ أضف حالات هجوم إلى معيار الوكلاء؛ أضف متّجهات؛ اقترح RFC. <a href="/ar/contribute/">كيف</a> · <a href="/docs/RFCS/">المقترحات</a> · <a href="https://github.com/amado2k5/cookwala" rel="noopener">GitHub</a></p><p class="note">الوثائق أيضًا في <a href="/llms.txt">/llms.txt</a> وبصيغة ماركداون لكل صفحة لقرّاء الذكاء الاصطناعي.</p></div>
+  </div>
+</section>

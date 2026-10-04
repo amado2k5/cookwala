@@ -1,0 +1,62 @@
+<!--meta {"title": "ساحة التجربة: التجربة الجافة ومستكشف المظاريف والمحاكيات", "description": "شغّل التجربة الجافة على تسع وصفات وأي جهاز تبنيه، واسحب أثر حرارة عبر النطاق الآمن لعملية، وشغّل أربعة محاكيات للبروتوكول وبدونه. كل شيء يعمل في متصفحك.", "path": "/playground/", "scripts": ["dryrun.js", "demo.js", "envelope.js"]} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/ar/">كوكوالا</a> / ساحة التجربة</p>
+  <h1>جرّبه في متصفحك</h1>
+  <p class="lead">ثلاثة أشياء تلعب بها: التجربة الجافة (هل يستطيع هذا الجهاز طهي هذه الوصفة؟)، ومستكشف المظاريف (متى تتوقف النار الهادئة عن كونها هادئة؟)، وأربعة محاكيات تُظهر البروتوكول وبدونه. لا شيء هنا جهاز حقيقي؛ كل شيء يعمل على جهازك.</p>
+</section>
+
+<section id="demo" class="band" aria-labelledby="demo-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="demo-h">التجربة الجافة: هل يستطيع هذا الجهاز طهي هذه الوصفة؟</h2><p>تسع وصفات، وخمسة أجهزة جاهزة، أو ابنِ جهازك من العمليات والحساسات وإشارات الرؤية. النتيجة رابط تستطيع مشاركته.</p></div>
+    <div class="demo">
+      <form class="controls" id="demoForm" aria-label="إعدادات التجربة الجافة">
+        <label>الوصفة <select id="dRecipe"></select></label>
+        <label>الجهاز <select id="dDevice"></select></label>
+        <label class="check"><input type="checkbox" id="dHuman" checked> يوجد شخص في المطبخ</label>
+        <label class="check"><input type="checkbox" id="dModel" checked> يُسمح بالتقديرات المسجّلة عند غياب الحساس</label>
+      </form>
+      <details id="builder" open><summary>ابنِ جهازك</summary><div class="builder" id="builderBody"></div></details>
+      <div class="verdict" id="verdict" role="status" aria-live="polite">جارٍ تحميل الوصفة ومفردات العمليات…</div>
+      <div class="table-wrap"><table class="steps-t" id="steps"><thead><tr><th>الخطوة</th><th>العملية</th><th>النطاق الآمن</th><th>من</th><th>التحقق</th></tr></thead><tbody></tbody></table></div>
+      <div class="share"><span>شارك هذه النتيجة</span><input id="shareUrl" type="text" readonly aria-label="رابط للمشاركة"><button type="button" class="btn" id="copyShare">نسخ</button></div>
+      <p class="note">جرّب الكشري على الجهاز بلا ترمومترات: يحتاج البصل المقرمش قليًا غزيرًا، وللقلي الغزير درجة واحدة في السلّم، ترمومتر الزيت. وجرّب السلطة البلدي على الذراع الآلي: بلا نار، فيقطّع الذراع بكاميرته.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="env-h">
+  <div class="sec-head"><h2 id="env-h">مستكشف المظاريف: متى تتوقف النار الهادئة عن كونها هادئة؟</h2><p>اختر عملية واسحب نقاط أثر الحرارة. الفاحص هو الدالة نفسها التي تختبرها متّجهات المطابقة: التسخين الأولي مسموح، ثم يجب أن يبقى الوسط داخل النطاق؛ وهدف الوصفة، متى بُلغ، يجب الاحتفاظ به. تتحرك نطاقات الماء مع الارتفاع.</p></div>
+  <div class="demo envelope-demo">
+    <form class="controls" id="envForm" aria-label="إعدادات المظروف">
+      <label>العملية <select id="envOp"></select></label>
+      <label>الارتفاع <input id="envAlt" type="number" value="0" min="0" max="5000" step="100"> م</label>
+      <label class="check"><input type="checkbox" id="envTarget"> هدف الوصفة <input id="envTargetV" type="number" value="94" step="1" aria-label="الهدف بالدرجات"> ± <input id="envTol" type="number" value="3" step="1" min="0" aria-label="التفاوت بالدرجات"> °م</label>
+    </form>
+    <div class="envelope">
+      <svg id="envSvg" viewBox="0 0 640 320" role="img" aria-labelledby="envTitle envDesc"><title id="envTitle">أثر الحرارة مقابل النطاق الآمن للعملية</title><desc id="envDesc">اسحب الدوائر لتغيير الأثر. المساحة المظللة هي المظروف.</desc></svg>
+      <div>
+        <div class="verdict" id="envVerdict" role="status" aria-live="polite"></div>
+        <dl class="sheet" id="envSheet"></dl>
+        <p class="note" id="envNote"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" aria-labelledby="sim-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="sim-h">المحاكيات، مشروحة لغير المتخصصين</h2><p>أربعة نماذج حتمية، كل منها قابل للتشغيل بالبروتوكول وبدونه، وكل منها موسوم <span class="kind modelled">نموذج توضيحي</span>. لا تتنبأ بالمستقبل؛ بل تُظهر ما يترتب على الافتراضات المكتوبة في كل صفحة، وكل افتراض قابل للتغيير. صفحات المحاكيات بالإنجليزية.</p></div>
+    <div class="cards">
+      <a class="card" href="/sim/"><h3>بيت</h3><p>تطلب أسرة عشاءً من روبوت. شاهد الطلب يسافر عبر المزوّدين والموافقات والمقاطعات والإغلاق؛ وأوقف البروتوكول لترى الأمسية نفسها بالروبوت وحده.</p><span class="go">شغّل ←</span></a>
+      <a class="card" href="/sim/city/"><h3>مدينتان، شهر واحد</h3><p>مزارع ومركز جملة ومتاجر و1500 بيت لكل مدينة وشاحنات وقمامة وطاقة. الروبوتات وحدها تدفع الهدر إلى الأعلى؛ وبالخطط المشتركة تنخفض الخسائر قبل البيوت.</p><span class="go">شغّل ←</span></a>
+      <a class="card" href="/sim/country/"><h3>دولة واحدة، سنة واحدة</h3><p>ست محافظات تتبنى بسرعات مختلفة، وفصول، وبرنامج إغاثة. يغطي الإنقاذ نحو 5٪ من الحاجة في النشر المختلط: حقيقي، وليس كافيًا.</p><span class="go">شغّل ←</span></a>
+      <a class="card" href="/sim/world/"><h3>العالم، خمس سنوات</h3><p>عشر مناطق وثلاثة سيناريوهات روبوتات والبروتوكول مفعّل أو لا. الجوع حيث لا روبوتات؛ ويساعد البروتوكول الدول بلا روبوتات.</p><span class="go">شغّل ←</span></a>
+    </div>
+    <p class="note">كيف تقرؤها: النتيجة فرق بين تشغيلين للنموذج نفسه، لا قياس للعالم. تذكر صفحتا المدينة والدولة المعايرة مقابل أرقام UNEP والفاو وكل افتراض سلوكي. <a href="/docs/SIM-FINDINGS/">ما وجدته المحاكيات</a>، ومنه ما أخطأت فيه.</p>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div><h2>إنقاذ الطعام بالرسائل النصية</h2><p>العرض التفاعلي للملف الإنساني: اكتب الرسائل التي يرسلها بنك طعام وشاهد الوثائق وملاحظات القواعد وملخص الأثر تظهر.</p><a class="btn primary" href="/ar/humanitarian/#sms">افتح العرض التفاعلي</a></div>
+  <div><h2>في سطر الأوامر</h2><p>كل شيء في هذه الصفحة دالة في المكتبة المرجعية. تشغّل <a href="/ar/developers/">البداية السريعة</a> الفحوص نفسها في الطرفية؛ ويقدّمها <a href="/docs/MCP/">خادم MCP</a> لوكيل ذكاء اصطناعي.</p></div>
+</section>

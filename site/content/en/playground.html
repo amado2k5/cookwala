@@ -1,0 +1,62 @@
+<!--meta {"title": "Playground: dry run, envelope explorer, simulators", "description": "Run the dry run on nine recipes and any device you build, drag a temperature trace through an operation's safe band, and play four simulators of the protocol on and off. Everything runs in your browser.", "path": "/playground/", "scripts": ["dryrun.js", "demo.js", "envelope.js"]} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Playground</p>
+  <h1>Try it in your browser</h1>
+  <p class="lead">Three things to play with: the dry run (can this device cook this recipe?), the envelope explorer (when does a simmer stop being a simmer?), and four simulators that show the protocol on and off. Nothing here is a real device; everything runs on your machine.</p>
+</section>
+
+<section id="demo" class="band" aria-labelledby="demo-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="demo-h">Dry run: can this device cook this recipe?</h2><p>Nine recipes, five device presets, or build your own device from operations, sensors and vision cues. The result is a link you can share.</p></div>
+    <div class="demo">
+      <form class="controls" id="demoForm" aria-label="Dry-run settings">
+        <label>Recipe <select id="dRecipe"></select></label>
+        <label>Device <select id="dDevice"></select></label>
+        <label class="check"><input type="checkbox" id="dHuman" checked> A person is in the kitchen</label>
+        <label class="check"><input type="checkbox" id="dModel" checked> Logged estimates allowed where a sensor is missing</label>
+      </form>
+      <details id="builder" open><summary>Build your own device</summary><div class="builder" id="builderBody"></div></details>
+      <div class="verdict" id="verdict" role="status" aria-live="polite">Loading the recipe and the operation vocabulary…</div>
+      <div class="table-wrap"><table class="steps-t" id="steps"><thead><tr><th>Step</th><th>Operation</th><th>Safe band</th><th>Who</th><th>Checked by</th></tr></thead><tbody></tbody></table></div>
+      <div class="share"><span>Share this result</span><input id="shareUrl" type="text" readonly aria-label="Shareable link"><button type="button" class="btn" id="copyShare">Copy</button></div>
+      <p class="note">Try koshari on the device without thermometers: the crisp onions need deep frying, and deep frying has one rung, an oil thermometer. Try salata baladi on the counter arm: no heat, so the arm does the cutting with its camera.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="env-h">
+  <div class="sec-head"><h2 id="env-h">Envelope explorer: when does a simmer stop being a simmer?</h2><p>Pick an operation and drag the points of a temperature trace. The checker is the same function the conformance vectors test: the warm-up is allowed, then the medium must stay inside the band; a recipe target, once reached, must hold. Water bands shift with altitude.</p></div>
+  <div class="demo envelope-demo">
+    <form class="controls" id="envForm" aria-label="Envelope settings">
+      <label>Operation <select id="envOp"></select></label>
+      <label>Altitude <input id="envAlt" type="number" value="0" min="0" max="5000" step="100"> m</label>
+      <label class="check"><input type="checkbox" id="envTarget"> Recipe target <input id="envTargetV" type="number" value="94" step="1" aria-label="Target °C"> ± <input id="envTol" type="number" value="3" step="1" min="0" aria-label="Tolerance °C"> °C</label>
+    </form>
+    <div class="envelope">
+      <svg id="envSvg" viewBox="0 0 640 320" role="img" aria-labelledby="envTitle envDesc"><title id="envTitle">Temperature trace against the operation's safe band</title><desc id="envDesc">Drag the circles to change the trace. The shaded band is the envelope.</desc></svg>
+      <div>
+        <div class="verdict" id="envVerdict" role="status" aria-live="polite"></div>
+        <dl class="sheet" id="envSheet"></dl>
+        <p class="note" id="envNote"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" aria-labelledby="sim-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="sim-h">Simulators, explained for non-experts</h2><p>Four deterministic models, each playable with the protocol on and off, each labelled <span class="kind modelled">illustrative model</span>. They do not predict the future; they show what follows from the assumptions written on each page, and every assumption can be changed.</p></div>
+    <div class="cards">
+      <a class="card" href="/sim/"><h3>A home</h3><p>A family asks a robot for dinner. Watch the request travel through providers, approvals, interruptions and a closure; switch the protocol off and see the same evening with the robot alone.</p><span class="go">Play →</span></a>
+      <a class="card" href="/sim/city/"><h3>Two cities, one month</h3><p>Farms, a wholesale hub, shops, 1,500 homes per city, trucks, garbage and energy. Robots alone push waste upstream; with shared plans, losses before homes fall.</p><span class="go">Play →</span></a>
+      <a class="card" href="/sim/country/"><h3>One country, one year</h3><p>Six provinces adopting at different speeds, seasons, a relief program. Rescue covers about 5 % of need in the mixed rollout: real, and not enough.</p><span class="go">Play →</span></a>
+      <a class="card" href="/sim/world/"><h3>The world, five years</h3><p>Ten regions, three robot scenarios, protocol on or off. Hunger is where robots are not; the protocol helps countries without robots.</p><span class="go">Play →</span></a>
+    </div>
+    <p class="note">How to read them: a result is a difference between two runs of the same model, not a measurement of the world. The city and country pages list calibration against UNEP and FAO figures and every behavioural assumption. <a href="/docs/SIM-FINDINGS/">What the simulators found</a>, including what they got wrong.</p>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div><h2>Food rescue by SMS</h2><p>The Humanitarian Profile walkthrough: type the messages a food bank would send and watch the documents, the rule findings and the impact summary appear.</p><a class="btn primary" href="/humanitarian/#sms">Open the walkthrough</a></div>
+  <div><h2>On the command line</h2><p>Everything on this page is a function in the reference library. <a href="/developers/">The quickstart</a> runs the same checks in a terminal; <a href="/docs/MCP/">the MCP server</a> gives them to an AI agent.</p></div>
+</section>

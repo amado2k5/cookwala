@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="{{lang}}" dir="{{dir}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{{title}}</title>
+  <meta name="description" content="{{description}}">
+  <link rel="canonical" href="{{canonical}}">
+  <link rel="alternate" hreflang="{{alt_lang}}" href="{{alt_url}}">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="{{font_link}}">
+  <link rel="stylesheet" href="/assets/site.css">
+  <script>try{var q=new URLSearchParams(location.search).get('theme');var t=q||localStorage.getItem('cw-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body class="deck-page">
+<a class="skip" href="#main">{{skip}}</a>
+<main id="main" class="deck" aria-roledescription="presentation">
+  <div id="slides">{{content}}</div>
+  <div class="deck-bar">
+    <button type="button" id="prev" aria-label="{{prev}}">←</button>
+    <span id="counter" aria-live="polite"></span>
+    <span class="progress" aria-hidden="true"><i id="bar"></i></span>
+    <a href="{{alt_href}}" hreflang="{{alt_lang}}" lang="{{alt_lang}}">{{alt_label}}</a>
+    <a href="{{home}}">{{brand}}</a>
+    <button type="button" id="next" aria-label="{{next}}">→</button>
+  </div>
+</main>
+<script src="/assets/deck.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "cookwala-site",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8787", "--directory", "/private/tmp/claude-501/-Users-ahmedabdelaal-Documents-GitHub-cookwala/f44fc039-1f7f-4064-b376-b7cec2d2b369/scratchpad/_site"],
+      "port": 8787
+    }
+  ]
+}

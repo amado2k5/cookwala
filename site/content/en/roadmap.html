@@ -1,0 +1,58 @@
+<!--meta {"title": "Roadmap: now, next, later, with a status on every item", "description": "What exists, what is planned, what is not yet funded, and the gates each item must pass. Nothing moves to done without the evidence named.", "path": "/roadmap/"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Roadmap</p>
+  <h1>Now, next, later</h1>
+  <p class="lead">Every item carries a status: done, in progress, planned, not yet funded. Gates come from the action plan. Nothing moves from planned to done without the evidence named. Maintained in <a href="/docs/ROADMAP/">docs/ROADMAP.md</a>.</p>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Now (this release)</h2>
+    <div class="table-wrap"><table><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody>
+      <tr><td>Core 0.2: envelopes, sensor ladders, refusal, local safety limits, signed records, agent rules</td><td><span class="status core">done</span> draft, under review</td></tr>
+      <tr><td>101 conformance vectors (Core and profiles); conformance report format</td><td><span class="status core">done</span></td></tr>
+      <tr><td>Reference library, Python package and CLI, TypeScript types, MCP server, reference hub, ROS 2 interface package</td><td><span class="status core">done</span> editable and source installs; package registries next</td></tr>
+      <tr><td>Nine example recipes in English and Arabic</td><td><span class="status core">done</span> V1: structured, not field-verified</td></tr>
+      <tr><td>Humanitarian Profile 0.2: surplus to plate, SMS grammar and parser, four worked flows, impact summaries, pilot protocol, concept note</td><td><span class="status">done</span> draft</td></tr>
+      <tr><td>Rule packs (basic, care for vulnerable groups, school meals, sodium reduction) with a review template</td><td><span class="status">done</span> drafts awaiting professional review</td></tr>
+      <tr><td>Household Context Profile with a 139-type facet registry and disclosure vectors</td><td><span class="status">done</span> draft</td></tr>
+      <tr><td>Registry and directory API; honest registry.json and directory.json</td><td><span class="status">done</span> static</td></tr>
+      <tr><td>Kitchens and production runs; supply signals</td><td><span class="status exp">done</span> experimental</td></tr>
+      <tr><td>Federation rules and relay vectors</td><td><span class="status">done</span> draft</td></tr>
+      <tr><td>Four simulators with the protocol on and off</td><td><span class="status model">done</span> illustrative</td></tr>
+      <tr><td>Website in English and Arabic, whitepaper, deck</td><td><span class="status">in progress</span></td></tr>
+    </tbody></table></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Next (within about a year, as resources allow)</h2>
+  <div class="table-wrap"><table><thead><tr><th>Item</th><th>Status</th><th>Gate</th></tr></thead><tbody>
+    <tr><td>Food scientist review of the operation envelopes</td><td>planned</td><td>reviewer agrees</td></tr>
+    <tr><td>Dietitian and food-safety officer reviews of the four rule packs</td><td>planned</td><td>reviews filed; packs move to reviewed</td></tr>
+    <tr><td>Data-protection impact assessment of the household profile</td><td>planned</td><td>reviewer agrees</td></tr>
+    <tr><td>A food-bank pilot (12 weeks, pre-registered, independent evaluator)</td><td>not yet funded</td><td>partner and funding</td></tr>
+    <tr><td>Agent-safety benchmark results for several model families</td><td>planned</td><td>runs published with method</td></tr>
+    <tr><td>pip install cookwala wheel and @cookwala/sdk on npm</td><td>planned</td><td>packaging that bundles vocabularies and schemas</td></tr>
+    <tr><td>Registry service (validate, publish, tombstones)</td><td>planned</td><td>a worker and namespace proof</td></tr>
+    <tr><td>First device maker implementing the Core API against the reference hub</td><td>planned</td><td>one maker agrees; report published</td></tr>
+    <tr><td>Conversion of the first fifi.cooking collections</td><td>planned</td><td>founder decides rights per collection</td></tr>
+    <tr><td>Core 0.3 from device feedback</td><td>planned</td><td>two implementers' feedback</td></tr>
+    <tr><td>Steering committee</td><td>planned</td><td>three independent adopters or two implementations</td></tr>
+  </tbody></table></div>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>Later</h2>
+      <ul><li>A real device cooking a Cookwala recipe, unedited, on video: not yet funded; needs a device partner</li><li>Certification scheme with an independent certifier: no certifier engaged</li><li>Neutral foundation for the specification, trademark and mark</li><li>Contributor network: consented recordings of real recipes with credit</li><li>Demand and supply signals published by programs and cooperatives, after competition-law review</li><li>"Cook in simulation" benchmark</li><li>Digital Public Good recognition for the Humanitarian Profile, after pilot evidence</li><li>Cross-region relief flows and clean-cooking effects in the world simulator</li></ul>
+    </div>
+    <div>
+      <h2>What we will not do</h2>
+      <p>Collect personal data; publish numbers without a method; name a partner before it agrees; claim a certification that does not exist; put household data on any ledger; build a central orchestrator that kitchens depend on; claim to end hunger.</p>
+      <h2>Kill and pivot rules</h2>
+      <p>If two external review rounds fail to produce a device maker or a pilot partner, Cookwala narrows to the Humanitarian Profile and the recipe format. If a pilot shows less than a 5 % gain, the results are published and the profile redesigned before any scaling.</p>
+    </div>
+  </div>
+</section>

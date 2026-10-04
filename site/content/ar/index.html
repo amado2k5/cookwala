@@ -1,0 +1,154 @@
+<!--meta {"title": "كوكوالا: المعيار المفتوح للطهي الآمن", "description": "معيار مفتوح بلا رسوم للطهي الآمن: للناس والمطابخ والروبوتات. ماذا نطبخ، ومتى ينضج، وما الذي لا يجوز أن يحدث أبدًا، يتحقق منه الجهاز. جرّب التجربة الجافة المباشرة.", "path": "/", "status": "core", "scripts": ["dryrun.js", "demo.js", "pathfinder.js"]} -->
+<section class="hero wrap">
+  {{chip}}
+  <h1>المعيار المفتوح للطهي الآمن.<br><span class="soft">للناس والمطابخ والروبوتات.</span></h1>
+  <ol class="triad" aria-label="ما تقوله وصفة كوكوالا">
+    <li><b>ماذا نطبخ.</b> وصفات كخطوات تستطيع الآلة التخطيط لها.</li>
+    <li><b>متى ينضج.</b> درجات حرارة وإشارات حالة الطعام وأزمنة تستطيع قياسها.</li>
+    <li><b>ما الذي لا يجوز أن يحدث أبدًا.</b> حدود سلامة يفرضها الجهاز على نفسه.</li>
+  </ol>
+  <div class="cta">
+    <a class="btn primary" href="#demo">جرّب التجربة الجافة</a>
+    <a class="btn" href="/ar/developers/">ابدأ البناء</a>
+    <a class="btn" href="/ar/humanitarian/">أنقذ طعامًا بالرسائل النصية</a>
+  </div>
+</section>
+
+<section id="demo" class="band" aria-labelledby="demo-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="demo-h">هل يستطيع هذا الجهاز طهي هذه الوصفة؟</h2>
+      <p>يتحقق جهاز كوكوالا من كل خطوة قبل أن يسخّن أي شيء، ويرفض بدل أن يخمّن. اختر وصفة، واختر جهازًا أو ابنِ واحدًا، وشاهد الإجابة تتغير. يعمل هذا بالقواعد نفسها التي يعمل بها الأمر <code>cookwala dryrun</code>، في متصفحك بالكامل.</p>
+    </div>
+    <div class="demo">
+      <form class="controls" id="demoForm" aria-label="إعدادات التجربة الجافة">
+        <label>الوصفة <select id="dRecipe"></select></label>
+        <label>الجهاز <select id="dDevice"></select></label>
+        <label class="check"><input type="checkbox" id="dHuman" checked> يوجد شخص في المطبخ</label>
+        <label class="check"><input type="checkbox" id="dModel" checked> يُسمح بالتقديرات المسجّلة عند غياب الحساس</label>
+      </form>
+      <details id="builder"><summary>ابنِ جهازك</summary><div class="builder" id="builderBody"></div></details>
+      <div class="verdict" id="verdict" role="status" aria-live="polite">جارٍ تحميل الوصفة ومفردات العمليات…</div>
+      <div class="table-wrap"><table class="steps-t" id="steps"><thead><tr><th>الخطوة</th><th>العملية</th><th>النطاق الآمن</th><th>من</th><th>التحقق</th></tr></thead><tbody></tbody></table></div>
+      <div class="share"><span>شارك هذه النتيجة</span><input id="shareUrl" type="text" readonly aria-label="رابط للمشاركة"><button type="button" class="btn" id="copyShare">نسخ</button></div>
+      <p class="note">النطاقات من <a href="/v1/vocab/ops.json">مفردات العمليات</a>. «التقدير» تقدير نموذجي مسجّل؛ و«الوقت» زمن اسمي فقط. الخطوة التي لا يستطيع شيء التحقق منها تُرفض. للقلي الغزير درجة واحدة في السلّم: بلا ترمومتر زيت لا قلي غزير.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="path-h">
+  <div class="sec-head"><h2 id="path-h">اعثر على مسارك</h2><p>في دقيقة: لماذا يهمّك كوكوالا، وشيء واحد تستطيع فعله اليوم.</p></div>
+  <div class="pathfinder" id="pathfinder">
+    <div class="row">
+      <label>أنا <select id="pfWho" aria-label="أنا"></select></label>
+      <label>وأريد أن <select id="pfWant" aria-label="أريد أن"></select></label>
+    </div>
+    <div class="result" id="pfResult"></div>
+    <noscript><ul>
+      <li><a href="/ar/for/developers/">المطوّرون وصانعو الروبوتات والأجهزة وبناة الوكلاء</a></li><li><a href="/ar/for/companies/">الشركات والبقالات والمطاعم وشركات التأمين</a></li><li><a href="/ar/for/providers/">المزوّدون</a></li><li><a href="/ar/for/food/">المزارعون والطباخون والشيفات ومدارس الطهي</a></li><li><a href="/ar/for/humanitarian/">المنظمات وبنوك الطعام وبرامج التغذية والإغاثة</a></li><li><a href="/ar/for/health/">أخصائيو التغذية ومسؤولو سلامة الغذاء والصحة العامة</a></li><li><a href="/ar/for/education/">المعلمون والأساتذة والباحثون والطلاب</a></li><li><a href="/ar/for/government/">الحكومات والجهات التنظيمية والمشرّعون وهيئات المعايير</a></li><li><a href="/ar/for/capital/">المستثمرون والمؤسسات الخيرية وبنوك التنمية</a></li><li><a href="/ar/for/thought/">الفلاسفة والأخلاقيون والمستقبليون</a></li><li><a href="/ar/for/everyone/">الجميع</a></li>
+    </ul></noscript>
+  </div>
+</section>
+
+<section class="band" aria-labelledby="prob-h">
+  <div class="wrap">
+    <h2 id="prob-h">تتعلم الروبوتات الحركة. لكن أحدًا لم يكتب كيف نطبخ.</h2>
+    <div class="three">
+      <p>روبوتات المنازل تُشحن وروبوتات المطابخ تتلقى الطلبات. يكتب كل صانع وصفاته المغلقة، من بضعة مطابخ غالبًا، ويقرر وحده ما معنى «نار هادئة» أو «نضج».</p>
+      <p>يسبب الطعام غير الآمن نحو 600 مليون حالة مرض سنويًا <span class="kind measured" title="منظمة الصحة العالمية، تقديرات العبء العالمي للأمراض المنقولة بالغذاء، 2015">مُحصى · WHO</span>. ونحو 13٪ من الطعام يُفقد قبل أن يصل إلى المتجر <span class="kind measured" title="الفاو، حالة الأغذية والزراعة 2019">مُحصى · FAO</span>، بينما واجه نحو 733 مليون شخص الجوع في 2023 <span class="kind measured" title="تقرير حالة الأمن الغذائي والتغذية في العالم 2024">مُحصى · SOFI 2024</span>.</p>
+      <p>كوكوالا هو الطبقة المفتوحة المشتركة: طريقة واحدة لوصف وصفة يستطيع الإنسان وبنك الطعام والفرن والروبوت قراءتها والتحقق منها وطهيها بأمان، من كل المطابخ، وباسم الطباخ عليها. <a href="/ar/why/">لماذا هذا، ولماذا الآن</a> · <a href="/ar/impact/">الأثر مع المصادر</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="loop-h">
+  <h2 id="loop-h">حلقة واحدة</h2>
+  <ol class="loop">
+    <li><span class="n">1</span><h3>صِف</h3><p>اكتب الوصفة خطوات بشروط إنهاء ومخاطر. احسب بصمتها ووقّعها.</p><code>cookwala hash recipe.json</code></li>
+    <li><span class="n">2</span><h3>تحقّق</h3><p>تحقق منها ثم جرّبها جافة على جهاز قبل الطهي.</p><code>cookwala dryrun recipe.json --device oven.json</code></li>
+    <li><span class="n">3</span><h3>اطبخ</h3><p>يشغّلها الجهاز عبر واجهة النواة أو ROS 2 مع إبقاء كل خطوة داخل نطاقها الآمن.</p><code>POST /v1/executions</code></li>
+    <li><span class="n">4</span><h3>تعلّم</h3><p>بالموافقة يصبح السجل أثرًا ومثالًا تدريبيًا للروبوتات.</p><code>cookwala export lerobot …</code></li>
+  </ol>
+</section>
+
+<section class="band" aria-labelledby="three-h">
+  <div class="wrap">
+    <h2 id="three-h">ثلاث حلقات، معيار واحد</h2>
+    <div class="cards">
+      <a class="card" href="/ar/developers/"><h3>اطبخ</h3><p>يجرّب الجهاز وصفة موقّعة جافة، فيرفض أو يقبل، ويطبخ داخل المظاريف، ويسجّل بلا بيانات شخصية. النواة 0.2، معيارية.</p><span class="go">البداية السريعة ←</span></a>
+      <a class="card" href="/ar/humanitarian/"><h3>أنقذ</h3><p>عرض ← حجز ← تسليم مع فحص حرارة ← توزيع ← أثر بمنهج تحت كل رقم. بالرسائل النصية وجداول البيانات، بلا بيانات شخصية.</p><span class="go">الملف الإنساني ←</span></a>
+      <a class="card" href="/ar/registry/"><h3>اعثر وانشر</h3><p>وصفات وأجهزة وحزم قواعد ومعايير تحت أسماء مُثبتة الملكية بنسخ دقيقة وبصمات؛ ودليل منظمات طلبت الإدراج.</p><span class="go">السجل ←</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="proof-h">
+  <h2 id="proof-h">ما الموجود اليوم</h2>
+  <p class="sub">مُحصى من المستودع عند كل بناء. لا شيء هنا توقّع إلا إذا قال ذلك.</p>
+  <div class="stats" id="stats" aria-live="polite"></div>
+  <p class="note" id="statsMeta"></p>
+</section>
+
+<section class="band" aria-labelledby="safe-h">
+  <div class="wrap two">
+    <div>
+      <h2 id="safe-h">آمن بالتصميم، قابل للتحقق من أي أحد</h2>
+      <p>تُفرض السلامة على الجهاز لا في السحابة. لا تستطيع وصفة أو وكيل أو رسالة أو إضافة رفع حدود الجهاز، ويعمل الإيقاف المحلي بلا شبكة. يتصرف وكلاء الذكاء الاصطناعي تحت تفويض موقّع فقط ويعاملون كل حقل نصي بيانات لا تعليمات.</p>
+      <p>يمكن حساب بصمة كل وصفة وسجل وتوقيعهما، وإلغاء المفاتيح، وتحمل سجلات الأحداث نقاط تحقق مشهودة. الاختبارات التي تثبت ذلك عامة: {{stat:conformanceVectors}} متّجهًا.</p>
+      <p><a href="/docs/CORE/">اقرأ النواة 0.2 (بالإنجليزية)</a> · <a href="/ar/trust/">الثقة</a> · <a href="/docs/CRITIQUES/">النقد الذي نشرناه</a></p>
+    </div>
+    <pre class="code" aria-label="مثال مظروف عملية"><code>"cw.op.deep_fry": {
+  "envelope": {
+    "medium": "oil",
+    "tempC": { "min": 160, "max": 190 },
+    "unattended": false,
+    "sensorLadder": ["cw.sense.oil_temp"],
+    "note": "No oil-temperature sensor,
+             no deep frying."
+  }
+}</code></pre>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="mission-h">
+  <h2 id="mission-h">لماذا نفعل هذا</h2>
+  <div class="three">
+    <div><h3>المساعدة على إنهاء الجوع</h3><p>طعام كان سيُرمى يصل إلى الطبق بأمان؛ برامج تستطيع مقارنة أرقامها؛ ولاحقًا مزارع ومتاجر تخطط على قدر الحاجة. للجوع أسباب كثيرة: الفقر والنزاع والمناخ والأسعار والسياسات. دور كوكوالا حقيقي وجزئي، ونقول أيّه.</p></div>
+    <div><h3>جعل الناس أكثر صحة</h3><p>نقاط تحكم حرجة يجب على الجهاز بلوغها؛ حفظ ساخن وتبريد يجب تسجيلهما؛ حزم قواعد للصوديوم والسكر والدهون والخضار والفواكه ورعاية الأطفال وكبار السن، يراجعها أخصائيو التغذية ومسؤولو سلامة الغذاء.</p></div>
+    <div><h3>تسخير الروبوتات لخدمة الناس</h3><p>روبوتات تطبخ كل المطابخ بأمان، وتتعلم بالموافقة ونسب الفضل، وتخدم من لا يستطيعون الطهي لأنفسهم، وتعيد الوقت إلى الناس، مع صوت للعمال على طاولة الحوكمة.</p></div>
+  </div>
+  <p><a href="/ar/impact/">كل رقم بمصدره وتصنيفه ←</a></p>
+</section>
+
+<section class="band" aria-labelledby="road-h">
+  <div class="wrap">
+    <h2 id="road-h">الآن، ثم، لاحقًا</h2>
+    <div class="road">
+      <div><h3>الآن</h3><ul><li>معيار النواة 0.2 والمخططات</li><li>تجربة جافة، ومتحقق، و101 متّجه مطابقة، وتقارير مطابقة</li><li>حزمة بايثون وسطر أوامر، وأنواع TypeScript، وخادم MCP، وموزّع مرجعي، وواجهات ROS 2</li><li>تسع وصفات نموذجية بالعربية والإنجليزية</li><li>الملف الإنساني 0.2 بقواعد رسائل نصية وأربعة تدفقات عملية</li><li>ملف سياق المنزل: لا تسافر إلا القيود المشتقة</li><li>أربعة محاكيات توضيحية</li></ul></div>
+      <div><h3>ثم</h3><ul><li>مراجعة مهنية للمظاريف وحزم القواعد</li><li>تجربة مع بنك طعام (لم تُموَّل بعد)</li><li>نتائج سلامة الوكلاء لكل نموذج</li><li>حزم SDK منشورة؛ خدمة سجل</li><li>أول صانع أجهزة مقابل الموزّع المرجعي</li><li>النواة 0.3؛ لجنة توجيهية</li></ul></div>
+      <div><h3>لاحقًا</h3><ul><li>جهاز حقيقي يطبخ وصفة كوكوالا بلا تحرير</li><li>اعتماد من جهة اعتماد مستقلة</li><li>مؤسسة محايدة للمعيار</li><li>شبكة مساهمين تعلّم الروبوتات كل المطابخ، بنسب الفضل</li><li>إشارات الإمداد بعد مراجعة قانون المنافسة</li></ul></div>
+    </div>
+    <p class="note"><a href="/ar/roadmap/">خارطة الطريق بحالة لكل بند</a> · <a href="/docs/CRITIQUES/">ما أخطأنا فيه حتى الآن</a></p>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="open-h">
+  <div class="two">
+    <div>
+      <h2 id="open-h">مفتوح، ويمكنك الانضمام اليوم</h2>
+      <p>بلا رسوم. الكود Apache-2.0، والمواصفة CC BY 4.0، والمفردات CC0. بلا مفاتيح API. محايد تجاه النماذج والأجهزة. يُحكم علنًا اليوم، وينتقل إلى مؤسسة محايدة عند وجود تنفيذ مستقل ثانٍ.</p>
+      <div class="cta"><a class="btn primary" href="/ar/contribute/">ساهم</a><a class="btn" href="/docs/GOVERNANCE/">كيف تُتخذ القرارات</a><a class="btn" href="/ar/whitepaper/">الورقة البيضاء</a></div>
+    </div>
+    <div>
+      <h3>للمطوّرين وقرّاء الذكاء الاصطناعي</h3>
+      <ul class="links">
+        <li><a href="/.well-known/cookwala.json">/.well-known/cookwala.json</a><span>الاكتشاف</span></li>
+        <li><a href="/v1/api/core.openapi.yaml">/v1/api/core.openapi.yaml</a><span>واجهة النواة</span></li>
+        <li><a href="/v1/schemas/bundle.json">/v1/schemas/bundle.json</a><span>كل المخططات، بلا اتصال</span></li>
+        <li><a href="/v1/conformance/hash.json">/v1/conformance/</a><span>متّجهات الاختبار</span></li>
+        <li><a href="/v1/registry.json">/v1/registry.json</a><span>السجل</span></li>
+        <li><a href="/llms.txt">/llms.txt</a><span>خريطة الوثائق للذكاء الاصطناعي</span></li>
+      </ul>
+    </div>
+  </div>
+</section>

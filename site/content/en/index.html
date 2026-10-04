@@ -1,0 +1,156 @@
+<!--meta {"title": "Cookwala: the open standard for cooking safely", "description": "An open, royalty-free standard for cooking safely: people, kitchens and robots. What to make, when it's done, and what must never happen, checked on the device. Try the live dry run.", "path": "/", "status": "core", "scripts": ["dryrun.js", "demo.js", "pathfinder.js"]} -->
+<section class="hero wrap">
+  {{chip}}
+  <h1>The open standard for cooking safely.<br><span class="soft">People, kitchens and robots.</span></h1>
+  <ol class="triad" aria-label="What a Cookwala recipe says">
+    <li><b>What to make.</b> Recipes as steps a machine can plan.</li>
+    <li><b>When it's done.</b> Temperatures, food-state cues and times it can measure.</li>
+    <li><b>What must never happen.</b> Safety limits the device enforces itself.</li>
+  </ol>
+  <div class="cta">
+    <a class="btn primary" href="#demo">Try the dry run</a>
+    <a class="btn" href="/developers/">Start building</a>
+    <a class="btn" href="/humanitarian/">Rescue food by SMS</a>
+  </div>
+</section>
+
+<section id="demo" class="band" aria-labelledby="demo-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="demo-h">Can this device cook this recipe?</h2>
+      <p>A Cookwala device checks every step before it heats anything up, and refuses rather than guesses. Pick a recipe, pick or build a device, and watch the answer change. This runs the same rules as <code>cookwala dryrun</code>, entirely in your browser.</p>
+    </div>
+    <div class="demo">
+      <form class="controls" id="demoForm" aria-label="Dry-run settings">
+        <label>Recipe <select id="dRecipe"></select></label>
+        <label>Device <select id="dDevice"></select></label>
+        <label class="check"><input type="checkbox" id="dHuman" checked> A person is in the kitchen</label>
+        <label class="check"><input type="checkbox" id="dModel" checked> Logged estimates allowed where a sensor is missing</label>
+      </form>
+      <details id="builder"><summary>Build your own device</summary>
+        <div class="builder" id="builderBody"></div>
+      </details>
+      <div class="verdict" id="verdict" role="status" aria-live="polite">Loading the recipe and the operation vocabulary…</div>
+      <div class="table-wrap"><table class="steps-t" id="steps"><thead><tr><th>Step</th><th>Operation</th><th>Safe band</th><th>Who</th><th>Checked by</th></tr></thead><tbody></tbody></table></div>
+      <div class="share"><span>Share this result</span><input id="shareUrl" type="text" readonly aria-label="Shareable link"><button type="button" class="btn" id="copyShare">Copy</button></div>
+      <p class="note">Bands come from <a href="/v1/vocab/ops.json">the operation vocabulary</a>. "Estimate" is a logged model estimate; "time" is nominal time only. A step that nothing can check is refused. Deep frying has one rung: no oil thermometer, no deep frying.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="path-h">
+  <div class="sec-head"><h2 id="path-h">Find your path</h2><p>Within a minute: why Cookwala matters to you, and one thing you can do today.</p></div>
+  <div class="pathfinder" id="pathfinder">
+    <div class="row">
+      <label>I am <select id="pfWho" aria-label="I am"></select></label>
+      <label>and I want to <select id="pfWant" aria-label="I want to"></select></label>
+    </div>
+    <div class="result" id="pfResult"></div>
+    <noscript><ul>
+      <li><a href="/for/developers/">Developers, robot and appliance makers, AI-agent builders</a></li><li><a href="/for/companies/">Companies, grocers, restaurants, insurers</a></li><li><a href="/for/providers/">Providers: grocers, farms, delivery, energy, AI vendors, recipe publishers</a></li><li><a href="/for/food/">Farmers, cooks, chefs, culinary schools</a></li><li><a href="/for/humanitarian/">NGOs, food banks, school-meal and relief programs</a></li><li><a href="/for/health/">Dietitians, food-safety officers, public health</a></li><li><a href="/for/education/">Teachers, professors, researchers, students</a></li><li><a href="/for/government/">Governments, regulators, legislators, standards bodies</a></li><li><a href="/for/capital/">Investors, philanthropies, development banks</a></li><li><a href="/for/thought/">Philosophers, ethicists, futurists</a></li><li><a href="/for/everyone/">Everyone</a></li>
+    </ul></noscript>
+  </div>
+</section>
+
+<section class="band" aria-labelledby="prob-h">
+  <div class="wrap">
+    <h2 id="prob-h">Robots are learning to move. Nobody had written down how to cook.</h2>
+    <div class="three">
+      <p>Home robots are shipping and kitchen robots are taking orders. Each maker writes its own closed recipes, mostly from a few cuisines, and decides alone what "simmer" or "done" means.</p>
+      <p>Unsafe food causes about 600 million illnesses a year <span class="kind measured" title="WHO, Estimates of the global burden of foodborne diseases, 2015">measured · WHO</span>. About 13 % of food is lost before it reaches a shop <span class="kind measured" title="FAO, The State of Food and Agriculture 2019">measured · FAO</span>, while about 733 million people faced hunger in 2023 <span class="kind measured" title="FAO, IFAD, UNICEF, WFP, WHO: SOFI 2024">measured · SOFI 2024</span>.</p>
+      <p>Cookwala is the shared, open layer: one way to describe a recipe that a person, a food bank, an oven or a humanoid can read, check and cook safely, in every cuisine, with the cook's name on it. <a href="/why/">Why this, why now</a> · <a href="/impact/">Impact, with sources</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="loop-h">
+  <h2 id="loop-h">One loop</h2>
+  <ol class="loop">
+    <li><span class="n">1</span><h3>Describe</h3><p>Write a recipe as steps with end conditions and hazards. Hash and sign it.</p><code>cookwala hash recipe.json</code></li>
+    <li><span class="n">2</span><h3>Check</h3><p>Validate it, then dry-run it against a device before cooking.</p><code>cookwala dryrun recipe.json --device oven.json</code></li>
+    <li><span class="n">3</span><h3>Cook</h3><p>The device runs it through the Core API or ROS 2, keeping every step inside its safe band.</p><code>POST /v1/executions</code></li>
+    <li><span class="n">4</span><h3>Learn</h3><p>With consent, the log becomes a trace and a training example for robots.</p><code>cookwala export lerobot …</code></li>
+  </ol>
+</section>
+
+<section class="band" aria-labelledby="three-h">
+  <div class="wrap">
+    <h2 id="three-h">Three loops, one standard</h2>
+    <div class="cards">
+      <a class="card" href="/developers/"><h3>Cook</h3><p>A device dry-runs a signed recipe, refuses or accepts, cooks inside envelopes, logs without personal data. Core 0.2, normative.</p><span class="go">Quickstart →</span></a>
+      <a class="card" href="/humanitarian/"><h3>Rescue</h3><p>Offer → claim → handover with a temperature check → distribution → impact with a method under every number. By SMS and spreadsheet, no personal data.</p><span class="go">Humanitarian Profile →</span></a>
+      <a class="card" href="/registry/"><h3>Find and publish</h3><p>Recipes, devices, rule packs, benchmarks under proven names with exact versions and hashes; a directory of organizations that asked to be listed.</p><span class="go">Registry →</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="proof-h">
+  <h2 id="proof-h">What exists today</h2>
+  <p class="sub">Counted from the repository at each build. Nothing here is a projection unless it says so.</p>
+  <div class="stats" id="stats" aria-live="polite"></div>
+  <p class="note" id="statsMeta"></p>
+</section>
+
+<section class="band" aria-labelledby="safe-h">
+  <div class="wrap two">
+    <div>
+      <h2 id="safe-h">Safe by design, verifiable by anyone</h2>
+      <p>Safety is enforced on the device, not in the cloud. No recipe, agent, message or extension can raise a device's limits, and a local stop works without a network. AI agents act only under a signed mandate and treat every text field as data, never as instructions.</p>
+      <p>Every recipe and record can be hashed and signed, keys can be revoked, and event logs carry witnessed checkpoints. The tests that prove it are public: {{stat:conformanceVectors}} vectors.</p>
+      <p><a href="/docs/CORE/">Read Core 0.2</a> · <a href="/trust/">Trust</a> · <a href="/docs/CRITIQUES/">Critiques we published</a></p>
+    </div>
+    <pre class="code" aria-label="Example operation envelope"><code>"cw.op.deep_fry": {
+  "envelope": {
+    "medium": "oil",
+    "tempC": { "min": 160, "max": 190 },
+    "unattended": false,
+    "sensorLadder": ["cw.sense.oil_temp"],
+    "note": "No oil-temperature sensor,
+             no deep frying."
+  }
+}</code></pre>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="mission-h">
+  <h2 id="mission-h">Why we do this</h2>
+  <div class="three">
+    <div><h3>Help end hunger</h3><p>Food that would be thrown away reaching a plate safely; programs that can compare their numbers; later, farms and stores that plan to need. Hunger has many causes: poverty, conflict, climate, prices, policy. Cookwala's part is real and partial, and we say which.</p></div>
+    <div><h3>Make people healthier</h3><p>Critical control points a device must meet; hot-holding and cooling it must record; rule packs for sodium, sugar, fat, fruit and vegetables and care for children and older people, reviewable by dietitians and food-safety officers.</p></div>
+    <div><h3>Put robots to work for people</h3><p>Robots that cook every cuisine safely, learn with consent and credit, serve people who cannot cook for themselves, and give human time back, with a labour voice at the table where this is governed.</p></div>
+  </div>
+  <p><a href="/impact/">Every number, with its source and label →</a></p>
+</section>
+
+<section class="band" aria-labelledby="road-h">
+  <div class="wrap">
+    <h2 id="road-h">Now, next, later</h2>
+    <div class="road">
+      <div><h3>Now</h3><ul><li>Core 0.2 standard and schemas</li><li>Dry run, validator, 101 conformance vectors, conformance reports</li><li>Python package and CLI, TypeScript types, MCP server, reference hub, ROS 2 interfaces</li><li>Eight example recipes, English and Arabic</li><li>Humanitarian Profile 0.2 with an SMS grammar and four worked flows</li><li>Household Context Profile: only derived constraints travel</li><li>Four simulators, illustrative</li></ul></div>
+      <div><h3>Next</h3><ul><li>Professional review of envelopes and rule packs</li><li>A food-bank pilot (not yet funded)</li><li>Agent-safety results per model</li><li>Packaged SDKs; a registry service</li><li>A first device maker against the reference hub</li><li>Core 0.3; a steering committee</li></ul></div>
+      <div><h3>Later</h3><ul><li>A real device cooking a Cookwala recipe, unedited</li><li>Certification with an independent certifier</li><li>A neutral foundation for the standard</li><li>A contributor network that teaches robots every cuisine, with credit</li><li>Supply signals, after competition-law review</li></ul></div>
+    </div>
+    <p class="note"><a href="/roadmap/">The roadmap with a status on every item</a> · <a href="/docs/CRITIQUES/">what we got wrong so far</a></p>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="open-h">
+  <div class="two">
+    <div>
+      <h2 id="open-h">Open, and joinable today</h2>
+      <p>Royalty-free. Apache-2.0 code, CC BY 4.0 specification, CC0 vocabularies. No API keys. Model-agnostic and device-agnostic. Governed in public today, moving to a neutral foundation once there is a second independent implementation.</p>
+      <div class="cta"><a class="btn primary" href="/contribute/">Contribute</a><a class="btn" href="/docs/GOVERNANCE/">How decisions are made</a><a class="btn" href="/whitepaper/">Whitepaper</a></div>
+    </div>
+    <div>
+      <h3>For developers and AI readers</h3>
+      <ul class="links">
+        <li><a href="/.well-known/cookwala.json">/.well-known/cookwala.json</a><span>discovery</span></li>
+        <li><a href="/v1/api/core.openapi.yaml">/v1/api/core.openapi.yaml</a><span>Core API</span></li>
+        <li><a href="/v1/schemas/bundle.json">/v1/schemas/bundle.json</a><span>all schemas, offline</span></li>
+        <li><a href="/v1/conformance/hash.json">/v1/conformance/</a><span>test vectors</span></li>
+        <li><a href="/v1/registry.json">/v1/registry.json</a><span>registry</span></li>
+        <li><a href="/llms.txt">/llms.txt</a><span>docs map for AI</span></li>
+      </ul>
+    </div>
+  </div>
+</section>

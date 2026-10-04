@@ -18,9 +18,11 @@ langs = set()
 for r in recipes:
     langs |= set(json.loads(r.read_text()).get('text', {}).keys())
 limits = len(json.loads((ROOT / 'profiles' / 'core' / 'safety-limits.default.json').read_text())['limits'])
-rules = len(json.loads((ROOT / 'profiles' / 'humanitarian' / 'who-codex-basic.rulepack.json').read_text())['rules'])
+rules = sum(len(json.loads(p.read_text())['rules']) for p in (ROOT / 'profiles' / 'humanitarian').glob('*.rulepack.json'))
 evals = __import__('yaml').safe_load((ROOT / 'evals' / 'kitchen-agent-safety' / 'promptfooconfig.yaml').read_text())['tests']
-m = lambda v, label: {'value': v, 'label': label, 'kind': 'measured'}
+facets = len(json.loads((ROOT / 'vocab' / 'facets.json').read_text())['entries'])
+AR = {'cooking operations with a physical definition': 'عملية طهي بتعريف فيزيائي', 'cooking operations in the vocabulary': 'عملية طهي في المفردات', 'conformance test vectors': 'متّجه اختبار مطابقة', 'JSON schemas': 'مخطط JSON', 'default on-device safety limits': 'حدّ سلامة افتراضي على الجهاز', 'agent-safety test cases': 'حالة اختبار لسلامة الوكلاء', 'food-safety and nutrition rules for food banks': 'قاعدة سلامة غذاء وتغذية لبنوك الطعام', 'recipes published in the index': 'وصفة منشورة في الفهرس', 'languages in published recipes': 'لغة في الوصفات المنشورة', 'playable simulators': 'محاكٍ قابل للتشغيل', 'fifi.cooking recipes planned for conversion': 'وصفة من fifi.cooking مخطَّط تحويلها', 'household and device facet types with privacy rules': 'نوع معلومة منزلية بقواعد خصوصية'}
+m = lambda v, label: {'value': v, 'label': label, 'labelAr': AR.get(label, label), 'kind': 'measured'}
 stats = {
     'generatedAt': dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds'),
     'commit': os.environ.get('GITHUB_SHA', 'local')[:12],
@@ -36,7 +38,8 @@ stats = {
         'publishedRecipes': m(len(recipes), 'recipes published in the index'),
         'languages': m(len(langs), 'languages in published recipes'),
         'simulators': m(4, 'playable simulators'),
-        'recipesInConversion': {'value': 1881, 'label': 'fifi.cooking recipes planned for conversion', 'kind': 'planned'},
+        'facets': m(facets, 'household and device facet types with privacy rules'),
+        'recipesInConversion': {'value': 1881, 'label': 'fifi.cooking recipes planned for conversion', 'labelAr': AR['fifi.cooking recipes planned for conversion'], 'kind': 'planned'},
     },
 }
 out = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else 'stats.json')
