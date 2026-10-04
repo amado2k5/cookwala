@@ -1,0 +1,87 @@
+{
+ "cookwala": "0.1.0",
+ "actor": {
+  "kind": "robot",
+  "id": "demo:arm",
+  "vendor": "Cookwala demo presets",
+  "model": "Counter robot arm (cuts, cracks, mixes, moves)"
+ },
+ "roles": [
+  "executor"
+ ],
+ "location": {
+  "zone": "kitchen",
+  "mobile": false
+ },
+ "capabilities": {
+  "ops": [
+   {
+    "op": "cw.op.cut"
+   },
+   {
+    "op": "cw.op.crack"
+   },
+   {
+    "op": "cw.op.transfer"
+   },
+   {
+    "op": "cw.op.mix"
+   },
+   {
+    "op": "cw.op.whisk"
+   },
+   {
+    "op": "cw.op.wash"
+   },
+   {
+    "op": "cw.op.drain"
+   },
+   {
+    "op": "cw.op.crush"
+   },
+   {
+    "op": "cw.op.grate"
+   },
+   {
+    "op": "cw.op.layer"
+   },
+   {
+    "op": "cw.op.garnish"
+   },
+   {
+    "op": "cw.op.form"
+   }
+  ],
+  "sensors": [
+   {
+    "sensor": "cw.sense.vision",
+    "visionCues": [
+     "cw.sense.translucent",
+     "cw.sense.egg_whites_set"
+    ]
+   }
+  ]
+ },
+ "x-note": "Exported from the home-page dry-run presets (site/assets/demo.js) so the CLI, the hub and the MCP server see the same five devices.",
+ "safety": {
+  "certifications": [
+   {
+    "standard": "ISO 10218-1",
+    "selfDeclared": true
+   }
+  ],
+  "presenceDetection": true,
+  "emergencyStop": "both",
+  "minVerificationLevel": {
+   "presence_required": "V1",
+   "unattended": "V3"
+  }
+ },
+ "interfaces": {
+  "cookwalaHttp": "https://arm-1.local:8080/cookwala/v1",
+  "ros2": {
+   "namespace": "/arm1",
+   "actionServer": "/cookwala/execute_node"
+  }
+ }
+}

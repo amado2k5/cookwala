@@ -52,3 +52,18 @@ P3, P4 and P7.
 ## 4. Open items for the founder
 
 Listed in `BACKSTORY.md` §5 and repeated in the PR.
+
+
+## Addendum, 2026-10-04: SDK scenarios, the fifi.cooking import, every fifi language
+
+Founder request: a full SDK with 100 scenarios (steps, command lines, code in every major
+language), the whole fifi.cooking collection imported into the standard and published on the
+site, and the website and its documentation in every language fifi.cooking has (25 with
+English and Arabic).
+
+| Phase | Deliverable | Acceptance |
+|---|---|---|
+| Q1 Import | `tools/export_fifi.py` (deterministic stages E0, E1-lite, E2, E6, E7 of EXPORT-FIFI.md); RFC-0009 and `cw.op.legacy_step`; `recipes/<collection>/*.cookwala.json` at V0; `vocab/ingredients.json` with labels in 25 languages; text sidecars; `/v1/manifest.json`, `/v1/index/<lang>/<page>.json`; recipe pages and a browse page with search; per-collection licence switch | 1,881 documents validate; semantics clean; dry run assigns every legacy step to a person; site shows V0 and V1 counts separately |
+| Q2 SDK | Reference-hub tool endpoints; clients in Python, TypeScript/JavaScript, Go, Rust, Java, Kotlin, C#, Swift, C++, Ruby, PHP and curl; `scenarios/` with 100 scenarios as data, rendered to a page and twelve code samples each; a runner that executes every scenario in Python against the hub and records expected output | 100 scenarios run green; samples compile where a toolchain exists (Java, Swift, C++, Ruby, Node, Python); the rest are reviewed and marked untested |
+| Q3 Languages | Site generator for 25 languages (RTL for ar, ur, fa, he, ps; fonts per script); per-language `strings.json`, `for.json` and content pages; whitepaper and deck; docs machine-translated by a local model in priority order with a visible "machine-translated, English is the reference" notice; recipe text from the fifi translations | every page builds in every language; no untranslated placeholders; hreflang on every page; a11y scan green |
+| Q4 Verify and ship | validator, conformance, sims, build, link check, a11y scan, screenshots; PROGRESS; commits; PR updated | green; PR body lists what is translated by whom and what the founder must confirm (collection licences) |

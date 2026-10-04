@@ -1,0 +1,22 @@
+{
+ "id": "003",
+ "slug": "household-constraints-for-a-grocer",
+ "audience": "developer",
+ "northStar": ["robots", "health"],
+ "level": "intermediate",
+ "title": {"en": "A grocer receives constraints, never the household's facts"},
+ "goal": {"en": "The Household Context Profile keeps a home's facts at home. Derive what a grocer may receive from a full household context and confirm that the raw facets about children and health stay withheld."},
+ "docs": ["/docs/HOUSEHOLD-CONTEXT/", "/trust/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "grocer"}, "save": "grocer", "note": {"en": "Run the derivation for the grocer role over the example household (an allergy, a child, a budget, a delivery window among the facets)."}, "expect": {"withheld.length": 9}},
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "planner"}, "save": "planner", "note": {"en": "A meal planner may receive more constraint types than a grocer, still never a raw facet."}},
+  {"op": "assert", "note": {"en": "The constraint list carries types and the facet ids it was derived from; no facet value appears."}, "expect": {"grocer.constraints[0].type": "allergen_block"}}
+ ],
+ "cli": [
+  "cookwala constraints examples/household/context.json --role grocer",
+  "cookwala constraints examples/household/context.json --role planner"
+ ],
+ "outcome": {"en": "You know the shape of a DerivedConstraint and why providers plug in as peers without seeing the home. Next: scenario 030 adds a consent grant for a device self-state facet."},
+ "tags": ["household", "privacy", "constraints"]
+}

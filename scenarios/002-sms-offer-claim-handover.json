@@ -1,0 +1,24 @@
+{
+ "id": "002",
+ "slug": "sms-offer-claim-handover",
+ "audience": "food_bank",
+ "northStar": ["hunger"],
+ "level": "beginner",
+ "title": {"en": "Parse a food bank's SMS day: offer, claim, handover with a partial rejection"},
+ "goal": {"en": "The Humanitarian Profile's SMS grammar lets a program run on basic phones. Parse the three messages of a typical rescue and see the cold-chain checks the gateway applies before it writes a document."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub"],
+ "steps": [
+  {"op": "parseSms", "args": {"text": "OFFER 36KG YOGURT C 4C UB0511"}, "save": "offer", "note": {"en": "A supermarket offers 36 kg of yogurt, chilled, at 4 °C, use by 5 November."}, "expect": {"ok": true, "command": "OFFER", "kg": 36.0, "storage": "chilled", "foodClasses": ["dairy"], "findings.length": 0}},
+  {"op": "parseSms", "args": {"text": "OFFER 12KG YOGURT A"}, "save": "ambient", "note": {"en": "The same yogurt declared ambient: the gateway infers the food class from the words and refuses to list it."}, "expect": {"findings": ["safety.storage_class_mismatch"]}},
+  {"op": "parseSms", "args": {"text": "CLAIM A7K ALL"}, "save": "claim", "note": {"en": "A food bank claims the whole offer."}, "expect": {"command": "CLAIM", "all": true}},
+  {"op": "parseSms", "args": {"text": "HAND A7K 30 REJ 6 PACK T4.6"}, "save": "hand", "note": {"en": "At handover 30 kg are accepted and 6 kg rejected for damaged packaging, measured at 4.6 °C. The reason code maps to the profile's enum."}, "expect": {"kgAccepted": 30.0, "kgRejected": 6.0, "reason": "packaging_damaged", "tempC": 4.6}},
+  {"op": "parseSms", "args": {"text": "HAND A7K ٣٠ T4.6"}, "save": "digits", "note": {"en": "Arabic-Indic digits are accepted wherever a digit is, so a phone set to an Arabic keyboard works."}, "expect": {"kgAccepted": 30.0}}
+ ],
+ "cli": [
+  "cookwala sms \"OFFER 36KG YOGURT C 4C UB0511\"",
+  "cookwala sms \"HAND A7K 30 REJ 6 PACK T4.6\""
+ ],
+ "outcome": {"en": "You can turn messages into structured commands and know which ones a gateway refuses. Next: scenario 003 checks a whole flow against a rule pack."},
+ "tags": ["sms", "humanitarian", "cold-chain"]
+}

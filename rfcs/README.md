@@ -14,6 +14,7 @@ name a qualified reviewer before they are accepted.
 | [0006](0006-federation.md) | Federation: catalogs, registries, feeds and relays | proposed | |
 | [0007](0007-farm-surplus-and-supply-signals.md) | Farm surplus and supply signals | proposed, experimental, needs competition-law review | |
 | [0008](0008-conformance-reports-and-certification.md) | Conformance reports and the certification path | proposed | |
+| [0009](0009-v0-import-profile.md) | V0 import profile and the unclassified step (fifi.cooking import) | draft | |
 
 Statuses: `proposed` → `comment` → `accepted` or `rejected` → `implemented`. An RFC is a
 short document: problem, proposal, alternatives considered, migration, open questions.

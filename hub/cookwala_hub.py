@@ -195,6 +195,9 @@ def ref_time(t):
     return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(t))
 
 
+TOOLS = ['hash', 'verify', 'dryrun', 'envelope', 'sms', 'constraints', 'convert', 'ladder', 'validate', 'humanitarian']
+
+
 class Handler(BaseHTTPRequestHandler):
     device: Device = None
     server_version = 'cookwala-hub/0.1'
@@ -238,12 +241,74 @@ class Handler(BaseHTTPRequestHandler):
                 if len(parts) == 5 and parts[4] == 'log':
                     if not ex.get('final') or not ex.get('log') or 'kind' not in (ex['log'] or {}): return self._problem(404, 'not-found', 'the log exists once the execution has ended')
                     return self._send(200, ex['log'])
+        if path == '/v1/tools/recipes':
+            return self._send(200, {'recipes': sorted(p.stem.replace('.cookwala', '') for p in pathlib.Path(d.recipes_dir).glob('*.cookwala.json'))})
+        if path.startswith('/v1/tools/recipes/'):
+            rid = path.split('/')[4]; f = pathlib.Path(d.recipes_dir) / f'{rid}.cookwala.json'
+            return self._send(200, json.loads(f.read_text())) if f.exists() else self._problem(404, 'not-found')
+        if path == '/v1/tools/devices':
+            return self._send(200, {'devices': {p.stem: json.loads(p.read_text()) for p in sorted((ROOT / 'examples' / 'capabilities').glob('*.json'))}})
+        if path == '/v1/tools/vocab/ops':
+            return self._send(200, json.loads((ROOT / 'vocab' / 'ops.json').read_text()))
+        if path == '/v1/tools/registry':
+            return self._send(200, json.loads((ROOT / 'site' / 'v1' / 'registry.json').read_text()))
         if path in ('/', '/v1'):
-            return self._send(200, {'name': 'Cookwala reference hub', 'core': '0.2.0', 'endpoints': ['/v1/capabilities', '/v1/safety-limits', '/v1/executions', '/v1/recalls', '/v1/conformance'], 'docs': 'https://cookwala.ai/docs/?p=CORE'}, 'application/json')
+            return self._send(200, {'name': 'Cookwala reference hub', 'core': '0.2.0', 'endpoints': ['/v1/capabilities', '/v1/safety-limits', '/v1/executions', '/v1/recalls', '/v1/conformance', '/v1/tools/*'], 'tools': TOOLS, 'docs': 'https://cookwala.ai/docs/HUB/'}, 'application/json')
         self._problem(404, 'not-found')
+
+    # ---- reference tools (not part of the Core API; the same functions the CLI exposes, over HTTP, so every language SDK can call them)
+    def _tool(self, name, body):
+        if name == 'hash': return {'hash': ref.doc_hash(body['doc'])}
+        if name == 'verify':
+            ok, why = ref.verify(body['doc'], body.get('keys', []))[:2]
+            return {'ok': bool(ok), 'reason': why}
+        if name == 'dryrun':
+            recipe = body.get('recipe') or json.loads((pathlib.Path(self.device.recipes_dir) / f"{body['recipeId']}.cookwala.json").read_text())
+            device = body.get('device') or json.loads((ROOT / 'examples' / 'capabilities' / f"{body['deviceId']}.json").read_text())
+            return ref.dry_run(recipe, device, bool(body.get('humanPresent', False)), bool(body.get('allowModel', True)))
+        if name == 'envelope': return ref.check_envelope(body['op'], body['trace'], body.get('target'), body.get('altitudeM', 0))
+        if name == 'sms':
+            cmd = ref.parse_sms(body['text']); out = dict(cmd)
+            if cmd.get('ok'): out['findings'] = ref.sms_storage_findings(cmd)
+            return out
+        if name == 'constraints': return ref.derive_constraints(body['facets'], body['role'], body.get('consents'))
+        if name == 'convert': return {'value': ref.convert(body['value'], body['unit'], body['to'], body.get('densityGPerMl')), 'unit': body['to']}
+        if name == 'ladder': return ref.ladder_choice(body['op'], body.get('sensors', []), bool(body.get('allowModel', True)), bool(body.get('humanPresent', False)))
+        if name == 'validate':
+            try:
+                from jsonschema import Draft202012Validator
+                from referencing import Registry, Resource
+            except ImportError:
+                return {'ok': None, 'errors': ['jsonschema not installed on this hub; pip install -e "sdk/python[full]"']}
+            reg = Registry()
+            for sp in (ROOT / 'schemas').glob('*.schema.json'):
+                s = json.loads(sp.read_text()); reg = reg.with_resource(s.get('$id', sp.name), Resource.from_contents(s))
+            schema = json.loads((ROOT / 'schemas' / f"{body.get('kind', 'recipe')}.schema.json").read_text())
+            errs = [f"{'/'.join(map(str, e.absolute_path))}: {e.message[:160]}" for e in Draft202012Validator(schema, registry=reg).iter_errors(body['doc'])]
+            return {'ok': not errs, 'errors': errs}
+        if name == 'humanitarian':
+            import importlib.util
+            spec = importlib.util.spec_from_file_location('humanitarian_check', ROOT / 'tools' / 'humanitarian_check.py'); hc = importlib.util.module_from_spec(spec); spec.loader.exec_module(hc)
+            pack = hc.merge_packs([ROOT / 'profiles' / 'humanitarian' / f'{p}.rulepack.json' for p in body.get('packs', ['who-codex-basic'])])
+            out = []
+            for doc in body['docs']:
+                f = hc.temperature_findings(doc, pack) + (hc.menu_findings(doc, pack) if doc.get('kind') == 'Distribution' else [])
+                out.append({'id': doc.get('id'), 'kind': doc.get('kind'), 'findings': [{'rule': r['id'], 'severity': r['severity'], 'detail': d_} for r, d_ in f]})
+            return {'results': out}
+        return None
+
+    def do_POST_tool(self, path):
+        name = path.split('/')[3] if len(path.split('/')) > 3 else ''
+        if name not in TOOLS: return self._problem(404, 'not-found', f'unknown tool {name}; see /v1 for the list')
+        try:
+            out = self._tool(name, self._body())
+        except (KeyError, FileNotFoundError, ValueError) as e:
+            return self._problem(400, 'invalid-request', f'{type(e).__name__}: {e}')
+        return self._send(200, out)
 
     def do_POST(self):
         d = self.device; path = self.path.split('?')[0]
+        if path.startswith('/v1/tools/'): return self.do_POST_tool(path)
         idem = self.headers.get('Idempotency-Key')
         if not idem or len(idem) < 8: return self._problem(400, 'missing-idempotency-key', 'Idempotency-Key header (8..128 chars) is required on every POST')
         if path == '/v1/executions':

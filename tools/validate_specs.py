@@ -139,6 +139,22 @@ def check_recipe_semantics(recipe, label):
 for path in sorted((ROOT / 'examples').glob('*.cookwala.json')):
     check_recipe_semantics(json.loads(path.read_text()), path.name)
 
+# ---- imported V0 recipes (RFC-0009): schema plus semantics, summarised
+import time as _time
+_t0 = _time.time(); _n = 0; _bad = 0
+_rv = Draft202012Validator(json.loads((ROOT / 'schemas' / 'recipe.schema.json').read_text()), registry=registry)
+for path in sorted((ROOT / 'recipes').rglob('*.cookwala.json')) if (ROOT / 'recipes').exists() else []:
+    doc = json.loads(path.read_text()); _n += 1
+    errs = [e.message[:100] for e in _rv.iter_errors(doc)]
+    probs = [f"{n.get('id')}: unknown op {n.get('op')}" for n in doc.get('process', {}).get('nodes', []) if n.get('op') not in OPS]
+    if doc.get('verification', {}).get('level') == 'V0' and any(n.get('op') != 'cw.op.legacy_step' for n in doc['process']['nodes']):
+        probs.append('V0 document with an executable node (RFC-0009)')
+    if errs or probs:
+        _bad += 1
+        if _bad <= 5: print(f'  recipes/{path.relative_to(ROOT / "recipes")}: {(errs + probs)[0]}')
+failures += _bad
+print(f'recipes/: {_n} imported documents, {_bad} with problems ({_time.time() - _t0:.1f}s)')
+
 
 # ---- strictness: every object schema with properties must say what to do with unknown fields
 def strictness(node, where, in_branch=False):

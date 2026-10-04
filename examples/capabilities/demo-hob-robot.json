@@ -1,0 +1,166 @@
+{
+ "cookwala": "0.1.0",
+ "actor": {
+  "kind": "robot",
+  "id": "demo:hob_robot",
+  "vendor": "Cookwala demo presets",
+  "model": "Kitchen robot with hob and thermometers"
+ },
+ "roles": [
+  "executor"
+ ],
+ "location": {
+  "zone": "kitchen",
+  "mobile": false
+ },
+ "capabilities": {
+  "ops": [
+   {
+    "op": "cw.op.heat"
+   },
+   {
+    "op": "cw.op.saute"
+   },
+   {
+    "op": "cw.op.simmer"
+   },
+   {
+    "op": "cw.op.boil"
+   },
+   {
+    "op": "cw.op.toast"
+   },
+   {
+    "op": "cw.op.bake"
+   },
+   {
+    "op": "cw.op.roast"
+   },
+   {
+    "op": "cw.op.melt"
+   },
+   {
+    "op": "cw.op.reduce"
+   },
+   {
+    "op": "cw.op.hold"
+   },
+   {
+    "op": "cw.op.cool"
+   },
+   {
+    "op": "cw.op.chill"
+   },
+   {
+    "op": "cw.op.cut"
+   },
+   {
+    "op": "cw.op.grate"
+   },
+   {
+    "op": "cw.op.crush"
+   },
+   {
+    "op": "cw.op.mix"
+   },
+   {
+    "op": "cw.op.whisk"
+   },
+   {
+    "op": "cw.op.form"
+   },
+   {
+    "op": "cw.op.form_wells"
+   },
+   {
+    "op": "cw.op.crack"
+   },
+   {
+    "op": "cw.op.transfer"
+   },
+   {
+    "op": "cw.op.wash"
+   },
+   {
+    "op": "cw.op.drain"
+   },
+   {
+    "op": "cw.op.layer"
+   },
+   {
+    "op": "cw.op.season"
+   },
+   {
+    "op": "cw.op.garnish"
+   },
+   {
+    "op": "cw.op.serve"
+   },
+   {
+    "op": "cw.op.rest"
+   },
+   {
+    "op": "cw.op.blend"
+   },
+   {
+    "op": "cw.op.wait"
+   }
+  ],
+  "sensors": [
+   {
+    "sensor": "cw.sense.pan_surface_temp"
+   },
+   {
+    "sensor": "cw.sense.liquid_temp"
+   },
+   {
+    "sensor": "cw.sense.core_temp"
+   },
+   {
+    "sensor": "cw.sense.boil_detect"
+   },
+   {
+    "sensor": "cw.sense.vision",
+    "visionCues": [
+     "cw.sense.translucent",
+     "cw.sense.egg_whites_set",
+     "cw.sense.color_golden",
+     "cw.sense.color_golden_brown",
+     "cw.sense.lentils_soft",
+     "cw.sense.liquid_absorbed",
+     "cw.sense.sauce_coats_spoon",
+     "cw.sense.fragrant_no_browning",
+     "cw.sense.oil_shimmer",
+     "cw.sense.boil_detect",
+     "cw.sense.fully_melted",
+     "cw.sense.molokhia_dispersed",
+     "cw.sense.pasta_al_dente",
+     "cw.sense.lentils_tender_whole",
+     "cw.sense.syrup_light_coat"
+    ]
+   }
+  ]
+ },
+ "x-note": "Exported from the home-page dry-run presets (site/assets/demo.js) so the CLI, the hub and the MCP server see the same five devices.",
+ "safety": {
+  "certifications": [
+   {
+    "standard": "ISO 10218-1",
+    "selfDeclared": true
+   }
+  ],
+  "presenceDetection": true,
+  "emergencyStop": "both",
+  "minVerificationLevel": {
+   "presence_required": "V1",
+   "unattended": "V3"
+  }
+ },
+ "interfaces": {
+  "cookwalaHttp": "https://arm-1.local:8080/cookwala/v1",
+  "ros2": {
+   "namespace": "/arm1",
+   "actionServer": "/cookwala/execute_node"
+  }
+ }
+}

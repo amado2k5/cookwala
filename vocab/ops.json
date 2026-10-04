@@ -3052,6 +3052,41 @@
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
    }
+  },
+  {
+   "id": "cw.op.legacy_step",
+   "label": {
+    "en": "Unclassified step (V0 import)",
+    "ar": "خطوة غير مصنفة (استيراد V0)"
+   },
+   "definition": "A step imported from a human recipe that has not been classified into an executable operation. Carries the original sentence and an optional opHint. No device declares this capability, so a dry run assigns it to a person or refuses; it never executes on a machine (RFC-0009).",
+   "classes": [
+    "cw.opfamily.aux",
+    "cw.opfamily.legacy"
+   ],
+   "paramsSchema": {
+    "type": "object",
+    "properties": {
+     "opHint": {
+      "type": "string",
+      "pattern": "^cw\\.op\\.[a-z_]+$"
+     },
+     "phase": {
+      "enum": [
+       "prep",
+       "cook",
+       "finish",
+       "alternative"
+      ]
+     },
+     "sourceStep": {
+      "type": "integer",
+      "minimum": 1
+     }
+    },
+    "unevaluatedProperties": false
+   },
+   "sensors": []
   }
  ]
 }

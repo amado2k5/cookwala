@@ -1,0 +1,42 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://cookwala.ai/v1/schemas/scenario.schema.json",
+ "title": "SDK scenario",
+ "description": "One scenario: a goal, ordered steps that call SDK operations (scenarios/OPERATIONS.md), the command lines that do the same, and what to expect. Rendered into a page and a code sample per language by tools/scenarios/render.py; executed in Python by tools/scenarios/run.py.",
+ "type": "object",
+ "required": ["id", "slug", "audience", "northStar", "title", "goal", "steps", "cli"],
+ "properties": {
+  "id": {"type": "string", "pattern": "^[0-9]{3}$"},
+  "slug": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
+  "audience": {"enum": ["developer", "robot_maker", "appliance_maker", "agent_builder", "kitchen_operator", "food_bank", "school_program", "farmer", "home_cook", "recipe_publisher", "dietitian", "food_safety_officer", "regulator", "registry_operator", "researcher", "teacher", "insurer", "certifier"]},
+  "northStar": {"type": "array", "minItems": 1, "items": {"enum": ["hunger", "health", "robots"]}},
+  "title": {"$ref": "#/$defs/LangMap"},
+  "goal": {"$ref": "#/$defs/LangMap", "description": "One or two sentences: what the reader achieves."},
+  "level": {"enum": ["beginner", "intermediate", "advanced"], "default": "beginner"},
+  "docs": {"type": "array", "items": {"type": "string"}, "description": "Site paths to read first, e.g. /docs/CORE/."},
+  "requires": {"type": "array", "items": {"enum": ["hub", "repo", "full"]}, "description": "hub: a running reference hub; repo: files from the checkout; full: the [full] Python extras."},
+  "steps": {
+   "type": "array", "minItems": 1, "maxItems": 12,
+   "items": {
+    "type": "object",
+    "required": ["op", "note"],
+    "properties": {
+     "op": {"enum": ["hash", "verify", "dryRun", "checkEnvelope", "parseSms", "deriveConstraints", "convert", "ladder", "validate", "humanitarianCheck", "listRecipes", "getRecipe", "getDevices", "getOps", "getRegistry", "capabilities", "safetyLimits", "recalls", "conformance", "startExecution", "getExecution", "stopExecution", "resumeExecution", "executionLog", "reportIncident", "wait", "assert"]},
+     "args": {"type": "object", "description": "Arguments by name. A value may be {\"$file\": \"examples/x.json\"} (read from the repository), {\"$var\": \"name\"} (a value saved by an earlier step), or {\"$var\": \"name\", \"path\": \"status.id\"}."},
+     "save": {"type": "string", "pattern": "^[a-z][a-zA-Z0-9]*$", "description": "Variable name the result is stored under."},
+     "note": {"$ref": "#/$defs/LangMap", "description": "What this step shows, one or two sentences; rendered as a comment and as the step text on the page."},
+     "expect": {"type": "object", "description": "Dotted path -> expected value, checked by the runner and printed by the samples. Paths may use [i] for arrays and a trailing .length.", "additionalProperties": true},
+     "seconds": {"type": "number", "description": "wait only: seconds to sleep (the hub simulates time at --speed)."}
+    },
+    "unevaluatedProperties": false
+   }
+  },
+  "cli": {"type": "array", "items": {"type": "string"}, "description": "Shell commands that do the same with the cookwala CLI or curl, from the repository root."},
+  "outcome": {"$ref": "#/$defs/LangMap", "description": "What the reader has at the end and what to do next."},
+  "tags": {"type": "array", "items": {"type": "string"}}
+ },
+ "unevaluatedProperties": false,
+ "$defs": {
+  "LangMap": {"type": "object", "required": ["en"], "propertyNames": {"pattern": "^[a-z]{2,3}$"}, "additionalProperties": {"type": "string"}}
+ }
+}

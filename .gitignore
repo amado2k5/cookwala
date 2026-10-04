@@ -11,3 +11,4 @@ sim/out/
 *.egg-info/
 sdk/typescript/node_modules/
 sdk/typescript/dist/
+scenarios/out/

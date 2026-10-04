@@ -1,0 +1,62 @@
+{
+ "cookwala": "0.1.0",
+ "actor": {
+  "kind": "appliance",
+  "id": "demo:oven",
+  "vendor": "Cookwala demo presets",
+  "model": "Smart oven with a core probe"
+ },
+ "roles": [
+  "executor"
+ ],
+ "location": {
+  "zone": "kitchen",
+  "mobile": false
+ },
+ "capabilities": {
+  "ops": [
+   {
+    "op": "cw.op.bake"
+   },
+   {
+    "op": "cw.op.roast"
+   },
+   {
+    "op": "cw.op.heat"
+   },
+   {
+    "op": "cw.op.rest"
+   }
+  ],
+  "sensors": [
+   {
+    "sensor": "cw.sense.oven_temp"
+   },
+   {
+    "sensor": "cw.sense.core_temp"
+   }
+  ]
+ },
+ "x-note": "Exported from the home-page dry-run presets (site/assets/demo.js) so the CLI, the hub and the MCP server see the same five devices.",
+ "safety": {
+  "certifications": [
+   {
+    "standard": "ISO 10218-1",
+    "selfDeclared": true
+   }
+  ],
+  "presenceDetection": true,
+  "emergencyStop": "both",
+  "minVerificationLevel": {
+   "presence_required": "V1",
+   "unattended": "V3"
+  }
+ },
+ "interfaces": {
+  "cookwalaHttp": "https://arm-1.local:8080/cookwala/v1",
+  "ros2": {
+   "namespace": "/arm1",
+   "actionServer": "/cookwala/execute_node"
+  }
+ }
+}

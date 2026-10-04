@@ -1,0 +1,23 @@
+{
+ "id": "001",
+ "slug": "dry-run-refuses-without-oil-thermometer",
+ "audience": "developer",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "A dry run refuses koshari on a robot with no oil thermometer"},
+ "goal": {"en": "See the standard's first rule in action: before anything heats up, a device checks every step and refuses what it cannot verify. Deep frying has exactly one rung on its sensor ladder, an oil thermometer."},
+ "docs": ["/docs/CORE/", "/docs/QUICKSTART/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "listRecipes", "save": "recipes", "note": {"en": "Ask the hub which recipes it can plan; the example set includes koshari."}, "expect": {"recipes.length": 9}},
+  {"op": "dryRun", "args": {"recipeId": "koshari", "deviceId": "demo-hob-robot-basic", "humanPresent": true}, "save": "basic", "note": {"en": "Dry-run koshari on a kitchen robot that has a hob but no thermometers. A person is in the kitchen, so cutting and sautéing may run."}, "expect": {"state": "refused", "refusal.reason": "missing_sensor_no_fallback", "refusal.node": "n14"}},
+  {"op": "dryRun", "args": {"recipeId": "koshari", "deviceId": "demo-fryer-robot", "humanPresent": true}, "save": "fryer", "note": {"en": "Same recipe on a robot with an oil thermometer: accepted, with a plan that says which rung verifies each step."}, "expect": {"state": "accepted"}},
+  {"op": "assert", "note": {"en": "The accepted plan still has every step; nothing was skipped to make it pass."}, "expect": {"fryer.plan.length": 20}}
+ ],
+ "cli": [
+  "cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/demo-hob-robot-basic.json --human-present",
+  "cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/demo-fryer-robot.json --human-present"
+ ],
+ "outcome": {"en": "You have seen a refusal with a reason and a node id, and an acceptance with a plan. Next: scenario 002 shows the same check from a browser, and scenario 010 adds a person-absent run."},
+ "tags": ["dry-run", "refusal", "sensor-ladder", "deep-fry"]
+}
