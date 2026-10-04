@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cookwala World Simulator</title>
+  <meta name="description" content="Five years, the whole world: robot cooks with and without the Cookwala protocol, and countries with few or no robots, compared with a world without robots.">
+  <link rel="stylesheet" href="../city/city.css?v=0.3.0">
+  <link rel="stylesheet" href="../country/country.css?v=0.3.1">
+  <link rel="stylesheet" href="world.css?v=0.4.0">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <a href="/" class="logo">Cookwala</a> <span class="title">World Simulator</span>
+      <p class="sub">Five years (2027–2031), 8.3 billion people, ten world regions. Choose how many homes get robot cooks and whether the food system runs the Cookwala protocol, then compare with <b>the same world without robots or the protocol</b>. Calibrated from the <a href="../country/">country</a>, <a href="../city/">city</a> and <a href="../">home</a> simulators.</p>
+    </div>
+  </header>
+
+  <section class="controls" aria-label="Scenario">
+    <div class="seg-group" role="group" aria-label="Robot cooks">
+      <span class="seg-label">Robot cooks</span>
+      <button type="button" class="seg" data-robots="none" aria-pressed="false">None</button><button type="button" class="seg" data-robots="few" aria-pressed="false">Few · wealthy homes</button><button type="button" class="seg" data-robots="many" aria-pressed="true">Many</button>
+    </div>
+    <div class="seg-group" role="group" aria-label="Cookwala protocol">
+      <span class="seg-label">Cookwala protocol</span>
+      <button type="button" class="seg" data-protocol="on" aria-pressed="true">On</button><button type="button" class="seg" data-protocol="off" aria-pressed="false">Off · robots alone</button>
+    </div>
+    <label>Show <select id="metric"></select></label>
+    <button id="editToggle" aria-expanded="false">Edit regions ▾</button>
+  </section>
+  <p id="scenarioNote" class="scenario-note"></p>
+  <section id="editor" class="panel" hidden></section>
+
+  <section class="player" aria-label="Quarter">
+    <button id="play" class="primary" aria-label="Play">▶</button>
+    <input id="quarter" type="range" min="0" max="20" value="20" aria-label="Quarter (last = all five years)">
+    <span id="quarterLabel" class="day">2027–2031</span>
+  </section>
+
+  <section class="country-grid">
+    <div class="panel map-panel">
+      <h2 id="mapTitle">Change vs no-robot world</h2>
+      <svg id="map" viewBox="0 0 960 440" role="img" aria-label="World map"></svg>
+      <div id="mapLegend" class="scale-legend"></div>
+    </div>
+    <div class="panel">
+      <h2 id="regTitle">Regions</h2>
+      <div id="regBars"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Three futures, five years</h2>
+    <p class="muted small">Same people, same population growth, same grids getting cleaner. Only robots and the protocol differ. <b>Robots alone</b>: robots shop and cook through their vendors' apps; stores, farms and logistics can't see their plans; no surplus rescue. <b>Protocol</b>: demand signals, consolidated delivery, surplus rescue to community kitchens, energy-saver modes, used by robots, stores, farms, relief programs and people's apps.</p>
+    <div id="futures" class="futures"></div>
+    <div class="table-wrap"><table class="data" id="compare"></table></div>
+  </section>
+
+  <section class="panel">
+    <h2>Five years in numbers <span class="muted small" id="kpiNote"></span></h2>
+    <div id="kpis" class="kpis"></div>
+  </section>
+
+  <section class="panel">
+    <h2>What the five years show</h2>
+    <ul id="insights" class="insights"></ul>
+  </section>
+
+  <section class="charts" id="charts" aria-label="Quarterly charts"></section>
+
+  <section class="panel">
+    <h2>Every region</h2>
+    <div class="table-wrap"><table class="data" id="regions"></table></div>
+  </section>
+
+  <section class="panel">
+    <h2>Method, sources &amp; assumptions</h2>
+    <div id="method"></div>
+  </section>
+  <footer class="foot muted small">Deterministic. Map: Natural Earth via world-atlas (public domain / ISC). Code: <a href="https://github.com/amado2k5/cookwala/tree/main/sim/world">sim/world</a> · write-up: <a href="https://github.com/amado2k5/cookwala/blob/main/docs/WORLD-SIMULATION.md">WORLD-SIMULATION.md</a></footer>
+  <div id="tip" class="tip" role="status" hidden></div>
+  <script type="module" src="world.js?v=0.4.0"></script>
+</body>
+</html>

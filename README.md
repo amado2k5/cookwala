@@ -39,6 +39,10 @@ roadmap).
 
 | | |
 |---|---|
+| **Try it: virtual kitchen simulator** | [cookwala.ai/sim](https://cookwala.ai/sim/) · [docs/SIMULATION.md](docs/SIMULATION.md) · [findings](docs/SIM-FINDINGS.md) |
+| **Try it: country, one-year simulator** | [cookwala.ai/sim/country](https://cookwala.ai/sim/country/) · [docs/COUNTRY-SIMULATION.md](docs/COUNTRY-SIMULATION.md) |
+| **Try it: world, five-year simulator** | [cookwala.ai/sim/world](https://cookwala.ai/sim/world/) · [docs/WORLD-SIMULATION.md](docs/WORLD-SIMULATION.md) |
+| **Try it: two-city, one-month simulator** | [cookwala.ai/sim/city](https://cookwala.ai/sim/city/) · [docs/CITY-SIMULATION.md](docs/CITY-SIMULATION.md) |
 | **The Cookwala Protocol: missions, context, swarm coordination** | [docs/PROTOCOL.md](docs/PROTOCOL.md) |
 | Decisions, commitments, budgets, degraded operation | [docs/DECISIONS.md](docs/DECISIONS.md) |
 | Recipe format (R1–R4 layers) | [docs/RECIPE-FORMAT.md](docs/RECIPE-FORMAT.md) |

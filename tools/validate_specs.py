@@ -51,6 +51,8 @@ for folder, ref in EXAMPLE_SCHEMAS.items():
         doc = json.loads(path.read_text())
         kind = doc.pop('$kind', None)
         check(doc, BASE + ref.format(kind=kind), f'examples/{folder}/{path.name}')
+for path in sorted((ROOT / 'sim' / 'out').glob('*.mission.json')) if (ROOT / 'sim' / 'out').exists() else []:
+    check(json.loads(path.read_text()), BASE + 'mission.schema.json', 'sim/out/' + path.name)
 for path in sorted((ROOT / 'site' / '.well-known').glob('cookwala.json')):
     check(json.loads(path.read_text()), BASE + 'catalog.schema.json#/$defs/Discovery', '.well-known/cookwala.json')
 

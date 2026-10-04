@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cookwala Simulator</title>
+  <meta name="description" content="Play and replay a virtual robot cooking dinner through the Cookwala Protocol: every actor, message, decision and ledger entry.">
+  <link rel="stylesheet" href="style.css?v=0.1.2">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <a href="/" class="logo">Cookwala</a>
+      <span class="title">Simulator</span>
+      <span class="sub">A virtual family asks robot NEO-1 for dinner. Watch the Mission travel through every actor. <a href="city/">City →</a> · <a href="country/">Country →</a> · <a href="world/">World →</a></span>
+    </div>
+    <div class="setup">
+      <label>Scenario
+        <select id="preset"></select>
+      </label>
+      <div class="proto-switch" role="group" aria-label="Cookwala protocol">Cookwala protocol
+        <button type="button" data-proto="on" class="seg on" aria-pressed="true">On</button><button type="button" data-proto="off" class="seg" aria-pressed="false">Off · robot alone</button>
+      </div>
+      <label>Seed <input id="seed" type="number" value="7" min="1" max="9999"></label>
+      <button id="toggleFaults" class="ghost" aria-expanded="false">Faults ▾</button>
+      <button id="run" class="primary">Run</button>
+    </div>
+    <div id="faults" class="faults" hidden></div>
+  </header>
+
+  <section class="player" aria-label="Playback controls">
+    <button id="first" title="First frame" aria-label="First frame">⏮</button>
+    <button id="prev" title="Previous frame" aria-label="Previous frame">◀</button>
+    <button id="play" class="primary" title="Play / pause" aria-label="Play">▶</button>
+    <button id="next" title="Next frame" aria-label="Next frame">▶︎|</button>
+    <button id="last" title="Last frame" aria-label="Last frame">⏭</button>
+    <label class="speed">Speed
+      <select id="speed"><option value="2000">0.5×</option><option value="1100" selected>1×</option><option value="550">2×</option><option value="250">4×</option></select>
+    </label>
+    <input id="scrub" type="range" min="0" value="0" aria-label="Timeline">
+    <div class="clock"><span id="clock">17:00</span><span id="counter" class="muted">0 / 0</span></div>
+  </section>
+
+  <nav id="stages" class="stages" aria-label="Mission stages"></nav>
+
+  <section class="now" id="now" aria-live="polite"></section>
+  <section class="panel compare" id="compare" aria-label="Protocol on vs off"></section>
+
+  <main class="grid">
+    <section class="panel map-panel">
+      <div class="panel-head"><h2>House</h2><div id="status" class="status"></div></div>
+      <svg id="map" viewBox="-0.3 -0.3 14.6 12.6" role="img" aria-label="House map with family, robots and devices"></svg>
+    </section>
+    <section class="panel lanes-panel">
+      <div class="panel-head"><h2>Who is doing what</h2><span class="muted small">click a row to jump</span></div>
+      <div id="lanes" class="lanes"></div>
+    </section>
+  </main>
+
+  <section class="panel inspector">
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="mission" class="active">Mission</button>
+      <button role="tab" data-tab="requirements">Requirements</button>
+      <button role="tab" data-tab="budgets">Budgets</button>
+      <button role="tab" data-tab="decisions">Decisions &amp; estimates</button>
+      <button role="tab" data-tab="ledger">Ledger</button>
+      <button role="tab" data-tab="findings">Findings <span id="findingCount" class="badge">0</span></button>
+    </div>
+    <div id="tabBody" class="tab-body"></div>
+  </section>
+
+  <footer class="foot muted">
+    Deterministic simulation of the <a href="https://github.com/amado2k5/cookwala/blob/main/docs/PROTOCOL.md">Cookwala Protocol</a>.
+    Missions validate against <a href="/v1/schemas/mission.schema.json">mission.schema.json</a>. Same seed + faults = same run.
+  </footer>
+  <script type="module" src="app.js?v=0.1.2"></script>
+</body>
+</html>

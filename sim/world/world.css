@@ -1,0 +1,24 @@
+:root { --alone: var(--series-2); --proto: var(--series-1); --few: var(--series-3); --base: var(--neutral); }
+.seg-group { display: flex; align-items: center; }
+.seg-label { color: var(--text-secondary); margin-right: 8px; }
+.seg-group .seg { border-radius: 0; margin-left: -1px; padding: 5px 10px; }
+.seg-group .seg:first-of-type { border-radius: 8px 0 0 8px; margin-left: 0; }
+.seg-group .seg:last-of-type { border-radius: 0 8px 8px 0; }
+.seg-group .seg[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; position: relative; }
+.scenario-note { margin: 0 16px 8px; color: var(--text-secondary); font-size: 13px; }
+#map .country { stroke: var(--surface-1); stroke-width: .5; transition: fill .4s; cursor: pointer; }
+#map .country.other { fill: var(--soft); cursor: default; }
+#map .region-hover .country { stroke: var(--fg); stroke-width: .8; }
+#map .rlabel { font-size: 11px; font-weight: 700; fill: var(--fg); paint-order: stroke; stroke: var(--surface-1); stroke-width: 3px; pointer-events: none; text-anchor: middle; }
+#map .rval { font-size: 10.5px; fill: var(--fg); paint-order: stroke; stroke: var(--surface-1); stroke-width: 3px; pointer-events: none; text-anchor: middle; font-variant-numeric: tabular-nums; }
+#map .sphere { fill: none; stroke: var(--line); }
+.prov-row { grid-template-columns: 150px 1fr 64px; }
+.futures { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 10px; margin-bottom: 12px; }
+.future { border: 1px solid var(--line); border-top: 4px solid var(--c); border-radius: 10px; padding: 10px 12px; }
+.future h3 { margin: 0 0 4px; font-size: 14px; }
+.future p { margin: 2px 0; font-size: 12.5px; color: var(--text-secondary); }
+.future b { color: var(--fg); font-variant-numeric: tabular-nums; }
+#compare th.sel, #compare td.sel { background: var(--soft); }
+.chart .series.dash { stroke-dasharray: 5 4; }
+button.future { background: var(--surface-1); cursor: pointer; font: inherit; color: inherit; }
+button.future[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--c); }

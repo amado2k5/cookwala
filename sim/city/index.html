@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cookwala City Simulator</title>
+  <meta name="description" content="One month, two cities: farms, wholesale, stores, homes with and without Cookwala robot cooks, deliveries, traffic and garbage.">
+  <link rel="stylesheet" href="city.css?v=0.2.2">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <a href="/" class="logo">Cookwala</a> <span class="title">City Simulator</span>
+      <p class="sub">One month, two cities of ~5,000 people. Farms, cattle, poultry, fisheries, wholesale, supermarkets and corner shops, homes with and without robot cooks, delivery vans, traffic and garbage trucks. Same people, same appetites. The difference is the Cookwala ecosystem. <a href="../">← home-kitchen simulator</a> · <a href="../country/">country simulator →</a> · <a href="../world/">world simulator →</a></p>
+    </div>
+  </header>
+
+  <section class="controls" aria-label="Scenario settings">
+    <label class="preset">Scenario <select id="preset"></select></label>
+    <div id="cityControls" class="city-controls"></div>
+    <label class="seed">Seed <input id="seed" type="number" value="11" min="1" max="9999"></label>
+    <button id="run" class="primary">Run month</button>
+  </section>
+
+  <section class="player" aria-label="Day playback">
+    <button id="play" class="primary" aria-label="Play">▶</button>
+    <input id="day" type="range" min="1" max="30" value="30" aria-label="Day of month">
+    <span id="dayLabel" class="day">Day 30</span>
+  </section>
+
+  <section class="maps" id="maps" aria-label="City maps"></section>
+
+  <section class="panel">
+    <h2>Robots alone vs robots + the Cookwala protocol</h2>
+    <p class="muted small">Same city, same people, same robot-cook homes, same seed. Only the protocol differs. <b>Off</b> = robots order and cook on their own (vendor apps, no shared plans with stores, farms or delivery, no surplus rescue, no energy-saver modes). <b>On</b> = demand signals, consolidated delivery, surplus rescue, reusable packaging, energy-saver cooking. Use each city's switch above to play either version.</p>
+    <div id="protocolImpact" class="impact"></div>
+  </section>
+
+  <section class="panel">
+    <h2>The month in numbers <span class="muted small">(Nilebridge vs Harborfield; % = difference from Harborfield)</span></h2>
+    <div id="kpis" class="kpis"></div>
+  </section>
+
+  <section class="panel">
+    <h2>What the protocol changed</h2>
+    <ul id="insights" class="insights"></ul>
+  </section>
+
+  <section class="charts" id="charts" aria-label="Daily charts"></section>
+
+  <section class="panel">
+    <h2>Assumptions &amp; sources</h2>
+    <p class="muted small">This is an illustrative model, not a forecast. Traditional homes and the supply chain are calibrated to published averages. Effects come from explicit, adjustable behaviours listed here.</p>
+    <table class="data" id="assumptions"></table>
+  </section>
+  <footer class="foot muted small">Deterministic: same seed + settings = same month. Code: <a href="https://github.com/amado2k5/cookwala/tree/main/sim/city">sim/city</a>.</footer>
+  <div id="tip" class="tip" role="status" hidden></div>
+  <script type="module" src="city.js?v=0.2.2"></script>
+</body>
+</html>

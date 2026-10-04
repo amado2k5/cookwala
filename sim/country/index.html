@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cookwala Country Simulator</title>
+  <meta name="description" content="One year, one country: provinces, cities and rural regions with and without Cookwala robot cooks, compared with their own no-robot baseline.">
+  <link rel="stylesheet" href="../city/city.css?v=0.3.0">
+  <link rel="stylesheet" href="country.css?v=0.3.1">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <a href="/" class="logo">Cookwala</a> <span class="title">Country Simulator</span>
+      <p class="sub">One year in Meridia, a country of 27.5 million people in six provinces: capitals, port cities, suburbs, farm villages, highlands and desert. Each province adopts robot cooks and the Cookwala protocol at its own pace. Every place is compared with <b>itself without robots or the protocol</b>: same people, same seasons. Calibrated from the <a href="../city/">city simulator</a>, which is calibrated from the <a href="../">home simulator</a>. <a href="../world/">World simulator →</a></p>
+    </div>
+  </header>
+
+  <section class="controls" aria-label="Scenario">
+    <label>Scenario <select id="preset"></select></label>
+    <label>Cookwala protocol <select id="protoMode"><option value="planned">As planned per province</option><option value="off">Off everywhere: robots alone</option><option value="all">On everywhere from January</option></select></label>
+    <label>Show <select id="metric"></select></label>
+    <button id="editToggle" aria-expanded="false">Edit provinces ▾</button>
+  </section>
+  <section id="editor" class="panel" hidden></section>
+
+  <section class="player" aria-label="Month">
+    <button id="play" class="primary" aria-label="Play">▶</button>
+    <input id="month" type="range" min="0" max="12" value="12" aria-label="Month (12 = whole year)">
+    <span id="monthLabel" class="day">Whole year</span>
+  </section>
+
+  <section class="country-grid">
+    <div class="panel map-panel">
+      <h2 id="mapTitle">Change vs no-robot baseline</h2>
+      <svg id="map" viewBox="0 0 560 390" role="img" aria-label="Country map"></svg>
+      <div id="mapLegend" class="scale-legend"></div>
+    </div>
+    <div class="panel">
+      <h2 id="provTitle">Provinces</h2>
+      <div id="provBars"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Robots alone vs robots + the Cookwala protocol</h2>
+    <p class="muted small">Same country, same people, same robot-cook adoption curves, same seasons. Only the protocol differs. <b>Robots alone</b> = robots shop and cook through their vendors' apps; stores, farms and logistics can't see their plans; no surplus rescue, no shared delivery slots, no energy-saver modes.</p>
+    <div class="table-wrap"><table class="data" id="protoImpact"></table></div>
+  </section>
+
+  <section class="panel">
+    <h2>The year in numbers <span class="muted small">(Meridia with its rollout vs the same country without robots or the protocol)</span></h2>
+    <div id="kpis" class="kpis"></div>
+  </section>
+
+  <section class="panel">
+    <h2>What the year shows</h2>
+    <ul id="insights" class="insights"></ul>
+  </section>
+
+  <section class="charts" id="charts" aria-label="Monthly charts"></section>
+
+  <section class="panel">
+    <h2>Every city and region</h2>
+    <div class="table-wrap"><table class="data" id="regions"></table></div>
+  </section>
+
+  <section class="panel">
+    <h2>Method, seasons &amp; assumptions</h2>
+    <div id="method"></div>
+  </section>
+  <footer class="foot muted small">Deterministic. Code: <a href="https://github.com/amado2k5/cookwala/tree/main/sim/country">sim/country</a> · write-up: <a href="https://github.com/amado2k5/cookwala/blob/main/docs/COUNTRY-SIMULATION.md">COUNTRY-SIMULATION.md</a></footer>
+  <div id="tip" class="tip" role="status" hidden></div>
+  <script type="module" src="country.js?v=0.3.1"></script>
+</body>
+</html>

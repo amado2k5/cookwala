@@ -23,7 +23,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Validate specs
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run simulator scenarios
+        run: node sim/run.mjs
+      - name: Validate specs (incl. simulated Missions)
         run: |
           pip install jsonschema pyyaml graphql-core
           python tools/validate_specs.py
@@ -38,6 +43,7 @@ jobs:
           cp api/* _site/v1/api/
           cp bindings/*.json _site/v1/bindings/
           cp examples/*.cookwala.json _site/v1/recipes/
+          mkdir -p _site/sim && cp -R sim/index.html sim/app.js sim/style.css sim/engine sim/city sim/country sim/world _site/sim/
           touch _site/.nojekyll
           find _site -type f | sort
       - if: github.event_name != 'pull_request'
