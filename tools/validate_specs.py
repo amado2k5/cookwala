@@ -44,6 +44,7 @@ EXAMPLE_SCHEMAS = {
     'market': 'market.schema.json#/$defs/{kind}',
     'capabilities': 'capabilities.schema.json',
     'relief': 'relief.schema.json#/$defs/{kind}',
+    'mission': 'mission.schema.json',
 }
 for folder, ref in EXAMPLE_SCHEMAS.items():
     for path in sorted((ROOT / 'examples' / folder).glob('*.json')) if (ROOT / 'examples' / folder).exists() else []:

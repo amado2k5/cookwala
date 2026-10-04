@@ -9,6 +9,8 @@ alone or together with other machines and people.
 people who can't pay, and get the right food, cooked the right way, in the right amount, at a
 known cost, with minimal waste. See [MISSION.md](MISSION.md) and [HEALTH.md](HEALTH.md).
 
+The architecture that ties everything together is the **Cookwala Protocol** ([PROTOCOL.md](PROTOCOL.md)): context-rich, signed Missions passed between providers and executed as living plans. Recipes follow the layered format in [RECIPE-FORMAT.md](RECIPE-FORMAT.md). Prior art is reviewed in [PRIOR-ART.md](PRIOR-ART.md).
+
 Status: draft v0.1, 2026-10-03. Owner: fifi.cooking. Repo: https://github.com/amado2k5/cookwala
 
 > "First and largest" is the positioning goal. Our landscape scan ([RESEARCH.md](RESEARCH.md))

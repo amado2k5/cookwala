@@ -456,6 +456,13 @@
     },
     "meta": {
       "$ref": "common.schema.json#/$defs/Meta"
+    },
+    "currentLimitations": {
+      "type": "array",
+      "items": {
+        "$ref": "mission.schema.json#/$defs/Degradation"
+      },
+      "description": "Live degradations (low light, weak grip, sensor fault...) so planners adapt before assigning tasks."
     }
   },
   "patternProperties": {

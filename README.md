@@ -39,6 +39,10 @@ roadmap).
 
 | | |
 |---|---|
+| **The Cookwala Protocol: missions, context, swarm coordination** | [docs/PROTOCOL.md](docs/PROTOCOL.md) |
+| Decisions, commitments, budgets, degraded operation | [docs/DECISIONS.md](docs/DECISIONS.md) |
+| Recipe format (R1–R4 layers) | [docs/RECIPE-FORMAT.md](docs/RECIPE-FORMAT.md) |
+| Prior art, parallels, novelty | [docs/PRIOR-ART.md](docs/PRIOR-ART.md) |
 | Plan, principles, roadmap | [docs/PLAN.md](docs/PLAN.md) |
 | Landscape research (universities, companies, governments) | [docs/RESEARCH.md](docs/RESEARCH.md) |
 | How robots, appliances, humans and services work together | [docs/INTEROP.md](docs/INTEROP.md) |

@@ -2,108 +2,864 @@
   "$schema": "https://cookwala.ai/v1/schemas/recipe.schema.json",
   "cookwala": "0.1.0",
   "id": "example-shakshuka",
-  "revision": 1,
+  "revision": 2,
   "updated": "2026-10-03",
-  "hash": "sha256:440a3914116ff39a2e79a28915d90dae5e9f4e60faa298aee4bf8079196ee755",
+  "hash": "sha256:4e731a0e07d73052f2c3778eef28886dfeada248019fd0457d30cce18a042249",
   "verification": {
     "level": "V2",
-    "evidence": { "simulatorRuns": 1, "humanReviews": 1, "fieldReports": 0 },
+    "evidence": {
+      "simulatorRuns": 1,
+      "humanReviews": 1,
+      "fieldReports": 0
+    },
     "reviewedBy": "fifi.cooking editorial",
     "notes": "Illustrative example for the spec; values are realistic but not field-verified."
   },
-
   "dish": {
-    "names": { "en": "Shakshuka", "ar": "شكشوكة", "fr": "Chakchouka" },
-    "cuisine": ["TN", "MA", "DZ", "LY"],
+    "names": {
+      "en": "Shakshuka",
+      "ar": "شكشوكة",
+      "fr": "Chakchouka"
+    },
+    "cuisine": [
+      "TN",
+      "MA",
+      "DZ",
+      "LY"
+    ],
     "course": "main",
-    "tags": ["eggs", "tomato", "one-pan", "breakfast"],
-    "images": [{ "url": "https://fifi.cooking/recipe-images/example-shakshuka.jpg", "role": "banner" }]
+    "tags": [
+      "eggs",
+      "tomato",
+      "one-pan",
+      "breakfast"
+    ],
+    "images": [
+      {
+        "url": "https://fifi.cooking/recipe-images/example-shakshuka.jpg",
+        "role": "banner"
+      }
+    ]
   },
-
   "yield": {
     "servings": 4,
-    "totalMass": { "value": 1350, "unit": "g" },
-    "scaling": { "minScale": 0.5, "maxScale": 2, "note": "Above 2x use two pans; egg count scales linearly." }
+    "totalMass": {
+      "value": 1350,
+      "unit": "g"
+    },
+    "scaling": {
+      "minScale": 0.5,
+      "maxScale": 2,
+      "note": "Above 2x use two pans; egg count scales linearly."
+    }
   },
-
   "ingredients": [
-    { "ref": "oil", "ingredientId": "cw.ing.olive_oil", "qty": { "value": 30, "unit": "ml", "tolerance": 0.2 }, "display": { "en": "2 tbsp olive oil", "ar": "2 ملعقة كبيرة زيت زيتون" }, "scaling": "linear" },
-    { "ref": "onion", "ingredientId": "cw.ing.onion_yellow", "qty": { "value": 150, "unit": "g", "pieces": 1, "tolerance": 0.25 }, "prep": { "op": "cut", "shape": "dice", "size": { "value": 10, "unit": "mm" } }, "startTemp": "room", "display": { "en": "1 onion", "ar": "بصلة واحدة" } },
-    { "ref": "pepper", "ingredientId": "cw.ing.bell_pepper_red", "qty": { "value": 160, "unit": "g", "pieces": 1, "tolerance": 0.25 }, "prep": { "op": "cut", "shape": "dice", "size": { "value": 10, "unit": "mm" }, "remove": ["stem", "seeds"] }, "display": { "en": "1 red bell pepper", "ar": "فلفل رومي أحمر واحد" } },
-    { "ref": "garlic", "ingredientId": "cw.ing.garlic", "qty": { "value": 9, "unit": "g", "pieces": 3, "tolerance": 0.3 }, "prep": { "op": "cut", "shape": "mince" }, "display": { "en": "3 garlic cloves", "ar": "3 فصوص ثوم" } },
-    { "ref": "cumin", "ingredientId": "cw.ing.cumin_ground", "qty": { "value": 2, "unit": "g", "tolerance": 0.3 }, "scaling": "sublinear", "display": { "en": "1 tsp ground cumin", "ar": "1 ملعقة صغيرة كمون مطحون" } },
-    { "ref": "paprika", "ingredientId": "cw.ing.paprika_sweet", "qty": { "value": 2, "unit": "g", "tolerance": 0.3 }, "scaling": "sublinear", "display": { "en": "1 tsp sweet paprika", "ar": "1 ملعقة صغيرة بابريكا" } },
-    { "ref": "tomato", "ingredientId": "cw.ing.tomato_crushed_canned", "qty": { "value": 800, "unit": "g", "tolerance": 0.1 }, "display": { "en": "800 g crushed tomatoes", "ar": "800 جرام طماطم مهروسة" } },
-    { "ref": "salt", "ingredientId": "cw.ing.salt", "qty": { "value": 5, "unit": "g", "tolerance": 0.4 }, "scaling": "sublinear", "toTaste": true, "display": { "en": "salt to taste", "ar": "ملح حسب الرغبة" } },
-    { "ref": "blackpepper", "ingredientId": "cw.ing.black_pepper_ground", "qty": { "value": 1, "unit": "g", "tolerance": 0.5 }, "toTaste": true, "display": { "en": "black pepper", "ar": "فلفل أسود" } },
-    { "ref": "eggs", "ingredientId": "cw.ing.egg_chicken_large", "qty": { "value": 6, "unit": "pcs", "massPerPiece": { "value": 50, "unit": "g" } }, "startTemp": "fridge", "display": { "en": "6 eggs", "ar": "6 بيضات" } },
-    { "ref": "parsley", "ingredientId": "cw.ing.parsley_flat_leaf", "qty": { "value": 10, "unit": "g", "tolerance": 0.5 }, "optional": true, "prep": { "op": "cut", "shape": "chop_fine" }, "display": { "en": "parsley to garnish", "ar": "بقدونس للتزيين" } }
+    {
+      "ref": "oil",
+      "ingredientId": "cw.ing.olive_oil",
+      "qty": {
+        "value": 30,
+        "unit": "ml",
+        "tolerance": 0.2
+      },
+      "display": {
+        "en": "2 tbsp olive oil",
+        "ar": "2 ملعقة كبيرة زيت زيتون"
+      },
+      "scaling": "linear"
+    },
+    {
+      "ref": "onion",
+      "ingredientId": "cw.ing.onion_yellow",
+      "qty": {
+        "value": 150,
+        "unit": "g",
+        "pieces": 1,
+        "tolerance": 0.25
+      },
+      "prep": {
+        "op": "cut",
+        "shape": "dice",
+        "size": {
+          "value": 10,
+          "unit": "mm"
+        }
+      },
+      "startTemp": "room",
+      "display": {
+        "en": "1 onion",
+        "ar": "بصلة واحدة"
+      }
+    },
+    {
+      "ref": "pepper",
+      "ingredientId": "cw.ing.bell_pepper_red",
+      "qty": {
+        "value": 160,
+        "unit": "g",
+        "pieces": 1,
+        "tolerance": 0.25
+      },
+      "prep": {
+        "op": "cut",
+        "shape": "dice",
+        "size": {
+          "value": 10,
+          "unit": "mm"
+        },
+        "remove": [
+          "stem",
+          "seeds"
+        ]
+      },
+      "display": {
+        "en": "1 red bell pepper",
+        "ar": "فلفل رومي أحمر واحد"
+      }
+    },
+    {
+      "ref": "garlic",
+      "ingredientId": "cw.ing.garlic",
+      "qty": {
+        "value": 9,
+        "unit": "g",
+        "pieces": 3,
+        "tolerance": 0.3
+      },
+      "prep": {
+        "op": "cut",
+        "shape": "mince"
+      },
+      "display": {
+        "en": "3 garlic cloves",
+        "ar": "3 فصوص ثوم"
+      }
+    },
+    {
+      "ref": "cumin",
+      "ingredientId": "cw.ing.cumin_ground",
+      "qty": {
+        "value": 2,
+        "unit": "g",
+        "tolerance": 0.3
+      },
+      "scaling": "sublinear",
+      "display": {
+        "en": "1 tsp ground cumin",
+        "ar": "1 ملعقة صغيرة كمون مطحون"
+      }
+    },
+    {
+      "ref": "paprika",
+      "ingredientId": "cw.ing.paprika_sweet",
+      "qty": {
+        "value": 2,
+        "unit": "g",
+        "tolerance": 0.3
+      },
+      "scaling": "sublinear",
+      "display": {
+        "en": "1 tsp sweet paprika",
+        "ar": "1 ملعقة صغيرة بابريكا"
+      }
+    },
+    {
+      "ref": "tomato",
+      "ingredientId": "cw.ing.tomato_crushed_canned",
+      "qty": {
+        "value": 800,
+        "unit": "g",
+        "tolerance": 0.1
+      },
+      "display": {
+        "en": "800 g crushed tomatoes",
+        "ar": "800 جرام طماطم مهروسة"
+      }
+    },
+    {
+      "ref": "salt",
+      "ingredientId": "cw.ing.salt",
+      "qty": {
+        "value": 5,
+        "unit": "g",
+        "tolerance": 0.4
+      },
+      "scaling": "sublinear",
+      "toTaste": true,
+      "display": {
+        "en": "salt to taste",
+        "ar": "ملح حسب الرغبة"
+      }
+    },
+    {
+      "ref": "blackpepper",
+      "ingredientId": "cw.ing.black_pepper_ground",
+      "qty": {
+        "value": 1,
+        "unit": "g",
+        "tolerance": 0.5
+      },
+      "toTaste": true,
+      "display": {
+        "en": "black pepper",
+        "ar": "فلفل أسود"
+      }
+    },
+    {
+      "ref": "eggs",
+      "ingredientId": "cw.ing.egg_chicken_large",
+      "qty": {
+        "value": 6,
+        "unit": "pcs",
+        "massPerPiece": {
+          "value": 50,
+          "unit": "g"
+        }
+      },
+      "startTemp": "fridge",
+      "display": {
+        "en": "6 eggs",
+        "ar": "6 بيضات"
+      }
+    },
+    {
+      "ref": "parsley",
+      "ingredientId": "cw.ing.parsley_flat_leaf",
+      "qty": {
+        "value": 10,
+        "unit": "g",
+        "tolerance": 0.5
+      },
+      "optional": true,
+      "prep": {
+        "op": "cut",
+        "shape": "chop_fine"
+      },
+      "display": {
+        "en": "parsley to garnish",
+        "ar": "بقدونس للتزيين"
+      }
+    }
   ],
-
   "equipment": [
-    { "ref": "pan", "class": "cw.eq.vessel.pan.skillet", "constraints": { "diameterMm": { "min": 260, "max": 320 }, "lid": true, "material": ["cast_iron", "stainless", "nonstick"] } },
-    { "ref": "hob", "class": "cw.eq.heat.hob", "constraints": { "powerW": { "min": 1500 } } },
-    { "ref": "knife", "class": "cw.eq.tool.knife.chef" },
-    { "ref": "board", "class": "cw.eq.tool.cutting_board" },
-    { "ref": "spoon", "class": "cw.eq.tool.spoon.wooden" },
-    { "ref": "probe", "class": "cw.eq.sensor.probe", "optional": true }
+    {
+      "ref": "pan",
+      "class": "cw.eq.vessel.pan.skillet",
+      "constraints": {
+        "diameterMm": {
+          "min": 260,
+          "max": 320
+        },
+        "lid": true,
+        "material": [
+          "cast_iron",
+          "stainless",
+          "nonstick"
+        ]
+      }
+    },
+    {
+      "ref": "hob",
+      "class": "cw.eq.heat.hob",
+      "constraints": {
+        "powerW": {
+          "min": 1500
+        }
+      }
+    },
+    {
+      "ref": "knife",
+      "class": "cw.eq.tool.knife.chef"
+    },
+    {
+      "ref": "board",
+      "class": "cw.eq.tool.cutting_board"
+    },
+    {
+      "ref": "spoon",
+      "class": "cw.eq.tool.spoon.wooden"
+    },
+    {
+      "ref": "probe",
+      "class": "cw.eq.sensor.probe",
+      "optional": true
+    }
   ],
-
   "process": {
     "nodes": [
-      { "id": "n1", "op": "cw.op.cut", "inputs": ["onion"], "output": "onion_diced", "equipment": ["knife", "board"], "params": { "shape": "dice", "size": { "value": 10, "unit": "mm" } }, "hazards": ["hz_knife"] },
-      { "id": "n2", "op": "cw.op.cut", "inputs": ["pepper"], "output": "pepper_diced", "equipment": ["knife", "board"], "params": { "shape": "dice", "size": { "value": 10, "unit": "mm" }, "remove": ["stem", "seeds"] }, "hazards": ["hz_knife"] },
-      { "id": "n3", "op": "cw.op.cut", "inputs": ["garlic"], "output": "garlic_minced", "equipment": ["knife", "board"], "params": { "shape": "mince" }, "hazards": ["hz_knife"] },
-      { "id": "n4", "op": "cw.op.heat", "inputs": ["oil"], "output": "hot_oil", "equipment": ["pan", "hob"], "params": { "heat": "medium", "target": { "sensor": "cw.sense.pan_surface_temp", "value": 170, "unit": "degC", "tolerance": 15 } },
-        "until": { "any": [ { "sensor": "cw.sense.pan_surface_temp", "gte": 160 }, { "vision": "cw.sense.oil_shimmer" } ], "minTime": "PT1M", "maxTime": "PT4M" },
-        "onTimeout": "extend", "hazards": ["hz_oil"], "attention": "monitor" },
-      { "id": "n5", "op": "cw.op.saute", "inputs": ["hot_oil", "onion_diced", "pepper_diced"], "output": "veg_soft", "params": { "heat": "medium", "stir": { "intervalS": 45 } },
-        "until": { "all": [ { "vision": "cw.sense.translucent", "target": "onion_diced" } ], "minTime": "PT6M", "maxTime": "PT10M" },
-        "onTimeout": "ask_human", "hazards": ["hz_oil", "hz_splatter"], "attention": "monitor" },
-      { "id": "n6", "op": "cw.op.saute", "inputs": ["veg_soft", "garlic_minced", "cumin", "paprika"], "output": "aromatic_base", "params": { "heat": "medium_low", "stir": { "intervalS": 15 } },
-        "until": { "minTime": "PT45S", "maxTime": "PT90S", "any": [ { "vision": "cw.sense.fragrant_no_browning" } ] }, "onTimeout": "extend",
-        "notes": { "en": "Garlic and paprika burn quickly; do not exceed 90 s." }, "hazards": ["hz_oil"], "attention": "continuous" },
-      { "id": "n7", "op": "cw.op.simmer", "inputs": ["aromatic_base", "tomato", "salt", "blackpepper"], "output": "sauce", "params": { "heat": "medium_low", "lid": "off", "target": { "sensor": "cw.sense.liquid_temp", "value": 94, "unit": "degC", "tolerance": 3 }, "stir": { "intervalS": 120 } },
-        "until": { "any": [ { "sensor": "cw.sense.mass_loss_ratio", "gte": 0.25 }, { "vision": "cw.sense.sauce_coats_spoon" } ], "minTime": "PT10M", "maxTime": "PT18M" },
-        "onTimeout": "extend", "hazards": ["hz_splatter", "hz_steam"], "attention": "monitor" },
-      { "id": "n8", "op": "cw.op.season", "inputs": ["sauce"], "output": "sauce_seasoned", "params": { "method": "taste_adjust", "ingredients": ["salt"] }, "humanOptional": true },
-      { "id": "n9", "op": "cw.op.form_wells", "inputs": ["sauce_seasoned"], "output": "sauce_with_wells", "params": { "count": 6, "spacing": "even" }, "timing": { "nextWithin": "PT2M" } },
-      { "id": "n10", "op": "cw.op.crack", "inputs": ["eggs"], "output": "eggs_in_wells", "into": "sauce_with_wells", "params": { "placement": "one_per_well", "checkShell": true }, "hazards": ["hz_allergen_egg"] },
-      { "id": "n11", "op": "cw.op.simmer", "inputs": ["eggs_in_wells"], "output": "shakshuka", "params": { "heat": "low", "lid": "on" },
-        "until": { "all": [ { "vision": "cw.sense.egg_whites_set" }, { "sensor": "cw.sense.core_temp", "target": "egg_white", "gte": 63, "optional": true } ], "minTime": "PT5M", "maxTime": "PT10M" },
-        "onTimeout": "ask_human", "ccp": "ccp_eggs", "hazards": ["hz_steam"], "attention": "monitor",
-        "variants": [ { "id": "yolk_firm", "label": { "en": "Firm yolks" }, "until": { "sensor": "cw.sense.core_temp", "target": "egg_yolk", "gte": 71 }, "maxTime": "PT14M" } ] },
-      { "id": "n12", "op": "cw.op.garnish", "inputs": ["shakshuka", "parsley"], "output": "served", "params": { "method": "scatter" }, "optional": true },
-      { "id": "n13", "op": "cw.op.serve", "inputs": ["served"], "params": { "serveWithin": "PT15M", "keepHot": { "gte": 57, "unit": "degC" } } }
+      {
+        "id": "n1",
+        "op": "cw.op.cut",
+        "inputs": [
+          "onion"
+        ],
+        "output": "onion_diced",
+        "equipment": [
+          "knife",
+          "board"
+        ],
+        "params": {
+          "shape": "dice",
+          "size": {
+            "value": 10,
+            "unit": "mm"
+          }
+        },
+        "hazards": [
+          "hz_knife"
+        ]
+      },
+      {
+        "id": "n2",
+        "op": "cw.op.cut",
+        "inputs": [
+          "pepper"
+        ],
+        "output": "pepper_diced",
+        "equipment": [
+          "knife",
+          "board"
+        ],
+        "params": {
+          "shape": "dice",
+          "size": {
+            "value": 10,
+            "unit": "mm"
+          },
+          "remove": [
+            "stem",
+            "seeds"
+          ]
+        },
+        "hazards": [
+          "hz_knife"
+        ]
+      },
+      {
+        "id": "n3",
+        "op": "cw.op.cut",
+        "inputs": [
+          "garlic"
+        ],
+        "output": "garlic_minced",
+        "equipment": [
+          "knife",
+          "board"
+        ],
+        "params": {
+          "shape": "mince"
+        },
+        "hazards": [
+          "hz_knife"
+        ]
+      },
+      {
+        "id": "n4",
+        "op": "cw.op.heat",
+        "inputs": [
+          "oil"
+        ],
+        "output": "hot_oil",
+        "equipment": [
+          "pan",
+          "hob"
+        ],
+        "params": {
+          "heat": "medium",
+          "target": {
+            "sensor": "cw.sense.pan_surface_temp",
+            "value": 170,
+            "unit": "degC",
+            "tolerance": 15
+          }
+        },
+        "until": {
+          "any": [
+            {
+              "sensor": "cw.sense.pan_surface_temp",
+              "gte": 160
+            },
+            {
+              "vision": "cw.sense.oil_shimmer"
+            }
+          ],
+          "minTime": "PT1M",
+          "maxTime": "PT4M"
+        },
+        "onTimeout": "extend",
+        "hazards": [
+          "hz_oil"
+        ],
+        "attention": "monitor",
+        "space": {
+          "zone": "hob",
+          "keepClearOfChildren": true
+        }
+      },
+      {
+        "id": "n5",
+        "op": "cw.op.saute",
+        "inputs": [
+          "hot_oil",
+          "onion_diced",
+          "pepper_diced"
+        ],
+        "output": "veg_soft",
+        "params": {
+          "heat": "medium",
+          "stir": {
+            "intervalS": 45
+          }
+        },
+        "until": {
+          "all": [
+            {
+              "vision": "cw.sense.translucent",
+              "target": "onion_diced"
+            }
+          ],
+          "minTime": "PT6M",
+          "maxTime": "PT10M"
+        },
+        "onTimeout": "ask_human",
+        "hazards": [
+          "hz_oil",
+          "hz_splatter"
+        ],
+        "attention": "monitor",
+        "post": [
+          {
+            "of": "veg_soft",
+            "state": "translucent",
+            "checks": [
+              {
+                "vision": "cw.sense.translucent"
+              }
+            ]
+          }
+        ],
+        "pause": {
+          "pausable": true,
+          "safeState": [
+            "heat_off",
+            "move_from_edge"
+          ],
+          "maxPause": "PT20M",
+          "onExceeded": "reheat_then_resume"
+        },
+        "failureModes": [
+          {
+            "incident": "cw.incident.scorched_bottom",
+            "likelihood": "medium",
+            "detect": [
+              {
+                "vision": "cw.sense.dark_edges"
+              }
+            ],
+            "prevent": [
+              "stir every 45 s",
+              "medium heat"
+            ],
+            "playbook": "cw.pb.scorched_bottom"
+          }
+        ],
+        "space": {
+          "zone": "hob",
+          "keepClearOfChildren": true
+        }
+      },
+      {
+        "id": "n6",
+        "op": "cw.op.saute",
+        "inputs": [
+          "veg_soft",
+          "garlic_minced",
+          "cumin",
+          "paprika"
+        ],
+        "output": "aromatic_base",
+        "params": {
+          "heat": "medium_low",
+          "stir": {
+            "intervalS": 15
+          }
+        },
+        "until": {
+          "minTime": "PT45S",
+          "maxTime": "PT90S",
+          "any": [
+            {
+              "vision": "cw.sense.fragrant_no_browning"
+            }
+          ]
+        },
+        "onTimeout": "extend",
+        "notes": {
+          "en": "Garlic and paprika burn quickly; do not exceed 90 s."
+        },
+        "hazards": [
+          "hz_oil"
+        ],
+        "attention": "continuous",
+        "space": {
+          "zone": "hob",
+          "keepClearOfChildren": true
+        }
+      },
+      {
+        "id": "n7",
+        "op": "cw.op.simmer",
+        "inputs": [
+          "aromatic_base",
+          "tomato",
+          "salt",
+          "blackpepper"
+        ],
+        "output": "sauce",
+        "params": {
+          "heat": "medium_low",
+          "lid": "off",
+          "target": {
+            "sensor": "cw.sense.liquid_temp",
+            "value": 94,
+            "unit": "degC",
+            "tolerance": 3
+          },
+          "stir": {
+            "intervalS": 120
+          }
+        },
+        "until": {
+          "any": [
+            {
+              "sensor": "cw.sense.mass_loss_ratio",
+              "gte": 0.25
+            },
+            {
+              "vision": "cw.sense.sauce_coats_spoon"
+            }
+          ],
+          "minTime": "PT10M",
+          "maxTime": "PT18M"
+        },
+        "onTimeout": "extend",
+        "hazards": [
+          "hz_splatter",
+          "hz_steam"
+        ],
+        "attention": "monitor",
+        "pause": {
+          "pausable": true,
+          "safeState": [
+            "heat_hold_low",
+            "lid_ajar"
+          ],
+          "maxPause": "PT45M",
+          "onExceeded": "reheat_then_resume"
+        },
+        "failureModes": [
+          {
+            "incident": "cw.incident.too_salty",
+            "likelihood": "low",
+            "playbook": "cw.pb.too_salty_liquid"
+          },
+          {
+            "incident": "cw.incident.too_thin",
+            "likelihood": "medium",
+            "playbook": "cw.pb.sauce_too_thin"
+          }
+        ]
+      },
+      {
+        "id": "n8",
+        "op": "cw.op.season",
+        "inputs": [
+          "sauce"
+        ],
+        "output": "sauce_seasoned",
+        "params": {
+          "method": "taste_adjust",
+          "ingredients": [
+            "salt"
+          ]
+        },
+        "humanOptional": true
+      },
+      {
+        "id": "n9",
+        "op": "cw.op.form_wells",
+        "inputs": [
+          "sauce_seasoned"
+        ],
+        "output": "sauce_with_wells",
+        "params": {
+          "count": 6,
+          "spacing": "even"
+        },
+        "timing": {
+          "nextWithin": "PT2M"
+        }
+      },
+      {
+        "id": "n10",
+        "op": "cw.op.crack",
+        "inputs": [
+          "eggs"
+        ],
+        "output": "eggs_in_wells",
+        "into": "sauce_with_wells",
+        "params": {
+          "placement": "one_per_well",
+          "checkShell": true
+        },
+        "hazards": [
+          "hz_allergen_egg"
+        ],
+        "affordances": {
+          "grasp": [
+            "egg_pinch"
+          ],
+          "forceN": {
+            "min": 2,
+            "max": 8
+          },
+          "precisionMm": 10,
+          "hygiene": [
+            "wash_after_raw_egg"
+          ]
+        }
+      },
+      {
+        "id": "n11",
+        "op": "cw.op.simmer",
+        "inputs": [
+          "eggs_in_wells"
+        ],
+        "output": "shakshuka",
+        "params": {
+          "heat": "low",
+          "lid": "on"
+        },
+        "until": {
+          "all": [
+            {
+              "vision": "cw.sense.egg_whites_set"
+            },
+            {
+              "sensor": "cw.sense.core_temp",
+              "target": "egg_white",
+              "gte": 63,
+              "optional": true
+            }
+          ],
+          "minTime": "PT5M",
+          "maxTime": "PT10M"
+        },
+        "onTimeout": "ask_human",
+        "ccp": "ccp_eggs",
+        "hazards": [
+          "hz_steam"
+        ],
+        "attention": "monitor",
+        "variants": [
+          {
+            "id": "yolk_firm",
+            "label": {
+              "en": "Firm yolks"
+            },
+            "until": {
+              "sensor": "cw.sense.core_temp",
+              "target": "egg_yolk",
+              "gte": 71
+            },
+            "maxTime": "PT14M"
+          }
+        ],
+        "pause": {
+          "pausable": false,
+          "safeState": [
+            "heat_off",
+            "lid_on"
+          ],
+          "onExceeded": "restart_node"
+        },
+        "failureModes": [
+          {
+            "incident": "cw.incident.undercooked",
+            "likelihood": "medium",
+            "playbook": "cw.pb.undercooked_protein"
+          }
+        ]
+      },
+      {
+        "id": "n12",
+        "op": "cw.op.garnish",
+        "inputs": [
+          "shakshuka",
+          "parsley"
+        ],
+        "output": "served",
+        "params": {
+          "method": "scatter"
+        },
+        "optional": true
+      },
+      {
+        "id": "n13",
+        "op": "cw.op.serve",
+        "inputs": [
+          "served"
+        ],
+        "params": {
+          "serveWithin": "PT15M",
+          "keepHot": {
+            "gte": 57,
+            "unit": "degC"
+          }
+        }
+      }
     ],
     "edges": "implicit-from-inputs",
-    "parallelGroups": [["n1", "n2", "n3"]]
+    "parallelGroups": [
+      [
+        "n1",
+        "n2",
+        "n3"
+      ]
+    ]
   },
-
   "safety": {
     "hazards": [
-      { "id": "hz_knife", "type": "cw.hz.cut.knife", "severity": "medium", "mitigation": ["keep_human_clear_of_blade", "stable_board"] },
-      { "id": "hz_oil", "type": "cw.hz.burn.hot_oil", "severity": "high", "mitigation": ["oil_temp_max_200C", "lid_ready", "no_water_contact"] },
-      { "id": "hz_splatter", "type": "cw.hz.splatter", "severity": "low", "mitigation": ["partial_lid"] },
-      { "id": "hz_steam", "type": "cw.hz.burn.steam", "severity": "medium", "mitigation": ["lift_lid_away_from_user"] },
-      { "id": "hz_allergen_egg", "type": "cw.hz.allergen.cross_contact", "severity": "medium", "mitigation": ["clean_tools_after_egg"] }
+      {
+        "id": "hz_knife",
+        "type": "cw.hz.cut.knife",
+        "severity": "medium",
+        "mitigation": [
+          "keep_human_clear_of_blade",
+          "stable_board"
+        ]
+      },
+      {
+        "id": "hz_oil",
+        "type": "cw.hz.burn.hot_oil",
+        "severity": "high",
+        "mitigation": [
+          "oil_temp_max_200C",
+          "lid_ready",
+          "no_water_contact"
+        ]
+      },
+      {
+        "id": "hz_splatter",
+        "type": "cw.hz.splatter",
+        "severity": "low",
+        "mitigation": [
+          "partial_lid"
+        ]
+      },
+      {
+        "id": "hz_steam",
+        "type": "cw.hz.burn.steam",
+        "severity": "medium",
+        "mitigation": [
+          "lift_lid_away_from_user"
+        ]
+      },
+      {
+        "id": "hz_allergen_egg",
+        "type": "cw.hz.allergen.cross_contact",
+        "severity": "medium",
+        "mitigation": [
+          "clean_tools_after_egg"
+        ]
+      }
     ],
     "ccps": [
-      { "id": "ccp_eggs", "hazard": "pathogen.salmonella", "node": "n11", "criticalLimit": { "default": "whites fully set; egg-white core ≥ 63 °C", "strict": "yolk core ≥ 71 °C (use variant yolk_firm)" }, "monitoring": ["cw.sense.egg_whites_set", "cw.sense.core_temp"], "corrective": "extend cooking with lid on; if not set by maxTime, ask_human" }
+      {
+        "id": "ccp_eggs",
+        "hazard": "pathogen.salmonella",
+        "node": "n11",
+        "criticalLimit": {
+          "default": "whites fully set; egg-white core ≥ 63 °C",
+          "strict": "yolk core ≥ 71 °C (use variant yolk_firm)"
+        },
+        "monitoring": [
+          "cw.sense.egg_whites_set",
+          "cw.sense.core_temp"
+        ],
+        "corrective": "extend cooking with lid on; if not set by maxTime, ask_human"
+      }
     ],
-    "allergens": { "eu14": ["eggs"], "us9": ["eggs"], "mayContain": [] },
+    "allergens": {
+      "eu14": [
+        "eggs"
+      ],
+      "us9": [
+        "eggs"
+      ],
+      "mayContain": []
+    },
     "dietary": [
-      { "claim": "halal", "basis": "ingredients", "ruleset": "cw.ruleset.halal.v1" },
-      { "claim": "vegetarian", "basis": "ingredients" },
-      { "claim": "gluten_free", "basis": "ingredients", "note": "Check canned tomato label." }
+      {
+        "claim": "halal",
+        "basis": "ingredients",
+        "ruleset": "cw.ruleset.halal.v1"
+      },
+      {
+        "claim": "vegetarian",
+        "basis": "ingredients"
+      },
+      {
+        "claim": "gluten_free",
+        "basis": "ingredients",
+        "note": "Check canned tomato label."
+      }
     ],
-    "supervision": { "default": "presence_required", "reasons": { "n4": "hot oil", "n5": "hot oil", "n6": "burn risk" } },
-    "abort": { "steps": ["heat_off", "lid_on", "move_pan_to_cool_zone_if_capable", "alert_user"], "neverLeave": ["n4", "n5", "n6"] }
+    "supervision": {
+      "default": "presence_required",
+      "reasons": {
+        "n4": "hot oil",
+        "n5": "hot oil",
+        "n6": "burn risk"
+      }
+    },
+    "abort": {
+      "steps": [
+        "heat_off",
+        "lid_on",
+        "move_pan_to_cool_zone_if_capable",
+        "alert_user"
+      ],
+      "neverLeave": [
+        "n4",
+        "n5",
+        "n6"
+      ]
+    }
   },
-
-  "nutrition": { "perServing": { "kcal": 245, "protein": 13, "fat": 15, "carbs": 15, "fiber": 4, "sugar": 10 }, "basis": "USDA-typical composition, estimate" },
-  "cost": { "currency": "USD", "priceYear": 2026, "region": "US", "total": 6.5, "buckets": { "dairyEggs": 2.0, "produce": 3.2, "fats": 0.6, "spices": 0.7 } },
-
+  "nutrition": {
+    "perServing": {
+      "kcal": 245,
+      "protein": 13,
+      "fat": 15,
+      "carbs": 15,
+      "fiber": 4,
+      "sugar": 10
+    },
+    "basis": "USDA-typical composition, estimate"
+  },
+  "cost": {
+    "currency": "USD",
+    "priceYear": 2026,
+    "region": "US",
+    "total": 6.5,
+    "buckets": {
+      "dairyEggs": 2.0,
+      "produce": 3.2,
+      "fats": 0.6,
+      "spices": 0.7
+    }
+  },
   "text": {
     "en": {
       "title": "Shakshuka",
@@ -120,12 +876,209 @@
       "intro": "بيض مطهو في صلصة طماطم وفلفل متبلة، في مقلاة واحدة."
     }
   },
-
   "bindings": {
     "x-oven.matter": null,
-    "x-thermocooker": { "supported": false, "reason": "egg poaching needs an open pan" }
+    "x-thermocooker": {
+      "supported": false,
+      "reason": "egg poaching needs an open pan"
+    }
   },
-
-  "source": { "name": "fifi.cooking", "url": "https://fifi.cooking/", "citation": "Cookwala spec example" },
-  "license": "CC-BY-4.0"
+  "source": {
+    "name": "fifi.cooking",
+    "url": "https://fifi.cooking/",
+    "citation": "Cookwala spec example"
+  },
+  "license": "CC-BY-4.0",
+  "layers": {
+    "r1": true,
+    "r2": true,
+    "r3": true
+  },
+  "identity": {
+    "essential": [
+      "eggs",
+      "tomato",
+      "pepper",
+      "cumin",
+      "n11"
+    ],
+    "flexible": [
+      "onion",
+      "paprika",
+      "parsley",
+      "garlic"
+    ],
+    "neverAdd": [
+      "pork_sausage",
+      "wine"
+    ],
+    "family": [
+      "menemen",
+      "huevos_rancheros",
+      "eggs_in_purgatory"
+    ],
+    "culturalNotes": {
+      "en": "Maghrebi origin; eaten from the pan, scooped with bread."
+    }
+  },
+  "sensory": [
+    {
+      "stage": "n7",
+      "color": "deep red",
+      "texture": "thick, coats a spoon",
+      "aroma": "cumin, sweet pepper"
+    },
+    {
+      "stage": "final",
+      "texture": "whites set, yolks soft (default)",
+      "taste": {
+        "salt": 3,
+        "sour": 2,
+        "sweet": 2,
+        "heat": 1,
+        "umami": 3
+      },
+      "servingTempC": {
+        "min": 60,
+        "max": 75
+      }
+    }
+  ],
+  "formula": {
+    "base": "tomato",
+    "ratios": [
+      {
+        "ref": "tomato",
+        "ratio": 1,
+        "role": "liquid_base"
+      },
+      {
+        "ref": "pepper",
+        "ratio": 0.2,
+        "min": 0.1,
+        "max": 0.35,
+        "role": "aromatic_base"
+      },
+      {
+        "ref": "onion",
+        "ratio": 0.19,
+        "min": 0.1,
+        "max": 0.3,
+        "role": "aromatic_base"
+      },
+      {
+        "ref": "oil",
+        "ratio": 0.035,
+        "role": "fat"
+      },
+      {
+        "ref": "cumin",
+        "ratio": 0.0025,
+        "scaling": "sublinear",
+        "role": "spice_warm"
+      },
+      {
+        "ref": "salt",
+        "ratio": 0.006,
+        "scaling": "to_taste",
+        "role": "salt"
+      },
+      {
+        "ref": "eggs",
+        "ratio": 0.375,
+        "role": "protein_main"
+      }
+    ],
+    "perServing": {
+      "baseG": 200,
+      "cookedG": 340
+    }
+  },
+  "prep": {
+    "tools": [
+      {
+        "ref": "pan",
+        "clean": true,
+        "dry": true,
+        "stageAt": "hob"
+      },
+      {
+        "ref": "knife",
+        "clean": true
+      },
+      {
+        "ref": "board",
+        "clean": true,
+        "stageAt": "counter-left"
+      }
+    ],
+    "surfaces": [
+      {
+        "zone": "counter-left",
+        "clearAreaCm2": 2400,
+        "sanitized": true
+      }
+    ],
+    "clearFirst": [
+      "hob",
+      "counter-left"
+    ],
+    "stageIngredients": true,
+    "estimatedPrepTime": "PT8M"
+  },
+  "service": {
+    "servingTempC": {
+      "min": 60,
+      "max": 75
+    },
+    "maxHoldBeforeServe": "PT15M",
+    "vessel": [
+      "shared pan",
+      "shallow bowl"
+    ],
+    "accompaniments": [
+      {
+        "item": "crusty bread or baladi bread",
+        "optional": false
+      }
+    ],
+    "tableware": [
+      "spoon",
+      "bread for scooping"
+    ],
+    "eatingStyle": [
+      "shared_platter",
+      "bread_scoop",
+      "utensils"
+    ],
+    "portioning": {
+      "unit": "egg with sauce",
+      "divisible": true
+    },
+    "packable": {
+      "lunchbox": false,
+      "notes": "Store sauce only; cook eggs fresh."
+    }
+  },
+  "acceptance": [
+    {
+      "of": "shakshuka",
+      "state": "whites_set",
+      "checks": [
+        {
+          "vision": "cw.sense.egg_whites_set"
+        }
+      ]
+    },
+    {
+      "of": "shakshuka",
+      "state": "hot",
+      "checks": [
+        {
+          "sensor": "cw.sense.liquid_temp",
+          "gte": 60
+        }
+      ]
+    }
+  ]
 }

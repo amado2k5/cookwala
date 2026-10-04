@@ -1,0 +1,1400 @@
+{
+ "cookwala": "0.1.0",
+ "id": "cw:mission:7f3c2a",
+ "header": {
+  "type": "home_meal",
+  "createdAt": "2026-10-04T17:00:00+03:00",
+  "holder": "did:web:robots.example:neo-1",
+  "owner": "did:key:household-amado",
+  "jurisdiction": "EG",
+  "deadline": "2026-10-04T19:30:00+03:00"
+ },
+ "intent": {
+  "summary": {
+   "en": "Halal dinner for 5 (2 kids) by 19:30, peanut-free, around $15"
+  },
+  "goals": [
+   "dinner"
+  ],
+  "commandersIntent": {
+   "en": "A safe, warm, halal, peanut-free dinner the kids will eat, on time; cost matters more than variety."
+  },
+  "priorities": [
+   "human_safety",
+   "animal_safety",
+   "food_safety",
+   "mandate",
+   "time",
+   "cost",
+   "quality",
+   "waste",
+   "energy"
+  ]
+ },
+ "mandate": {
+  "tasks": [
+   "cook",
+   "prep",
+   "clean_dishes",
+   "set_table",
+   "serve_to_table",
+   "remind_people",
+   "receive_delivery"
+  ],
+  "zones": [
+   "kitchen",
+   "dining",
+   "front_door"
+  ],
+  "stairs": false,
+  "hardNos": [
+   "no deep-frying when kids are home",
+   "never open the door to unknown people"
+  ],
+  "caution": "extra_slow",
+  "autonomyLevel": "CA2",
+  "spendingLimit": {
+   "amount": 20,
+   "currency": "USD"
+  },
+  "mayAddParties": [
+   "did:web:planner.example",
+   "did:web:planner-b.example",
+   "did:web:greengrocer.example",
+   "did:web:market-b.example",
+   "did:web:arbiter.example"
+  ],
+  "authority": [
+   {
+    "who": "household:parent",
+    "level": 10
+   },
+   {
+    "who": "household:child",
+    "level": 2,
+    "scopes": [
+     "drinks",
+     "dessert_choice"
+    ]
+   },
+   {
+    "who": "household:babysitter",
+    "level": 5,
+    "scopes": [
+     "timing",
+     "serving"
+    ]
+   }
+  ]
+ },
+ "context": {
+  "mode": {
+   "preset": "budget",
+   "energy": {
+    "prefer": [
+     "electric_induction",
+     "natural_gas"
+    ]
+   },
+   "robots": [
+    {
+     "actorId": "robot:neo-1",
+     "level": "medium",
+     "pct": 58,
+     "minReservePct": 15
+    }
+   ]
+  },
+  "facets": [
+   {
+    "facet": "cw.facet.household.pets",
+    "subject": "household",
+    "value": {
+     "dog": 1,
+     "knocksThingsFromCounterEdge": true
+    },
+    "summary": "One dog; known to knock items off counter edges.",
+    "source": {
+     "kind": "declared",
+     "actor": "household:parent"
+    },
+    "observedAt": "2026-09-01T10:00:00+03:00",
+    "validFor": "P365D",
+    "confidence": 1,
+    "privacy": "household"
+   },
+   {
+    "facet": "cw.facet.household.health.allergy",
+    "subject": "person:p3",
+    "value": {
+     "allergen": "peanuts",
+     "severity": "anaphylaxis"
+    },
+    "summary": "Child p3: severe peanut allergy.",
+    "source": {
+     "kind": "declared",
+     "actor": "household:parent"
+    },
+    "observedAt": "2026-09-01T10:00:00+03:00",
+    "confidence": 1,
+    "privacy": "sensitive"
+   },
+   {
+    "facet": "cw.facet.space.status",
+    "subject": "zone:sink",
+    "value": {
+     "occupied": true,
+     "dishes": 14
+    },
+    "summary": "Sink full: 14 dirty dishes.",
+    "source": {
+     "kind": "observed",
+     "actor": "robot:neo-1",
+     "evidence": [
+      "frame:4410"
+     ]
+    },
+    "observedAt": "2026-10-04T16:58:00+03:00",
+    "validFor": "PT2H",
+    "confidence": 0.9,
+    "privacy": "household"
+   },
+   {
+    "facet": "cw.facet.household.schedule",
+    "subject": "household",
+    "value": {
+     "kidsHomeFrom": "16:30",
+     "guests": 0
+    },
+    "summary": "Kids home from 16:30; no guests.",
+    "source": {
+     "kind": "declared"
+    },
+    "observedAt": "2026-10-04T08:00:00+03:00",
+    "validFor": "P1D",
+    "confidence": 0.9,
+    "privacy": "secret"
+   },
+   {
+    "facet": "cw.facet.self.battery",
+    "subject": "robot:neo-1",
+    "value": {
+     "pct": 58,
+     "healthPct": 82,
+     "capacityWhNominal": 1200,
+     "minReservePct": 15
+    },
+    "summary": "Battery 58%, health 82% of nominal capacity.",
+    "source": {
+     "kind": "reported",
+     "actor": "robot:neo-1"
+    },
+    "observedAt": "2026-10-04T17:20:00+03:00",
+    "validFor": "PT30M",
+    "confidence": 0.95,
+    "privacy": "household"
+   }
+  ]
+ },
+ "routing": {
+  "topology": "hybrid",
+  "maxHops": 3,
+  "budget": {
+   "amount": 1,
+   "currency": "USD"
+  },
+  "providers": [
+   {
+    "role": "planner",
+    "candidates": [
+     {
+      "provider": "did:web:planner.example",
+      "pace": "primary"
+     },
+     {
+      "provider": "did:web:planner-b.example",
+      "pace": "alternate"
+     },
+     {
+      "provider": "local:hub-reasoner",
+      "pace": "contingency"
+     }
+    ],
+    "view": [
+     "cw.facet.household.*:derived",
+     "cw.facet.space.*",
+     "cw.facet.resources.*"
+    ],
+    "timeoutS": 20,
+    "hedge": false
+   },
+   {
+    "role": "grocer",
+    "candidates": [
+     {
+      "provider": "did:web:greengrocer.example",
+      "pace": "primary"
+     },
+     {
+      "provider": "did:web:market-b.example",
+      "pace": "alternate"
+     }
+    ],
+    "view": [
+     "order_lines",
+     "delivery_window",
+     "door_policy"
+    ],
+    "timeoutS": 60,
+    "mayForward": true
+   },
+   {
+    "role": "arbiter:substitution",
+    "candidates": [
+     {
+      "provider": "did:web:arbiter.example",
+      "pace": "primary"
+     },
+     {
+      "provider": "local:hub-reasoner",
+      "pace": "alternate"
+     }
+    ],
+    "view": [
+     "recipe",
+     "requirements",
+     "dietary_constraints:derived"
+    ]
+   },
+   {
+    "role": "estimator:energy",
+    "capabilities": [
+     "estimate:robot_energy",
+     "estimate:appliance_energy"
+    ],
+    "candidates": [
+     {
+      "provider": "did:web:energy-est.example",
+      "pace": "primary"
+     },
+     {
+      "provider": "did:web:robots.example:fleet-insights",
+      "pace": "primary"
+     }
+    ],
+    "view": [
+     "cw.facet.self.battery",
+     "cw.facet.self.model",
+     "plan",
+     "cw.facet.devices.*",
+     "cw.facet.space.layout:derived"
+    ]
+   }
+  ],
+  "groups": [
+   {
+    "id": "grp-energy",
+    "members": [
+     "did:web:energy-est.example",
+     "did:web:robots.example:fleet-insights"
+    ],
+    "sharedCapabilities": [
+     "estimate:robot_energy"
+    ],
+    "mode": "each_independent"
+   }
+  ]
+ },
+ "requirements": [
+  {
+   "id": "r-halal",
+   "what": "dietary:halal",
+   "criticality": "critical",
+   "source": "owner",
+   "status": "satisfied"
+  },
+  {
+   "id": "r-peanut",
+   "what": "allergen_free:peanuts",
+   "criticality": "critical",
+   "source": "clinician/owner",
+   "status": "satisfied"
+  },
+  {
+   "id": "r-time",
+   "what": "serve_by:19:30",
+   "criticality": "required",
+   "source": "owner",
+   "fallbacks": {
+    "primary": {
+     "action": "serve 19:30"
+    },
+    "alternate": {
+     "action": "delay:PT15M",
+     "needsApproval": "delay"
+    },
+    "contingency": {
+     "action": "order:ready_meal",
+     "needsApproval": "change_dish"
+    }
+   },
+   "decidedBy": "delay",
+   "status": "satisfied"
+  },
+  {
+   "id": "r-dish",
+   "what": "dish:add-001 (chicken mandi)",
+   "criticality": "required",
+   "fallbacks": {
+    "primary": {
+     "action": "dish:add-001"
+    },
+    "alternate": {
+     "action": "dish:ec-160 (from inventory)",
+     "trigger": "unavailable"
+    },
+    "contingency": {
+     "action": "order:ready_meal",
+     "trigger": "timeout"
+    }
+   },
+   "decidedBy": "change_dish",
+   "status": "satisfied"
+  },
+  {
+   "id": "r-saffron",
+   "what": "ingredient:cw.ing.saffron",
+   "criticality": "preferred",
+   "fallbacks": {
+    "primary": {
+     "action": "buy saffron"
+    },
+    "alternate": {
+     "action": "substitute:cw.ing.turmeric",
+     "impact": {
+      "quality": "minor"
+     }
+    }
+   },
+   "decidedBy": "substitute_ingredient",
+   "status": "satisfied_by_fallback",
+   "satisfiedBy": "d-1"
+  },
+  {
+   "id": "r-nuts-garnish",
+   "what": "ingredient:toasted_nuts_garnish",
+   "criticality": "optional",
+   "status": "dropped"
+  },
+  {
+   "id": "r-groceries",
+   "what": "delivery:chicken+rice by 17:45",
+   "criticality": "required",
+   "fallbacks": {
+    "primary": {
+     "action": "provider:did:web:greengrocer.example"
+    },
+    "alternate": {
+     "action": "provider:did:web:market-b.example",
+     "trigger": "timeout"
+    },
+    "contingency": {
+     "action": "dish from inventory (ec-160)",
+     "trigger": "unavailable"
+    }
+   },
+   "decidedBy": "change_provider",
+   "status": "satisfied_by_fallback",
+   "satisfiedBy": "c-3"
+  }
+ ],
+ "readiness": {
+  "requires": [
+   "r-halal",
+   "r-peanut",
+   "r-dish",
+   "r-groceries"
+  ],
+  "minConfidence": 0.8,
+  "deadline": "2026-10-04T18:00:00+03:00"
+ },
+ "decisionRights": [
+  {
+   "class": "discard_food",
+   "decider": "safety_kernel"
+  },
+  {
+   "class": "contact_emergency",
+   "decider": "holder",
+   "default": "call if anaphylaxis signs"
+  },
+  {
+   "class": "accept_deviation",
+   "decider": "holder",
+   "limits": {
+    "quality": "minor",
+    "identityPreserved": true
+   },
+   "beyondLimits": "household_human"
+  },
+  {
+   "class": "substitute_ingredient",
+   "decider": "arbiter",
+   "who": [
+    "did:web:arbiter.example"
+   ],
+   "limits": {
+    "quality": "minor",
+    "extraCost": {
+     "amount": 1,
+     "currency": "USD"
+    }
+   },
+   "beyondLimits": "household_human",
+   "timeout": "PT2M",
+   "onTimeout": "take_safest"
+  },
+  {
+   "class": "drop_optional",
+   "decider": "holder"
+  },
+  {
+   "class": "drop_preferred",
+   "decider": "holder",
+   "limits": {
+    "quality": "minor"
+   },
+   "beyondLimits": "household_human"
+  },
+  {
+   "class": "change_provider",
+   "decider": "holder",
+   "limits": {
+    "extraCost": {
+     "amount": 2,
+     "currency": "USD"
+    }
+   },
+   "beyondLimits": "household_human"
+  },
+  {
+   "class": "spend_more",
+   "decider": "household_human",
+   "who": [
+    "household:parent"
+   ],
+   "timeout": "PT10M",
+   "onTimeout": "take_default",
+   "default": "cheaper_mode"
+  },
+  {
+   "class": "delay",
+   "decider": "holder",
+   "limits": {
+    "delay": "PT15M"
+   },
+   "beyondLimits": "household_human"
+  },
+  {
+   "class": "change_dish",
+   "decider": "household_human",
+   "who": [
+    "household:parent"
+   ],
+   "timeout": "PT10M",
+   "onTimeout": "take_default",
+   "default": "alternate dish from inventory"
+  },
+  {
+   "class": "abort_mission",
+   "decider": "household_human"
+  },
+  {
+   "class": "recharge_plan",
+   "decider": "holder",
+   "limits": {
+    "delay": "PT15M"
+   },
+   "beyondLimits": "household_human"
+  },
+  {
+   "class": "reconcile",
+   "decider": "holder"
+  }
+ ],
+ "escalation": [
+  {
+   "level": 0,
+   "to": "holder"
+  },
+  {
+   "level": 1,
+   "to": "arbiter:substitution",
+   "when": [
+    "no_knowledge",
+    "ambiguous"
+   ]
+  },
+  {
+   "level": 2,
+   "to": "household:parent",
+   "channel": [
+    "push",
+    "speaker"
+   ],
+   "waitFor": "PT10M",
+   "then": "take_default"
+  },
+  {
+   "level": 3,
+   "to": "maker_support",
+   "when": [
+    "robot_fault"
+   ]
+  },
+  {
+   "level": 4,
+   "to": "emergency_services",
+   "when": [
+    "fire",
+    "medical"
+   ]
+  }
+ ],
+ "budgets": [
+  {
+   "id": "b-cost",
+   "kind": "cost",
+   "scope": "mission",
+   "unit": "USD",
+   "limit": {
+    "amount": 20,
+    "currency": "USD"
+   },
+   "plan": {
+    "amount": 15,
+    "currency": "USD"
+   },
+   "controller": "holder",
+   "thresholds": [
+    {
+     "at": 0.8,
+     "on": "forecast",
+     "action": "notify",
+     "to": "household:parent"
+    },
+    {
+     "at": 0.9,
+     "on": "forecast",
+     "action": "require_approval",
+     "to": "spend_more"
+    },
+    {
+     "at": 1.0,
+     "on": "actual",
+     "action": "abort"
+    }
+   ],
+   "status": {
+    "spent": {
+     "amount": 11.9,
+     "currency": "USD"
+    },
+    "committed": {
+     "amount": 2.1,
+     "currency": "USD"
+    },
+    "forecastAtCompletion": {
+     "amount": 17.2,
+     "currency": "USD"
+    },
+    "variance": 0.147,
+    "state": "warning",
+    "updatedAt": "2026-10-04T17:31:00+03:00"
+   }
+  },
+  {
+   "id": "b-time",
+   "kind": "time",
+   "scope": "mission",
+   "unit": "datetime",
+   "limit": "2026-10-04T19:45:00+03:00",
+   "plan": "2026-10-04T19:30:00+03:00",
+   "controller": "holder",
+   "thresholds": [
+    {
+     "at": 0.5,
+     "on": "forecast",
+     "action": "switch_fallback",
+     "to": "delay"
+    },
+    {
+     "at": 1.0,
+     "on": "forecast",
+     "action": "escalate",
+     "to": "household:parent"
+    }
+   ],
+   "status": {
+    "forecastAtCompletion": "2026-10-04T19:34:00+03:00",
+    "variance": 0.27,
+    "state": "warning",
+    "updatedAt": "2026-10-04T18:40:00+03:00"
+   }
+  },
+  {
+   "id": "b-battery",
+   "kind": "robot_battery",
+   "scope": "robot:neo-1",
+   "unit": "pct",
+   "limit": 15,
+   "controller": "holder",
+   "thresholds": [
+    {
+     "at": 1.0,
+     "action": "pause",
+     "to": "holder"
+    }
+   ],
+   "status": {
+    "spent": 31,
+    "state": "ok"
+   }
+  },
+  {
+   "id": "b-retries",
+   "kind": "retries",
+   "scope": "role:grocer",
+   "unit": "count",
+   "limit": 2,
+   "controller": "holder",
+   "thresholds": [
+    {
+     "at": 1.0,
+     "action": "switch_fallback"
+    }
+   ],
+   "status": {
+    "spent": 1,
+    "state": "ok"
+   }
+  },
+  {
+   "id": "b-disclosure",
+   "kind": "data_disclosure",
+   "scope": "mission",
+   "unit": "privacy_class",
+   "limit": "household",
+   "controller": "holder",
+   "thresholds": [
+    {
+     "at": 1.0,
+     "action": "require_approval",
+     "to": "share_more_data"
+    }
+   ]
+  }
+ ],
+ "roles": [
+  {
+   "role": "holder",
+   "who": "robot:neo-1"
+  },
+  {
+   "role": "owner",
+   "who": "household:parent"
+  },
+  {
+   "role": "budget_controller",
+   "who": "robot:neo-1"
+  },
+  {
+   "role": "arbiter",
+   "who": "did:web:arbiter.example",
+   "scope": [
+    "substitute_ingredient"
+   ]
+  },
+  {
+   "role": "approver",
+   "who": "household:parent",
+   "scope": [
+    "spend_more",
+    "change_dish",
+    "delay"
+   ]
+  },
+  {
+   "role": "safety_kernel",
+   "who": "robot:neo-1/kernel"
+  }
+ ],
+ "contributions": [
+  {
+   "id": "c-1",
+   "by": "did:web:planner.example",
+   "role": "planner",
+   "kind": "advice",
+   "satisfies": [
+    "r-dish"
+   ],
+   "binding": "advisory",
+   "status": "accepted",
+   "createdAt": "2026-10-04T17:02:00+03:00",
+   "bodySchema": "advice.schema.json#/$defs/AdviceResponse",
+   "body": {
+    "summary": "Chicken mandi for 5; clear and wash sink first (14 dishes); order chicken+rice."
+   }
+  },
+  {
+   "id": "c-2",
+   "by": "did:web:greengrocer.example",
+   "role": "grocer",
+   "kind": "quote",
+   "satisfies": [
+    "r-groceries"
+   ],
+   "binding": "binding_offer",
+   "status": "failed",
+   "createdAt": "2026-10-04T17:05:00+03:00",
+   "failure": {
+    "code": "timeout",
+    "retryable": true,
+    "retryAfter": "PT5M",
+    "suggest": [
+     "did:web:market-b.example"
+    ],
+    "message": "No confirmation within 60 s (retried once)."
+   }
+  },
+  {
+   "id": "c-3",
+   "by": "did:web:market-b.example",
+   "role": "grocer",
+   "kind": "order",
+   "satisfies": [
+    "r-groceries"
+   ],
+   "binding": "commitment",
+   "status": "fulfilled",
+   "sla": {
+    "deliverBy": "2026-10-04T17:45:00+03:00"
+   },
+   "compensation": "cancel order before 17:20 for full refund",
+   "idempotencyKey": "ord-7f3c2a-1",
+   "createdAt": "2026-10-04T17:08:00+03:00",
+   "body": {
+    "lines": [
+     "chicken 1.3 kg halal_certified",
+     "basmati 1 kg"
+    ],
+    "total": {
+     "amount": 9.8,
+     "currency": "USD"
+    }
+   }
+  }
+ ],
+ "decisions": [
+  {
+   "id": "d-1",
+   "class": "substitute_ingredient",
+   "about": [
+    "r-saffron"
+   ],
+   "by": "did:web:arbiter.example",
+   "basis": "decision_right",
+   "options": [
+    "buy saffron (+$3.5)",
+    "turmeric (in pantry)"
+   ],
+   "choice": "turmeric (in pantry)",
+   "rationale": "Colour role only; saffron over cost limit; minor quality impact within limits.",
+   "confidence": 0.86,
+   "verifiedBy": "robot:neo-1/kernel",
+   "at": "2026-10-04T17:10:00+03:00"
+  },
+  {
+   "id": "d-2",
+   "class": "change_provider",
+   "about": [
+    "r-groceries"
+   ],
+   "by": "robot:neo-1",
+   "basis": "fallback_rule",
+   "choice": "did:web:market-b.example (alternate)",
+   "rationale": "Primary timed out twice; alternate within +$2 limit.",
+   "at": "2026-10-04T17:08:00+03:00"
+  },
+  {
+   "id": "d-3",
+   "class": "spend_more",
+   "about": [
+    "b-cost"
+   ],
+   "by": "household:parent",
+   "basis": "human",
+   "options": [
+    "approve +$2.5",
+    "cheaper mode"
+   ],
+   "choice": "approve +$2.5",
+   "at": "2026-10-04T17:33:00+03:00"
+  },
+  {
+   "id": "d-4",
+   "class": "delay",
+   "about": [
+    "r-time"
+   ],
+   "by": "robot:neo-1",
+   "basis": "decision_right",
+   "choice": "serve 19:34 (+4 min, within 15 min limit); remind family at 19:25",
+   "rationale": "Dog incident cost 6 minutes.",
+   "at": "2026-10-04T18:40:00+03:00"
+  },
+  {
+   "id": "d-5",
+   "class": "accept_deviation",
+   "about": [
+    "a-3"
+   ],
+   "by": "robot:neo-1",
+   "basis": "decision_right",
+   "choice": "accept coarse chop",
+   "rationale": "Minor quality impact within holder limits; safer under low vision.",
+   "at": "2026-10-04T18:06:00+03:00"
+  },
+  {
+   "id": "d-6",
+   "class": "recharge_plan",
+   "about": [
+    "rc-1",
+    "b-battery"
+   ],
+   "by": "robot:neo-1",
+   "basis": "decision_right",
+   "options": [
+    "charge to full first (+50 min, misses 19:30)",
+    "dock 25 min during passive rice steaming",
+    "hand stirring to arm-1 / parent"
+   ],
+   "choice": "dock 25 min during passive rice steaming (lid on, low heat, smoke monitor active, parent at home)",
+   "rationale": "Need at p90 is 60% vs 43% usable (58% − 15% reserve); docking during the passive step recovers ~22% without missing the deadline.",
+   "confidence": 0.8,
+   "verifiedBy": "robot:neo-1/kernel",
+   "at": "2026-10-04T17:22:30+03:00"
+  },
+  {
+   "id": "d-7",
+   "class": "handoff_task",
+   "about": [
+    "rc-1"
+   ],
+   "by": "robot:neo-1",
+   "basis": "fallback_rule",
+   "choice": "if dock window slips: ask parent (or arm-1) to fluff rice and plate; NEO resumes for serving",
+   "at": "2026-10-04T17:22:40+03:00"
+  }
+ ],
+ "plan": {
+  "recipes": [
+   {
+    "recipe": "cw:fifi.cooking:add-001",
+    "servings": 5
+   }
+  ],
+  "invariants": [
+   "no peanuts or peanut-containing products in kitchen during mission",
+   "stove never on unattended",
+   "hot items ≥ 30 cm from counter edge (dog)"
+  ],
+  "contingencies": [
+   {
+    "on": "pet_or_child_disturbance",
+    "do": "safe_pause → clean → re-plan → resume"
+   },
+   {
+    "on": "stove_unexpected_off",
+    "do": "reconcile with cw.pb.power_outage"
+   },
+   {
+    "on": "perishable_out_over_budget",
+    "do": "cw.pb.time_temp_abuse"
+   }
+  ],
+  "monitors": [
+   {
+    "who": "did:web:market-b.example",
+    "signal": "cookwala.order.status",
+    "everyS": 60
+   },
+   {
+    "who": "appliance:smoke-1",
+    "signal": "cookwala.safety.*"
+   }
+  ]
+ },
+ "execution": {
+  "progress": 0.7,
+  "log": [
+   {
+    "at": "2026-10-04T17:15:00+03:00",
+    "by": "robot:neo-1",
+    "kind": "progress",
+    "text": "Sink cleared, 14 dishes washed and racked."
+   },
+   {
+    "at": "2026-10-04T18:32:00+03:00",
+    "by": "robot:neo-1",
+    "kind": "interruption",
+    "text": "Dog knocked rice bowl off counter edge: safe-paused (heat to low, lid on), cleaned floor, re-staged 300 g rice from pantry.",
+    "ref": "cw.incident.spill"
+   },
+   {
+    "at": "2026-10-04T18:38:00+03:00",
+    "by": "robot:neo-1",
+    "kind": "lesson",
+    "text": "Stage bowls ≥ 30 cm from counter edge when the dog is in the kitchen."
+   }
+  ]
+ },
+ "state": "executing",
+ "ledger": [
+  {
+   "seq": 0,
+   "at": "2026-10-04T17:00:00+03:00",
+   "actor": "robot:neo-1",
+   "action": "created",
+   "ref": "cw:mission:7f3c2a",
+   "prev": "genesis",
+   "why": "owner asked for dinner"
+  },
+  {
+   "seq": 1,
+   "at": "2026-10-04T17:02:00+03:00",
+   "actor": "did:web:planner.example",
+   "action": "contribution_offered",
+   "ref": "c-1",
+   "prev": "sha256:b25262b9798b7641b9fe7ea0cdf8ec5945dccb69259460f2ddfb3c5ccb02e78a"
+  },
+  {
+   "seq": 2,
+   "at": "2026-10-04T17:03:00+03:00",
+   "actor": "robot:neo-1",
+   "action": "contribution_accepted",
+   "ref": "c-1",
+   "prev": "sha256:a66d1d76ef742b984d2333e2c90ae93044f888fdb843510a6dc9fbb92436aa0b"
+  },
+  {
+   "seq": 3,
+   "at": "2026-10-04T17:06:00+03:00",
+   "actor": "did:web:greengrocer.example",
+   "action": "failed",
+   "ref": "c-2",
+   "prev": "sha256:776feaedd9a7a036c0dc7724a2f79c8671e8b0f08791788ecd6063bb0009091e",
+   "why": "timeout"
+  },
+  {
+   "seq": 4,
+   "at": "2026-10-04T17:08:00+03:00",
+   "actor": "robot:neo-1",
+   "action": "decision",
+   "ref": "d-2",
+   "prev": "sha256:0376832b9e952e41929947128983015608ccef14551c7d27a34a08b9eec2df5b",
+   "why": "fallback to alternate grocer"
+  },
+  {
+   "seq": 5,
+   "at": "2026-10-04T17:08:30+03:00",
+   "actor": "did:web:market-b.example",
+   "action": "committed",
+   "ref": "c-3",
+   "prev": "sha256:3958e959e531840b5aeeea541f60a97ec58bc46c5f62286aa98a81aecf47de70"
+  },
+  {
+   "seq": 6,
+   "at": "2026-10-04T17:10:00+03:00",
+   "actor": "did:web:arbiter.example",
+   "action": "decision",
+   "ref": "d-1",
+   "prev": "sha256:aed68f9ab4aca1e3b6bf931e2aa9a6353cc221236eb3f9978faa3155f25a6015"
+  },
+  {
+   "at": "2026-10-04T17:20:30+03:00",
+   "actor": "did:web:energy-est.example",
+   "action": "assessment",
+   "ref": "as-1",
+   "seq": 7,
+   "prev": "sha256:04d62189b1f64409bd91933ece8987f551af4a67538074aa3286e024ab906170"
+  },
+  {
+   "at": "2026-10-04T17:21:10+03:00",
+   "actor": "did:web:robots.example:fleet-insights",
+   "action": "assessment",
+   "ref": "as-2",
+   "why": "disagree",
+   "seq": 8,
+   "prev": "sha256:ffb983ea6944a05ece17647faa2c971501d483e3080727540861248c1c71cf36"
+  },
+  {
+   "at": "2026-10-04T17:21:40+03:00",
+   "actor": "did:web:energy-est.example",
+   "action": "assessment",
+   "ref": "as-3",
+   "why": "refine after rebuttal",
+   "seq": 9,
+   "prev": "sha256:9130c5ae322f5bcc16f009c4a4530b80df24fef4ba9cdde14c955ad62ef4ca07"
+  },
+  {
+   "at": "2026-10-04T17:22:00+03:00",
+   "actor": "robot:neo-1",
+   "action": "reconciled",
+   "ref": "rc-1",
+   "seq": 10,
+   "prev": "sha256:536ef6ce8437decd232b7b03d405bb9bd8bbf0bd0eebb04eea6d7f119aaea863"
+  },
+  {
+   "at": "2026-10-04T17:22:30+03:00",
+   "actor": "robot:neo-1",
+   "action": "decision",
+   "ref": "d-6",
+   "seq": 11,
+   "prev": "sha256:f86ce9c4ea3892f100e6d6809adca91ba39d54f621aadd62c4fb6536cb93f2af"
+  },
+  {
+   "seq": 12,
+   "at": "2026-10-04T17:31:00+03:00",
+   "actor": "robot:neo-1",
+   "action": "escalated",
+   "ref": "b-cost",
+   "prev": "sha256:105d06d4a0f67f71d4f143e95f0953b55048349a507cab1f869facdc5867b0bb",
+   "why": "forecast 86% of limit"
+  },
+  {
+   "seq": 13,
+   "at": "2026-10-04T17:33:00+03:00",
+   "actor": "household:parent",
+   "action": "approved",
+   "ref": "d-3",
+   "prev": "sha256:686956bb57e98e919ac280eb5f5b1906cf83d6455c6d230569faf618efec0197"
+  },
+  {
+   "seq": 14,
+   "at": "2026-10-04T17:44:00+03:00",
+   "actor": "did:web:market-b.example",
+   "action": "fulfilled",
+   "ref": "c-3",
+   "prev": "sha256:ffd0d9b9f9f4372449ce82bd382eb07bb6f18b5084fc87ba05be5ef8f9d9c6f4",
+   "why": "delivered, received by robot"
+  },
+  {
+   "seq": 15,
+   "at": "2026-10-04T18:06:00+03:00",
+   "actor": "robot:neo-1",
+   "action": "decision",
+   "ref": "d-5",
+   "why": "low light: accept coarse chop",
+   "prev": "sha256:2fa884937e87f3f57929347962929ca876b2564f1bf97a49622f1a54d8b315a7"
+  },
+  {
+   "seq": 16,
+   "at": "2026-10-04T18:40:00+03:00",
+   "actor": "robot:neo-1",
+   "action": "decision",
+   "ref": "d-4",
+   "prev": "sha256:51af847f361bc0fae1180db8e279a20db0417fd477e16e0aa31e272b753d6bbd"
+  }
+ ],
+ "degradations": [
+  {
+   "id": "g-1",
+   "area": "low_light",
+   "subject": "zone:hob",
+   "severity": "moderate",
+   "detail": "Evening; hob area 40 lux, vision confidence on browning cues dropped",
+   "measured": {
+    "lux": 40,
+    "visionConfidence": 0.55
+   },
+   "since": "2026-10-04T18:05:00+03:00",
+   "affects": [
+    "cw.sense.translucent",
+    "cw.sense.golden",
+    "cw.op.cut"
+   ]
+  },
+  {
+   "id": "g-2",
+   "area": "gripper",
+   "subject": "robot:neo-1/hand-left",
+   "severity": "minor",
+   "detail": "Left grip force limited after firmware 4.2 patch",
+   "measured": {
+    "gripForceMaxN": 6
+   },
+   "affects": [
+    "cw.op.transfer"
+   ]
+  }
+ ],
+ "adaptations": [
+  {
+   "id": "a-1",
+   "for": [
+    "g-1"
+   ],
+   "strategy": "fix_environment",
+   "by": "robot:neo-1",
+   "actions": [
+    "turn on hood light and kitchen ceiling light (Matter On/Off)",
+    "close blinds glare not applicable at night"
+   ],
+   "deviation": {
+    "identityPreserved": true,
+    "quality": "none"
+   },
+   "safety": "unchanged",
+   "status": "active"
+  },
+  {
+   "id": "a-2",
+   "for": [
+    "g-1"
+   ],
+   "strategy": "substitute_sensing",
+   "by": "did:web:planner.example",
+   "actions": [
+    "doneness of chicken by probe cw.sense.core_temp ≥ 74 °C instead of colour",
+    "onion softness by time window upper bound + torque on spoon"
+   ],
+   "deviation": {
+    "identityPreserved": true,
+    "sensory": [
+     "onions slightly less browned"
+    ],
+    "quality": "minor",
+    "extraTime": "PT3M"
+   },
+   "safety": "CCP now measured by probe: stricter",
+   "approvedBy": "robot:neo-1",
+   "status": "active"
+  },
+  {
+   "id": "a-3",
+   "for": [
+    "g-1"
+   ],
+   "strategy": "simplify_method",
+   "by": "did:web:planner.example",
+   "actions": [
+    "coarse chop onions 20 mm instead of fine dice"
+   ],
+   "deviation": {
+    "identityPreserved": true,
+    "sensory": [
+     "coarser onion texture in rice"
+    ],
+    "quality": "minor"
+   },
+   "safety": "larger cuts keep fingers/knife margin under low vision",
+   "approvedBy": "d-5",
+   "status": "active"
+  },
+  {
+   "id": "a-4",
+   "for": [
+    "g-2"
+   ],
+   "strategy": "reassign_task",
+   "by": "robot:neo-1",
+   "actions": [
+    "lift 8 L pot with both hands only",
+    "household:parent asked to drain rice pot (hot, heavy)"
+   ],
+   "deviation": {
+    "identityPreserved": true,
+    "quality": "none"
+   },
+   "safety": "no single-hand lifting of hot vessels",
+   "status": "active"
+  }
+ ],
+ "reconcileRules": [
+  {
+   "topic": "estimate.robot_energy*",
+   "reconciler": "robot:neo-1",
+   "strategy": "evidence_priority",
+   "safetyBias": "p90",
+   "conflictThreshold": 0.25,
+   "evidenceOrder": [
+    "measurement",
+    "historical_stats",
+    "physics_model",
+    "vendor_spec",
+    "llm_judgment"
+   ],
+   "maxRounds": 1,
+   "timeout": "PT1M",
+   "onTimeout": "take_conservative"
+  },
+  {
+   "topic": "estimate.cost",
+   "reconciler": "robot:neo-1",
+   "strategy": "calibration_weighted",
+   "safetyBias": "p50"
+  }
+ ],
+ "assessments": [
+  {
+   "id": "as-1",
+   "topic": "estimate.robot_energy_pct",
+   "subject": "plan",
+   "by": "did:web:energy-est.example",
+   "group": "grp-energy",
+   "value": 34,
+   "unit": "pct",
+   "distribution": {
+    "p10": 28,
+    "p50": 34,
+    "p90": 40
+   },
+   "method": "physics_model",
+   "assumptions": [
+    "nominal battery capacity",
+    "standard stirring duty cycle"
+   ],
+   "evidence": [
+    {
+     "kind": "spec",
+     "ref": "neo-1 datasheet"
+    }
+   ],
+   "confidence": 0.7,
+   "stance": "independent",
+   "at": "2026-10-04T17:20:30+03:00"
+  },
+  {
+   "id": "as-2",
+   "topic": "estimate.robot_energy_pct",
+   "subject": "plan",
+   "by": "did:web:robots.example:fleet-insights",
+   "group": "grp-energy",
+   "value": 52,
+   "unit": "pct",
+   "distribution": {
+    "p10": 44,
+    "p50": 52,
+    "p90": 61
+   },
+   "method": "historical_stats",
+   "assumptions": [
+    "battery health 82%",
+    "induction zone 2 is slow on this hob model → +11 min stirring",
+    "walk kitchen↔door for delivery"
+   ],
+   "evidence": [
+    {
+     "kind": "history",
+     "ref": "412 similar missions, same robot model, health 75–85%"
+    },
+    {
+     "kind": "facet",
+     "ref": "cw.facet.self.battery"
+    },
+    {
+     "kind": "media",
+     "ref": "frame:4410",
+     "note": "pot size/lid seen in photo"
+    }
+   ],
+   "confidence": 0.8,
+   "respondsTo": "as-1",
+   "stance": "disagree",
+   "reason": "as-1 assumes nominal capacity and ignores the slow hob zone and delivery walk.",
+   "calibration": {
+    "n": 412,
+    "intervalCoverage": 0.82,
+    "meanAbsError": 5.1
+   },
+   "at": "2026-10-04T17:21:10+03:00"
+  },
+  {
+   "id": "as-3",
+   "topic": "estimate.robot_energy_pct",
+   "subject": "plan",
+   "by": "did:web:energy-est.example",
+   "value": 49,
+   "unit": "pct",
+   "distribution": {
+    "p10": 42,
+    "p50": 49,
+    "p90": 57
+   },
+   "method": "physics_model",
+   "assumptions": [
+    "capacity × 0.82 health",
+    "hob zone 2 efficiency from appliance facet"
+   ],
+   "confidence": 0.75,
+   "respondsTo": "as-2",
+   "stance": "refine",
+   "reason": "Re-estimated with the battery health and hob facets after the rebuttal round.",
+   "at": "2026-10-04T17:21:40+03:00"
+  }
+ ],
+ "reconciliations": [
+  {
+   "id": "rc-1",
+   "topic": "estimate.robot_energy_pct",
+   "assessments": [
+    "as-1",
+    "as-2",
+    "as-3"
+   ],
+   "conflict": {
+    "detected": true,
+    "spread": 0.42,
+    "causes": [
+     "different_inputs",
+     "different_assumptions"
+    ]
+   },
+   "rounds": [
+    {
+     "asked": [
+      "did:web:energy-est.example"
+     ],
+     "question": "Re-estimate using battery health 82% and hob zone 2 efficiency",
+     "newEvidence": [
+      "as-3"
+     ]
+    }
+   ],
+   "reconciler": "robot:neo-1",
+   "strategy": "evidence_priority",
+   "weights": {
+    "did:web:robots.example:fleet-insights": 0.6,
+    "did:web:energy-est.example": 0.4
+   },
+   "result": {
+    "value": 51,
+    "unit": "pct",
+    "distribution": {
+     "p10": 43,
+     "p50": 51,
+     "p90": 60
+    },
+    "decisionValue": 60,
+    "dissent": [
+     "as-1 superseded by as-3"
+    ]
+   },
+   "consequences": [
+    "d-6",
+    "d-7"
+   ],
+   "at": "2026-10-04T17:22:00+03:00"
+  }
+ ]
+}

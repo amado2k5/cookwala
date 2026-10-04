@@ -1,0 +1,2089 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cookwala.ai/v1/schemas/mission.schema.json",
+  "title": "Cookwala Mission",
+  "description": "The shared, signed, living document of the Cookwala Protocol (docs/PROTOCOL.md): intent, mandate, context facets, credentials, routing, requirements with criticality, fallbacks (PACE), decision rights, escalation, contributions with commitment lifecycle, the bound plan, execution, outcome and a hash-chained ledger. Decision governance is described in docs/DECISIONS.md.",
+  "type": "object",
+  "required": [
+    "cookwala",
+    "id",
+    "header",
+    "intent",
+    "mandate",
+    "requirements",
+    "decisionRights",
+    "state",
+    "ledger"
+  ],
+  "properties": {
+    "cookwala": {
+      "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "id": {
+      "type": "string",
+      "description": "Stable URI-able id (e.g. cw:mission:<uuid>)."
+    },
+    "header": {
+      "type": "object",
+      "required": [
+        "type",
+        "createdAt",
+        "holder"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "home_meal",
+            "meal_plan",
+            "event",
+            "restaurant_service",
+            "production_run",
+            "school_meals",
+            "relief_kitchen",
+            "packed_meals",
+            "delivery",
+            "custom"
+          ]
+        },
+        "createdAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "holder": {
+          "type": "string",
+          "description": "DID of the party that owns the Mission (usually the robot acting for the household); only the holder accepts contributions and closes the Mission."
+        },
+        "owner": {
+          "type": "string",
+          "description": "DID of the human/organization the holder acts for."
+        },
+        "jurisdiction": {
+          "type": "string"
+        },
+        "parent": {
+          "type": "string",
+          "description": "Parent Mission (e.g. a relief program Mission)."
+        },
+        "deadline": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        }
+      }
+    },
+    "intent": {
+      "type": "object",
+      "required": [
+        "summary"
+      ],
+      "properties": {
+        "summary": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "goals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "commandersIntent": {
+          "$ref": "common.schema.json#/$defs/LangMap",
+          "description": "What matters most if the plan breaks (e.g. 'a safe, warm halal dinner for 5 by 19:30; cost matters more than variety')."
+        },
+        "priorities": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "human_safety",
+              "animal_safety",
+              "food_safety",
+              "property",
+              "mandate",
+              "time",
+              "quality",
+              "cost",
+              "waste",
+              "energy"
+            ]
+          },
+          "description": "Order after the fixed safety prefix; the first three are always first."
+        },
+        "advice": {
+          "$ref": "advice.schema.json#/$defs/AdviceRequest",
+          "description": "Structured request when the intent maps to a reasoner intent."
+        }
+      }
+    },
+    "mandate": {
+      "type": "object",
+      "description": "What the holder may do and decide.",
+      "properties": {
+        "tasks": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "cook",
+              "prep",
+              "clean_dishes",
+              "clean_floor",
+              "fetch_supplies",
+              "open_door_for_delivery",
+              "receive_delivery",
+              "take_out_trash",
+              "set_table",
+              "serve_to_table",
+              "serve_to_room",
+              "pack_food",
+              "order_groceries",
+              "garden_pick",
+              "remind_people",
+              "care_for_pets_food"
+            ]
+          }
+        },
+        "zones": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stairs": {
+          "type": "boolean"
+        },
+        "hardNos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "caution": {
+          "enum": [
+            "extra_slow",
+            "normal",
+            "relaxed"
+          ]
+        },
+        "autonomyLevel": {
+          "enum": [
+            "CA0",
+            "CA1",
+            "CA2",
+            "CA3",
+            "CA4",
+            "CA5"
+          ]
+        },
+        "spendingLimit": {
+          "$ref": "common.schema.json#/$defs/Money"
+        },
+        "mayAddParties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Providers/people the holder may bring into the flow."
+        },
+        "authority": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "who",
+              "level"
+            ],
+            "properties": {
+              "who": {
+                "type": "string"
+              },
+              "level": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 10
+              },
+              "scopes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "description": "Whose instructions win (higher level wins within scope)."
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "facets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Facet"
+          }
+        },
+        "profiles": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/GlobalRef"
+          }
+        },
+        "mode": {
+          "$ref": "profile.schema.json#/$defs/OperatingMode"
+        }
+      }
+    },
+    "credentials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "vc"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "vc": {
+            "type": "string"
+          },
+          "selective": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "routing": {
+      "type": "object",
+      "properties": {
+        "topology": {
+          "enum": [
+            "direct",
+            "chain",
+            "orchestrated",
+            "swarm",
+            "hybrid"
+          ]
+        },
+        "orchestrator": {
+          "type": "string"
+        },
+        "providers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ProviderSlot"
+          }
+        },
+        "maxHops": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "budget": {
+          "$ref": "common.schema.json#/$defs/Money"
+        },
+        "groups": {
+          "type": "array",
+          "description": "Provider groups that share capabilities (consortia, ensembles, partner networks).",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "members"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "members": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "sharedCapabilities": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "mode": {
+                "enum": [
+                  "each_independent",
+                  "group_consensus",
+                  "leader_with_reviewers"
+                ],
+                "description": "Each member answers independently, the group returns one agreed answer, or a leader answers and others review."
+              },
+              "leader": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Requirement"
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "description": "Definition of ready: execution may start only when every listed requirement is satisfied (or resolved by an allowed fallback) and the safety kernel passes.",
+      "properties": {
+        "requires": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "minConfidence": {
+          "type": "number"
+        },
+        "deadline": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        }
+      }
+    },
+    "decisionRights": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/DecisionRight"
+      }
+    },
+    "escalation": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/EscalationStep"
+      }
+    },
+    "contributions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Contribution"
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Decision"
+      }
+    },
+    "plan": {
+      "type": "object",
+      "properties": {
+        "recipes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "recipe": {
+                "$ref": "common.schema.json#/$defs/GlobalRef"
+              },
+              "hash": {
+                "$ref": "common.schema.json#/$defs/Hash"
+              },
+              "servings": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "session": {
+          "$ref": "session.schema.json",
+          "description": "Bound plan (R4): tasks, leases, handoffs."
+        },
+        "contingencies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "on": {
+                "type": "string"
+              },
+              "do": {
+                "type": "string"
+              },
+              "playbook": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "invariants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "monitors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "who": {
+                "type": "string"
+              },
+              "signal": {
+                "type": "string"
+              },
+              "everyS": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "properties": {
+        "progress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "log": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "at": {
+                "$ref": "common.schema.json#/$defs/DateTime"
+              },
+              "by": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "progress",
+                  "deviation",
+                  "interruption",
+                  "decision",
+                  "comment",
+                  "lesson",
+                  "issue"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "ref": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "enum": [
+            "success",
+            "success_degraded",
+            "partial",
+            "failed",
+            "aborted_safety",
+            "aborted_by_human",
+            "cancelled"
+          ]
+        },
+        "requirementsMet": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "requirementsDropped": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "consumedPct": {
+          "type": "number"
+        },
+        "wasteG": {
+          "type": "number"
+        },
+        "costActual": {
+          "$ref": "common.schema.json#/$defs/Money"
+        },
+        "feedback": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lessons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "state": {
+      "enum": [
+        "draft",
+        "open",
+        "enriching",
+        "ready",
+        "committed",
+        "executing",
+        "paused",
+        "degraded",
+        "closing",
+        "closed",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "closure": {
+      "$ref": "#/$defs/Closure"
+    },
+    "ledger": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/LedgerEntry"
+      }
+    },
+    "meta": {
+      "$ref": "common.schema.json#/$defs/Meta"
+    },
+    "budgets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Budget"
+      },
+      "description": "Guardrails for cost, time, energy, retries, hops, data disclosure, human attention. Tracked live from contributions, meters and execution; thresholds trigger actions automatically."
+    },
+    "meters": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/MeterEntry"
+      },
+      "description": "Accruals against budgets (each also recorded in the ledger)."
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "role",
+          "who"
+        ],
+        "properties": {
+          "role": {
+            "enum": [
+              "holder",
+              "owner",
+              "budget_controller",
+              "orchestrator",
+              "arbiter",
+              "provider",
+              "monitor",
+              "approver",
+              "safety_kernel",
+              "auditor",
+              "executor"
+            ]
+          },
+          "who": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "description": "Who plays which role in this Mission (see docs/DECISIONS.md)."
+    },
+    "degradations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Degradation"
+      },
+      "description": "What is not working fully right now (robot, environment, devices, connectivity). Declared by the holder or observed by monitors."
+    },
+    "adaptations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Adaptation"
+      },
+      "description": "How the plan is adjusted to the degradations, by whom, with which accepted deviations from the normal dish."
+    },
+    "assessments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Assessment"
+      }
+    },
+    "reconcileRules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ReconcileRule"
+      }
+    },
+    "reconciliations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Reconciliation"
+      }
+    }
+  },
+  "patternProperties": {
+    "^x-": {}
+  },
+  "$defs": {
+    "Facet": {
+      "type": "object",
+      "required": [
+        "facet",
+        "subject",
+        "value",
+        "source",
+        "observedAt",
+        "privacy"
+      ],
+      "properties": {
+        "facet": {
+          "$ref": "common.schema.json#/$defs/VocabId"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "value": {},
+        "summary": {
+          "type": "string"
+        },
+        "source": {
+          "type": "object",
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "declared",
+                "observed",
+                "reported",
+                "inferred"
+              ]
+            },
+            "actor": {
+              "type": "string"
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "observedAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "validFor": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "privacy": {
+          "enum": [
+            "public",
+            "household",
+            "sensitive",
+            "secret"
+          ]
+        },
+        "consent": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ProviderSlot": {
+      "type": "object",
+      "required": [
+        "role",
+        "candidates"
+      ],
+      "description": "A role in the flow with ordered candidates (primary → alternates), what each may see and do.",
+      "properties": {
+        "role": {
+          "type": "string",
+          "description": "e.g. planner, grocer, delivery, monitor, arbiter:substitution, nutrition, orchestrator."
+        },
+        "candidates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "provider"
+            ],
+            "properties": {
+              "provider": {
+                "type": "string"
+              },
+              "tier": {
+                "type": "string"
+              },
+              "pace": {
+                "enum": [
+                  "primary",
+                  "alternate",
+                  "contingency",
+                  "emergency"
+                ]
+              },
+              "endpoint": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "view": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Facet types disclosed to this role."
+        },
+        "capabilityToken": {
+          "type": "string",
+          "description": "Delegated, attenuated authorization (UCAN/ZCAP-style)."
+        },
+        "mayForward": {
+          "type": "boolean"
+        },
+        "timeoutS": {
+          "type": "number"
+        },
+        "hedge": {
+          "type": "boolean",
+          "description": "Ask alternates in parallel when latency matters; first valid answer wins."
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Capability tags this role covers, e.g. estimate:robot_energy, estimate:duration, assess:criticality. Several roles/providers may share a tag; their outputs become competing assessments."
+        }
+      }
+    },
+    "Criticality": {
+      "enum": [
+        "critical",
+        "required",
+        "preferred",
+        "optional"
+      ],
+      "description": "critical: must be met exactly, never traded, failure blocks the Mission (allergen-free, halal, CCPs, child safety). required: must be met, but approved alternatives (plan B/C) are allowed. preferred: degrade gracefully; record the loss. optional: drop silently if unavailable; log only."
+    },
+    "Requirement": {
+      "type": "object",
+      "required": [
+        "id",
+        "what",
+        "criticality"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "what": {
+          "type": "string",
+          "description": "e.g. ingredient:eggs, dietary:halal, allergen_free:peanuts, serve_by:19:30, budget<=40USD, dish_identity, delivery:groceries, device:oven."
+        },
+        "criticality": {
+          "$ref": "#/$defs/Criticality"
+        },
+        "source": {
+          "type": "string",
+          "description": "Who set it: owner, recipe identity, policy pack, clinician, mode."
+        },
+        "fallbacks": {
+          "$ref": "#/$defs/Pace"
+        },
+        "decidedBy": {
+          "type": "string",
+          "description": "Decision class governing changes to it (see decisionRights)."
+        },
+        "status": {
+          "enum": [
+            "open",
+            "satisfied",
+            "satisfied_by_fallback",
+            "dropped",
+            "violated",
+            "blocked"
+          ]
+        },
+        "satisfiedBy": {
+          "type": "string",
+          "description": "Contribution or decision id."
+        }
+      }
+    },
+    "Pace": {
+      "type": "object",
+      "description": "Primary, Alternate, Contingency, Emergency (military PACE planning): ordered plan A/B/C/D for one requirement, step or the whole Mission.",
+      "properties": {
+        "primary": {
+          "$ref": "#/$defs/Fallback"
+        },
+        "alternate": {
+          "$ref": "#/$defs/Fallback"
+        },
+        "contingency": {
+          "$ref": "#/$defs/Fallback"
+        },
+        "emergency": {
+          "$ref": "#/$defs/Fallback"
+        }
+      }
+    },
+    "Fallback": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "e.g. substitute:cw.ing.turmeric, provider:did:web:grocer-b, method:pressure_cook, dish:w-ma-012, order:ready_meal, drop, delay:PT30M, ask:owner."
+        },
+        "trigger": {
+          "type": "string",
+          "description": "When to switch: timeout, unavailable, failed_check, budget_exceeded, quality_below."
+        },
+        "impact": {
+          "type": "object",
+          "properties": {
+            "quality": {
+              "type": "string"
+            },
+            "extraCost": {
+              "$ref": "common.schema.json#/$defs/Money"
+            },
+            "extraTime": {
+              "$ref": "common.schema.json#/$defs/Duration"
+            }
+          }
+        },
+        "needsApproval": {
+          "type": "string",
+          "description": "Decision class or actor that must approve before switching."
+        }
+      }
+    },
+    "DecisionRight": {
+      "type": "object",
+      "required": [
+        "class",
+        "decider"
+      ],
+      "description": "Who may decide what. Evaluated top-down; the first matching rule applies. Safety-class decisions can never be granted solely to a remote provider.",
+      "properties": {
+        "class": {
+          "enum": [
+            "substitute_ingredient",
+            "drop_optional",
+            "drop_preferred",
+            "change_method",
+            "change_dish",
+            "change_provider",
+            "spend_more",
+            "delay",
+            "reschedule",
+            "discard_food",
+            "salvage",
+            "serve_degraded",
+            "abort_mission",
+            "contact_emergency",
+            "share_more_data",
+            "accept_offer",
+            "criticality_assessment",
+            "custom",
+            "budget_increase",
+            "deadline_extension",
+            "reduce_scope",
+            "accept_deviation",
+            "lower_autonomy",
+            "request_assist",
+            "recharge_plan",
+            "handoff_task",
+            "reconcile"
+          ]
+        },
+        "decider": {
+          "enum": [
+            "holder",
+            "arbiter",
+            "orchestrator",
+            "provider",
+            "quorum",
+            "household_human",
+            "named_human",
+            "safety_kernel"
+          ]
+        },
+        "who": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Specific DIDs/roles (e.g. arbiter providers, 'parent')."
+        },
+        "limits": {
+          "type": "object",
+          "description": "Thresholds under which the decider may act alone, e.g. {\"extraCost\": {\"amount\": 3, \"currency\": \"USD\"}, \"quality\": \"minor\", \"delay\": \"PT15M\"}.",
+          "additionalProperties": true
+        },
+        "quorum": {
+          "type": "object",
+          "properties": {
+            "of": {
+              "type": "integer"
+            },
+            "need": {
+              "type": "integer"
+            }
+          }
+        },
+        "beyondLimits": {
+          "type": "string",
+          "description": "Decision class/actor to escalate to when limits are exceeded."
+        },
+        "timeout": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "onTimeout": {
+          "enum": [
+            "take_default",
+            "take_safest",
+            "escalate",
+            "abort"
+          ]
+        },
+        "default": {
+          "type": "string"
+        }
+      }
+    },
+    "EscalationStep": {
+      "type": "object",
+      "required": [
+        "level",
+        "to"
+      ],
+      "properties": {
+        "level": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "to": {
+          "type": "string",
+          "description": "holder | arbiter:<class> | orchestrator | household:<person/role> | maker_support | service_provider | emergency_services."
+        },
+        "when": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "channel": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "waitFor": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "then": {
+          "type": "string"
+        }
+      }
+    },
+    "Contribution": {
+      "type": "object",
+      "required": [
+        "id",
+        "by",
+        "role",
+        "kind",
+        "status",
+        "createdAt"
+      ],
+      "description": "What a provider adds. Lifecycle: offered → accepted/rejected (by holder) → committed (binding, with SLA) → in_progress → fulfilled | partially_fulfilled | failed | withdrawn | superseded | compensated.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "by": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "facet",
+            "advice",
+            "plan",
+            "quote",
+            "offer",
+            "order",
+            "delivery",
+            "monitor",
+            "decision",
+            "approval",
+            "review",
+            "custom",
+            "assessment"
+          ]
+        },
+        "satisfies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Requirement ids."
+        },
+        "body": {
+          "description": "Typed payload (AdviceResponse, TeamPlan, Quote, OrderIntent...)."
+        },
+        "bodySchema": {
+          "type": "string"
+        },
+        "binding": {
+          "enum": [
+            "informational",
+            "advisory",
+            "binding_offer",
+            "commitment"
+          ]
+        },
+        "sla": {
+          "type": "object",
+          "properties": {
+            "deliverBy": {
+              "$ref": "common.schema.json#/$defs/DateTime"
+            },
+            "availability": {
+              "type": "string"
+            },
+            "penalty": {
+              "type": "string"
+            },
+            "insurer": {
+              "type": "string"
+            }
+          }
+        },
+        "status": {
+          "enum": [
+            "offered",
+            "accepted",
+            "rejected",
+            "committed",
+            "in_progress",
+            "fulfilled",
+            "partially_fulfilled",
+            "failed",
+            "withdrawn",
+            "superseded",
+            "compensated"
+          ]
+        },
+        "failure": {
+          "$ref": "#/$defs/Failure"
+        },
+        "compensation": {
+          "type": "string",
+          "description": "Action that undoes/offsets this contribution if the Mission changes (cancel order, release slot, refund) — saga pattern."
+        },
+        "idempotencyKey": {
+          "type": "string"
+        },
+        "createdAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "hash": {
+          "$ref": "common.schema.json#/$defs/Hash"
+        },
+        "signature": {
+          "$ref": "common.schema.json#/$defs/Signature"
+        }
+      }
+    },
+    "Failure": {
+      "type": "object",
+      "required": [
+        "code",
+        "retryable"
+      ],
+      "properties": {
+        "code": {
+          "enum": [
+            "timeout",
+            "unavailable",
+            "out_of_stock",
+            "capability_mismatch",
+            "policy_denied",
+            "safety_denied",
+            "budget_exceeded",
+            "invalid_input",
+            "insufficient_context",
+            "conflict",
+            "internal_error",
+            "rate_limited",
+            "subscription_inactive",
+            "custom"
+          ]
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "retryAfter": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "partial": {
+          "description": "Whatever could still be provided."
+        },
+        "needs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Missing facets/permissions that would let it succeed."
+        },
+        "suggest": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Suggested alternates/fallbacks."
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Decision": {
+      "type": "object",
+      "required": [
+        "id",
+        "class",
+        "by",
+        "choice",
+        "at"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "class": {
+          "type": "string"
+        },
+        "about": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Requirement/contribution/task ids."
+        },
+        "by": {
+          "type": "string"
+        },
+        "basis": {
+          "enum": [
+            "decision_right",
+            "quorum",
+            "fallback_rule",
+            "default_on_timeout",
+            "safety_kernel",
+            "human"
+          ]
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "choice": {
+          "type": "string"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "number"
+        },
+        "votes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "by": {
+                "type": "string"
+              },
+              "choice": {
+                "type": "string"
+              },
+              "confidence": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "verifiedBy": {
+          "type": "string",
+          "description": "Usually the holder's safety kernel."
+        },
+        "at": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "signature": {
+          "$ref": "common.schema.json#/$defs/Signature"
+        }
+      }
+    },
+    "Closure": {
+      "type": "object",
+      "description": "How the Mission ends: every committed contribution is fulfilled, failed-and-compensated or released; the holder signs the final receipt; settlements are recorded.",
+      "properties": {
+        "closedAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "byHolder": {
+          "$ref": "common.schema.json#/$defs/Signature"
+        },
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "who": {
+                "type": "string"
+              },
+              "contributions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "final": {
+                "enum": [
+                  "fulfilled",
+                  "partially_fulfilled",
+                  "failed",
+                  "compensated",
+                  "released"
+                ]
+              },
+              "settlement": {
+                "type": "string"
+              },
+              "rating": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              },
+              "signature": {
+                "$ref": "common.schema.json#/$defs/Signature"
+              }
+            }
+          }
+        },
+        "ledgerHead": {
+          "$ref": "common.schema.json#/$defs/Hash"
+        },
+        "anchoredAt": {
+          "type": "string",
+          "description": "Transparency log / blockchain anchoring reference, if any."
+        },
+        "calibration": {
+          "type": "array",
+          "description": "Predicted vs actual per assessment; updates provider calibration and reputation.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "assessment": {
+                "type": "string"
+              },
+              "by": {
+                "type": "string"
+              },
+              "predicted": {},
+              "actual": {},
+              "withinInterval": {
+                "type": "boolean"
+              },
+              "error": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "LedgerEntry": {
+      "type": "object",
+      "required": [
+        "seq",
+        "at",
+        "actor",
+        "action",
+        "prev"
+      ],
+      "description": "Append-only, hash-chained, signed. Modeled on EPCIS event dimensions (what, when, where, why, who).",
+      "properties": {
+        "seq": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "at": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "actor": {
+          "type": "string"
+        },
+        "action": {
+          "enum": [
+            "created",
+            "facet_added",
+            "view_granted",
+            "contribution_offered",
+            "contribution_accepted",
+            "contribution_rejected",
+            "committed",
+            "progress",
+            "fulfilled",
+            "failed",
+            "withdrawn",
+            "compensated",
+            "decision",
+            "escalated",
+            "approved",
+            "state_changed",
+            "closed",
+            "custom",
+            "assessment",
+            "reconciled"
+          ]
+        },
+        "ref": {
+          "type": "string"
+        },
+        "why": {
+          "type": "string"
+        },
+        "where": {
+          "type": "string"
+        },
+        "contentHash": {
+          "$ref": "common.schema.json#/$defs/Hash"
+        },
+        "prev": {
+          "type": "string",
+          "description": "Hash of the previous entry ('genesis' for seq 0)."
+        },
+        "signature": {
+          "$ref": "common.schema.json#/$defs/Signature"
+        }
+      }
+    },
+    "Budget": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "limit",
+        "controller"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "cost",
+            "time",
+            "energy",
+            "gas",
+            "water",
+            "robot_battery",
+            "retries",
+            "provider_calls",
+            "hops",
+            "data_disclosure",
+            "human_attention",
+            "waste",
+            "custom"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "description": "Whole mission, a requirement, a step, a provider role or a provider (e.g. 'mission', 'role:grocer', 'step:n7')."
+        },
+        "unit": {
+          "type": "string",
+          "description": "Currency code, ISO 8601 duration ('time'), kWh, MJ, L, pct, count, minutes."
+        },
+        "limit": {
+          "description": "Hard limit (number, Money or Duration/DateTime for time)."
+        },
+        "plan": {
+          "description": "Planned/baseline amount (from the bound plan)."
+        },
+        "thresholds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "at",
+              "action"
+            ],
+            "properties": {
+              "at": {
+                "type": "number",
+                "description": "Fraction of limit (0.8 = 80%) or of forecast overrun."
+              },
+              "on": {
+                "enum": [
+                  "actual",
+                  "forecast"
+                ],
+                "default": "forecast",
+                "description": "Trigger on spent-so-far or on estimate-at-completion."
+              },
+              "action": {
+                "enum": [
+                  "log",
+                  "notify",
+                  "require_approval",
+                  "switch_fallback",
+                  "cheaper_mode",
+                  "reduce_scope",
+                  "pause",
+                  "escalate",
+                  "abort"
+                ]
+              },
+              "to": {
+                "type": "string",
+                "description": "Who is notified/asked (decision class, role or person)."
+              }
+            }
+          }
+        },
+        "controller": {
+          "type": "string",
+          "description": "Who tracks and enforces it: holder (default), orchestrator (delegated), or budget_controller provider. The holder's kernel enforces hard limits regardless."
+        },
+        "status": {
+          "type": "object",
+          "properties": {
+            "spent": {
+              "description": "Actual so far."
+            },
+            "committed": {
+              "description": "Committed but not yet spent (e.g. accepted orders)."
+            },
+            "forecastAtCompletion": {
+              "description": "Estimate at completion (spent + committed + remaining plan)."
+            },
+            "variance": {
+              "type": "number",
+              "description": "(forecast - plan) / plan."
+            },
+            "state": {
+              "enum": [
+                "ok",
+                "warning",
+                "over_soft",
+                "over_hard",
+                "frozen"
+              ]
+            },
+            "updatedAt": {
+              "$ref": "common.schema.json#/$defs/DateTime"
+            }
+          }
+        },
+        "carryOver": {
+          "type": "boolean",
+          "description": "Unspent amount returns to a parent budget (meal plan, week)."
+        }
+      }
+    },
+    "MeterEntry": {
+      "type": "object",
+      "required": [
+        "budget",
+        "amount",
+        "at",
+        "by"
+      ],
+      "properties": {
+        "budget": {
+          "type": "string"
+        },
+        "amount": {
+          "description": "Number, Money or Duration."
+        },
+        "kind": {
+          "enum": [
+            "spent",
+            "committed",
+            "released",
+            "forecast_change"
+          ]
+        },
+        "ref": {
+          "type": "string",
+          "description": "Contribution/task/decision causing it."
+        },
+        "at": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "by": {
+          "type": "string"
+        },
+        "signature": {
+          "$ref": "common.schema.json#/$defs/Signature"
+        }
+      }
+    },
+    "Degradation": {
+      "type": "object",
+      "required": [
+        "id",
+        "area",
+        "severity"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "area": {
+          "enum": [
+            "vision",
+            "low_light",
+            "glare",
+            "depth_sensing",
+            "touch_force",
+            "gripper",
+            "arm_reach",
+            "mobility",
+            "temperature_sensing",
+            "smell_sensing",
+            "audio",
+            "speech",
+            "compute",
+            "network",
+            "battery",
+            "calibration",
+            "tool_missing",
+            "appliance_fault",
+            "space_constraint",
+            "human_unavailable",
+            "custom"
+          ]
+        },
+        "subject": {
+          "type": "string",
+          "description": "Robot/device/zone affected."
+        },
+        "severity": {
+          "enum": [
+            "minor",
+            "moderate",
+            "severe",
+            "blocking"
+          ]
+        },
+        "detail": {
+          "type": "string"
+        },
+        "measured": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "e.g. {\"visionConfidence\": 0.55, \"lux\": 40, \"gripForceMaxN\": 6}."
+        },
+        "since": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "expectedUntil": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "affects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Ops, sensors or cues affected (cw.op.cut, cw.sense.translucent...)."
+        }
+      }
+    },
+    "Adaptation": {
+      "type": "object",
+      "required": [
+        "id",
+        "for",
+        "strategy",
+        "by"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "for": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Degradation ids."
+        },
+        "strategy": {
+          "enum": [
+            "fix_environment",
+            "substitute_sensing",
+            "borrow_perception",
+            "reassign_task",
+            "human_assist",
+            "remote_assist",
+            "simplify_method",
+            "change_equipment",
+            "widen_safety_margin",
+            "slow_down",
+            "shrink_batch",
+            "change_recipe",
+            "use_preprepared_ingredient",
+            "lower_autonomy",
+            "defer"
+          ]
+        },
+        "by": {
+          "type": "string",
+          "description": "Who proposed/provides it: holder, planner, arbiter, maker extension, another robot, smart-home device, human, teleoperation service."
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "e.g. 'turn on hood light (Matter On/Off)', 'use probe cw.sense.core_temp instead of vision cue', 'arm-1 camera streams view of pan', 'coarse chop 20 mm instead of 10 mm'."
+        },
+        "patch": {
+          "$ref": "advice.schema.json#/$defs/RecipePatch"
+        },
+        "deviation": {
+          "type": "object",
+          "description": "How the result will differ from the normal dish.",
+          "properties": {
+            "identityPreserved": {
+              "type": "boolean",
+              "description": "Must be true unless a change_dish decision approved otherwise."
+            },
+            "sensory": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "e.g. 'onions less browned', 'coarser texture', 'slightly overcooked eggs (firm yolks)'."
+            },
+            "quality": {
+              "enum": [
+                "none",
+                "minor",
+                "noticeable",
+                "major"
+              ]
+            },
+            "nutritionDelta": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            },
+            "extraTime": {
+              "$ref": "common.schema.json#/$defs/Duration"
+            },
+            "extraCost": {
+              "$ref": "common.schema.json#/$defs/Money"
+            }
+          }
+        },
+        "safety": {
+          "type": "string",
+          "description": "Why safety is unchanged or stricter (never looser)."
+        },
+        "approvedBy": {
+          "type": "string",
+          "description": "Decision id (serve_degraded / change_method) or actor."
+        },
+        "status": {
+          "enum": [
+            "proposed",
+            "approved",
+            "active",
+            "rejected",
+            "ended"
+          ]
+        }
+      }
+    },
+    "Distribution": {
+      "type": "object",
+      "description": "Uncertainty of an estimate.",
+      "properties": {
+        "p10": {
+          "type": "number"
+        },
+        "p50": {
+          "type": "number"
+        },
+        "p90": {
+          "type": "number"
+        },
+        "mean": {
+          "type": "number"
+        },
+        "sd": {
+          "type": "number"
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      }
+    },
+    "Assessment": {
+      "type": "object",
+      "required": [
+        "id",
+        "topic",
+        "by",
+        "value",
+        "method",
+        "confidence",
+        "at"
+      ],
+      "description": "An opinion, estimate or judgment by a provider (or the robot) on a topic. Multiple providers may assess the same topic; they may agree, refine or disagree.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string",
+          "description": "e.g. estimate.robot_energy_pct, estimate.robot_energy_wh, estimate.duration, estimate.cost, estimate.appliance_energy_kwh, assess.safety, assess.criticality, assess.feasibility, assess.doneness, assess.spoilage."
+        },
+        "subject": {
+          "type": "string",
+          "description": "What it is about: mission, recipe, plan, task, item."
+        },
+        "by": {
+          "type": "string"
+        },
+        "group": {
+          "type": "string"
+        },
+        "value": {
+          "description": "Point value (number/string/object)."
+        },
+        "unit": {
+          "type": "string"
+        },
+        "distribution": {
+          "$ref": "#/$defs/Distribution"
+        },
+        "method": {
+          "enum": [
+            "physics_model",
+            "simulation",
+            "historical_stats",
+            "ml_model",
+            "llm_judgment",
+            "measurement",
+            "vendor_spec",
+            "expert_rule",
+            "human_judgment"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "facet",
+                  "media",
+                  "telemetry",
+                  "history",
+                  "spec",
+                  "benchmark",
+                  "report"
+                ]
+              },
+              "ref": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "inputsHash": {
+          "$ref": "common.schema.json#/$defs/Hash",
+          "description": "Hash of the inputs/view it saw, so disagreements caused by different inputs are visible."
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "respondsTo": {
+          "type": "string",
+          "description": "Assessment id it reacts to."
+        },
+        "stance": {
+          "enum": [
+            "independent",
+            "agree",
+            "refine",
+            "disagree"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "calibration": {
+          "type": "object",
+          "description": "Provider's historical accuracy on this topic (claimed; verified by the reconciler from closure data).",
+          "properties": {
+            "n": {
+              "type": "integer"
+            },
+            "intervalCoverage": {
+              "type": "number"
+            },
+            "meanAbsError": {
+              "type": "number"
+            }
+          }
+        },
+        "at": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "signature": {
+          "$ref": "common.schema.json#/$defs/Signature"
+        }
+      }
+    },
+    "ReconcileRule": {
+      "type": "object",
+      "required": [
+        "topic",
+        "reconciler",
+        "strategy"
+      ],
+      "properties": {
+        "topic": {
+          "type": "string",
+          "description": "Topic or prefix (estimate.robot_energy*)."
+        },
+        "reconciler": {
+          "type": "string",
+          "description": "holder (default), a chosen agent/orchestrator DID, a quorum, or a household human."
+        },
+        "strategy": {
+          "enum": [
+            "conservative",
+            "calibration_weighted",
+            "evidence_priority",
+            "bayesian_fusion",
+            "median",
+            "quorum",
+            "debate_then_decide",
+            "ask_human"
+          ]
+        },
+        "safetyBias": {
+          "enum": [
+            "worst_case",
+            "p90",
+            "p50"
+          ],
+          "description": "For safety/feasibility topics take the cautious quantile (e.g. energy need at p90)."
+        },
+        "conflictThreshold": {
+          "type": "number",
+          "description": "Relative spread above which assessments count as conflicting (e.g. 0.25)."
+        },
+        "evidenceOrder": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Precedence when evidence quality differs, e.g. [measurement, historical_stats, physics_model, vendor_spec, llm_judgment]."
+        },
+        "maxRounds": {
+          "type": "integer",
+          "description": "Rebuttal/clarification rounds before deciding."
+        },
+        "timeout": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "onTimeout": {
+          "enum": [
+            "take_conservative",
+            "take_latest",
+            "escalate"
+          ]
+        }
+      }
+    },
+    "Reconciliation": {
+      "type": "object",
+      "required": [
+        "id",
+        "topic",
+        "assessments",
+        "reconciler",
+        "strategy",
+        "result",
+        "at"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "assessments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "conflict": {
+          "type": "object",
+          "properties": {
+            "detected": {
+              "type": "boolean"
+            },
+            "spread": {
+              "type": "number"
+            },
+            "causes": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "different_inputs",
+                  "different_methods",
+                  "different_assumptions",
+                  "stale_evidence",
+                  "model_error",
+                  "unknown"
+                ]
+              }
+            }
+          }
+        },
+        "rounds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "asked": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "question": {
+                "type": "string"
+              },
+              "newEvidence": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "description": "Requests for more evidence/rebuttals (e.g. robot measured battery; provider re-estimated)."
+        },
+        "reconciler": {
+          "type": "string"
+        },
+        "strategy": {
+          "type": "string"
+        },
+        "weights": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "value": {},
+            "unit": {
+              "type": "string"
+            },
+            "distribution": {
+              "$ref": "#/$defs/Distribution"
+            },
+            "decisionValue": {
+              "description": "The value used for decisions after safety bias."
+            },
+            "dissent": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "consequences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Decision/plan-change ids triggered (charge first, handoff midway, notify owner...)."
+        },
+        "at": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "signature": {
+          "$ref": "common.schema.json#/$defs/Signature"
+        }
+      }
+    }
+  }
+}

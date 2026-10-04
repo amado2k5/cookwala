@@ -163,6 +163,294 @@
     },
     "meta": {
       "$ref": "common.schema.json#/$defs/Meta"
+    },
+    "identity": {
+      "type": "object",
+      "description": "What makes this dish itself: elements that must not change (or it becomes another dish) vs elements that may flex. Planners and substitution engines must keep the essentials.",
+      "properties": {
+        "essential": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Ingredient refs, ops or states that define the dish (e.g. eggs poached in spiced tomato-pepper sauce)."
+        },
+        "flexible": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "neverAdd": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additions that break authenticity or the dish's dietary character."
+        },
+        "family": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Related dishes/variants (for repurposing and suggestions)."
+        },
+        "culturalNotes": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        }
+      }
+    },
+    "sensory": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/SensoryTarget"
+      },
+      "description": "Sensory targets per stage and for the finished dish."
+    },
+    "formula": {
+      "type": "object",
+      "description": "Scalable proportions: quantities as ratios to a base, with role and flex range. Lets planners scale, ration, budget and substitute without breaking the dish.",
+      "properties": {
+        "base": {
+          "type": "string",
+          "description": "Ingredient ref used as 1.0 (e.g. tomato)."
+        },
+        "ratios": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "ref",
+              "ratio"
+            ],
+            "properties": {
+              "ref": {
+                "type": "string"
+              },
+              "ratio": {
+                "type": "number"
+              },
+              "min": {
+                "type": "number"
+              },
+              "max": {
+                "type": "number"
+              },
+              "role": {
+                "type": "string"
+              },
+              "scaling": {
+                "enum": [
+                  "linear",
+                  "sublinear",
+                  "fixed",
+                  "to_taste"
+                ]
+              }
+            }
+          }
+        },
+        "perServing": {
+          "type": "object",
+          "description": "Base-ingredient grams per serving at reference portion.",
+          "properties": {
+            "baseG": {
+              "type": "number"
+            },
+            "cookedG": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "prep": {
+      "type": "object",
+      "description": "Mise en place for the environment: what must be true or done before cooking starts (tools found and clean, surfaces cleared, space, ingredients staged, pre-tasks like soaking).",
+      "properties": {
+        "tools": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ref": {
+                "type": "string"
+              },
+              "clean": {
+                "type": "boolean"
+              },
+              "dry": {
+                "type": "boolean"
+              },
+              "stageAt": {
+                "type": "string",
+                "description": "Zone, e.g. counter-left."
+              }
+            }
+          }
+        },
+        "surfaces": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "zone": {
+                "type": "string"
+              },
+              "clearAreaCm2": {
+                "type": "number"
+              },
+              "sanitized": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "stageIngredients": {
+          "type": "boolean",
+          "default": true
+        },
+        "advanceTasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "task": {
+                "type": "string"
+              },
+              "lead": {
+                "$ref": "common.schema.json#/$defs/Duration"
+              },
+              "node": {
+                "$ref": "#/$defs/Node"
+              }
+            }
+          },
+          "description": "Soak, thaw, marinate, preheat: scheduled ahead by planners."
+        },
+        "clearFirst": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "e.g. sink, hob, counter-left (planner adds tidy/wash/dry tasks if occupied)."
+        },
+        "estimatedPrepTime": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "description": "How the dish is served and eaten.",
+      "properties": {
+        "servingTempC": {
+          "$ref": "common.schema.json#/$defs/Range"
+        },
+        "maxHoldBeforeServe": {
+          "$ref": "common.schema.json#/$defs/Duration"
+        },
+        "plating": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "vessel": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Serving vessel classes (shared pan, bowl, plate, lunchbox)."
+        },
+        "accompaniments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item": {
+                "type": "string"
+              },
+              "recipeId": {
+                "$ref": "common.schema.json#/$defs/GlobalRef"
+              },
+              "optional": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "tableware": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "e.g. spoon, bread for scooping, fork, chopsticks."
+        },
+        "eatingStyle": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "utensils",
+              "by_hand",
+              "bread_scoop",
+              "chopsticks",
+              "shared_platter",
+              "individual"
+            ]
+          }
+        },
+        "portioning": {
+          "type": "object",
+          "properties": {
+            "unit": {
+              "type": "string"
+            },
+            "divisible": {
+              "type": "boolean"
+            },
+            "perPersonMin": {
+              "type": "number"
+            },
+            "perPersonMax": {
+              "type": "number"
+            }
+          }
+        },
+        "packable": {
+          "type": "object",
+          "properties": {
+            "lunchbox": {
+              "type": "boolean"
+            },
+            "travelMax": {
+              "$ref": "common.schema.json#/$defs/Duration"
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "acceptance": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/FoodState"
+      },
+      "description": "Final acceptance checks (the recipe's 'tests'): the dish is done and right when these hold."
+    },
+    "layers": {
+      "type": "object",
+      "description": "Which knowledge layers this document carries (WHO-SMART-style): R1 narrative, R2 dish spec, R3 executable IR. R4 bound plans live in Missions.",
+      "properties": {
+        "r1": {
+          "type": "boolean"
+        },
+        "r2": {
+          "type": "boolean"
+        },
+        "r3": {
+          "type": "boolean"
+        }
+      }
     }
   },
   "additionalProperties": false,
@@ -791,6 +1079,145 @@
               }
             }
           }
+        },
+        "pre": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FoodState"
+          },
+          "description": "Food/equipment states required before this node may start."
+        },
+        "post": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FoodState"
+          },
+          "description": "States this node produces (planner effects; verified at completion)."
+        },
+        "pause": {
+          "type": "object",
+          "description": "Interruption handling.",
+          "properties": {
+            "pausable": {
+              "type": "boolean"
+            },
+            "safeState": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "e.g. heat_off, heat_hold_low, lid_on, knife_down, cover_food, move_from_edge."
+            },
+            "maxPause": {
+              "$ref": "common.schema.json#/$defs/Duration",
+              "description": "Longest pause before the node's output quality or safety is affected."
+            },
+            "onExceeded": {
+              "enum": [
+                "resume_with_extension",
+                "reheat_then_resume",
+                "restart_node",
+                "salvage",
+                "discard"
+              ]
+            },
+            "resumeCheck": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/FoodState"
+              }
+            }
+          }
+        },
+        "failureModes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "incident"
+            ],
+            "properties": {
+              "incident": {
+                "type": "string",
+                "description": "cw.incident.* id."
+              },
+              "likelihood": {
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              "detect": {
+                "type": "array",
+                "items": {
+                  "$ref": "common.schema.json#/$defs/ConditionOrCheck"
+                }
+              },
+              "prevent": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "playbook": {
+                "type": "string",
+                "description": "cw.pb.* id to run."
+              }
+            }
+          },
+          "description": "Known ways this step goes wrong, how to spot them early, and which playbook recovers."
+        },
+        "affordances": {
+          "type": "object",
+          "description": "What an executor needs physically (robots match capabilities against this).",
+          "properties": {
+            "grasp": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "forceN": {
+              "$ref": "common.schema.json#/$defs/Range"
+            },
+            "precisionMm": {
+              "type": "number"
+            },
+            "tools": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "twoHanded": {
+              "type": "boolean"
+            },
+            "liftKg": {
+              "type": "number"
+            },
+            "hygiene": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "e.g. clean_gloves, wash_after_raw_meat, allergen_clean."
+            }
+          }
+        },
+        "space": {
+          "type": "object",
+          "properties": {
+            "zone": {
+              "type": "string"
+            },
+            "areaCm2": {
+              "type": "number"
+            },
+            "keepClearOfChildren": {
+              "type": "boolean"
+            }
+          }
         }
       }
     },
@@ -1293,6 +1720,104 @@
             "type": "string"
           },
           "description": "Original human steps in order, as published on the source site."
+        }
+      }
+    },
+    "FoodState": {
+      "type": "object",
+      "description": "A named state of an ingredient or intermediate, checkable by sensors, vision or a human. Used as node pre/post conditions (planning) and as checkpoints.",
+      "properties": {
+        "of": {
+          "type": "string",
+          "description": "Ingredient ref or intermediate output."
+        },
+        "state": {
+          "type": "string",
+          "description": "e.g. diced_10mm, translucent, golden, reduced_30pct, al_dente, set, rested, cooled_below_5C."
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/ConditionOrCheck"
+          }
+        },
+        "reference": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Reference images/clips/sounds of this state for vision/audio models."
+        },
+        "description": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        }
+      }
+    },
+    "SensoryTarget": {
+      "type": "object",
+      "properties": {
+        "stage": {
+          "type": "string",
+          "description": "Node id or 'final'."
+        },
+        "color": {
+          "type": "string"
+        },
+        "texture": {
+          "type": "string"
+        },
+        "aroma": {
+          "type": "string"
+        },
+        "sound": {
+          "type": "string"
+        },
+        "taste": {
+          "type": "object",
+          "properties": {
+            "salt": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "sour": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "sweet": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "bitter": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "umami": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "heat": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5
+            }
+          }
+        },
+        "servingTempC": {
+          "$ref": "common.schema.json#/$defs/Range"
+        },
+        "description": {
+          "$ref": "common.schema.json#/$defs/LangMap"
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     }

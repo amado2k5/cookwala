@@ -257,7 +257,15 @@
             "cookwala.relief.dispatched",
             "cookwala.relief.delivered",
             "cookwala.relief.impact",
-            "cookwala.relief.surplus_available"
+            "cookwala.relief.surplus_available",
+            "cookwala.mission.assessment",
+            "cookwala.mission.conflict",
+            "cookwala.mission.reconciled",
+            "cookwala.mission.budget_threshold",
+            "cookwala.mission.degradation",
+            "cookwala.mission.adaptation",
+            "cookwala.mission.decision",
+            "cookwala.mission.closed"
           ]
         },
         {
