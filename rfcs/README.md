@@ -1,0 +1,19 @@
+# RFCs
+
+Proposals to change the Cookwala standard, following `GOVERNANCE.md`: a pull request, a
+30-day public comment period, then a decision with written reasons. Safety-relevant RFCs
+name a qualified reviewer before they are accepted.
+
+| RFC | Title | Status | Comment period |
+|---|---|---|---|
+| [0001](0001-household-context-profile.md) | Household Context Profile | proposed | opens when the PR merges |
+| [0002](0002-registry-and-directory.md) | Registry and Directory | proposed | |
+| [0003](0003-humanitarian-0.2-surplus-to-plate.md) | Humanitarian Profile 0.2: surplus to plate | proposed | |
+| [0004](0004-health-rule-packs.md) | Health and food-safety rule packs | proposed, needs dietitian and food-safety review | |
+| [0005](0005-kitchens-and-production-runs.md) | Kitchens and production runs (fleets) | proposed | |
+| [0006](0006-federation.md) | Federation: catalogs, registries, feeds and relays | proposed | |
+| [0007](0007-farm-surplus-and-supply-signals.md) | Farm surplus and supply signals | proposed, experimental, needs competition-law review | |
+| [0008](0008-conformance-reports-and-certification.md) | Conformance reports and the certification path | proposed | |
+
+Statuses: `proposed` → `comment` → `accepted` or `rejected` → `implemented`. An RFC is a
+short document: problem, proposal, alternatives considered, migration, open questions.
