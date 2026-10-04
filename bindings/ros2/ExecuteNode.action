@@ -1,0 +1,18 @@
+# Cookwala Core 0.2 ROS 2 action: run one recipe node on one device (used by a hub that
+# splits a recipe across robots and appliances; see Open-RMF for fleet-level dispatch).
+
+# ---- Goal
+string node_json           # the recipe Node (recipe.schema.json#/$defs/Node)
+string envelope_json       # the op envelope from vocab/ops.json, resolved by the hub
+string target_json         # narrower recipe target inside the envelope, or empty
+---
+# ---- Result
+bool envelope_ok           # medium stayed inside envelope (and target, once reached)
+string verified_by         # sensor | model | time | human
+string summary_json        # ExecutionLog step summary (min/max/end per sensor)
+string deviation_json      # ExecutionLog step deviation, or empty
+---
+# ---- Feedback
+float32 progress
+float32 medium_temp_c
+bool target_reached

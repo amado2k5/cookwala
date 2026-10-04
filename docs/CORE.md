@@ -57,6 +57,9 @@ bundle so that devices validate offline. Implementations MUST NOT fetch schemas 
   then `model` (a logged estimate), then `time`, then `human`.
   - The executor uses the first rung it can satisfy and records it in `verifiedBy`.
   - If it can satisfy **no** rung, it MUST refuse the step (`missing_sensor_no_fallback`).
+  - Operations that need constant attention and may not run unattended (sautéing, searing,
+    frying, reducing, caramelizing…) never fall back to time alone: their last rung is a person
+    watching.
   - Deep frying has no fallback: no oil-temperature sensor means no deep frying.
   - A `Condition` can narrow this with `onSensorMissing`.
 - **Refusal, not guessing.** An executor that cannot meet a step's envelope, ladder, equipment
@@ -213,7 +216,7 @@ and it has real users.
 | Agents | Mandate inside Missions only | `AgentMandate` in common; required for agent requests |
 | Safety | Declared in recipes | Also enforced locally through SafetyLimits; recalls; incident reports |
 | Data | No dataset model | Consented, personal-data-free ExecutionLog |
-| Conformance | Schema validation only | 42 vectors plus a reference implementation |
+| Conformance | Schema validation only | 44 vectors plus a reference implementation |
 
 To migrate a 0.1 document: convert °F to °C; replace relative tolerances on temperatures with
 `toleranceAbs`; turn money amounts into decimal strings; remove or rename unknown fields to

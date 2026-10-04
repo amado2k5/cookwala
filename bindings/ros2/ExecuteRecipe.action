@@ -1,0 +1,26 @@
+# Cookwala Core 0.2 ROS 2 action: cook one recipe revision.
+# Mirrors POST /v1/executions (goal), ExecutionStatus (feedback) and ExecutionLog (result).
+# Cancelling the goal is a StopRequest: the server must stop safely (cut heat, stop motion).
+# Safety limits are enforced by the device itself; nothing in this action can raise them.
+
+# ---- Goal (ExecuteRequest)
+string recipe_ref          # GlobalRef, e.g. cw:cookwala.ai:shakshuka
+string recipe_hash         # sha256:<hex>; the server refuses on mismatch
+float32 servings
+string idempotency_key
+string request_json        # full ExecuteRequest (core.schema.json), incl. AgentMandate when an agent asks
+---
+# ---- Result (final state + ExecutionLog)
+string state               # completed | refused | stopped | failed
+string refusal_reason      # RefusalReason when state == refused
+string log_json            # ExecutionLog (core.schema.json); no personal data
+---
+# ---- Feedback (ExecutionStatus)
+uint32 seq                 # equals ExecutionStatus.seq and the CloudEvents cookwalaseq
+string state               # preparing | running | paused | needs_human | stopping
+string node                # current recipe node id
+string op                  # cw.op.* id
+float32 progress           # 0..1 within the node
+string verified_by         # sensor | model | time | human (sensor-ladder rung)
+float32 medium_temp_c      # envelope medium temperature, NaN if not applicable
+string human_needed        # why a person is needed, empty otherwise

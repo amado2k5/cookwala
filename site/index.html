@@ -2,92 +2,164 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Cookwala</title>
-  <meta name="description" content="Cookwala: the world's first and largest robot cooking recipes index and CLI. An open, royalty-free standard for recipes robots, appliances and AI agents can execute safely.">
+  <meta name="description" content="Cookwala is the open standard for cooking safely: people, kitchens and robots. What to make, when it's done, and what must never happen, checked on the device.">
   <link rel="alternate" type="application/json" href="/.well-known/cookwala.json" title="Cookwala discovery">
-  <style>
-    :root {
-      --bg: #fbfaf7; --fg: #1d1b18; --muted: #6b665e; --card: #ffffff; --line: #e7e2d9;
-      --accent: #c2410c; --accent-soft: #fff1e8; --code: #f4f1ea;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root { --bg: #14130f; --fg: #f1ede6; --muted: #a39d92; --card: #1d1b17; --line: #2f2c26;
-              --accent: #fb923c; --accent-soft: #2a1c12; --code: #22201b; }
-    }
-    * { box-sizing: border-box; }
-    body { margin: 0; background: var(--bg); color: var(--fg);
-           font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif; }
-    main { max-width: 880px; margin: 0 auto; padding: 56px 16px 72px; }
-    .badge { display: inline-block; font-size: 13px; font-weight: 600; color: var(--accent);
-             background: var(--accent-soft); border-radius: 999px; padding: 3px 12px; }
-    h1 { font-size: clamp(40px, 8vw, 64px); line-height: 1.05; margin: 18px 0 10px; letter-spacing: -0.02em; }
-    .lede { font-size: clamp(19px, 3vw, 22px); color: var(--muted); margin: 0 0 32px; max-width: 40ch; }
-    h2 { font-size: 22px; margin: 48px 0 14px; }
-    .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
-    .card h3 { margin: 0 0 6px; font-size: 17px; }
-    .card p { margin: 0; color: var(--muted); font-size: 15px; }
-    a { color: var(--accent); }
-    ul.links { padding: 0; list-style: none; margin: 0; }
-    ul.links li { padding: 10px 0; border-bottom: 1px solid var(--line); display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between; }
-    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; }
-    pre { background: var(--code); border: 1px solid var(--line); border-radius: 12px; padding: 16px; overflow-x: auto; }
-    .muted { color: var(--muted); font-size: 14px; }
-    footer { margin-top: 56px; color: var(--muted); font-size: 14px; }
-  </style>
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Docs for AI readers">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
-<main>
-  <span class="badge">Draft v0.1 · open standard</span>
-  <h1>Cookwala</h1>
-  <p class="lede">The world's first and largest robot cooking recipes index and CLI.</p>
-  <p><strong>Mission:</strong> help end world hunger and make people healthier, so that everyone eats the right food, cooked the right way, in the right amount, with the least waste.</p>
-  <p>Cookwala is an open, royalty-free standard and a free public index of recipes that robots,
-    smart appliances and AI agents can execute safely, end to end, alone or together with people and
-    other machines.</p>
-
-  <h2>What's in it</h2>
-  <div class="grid">
-    <div class="card"><h3>Executable recipes</h3><p>Typed steps with parameters, measurable end conditions (temperature, food-state cues, time windows) and defined failure paths.</p></div>
-    <div class="card"><h3>Safety as data</h3><p>Hazards, food-safety checkpoints, allergens, supervision levels, abort procedures and kitchen-wide safety events.</p></div>
-    <div class="card"><h3>Local rules</h3><p>Policy packs for food-safety codes, dietary rules such as halal, venues and households, checked before cooking.</p></div>
-    <div class="card"><h3>Kitchen teamwork</h3><p>A local hub protocol for robots, ovens, cooktops, fridges, alarms, people, AI agents, delivery and notifications.</p></div>
-    <div class="card"><h3>Every interface</h3><p>Static JSON, REST, GraphQL, MQTT / WebSocket / SSE events, MCP, A2A and the <code>cookwala</code> CLI.</p></div>
-    <div class="card"><h3>A reasoner, not a database</h3><p>What can I cook, fix my mistake and resume, rescue the meal, store it, feed 40 people, split work across robots: answers a robot can apply.</p></div>
-    <div class="card"><h3>Feeding everyone</h3><p>Programs, needs, pledges and impact reports let food organizations, kitchens, grocers and robots work as one network.</p></div>
-    <div class="card"><h3>Open to everyone</h3><p>No API keys, no membership. Apache-2.0, CC BY 4.0 and CC0, plus a patent non-assertion pledge.</p></div>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="/" aria-label="Cookwala home"><span class="mark" aria-hidden="true"></span>Cookwala</a>
+    <nav aria-label="Main">
+      <a href="/docs/?p=QUICKSTART">Start</a>
+      <a href="/docs/">Docs</a>
+      <a href="/#demo">Dry run</a>
+      <a href="/sim/">Simulators</a>
+      <a href="/docs/?p=CONTRIBUTING">Contribute</a>
+      <a href="https://github.com/amado2k5/cookwala">GitHub</a>
+    </nav>
   </div>
+</header>
 
-  <h2>A recipe step</h2>
-<pre>{
-  "id": "n11", "op": "cw.op.simmer", "params": { "heat": "low", "lid": "on" },
-  "until": { "all": [ { "vision": "cw.sense.egg_whites_set" },
-                      { "sensor": "cw.sense.core_temp", "target": "egg_white", "gte": 63 } ],
-             "minTime": "PT5M", "maxTime": "PT10M" },
-  "onTimeout": "ask_human", "ccp": "ccp_eggs", "attention": "monitor"
-}</pre>
+<main id="main">
+  <section class="hero wrap">
+    <p class="chip"><span class="dot" aria-hidden="true"></span>Draft standard · Core 0.2</p>
+    <h1>The open standard for cooking safely.<br><span class="soft">People, kitchens and robots.</span></h1>
+    <ol class="triad" aria-label="What a Cookwala recipe says">
+      <li><b>What to make.</b> Recipes as steps a machine can plan.</li>
+      <li><b>When it's done.</b> Temperatures, food-state cues and times it can measure.</li>
+      <li><b>What must never happen.</b> Safety limits the device enforces itself.</li>
+    </ol>
+    <div class="cta">
+      <a class="btn primary" href="#demo">Try the dry run</a>
+      <a class="btn" href="/docs/?p=QUICKSTART">Read the 5-minute quickstart</a>
+    </div>
+  </section>
 
-  <h2>Try it</h2>
-  <p><a href="/sim/country/"><strong>Country simulator →</strong></a> One year, one country of 27.5 million: six provinces adopting robot cooks and the protocol at different speeds, each compared with itself without them.</p>
-  <p><a href="/sim/world/"><strong>World simulator →</strong></a> Five years, 8.3 billion people, ten regions on a world map: robots alone, robots with the protocol, and countries with few or no robots, against a world without them.</p>
-  <p><a href="/sim/city/"><strong>City simulator →</strong></a> One month, two cities: farms, wholesale, stores, homes with and without robot cooks, deliveries, traffic and garbage. See what the Cookwala ecosystem changes for waste, cost, traffic, emissions and hunger.</p>
-  <p><a href="/sim/"><strong>Home-kitchen simulator →</strong></a> A virtual family asks robot NEO-1 for dinner. Play and replay how the Mission travels through providers, robots, devices and people, with faults like grocer timeouts, a dog knocking over a bowl, a power cut, or a single over-optimistic battery estimate.</p>
+  <section id="demo" class="band" aria-labelledby="demo-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="demo-h">Can this device cook this recipe?</h2>
+        <p>A Cookwala device checks every step before it heats anything up, and refuses rather than guesses. Change the device or the kitchen and watch the answer change. This runs the same rules as <code>cookwala_ref.py dryrun</code>.</p>
+      </div>
+      <div class="demo">
+        <form class="controls" id="demoForm" aria-label="Dry-run settings">
+          <label>Recipe <select id="dRecipe"><option value="shakshuka">Shakshuka (13 steps)</option></select></label>
+          <label>Device <select id="dDevice"></select></label>
+          <label class="check"><input type="checkbox" id="dHuman" checked> A person is in the kitchen</label>
+          <label class="check"><input type="checkbox" id="dModel" checked> The device may use logged estimates when it lacks a sensor</label>
+        </form>
+        <div class="verdict" id="verdict" role="status" aria-live="polite">Loading the recipe and the operation vocabulary…</div>
+        <div class="table-wrap"><table class="steps" id="steps"><thead><tr><th>Step</th><th>Operation</th><th>Safe band</th><th>Who</th><th>Checked by</th></tr></thead><tbody></tbody></table></div>
+        <p class="note">Bands come from <a href="/v1/vocab/ops.json">vocab/ops.json</a>. "Estimate" is a logged model estimate; "time" is nominal time only. A step that nothing can check is refused.</p>
+      </div>
+    </div>
+  </section>
 
-  <h2>For developers</h2>
-  <ul class="links">
-    <li><a href="/.well-known/cookwala.json">/.well-known/cookwala.json</a><span class="muted">discovery</span></li>
-    <li><a href="/v1/recipes/shakshuka.cookwala.json">/v1/recipes/shakshuka.cookwala.json</a><span class="muted">example recipe</span></li>
-    <li><a href="/v1/schemas/recipe.schema.json">/v1/schemas/</a><span class="muted">JSON Schemas</span></li>
-    <li><a href="/v1/vocab/ops.json">/v1/vocab/ops.json</a><span class="muted">operation vocabulary</span></li>
-    <li><a href="/v1/api/index.openapi.yaml">/v1/api/</a><span class="muted">OpenAPI, GraphQL, AsyncAPI</span></li>
-    <li><a href="https://github.com/amado2k5/cookwala">github.com/amado2k5/cookwala</a><span class="muted">specs, plan, RFCs</span></li>
-  </ul>
+  <section class="wrap prob" aria-labelledby="prob-h">
+    <h2 id="prob-h">Robots are learning to move. Nobody has written down how to cook.</h2>
+    <div class="cols">
+      <p>Home robots are shipping and kitchen robots are taking orders. Each maker writes its own closed recipes, mostly from a few cuisines, and decides alone what "simmer" or "done" means.</p>
+      <p>Meanwhile roughly a third of the world's food is lost or wasted while hundreds of millions of people go hungry (FAO, UNEP). Kitchens and food banks rescue what they can, with phone calls and spreadsheets.</p>
+      <p>Cookwala is the shared, open layer: one way to describe a recipe that a person, a food bank, an oven or a humanoid can read, check and cook safely, in every cuisine.</p>
+    </div>
+  </section>
 
-  <footer>
-    Started by <a href="https://fifi.cooking">fifi.cooking</a>. Cookwala data is provided without warranty;
-    device makers and operators are responsible for safe execution and local law.
-  </footer>
+  <section class="wrap" aria-labelledby="loop-h">
+    <h2 id="loop-h">One loop</h2>
+    <ol class="loop">
+      <li><span class="n">1</span><h3>Describe</h3><p>Write a recipe as steps with end conditions and hazards. Hash and sign it.</p><code>cookwala_ref.py hash recipe.json</code></li>
+      <li><span class="n">2</span><h3>Check</h3><p>Validate it, then dry-run it against a device before cooking.</p><code>cookwala_ref.py dryrun recipe.json --device oven.json</code></li>
+      <li><span class="n">3</span><h3>Cook</h3><p>The device runs it through the Core API or ROS 2, keeping every step inside its safe band.</p><code>POST /v1/executions</code></li>
+      <li><span class="n">4</span><h3>Learn</h3><p>With consent, the log becomes a trace and a training example for robots.</p><code>execlog_export.py lerobot …</code></li>
+    </ol>
+  </section>
+
+  <section class="band" aria-labelledby="paths-h">
+    <div class="wrap">
+      <h2 id="paths-h">Pick your path</h2>
+      <div class="paths">
+        <a class="path" href="/docs/?p=ROBOTICS"><h3>I build robots or appliances</h3><p>Dry-run your device, implement the Core API or the ROS 2 actions, pass the conformance tests.</p><span>First success: a dry run in 2 minutes →</span></a>
+        <a class="path" href="/docs/?p=CORE#6-safety-and-agent-rules-normative"><h3>I build AI agents</h3><p>Act under a mandate, treat recipe text as data, and run the kitchen agent-safety benchmark on your model.</p><span>First success: run 10 safety tests →</span></a>
+        <a class="path" href="/docs/?p=HUMANITARIAN-PROFILE"><h3>I run a kitchen or food bank</h3><p>Rescue surplus safely by SMS or spreadsheet. No robots, no personal data.</p><span>First success: send an offer by SMS →</span></a>
+        <a class="path" href="/docs/?p=CONTRIBUTING"><h3>I cook</h3><p>Turn a recipe you know by heart into one a machine can cook, in your language, with your name on it.</p><span>First success: one recipe validated →</span></a>
+        <a class="path" href="/sim/"><h3>I research or review</h3><p>Play the simulators, read the critiques, check the conformance vectors, and tell us what's wrong.</p><span>First success: one simulator run →</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="proof-h">
+    <h2 id="proof-h">What exists today</h2>
+    <p class="sub">Counted from the repository at each release. Nothing here is a projection unless it says so.</p>
+    <div class="stats" id="stats" aria-live="polite"></div>
+    <p class="note" id="statsMeta"></p>
+  </section>
+
+  <section class="band" aria-labelledby="safe-h">
+    <div class="wrap two">
+      <div>
+        <h2 id="safe-h">Safe by design, verifiable by anyone</h2>
+        <p>Safety is enforced on the device, not in the cloud. No recipe, agent, message or extension can raise a device's limits, and a local stop works without a network. AI agents act only under a signed mandate and treat every text field as data, never as instructions.</p>
+        <p>Every recipe and record can be hashed and signed, keys can be revoked, and event logs carry witnessed checkpoints. The tests that prove it are public.</p>
+        <p><a href="/docs/?p=CORE">Read Core 0.2</a> · <a href="/docs/?p=SECURITY">Security policy</a> · <a href="/docs/?p=CRITIQUES">Critiques we published</a></p>
+      </div>
+      <pre class="code" aria-label="Example operation envelope"><code>"cw.op.deep_fry": {
+  "envelope": {
+    "medium": "oil",
+    "tempC": { "min": 160, "max": 190 },
+    "unattended": false,
+    "sensorLadder": ["cw.sense.oil_temp"],
+    "note": "No oil-temperature sensor,
+             no deep frying."
+  }
+}</code></pre>
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="road-h">
+    <h2 id="road-h">Now, next, later</h2>
+    <div class="road">
+      <div><h3>Now</h3><ul><li>Core 0.2 standard and schemas</li><li>Dry run, validator, conformance tests</li><li>ROS 2 actions, LeRobot and OpenTelemetry exports</li><li>Agent-safety benchmark</li><li>Humanitarian Profile for food banks</li><li>Four simulators</li></ul></div>
+      <div><h3>Next</h3><ul><li><code>pip install cookwala</code> and a reference hub you can run</li><li>The first 100 fifi.cooking recipes, in Arabic and English</li><li>A food-bank pilot in Egypt</li><li>MCP server and TypeScript SDK</li><li>Published agent-safety results</li></ul></div>
+      <div><h3>Later</h3><ul><li>A real device cooking a Cookwala recipe, unedited</li><li>A contributor network that teaches robots every cuisine, with credit</li><li>Certification with an independent certifier</li><li>A neutral home for the standard</li></ul></div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="open-h">
+    <div class="wrap two">
+      <div>
+        <h2 id="open-h">Open, and joinable today</h2>
+        <p>Royalty-free. Apache-2.0 code, CC BY 4.0 specification, CC0 vocabularies. No API keys. Model-agnostic and device-agnostic. Governed in public today, moving to a neutral foundation once there is a second independent implementation.</p>
+        <div class="cta"><a class="btn primary" href="/docs/?p=CONTRIBUTING">Contribute</a><a class="btn" href="/docs/?p=GOVERNANCE">How decisions are made</a></div>
+      </div>
+      <div>
+        <h3>For developers and AI readers</h3>
+        <ul class="links">
+          <li><a href="/.well-known/cookwala.json">/.well-known/cookwala.json</a><span>discovery</span></li>
+          <li><a href="/v1/api/core.openapi.yaml">/v1/api/core.openapi.yaml</a><span>Core API</span></li>
+          <li><a href="/v1/schemas/bundle.json">/v1/schemas/bundle.json</a><span>all schemas, offline</span></li>
+          <li><a href="/v1/conformance/hash.json">/v1/conformance/</a><span>test vectors</span></li>
+          <li><a href="/llms.txt">/llms.txt</a><span>docs map for AI</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <p>Cookwala started from <a href="https://fifi.cooking">fifi.cooking</a>, a family collection of Egyptian home recipes. Cookwala data is provided without warranty. Device makers and operators remain responsible for safe hardware and local law.</p>
+    <p><a href="/docs/?p=SECURITY">Security</a> · <a href="/.well-known/security.txt">security.txt</a> · <a href="/docs/?p=GOVERNANCE">Governance</a> · <a href="/docs/?p=STRATEGY">Strategy</a> · <a href="https://github.com/amado2k5/cookwala">GitHub</a></p>
+  </div>
+</footer>
+<script src="/assets/dryrun.js" defer></script>
+<script src="/assets/home.js" defer></script>
 </body>
 </html>

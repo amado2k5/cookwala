@@ -751,20 +751,25 @@
         "kind",
         "url"
       ],
-      "description": "Item in a registry (/v1/registry.json): anyone can list a catalog, extension, flow, provider, knowledge pack or policy pack hosted anywhere.",
+      "description": "Item in a registry (/v1/registry.json): anyone can list a catalog, recipe collection, extension, flow, provider, knowledge pack, policy or rule pack hosted anywhere. Modelled on the MCP Registry: verified namespaces, pinned versions, integrity hashes and a lifecycle status (docs/REGISTRY.md).",
       "properties": {
         "kind": {
           "enum": [
+            "advisor",
+            "benchmark",
             "catalog",
+            "device",
             "extension",
             "flow",
-            "provider",
+            "hub",
+            "kitchen",
             "knowledge",
             "policy_pack",
-            "hub",
-            "advisor",
             "program",
-            "kitchen"
+            "provider",
+            "recipe_collection",
+            "rule_pack",
+            "safety_limits"
           ]
         },
         "id": {
@@ -774,10 +779,17 @@
           "type": "string"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "pattern": "^[a-z0-9.-]+/[a-z0-9._-]+$",
+          "minLength": 3,
+          "maxLength": 200,
+          "description": "<namespace>/<name>. The namespace is a reverse-DNS domain the publisher proved control of (org.fifi-cooking/egyptian-home) or a code-host account (io.github.amado2k5/recipes)."
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "One clear sentence, 100 characters at most."
         },
         "tags": {
           "type": "array",
@@ -796,6 +808,121 @@
         },
         "addedAt": {
           "type": "string"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9A-Za-z.-]+)?$",
+          "description": "An exact version. Ranges (^1.2, ~1.2, >=1, 1.x) are rejected."
+        },
+        "status": {
+          "enum": [
+            "active",
+            "deprecated",
+            "recalled",
+            "deleted"
+          ],
+          "description": "recalled entries also appear in the recall feed; deleted entries stay listed as tombstones so ids are never reused."
+        },
+        "verification": {
+          "type": "object",
+          "required": [
+            "method",
+            "verifiedAt"
+          ],
+          "unevaluatedProperties": false,
+          "properties": {
+            "method": {
+              "enum": [
+                "dns_txt",
+                "http_well_known",
+                "github_oidc",
+                "gitlab_oidc",
+                "signature"
+              ]
+            },
+            "verifiedAt": {
+              "$ref": "common.schema.json#/$defs/DateTime"
+            },
+            "by": {
+              "type": "string",
+              "description": "Registry that verified it."
+            }
+          }
+        },
+        "repository": {
+          "type": "object",
+          "unevaluatedProperties": false,
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "source": {
+              "enum": [
+                "github",
+                "gitlab",
+                "codeberg",
+                "other"
+              ]
+            },
+            "id": {
+              "type": "string",
+              "description": "Stable id from the code host; changes if the repository is deleted and recreated (resurrection attacks)."
+            },
+            "subfolder": {
+              "type": "string"
+            }
+          }
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Hash of the published artifact; clients verify before use."
+        },
+        "icons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "src"
+            ],
+            "unevaluatedProperties": false,
+            "properties": {
+              "src": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://"
+              },
+              "mimeType": {
+                "enum": [
+                  "image/png",
+                  "image/jpeg",
+                  "image/svg+xml",
+                  "image/webp"
+                ]
+              },
+              "sizes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^([0-9]+x[0-9]+|any)$"
+                }
+              },
+              "theme": {
+                "enum": [
+                  "light",
+                  "dark"
+                ]
+              }
+            }
+          }
+        },
+        "publishedAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "coreVersion": {
+          "type": "string",
+          "description": "Cookwala Core version this entry targets."
         }
       },
       "unevaluatedProperties": false,

@@ -1,14 +1,35 @@
-# Security and safety reporting
+# Security policy
 
-Cookwala data can cause machines to heat, cut and move. Treat safety issues as security
-issues.
+Cookwala data can cause machines to heat, cut and move, so security problems can become
+physical safety problems. Treat safety issues as security issues, and report them privately.
 
-- **Recipe safety problem** (wrong temperature, missing hazard or CCP, dangerous step):
-  `POST https://cookwala.ai/v1/safety-reports` or open a private security
-  advisory on GitHub. Triage within 24 hours; a confirmed problem is recalled through the
-  changes feed.
-- **Vulnerabilities** in the specs, tools, reference hub or index (signing, auth,
-  injection, event spoofing): use GitHub's private vulnerability reporting for
-  amado2k5/cookwala. Please don't open public issues for these.
+## Report a vulnerability
 
-We follow coordinated disclosure (90 days by default, sooner when fixed).
+- Use GitHub's private vulnerability reporting on
+  [amado2k5/cookwala](https://github.com/amado2k5/cookwala/security/advisories/new).
+- Include what is affected (spec section, schema, tool, website), how to reproduce it, and
+  the impact you see.
+- We acknowledge within 3 working days and agree a disclosure date with you. The default
+  is 90 days, or sooner once a fix ships.
+
+## In scope
+
+- Ways to make a conforming executor exceed its safety limits or skip a refusal.
+- Signature, hash, key-revocation, disclosure or event-log weaknesses (`tools/cookwala_ref.py`,
+  `docs/CORE.md` section 5).
+- Prompt-injection paths through recipe text, notes or listings that the Core rules don't
+  cover (`docs/CORE.md` section 6).
+- Privacy leaks: personal data that can travel despite the Core and Humanitarian rules.
+- The cookwala.ai website and its published files.
+
+## Unsafe recipes
+
+A wrong temperature, a missing hazard or critical control point, or a dangerous step in an
+index recipe is a safety problem. Report it through GitHub's private vulnerability reporting
+(or an `IncidentReport` to `POST /v1/incidents` once the catalog service is live). We triage
+within 24 hours. Confirmed problems are withdrawn through the signed recall feed
+(`GET /v1/recalls`).
+
+## Supported versions
+
+Cookwala Core 0.2.x. Earlier drafts get no fixes.

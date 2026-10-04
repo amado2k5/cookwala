@@ -37,22 +37,7 @@ jobs:
       - name: Check humanitarian examples against the rule pack
         run: python tools/humanitarian_check.py examples/humanitarian/*.json
       - name: Assemble site
-        run: |
-          set -e
-          mkdir -p _site/v1/schemas _site/v1/vocab _site/v1/api _site/v1/recipes _site/v1/bindings
-          cp -R site/. _site/
-          cp -R schemas/. _site/v1/schemas/
-          cp schemas/context.jsonld _site/v1/context.jsonld
-          cp vocab/*.json _site/v1/vocab/
-          cp api/* _site/v1/api/
-          cp bindings/*.json _site/v1/bindings/
-          cp examples/*.cookwala.json _site/v1/recipes/
-          mkdir -p _site/v1/profiles && cp -R profiles/humanitarian profiles/core profiles/mission _site/v1/profiles/
-          cp -R conformance _site/v1/conformance
-          python tools/bundle_schemas.py _site/v1/schemas/bundle.json
-          mkdir -p _site/sim && cp -R sim/index.html sim/app.js sim/style.css sim/engine sim/city sim/country sim/world _site/sim/
-          touch _site/.nojekyll
-          find _site -type f | sort
+        run: bash tools/build_site.sh _site && find _site -type f | sort
       - if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
       - if: github.event_name != 'pull_request'

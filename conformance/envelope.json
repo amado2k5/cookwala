@@ -353,5 +353,33 @@
   "expected": {
    "choice": null
   }
+ },
+ {
+  "id": "ladder-saute-no-sensor-no-model-alone",
+  "kind": "envelope",
+  "description": "Sensor ladder for cw.op.saute; null means the step must be refused.",
+  "input": {
+   "op": "cw.op.saute",
+   "sensors": [],
+   "allowModel": false,
+   "humanPresent": false
+  },
+  "expected": {
+   "choice": null
+  }
+ },
+ {
+  "id": "ladder-saute-no-sensor-person-watches",
+  "kind": "envelope",
+  "description": "Sensor ladder for cw.op.saute; null means the step must be refused.",
+  "input": {
+   "op": "cw.op.saute",
+   "sensors": [],
+   "allowModel": false,
+   "humanPresent": true
+  },
+  "expected": {
+   "choice": "human"
+  }
  }
 ]

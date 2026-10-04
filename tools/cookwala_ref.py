@@ -16,6 +16,7 @@ CLI:
     python tools/cookwala_ref.py hash FILE
     python tools/cookwala_ref.py verify FILE --keys KEYS.json
     python tools/cookwala_ref.py chain EVENTS.json [--keys KEYS.json]
+    python tools/cookwala_ref.py dryrun RECIPE.json --device CAPABILITIES.json [--human-present] [--no-model]
 """
 import base64
 import datetime as dt
@@ -294,6 +295,39 @@ def ladder_choice(op_id, available_sensors, allow_model=True, human_present=Fals
         if rung in available_sensors: return rung
     return None
 
+# ---------------------------------------------------------------- dry run
+
+
+def dry_run(recipe, capabilities, human_present=False, allow_model=True):
+    """Decide, before cooking, whether a device can run every step of a recipe.
+
+    Returns an ExecutionStatus-like dict: state accepted (with the sensor-ladder rung chosen per
+    step) or refused (with the first blocking reason). Nothing is executed.
+    """
+    caps = capabilities.get('capabilities', {})
+    ops = {o['op'] for o in caps.get('ops', [])}
+    sensors = {s['sensor'] for s in caps.get('sensors', [])}
+    for s in caps.get('sensors', []):
+        sensors.update(s.get('visionCues', []))
+    vocab = _vocab('ops')
+    plan = []
+    for node in recipe.get('process', {}).get('nodes', []):
+        op = node['op']
+        assign = node.get('assignment', {}).get('allowed', ['any'])
+        if op not in ops:
+            if human_present and ('human' in assign or 'any' in assign):
+                plan.append({'node': node['id'], 'op': op, 'by': 'human', 'verifiedBy': 'human'}); continue
+            return {'state': 'refused', 'refusal': {'reason': 'missing_capability', 'node': node['id'], 'detail': f'device cannot perform {op} and no person is present to do it'}, 'plan': plan}
+        env = vocab.get(op, {}).get('envelope', {})
+        if env and not env.get('unattended', True) and not human_present:
+            return {'state': 'refused', 'refusal': {'reason': 'needs_human_present', 'node': node['id'], 'detail': f'{op} may not run unattended'}, 'plan': plan}
+        rung = ladder_choice(op, sensors, allow_model, human_present) if env else 'time'
+        if rung is None:
+            return {'state': 'refused', 'refusal': {'reason': 'missing_sensor_no_fallback', 'node': node['id'], 'detail': f'no way to verify {op} on this device'}, 'plan': plan}
+        plan.append({'node': node['id'], 'op': op, 'by': 'device', 'verifiedBy': 'sensor' if rung.startswith(('cw.', 'x-')) else rung, 'rung': rung})
+    return {'state': 'accepted', 'plan': plan}
+
+
 # ---------------------------------------------------------------- CLI
 
 
@@ -308,6 +342,10 @@ def main(argv):
         print(doc_hash(doc)); return 0
     if cmd == 'verify':
         ok, why = verify(doc, keys); print(why); return 0 if ok else 1
+    if cmd == 'dryrun':
+        dev = json.loads(pathlib.Path(argv[argv.index('--device') + 1]).read_text())
+        res = dry_run(doc, dev, '--human-present' in argv, '--no-model' not in argv)
+        print(json.dumps(res, indent=1, ensure_ascii=False)); return 0 if res['state'] == 'accepted' else 1
     if cmd == 'chain':
         ok, why, head = verify_chain(doc, keys if keys else None); print(why, head or ''); return 0 if ok else 1
     print(__doc__); return 2

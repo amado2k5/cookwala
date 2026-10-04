@@ -125,7 +125,8 @@ for vid, op, readings, target, alt, env_ok, tgt_ok in env_vectors:
     assert res['envelopeOk'] == env_ok and res['targetOk'] == tgt_ok, (vid, res)
     vecs.append({'id': vid, 'kind': 'envelope', 'description': f'{op} trace check' + (f' at {alt} m' if alt else ''), 'input': {'op': op, 'readings': readings, 'target': target, 'altitudeM': alt}, 'expected': res})
 for vid, op, sensors, model, human, exp in [('ladder-deep-fry-no-oil-sensor', 'cw.op.deep_fry', [], True, True, None), ('ladder-simmer-no-sensor-uses-model', 'cw.op.simmer', [], True, False, 'model'),
-                                            ('ladder-simmer-sensor', 'cw.op.simmer', ['cw.sense.liquid_temp'], True, False, 'cw.sense.liquid_temp'), ('ladder-cut-needs-vision-or-human', 'cw.op.cut', [], True, False, None)]:
+                                            ('ladder-simmer-sensor', 'cw.op.simmer', ['cw.sense.liquid_temp'], True, False, 'cw.sense.liquid_temp'), ('ladder-cut-needs-vision-or-human', 'cw.op.cut', [], True, False, None),
+                                            ('ladder-saute-no-sensor-no-model-alone', 'cw.op.saute', [], False, False, None), ('ladder-saute-no-sensor-person-watches', 'cw.op.saute', [], False, True, 'human')]:
     got = ref.ladder_choice(op, sensors, model, human)
     assert got == exp, (vid, got)
     vecs.append({'id': vid, 'kind': 'envelope', 'description': f'Sensor ladder for {op}; null means the step must be refused.', 'input': {'op': op, 'sensors': sensors, 'allowModel': model, 'humanPresent': human}, 'expected': {'choice': exp}})

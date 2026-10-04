@@ -41,6 +41,10 @@ roadmap).
 |---|---|
 | **Try it: virtual kitchen simulator** | [cookwala.ai/sim](https://cookwala.ai/sim/) · [docs/SIMULATION.md](docs/SIMULATION.md) · [findings](docs/SIM-FINDINGS.md) |
 | **Try it: country, one-year simulator** | [cookwala.ai/sim/country](https://cookwala.ai/sim/country/) · [docs/COUNTRY-SIMULATION.md](docs/COUNTRY-SIMULATION.md) |
+| **Start here** | [Quickstart (5 minutes)](docs/QUICKSTART.md) · [cookwala.ai/docs](https://cookwala.ai/docs/) · [Strategy](docs/STRATEGY.md) |
+| **Robots, ROS 2, datasets, traces** | [docs/ROBOTICS.md](docs/ROBOTICS.md) · [bindings/ros2](bindings/ros2) · `tools/execlog_export.py` |
+| **Agent-safety benchmark** | [evals/kitchen-agent-safety](evals/kitchen-agent-safety) (promptfoo) |
+| **Registry** | [docs/REGISTRY.md](docs/REGISTRY.md) |
 | **Cookwala Core 0.2 (normative)** | The small core devices implement first: [docs/CORE.md](docs/CORE.md) · [api/core.openapi.yaml](api/core.openapi.yaml) · [conformance/](conformance) |
 | **Action plan** | How Cookwala answers its critics, reviewers and partners: [docs/ACTION-PLAN.md](docs/ACTION-PLAN.md) |
 | **Humanitarian Profile (draft)** | Personal-data-free food rescue for food banks and kitchens: [docs/HUMANITARIAN-PROFILE.md](docs/HUMANITARIAN-PROFILE.md) |
