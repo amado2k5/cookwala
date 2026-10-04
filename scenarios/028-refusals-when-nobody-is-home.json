@@ -1,0 +1,110 @@
+{
+ "id": "028",
+ "slug": "refusals-when-nobody-is-home",
+ "audience": "agent_builder",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "The refusals an agent sees when nobody is home"
+ },
+ "goal": {
+  "en": "An agent planning dinner for an empty house gets needs_human_present at the first step whose envelope says unattended is false. The plan up to that step is returned, so the agent can say what could have run."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "shakshuka",
+    "deviceId": "demo-hob-robot",
+    "humanPresent": false
+   },
+   "save": "shakshuka",
+   "note": {
+    "en": "Shakshuka starts with cutting: refused at n1 with an empty plan."
+   },
+   "expect": {
+    "state": "refused",
+    "refusal.reason": "needs_human_present",
+    "refusal.node": "n1",
+    "plan.length": 0
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "molokhia",
+    "deviceId": "demo-hob-robot",
+    "humanPresent": false
+   },
+   "save": "molokhia",
+   "note": {
+    "en": "Molokhia boils and simmers the chicken first: five steps are planned, then heating a pan stops it."
+   },
+   "expect": {
+    "state": "refused",
+    "refusal.reason": "needs_human_present",
+    "refusal.node": "n6",
+    "plan.length": 5,
+    "plan[0].rung": "cw.sense.liquid_temp"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "koshari",
+    "deviceId": "demo-fryer-robot",
+    "humanPresent": false
+   },
+   "save": "koshari",
+   "note": {
+    "en": "Koshari on the fryer robot: six boiling, simmering and draining steps are fine unattended; heating the pan for the vermicelli is not."
+   },
+   "expect": {
+    "state": "refused",
+    "refusal.reason": "needs_human_present",
+    "refusal.node": "n7",
+    "plan.length": 6
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "molokhia",
+    "deviceId": "demo-hob-robot",
+    "humanPresent": true
+   },
+   "save": "molokhiaWithPerson",
+   "note": {
+    "en": "The same molokhia with a person in the house: twelve steps, all by the device."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 12
+   }
+  }
+ ],
+ "cli": [
+  "cookwala dryrun examples/shakshuka.cookwala.json --device examples/capabilities/demo-hob-robot.json",
+  "cookwala dryrun examples/molokhia.cookwala.json --device examples/capabilities/demo-hob-robot.json",
+  "cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/demo-fryer-robot.json",
+  "cookwala dryrun examples/molokhia.cookwala.json --device examples/capabilities/demo-hob-robot.json --human-present"
+ ],
+ "outcome": {
+  "en": "Your agent can explain a refusal to the household in one sentence and offer the alternative: start when someone is home. The rule is in Core section 6, item 6."
+ },
+ "tags": [
+  "refusal",
+  "needs-human-present",
+  "agent",
+  "dry-run"
+ ]
+}

@@ -1,0 +1,27 @@
+{
+ "id": "042",
+ "slug": "resume-with-the-current-seq",
+ "audience": "kitchen_operator",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "Resume a waiting run with If-Match set to the current seq"},
+ "goal": {"en": "When the device waits for a person, the person confirms by resuming. The resume carries If-Match with the seq read from the status, so two people cannot both answer the same question."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-042-resume", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-042-resume-a"}, "idempotencyKey": "ex-042-resume-key", "humanPresent": true}, "save": "started", "note": {"en": "Start a shakshuka run with a person present."}, "expect": {"state": "accepted"}},
+  {"op": "wait", "note": {"en": "The arm cuts; the run then waits for a person to heat the pan."}, "seconds": 4},
+  {"op": "getExecution", "args": {"id": "ex-042-resume"}, "save": "status", "note": {"en": "Read the status and keep its seq."}, "expect": {"state": "needs_human", "seq": 6}},
+  {"op": "resumeExecution", "args": {"id": "ex-042-resume", "seq": {"$var": "status", "path": "seq"}}, "save": "resumed", "note": {"en": "Resume with the seq just read. The hub accepts and the run continues: the person is heating the pan."}, "expect": {"state": "running", "seq": 7}},
+  {"op": "wait", "note": {"en": "One simulated minute of heating passes."}, "seconds": 2},
+  {"op": "getExecution", "args": {"id": "ex-042-resume"}, "save": "next", "note": {"en": "The next step, sautéing the onion, is again one a person performs on this device, so the run waits once more with a higher seq."}, "expect": {"state": "needs_human", "seq": 8, "humanNeeded": "a person performs cw.op.saute"}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "jq '. + {\"x-hub-human-present\": true}' examples/core/execute-request.json | curl -s -X POST http://localhost:7878/v1/executions -H 'Content-Type: application/json' -H 'Idempotency-Key: ex-2026-10-04-001-a' -d @-",
+  "curl -si http://localhost:7878/v1/executions/ex-2026-10-04-001",
+  "curl -s -X POST http://localhost:7878/v1/executions/ex-2026-10-04-001/resume -H 'If-Match: 6' -H 'Idempotency-Key: resume-0001'"
+ ],
+ "outcome": {"en": "You have resumed a run with the right precondition. Next: scenario 043 shows what happens with a stale seq."},
+ "tags": ["execution", "resume", "if-match", "needs-human"]
+}

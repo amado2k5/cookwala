@@ -1,0 +1,27 @@
+{
+ "id": "057",
+ "slug": "stop-is-never-refused-and-is-final",
+ "audience": "robot_maker",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "Stop works at every moment and a stopped run stays stopped"},
+ "goal": {"en": "Stop a waiting run, stop it again, try to resume it, then read the log: the second stop and the resume change nothing, and the log records the outcome aborted_safe."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-057-final", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-057-final-a"}, "idempotencyKey": "ex-057-final-key", "humanPresent": true}, "save": "started", "note": {"en": "Start a shakshuka run with a person present."}, "expect": {"state": "accepted"}},
+  {"op": "wait", "note": {"en": "The run reaches the first step that needs a person."}, "seconds": 4},
+  {"op": "stopExecution", "args": {"id": "ex-057-final", "reason": "test"}, "save": "stop", "note": {"en": "Stop: the state becomes stopping at once."}, "expect": {"state": "stopping", "seq": 7}},
+  {"op": "wait", "note": {"en": "The device completes the stop."}, "seconds": 1.5},
+  {"op": "stopExecution", "args": {"id": "ex-057-final"}, "save": "again", "note": {"en": "Stop again: the hub returns the final status unchanged, same seq."}, "expect": {"state": "stopped", "seq": 8}},
+  {"op": "resumeExecution", "args": {"id": "ex-057-final", "seq": 8}, "save": "resume", "note": {"en": "Resume with the current seq: a stopped run cannot be resumed, so the status comes back unchanged."}, "expect": {"state": "stopped", "seq": 8}},
+  {"op": "executionLog", "args": {"id": "ex-057-final"}, "save": "log", "note": {"en": "The log records the outcome."}, "expect": {"outcome": "aborted_safe", "kind": "ExecutionLog"}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "curl -s -X POST http://localhost:7878/v1/executions/ex-2026-10-04-001/stop -H 'Content-Type: application/json' -H 'Idempotency-Key: stop-0002' -d '{\"reason\":\"test\"}'",
+  "curl -s -X POST http://localhost:7878/v1/executions/ex-2026-10-04-001/resume -H 'If-Match: 8' -H 'Idempotency-Key: resume-0002'"
+ ],
+ "outcome": {"en": "You have exercised the end of the state machine. Next: scenario 058 reads the log fields that matter for data protection."},
+ "tags": ["execution", "stop", "state-machine"]
+}

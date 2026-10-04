@@ -1,0 +1,27 @@
+{
+ "id": "079",
+ "slug": "a-food-bank-day-from-offer-to-distribution",
+ "audience": "regulator",
+ "northStar": ["hunger", "health"],
+ "level": "beginner",
+ "title": {"en": "A food bank's day as the Cairo flow records it: offer, claim, handover, distribution"},
+ "goal": {"en": "Follow the food-bank-cairo example flow through its SMS messages, then check and validate the documents the gateway wrote from them. Nothing here is a real program; it is the example flow in the repository."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "parseSms", "args": {"text": "OFFER 80KG TOMATOES A BB1111"}, "save": "tomatoes", "note": {"en": "The supermarket's first line: tomatoes, ambient, best before 11 November."}, "expect": {"ok": true, "dateMark.dayMonth": "11-11", "findings.length": 0}},
+  {"op": "parseSms", "args": {"text": "OFFER 24KG YOGURT C 3.8C UB1211"}, "save": "yogurt", "note": {"en": "The second line: yogurt, chilled at 3.8 °C."}, "expect": {"storage": "chilled", "tempC": 3.8, "findings.length": 0}},
+  {"op": "parseSms", "args": {"text": "CLAIM 012 ALL"}, "save": "claim", "note": {"en": "The food bank claims the grouped offer."}, "expect": {"command": "CLAIM", "all": true}},
+  {"op": "parseSms", "args": {"text": "HAND 012 74 REJ 6 PACK T4.4"}, "save": "hand", "note": {"en": "At pickup 74 kg are accepted and 6 kg of tomatoes rejected for damaged packaging; the yogurt reads 4.4 °C."}, "expect": {"kgAccepted": 74.0, "kgRejected": 6.0, "reason": "packaging_damaged", "tempC": 4.4}},
+  {"op": "parseSms", "args": {"text": "DIST 410 MEALS 410 PEOPLE 96KG"}, "save": "dist", "note": {"en": "The kitchen reports the next day's distribution."}, "expect": {"meals": 410, "kg": 96.0}},
+  {"op": "humanitarianCheck", "args": {"docs": [{"profile": "0.2.0", "kind": "Offer", "id": "of-2026-11-09-012", "donor": "did:web:supermarket.example", "createdAt": "2026-11-09T17:40:00+02:00", "items": [{"lineId": "1", "name": "Tomatoes", "ingredientId": "cw.ing.tomato", "kg": 80, "storage": "ambient", "origin": "retail", "dateMark": {"kind": "best_before", "date": "2026-11-11"}, "allergens": []}, {"lineId": "2", "name": "Yogurt cups", "gtin": "6221234567890", "kg": 24, "units": 160, "storage": "chilled", "origin": "retail", "dateMark": {"kind": "use_by", "date": "2026-11-12"}, "allergens": ["milk"]}, {"lineId": "3", "name": "Bread", "kg": 30, "storage": "ambient", "origin": "retail", "dateMark": {"kind": "best_before", "date": "2026-11-10"}, "allergens": ["cereals_gluten"]}], "window": {"from": "2026-11-09T18:00:00+02:00", "to": "2026-11-10T08:00:00+02:00"}, "site": {"country": "EG", "admin1": "Cairo", "admin2": "Nasr City", "siteName": "Supermarket loading bay"}, "readings": [{"at": "2026-11-09T17:35:00+02:00", "tempC": 3.8, "method": "fridge_display", "lineId": "2"}], "needs": ["refrigerated_vehicle"], "state": "distributed", "version": 5, "note": "Sent by SMS: OFFER 80KG TOMATOES A BB1111; OFFER 24KG YOGURT C 3.8C UB1211; OFFER 30KG BREAD A BB1011. Gateway grouped them under one offer id."}], "packs": ["who-codex-basic"]}, "save": "checked", "note": {"en": "The offer the gateway wrote, checked with the basic pack: no findings."}, "expect": {"results[0].findings.length": 0}},
+  {"op": "validate", "args": {"kind": "humanitarian", "doc": {"$file": "examples/humanitarian/flows/food-bank-cairo/distribution.json"}}, "save": "dist2", "note": {"en": "The recorded distribution, with its audience groups and an empty findings list, validates."}, "expect": {"ok": true}}
+ ],
+ "cli": [
+  "cookwala sms \"OFFER 80KG TOMATOES A BB1111\"",
+  "cookwala sms \"HAND 012 74 REJ 6 PACK T4.4\"",
+  "cookwala humanitarian examples/humanitarian/flows/food-bank-cairo/*.json"
+ ],
+ "outcome": {"en": "You have read one example day end to end and know which document each message becomes. Next: scenario 075 shows the month's impact summary computed from such days."},
+ "tags": ["humanitarian", "food-bank", "flow", "sms"]
+}

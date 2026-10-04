@@ -1,0 +1,24 @@
+{
+ "id": "052",
+ "slug": "read-recalls-and-check-the-signed-example-recall",
+ "audience": "regulator",
+ "northStar": ["health"],
+ "level": "beginner",
+ "title": {"en": "Read the recall list and try to verify the example recall"},
+ "goal": {"en": "Catalogs publish signed recalls; executors poll them and refuse recalled revisions. The reference hub has none to publish. The example recall is signed, and verifying it needs the issuer's key record, which this repository does not ship."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "recalls", "save": "recalls", "note": {"en": "The reference hub publishes an empty recall list."}, "expect": {"length": 0}},
+  {"op": "verify", "args": {"doc": {"$file": "examples/core/recall.json"}, "keys": []}, "save": "v", "note": {"en": "Verify the example recall with no key records. The signature names a key id; without its record the result is unknown_key, not ok. A refusal to trust is a result."}, "expect": {"ok": false, "reason": "unknown_key"}},
+  {"op": "hash", "args": {"doc": {"$file": "examples/core/recall.json"}}, "save": "h", "note": {"en": "The content hash of the recall, computed without the signature field, is what the signature covers."}, "expect": {"hash": "sha256:690225c63501e33d8bc268203fa45cca9a23c43b717e4b2eccc2018f00770bb0"}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "curl -s http://localhost:7878/v1/recalls",
+  "cookwala verify examples/core/recall.json",
+  "cookwala hash examples/core/recall.json"
+ ],
+ "outcome": {"en": "You know where recalls come from and that verification without a key record fails safely. Next: scenario 054 verifies documents against real key records from the conformance vectors."},
+ "tags": ["recall", "signature", "verify"]
+}

@@ -1,0 +1,24 @@
+{
+ "id": "062",
+ "slug": "handover-accepted-partly-accepted-or-rejected",
+ "audience": "food_bank",
+ "northStar": ["hunger"],
+ "level": "beginner",
+ "title": {"en": "Record a handover: all accepted, partly accepted, or all rejected"},
+ "goal": {"en": "HAND names the offer, the kilograms accepted, optionally REJ with the kilograms rejected and a reason code, and a temperature. Zero accepted with REJ means the whole load was turned away."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "parseSms", "args": {"text": "HAND A7K 36 T4.6"}, "save": "full", "note": {"en": "All 36 kg accepted at 4.6 °C; no rejected line is written."}, "expect": {"ok": true, "command": "HAND", "kgAccepted": 36.0, "kgRejected": null, "tempC": 4.6}},
+  {"op": "parseSms", "args": {"text": "HAND A7K 30 REJ 6 PACK T4.6"}, "save": "partial", "note": {"en": "30 kg accepted, 6 kg rejected for damaged packaging."}, "expect": {"kgAccepted": 30.0, "kgRejected": 6.0, "reason": "packaging_damaged", "reasonCode": "PACK"}},
+  {"op": "parseSms", "args": {"text": "HAND A7K 0 REJ 18 TEMP T52"}, "save": "rejected", "note": {"en": "Nothing accepted: 18 kg of hot food measured at 52 °C is rejected for temperature."}, "expect": {"kgAccepted": 0.0, "kgRejected": 18.0, "reason": "temp_out_of_range", "tempC": 52.0}},
+  {"op": "parseSms", "args": {"text": "HAND A7K 36 REJ"}, "save": "usage", "note": {"en": "REJ without a quantity and reason: usage error."}, "expect": {"ok": false, "error": "usage"}},
+  {"op": "parseSms", "args": {"text": "HAND A7K"}, "save": "usage2", "note": {"en": "No quantity at all: usage error."}, "expect": {"ok": false, "error": "usage"}}
+ ],
+ "cli": [
+  "cookwala sms \"HAND A7K 36 T4.6\"",
+  "cookwala sms \"HAND A7K 0 REJ 18 TEMP T52\""
+ ],
+ "outcome": {"en": "You can record the three outcomes of a handover. Next: scenarios 063 and 064 list every rejection reason code."},
+ "tags": ["sms", "handover", "rejection", "humanitarian"]
+}

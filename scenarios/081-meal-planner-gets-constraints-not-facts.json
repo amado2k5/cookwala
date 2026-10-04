@@ -1,0 +1,23 @@
+{
+ "id": "081",
+ "slug": "meal-planner-gets-constraints-not-facts",
+ "audience": "agent_builder",
+ "northStar": ["robots", "health"],
+ "level": "intermediate",
+ "title": {"en": "A meal-planning agent receives eleven constraints and zero facts"},
+ "goal": {"en": "An AI planner is the role that may receive the most constraint types. Derive them and see that two facts about one household member (a medication and a schedule) collapse into one serve window with no times, no drug and no name."},
+ "docs": ["/docs/HOUSEHOLD-CONTEXT/", "/trust/", "/docs/CORE/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "planner"}, "save": "planner", "note": {"en": "Derive the planner's constraints from the example household."}, "expect": {"constraints.length": 11, "disclosed.length": 0, "withheld.length": 2, "constraints[0].type": "allergen_block", "constraints[1].type": "diet_rule", "constraints[2].type": "avoid_ingredient"}},
+  {"op": "assert", "note": {"en": "The serve window is derived from two facets at once, the medication timing and the household schedule; the agent learns a window exists, not why."}, "expect": {"planner.constraints[3].type": "serve_window", "planner.constraints[3].derivedFrom": ["cw.facet.household.health.medications", "cw.facet.household.people.schedule"]}},
+  {"op": "assert", "note": {"en": "Only two facets are withheld from a planner: the receiving rules (a grocer's business, not a planner's) and the firmware (consented, and no grant names a planner)."}, "expect": {"planner.withheld[0].facet": "cw.facet.commerce.receiving_rules", "planner.withheld[0].reason": "not_allowed_for_role", "planner.withheld[1].facet": "cw.facet.self.firmware", "planner.withheld[1].reason": "no_consent"}},
+  {"op": "deriveConstraints", "args": {"facets": [{"facet": "cw.facet.household.health.medications"}], "role": "planner"}, "save": "meds", "note": {"en": "The same medication facet alone: it yields an avoid-ingredient rule and a serve window, and the facet's free text about timing never leaves."}, "expect": {"constraints.length": 2, "constraints[0].type": "avoid_ingredient", "constraints[1].type": "serve_window", "withheld.length": 0}}
+ ],
+ "cli": [
+  "cookwala constraints examples/household/context.json --role planner",
+  "jq '.roles.planner' profiles/household/recipient-roles.json"
+ ],
+ "outcome": {"en": "Your planning agent can be built against DerivedConstraint documents only, which is also what the kitchen agent-safety benchmark expects. Next: 096 shows why recipe text is data for the same agent."},
+ "tags": ["household", "privacy", "agents", "planner"]
+}

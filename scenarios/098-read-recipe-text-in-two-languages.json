@@ -1,0 +1,23 @@
+{
+ "id": "098",
+ "slug": "read-recipe-text-in-two-languages",
+ "audience": "researcher",
+ "northStar": ["health", "hunger"],
+ "level": "beginner",
+ "title": {"en": "Read a recipe's steps in English and Arabic, exporting nothing"},
+ "goal": {"en": "Every example recipe carries its text in two languages under one process graph. List the recipes, read koshari's titles and first step in both, and confirm a second recipe follows the same shape. Nothing is written anywhere; a researcher reads."},
+ "docs": ["/docs/CORE/", "/recipes/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "listRecipes", "save": "recipes", "note": {"en": "The hub plans nine example recipes, all Egyptian home cooking."}, "expect": {"recipes.length": 9, "recipes[3]": "koshari"}},
+  {"op": "getRecipe", "args": {"id": "koshari"}, "save": "k", "note": {"en": "Koshari: one id, names and step text in en and ar, the same node ids in both."}, "expect": {"text.en.title": "Koshari", "text.ar.title": "كشري", "dish.names.en": "Koshari", "dish.cuisine": ["EG"], "text.en.steps.n1": "Bring the lentils and water to the boil."}},
+  {"op": "assert", "note": {"en": "The Arabic step for the same node n1."}, "expect": {"k.text.ar.steps.n1": "اتركي العدس والماء حتى يغليا."}},
+  {"op": "getRecipe", "args": {"id": "shakshuka"}, "save": "s", "note": {"en": "Shakshuka has the same shape; its id carries the example- prefix."}, "expect": {"id": "example-shakshuka", "text.en.title": "Shakshuka", "text.ar.title": "شكشوكة"}}
+ ],
+ "cli": [
+  "curl -s ${COOKWALA_HUB:-http://localhost:7878}/v1/tools/recipes/koshari | jq '{en: .text.en.title, ar: .text.ar.title, n1: [.text.en.steps.n1, .text.ar.steps.n1]}'",
+  "jq '.text | keys' examples/koshari.cookwala.json"
+ ],
+ "outcome": {"en": "You can study bilingual recipe text against one machine-readable process graph without touching any household or execution data. Next: 099 validates a recipe as a publisher would."},
+ "tags": ["recipes", "languages", "research"]
+}

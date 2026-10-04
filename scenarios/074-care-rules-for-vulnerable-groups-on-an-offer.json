@@ -1,0 +1,24 @@
+{
+ "id": "074",
+ "slug": "care-rules-for-vulnerable-groups-on-an-offer",
+ "audience": "food_safety_officer",
+ "northStar": ["health"],
+ "level": "beginner",
+ "title": {"en": "Care rules: which food classes are blocked for everyone, which depend on the group"},
+ "goal": {"en": "The care pack blocks raw egg, raw meat, raw fish and unpasteurized dairy for all vulnerable groups, warns about raw sprouts, and ties other rules to a named group. Three small test offers written for this scenario show the three cases."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "humanitarianCheck", "args": {"docs": [{"profile": "0.2.0", "kind": "Offer", "id": "of-test-074-egg", "donor": "did:web:example.org", "state": "offered", "items": [{"lineId": "1", "name": "Homemade mayonnaise", "kg": 4, "storage": "chilled", "allergens": [], "foodClasses": ["raw_egg"]}], "window": {"from": "2026-11-02T18:00:00+02:00", "to": "2026-11-02T21:00:00+02:00"}, "site": {"country": "EG", "admin1": "Cairo"}}], "packs": ["care-vulnerable-groups"]}, "save": "egg", "note": {"en": "A test offer of a raw-egg dish, checked with the care pack: a block finding for everyone."}, "expect": {"results[0].findings.length": 1, "results[0].findings[0].rule": "care.raw_egg", "results[0].findings[0].severity": "block"}},
+  {"op": "humanitarianCheck", "args": {"docs": [{"profile": "0.2.0", "kind": "Offer", "id": "of-test-074-egg", "donor": "did:web:example.org", "state": "offered", "items": [{"lineId": "1", "name": "Homemade mayonnaise", "kg": 4, "storage": "chilled", "allergens": [], "foodClasses": ["raw_egg"]}], "window": {"from": "2026-11-02T18:00:00+02:00", "to": "2026-11-02T21:00:00+02:00"}, "site": {"country": "EG", "admin1": "Cairo"}}], "packs": ["who-codex-basic"]}, "save": "eggBasic", "note": {"en": "The same offer with the basic pack only: no food-class rules there, no finding."}, "expect": {"results[0].findings.length": 0}},
+  {"op": "humanitarianCheck", "args": {"docs": [{"profile": "0.2.0", "kind": "Offer", "id": "of-test-074-sprouts", "donor": "did:web:example.org", "state": "offered", "items": [{"lineId": "1", "name": "Bean sprouts", "kg": 6, "storage": "chilled", "allergens": [], "foodClasses": ["raw_sprouts"]}], "window": {"from": "2026-11-02T18:00:00+02:00", "to": "2026-11-02T21:00:00+02:00"}, "site": {"country": "EG", "admin1": "Cairo"}}], "packs": ["care-vulnerable-groups"]}, "save": "sprouts", "note": {"en": "Raw sprouts: a warning, not a block."}, "expect": {"results[0].findings[0].rule": "care.raw_sprouts", "results[0].findings[0].severity": "warn"}},
+  {"op": "humanitarianCheck", "args": {"docs": [{"profile": "0.2.0", "kind": "Offer", "id": "of-test-074-fish", "donor": "did:web:example.org", "state": "offered", "items": [{"lineId": "1", "name": "Swordfish steaks", "kg": 10, "storage": "frozen", "allergens": [], "foodClasses": ["high_mercury_fish"]}], "window": {"from": "2026-11-02T18:00:00+02:00", "to": "2026-11-02T21:00:00+02:00"}, "site": {"country": "EG", "admin1": "Cairo"}}], "packs": ["care-vulnerable-groups"]}, "save": "fish", "note": {"en": "High-mercury fish: the rule names the group pregnant, and an offer names no group, so no finding here. It fires on a handover or distribution that names the group."}, "expect": {"results[0].findings.length": 0}},
+  {"op": "validate", "args": {"kind": "humanitarian", "doc": {"profile": "0.2.0", "kind": "Offer", "id": "of-test-074-egg", "donor": "did:web:example.org", "state": "offered", "items": [{"lineId": "1", "name": "Homemade mayonnaise", "kg": 4, "storage": "chilled", "allergens": [], "foodClasses": ["raw_egg"]}], "window": {"from": "2026-11-02T18:00:00+02:00", "to": "2026-11-02T21:00:00+02:00"}, "site": {"country": "EG", "admin1": "Cairo"}}}, "save": "valid", "note": {"en": "The test offer is a valid profile document."}, "expect": {"ok": true}}
+ ],
+ "cli": [
+  "cookwala humanitarian --pack profiles/humanitarian/care-vulnerable-groups.rulepack.json examples/humanitarian/flows/disaster-kitchen/offer.json",
+  "cat profiles/humanitarian/care-vulnerable-groups.rulepack.json"
+ ],
+ "outcome": {"en": "You know how a food class on an item meets a rule in a pack, and when the audience matters. Next: scenario 069 shows the school case."},
+ "tags": ["humanitarian", "care", "food-class", "audience-groups"]
+}

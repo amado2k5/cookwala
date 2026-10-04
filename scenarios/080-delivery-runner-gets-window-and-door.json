@@ -1,0 +1,22 @@
+{
+ "id": "080",
+ "slug": "delivery-runner-gets-window-and-door",
+ "audience": "developer",
+ "northStar": ["robots", "health"],
+ "level": "beginner",
+ "title": {"en": "A delivery runner receives the window and the door, nothing else"},
+ "goal": {"en": "The recipient-roles table gives the delivery role three constraint types. Derive them from the example household and see that every health, schedule and device fact is withheld with a reason."},
+ "docs": ["/docs/HOUSEHOLD-CONTEXT/", "/trust/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "delivery"}, "save": "delivery", "note": {"en": "Derive what a delivery service may receive from the twelve facets of the example household."}, "expect": {"constraints.length": 2, "constraints[0].type": "delivery_window", "constraints[1].type": "access_point", "disclosed.length": 0, "withheld.length": 11}},
+  {"op": "assert", "note": {"en": "Both constraints come from one facet, the household's receiving rules; the facet's own value (the hour, the door) is not in the answer."}, "expect": {"delivery.constraints[0].derivedFrom": ["cw.facet.commerce.receiving_rules"], "delivery.constraints[1].derivedFrom": ["cw.facet.commerce.receiving_rules"]}},
+  {"op": "assert", "note": {"en": "The child's allergy is the first withheld facet, because the role is not allowed that constraint type; the robot's firmware is withheld because no consent names a delivery service."}, "expect": {"delivery.withheld[0].facet": "cw.facet.household.health.allergies", "delivery.withheld[0].reason": "not_allowed_for_role", "delivery.withheld[9].facet": "cw.facet.self.firmware", "delivery.withheld[9].reason": "no_consent"}}
+ ],
+ "cli": [
+  "cookwala constraints examples/household/context.json --role delivery",
+  "curl -s -X POST ${COOKWALA_HUB:-http://localhost:7878}/v1/tools/constraints -H 'Content-Type: application/json' -d \"{\\\"facets\\\": $(jq .facets examples/household/context.json), \\\"role\\\": \\\"delivery\\\"}\""
+ ],
+ "outcome": {"en": "You know that a role's allow-list in profiles/household/recipient-roles.json decides what travels, and that the answer carries facet ids and reasons, never values. Next: 081 derives the richest role, the meal planner."},
+ "tags": ["household", "privacy", "delivery", "constraints"]
+}

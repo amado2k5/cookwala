@@ -1,0 +1,22 @@
+{
+ "id": "085",
+ "slug": "other-robot-learns-zones-not-schedules",
+ "audience": "robot_maker",
+ "northStar": ["robots"],
+ "level": "intermediate",
+ "title": {"en": "A second robot learns where not to move, never when people are home"},
+ "goal": {"en": "Another robot in the same home may receive movement, quiet, safe-zone, pet-storage and equipment constraints. The no-movement zone is derived from the schedule and the hallway traffic facet without revealing either. A role that is not in the roles file receives nothing."},
+ "docs": ["/docs/HOUSEHOLD-CONTEXT/", "/trust/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "other_robot"}, "save": "robot", "note": {"en": "Derive the other-robot view of the example household."}, "expect": {"constraints.length": 3, "constraints[0].type": "no_movement_zone", "constraints[1].type": "pet_safe_storage", "constraints[2].type": "equipment_available", "disclosed.length": 0, "withheld.length": 8}},
+  {"op": "assert", "note": {"en": "The no-movement zone comes from the household schedule and the observed hallway traffic; the constraint says where, not when the children come home."}, "expect": {"robot.constraints[0].derivedFrom": ["cw.facet.household.people.schedule", "cw.facet.space.environment.foot_traffic"], "robot.withheld[0].facet": "cw.facet.household.health.allergies", "robot.withheld[5].facet": "cw.facet.self.battery", "robot.withheld[5].reason": "not_allowed_for_role"}},
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "visitor_robot"}, "save": "unknown", "note": {"en": "A role name that is not in profiles/household/recipient-roles.json has an empty allow-list: the roles file is an allow-list, not a default."}, "expect": {"constraints.length": 0, "disclosed.length": 0, "withheld.length": 12}}
+ ],
+ "cli": [
+  "cookwala constraints examples/household/context.json --role other_robot",
+  "cookwala constraints examples/household/context.json --role visitor_robot"
+ ],
+ "outcome": {"en": "Two robots from different makers can share a kitchen through constraints without sharing the household's facts. Next: 086 reads the travel rules behind these answers."},
+ "tags": ["household", "privacy", "robots", "zones"]
+}

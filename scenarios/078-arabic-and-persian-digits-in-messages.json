@@ -1,0 +1,23 @@
+{
+ "id": "078",
+ "slug": "arabic-and-persian-digits-in-messages",
+ "audience": "food_bank",
+ "northStar": ["hunger"],
+ "level": "beginner",
+ "title": {"en": "Arabic-Indic and Persian digits work in every command"},
+ "goal": {"en": "Phones set to an Arabic or Persian keyboard send different digit characters. The grammar accepts them wherever a digit may appear, in quantities, temperatures, dates and counts."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "parseSms", "args": {"text": "OFFER ٣٦KG YOGURT C ٤C UB0511"}, "save": "offer", "note": {"en": "An offer with Arabic-Indic quantity and temperature."}, "expect": {"ok": true, "kg": 36.0, "tempC": 4.0, "storage": "chilled"}},
+  {"op": "parseSms", "args": {"text": "HAND A7K ٣٠ REJ ٦ PACK T4.6"}, "save": "hand", "note": {"en": "A handover with Arabic-Indic kilograms."}, "expect": {"kgAccepted": 30.0, "kgRejected": 6.0, "reason": "packaging_damaged"}},
+  {"op": "parseSms", "args": {"text": "FARM ۱۲۰KG TOMATO A HV۰۴۱۱"}, "save": "farm", "note": {"en": "A farm offer with Persian digits in the quantity and the harvest date."}, "expect": {"kg": 120.0, "harvested": "04-11", "origin": "farm"}},
+  {"op": "parseSms", "args": {"text": "DIST ٤١٠ MEALS ٤١٠ PEOPLE ٩٦KG"}, "save": "dist", "note": {"en": "A distribution with Arabic-Indic counts."}, "expect": {"meals": 410, "people": 410, "kg": 96.0}}
+ ],
+ "cli": [
+  "cookwala sms \"OFFER ٣٦KG YOGURT C ٤C UB0511\"",
+  "cookwala sms \"FARM ۱۲۰KG TOMATO A HV۰۴۱۱\""
+ ],
+ "outcome": {"en": "You know a program can run on the phones people already have, in the digits they already type. Next: scenario 002 walks through a full SMS day."},
+ "tags": ["sms", "digits", "arabic", "persian"]
+}

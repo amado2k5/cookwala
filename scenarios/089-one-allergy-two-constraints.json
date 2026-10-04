@@ -1,0 +1,23 @@
+{
+ "id": "089",
+ "slug": "one-allergy-two-constraints",
+ "audience": "dietitian",
+ "northStar": ["health"],
+ "level": "beginner",
+ "title": {"en": "One allergy becomes two constraints for a grocer and one for a planner"},
+ "goal": {"en": "The allergy facet derives to allergen_block and labeling_required. A grocer may receive both, a planner only the block, a delivery service neither. The answer names the facet id, never the allergen or the child."},
+ "docs": ["/docs/HOUSEHOLD-CONTEXT/", "/trust/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "deriveConstraints", "args": {"facets": [{"facet": "cw.facet.household.health.allergies"}], "role": "grocer"}, "save": "grocer", "note": {"en": "The allergy facet alone, for a grocer: a block and a labelling requirement."}, "expect": {"constraints.length": 2, "constraints[0].type": "allergen_block", "constraints[1].type": "labeling_required", "withheld.length": 0}},
+  {"op": "deriveConstraints", "args": {"facets": [{"facet": "cw.facet.household.health.allergies"}], "role": "planner"}, "save": "planner", "note": {"en": "For a planner: the block only; labelling is not in the planner's allow-list."}, "expect": {"constraints.length": 1, "constraints[0].type": "allergen_block"}},
+  {"op": "deriveConstraints", "args": {"facets": [{"facet": "cw.facet.household.health.allergies"}], "role": "delivery"}, "save": "delivery", "note": {"en": "For a delivery service: nothing; the facet is withheld as not allowed for the role."}, "expect": {"constraints.length": 0, "withheld.length": 1, "withheld[0].reason": "not_allowed_for_role"}},
+  {"op": "assert", "note": {"en": "derivedFrom carries the facet id. The allergen itself goes in the DerivedConstraint's value (examples/household/constraints-planner-allergen.json); the subject never does."}, "expect": {"grocer.constraints[0].derivedFrom": ["cw.facet.household.health.allergies"], "planner.constraints[0].derivedFrom": ["cw.facet.household.health.allergies"]}}
+ ],
+ "cli": [
+  "cookwala constraints examples/household/context.json --role grocer",
+  "jq '.entries[] | select(.id == \"cw.facet.household.health.allergies\") | .derivesTo' vocab/facets.json"
+ ],
+ "outcome": {"en": "You know how an allergy reaches a shop as a block and a label and reaches a planner as a block only; Core rule 6.7 then refuses any recipe that contains a blocked allergen. Next: 090 reads the public registry."},
+ "tags": ["household", "allergen", "dietitian"]
+}

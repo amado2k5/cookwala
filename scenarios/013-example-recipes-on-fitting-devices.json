@@ -1,0 +1,119 @@
+{
+ "id": "013",
+ "slug": "example-recipes-on-fitting-devices",
+ "audience": "appliance_maker",
+ "northStar": [
+  "hunger",
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Kofta on the oven, salad on the arm, koshari on the fryer robot"
+ },
+ "goal": {
+  "en": "Three recipes, each on the preset built for it: the smart oven bakes the kofta while a person prepares it, the counter arm washes and cuts the salad, and the fryer robot does all of koshari including the deep-fried onions."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "kofta-oven",
+    "deviceId": "demo-oven",
+    "humanPresent": true
+   },
+   "save": "kofta",
+   "note": {
+    "en": "Kofta in the oven: the oven bakes (verified by its oven thermometer); grating, cutting, mixing and forming are the person's."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 10,
+    "plan[0].by": "human",
+    "plan[7].node": "n8",
+    "plan[7].op": "cw.op.bake",
+    "plan[7].by": "device",
+    "plan[7].rung": "cw.sense.oven_temp"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "salata-baladi",
+    "deviceId": "demo-arm",
+    "humanPresent": true
+   },
+   "save": "salad",
+   "note": {
+    "en": "Salad on the counter arm: it washes, cuts under its camera, whisks and mixes; chilling and serving are the person's."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 9,
+    "plan[2].op": "cw.op.cut",
+    "plan[2].by": "device",
+    "plan[2].rung": "cw.sense.vision",
+    "plan[7].op": "cw.op.chill",
+    "plan[7].by": "human"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "koshari",
+    "deviceId": "demo-fryer-robot",
+    "humanPresent": true
+   },
+   "save": "koshari",
+   "note": {
+    "en": "Koshari on the robot with an oil thermometer: twenty steps by the device, the deep fry verified by the oil thermometer."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 20,
+    "plan[13].op": "cw.op.deep_fry",
+    "plan[13].by": "device",
+    "plan[13].rung": "cw.sense.oil_temp"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "kofta-oven",
+    "deviceId": "demo-oven",
+    "humanPresent": false
+   },
+   "save": "ovenAlone",
+   "note": {
+    "en": "The oven alone cannot grate an onion and nobody is there to do it: refused before heat."
+   },
+   "expect": {
+    "state": "refused",
+    "refusal.reason": "missing_capability",
+    "refusal.node": "n1"
+   }
+  }
+ ],
+ "cli": [
+  "cookwala dryrun examples/kofta-oven.cookwala.json --device examples/capabilities/demo-oven.json --human-present",
+  "cookwala dryrun examples/salata-baladi.cookwala.json --device examples/capabilities/demo-arm.json --human-present",
+  "cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/demo-fryer-robot.json --human-present",
+  "cookwala dryrun examples/kofta-oven.cookwala.json --device examples/capabilities/demo-oven.json"
+ ],
+ "outcome": {
+  "en": "Every example recipe now has a device that plans it. An appliance that covers only part of a recipe is still useful when a person is present; alone it is refused with the first missing operation named. Next: scenario 032 looks closer at the oven and its core probe."
+ },
+ "tags": [
+  "dry-run",
+  "example-recipes",
+  "oven",
+  "arm",
+  "fryer"
+ ]
+}

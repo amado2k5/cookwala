@@ -1,0 +1,25 @@
+{
+ "id": "060",
+ "slug": "farm-offer-with-a-harvest-date",
+ "audience": "farmer",
+ "northStar": ["hunger"],
+ "level": "beginner",
+ "title": {"en": "A farm offers produce by SMS with the harvest date"},
+ "goal": {"en": "FARM is an OFFER with origin farm. A harvest date HV, a best-before BB and the storage code are the whole message; the gateway records the offer and the rule packs read the origin and date later."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "parseSms", "args": {"text": "FARM 120KG TOMATO A HV0411"}, "save": "farm", "note": {"en": "A cooperative offers 120 kg of tomatoes, ambient, harvested 4 November."}, "expect": {"ok": true, "command": "OFFER", "origin": "farm", "harvested": "04-11", "kg": 120.0, "storage": "ambient", "findings.length": 0}},
+  {"op": "parseSms", "args": {"text": "FARM 120KG TOMATO A BB2411"}, "save": "bb", "note": {"en": "The same offer with a best-before date instead; this is the message recorded in the robot-kitchen example flow."}, "expect": {"dateMark.kind": "best_before", "dateMark.dayMonth": "24-11"}},
+  {"op": "parseSms", "args": {"text": "OFFER 50KG EGGS C T4C HV0311"}, "save": "eggs", "note": {"en": "A plain OFFER may also carry HV. The item words imply the food class egg, which the storage checks use."}, "expect": {"harvested": "03-11", "foodClasses": ["egg"], "tempC": 4.0, "origin": null}},
+  {"op": "parseSms", "args": {"text": "FARM 120KG TOMATO A HV3213"}, "save": "bad", "note": {"en": "Day 32 of month 13 is not a date: the gateway answers bad_date and writes nothing."}, "expect": {"ok": false, "error": "bad_date"}},
+  {"op": "humanitarianCheck", "args": {"docs": [{"profile": "0.2.0", "kind": "Offer", "id": "of-2026-11-20-rk-002", "donor": "did:web:farmcoop.example", "createdAt": "2026-11-20T05:30:00+02:00", "items": [{"lineId": "1", "name": "Tomatoes", "ingredientId": "cw.ing.tomato", "kg": 120, "storage": "ambient", "origin": "farm", "harvestedAt": "2026-11-19", "dateMark": {"kind": "best_before", "date": "2026-11-24"}, "allergens": []}], "window": {"from": "2026-11-20T06:00:00+02:00", "to": "2026-11-20T12:00:00+02:00"}, "site": {"country": "EG", "admin1": "Beheira", "siteName": "Cooperative packing shed"}, "state": "distributed", "version": 5, "note": "SMS: FARM 120KG TOMATO A BB2411"}], "packs": ["who-codex-basic"]}, "save": "checked", "note": {"en": "The recorded offer for the robot-kitchen flow, checked with the basic food-safety pack: ambient produce with a date mark in the future, no findings."}, "expect": {"results[0].id": "of-2026-11-20-rk-002", "results[0].kind": "Offer", "results[0].findings.length": 0}}
+ ],
+ "cli": [
+  "cookwala sms \"FARM 120KG TOMATO A HV0411\"",
+  "cookwala sms \"FARM 120KG TOMATO A HV3213\"",
+  "cookwala humanitarian examples/humanitarian/flows/robot-kitchen/offer.json"
+ ],
+ "outcome": {"en": "You can offer produce from a basic phone and know what the gateway records. Next: scenario 061 claims an offer."},
+ "tags": ["sms", "farm", "harvest", "humanitarian"]
+}

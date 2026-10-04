@@ -1,0 +1,23 @@
+{
+ "id": "095",
+ "slug": "validate-kitchen-and-production-run",
+ "audience": "kitchen_operator",
+ "northStar": ["hunger", "health"],
+ "level": "beginner",
+ "title": {"en": "Validate a relief kitchen and its production run"},
+ "goal": {"en": "A Kitchen document describes stations, capacity and rule packs; a ProductionRun records recipes, assignments, critical control points and an outcome (here 710 meals produced, 650 served, one CCP failure). Both examples are illustrative; no real kitchen is described. Validate and hash them."},
+ "docs": ["/docs/KITCHENS-AND-FLEETS/", "/docs/HUMANITARIAN-PROFILE/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "validate", "args": {"kind": "fleet", "doc": {"$file": "examples/fleet/kitchen-disaster.json"}}, "save": "kitchen", "note": {"en": "Validate the example Kitchen (disaster type, 350 meals per hour, five stations). The reference hub's validate checks the document against the schema file's root; this schema keeps its kinds under $defs, so today this call reports ok for any document, and `cookwala validate` (the CLI line) is the real check."}, "expect": {"ok": true}},
+  {"op": "validate", "args": {"kind": "fleet", "doc": {"$file": "examples/fleet/production-run-disaster.json"}}, "save": "run", "note": {"en": "Validate the example ProductionRun (lentil soup and rice with vermicelli for a relief program, halal, peanuts blocked)."}, "expect": {"ok": true}},
+  {"op": "hash", "args": {"doc": {"$file": "examples/fleet/production-run-disaster.json"}}, "save": "h", "note": {"en": "Hash the run: the hash is what a Humanitarian Distribution or an audit refers to."}, "expect": {"hash": "sha256:98733ccff20c4ffc3f0b330434aaf81c6e512c88492512394cacc5a7fe384567"}}
+ ],
+ "cli": [
+  "cookwala validate",
+  "cookwala hash examples/fleet/production-run-disaster.json",
+  "jq '.outcome | {mealsProduced, mealsServed, ccpFailures, kgRescuedUsed}' examples/fleet/production-run-disaster.json"
+ ],
+ "outcome": {"en": "You know the documents a kitchen keeps and how a run links to Core executions and to a Distribution. Fleet dispatch stays with Open-RMF or a vendor. Next: 096 shows the agent rule on recipe text."},
+ "tags": ["fleet", "kitchen", "production-run"]
+}

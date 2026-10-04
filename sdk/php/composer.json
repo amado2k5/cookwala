@@ -1,0 +1,17 @@
+{
+  "name": "cookwala/sdk",
+  "description": "Client for a Cookwala hub: the Core 0.2 API plus the reference tool endpoints. Open standard for cooking safely: people, kitchens and robots.",
+  "type": "library",
+  "license": "Apache-2.0",
+  "homepage": "https://cookwala.ai",
+  "require": {
+    "php": ">=7.4",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Cookwala\\": "src/"
+    }
+  },
+  "keywords": ["cooking", "robots", "food-safety", "standard", "recipes"]
+}

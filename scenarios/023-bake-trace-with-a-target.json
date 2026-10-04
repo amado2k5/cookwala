@@ -1,0 +1,168 @@
+{
+ "id": "023",
+ "slug": "bake-trace-with-a-target",
+ "audience": "appliance_maker",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "An oven trace against the bake envelope and a recipe target"
+ },
+ "goal": {
+  "en": "Baking is air at 120 to 250 degC. The kofta recipe asks for 200 plus or minus 10. The check separates leaving the band from missing the target, and treats the preheat as warm-up."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.bake",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 25
+     },
+     {
+      "t": 300,
+      "tempC": 180
+     },
+     {
+      "t": 600,
+      "tempC": 198
+     },
+     {
+      "t": 900,
+      "tempC": 203
+     }
+    ],
+    "target": {
+     "value": 200,
+     "tolerance": 10
+    }
+   },
+   "save": "ok",
+   "note": {
+    "en": "Preheat from 25, then 180, 198, 203 degC: the band is reached and the target held."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "targetOk": true,
+    "reason": "ok"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.bake",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 25
+     },
+     {
+      "t": 300,
+      "tempC": 180
+     },
+     {
+      "t": 600,
+      "tempC": 200
+     },
+     {
+      "t": 900,
+      "tempC": 215
+     }
+    ],
+    "target": {
+     "value": 200,
+     "tolerance": 10
+    }
+   },
+   "save": "overshoot",
+   "note": {
+    "en": "The oven overshoots to 215 degC: still inside the envelope, but the target was missed."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "targetOk": false,
+    "reason": "missed_target"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.bake",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 200
+     },
+     {
+      "t": 300,
+      "tempC": 115
+     },
+     {
+      "t": 600,
+      "tempC": 200
+     }
+    ]
+   },
+   "save": "doorOpen",
+   "note": {
+    "en": "The door was open for five minutes and the air fell to 115 degC: left the envelope. No target given, so targetOk is null."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "targetOk": null,
+    "reason": "left_envelope"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.bake",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 25
+     },
+     {
+      "t": 300,
+      "tempC": 60
+     },
+     {
+      "t": 600,
+      "tempC": 110
+     }
+    ]
+   },
+   "save": "cold",
+   "note": {
+    "en": "An oven that only reached 110 degC never baked."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "reason": "never_reached_envelope"
+   }
+  }
+ ],
+ "cli": [
+  "printf '[{\"t\": 0, \"tempC\": 25}, {\"t\": 30, \"tempC\": 180}, {\"t\": 60, \"tempC\": 198}, {\"t\": 90, \"tempC\": 203}]' > trace.json && cookwala envelope cw.op.bake trace.json --target 200 --tolerance 10",
+  "printf '[{\"t\": 0, \"tempC\": 25}, {\"t\": 30, \"tempC\": 180}, {\"t\": 60, \"tempC\": 200}, {\"t\": 90, \"tempC\": 215}]' > trace.json && cookwala envelope cw.op.bake trace.json --target 200 --tolerance 10",
+  "printf '[{\"t\": 0, \"tempC\": 200}, {\"t\": 30, \"tempC\": 115}, {\"t\": 60, \"tempC\": 200}]' > trace.json && cookwala envelope cw.op.bake trace.json"
+ ],
+ "outcome": {
+  "en": "You can grade an oven's log into ok, missed_target, left_envelope and never_reached_envelope, the same four words every executor uses. Next: scenario 032 plans a recipe on the oven preset."
+ },
+ "tags": [
+  "envelope",
+  "bake",
+  "oven"
+ ]
+}

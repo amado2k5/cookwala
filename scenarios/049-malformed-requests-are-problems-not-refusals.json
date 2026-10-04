@@ -1,0 +1,22 @@
+{
+ "id": "049",
+ "slug": "malformed-requests-are-problems-not-refusals",
+ "audience": "developer",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "A malformed request gets a Problem, a well-formed one gets a status"},
+ "goal": {"en": "Two different answers: a request that is not a valid ExecuteRequest is answered with application/problem+json and never reaches the device; a valid request the device will not cook gets an ExecutionStatus in state refused."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-049-missing", "recipe": "cw:cookwala.ai:example-shakshuka", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-049-missing-a"}, "idempotencyKey": "ex-049-missing-key", "humanPresent": true}, "save": "missing", "note": {"en": "Send a request without recipeHash. The answer is a Problem with title invalid-request naming the missing field."}, "expect": {"title": "invalid-request", "detail": "missing recipeHash"}},
+  {"op": "startExecution", "args": {"request": {"core": "0.1.0", "kind": "ExecuteRequest", "id": "ex-049-version", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-049-version-a"}, "idempotencyKey": "ex-049-version-key", "humanPresent": true}, "save": "version", "note": {"en": "Send a request that claims core 0.1.0. The Problem title is unsupported-version and it carries the refusal code."}, "expect": {"title": "unsupported-version", "refusal": "unsupported_version"}},
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-049-ok", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-049-ok-a"}, "idempotencyKey": "ex-049-ok-key", "humanPresent": true}, "save": "ok", "note": {"en": "A well-formed request is accepted and returns an ExecutionStatus."}, "expect": {"kind": "ExecutionStatus", "state": "accepted"}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "curl -si -X POST http://localhost:7878/v1/executions -H 'Content-Type: application/json' -H 'Idempotency-Key: bad-request-01' -d '{\"core\":\"0.2.0\",\"kind\":\"ExecuteRequest\",\"id\":\"ex-bad\"}'"
+ ],
+ "outcome": {"en": "You can tell a transport or schema error from a device refusal in your client. Next: scenario 050 covers a duplicate execution id."},
+ "tags": ["execution", "problem", "validation"]
+}

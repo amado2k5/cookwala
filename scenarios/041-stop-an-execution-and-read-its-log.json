@@ -1,0 +1,26 @@
+{
+ "id": "041",
+ "slug": "stop-an-execution-and-read-its-log",
+ "audience": "kitchen_operator",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "Stop a run and read the log it leaves behind"},
+ "goal": {"en": "Stop always works. Start a run, stop it while it waits for a person, and read the ExecutionLog: what was done, by whom it was verified, and that it carries no personal data."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-041-stop", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-041-stop-a"}, "idempotencyKey": "ex-041-stop-key", "humanPresent": true}, "save": "started", "note": {"en": "Start a shakshuka run with a person present."}, "expect": {"state": "accepted", "seq": 0}},
+  {"op": "wait", "note": {"en": "Let the arm finish the three cutting steps; the run then waits for a person to heat the pan."}, "seconds": 4},
+  {"op": "stopExecution", "args": {"id": "ex-041-stop", "reason": "service ended"}, "save": "stop", "note": {"en": "Stop with a reason. The hub answers at once with state stopping; the device cuts motion and heat locally."}, "expect": {"state": "stopping", "seq": 7}},
+  {"op": "wait", "note": {"en": "The next tick of the simulated device completes the stop."}, "seconds": 1.5},
+  {"op": "getExecution", "args": {"id": "ex-041-stop"}, "save": "status", "note": {"en": "The run is now stopped, a final state."}, "expect": {"state": "stopped", "seq": 8}},
+  {"op": "executionLog", "args": {"id": "ex-041-stop"}, "save": "log", "note": {"en": "The log exists once the run has ended. It records the three steps that ran, the device and its safety-limits pack, the outcome aborted_safe, and privacy fields that say no personal data is inside."}, "expect": {"outcome": "aborted_safe", "steps.length": 3, "device.model": "CounterArm 2", "device.safetyLimits": "cookwala-default@0.2.0", "privacy.personalData": "none"}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "curl -s -X POST http://localhost:7878/v1/executions/ex-2026-10-04-001/stop -H 'Content-Type: application/json' -H 'Idempotency-Key: stop-0001' -d '{\"reason\":\"service ended\"}'",
+  "curl -s http://localhost:7878/v1/executions/ex-2026-10-04-001/log"
+ ],
+ "outcome": {"en": "You know that a stop is answered immediately and that the log of an aborted run is as complete as the log of a served one. Next: scenario 058 looks at the privacy fields of the log."},
+ "tags": ["execution", "stop", "log"]
+}

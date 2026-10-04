@@ -1,0 +1,23 @@
+{
+ "id": "076",
+ "slug": "readings-decide-whether-a-line-may-move",
+ "audience": "insurer",
+ "northStar": ["health", "hunger"],
+ "level": "beginner",
+ "title": {"en": "Temperature readings decide: one offer passes, one is blocked"},
+ "goal": {"en": "The example offer carries readings of 4.1 °C on yogurt and 66 °C on hot rice and passes. The disaster-kitchen offer carries 52 °C on hot rice and is blocked. The same checks run on an SMS before any document exists."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "humanitarianCheck", "args": {"docs": [{"profile": "0.1.0", "kind": "Offer", "id": "of-2026-11-02-001", "donor": "did:web:greengrocer.example", "state": "offered", "version": 1, "items": [{"lineId": "1", "name": "Tomatoes", "ingredientId": "cw.ing.tomato", "kg": 120, "storage": "ambient", "dateMark": {"kind": "best_before", "date": "2026-11-04"}, "allergens": []}, {"lineId": "2", "name": "Red lentils", "ingredientId": "cw.ing.lentils_red", "kg": 200, "storage": "ambient", "dateMark": {"kind": "best_before", "date": "2027-03-01"}, "allergens": []}, {"lineId": "3", "name": "Yogurt cups", "gtin": "6221234567890", "kg": 36, "units": 240, "storage": "chilled", "dateMark": {"kind": "use_by", "date": "2026-11-05"}, "allergens": ["milk"]}, {"lineId": "4", "name": "Cooked rice trays", "kg": 18, "storage": "hot_held", "cooked": true, "cookedAt": "2026-11-02T13:30:00+02:00", "allergens": []}], "window": {"from": "2026-11-02T18:00:00+02:00", "to": "2026-11-03T08:00:00+02:00"}, "site": {"country": "EG", "admin1": "Cairo", "admin2": "Nasr City", "siteName": "Supermarket loading bay", "lat": 30.06, "lon": 31.33}, "readings": [{"at": "2026-11-02T17:55:00+02:00", "tempC": 4.1, "method": "fridge_display", "lineId": "3"}, {"at": "2026-11-02T17:55:00+02:00", "tempC": 66, "method": "probe", "lineId": "4"}], "needs": ["refrigerated_vehicle", "same_day"], "note": "Loading bay closes at 21:00; ring the bell."}], "packs": ["who-codex-basic"]}, "save": "pass", "note": {"en": "The example offer: chilled and hot-held lines both inside their limits."}, "expect": {"results[0].id": "of-2026-11-02-001", "results[0].findings.length": 0}},
+  {"op": "humanitarianCheck", "args": {"docs": [{"profile": "0.2.0", "kind": "Offer", "id": "of-2026-11-03-rel-004", "donor": "did:web:wholesaler.example", "createdAt": "2026-11-02T16:00:00+02:00", "items": [{"lineId": "1", "name": "Red lentils", "ingredientId": "cw.ing.lentils_red", "kg": 200, "storage": "ambient", "origin": "wholesale", "dateMark": {"kind": "best_before", "date": "2027-03-01"}, "allergens": []}, {"lineId": "2", "name": "Rice", "ingredientId": "cw.ing.rice_short", "kg": 150, "storage": "ambient", "origin": "wholesale", "dateMark": {"kind": "best_before", "date": "2027-06-01"}, "allergens": []}, {"lineId": "3", "name": "Cooked rice trays", "kg": 18, "storage": "hot_held", "origin": "food_service", "cooked": true, "cookedAt": "2026-11-02T13:30:00+02:00", "allergens": [], "foodClasses": ["cooked_rice"]}], "window": {"from": "2026-11-02T16:30:00+02:00", "to": "2026-11-02T22:00:00+02:00"}, "site": {"country": "EG", "admin1": "Example province", "siteName": "Wholesale depot"}, "readings": [{"at": "2026-11-02T16:25:00+02:00", "tempC": 52, "method": "probe", "lineId": "3"}], "needs": ["same_day"], "state": "distributed", "version": 5}], "packs": ["who-codex-basic"]}, "save": "block", "note": {"en": "The disaster-kitchen offer: hot rice at 52 °C, blocked."}, "expect": {"results[0].findings[0].rule": "safety.hot_hold_min", "results[0].findings[0].severity": "block"}},
+  {"op": "parseSms", "args": {"text": "OFFER 18KG COOKED RICE TRAYS H T66C"}, "save": "ok", "note": {"en": "The passing hot line as an SMS: no gateway finding."}, "expect": {"findings.length": 0}},
+  {"op": "parseSms", "args": {"text": "OFFER 36KG YOGURT C T7C"}, "save": "warm", "note": {"en": "Yogurt at 7 °C as an SMS: the gateway refuses to list it."}, "expect": {"findings": ["safety.chilled_max"]}}
+ ],
+ "cli": [
+  "cookwala humanitarian examples/humanitarian/offer.json examples/humanitarian/flows/disaster-kitchen/offer.json",
+  "cookwala sms \"OFFER 36KG YOGURT C T7C\""
+ ],
+ "outcome": {"en": "You know that a recorded reading, not a declaration, is what moves food, and where the limits are written. Next: scenario 077 pins the rule packs by hash."},
+ "tags": ["humanitarian", "cold-chain", "readings", "insurer"]
+}

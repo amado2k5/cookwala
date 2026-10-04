@@ -1,0 +1,107 @@
+{
+ "id": "010",
+ "slug": "model-estimates-allowed-or-not",
+ "audience": "researcher",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Allow or forbid model estimates and watch the rungs change"
+ },
+ "goal": {
+  "en": "A logged model estimate is a rung below a sensor and above time. Forbidding it shows which steps a robot without thermometers can still verify, and how."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "lentil-soup",
+    "deviceId": "demo-hob-robot-basic",
+    "humanPresent": true,
+    "allowModel": true
+   },
+   "save": "withModel",
+   "note": {
+    "en": "Lentil soup on the robot without thermometers, estimates allowed: heating, sauteing, boiling and simmering are verified by model."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan[3].node": "n4",
+    "plan[3].rung": "model",
+    "plan[4].rung": "model",
+    "plan[6].rung": "model",
+    "plan[9].rung": "model"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "lentil-soup",
+    "deviceId": "demo-hob-robot-basic",
+    "humanPresent": true,
+    "allowModel": false
+   },
+   "save": "noModel",
+   "note": {
+    "en": "Estimates forbidden: heating and sauteing fall to the person present; boiling, simmering and hot holding fall to time."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan[3].rung": "human",
+    "plan[4].rung": "human",
+    "plan[6].rung": "time",
+    "plan[9].rung": "time"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "lentil-soup",
+    "deviceId": "demo-hob-robot",
+    "humanPresent": true,
+    "allowModel": false
+   },
+   "save": "sensors",
+   "note": {
+    "en": "The robot with thermometers never needs the estimate: every heat step has a sensor."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan[3].rung": "cw.sense.pan_surface_temp",
+    "plan[6].rung": "cw.sense.liquid_temp",
+    "plan[9].rung": "cw.sense.core_temp"
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "Both runs on the basic robot are accepted with eleven steps; only the verification differs."
+   },
+   "expect": {
+    "withModel.plan.length": 11,
+    "noModel.plan.length": 11
+   }
+  }
+ ],
+ "cli": [
+  "cookwala dryrun examples/lentil-soup.cookwala.json --device examples/capabilities/demo-hob-robot-basic.json --human-present",
+  "cookwala dryrun examples/lentil-soup.cookwala.json --device examples/capabilities/demo-hob-robot-basic.json --human-present --no-model",
+  "cookwala dryrun examples/lentil-soup.cookwala.json --device examples/capabilities/demo-hob-robot.json --human-present --no-model"
+ ],
+ "outcome": {
+  "en": "You can measure how much of a recipe a device verifies by sensor, by estimate, by time or by a person, and compare devices on that. Next: scenario 031 compares two devices on the same recipe."
+ },
+ "tags": [
+  "allow-model",
+  "sensor-ladder",
+  "dry-run"
+ ]
+}

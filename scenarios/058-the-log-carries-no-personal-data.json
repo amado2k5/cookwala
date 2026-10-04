@@ -1,0 +1,27 @@
+{
+ "id": "058",
+ "slug": "the-log-carries-no-personal-data",
+ "audience": "researcher",
+ "northStar": ["health", "robots"],
+ "level": "beginner",
+ "title": {"en": "An execution log records steps and verification, never people"},
+ "goal": {"en": "Run part of a shakshuka with a person doing one step, then read the log: each step says who verified it, the human intervention is counted in minutes, consent is none by default and time precision is a day."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-058-log", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-058-log-a"}, "idempotencyKey": "ex-058-log-key", "humanPresent": true}, "save": "started", "note": {"en": "Start a shakshuka run with a person present."}, "expect": {"state": "accepted"}},
+  {"op": "wait", "note": {"en": "The arm cuts; the run waits for a person to heat the pan."}, "seconds": 4},
+  {"op": "getExecution", "args": {"id": "ex-058-log"}, "save": "status", "note": {"en": "Read the seq."}, "expect": {"state": "needs_human"}},
+  {"op": "resumeExecution", "args": {"id": "ex-058-log", "seq": {"$var": "status", "path": "seq"}}, "save": "resumed", "note": {"en": "The person heats the pan and confirms."}, "expect": {"state": "running"}},
+  {"op": "wait", "note": {"en": "The heating step completes; the run waits for the next human step."}, "seconds": 2},
+  {"op": "stopExecution", "args": {"id": "ex-058-log", "reason": "enough for the log"}, "save": "stop", "note": {"en": "Stop the run."}, "expect": {"state": "stopping"}},
+  {"op": "wait", "note": {"en": "The device completes the stop."}, "seconds": 1.5},
+  {"op": "executionLog", "args": {"id": "ex-058-log"}, "save": "log", "note": {"en": "Four steps ran: three verified by the vision sensor, one by the person. The human intervention appears as a kind and minutes, consent.dataset is none, privacy.personalData is none, timePrecision is day."}, "expect": {"steps.length": 4, "steps[0].verifiedBy": "sensor", "steps[3].verifiedBy": "human", "steps[3].op": "cw.op.heat", "humanInterventions.length": 1, "consent.dataset": "none", "consent.withdrawable": true, "privacy.personalData": "none", "privacy.timePrecision": "day"}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "curl -s http://localhost:7878/v1/executions/ex-2026-10-04-001/log"
+ ],
+ "outcome": {"en": "You know what a log holds and what it leaves out, which is what makes a research dataset of logs possible with consent. Next: scenario 003 shows the household side of the same principle."},
+ "tags": ["log", "privacy", "consent", "research"]
+}

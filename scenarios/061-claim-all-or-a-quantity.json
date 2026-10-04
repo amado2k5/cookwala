@@ -1,0 +1,24 @@
+{
+ "id": "061",
+ "slug": "claim-all-or-a-quantity",
+ "audience": "food_bank",
+ "northStar": ["hunger"],
+ "level": "beginner",
+ "title": {"en": "Claim an offer in full or by the kilogram"},
+ "goal": {"en": "CLAIM names the offer and either ALL or a quantity. Kilograms may be written with or without KG; anything else is a usage error and nothing is written."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "parseSms", "args": {"text": "CLAIM A7K ALL"}, "save": "all", "note": {"en": "Claim the whole offer."}, "expect": {"ok": true, "command": "CLAIM", "offer": "A7K", "all": true}},
+  {"op": "parseSms", "args": {"text": "CLAIM A7K 20"}, "save": "kg", "note": {"en": "Claim 20 kg of it."}, "expect": {"kg": 20.0, "all": null}},
+  {"op": "parseSms", "args": {"text": "CLAIM A7K 20KG"}, "save": "kgSuffix", "note": {"en": "The KG suffix is accepted too."}, "expect": {"kg": 20.0}},
+  {"op": "parseSms", "args": {"text": "CLAIM A7K"}, "save": "missing", "note": {"en": "No quantity: usage error."}, "expect": {"ok": false, "error": "usage"}},
+  {"op": "parseSms", "args": {"text": "CLAIM A7K SOME"}, "save": "word", "note": {"en": "A word where a quantity should be: usage error."}, "expect": {"ok": false, "error": "usage"}}
+ ],
+ "cli": [
+  "cookwala sms \"CLAIM A7K ALL\"",
+  "cookwala sms \"CLAIM A7K 20KG\""
+ ],
+ "outcome": {"en": "You can claim and know the two forms the gateway accepts. Next: scenario 062 records the handover."},
+ "tags": ["sms", "claim", "humanitarian"]
+}

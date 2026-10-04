@@ -1,0 +1,25 @@
+{
+ "id": "043",
+ "slug": "resume-with-a-stale-seq-is-refused-with-412",
+ "audience": "developer",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "A resume with a stale seq is answered with 412 Precondition Failed"},
+ "goal": {"en": "Changes to an execution carry If-Match with the seq the caller last saw. If the run moved on, the hub refuses with a Problem and tells the caller the current seq, and nothing changes."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-043-stale", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-043-stale-a"}, "idempotencyKey": "ex-043-stale-key", "humanPresent": true}, "save": "started", "note": {"en": "Start a shakshuka run with a person present."}, "expect": {"state": "accepted"}},
+  {"op": "wait", "note": {"en": "The arm cuts; the run waits for a person at seq 6."}, "seconds": 4},
+  {"op": "resumeExecution", "args": {"id": "ex-043-stale", "seq": 1}, "save": "stale", "note": {"en": "Resume with seq 1, a value from long ago. The answer is a Problem: title precondition-failed, and the detail names the current seq."}, "expect": {"title": "precondition-failed", "detail": "seq is 6"}},
+  {"op": "getExecution", "args": {"id": "ex-043-stale"}, "save": "status", "note": {"en": "The run did not change: still waiting at seq 6."}, "expect": {"state": "needs_human", "seq": 6}},
+  {"op": "resumeExecution", "args": {"id": "ex-043-stale", "seq": {"$var": "status", "path": "seq"}}, "save": "resumed", "note": {"en": "Resume again with the seq just read; this time the hub accepts."}, "expect": {"state": "running", "seq": 7}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "jq '. + {\"x-hub-human-present\": true}' examples/core/execute-request.json | curl -s -X POST http://localhost:7878/v1/executions -H 'Content-Type: application/json' -H 'Idempotency-Key: ex-2026-10-04-001-a' -d @-",
+  "curl -si -X POST http://localhost:7878/v1/executions/ex-2026-10-04-001/resume -H 'If-Match: 1' -H 'Idempotency-Key: resume-stale-01'"
+ ],
+ "outcome": {"en": "You have seen the 412 Problem and that a stale write is harmless. Next: scenario 044 covers idempotent retries of the start itself."},
+ "tags": ["execution", "resume", "if-match", "problem", "412"]
+}

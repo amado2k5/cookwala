@@ -1,0 +1,22 @@
+{
+ "id": "045",
+ "slug": "refused-before-heat-when-no-person-is-present",
+ "audience": "robot_maker",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "A run is refused before anything heats when no person is present"},
+ "goal": {"en": "The hub dry-runs every request against the device before accepting it. This counter arm has no hob and may not cut unattended, so a request with nobody present is refused at the first node, and the refusal says why."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "capabilities", "save": "hub", "note": {"en": "The device: three operations (cut, crack, transfer), one vision sensor, presence detection and a stop control."}, "expect": {"capabilities.ops.length": 3, "capabilities.sensors.length": 1, "safety.presenceDetection": true}},
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-045-absent", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-045-absent-a"}, "idempotencyKey": "ex-045-absent-key", "humanPresent": false}, "save": "refused", "note": {"en": "Send the request with humanPresent false. The answer is an ExecutionStatus in state refused with a reason, the node and a detail; nothing was heated or moved."}, "expect": {"state": "refused", "refusal.reason": "needs_human_present", "refusal.node": "n1", "refusal.detail": "cw.op.cut may not run unattended"}},
+  {"op": "stopExecution", "args": {"id": "ex-045-absent"}, "save": "stop", "note": {"en": "Stop is never refused, even for a run that never started: the hub returns the final status unchanged."}, "expect": {"state": "refused", "seq": 0}}
+ ],
+ "cli": [
+  "cookwala dryrun examples/shakshuka.cookwala.json --device examples/capabilities/robot-arm.json",
+  "cookwala dryrun examples/shakshuka.cookwala.json --device examples/capabilities/robot-arm.json --human-present"
+ ],
+ "outcome": {"en": "You have a refusal with reason, node and detail, which is the standard's first promise: check before heat. Next: scenarios 046 to 048 show the other refusal reasons a hub applies before the dry run."},
+ "tags": ["execution", "refusal", "needs-human-present", "dry-run"]
+}

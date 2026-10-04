@@ -284,6 +284,11 @@ class Handler(BaseHTTPRequestHandler):
             for sp in (ROOT / 'schemas').glob('*.schema.json'):
                 s = json.loads(sp.read_text()); reg = reg.with_resource(s.get('$id', sp.name), Resource.from_contents(s))
             schema = json.loads((ROOT / 'schemas' / f"{body.get('kind', 'recipe')}.schema.json").read_text())
+            doc_kind = body['doc'].get('kind') if isinstance(body['doc'], dict) else None
+            if doc_kind and doc_kind in schema.get('$defs', {}) and not schema.get('properties'):
+                schema = {'$ref': f"{schema['$id']}#/$defs/{doc_kind}"}  # container schemas: validate the named document kind (same as tools/validate_specs.py)
+            elif not schema.get('properties') and not schema.get('required'):
+                return {'ok': None, 'errors': [f"{body.get('kind')} is a container schema; the document needs a 'kind' naming one of: {', '.join(sorted(schema.get('$defs', {})))}"]}
             errs = [f"{'/'.join(map(str, e.absolute_path))}: {e.message[:160]}" for e in Draft202012Validator(schema, registry=reg).iter_errors(body['doc'])]
             return {'ok': not errs, 'errors': errs}
         if name == 'humanitarian':
@@ -302,8 +307,10 @@ class Handler(BaseHTTPRequestHandler):
         if name not in TOOLS: return self._problem(404, 'not-found', f'unknown tool {name}; see /v1 for the list')
         try:
             out = self._tool(name, self._body())
-        except (KeyError, FileNotFoundError, ValueError) as e:
+        except (KeyError, FileNotFoundError, ValueError, TypeError) as e:
             return self._problem(400, 'invalid-request', f'{type(e).__name__}: {e}')
+        except Exception as e:  # never close the socket without a problem document
+            return self._problem(500, 'tool-error', f'{type(e).__name__}: {e}')
         return self._send(200, out)
 
     def do_POST(self):

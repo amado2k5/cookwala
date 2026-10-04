@@ -1,0 +1,142 @@
+{
+ "id": "025",
+ "slug": "target-outside-envelope",
+ "audience": "recipe_publisher",
+ "northStar": [
+  "health",
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "A recipe target outside its operation's envelope is invalid whatever the readings"
+ },
+ "goal": {
+  "en": "A recipe may narrow an envelope, never widen it. A simmer at 100 degC, a deep fry at 195 degC or a bake at 110 degC fail before a single reading is looked at."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.simmer",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 90
+     }
+    ],
+    "target": {
+     "value": 100,
+     "tolerance": 2
+    }
+   },
+   "save": "simmer",
+   "note": {
+    "en": "Simmer with a target of 100 plus or minus 2: 100 is a boil."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "targetOk": false,
+    "reason": "target_outside_envelope"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.deep_fry",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 170
+     }
+    ],
+    "target": {
+     "value": 195,
+     "tolerance": 5
+    }
+   },
+   "save": "fry",
+   "note": {
+    "en": "Deep fry at 195 degC: above the 190 ceiling of the band."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "targetOk": false,
+    "reason": "target_outside_envelope"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.bake",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 200
+     }
+    ],
+    "target": {
+     "value": 110,
+     "tolerance": 5
+    }
+   },
+   "save": "bake",
+   "note": {
+    "en": "Bake at 110 degC: below the 120 floor."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "targetOk": false,
+    "reason": "target_outside_envelope"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.simmer",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 90
+     },
+     {
+      "t": 30,
+      "tempC": 94
+     }
+    ],
+    "target": {
+     "value": 94,
+     "tolerance": 3
+    }
+   },
+   "save": "fixed",
+   "note": {
+    "en": "The corrected simmer target, 94 plus or minus 3, passes with the same kind of trace."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "targetOk": true,
+    "reason": "ok"
+   }
+  }
+ ],
+ "cli": [
+  "printf '[{\"t\": 0, \"tempC\": 90}]' > trace.json && cookwala envelope cw.op.simmer trace.json --target 100 --tolerance 2",
+  "printf '[{\"t\": 0, \"tempC\": 170}]' > trace.json && cookwala envelope cw.op.deep_fry trace.json --target 195 --tolerance 5",
+  "cookwala validate   # the repository validator applies the same rule to every recipe target"
+ ],
+ "outcome": {
+  "en": "You know the rule the validator applies to every recipe: targets live inside envelopes. A publisher fixes the recipe; a device never stretches the band. Next: scenario 026 walks a ladder rung by rung."
+ },
+ "tags": [
+  "envelope",
+  "target",
+  "validation"
+ ]
+}

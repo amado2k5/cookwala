@@ -1,0 +1,22 @@
+{
+ "id": "051",
+ "slug": "report-an-incident",
+ "audience": "food_safety_officer",
+ "northStar": ["health", "robots"],
+ "level": "beginner",
+ "title": {"en": "Report an anonymous incident to a catalog"},
+ "goal": {"en": "Incident reports carry a date, a category, a severity, the operation and the safety limits that fired, and no names or ids, so every maker learns from each near miss. Send the example report and read the recall list it feeds."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "reportIncident", "args": {"doc": {"$file": "examples/core/incident.json"}}, "save": "r", "note": {"en": "Submit the example report: oil reached 201 °C while a robot waited for a delivery; the oil.max_temp limit cut the heat. The catalog answers received."}, "expect": {"received": true}},
+  {"op": "recalls", "save": "recalls", "note": {"en": "Recalls are the catalog's other door: what it publishes after reviewing incidents. The reference hub publishes none."}, "expect": {"length": 0}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "curl -s -X POST http://localhost:7878/v1/incidents -H 'Content-Type: application/json' -H 'Idempotency-Key: inc-2026-0001' -d @examples/core/incident.json",
+  "curl -s http://localhost:7878/v1/recalls"
+ ],
+ "outcome": {"en": "You have filed an incident that names no one. Next: scenario 052 reads a signed recall."},
+ "tags": ["incident", "safety", "catalog"]
+}

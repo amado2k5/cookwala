@@ -1,0 +1,23 @@
+{
+ "id": "092",
+ "slug": "conformance-claim-and-reference-report",
+ "audience": "certifier",
+ "northStar": ["robots"],
+ "level": "intermediate",
+ "title": {"en": "The hub's self-declared claim and the reference report with 101 vectors"},
+ "goal": {"en": "A hub answers GET /v1/conformance with the classes it claims and a pointer to a report. The reference hub claims executor and has no report: self-declared. The reference report (claim verifier, 12 suites, 101 vectors, all passed on 2026-10-04) is the shape a certifier reads."},
+ "docs": ["/docs/CERTIFICATION/", "/docs/CORE/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "conformance", "save": "claim", "note": {"en": "Ask the hub what it claims. report is null: a claim without a report is a self-declaration, which the note says plainly."}, "expect": {"claims": ["executor"], "report": null}},
+  {"op": "validate", "args": {"kind": "conformance", "doc": {"$file": "examples/conformance/report-reference.json"}}, "save": "report", "note": {"en": "Validate the reference ConformanceReport produced by tools/run_conformance.py. The reference hub's validate checks the document against the schema file's root; this schema keeps its kinds under $defs, so today this call reports ok for any document, and `cookwala validate` (the CLI line) is the real check."}, "expect": {"ok": true}},
+  {"op": "hash", "args": {"doc": {"$file": "examples/conformance/report-reference.json"}}, "save": "h", "note": {"en": "Hash the report; this is the value a DirectoryEntry or a registry entry points at (scenario 091)."}, "expect": {"hash": "sha256:26a02859cae03b7f04401904a9c7902d0f3559ef085c66b2b6815844d465811d"}}
+ ],
+ "cli": [
+  "curl -s ${COOKWALA_HUB:-http://localhost:7878}/v1/conformance",
+  "cookwala conformance --report report.json",
+  "jq '[.suites[].total] | add' examples/conformance/report-reference.json"
+ ],
+ "outcome": {"en": "You can tell a self-declared claim from a report, and you know a report proves behaviour on the vectors on one day, not safety in every kitchen (CERTIFICATION section 4). Next: 093 reads the operation vocabulary the vectors test."},
+ "tags": ["conformance", "certification", "report"]
+}

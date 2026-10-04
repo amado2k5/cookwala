@@ -1,0 +1,24 @@
+{
+ "id": "053",
+ "slug": "the-reference-hubs-conformance-claim",
+ "audience": "certifier",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "Read what the reference hub claims to conform to"},
+ "goal": {"en": "A device publishes its conformance claim with a pointer to a report. The reference hub claims the executor class, self-declared, with no report attached; its capability document and safety-limits pack say the same about what it is."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "conformance", "save": "claim", "note": {"en": "One claim, executor, and no report: the hub says so itself rather than implying a certification."}, "expect": {"claims.length": 1, "claims[0]": "executor", "report": null}},
+  {"op": "capabilities", "save": "caps", "note": {"en": "The capability document lists the same role and a self-declared ISO 10218-1 certification entry."}, "expect": {"roles[0]": "executor", "safety.certifications[0].selfDeclared": true}},
+  {"op": "safetyLimits", "save": "limits", "note": {"en": "The safety-limits pack is the draft default; its status field says draft and its disclaimer says makers must replace it."}, "expect": {"id": "cookwala-default", "version": "0.2.0", "status": "draft"}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "curl -s http://localhost:7878/v1/conformance",
+  "curl -s http://localhost:7878/v1/capabilities",
+  "cookwala conformance"
+ ],
+ "outcome": {"en": "You can read a claim and tell self-declaration from a report. Next: scenario 054 checks signatures, which is how a report would be trusted."},
+ "tags": ["conformance", "certification", "self-declared"]
+}

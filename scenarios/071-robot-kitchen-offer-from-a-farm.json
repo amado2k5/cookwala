@@ -1,0 +1,24 @@
+{
+ "id": "071",
+ "slug": "robot-kitchen-offer-from-a-farm",
+ "audience": "robot_maker",
+ "northStar": ["robots", "hunger"],
+ "level": "beginner",
+ "title": {"en": "A farm offer reaches a robot kitchen: from SMS to a dry run"},
+ "goal": {"en": "The robot-kitchen flow starts with a cooperative's FARM message for 120 kg of tomatoes. Parse it, check the recorded offer, then dry-run salata baladi, a tomato dish, on an example hob robot."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "parseSms", "args": {"text": "FARM 120KG TOMATO A BB2411"}, "save": "farm", "note": {"en": "The message recorded in the offer's note."}, "expect": {"origin": "farm", "kg": 120.0, "findings.length": 0}},
+  {"op": "humanitarianCheck", "args": {"docs": [{"profile": "0.2.0", "kind": "Offer", "id": "of-2026-11-20-rk-002", "donor": "did:web:farmcoop.example", "createdAt": "2026-11-20T05:30:00+02:00", "items": [{"lineId": "1", "name": "Tomatoes", "ingredientId": "cw.ing.tomato", "kg": 120, "storage": "ambient", "origin": "farm", "harvestedAt": "2026-11-19", "dateMark": {"kind": "best_before", "date": "2026-11-24"}, "allergens": []}], "window": {"from": "2026-11-20T06:00:00+02:00", "to": "2026-11-20T12:00:00+02:00"}, "site": {"country": "EG", "admin1": "Beheira", "siteName": "Cooperative packing shed"}, "state": "distributed", "version": 5, "note": "SMS: FARM 120KG TOMATO A BB2411"}], "packs": ["who-codex-basic"]}, "save": "checked", "note": {"en": "The recorded offer passes the basic pack."}, "expect": {"results[0].findings.length": 0}},
+  {"op": "validate", "args": {"kind": "humanitarian", "doc": {"$file": "examples/humanitarian/flows/robot-kitchen/offer.json"}}, "save": "valid", "note": {"en": "It validates as a profile document."}, "expect": {"ok": true}},
+  {"op": "dryRun", "args": {"recipeId": "salata-baladi", "deviceId": "demo-hob-robot", "humanPresent": true}, "save": "plan", "note": {"en": "Dry-run salata baladi on the example hob robot with a person present."}, "expect": {"state": "accepted", "plan.length": 9}}
+ ],
+ "cli": [
+  "cookwala sms \"FARM 120KG TOMATO A BB2411\"",
+  "cookwala humanitarian examples/humanitarian/flows/robot-kitchen/offer.json",
+  "cookwala dryrun examples/salata-baladi.cookwala.json --device examples/capabilities/demo-hob-robot.json --human-present"
+ ],
+ "outcome": {"en": "You have followed produce from a phone message to a plan a robot can check. Next: scenario 001 explains dry runs in depth."},
+ "tags": ["humanitarian", "robot-kitchen", "farm", "dry-run"]
+}

@@ -1,0 +1,123 @@
+{
+ "id": "034",
+ "slug": "fryer-robot-without-estimates",
+ "audience": "robot_maker",
+ "northStar": [
+  "hunger",
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "The fryer robot plans koshari with every heat step verified by a sensor"
+ },
+ "goal": {
+  "en": "With estimates forbidden, a robot that has a pan thermometer, a liquid thermometer and an oil thermometer still plans all twenty steps of koshari, none by estimate and none by a person. Then check the recipe's own frying target against the envelope."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "koshari",
+    "deviceId": "demo-fryer-robot",
+    "humanPresent": true,
+    "allowModel": false
+   },
+   "save": "plan",
+   "note": {
+    "en": "Estimates forbidden: boiling by liquid thermometer, heating by pan thermometer, deep frying by oil thermometer."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 20,
+    "plan[0].rung": "cw.sense.liquid_temp",
+    "plan[6].rung": "cw.sense.pan_surface_temp",
+    "plan[13].rung": "cw.sense.oil_temp",
+    "plan[10].rung": "cw.sense.vision"
+   }
+  },
+  {
+   "op": "getRecipe",
+   "args": {
+    "id": "koshari"
+   },
+   "save": "koshari",
+   "note": {
+    "en": "The recipe asks for oil at 175 plus or minus 10 degC and limits each batch to 130 g."
+   },
+   "expect": {
+    "process.nodes[13].op": "cw.op.deep_fry",
+    "process.nodes[13].params.target.value": 175,
+    "process.nodes[13].params.target.tolerance": 10,
+    "process.nodes[13].params.batchMaxG": 130
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.deep_fry",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 160
+     },
+     {
+      "t": 60,
+      "tempC": 172
+     },
+     {
+      "t": 120,
+      "tempC": 176
+     },
+     {
+      "t": 180,
+      "tempC": 174
+     }
+    ],
+    "target": {
+     "value": 175,
+     "tolerance": 10
+    }
+   },
+   "save": "trace",
+   "note": {
+    "en": "A trace that holds the recipe target passes the envelope and the target."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "targetOk": true,
+    "reason": "ok"
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "Twenty steps, the deep fry by the device."
+   },
+   "expect": {
+    "plan.plan[13].by": "device",
+    "plan.plan[13].verifiedBy": "sensor"
+   }
+  }
+ ],
+ "cli": [
+  "cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/demo-fryer-robot.json --human-present --no-model",
+  "curl -s http://localhost:7878/v1/tools/recipes/koshari",
+  "printf '[{\"t\": 0, \"tempC\": 160}, {\"t\": 30, \"tempC\": 172}, {\"t\": 60, \"tempC\": 176}, {\"t\": 90, \"tempC\": 174}]' > trace.json && cookwala envelope cw.op.deep_fry trace.json --target 175 --tolerance 10"
+ ],
+ "outcome": {
+  "en": "You have the sensor list a koshari robot needs to run with no estimates and no person doing a step, and the target it must hold. Next: scenario 022 shows the limit above that target."
+ },
+ "tags": [
+  "fryer",
+  "koshari",
+  "deep-fry",
+  "allow-model"
+ ]
+}

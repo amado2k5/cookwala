@@ -1,0 +1,22 @@
+{
+ "id": "084",
+ "slug": "program-and-dataset-receive-nothing",
+ "audience": "school_program",
+ "northStar": ["hunger", "health"],
+ "level": "beginner",
+ "title": {"en": "A food program and a dataset receive nothing from a home"},
+ "goal": {"en": "Two recipient roles have empty allow-lists: program (a food bank or a school) and dataset. Derive both over the example household and see twelve withheld facets and zero constraints, which is the intended result."},
+ "docs": ["/docs/HOUSEHOLD-CONTEXT/", "/trust/", "/docs/HUMANITARIAN-PROFILE/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "program"}, "save": "program", "note": {"en": "A program plans menus from its own Distribution documents and the recipes' allergen lists; it receives nothing from households."}, "expect": {"constraints.length": 0, "disclosed.length": 0, "withheld.length": 12}},
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "dataset"}, "save": "dataset", "note": {"en": "A dataset receives nothing either: there is no research export of household facets, derived or raw."}, "expect": {"constraints.length": 0, "disclosed.length": 0, "withheld.length": 12}},
+  {"op": "assert", "note": {"en": "Every withheld entry carries the reason, so an auditor can tell an empty allow-list from a missing consent."}, "expect": {"program.withheld[0].reason": "not_allowed_for_role", "program.withheld[10].facet": "cw.facet.self.firmware", "program.withheld[10].reason": "no_consent", "dataset.withheld[0].reason": "not_allowed_for_role"}}
+ ],
+ "cli": [
+  "cookwala constraints examples/household/context.json --role program",
+  "cookwala constraints examples/household/context.json --role dataset"
+ ],
+ "outcome": {"en": "A refusal is a result: a program that integrates with homes gets an empty list by design and keeps working from its own documents. Next: 085, what another robot in the same home may learn."},
+ "tags": ["household", "privacy", "program", "dataset"]
+}

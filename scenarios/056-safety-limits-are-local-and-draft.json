@@ -1,0 +1,22 @@
+{
+ "id": "056",
+ "slug": "safety-limits-are-local-and-draft",
+ "audience": "regulator",
+ "northStar": ["robots", "health"],
+ "level": "beginner",
+ "title": {"en": "Read the safety limits a device enforces locally"},
+ "goal": {"en": "Safety limits live on the device and no request can raise them. Read the draft default pack the reference hub enforces, with its disclaimer, and the device's own stop and presence features."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "safetyLimits", "save": "limits", "note": {"en": "Fourteen draft limits. The first cuts heat when frying oil passes 200 °C; each limit names its source."}, "expect": {"id": "cookwala-default", "status": "draft", "limits.length": 14, "limits[0].id": "oil.max_temp", "limits[0].max": 200, "limits[0].action": "cut_heat"}},
+  {"op": "capabilities", "save": "caps", "note": {"en": "The device declares presence detection and a stop control that works both locally and over the network."}, "expect": {"safety.presenceDetection": true, "safety.emergencyStop": "both"}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "curl -s http://localhost:7878/v1/safety-limits",
+  "cat profiles/core/safety-limits.default.json"
+ ],
+ "outcome": {"en": "You have read a limits pack and know it is a draft a maker must tighten from its own safety case. Next: scenario 053 reads the conformance claim."},
+ "tags": ["safety-limits", "local-safety", "draft"]
+}

@@ -1,0 +1,26 @@
+{
+ "id": "059",
+ "slug": "what-an-insurer-reads-after-a-run",
+ "audience": "insurer",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "What an insurer can read after a run: the log, its limits pack, and incident reports"},
+ "goal": {"en": "After a run ends, the log names the device, firmware and the exact safety-limits pack that was in force, lists safety events, and marks each step's envelope check. Incidents are reported separately and anonymously."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-059-ins", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-059-ins-a"}, "idempotencyKey": "ex-059-ins-key", "humanPresent": true}, "save": "started", "note": {"en": "Start a shakshuka run with a person present."}, "expect": {"state": "accepted"}},
+  {"op": "wait", "note": {"en": "The arm cuts; the run waits for a person."}, "seconds": 4},
+  {"op": "stopExecution", "args": {"id": "ex-059-ins", "reason": "shift change"}, "save": "stop", "note": {"en": "The run is stopped by the operator."}, "expect": {"state": "stopping"}},
+  {"op": "wait", "note": {"en": "The device completes the stop."}, "seconds": 1.5},
+  {"op": "executionLog", "args": {"id": "ex-059-ins"}, "save": "log", "note": {"en": "The log: device vendor, model and firmware, the limits pack by id and version, no safety events, every step with envelopeOk true, and the recipe hash that was cooked."}, "expect": {"device.vendor": "Example Robotics", "device.safetyLimits": "cookwala-default@0.2.0", "safetyEvents.length": 0, "steps[0].envelopeOk": true, "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "outcome": "aborted_safe"}},
+  {"op": "reportIncident", "args": {"doc": {"$file": "examples/core/incident.json"}}, "save": "inc", "note": {"en": "An incident, had there been one, goes to the catalog as an anonymous report; here the example report."}, "expect": {"received": true}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "curl -s http://localhost:7878/v1/executions/ex-2026-10-04-001/log",
+  "curl -s http://localhost:7878/v1/safety-limits"
+ ],
+ "outcome": {"en": "You know which fields of a log an actuarial model can rely on and that incidents are a separate, anonymous stream. Next: scenario 054 covers signatures."},
+ "tags": ["log", "insurance", "safety-limits", "incident"]
+}

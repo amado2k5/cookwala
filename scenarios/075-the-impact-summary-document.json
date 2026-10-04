@@ -1,0 +1,24 @@
+{
+ "id": "075",
+ "slug": "the-impact-summary-document",
+ "audience": "regulator",
+ "northStar": ["hunger"],
+ "level": "beginner",
+ "title": {"en": "The impact summary: every measure says how it was obtained"},
+ "goal": {"en": "An ImpactSummary is computed from a folder of offers, claims, handovers and distributions. Each measure carries a value, a unit, a method and a source, and the document lists what went wrong and what is unknown. Validate and hash the four example summaries."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "validate", "args": {"kind": "humanitarian", "doc": {"$file": "examples/humanitarian/flows/food-bank-cairo/impact-summary.json"}}, "save": "cairo", "note": {"en": "The Cairo food bank's November summary validates."}, "expect": {"ok": true}},
+  {"op": "hash", "args": {"doc": {"$file": "examples/humanitarian/flows/food-bank-cairo/impact-summary.json"}}, "save": "cairoHash", "note": {"en": "Its content hash: the value a regulator can quote when citing the summary."}, "expect": {"hash": "sha256:47f5488e691a103c5f8e014b78774b51d1fb9d78a460e2d7ecfa241d02889d90"}},
+  {"op": "hash", "args": {"doc": {"$file": "examples/humanitarian/flows/school-meals/impact-summary.json"}}, "save": "schoolHash", "note": {"en": "The school-meals summary."}, "expect": {"hash": "sha256:cdf3dcfe857624f606e4107fd88ceaaf0c3f6327563079b373d0348121c415bc"}},
+  {"op": "hash", "args": {"doc": {"$file": "examples/humanitarian/flows/disaster-kitchen/impact-summary.json"}}, "save": "disasterHash", "note": {"en": "The disaster-kitchen summary."}, "expect": {"hash": "sha256:7f3bace3af14214d85f8d5bcf4530acb6951a7d8b86cd6c545883c658cf013f8"}},
+  {"op": "hash", "args": {"doc": {"$file": "examples/humanitarian/flows/robot-kitchen/impact-summary.json"}}, "save": "robotHash", "note": {"en": "The robot-kitchen summary."}, "expect": {"hash": "sha256:f6661fd7b965c7f43a79f1264f5b7a98fb056cad8504606aa6dcbf7d025a3a95"}}
+ ],
+ "cli": [
+  "cookwala humanitarian --summary examples/humanitarian/flows/food-bank-cairo --org did:web:food-bank-cairo.example --from 2026-11-01 --to 2026-11-30",
+  "cookwala hash examples/humanitarian/flows/food-bank-cairo/impact-summary.json"
+ ],
+ "outcome": {"en": "You can cite a summary by hash and recompute it from the documents with the command above. Next: scenario 077 does the same for rule packs."},
+ "tags": ["humanitarian", "impact-summary", "measures", "regulator"]
+}

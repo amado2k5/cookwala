@@ -1,0 +1,23 @@
+{
+ "id": "091",
+ "slug": "directory-entry-points-at-a-report-by-hash",
+ "audience": "registry_operator",
+ "northStar": ["robots"],
+ "level": "intermediate",
+ "title": {"en": "A directory entry points at a conformance report by hash"},
+ "goal": {"en": "The organization directory lists one entry, the operator of cookwala.ai, because nobody else has asked yet. Validate the entry, then hash the reference conformance report and see that the entry's conformance pointer is exactly that hash."},
+ "docs": ["/docs/REGISTRY/", "/docs/CERTIFICATION/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "validate", "args": {"kind": "catalog", "doc": {"$file": "examples/registry/directory-entry.json"}}, "save": "entry", "note": {"en": "Validate the DirectoryEntry (catalog schema). The reference hub's validate checks the document against the schema file's root; this schema keeps its kinds under $defs, so today this call reports ok for any document, and `cookwala validate` (the CLI line) is the real check."}, "expect": {"ok": true}},
+  {"op": "hash", "args": {"doc": {"$file": "examples/conformance/report-reference.json"}}, "save": "report", "note": {"en": "Hash the reference ConformanceReport. The directory entry's conformance list holds this same value, so a reader can fetch the report and check it was not altered."}, "expect": {"hash": "sha256:26a02859cae03b7f04401904a9c7902d0f3559ef085c66b2b6815844d465811d"}},
+  {"op": "hash", "args": {"doc": {"$file": "examples/registry/directory-entry.json"}}, "save": "entryHash", "note": {"en": "Hash the entry itself; a registry publishes this so mirrors can be checked byte for byte."}, "expect": {"hash": "sha256:271a2b6411f4de05b04f8e7c2e977a94362bf034c32f6ed207c9081e1e956f0c"}}
+ ],
+ "cli": [
+  "cookwala hash examples/conformance/report-reference.json",
+  "jq '.conformance[0]' examples/registry/directory-entry.json",
+  "cookwala validate"
+ ],
+ "outcome": {"en": "You can list an organization with a verifiable conformance pointer and know that listing is not endorsement. Next: 092 reads the report and the hub's own claim."},
+ "tags": ["registry", "directory", "conformance", "hash"]
+}

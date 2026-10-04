@@ -1,0 +1,24 @@
+{
+ "id": "082",
+ "slug": "device-maker-consent-grant-and-withdrawal",
+ "audience": "appliance_maker",
+ "northStar": ["robots"],
+ "level": "intermediate",
+ "title": {"en": "A device maker sees firmware only while a consent grant stands"},
+ "goal": {"en": "Device self-state facets travel by consent. Derive the device maker's view without a grant, with the household's grant, after the grant is withdrawn, and when another role tries to use the same grant."},
+ "docs": ["/docs/HOUSEHOLD-CONTEXT/", "/trust/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "device_maker"}, "save": "none", "note": {"en": "Without consents the maker receives one derived constraint (robot runtime, from the battery facet); the firmware facet is withheld for lack of consent."}, "expect": {"constraints.length": 1, "constraints[0].type": "robot_runtime_minutes", "disclosed.length": 0, "withheld.length": 11}},
+  {"op": "assert", "note": {"en": "The withheld entry names the facet and the reason, so the maker's software can ask the owner for a grant instead of guessing."}, "expect": {"none.withheld[9].facet": "cw.facet.self.firmware", "none.withheld[9].reason": "no_consent"}},
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "device_maker", "consents": {"$file": "examples/household/context.json", "path": "consents"}}, "save": "granted", "note": {"en": "With the household's grant cg-maker-1 (scope: the self family, recipient role device_maker, purpose warranty and recalls) the firmware facet is disclosed."}, "expect": {"disclosed": ["cw.facet.self.firmware"], "withheld.length": 10, "constraints.length": 1}},
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "device_maker", "consents": [{"id": "cg-maker-1", "grantedBy": "owner", "scope": {"families": ["self"]}, "recipientRole": "device_maker", "recipient": "did:web:robots.example", "purpose": "Warranty support and recall handling for robot neo-1", "grantedAt": "2026-10-01T18:05:00+03:00", "withdrawnAt": "2026-10-03T09:00:00+03:00", "withdrawable": true}]}, "save": "withdrawn", "note": {"en": "The same grant with a withdrawnAt date no longer counts: the facet goes back to withheld."}, "expect": {"disclosed.length": 0, "withheld.length": 11, "withheld[9].reason": "no_consent"}},
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "insurer", "consents": {"$file": "examples/household/context.json", "path": "consents"}}, "save": "insurer", "note": {"en": "A grant names its recipient role. Presented for the insurer role, the maker's grant unlocks nothing."}, "expect": {"disclosed.length": 0, "constraints.length": 0, "withheld.length": 12}}
+ ],
+ "cli": [
+  "cookwala constraints examples/household/context.json --role device_maker",
+  "jq '.consents' examples/household/context.json"
+ ],
+ "outcome": {"en": "You can design a warranty or recall flow that asks for a ConsentGrant, respects its withdrawal, and never receives the household's other facts. Next: 083 shows the narrowest commercial role, the insurer."},
+ "tags": ["household", "privacy", "consent", "device-maker"]
+}

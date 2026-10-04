@@ -1,0 +1,25 @@
+{
+ "id": "044",
+ "slug": "idempotent-retry-returns-the-same-execution",
+ "audience": "agent_builder",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "Retrying a start with the same Idempotency-Key never starts a second pot"},
+ "goal": {"en": "Networks drop answers. An agent that retries POST /v1/executions with the same Idempotency-Key gets the execution already started, in its current state, instead of a second run of the same recipe."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-044-idem", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-044-idem-a"}, "idempotencyKey": "ex-044-idem-key", "humanPresent": true}, "save": "first", "note": {"en": "Start a shakshuka run with the key ex-044-idem-key."}, "expect": {"state": "accepted", "seq": 0, "id": "ex-044-idem"}},
+  {"op": "wait", "note": {"en": "The run advances to the first step that needs a person."}, "seconds": 4},
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-044-idem", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-044-idem-a"}, "idempotencyKey": "ex-044-idem-key", "humanPresent": true}, "save": "retry", "note": {"en": "Send the identical request with the identical key, as a client would after a lost answer. The hub returns the same execution at its current state, not a new one."}, "expect": {"id": "ex-044-idem", "state": "needs_human", "seq": 6}},
+  {"op": "getExecution", "args": {"id": "ex-044-idem"}, "save": "status", "note": {"en": "Reading the status confirms there is one execution and it is the one both answers described."}, "expect": {"seq": 6, "state": "needs_human"}},
+  {"op": "assert", "note": {"en": "The retry carried the plan of the original start."}, "expect": {"retry.plan.length": 13}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "jq '. + {\"x-hub-human-present\": true}' examples/core/execute-request.json | curl -s -X POST http://localhost:7878/v1/executions -H 'Content-Type: application/json' -H 'Idempotency-Key: ex-2026-10-04-001-a' -d @-",
+  "jq '. + {\"x-hub-human-present\": true}' examples/core/execute-request.json | curl -s -X POST http://localhost:7878/v1/executions -H 'Content-Type: application/json' -H 'Idempotency-Key: ex-2026-10-04-001-a' -d @-"
+ ],
+ "outcome": {"en": "You can retry a start safely. Next: scenario 050 shows what happens when the key differs but the execution id repeats."},
+ "tags": ["execution", "idempotency", "retry", "agent"]
+}

@@ -1,0 +1,21 @@
+{
+ "id": "048",
+ "slug": "refused-when-the-mandate-lacks-start-cooking",
+ "audience": "agent_builder",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "An agent whose mandate lacks the start_cooking scope is refused"},
+ "goal": {"en": "Agents act under a mandate from a person. A request that carries a mandate without the start_cooking scope is refused with mandate_scope; the same request with the scope is accepted."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-048-mandate", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-048-mandate-a", "mandate": {"principal": "household:h-42/person:p-1", "agent": "agent:planner-1", "scopes": ["plan_meals", "order_groceries"], "confirmBefore": ["irreversible", "safety_override"], "expires": "2026-10-04T23:59:00+03:00"}}, "idempotencyKey": "ex-048-mandate-key", "humanPresent": true}, "save": "refused", "note": {"en": "Send a request whose mandate allows planning meals and ordering groceries only."}, "expect": {"state": "refused", "refusal.reason": "mandate_scope", "refusal.detail": "the agent mandate lacks start_cooking"}},
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-048-ok", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-048-ok-a", "mandate": {"principal": "household:h-42/person:p-1", "agent": "agent:planner-1", "scopes": ["plan_meals", "start_cooking", "stop_cooking"], "confirmBefore": ["irreversible", "safety_override"], "expires": "2026-10-04T23:59:00+03:00"}}, "idempotencyKey": "ex-048-ok-key", "humanPresent": true}, "save": "accepted", "note": {"en": "The same request with start_cooking in the scopes is accepted."}, "expect": {"state": "accepted"}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "jq '. + {\"x-hub-human-present\": true}' examples/core/execute-request.json | curl -s -X POST http://localhost:7878/v1/executions -H 'Content-Type: application/json' -H 'Idempotency-Key: ex-2026-10-04-001-a' -d @-"
+ ],
+ "outcome": {"en": "You know a device checks the mandate before the dry run. Next: scenario 049 shows malformed requests, which are Problems rather than refusals."},
+ "tags": ["execution", "refusal", "mandate", "agent"]
+}

@@ -1,0 +1,128 @@
+{
+ "id": "039",
+ "slug": "ops-without-a-thermal-envelope",
+ "audience": "developer",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Operations without a thermal envelope: mixing, cutting, peeling"
+ },
+ "goal": {
+  "en": "Not every operation has a temperature band. Mixing has no envelope at all and is verified by time; cutting and peeling have an envelope without temperatures, with hazards and a ladder but nothing for a thermometer to check."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.mix",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 20
+     }
+    ]
+   },
+   "save": "mix",
+   "note": {
+    "en": "A trace for mixing: nothing thermal to check, so envelopeOk is true with the reason no_thermal_envelope."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "targetOk": null,
+    "reason": "no_thermal_envelope"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.cut",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 20
+     }
+    ]
+   },
+   "save": "cut",
+   "note": {
+    "en": "The same for cutting, which has an envelope but no temperature band."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "reason": "no_thermal_envelope"
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.mix",
+    "sensors": [],
+    "allowModel": false,
+    "humanPresent": false
+   },
+   "save": "mixRung",
+   "note": {
+    "en": "Mixing has no ladder in the vocabulary; the default is time."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.peel",
+    "sensors": [],
+    "allowModel": true,
+    "humanPresent": false
+   },
+   "save": "peelRung",
+   "note": {
+    "en": "Peeling has a ladder (vision, then a person) and no time rung: alone, null."
+   }
+  },
+  {
+   "op": "getOps",
+   "save": "ops",
+   "note": {
+    "en": "In the vocabulary: mix has no envelope; peel has one that says unattended is false and names the cut hazard."
+   },
+   "expect": {
+    "entries[11].id": "cw.op.mix",
+    "entries[11].envelope": null,
+    "entries[5].id": "cw.op.peel",
+    "entries[5].envelope.unattended": false,
+    "entries[5].envelope.hazards[0]": "cw.hz.cut"
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "Time for mixing, nothing for peeling alone."
+   },
+   "expect": {
+    "mixRung": "time",
+    "peelRung": null
+   }
+  }
+ ],
+ "cli": [
+  "printf '[{\"t\": 0, \"tempC\": 20}]' > trace.json && cookwala envelope cw.op.mix trace.json",
+  "curl -s -X POST http://localhost:7878/v1/tools/ladder -H 'Content-Type: application/json' -d '{\"op\": \"cw.op.mix\", \"sensors\": [], \"allowModel\": false, \"humanPresent\": false}'",
+  "curl -s -X POST http://localhost:7878/v1/tools/ladder -H 'Content-Type: application/json' -d '{\"op\": \"cw.op.peel\", \"sensors\": [], \"allowModel\": true, \"humanPresent\": false}'"
+ ],
+ "outcome": {
+  "en": "You know the three shapes an operation can take: a thermal envelope, an envelope with hazards and a ladder but no band, or no envelope at all, and how each behaves in the two checks."
+ },
+ "tags": [
+  "vocabulary",
+  "envelope",
+  "sensor-ladder"
+ ]
+}

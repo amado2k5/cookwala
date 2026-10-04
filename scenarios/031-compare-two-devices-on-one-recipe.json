@@ -1,0 +1,96 @@
+{
+ "id": "031",
+ "slug": "compare-two-devices-on-one-recipe",
+ "audience": "developer",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Compare two devices on the same recipe: same plan length, different rungs"
+ },
+ "goal": {
+  "en": "Two kitchen robots with the same operations and different sensors both plan lentil soup. The plans have the same eleven steps; the verification column is where they differ."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "lentil-soup",
+    "deviceId": "demo-hob-robot-basic",
+    "humanPresent": true
+   },
+   "save": "basic",
+   "note": {
+    "en": "Without thermometers: heating, boiling and hot holding are logged estimates."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 11,
+    "plan[3].rung": "model",
+    "plan[5].rung": "model",
+    "plan[9].rung": "model"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "lentil-soup",
+    "deviceId": "demo-hob-robot",
+    "humanPresent": true
+   },
+   "save": "thermometers",
+   "note": {
+    "en": "With thermometers: pan surface, liquid and core temperature verify the same three steps."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 11,
+    "plan[3].rung": "cw.sense.pan_surface_temp",
+    "plan[5].rung": "cw.sense.liquid_temp",
+    "plan[9].rung": "cw.sense.core_temp"
+   }
+  },
+  {
+   "op": "getDevices",
+   "save": "devices",
+   "note": {
+    "en": "The difference is four sensors in the capability documents."
+   },
+   "expect": {
+    "devices.demo-hob-robot.capabilities.sensors.length": 5,
+    "devices.demo-hob-robot-basic.capabilities.sensors.length": 1
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "Both robots cut the vegetables under their camera; the knife step is identical."
+   },
+   "expect": {
+    "basic.plan[0].rung": "cw.sense.vision",
+    "thermometers.plan[0].rung": "cw.sense.vision"
+   }
+  }
+ ],
+ "cli": [
+  "cookwala dryrun examples/lentil-soup.cookwala.json --device examples/capabilities/demo-hob-robot-basic.json --human-present",
+  "cookwala dryrun examples/lentil-soup.cookwala.json --device examples/capabilities/demo-hob-robot.json --human-present",
+  "curl -s http://localhost:7878/v1/tools/devices"
+ ],
+ "outcome": {
+  "en": "You can diff two devices by the rung each step gets, which is a fair way to compare products: not what they accept, but what they verify. Next: scenario 010 does the same with estimates forbidden."
+ },
+ "tags": [
+  "dry-run",
+  "compare",
+  "sensors"
+ ]
+}

@@ -1,0 +1,22 @@
+{
+ "id": "083",
+ "slug": "insurer-receives-fault-summary-only",
+ "audience": "insurer",
+ "northStar": ["robots"],
+ "level": "intermediate",
+ "title": {"en": "An insurer receives a device fault summary and nothing about the home"},
+ "goal": {"en": "The insurer role may receive one constraint type, a summary of device faults by category, and only when the household names an insurer. The example household has no fault facet, so the insurer receives an empty list; a fault facet alone shows what the summary is derived from."},
+ "docs": ["/docs/HOUSEHOLD-CONTEXT/", "/trust/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "insurer"}, "save": "insurer", "note": {"en": "Over the example household an insurer receives no constraints; every one of the twelve facets is withheld with a reason."}, "expect": {"constraints.length": 0, "disclosed.length": 0, "withheld.length": 12}},
+  {"op": "assert", "note": {"en": "Health facets are withheld as not allowed for the role; the firmware facet as not consented. No reason ever says what the value was."}, "expect": {"insurer.withheld[0].facet": "cw.facet.household.health.allergies", "insurer.withheld[0].reason": "not_allowed_for_role", "insurer.withheld[2].facet": "cw.facet.household.health.medications", "insurer.withheld[2].reason": "not_allowed_for_role", "insurer.withheld[10].reason": "no_consent"}},
+  {"op": "deriveConstraints", "args": {"facets": [{"facet": "cw.facet.devices.issues"}], "role": "insurer"}, "save": "faults", "note": {"en": "A device-issues facet on its own derives the one type an insurer may receive: counts of faults by category, no times, no household facts."}, "expect": {"constraints.length": 1, "constraints[0].type": "device_fault_summary", "constraints[0].derivedFrom": ["cw.facet.devices.issues"]}}
+ ],
+ "cli": [
+  "cookwala constraints examples/household/context.json --role insurer",
+  "jq '.roles.insurer' profiles/household/recipient-roles.json"
+ ],
+ "outcome": {"en": "You know the exact scope of what an insurer can be offered under this profile, and that RFC-0001 lists the role as the first to be removed if a privacy review objects. Next: 084, two roles that receive nothing."},
+ "tags": ["household", "privacy", "insurer"]
+}

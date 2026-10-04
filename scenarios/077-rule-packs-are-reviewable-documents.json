@@ -1,0 +1,23 @@
+{
+ "id": "077",
+ "slug": "rule-packs-are-reviewable-documents",
+ "audience": "certifier",
+ "northStar": ["health", "hunger"],
+ "level": "beginner",
+ "title": {"en": "Rule packs are documents: validate them, hash them, apply one"},
+ "goal": {"en": "A rule pack is a Humanitarian Profile document with an id, a version, a status and reviews. A certifier can validate it, pin it by content hash and see a rule fire on a recorded offer."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "validate", "args": {"kind": "humanitarian", "doc": {"$file": "profiles/humanitarian/who-codex-basic.rulepack.json"}}, "save": "basic", "note": {"en": "The basic WHO/Codex pack validates as a profile document."}, "expect": {"ok": true}},
+  {"op": "hash", "args": {"doc": {"$file": "profiles/humanitarian/who-codex-basic.rulepack.json"}}, "save": "basicHash", "note": {"en": "Its content hash."}, "expect": {"hash": "sha256:9226d6a0d47eed6d7d61d1a5e8461aa60650c7681c05db2499cdd58e9f313553"}},
+  {"op": "hash", "args": {"doc": {"$file": "profiles/humanitarian/care-vulnerable-groups.rulepack.json"}}, "save": "careHash", "note": {"en": "The care pack's content hash."}, "expect": {"hash": "sha256:d1bed3453cd715c0a074f2a1c48c7fd2cf7d026f80fd7091b83796d798fdf42e"}},
+  {"op": "humanitarianCheck", "args": {"docs": [{"profile": "0.2.0", "kind": "Offer", "id": "of-2026-11-03-rel-004", "donor": "did:web:wholesaler.example", "createdAt": "2026-11-02T16:00:00+02:00", "items": [{"lineId": "1", "name": "Red lentils", "ingredientId": "cw.ing.lentils_red", "kg": 200, "storage": "ambient", "origin": "wholesale", "dateMark": {"kind": "best_before", "date": "2027-03-01"}, "allergens": []}, {"lineId": "2", "name": "Rice", "ingredientId": "cw.ing.rice_short", "kg": 150, "storage": "ambient", "origin": "wholesale", "dateMark": {"kind": "best_before", "date": "2027-06-01"}, "allergens": []}, {"lineId": "3", "name": "Cooked rice trays", "kg": 18, "storage": "hot_held", "origin": "food_service", "cooked": true, "cookedAt": "2026-11-02T13:30:00+02:00", "allergens": [], "foodClasses": ["cooked_rice"]}], "window": {"from": "2026-11-02T16:30:00+02:00", "to": "2026-11-02T22:00:00+02:00"}, "site": {"country": "EG", "admin1": "Example province", "siteName": "Wholesale depot"}, "readings": [{"at": "2026-11-02T16:25:00+02:00", "tempC": 52, "method": "probe", "lineId": "3"}], "needs": ["same_day"], "state": "distributed", "version": 5}], "packs": ["who-codex-basic"]}, "save": "applied", "note": {"en": "The basic pack applied to the disaster-kitchen offer: one block finding."}, "expect": {"results[0].findings.length": 1, "results[0].findings[0].rule": "safety.hot_hold_min"}}
+ ],
+ "cli": [
+  "cookwala hash profiles/humanitarian/who-codex-basic.rulepack.json",
+  "cookwala humanitarian --pack profiles/humanitarian/who-codex-basic.rulepack.json examples/humanitarian/flows/disaster-kitchen/offer.json"
+ ],
+ "outcome": {"en": "You can cite the exact pack a finding came from. Next: scenario 053 reads a device's conformance claim, the other kind of self-declaration."},
+ "tags": ["humanitarian", "rule-pack", "hash", "certifier"]
+}

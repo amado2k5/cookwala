@@ -1,0 +1,24 @@
+{
+ "id": "047",
+ "slug": "refused-when-the-recipe-hash-does-not-match",
+ "audience": "recipe_publisher",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "A request whose recipeHash differs from the hub's copy is refused"},
+ "goal": {"en": "Every request names the exact recipe revision by its hash. Hash the recipe the hub holds, send a request with a different hash and see the refusal, then send the right hash."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "getRecipe", "args": {"id": "shakshuka"}, "save": "recipe", "note": {"en": "Fetch the shakshuka recipe the hub holds."}, "expect": {"id": "example-shakshuka"}},
+  {"op": "hash", "args": {"doc": {"$var": "recipe"}}, "save": "h", "note": {"en": "Hash it: sha256 over RFC 8785 canonical JSON, excluding the hash and signature fields. This is the value a request must carry."}, "expect": {"hash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841"}},
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-047-hash", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-047-hash-a"}, "idempotencyKey": "ex-047-hash-key", "humanPresent": true}, "save": "refused", "note": {"en": "Send a request with a hash of all zeros. The hub refuses with recipe_hash_mismatch and tells you which hash it holds."}, "expect": {"state": "refused", "refusal.reason": "recipe_hash_mismatch", "refusal.detail": "this hub holds sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841"}},
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-047-ok", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-047-ok-a"}, "idempotencyKey": "ex-047-ok-key", "humanPresent": true}, "save": "accepted", "note": {"en": "The same request with the right hash is accepted."}, "expect": {"state": "accepted"}}
+ ],
+ "cli": [
+  "cookwala hash examples/shakshuka.cookwala.json",
+  "cookwala hub --recipes examples --speed 200",
+  "jq '. + {\"x-hub-human-present\": true}' examples/core/execute-request.json | curl -s -X POST http://localhost:7878/v1/executions -H 'Content-Type: application/json' -H 'Idempotency-Key: ex-2026-10-04-001-a' -d @-"
+ ],
+ "outcome": {"en": "You can compute the hash a request needs and have seen that a stale or edited recipe is refused. Next: scenario 055 compares a hash with the field inside a recipe file."},
+ "tags": ["execution", "refusal", "hash", "recipe"]
+}

@@ -1,0 +1,111 @@
+{
+ "id": "030",
+ "slug": "refusal-missing-sensor-no-fallback",
+ "audience": "robot_maker",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "missing_sensor_no_fallback: the one refusal a person present cannot lift"
+ },
+ "goal": {
+  "en": "Deep frying has a single rung, an oil thermometer. A robot that lists the operation but lacks the sensor is refused with a person present, with or without estimates; a robot that does not list the operation hands the frying to the person."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "koshari",
+    "deviceId": "demo-hob-robot-basic",
+    "humanPresent": true
+   },
+   "save": "basic",
+   "note": {
+    "en": "The basic hob robot lists deep_fry but has no oil thermometer: thirteen steps are planned, then refused at n14."
+   },
+   "expect": {
+    "state": "refused",
+    "refusal.reason": "missing_sensor_no_fallback",
+    "refusal.node": "n14",
+    "refusal.detail": "no way to verify cw.op.deep_fry on this device",
+    "plan.length": 13
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "koshari",
+    "deviceId": "demo-hob-robot-basic",
+    "humanPresent": true,
+    "allowModel": false
+   },
+   "save": "basicNoModel",
+   "note": {
+    "en": "Forbidding estimates changes nothing here: a model was never a rung for deep frying."
+   },
+   "expect": {
+    "state": "refused",
+    "refusal.reason": "missing_sensor_no_fallback",
+    "refusal.node": "n14"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "koshari",
+    "deviceId": "demo-hob-robot",
+    "humanPresent": true
+   },
+   "save": "thermometers",
+   "note": {
+    "en": "The hob robot with thermometers does not list deep_fry at all, so the person fries the onions and the rest is the robot's."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 20,
+    "plan[13].op": "cw.op.deep_fry",
+    "plan[13].by": "human"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "koshari",
+    "deviceId": "demo-fryer-robot",
+    "humanPresent": true
+   },
+   "save": "fryer",
+   "note": {
+    "en": "The fryer robot has the sensor: the device fries, verified by the oil thermometer."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan[13].by": "device",
+    "plan[13].rung": "cw.sense.oil_temp"
+   }
+  }
+ ],
+ "cli": [
+  "cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/demo-hob-robot-basic.json --human-present",
+  "cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/demo-hob-robot-basic.json --human-present --no-model",
+  "cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/demo-hob-robot.json --human-present",
+  "cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/demo-fryer-robot.json --human-present"
+ ],
+ "outcome": {
+  "en": "You know the difference between claiming an operation and being able to verify it, and that a capability document should not list deep_fry without an oil thermometer. Next: scenario 034 runs the fryer robot with estimates forbidden."
+ },
+ "tags": [
+  "refusal",
+  "missing-sensor",
+  "deep-fry",
+  "dry-run"
+ ]
+}

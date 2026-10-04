@@ -1,0 +1,22 @@
+{
+ "id": "069",
+ "slug": "school-offer-with-whole-nuts",
+ "audience": "school_program",
+ "northStar": ["health", "hunger"],
+ "level": "beginner",
+ "title": {"en": "A school offer that includes whole nuts: the audience decides"},
+ "goal": {"en": "The school-meals flow records bread and whole mixed nuts. The nut rules in the school and care packs are tied to the audience group children under five, which the handover and distribution name, not the offer, so checking the offer alone finds nothing."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "humanitarianCheck", "args": {"docs": [{"profile": "0.2.0", "kind": "Offer", "id": "of-2026-11-16-sch-001", "donor": "did:web:bakery.example", "createdAt": "2026-11-16T06:30:00+02:00", "items": [{"lineId": "1", "name": "Whole-wheat bread", "kg": 40, "storage": "ambient", "origin": "food_service", "dateMark": {"kind": "best_before", "date": "2026-11-17"}, "allergens": ["cereals_gluten"]}, {"lineId": "2", "name": "Mixed nuts (whole)", "kg": 5, "storage": "ambient", "origin": "retail", "dateMark": {"kind": "best_before", "date": "2027-02-01"}, "allergens": ["tree_nuts"], "foodClasses": ["whole_nuts"]}], "window": {"from": "2026-11-16T07:00:00+02:00", "to": "2026-11-16T10:00:00+02:00"}, "site": {"country": "EG", "admin1": "Giza", "siteName": "Bakery back door"}, "state": "distributed", "version": 4}], "packs": ["school-meals-basic"]}, "save": "school", "note": {"en": "The school pack on the offer: no finding, because an offer names no audience."}, "expect": {"results[0].id": "of-2026-11-16-sch-001", "results[0].findings.length": 0}},
+  {"op": "humanitarianCheck", "args": {"docs": [{"profile": "0.2.0", "kind": "Offer", "id": "of-2026-11-16-sch-001", "donor": "did:web:bakery.example", "createdAt": "2026-11-16T06:30:00+02:00", "items": [{"lineId": "1", "name": "Whole-wheat bread", "kg": 40, "storage": "ambient", "origin": "food_service", "dateMark": {"kind": "best_before", "date": "2026-11-17"}, "allergens": ["cereals_gluten"]}, {"lineId": "2", "name": "Mixed nuts (whole)", "kg": 5, "storage": "ambient", "origin": "retail", "dateMark": {"kind": "best_before", "date": "2027-02-01"}, "allergens": ["tree_nuts"], "foodClasses": ["whole_nuts"]}], "window": {"from": "2026-11-16T07:00:00+02:00", "to": "2026-11-16T10:00:00+02:00"}, "site": {"country": "EG", "admin1": "Giza", "siteName": "Bakery back door"}, "state": "distributed", "version": 4}], "packs": ["care-vulnerable-groups"]}, "save": "care", "note": {"en": "The care pack on the offer: the same."}, "expect": {"results[0].findings.length": 0}},
+  {"op": "validate", "args": {"kind": "humanitarian", "doc": {"$file": "examples/humanitarian/flows/school-meals/handover-1.json"}}, "save": "handover", "note": {"en": "The recorded handover names the groups children and children_under_5 and declares the two nut findings; it validates."}, "expect": {"ok": true}},
+  {"op": "hash", "args": {"doc": {"$file": "examples/humanitarian/flows/school-meals/handover-1.json"}}, "save": "h", "note": {"en": "The handover's content hash, the value a program would pin in its records."}, "expect": {"hash": "sha256:c65ab78eecd80f2b712f5e1ff94fb18f58fe237956c1265a5c36c13193c70054"}}
+ ],
+ "cli": [
+  "cookwala humanitarian --pack profiles/humanitarian/school-meals-basic.rulepack.json examples/humanitarian/flows/school-meals/*.json"
+ ],
+ "outcome": {"en": "You know that care rules follow the people served, not the food alone. Next: scenario 074 shows the care rules that apply to everyone."},
+ "tags": ["humanitarian", "school-meals", "audience-groups", "rule-pack"]
+}

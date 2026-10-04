@@ -1,0 +1,106 @@
+{
+ "id": "008",
+ "slug": "validate-a-document-and-see-errors",
+ "audience": "recipe_publisher",
+ "northStar": [
+  "health"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Validate documents against the schemas and read the errors for a broken one"
+ },
+ "goal": {
+  "en": "Every Cookwala document kind has a JSON Schema. The validate tool returns ok or a list of errors with the path of each one, so a publisher can fix a recipe before it reaches any device."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub",
+  "repo"
+ ],
+ "steps": [
+  {
+   "op": "validate",
+   "args": {
+    "kind": "recipe",
+    "doc": {
+     "$file": "examples/shakshuka.cookwala.json"
+    }
+   },
+   "save": "good",
+   "note": {
+    "en": "The shakshuka example passes the recipe schema."
+   },
+   "expect": {
+    "ok": true,
+    "errors.length": 0
+   }
+  },
+  {
+   "op": "validate",
+   "args": {
+    "kind": "recipe",
+    "doc": {
+     "cookwala": "0.2.0",
+     "id": "Broken Recipe",
+     "revision": "one"
+    }
+   },
+   "save": "bad",
+   "note": {
+    "en": "A stub with an id that has spaces and a revision given as a word: eleven errors, each with its path."
+   },
+   "expect": {
+    "ok": false,
+    "errors.length": 11,
+    "errors[9]": "id: 'Broken Recipe' does not match '^[a-z0-9][a-z0-9-]{1,63}$'",
+    "errors[10]": "revision: 'one' is not of type 'integer'"
+   }
+  },
+  {
+   "op": "validate",
+   "args": {
+    "kind": "capabilities",
+    "doc": {
+     "$file": "examples/capabilities/demo-oven.json"
+    }
+   },
+   "save": "caps",
+   "note": {
+    "en": "A capability document is checked against its own schema."
+   },
+   "expect": {
+    "ok": true
+   }
+  },
+  {
+   "op": "validate",
+   "args": {
+    "kind": "core",
+    "doc": {
+     "$file": "examples/core/incident.json"
+    }
+   },
+   "save": "incident",
+   "note": {
+    "en": "The Core schema covers requests, statuses, logs, recalls and incident reports."
+   },
+   "expect": {
+    "ok": true
+   }
+  }
+ ],
+ "cli": [
+  "cookwala validate   # every schema, example, vocabulary and API in the repository",
+  "curl -s -X POST http://localhost:7878/v1/tools/validate -H 'Content-Type: application/json' -d '{\"kind\": \"recipe\", \"doc\": {\"cookwala\": \"0.2.0\", \"id\": \"Broken Recipe\", \"revision\": \"one\"}}'"
+ ],
+ "outcome": {
+  "en": "You can validate any document kind over HTTP and read machine-checkable errors. The CLI form validates the whole repository, including recipe targets against operation envelopes. Next: scenario 025 shows a target outside its envelope."
+ },
+ "tags": [
+  "validation",
+  "schemas"
+ ]
+}

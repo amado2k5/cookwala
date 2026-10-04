@@ -1,0 +1,156 @@
+{
+ "id": "021",
+ "slug": "boiling-at-altitude",
+ "audience": "researcher",
+ "northStar": [
+  "robots",
+  "health"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Water boils lower at altitude: the same trace at sea level and at 1,500 m"
+ },
+ "goal": {
+  "en": "Water and steam bands shift by minus 1 degC per 300 m. A reading of 97 degC is not a boil at sea level and is one in a mountain kitchen; a reading of 100 degC at 1,500 m is something a sensor should not see."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.boil",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 80
+     },
+     {
+      "t": 60,
+      "tempC": 97
+     },
+     {
+      "t": 120,
+      "tempC": 97
+     }
+    ]
+   },
+   "save": "seaLevel",
+   "note": {
+    "en": "A pot that holds at 97 degC at sea level never reaches the 98 to 102 band."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "reason": "never_reached_envelope"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.boil",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 80
+     },
+     {
+      "t": 60,
+      "tempC": 97
+     },
+     {
+      "t": 120,
+      "tempC": 97
+     }
+    ],
+    "target": null,
+    "altitudeM": 1500
+   },
+   "save": "mountain",
+   "note": {
+    "en": "The same readings at 1,500 m: the band is 93 to 97, and the pot is boiling."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "reason": "ok"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.boil",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 80
+     },
+     {
+      "t": 60,
+      "tempC": 100
+     },
+     {
+      "t": 120,
+      "tempC": 100
+     }
+    ],
+    "target": null,
+    "altitudeM": 1500
+   },
+   "save": "tooHot",
+   "note": {
+    "en": "A reading of 100 degC at 1,500 m is above the shifted band: water cannot be that hot there, so the sensor or the medium is in question."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "reason": "never_reached_envelope"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.boil",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 95
+     },
+     {
+      "t": 60,
+      "tempC": 94
+     }
+    ],
+    "target": {
+     "value": 94,
+     "tolerance": 1
+    },
+    "altitudeM": 2400
+   },
+   "save": "highTarget",
+   "note": {
+    "en": "At 2,400 m with a recipe target of 94 plus or minus 1: the target is checked inside the shifted band."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "targetOk": true,
+    "reason": "ok"
+   }
+  }
+ ],
+ "cli": [
+  "printf '[{\"t\": 0, \"tempC\": 80}, {\"t\": 30, \"tempC\": 97}, {\"t\": 60, \"tempC\": 97}]' > trace.json && cookwala envelope cw.op.boil trace.json",
+  "printf '[{\"t\": 0, \"tempC\": 80}, {\"t\": 30, \"tempC\": 97}, {\"t\": 60, \"tempC\": 97}]' > trace.json && cookwala envelope cw.op.boil trace.json --altitude 1500",
+  "printf '[{\"t\": 0, \"tempC\": 80}, {\"t\": 30, \"tempC\": 100}, {\"t\": 60, \"tempC\": 100}]' > trace.json && cookwala envelope cw.op.boil trace.json --altitude 1500"
+ ],
+ "outcome": {
+  "en": "You can validate boiling and simmering traces from kitchens at any altitude, and you have a test for sensors that read what physics forbids. Next: scenario 022 checks hot oil."
+ },
+ "tags": [
+  "envelope",
+  "boil",
+  "altitude"
+ ]
+}

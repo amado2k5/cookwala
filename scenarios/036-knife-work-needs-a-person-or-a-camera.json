@@ -1,0 +1,141 @@
+{
+ "id": "036",
+ "slug": "knife-work-needs-a-person-or-a-camera",
+ "audience": "teacher",
+ "northStar": [
+  "robots",
+  "health"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Knife work: what the vocabulary says, what the ladder says, what the dry run says"
+ },
+ "goal": {
+  "en": "Cutting carries a cut hazard, may not run unattended and is verified by a camera or a person. Read the three rules in the vocabulary, the ladder and a dry run, and see how they fit together."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "getOps",
+   "save": "ops",
+   "note": {
+    "en": "The vocabulary: cutting is attended, hazardous, and verified by vision or a person."
+   },
+   "expect": {
+    "entries[8].id": "cw.op.cut",
+    "entries[8].envelope.unattended": false,
+    "entries[8].envelope.attention": "continuous",
+    "entries[8].envelope.hazards[0]": "cw.hz.cut",
+    "entries[8].envelope.sensorLadder[0]": "cw.sense.vision",
+    "entries[8].envelope.sensorLadder[1]": "human"
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.cut",
+    "sensors": [],
+    "allowModel": true,
+    "humanPresent": false
+   },
+   "save": "nothing",
+   "note": {
+    "en": "No camera, nobody: no rung."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.cut",
+    "sensors": [],
+    "allowModel": true,
+    "humanPresent": true
+   },
+   "save": "person",
+   "note": {
+    "en": "A person present verifies the cut."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.cut",
+    "sensors": [
+     "cw.sense.vision"
+    ],
+    "allowModel": true,
+    "humanPresent": false
+   },
+   "save": "camera",
+   "note": {
+    "en": "A camera verifies the cut."
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "salata-baladi",
+    "deviceId": "demo-hob-robot-basic",
+    "humanPresent": false
+   },
+   "save": "alone",
+   "note": {
+    "en": "The robot has a camera and nobody is home: the dry run still refuses the first cut, because unattended is false."
+   },
+   "expect": {
+    "state": "refused",
+    "refusal.reason": "needs_human_present",
+    "refusal.node": "n2"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "salata-baladi",
+    "deviceId": "demo-hob-robot-basic",
+    "humanPresent": true
+   },
+   "save": "withPerson",
+   "note": {
+    "en": "With a person in the room the robot cuts, verified by its camera."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan[2].op": "cw.op.cut",
+    "plan[2].by": "device",
+    "plan[2].rung": "cw.sense.vision"
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "The three ladder answers."
+   },
+   "expect": {
+    "nothing": null,
+    "person": "human",
+    "camera": "cw.sense.vision"
+   }
+  }
+ ],
+ "cli": [
+  "curl -s http://localhost:7878/v1/tools/vocab/ops",
+  "curl -s -X POST http://localhost:7878/v1/tools/ladder -H 'Content-Type: application/json' -d '{\"op\": \"cw.op.cut\", \"sensors\": [], \"allowModel\": true, \"humanPresent\": false}'",
+  "cookwala dryrun examples/salata-baladi.cookwala.json --device examples/capabilities/demo-hob-robot-basic.json"
+ ],
+ "outcome": {
+  "en": "A class can trace one safety rule from the vocabulary to a refusal and see that verification (the camera) and presence (the person) are two different requirements that both have to hold."
+ },
+ "tags": [
+  "cut",
+  "hazards",
+  "sensor-ladder",
+  "education"
+ ]
+}

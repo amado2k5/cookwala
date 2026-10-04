@@ -1,0 +1,115 @@
+{
+ "id": "007",
+ "slug": "convert-kitchen-units",
+ "audience": "home_cook",
+ "northStar": [
+  "health"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Convert kitchen units, and see that volume to mass needs a density"
+ },
+ "goal": {
+  "en": "Kitchen units have exact metric values in the standard (a tablespoon is 15 ml, a cup 240 ml). Converting a volume to a mass requires a density; without one the tool answers an error, never a guess."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "convert",
+   "args": {
+    "value": 2,
+    "unit": "tbsp",
+    "to": "ml"
+   },
+   "save": "oil",
+   "note": {
+    "en": "Two tablespoons of oil in millilitres."
+   },
+   "expect": {
+    "value": 30.0,
+    "unit": "ml"
+   }
+  },
+  {
+   "op": "convert",
+   "args": {
+    "value": 1,
+    "unit": "cup",
+    "to": "g",
+    "densityGPerMl": 0.53
+   },
+   "save": "flour",
+   "note": {
+    "en": "One cup of flour in grams, with the density of flour given as 0.53 g/ml."
+   },
+   "expect": {
+    "value": 127.2,
+    "unit": "g"
+   }
+  },
+  {
+   "op": "convert",
+   "args": {
+    "value": 500,
+    "unit": "g",
+    "to": "kg"
+   },
+   "save": "kg",
+   "note": {
+    "en": "Half a kilogram, the other way round."
+   },
+   "expect": {
+    "value": 0.5
+   }
+  },
+  {
+   "op": "convert",
+   "args": {
+    "value": 30,
+    "unit": "ml",
+    "to": "tbsp"
+   },
+   "save": "tbsp",
+   "note": {
+    "en": "Thirty millilitres back to tablespoons."
+   },
+   "expect": {
+    "value": 2.0
+   }
+  },
+  {
+   "op": "convert",
+   "args": {
+    "value": 1,
+    "unit": "pinch",
+    "to": "g"
+   },
+   "save": "pinch",
+   "note": {
+    "en": "A pinch is about 0.36 g."
+   },
+   "expect": {
+    "value": 0.36
+   }
+  }
+ ],
+ "cli": [
+  "cookwala convert 2 tbsp ml",
+  "cookwala convert 1 cup g --density 0.53",
+  "cookwala convert 1 cup g   # error: volume<->mass conversion needs a density",
+  "curl -s -X POST http://localhost:7878/v1/tools/convert -H 'Content-Type: application/json' -d '{\"value\": 2, \"unit\": \"tbsp\", \"to\": \"ml\"}'"
+ ],
+ "outcome": {
+  "en": "You can scale and convert the quantities in a recipe. Asking for a cup in grams without a density returns an HTTP 400 problem, which is the standard refusing to guess. Next: scenario 019 converts quantities read from a recipe document."
+ },
+ "tags": [
+  "units",
+  "conversion"
+ ]
+}

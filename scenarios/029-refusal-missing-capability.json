@@ -1,0 +1,110 @@
+{
+ "id": "029",
+ "slug": "refusal-missing-capability",
+ "audience": "appliance_maker",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "missing_capability: what an appliance cannot do, and what accepted means when a person does the rest"
+ },
+ "goal": {
+  "en": "A device that lacks an operation is refused alone and named at the first missing step. With a person present every missing step is assigned to the person, so accepted means a plan exists, not that the appliance does much of it."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "kofta-oven",
+    "deviceId": "demo-oven",
+    "humanPresent": false
+   },
+   "save": "ovenAlone",
+   "note": {
+    "en": "The oven cannot grate an onion: refused at n1 with the reason spelled out."
+   },
+   "expect": {
+    "state": "refused",
+    "refusal.reason": "missing_capability",
+    "refusal.node": "n1",
+    "refusal.detail": "device cannot perform cw.op.grate and no person is present to do it"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "rice-vermicelli",
+    "deviceId": "demo-arm",
+    "humanPresent": false
+   },
+   "save": "armAlone",
+   "note": {
+    "en": "The counter arm washes and drains the rice, then cannot heat a pan: two steps planned, refused at n3."
+   },
+   "expect": {
+    "state": "refused",
+    "refusal.reason": "missing_capability",
+    "refusal.node": "n3",
+    "plan.length": 2
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "kofta-oven",
+    "deviceId": "demo-oven",
+    "humanPresent": true
+   },
+   "save": "ovenWithPerson",
+   "note": {
+    "en": "With a person: accepted. The person grates, cuts, mixes and forms; the oven preheats and bakes."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 10,
+    "plan[0].by": "human",
+    "plan[7].by": "device"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "salata-baladi",
+    "deviceId": "demo-oven",
+    "humanPresent": true
+   },
+   "save": "salad",
+   "note": {
+    "en": "A salad on an oven with a person present is also accepted, and every one of the nine steps is the person's. Read the plan, not only the state."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 9,
+    "plan[0].by": "human",
+    "plan[8].by": "human"
+   }
+  }
+ ],
+ "cli": [
+  "cookwala dryrun examples/kofta-oven.cookwala.json --device examples/capabilities/demo-oven.json",
+  "cookwala dryrun examples/rice-vermicelli.cookwala.json --device examples/capabilities/demo-arm.json",
+  "cookwala dryrun examples/kofta-oven.cookwala.json --device examples/capabilities/demo-oven.json --human-present",
+  "cookwala dryrun examples/salata-baladi.cookwala.json --device examples/capabilities/demo-oven.json --human-present"
+ ],
+ "outcome": {
+  "en": "You know how to read a missing_capability refusal and why a product page should count the steps the device does, not the recipes it accepts. Next: scenario 030 shows the refusal no person can lift."
+ },
+ "tags": [
+  "refusal",
+  "missing-capability",
+  "dry-run"
+ ]
+}

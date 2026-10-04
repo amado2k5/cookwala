@@ -1,0 +1,120 @@
+{
+ "id": "032",
+ "slug": "oven-with-core-probe-for-kofta",
+ "audience": "appliance_maker",
+ "northStar": [
+  "health",
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "The smart oven and its core probe: the kofta recipe, the ladder, the limit"
+ },
+ "goal": {
+  "en": "The kofta recipe ends its bake when the core probe reads 71 degC. The oven preset has an oven thermometer and a core probe. See which rung the dry run records, what a probe alone would verify, and the limit the number comes from."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "getRecipe",
+   "args": {
+    "id": "kofta-oven"
+   },
+   "save": "kofta",
+   "note": {
+    "en": "The bake step's end condition is the core probe at 71 degC or more, marked as a critical control point."
+   },
+   "expect": {
+    "process.nodes[7].until.all[0].sensor": "cw.sense.core_temp",
+    "process.nodes[7].until.all[0].gte": 71,
+    "process.nodes[7].ccp": "ccp_ground_meat"
+   }
+  },
+  {
+   "op": "getDevices",
+   "save": "devices",
+   "note": {
+    "en": "The oven preset lists both sensors."
+   },
+   "expect": {
+    "devices.demo-oven.capabilities.sensors[0].sensor": "cw.sense.oven_temp",
+    "devices.demo-oven.capabilities.sensors[1].sensor": "cw.sense.core_temp"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "kofta-oven",
+    "deviceId": "demo-oven",
+    "humanPresent": true
+   },
+   "save": "plan",
+   "note": {
+    "en": "The dry run records the first rung of the bake ladder, the oven thermometer; the end condition and the limit are the probe's job during the run. The preheat is a logged estimate because cw.op.heat's ladder names a pan thermometer, not an oven one."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan[7].op": "cw.op.bake",
+    "plan[7].rung": "cw.sense.oven_temp",
+    "plan[6].op": "cw.op.heat",
+    "plan[6].rung": "model"
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.bake",
+    "sensors": [
+     "cw.sense.core_temp"
+    ],
+    "allowModel": true,
+    "humanPresent": false
+   },
+   "save": "probeOnly",
+   "note": {
+    "en": "An oven with only a core probe would still verify baking: the probe is the second rung."
+   }
+  },
+  {
+   "op": "safetyLimits",
+   "save": "limits",
+   "note": {
+    "en": "The 71 degC in the recipe is the default limit for ground meat; the device asks a person when it is not reached."
+   },
+   "expect": {
+    "limits[4].id": "core.ground_meat",
+    "limits[4].min": 71,
+    "limits[4].action": "ask_human"
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "The probe-only rung."
+   },
+   "expect": {
+    "probeOnly": "cw.sense.core_temp"
+   }
+  }
+ ],
+ "cli": [
+  "curl -s http://localhost:7878/v1/tools/recipes/kofta-oven",
+  "cookwala dryrun examples/kofta-oven.cookwala.json --device examples/capabilities/demo-oven.json --human-present",
+  "curl -s -X POST http://localhost:7878/v1/tools/ladder -H 'Content-Type: application/json' -d '{\"op\": \"cw.op.bake\", \"sensors\": [\"cw.sense.core_temp\"], \"allowModel\": true, \"humanPresent\": false}'"
+ ],
+ "outcome": {
+  "en": "You know how a recipe, a sensor list and a limits pack meet on one number. You also saw a vocabulary edge: an oven preheat written as cw.op.heat is verified by estimate because that operation's ladder is pan-centred."
+ },
+ "tags": [
+  "oven",
+  "core-probe",
+  "bake",
+  "ccp"
+ ]
+}

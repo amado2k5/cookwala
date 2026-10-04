@@ -1,0 +1,107 @@
+{
+ "id": "014",
+ "slug": "v0-recipe-refused-on-a-robot-assigned-to-a-person",
+ "audience": "recipe_publisher",
+ "northStar": [
+  "hunger"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "A V0 imported recipe is refused on a robot and assigned to a person when one is present"
+ },
+ "goal": {
+  "en": "The fifi.cooking collection holds 1,881 described recipes (V0, RFC-0009). Every step is a legacy step that no device can execute. The dry run refuses them on any robot alone and hands every step to a person when one is present."
+ },
+ "docs": [
+  "/docs/RECIPE-FORMAT/",
+  "/docs/CORE/"
+ ],
+ "requires": [
+  "hub",
+  "repo"
+ ],
+ "steps": [
+  {
+   "op": "validate",
+   "args": {
+    "kind": "recipe",
+    "doc": {
+     "$file": "recipes/archive/salad-08.cookwala.json"
+    }
+   },
+   "save": "valid",
+   "note": {
+    "en": "A V0 document passes the recipe schema: described is a valid level."
+   },
+   "expect": {
+    "ok": true
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipe": {
+     "$file": "recipes/archive/salad-08.cookwala.json"
+    },
+    "deviceId": "demo-hob-robot",
+    "humanPresent": false
+   },
+   "save": "alone",
+   "note": {
+    "en": "Fattoush salad (archive, CC-BY-4.0) on the kitchen robot, nobody present: refused at the first step."
+   },
+   "expect": {
+    "state": "refused",
+    "refusal.reason": "missing_capability",
+    "refusal.node": "n1",
+    "refusal.detail": "device cannot perform cw.op.legacy_step and no person is present to do it"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipe": {
+     "$file": "recipes/archive/salad-08.cookwala.json"
+    },
+    "deviceId": "demo-hob-robot",
+    "humanPresent": true
+   },
+   "save": "withPerson",
+   "note": {
+    "en": "With a person present: accepted, and all three steps are the person's."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 3,
+    "plan[0].op": "cw.op.legacy_step",
+    "plan[0].by": "human",
+    "plan[2].verifiedBy": "human"
+   }
+  },
+  {
+   "op": "getOps",
+   "save": "ops",
+   "note": {
+    "en": "The vocabulary entry says why: legacy_step belongs to the legacy family, declares no sensors, and its definition says no device declares it as a capability."
+   },
+   "expect": {
+    "entries[56].id": "cw.op.legacy_step",
+    "entries[56].classes[1]": "cw.opfamily.legacy",
+    "entries[56].sensors.length": 0
+   }
+  }
+ ],
+ "cli": [
+  "cookwala dryrun recipes/archive/salad-08.cookwala.json --device examples/capabilities/demo-hob-robot.json",
+  "cookwala dryrun recipes/archive/salad-08.cookwala.json --device examples/capabilities/demo-hob-robot.json --human-present"
+ ],
+ "outcome": {
+  "en": "You know that a described recipe is findable and attributable today, and that no device will act on it until a reviewed process graph makes it V1. Next: scenario 016 reads a V1 recipe as a document."
+ },
+ "tags": [
+  "v0",
+  "import",
+  "legacy-step",
+  "refusal"
+ ]
+}

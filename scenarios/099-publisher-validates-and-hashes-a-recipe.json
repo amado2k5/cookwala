@@ -1,0 +1,23 @@
+{
+ "id": "099",
+ "slug": "publisher-validates-and-hashes-a-recipe",
+ "audience": "recipe_publisher",
+ "northStar": ["health"],
+ "level": "beginner",
+ "title": {"en": "Validate a recipe, see an invalid one fail, and publish its hash"},
+ "goal": {"en": "A publisher validates against the recipe schema (the one kind the hub checks in full), sees what a non-recipe gets back, and computes the hash that executors compare with ExecuteRequest.recipeHash."},
+ "docs": ["/docs/CORE/", "/docs/REGISTRY/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "getRecipe", "args": {"id": "koshari"}, "save": "recipe", "note": {"en": "Fetch koshari from the hub."}, "expect": {"id": "example-koshari", "cookwala": "0.2.0"}},
+  {"op": "validate", "args": {"kind": "recipe", "doc": {"$var": "recipe"}}, "save": "valid", "note": {"en": "Validate it as a recipe: no errors."}, "expect": {"ok": true, "errors.length": 0}},
+  {"op": "validate", "args": {"kind": "recipe", "doc": {"nonsense": 1}}, "save": "invalid", "note": {"en": "A document that is not a recipe fails with thirteen errors, one per required property plus the unknown field."}, "expect": {"ok": false, "errors.length": 13}},
+  {"op": "hash", "args": {"doc": {"$var": "recipe"}}, "save": "h", "note": {"en": "The recipe's hash: an executor refuses a request whose recipeHash differs (recipe_hash_mismatch, scenario 097)."}, "expect": {"hash": "sha256:f7fc3745af51465fb7a849faa5b5927eeaa44030a703318bb293381fef8b3f45"}}
+ ],
+ "cli": [
+  "cookwala validate",
+  "cookwala hash examples/koshari.cookwala.json"
+ ],
+ "outcome": {"en": "You can validate and hash before you publish, and put the hash in a registry entry. Next: 100 verifies a recall that travelled through a mirror."},
+ "tags": ["recipes", "validate", "hash", "publisher"]
+}

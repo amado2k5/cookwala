@@ -1,0 +1,23 @@
+{
+ "id": "087",
+ "slug": "validate-household-context-and-roles",
+ "audience": "developer",
+ "northStar": ["robots", "health"],
+ "level": "beginner",
+ "title": {"en": "Validate a household context and the roles file, and hash the context"},
+ "goal": {"en": "Check the example HouseholdContext and the RecipientRoles file with the validate tool, hash the context so a local log can refer to it, and see the same document fail when checked as a recipe."},
+ "docs": ["/docs/HOUSEHOLD-CONTEXT/", "/trust/", "/docs/CORE/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "validate", "args": {"kind": "household", "doc": {"$file": "examples/household/context.json"}}, "save": "ctx", "note": {"en": "Validate the example household context against the household schema. The reference hub's validate checks the document against the schema file's root; this schema keeps its kinds under $defs, so today this call reports ok for any document, and `cookwala validate` (the CLI line) is the real check."}, "expect": {"ok": true, "errors.length": 0}},
+  {"op": "hash", "args": {"doc": {"$file": "examples/household/context.json"}}, "save": "h", "note": {"en": "Hash the context: sha256 over RFC 8785 canonical JSON, the same hash in every language."}, "expect": {"hash": "sha256:8fc1fdf5246943f0fa191a499af1641688278906dd41453dadaa07089aaba34b"}},
+  {"op": "validate", "args": {"kind": "recipe", "doc": {"$file": "examples/household/context.json"}}, "save": "asRecipe", "note": {"en": "The same document checked as a recipe fails with twelve errors: kinds are not interchangeable."}, "expect": {"ok": false, "errors.length": 12}},
+  {"op": "validate", "args": {"kind": "household", "doc": {"$file": "profiles/household/recipient-roles.json"}}, "save": "roles", "note": {"en": "The recipient roles file is a household-profile document too."}, "expect": {"ok": true}}
+ ],
+ "cli": [
+  "cookwala validate",
+  "cookwala hash examples/household/context.json"
+ ],
+ "outcome": {"en": "You can check and hash household documents from any language. The hash never leaves the home either; it is for the local incident memory. Next: 088 compares three roles side by side."},
+ "tags": ["household", "validate", "hash"]
+}

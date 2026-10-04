@@ -1,0 +1,71 @@
+{
+ "id": "017",
+ "slug": "registry-pointers-only",
+ "audience": "registry_operator",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Read the reference registry: five pointers, nothing third-party"
+ },
+ "goal": {
+  "en": "A registry lists what exists and where; it does not host it. The reference registry at cookwala.ai points at the catalog, the example recipes, the default limits, the WHO/Codex rule pack and the agent-safety benchmark, all from this repository."
+ },
+ "docs": [
+  "/docs/REGISTRY/",
+  "/docs/FEDERATION/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "getRegistry",
+   "save": "registry",
+   "note": {
+    "en": "Five entries, each with a kind, a name under ai.cookwala/, a verification method and a repository pointer."
+   },
+   "expect": {
+    "cookwala": "0.2.0",
+    "entries.length": 5,
+    "entries[0].kind": "catalog",
+    "entries[0].name": "ai.cookwala/reference-catalog",
+    "entries[1].kind": "recipe_collection",
+    "entries[2].kind": "safety_limits",
+    "entries[3].kind": "rule_pack",
+    "entries[4].kind": "benchmark"
+   }
+  },
+  {
+   "op": "listRecipes",
+   "save": "recipes",
+   "note": {
+    "en": "The recipe collection the registry points at is the nine the hub serves."
+   },
+   "expect": {
+    "recipes.length": 9
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "The registry says it in its own note: pointers only, nothing here is a third-party product."
+   },
+   "expect": {
+    "registry.note": "Pointers only. Everything listed exists in the amado2k5/cookwala repository; nothing here is a third-party product. Anyone may run a registry (RFC-0002, RFC-0006)."
+   }
+  }
+ ],
+ "cli": [
+  "curl -s http://localhost:7878/v1/tools/registry",
+  "curl -s https://cookwala.ai/v1/registry.json"
+ ],
+ "outcome": {
+  "en": "You know what a registry entry looks like and that anyone may run one. Scenarios 090 onwards cover publishing, verification and federation."
+ },
+ "tags": [
+  "registry",
+  "federation"
+ ]
+}

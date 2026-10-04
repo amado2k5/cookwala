@@ -1,0 +1,24 @@
+{
+ "id": "072",
+ "slug": "per-meal-nutrients-by-sms",
+ "audience": "dietitian",
+ "northStar": ["health"],
+ "level": "beginner",
+ "title": {"en": "The per-meal nutrients a MENU message carries and the packs read"},
+ "goal": {"en": "MENU carries energy, sodium, fruit and vegetables and protein per meal. The school-meals and sodium-reduction packs compare these fields with their limits; the sodium pack validates as a profile document."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "parseSms", "args": {"text": "MENU D12 KCAL650 SODIUM540 FV95"}, "save": "menu", "note": {"en": "Energy, sodium and fruit-and-vegetable grams become energyKcal, sodiumMg and fruitVegG."}, "expect": {"perMeal.energyKcal": 650.0, "perMeal.sodiumMg": 540.0, "perMeal.fruitVegG": 95.0}},
+  {"op": "parseSms", "args": {"text": "MENU D12 PROTEIN22"}, "save": "protein", "note": {"en": "Protein becomes proteinG; a message may carry any subset."}, "expect": {"perMeal.proteinG": 22.0}},
+  {"op": "parseSms", "args": {"text": "MENU D12"}, "save": "usage", "note": {"en": "A MENU with no nutrient is a usage error."}, "expect": {"ok": false, "error": "usage"}},
+  {"op": "parseSms", "args": {"text": "MENU D12 KCAL"}, "save": "usage2", "note": {"en": "A nutrient word without a number is a usage error."}, "expect": {"ok": false, "error": "usage"}},
+  {"op": "validate", "args": {"kind": "humanitarian", "doc": {"$file": "profiles/humanitarian/sodium-reduction.rulepack.json"}}, "save": "pack", "note": {"en": "The sodium-reduction rule pack is itself a profile document."}, "expect": {"ok": true}}
+ ],
+ "cli": [
+  "cookwala sms \"MENU D12 KCAL650 SODIUM540 FV95\"",
+  "cat profiles/humanitarian/sodium-reduction.rulepack.json"
+ ],
+ "outcome": {"en": "You know the four nutrient fields and their names in documents. Next: scenario 077 hashes and validates the rule packs."},
+ "tags": ["sms", "menu", "nutrition", "dietitian"]
+}

@@ -1,0 +1,143 @@
+{
+ "id": "012",
+ "slug": "example-recipes-on-the-hob-robot",
+ "audience": "kitchen_operator",
+ "northStar": [
+  "hunger",
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Six example recipes dry-run on the kitchen robot with thermometers"
+ },
+ "goal": {
+  "en": "A kitchen robot with a hob, a pan thermometer, a liquid thermometer and a core probe plans six of the nine example dishes without a person doing any step, as long as a person is present for the knife work."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "shakshuka",
+    "deviceId": "demo-hob-robot",
+    "humanPresent": true
+   },
+   "save": "shakshuka",
+   "note": {
+    "en": "Shakshuka: thirteen steps, all by the device."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 13
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "lentil-soup",
+    "deviceId": "demo-hob-robot",
+    "humanPresent": true
+   },
+   "save": "lentil",
+   "note": {
+    "en": "Lentil soup: hot holding at the end is verified by the core probe."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 11,
+    "plan[9].op": "cw.op.hold",
+    "plan[9].rung": "cw.sense.core_temp"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "molokhia",
+    "deviceId": "demo-hob-robot",
+    "humanPresent": true
+   },
+   "save": "molokhia",
+   "note": {
+    "en": "Molokhia with chicken: twelve steps."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 12
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "ful-medames",
+    "deviceId": "demo-hob-robot",
+    "humanPresent": true
+   },
+   "save": "ful",
+   "note": {
+    "en": "Ful medames: the simmer is verified by the liquid thermometer."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 7,
+    "plan[1].rung": "cw.sense.liquid_temp"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "rice-vermicelli",
+    "deviceId": "demo-hob-robot",
+    "humanPresent": true
+   },
+   "save": "rice",
+   "note": {
+    "en": "Rice with vermicelli: toasting the vermicelli is verified by the pan thermometer."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 9,
+    "plan[3].op": "cw.op.toast",
+    "plan[3].rung": "cw.sense.pan_surface_temp"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "basbousa",
+    "deviceId": "demo-hob-robot",
+    "humanPresent": true
+   },
+   "save": "basbousa",
+   "note": {
+    "en": "Basbousa: melting the butter has no product thermometer on this robot, so it is a logged estimate."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 13,
+    "plan[0].op": "cw.op.melt",
+    "plan[0].rung": "model"
+   }
+  }
+ ],
+ "cli": [
+  "cookwala dryrun examples/shakshuka.cookwala.json --device examples/capabilities/demo-hob-robot.json --human-present",
+  "cookwala dryrun examples/lentil-soup.cookwala.json --device examples/capabilities/demo-hob-robot.json --human-present",
+  "cookwala dryrun examples/molokhia.cookwala.json --device examples/capabilities/demo-hob-robot.json --human-present",
+  "cookwala dryrun examples/ful-medames.cookwala.json --device examples/capabilities/demo-hob-robot.json --human-present",
+  "cookwala dryrun examples/rice-vermicelli.cookwala.json --device examples/capabilities/demo-hob-robot.json --human-present",
+  "cookwala dryrun examples/basbousa.cookwala.json --device examples/capabilities/demo-hob-robot.json --human-present"
+ ],
+ "outcome": {
+  "en": "You have a plan for each dish and can read, step by step, what verifies it. Next: scenario 013 puts the remaining three recipes on the devices that fit them."
+ },
+ "tags": [
+  "dry-run",
+  "example-recipes"
+ ]
+}

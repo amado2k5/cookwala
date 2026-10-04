@@ -1,0 +1,107 @@
+{
+ "id": "004",
+ "slug": "hash-a-recipe",
+ "audience": "developer",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Hash a recipe and see that the same document always gives the same hash"
+ },
+ "goal": {
+  "en": "An executor cooks exactly one revision of a recipe and refuses any other. The hash is SHA-256 over RFC 8785 canonical JSON, without the hash and signature fields, so the hub, the CLI and every SDK agree on it."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub",
+  "repo"
+ ],
+ "steps": [
+  {
+   "op": "getRecipe",
+   "args": {
+    "id": "shakshuka"
+   },
+   "save": "recipe",
+   "note": {
+    "en": "Fetch the shakshuka example from the hub."
+   },
+   "expect": {
+    "id": "example-shakshuka",
+    "revision": 2
+   }
+  },
+  {
+   "op": "hash",
+   "args": {
+    "doc": {
+     "$var": "recipe"
+    }
+   },
+   "save": "fromHub",
+   "note": {
+    "en": "Hash the fetched document."
+   },
+   "expect": {
+    "hash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841"
+   }
+  },
+  {
+   "op": "hash",
+   "args": {
+    "doc": {
+     "$file": "examples/shakshuka.cookwala.json"
+    }
+   },
+   "save": "fromFile",
+   "note": {
+    "en": "Hash the same recipe read from the repository checkout: the same bytes in a different order still give the same hash."
+   },
+   "expect": {
+    "hash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841"
+   }
+  },
+  {
+   "op": "hash",
+   "args": {
+    "doc": {
+     "$file": "examples/kofta-oven.cookwala.json"
+    }
+   },
+   "save": "kofta",
+   "note": {
+    "en": "Another recipe gives another hash; a changed byte anywhere would too."
+   },
+   "expect": {
+    "hash": "sha256:932c364ad759aa2d27905c30c198be08ea9a7ac80ac3b60068895818cbdb4720"
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "The two shakshuka hashes are identical and equal the recipeHash in the ExecuteRequest example."
+   },
+   "expect": {
+    "fromHub.hash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841",
+    "fromFile.hash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841"
+   }
+  }
+ ],
+ "cli": [
+  "cookwala hash examples/shakshuka.cookwala.json",
+  "cookwala hash examples/kofta-oven.cookwala.json",
+  "curl -s -X POST http://localhost:7878/v1/tools/hash -H 'Content-Type: application/json' -d \"{\\\"doc\\\": $(cat examples/shakshuka.cookwala.json)}\""
+ ],
+ "outcome": {
+  "en": "You can compute the hash an ExecuteRequest must carry. Next: scenario 018 sends a request with the wrong hash and reads the refusal."
+ },
+ "tags": [
+  "hash",
+  "rfc8785",
+  "integrity"
+ ]
+}

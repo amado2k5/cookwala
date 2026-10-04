@@ -1,0 +1,25 @@
+{
+ "id": "067",
+ "slug": "gateway-cold-chain-checks-on-offers",
+ "audience": "food_safety_officer",
+ "northStar": ["health", "hunger"],
+ "level": "beginner",
+ "title": {"en": "The checks a gateway applies to an OFFER before listing it"},
+ "goal": {"en": "A gateway must refuse to list offers that fail the cold-chain checks: chilled above 5 °C, frozen above -18 °C, hot-held below 60 °C, or a chilled-class food declared ambient. The parser returns the finding ids."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "parseSms", "args": {"text": "OFFER 36KG YOGURT C T7C"}, "save": "chilled", "note": {"en": "Chilled yogurt at 7 °C: safety.chilled_max."}, "expect": {"ok": true, "findings": ["safety.chilled_max"]}},
+  {"op": "parseSms", "args": {"text": "OFFER 18KG COOKED RICE TRAYS H T52C"}, "save": "hot", "note": {"en": "Hot-held rice at 52 °C: safety.hot_hold_min."}, "expect": {"findings": ["safety.hot_hold_min"], "foodClasses": ["cooked_food", "cooked_rice"]}},
+  {"op": "parseSms", "args": {"text": "OFFER 20KG CHICKEN F T-10C"}, "save": "frozen", "note": {"en": "Frozen chicken at -10 °C: safety.frozen_max."}, "expect": {"findings": ["safety.frozen_max"], "tempC": -10.0}},
+  {"op": "parseSms", "args": {"text": "OFFER 20KG CHICKEN A"}, "save": "ambient", "note": {"en": "Chicken declared ambient: the item words imply poultry, so safety.storage_class_mismatch."}, "expect": {"findings": ["safety.storage_class_mismatch"], "foodClasses": ["poultry"]}},
+  {"op": "parseSms", "args": {"text": "OFFER 18KG COOKED RICE TRAYS H T66C"}, "save": "ok", "note": {"en": "The same rice at 66 °C passes and may be listed."}, "expect": {"findings.length": 0, "storage": "hot_held"}}
+ ],
+ "cli": [
+  "cookwala sms \"OFFER 36KG YOGURT C T7C\"",
+  "cookwala sms \"OFFER 20KG CHICKEN A\"",
+  "cookwala sms \"OFFER 18KG COOKED RICE TRAYS H T66C\""
+ ],
+ "outcome": {"en": "You know the four block findings and that they fire before a document exists. Next: scenario 070 applies the full rule pack to a recorded offer."},
+ "tags": ["sms", "cold-chain", "gateway", "food-safety"]
+}

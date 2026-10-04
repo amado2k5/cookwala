@@ -1,0 +1,134 @@
+{
+ "id": "015",
+ "slug": "browser-demo-presets",
+ "audience": "developer",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "The five presets of the home-page demo, from the SDK"
+ },
+ "goal": {
+  "en": "The dry run on the home page uses five device presets. They are exported to examples/capabilities so the hub, the CLI and every SDK see the same devices; this scenario reproduces the demo for shakshuka."
+ },
+ "docs": [
+  "/docs/QUICKSTART/",
+  "/docs/CORE/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "getDevices",
+   "save": "devices",
+   "note": {
+    "en": "The presets carry the vendor name \"Cookwala demo presets\"; the basic hob robot has one sensor, its camera."
+   },
+   "expect": {
+    "devices.demo-arm.actor.vendor": "Cookwala demo presets",
+    "devices.demo-hob-robot-basic.capabilities.sensors.length": 1
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "shakshuka",
+    "deviceId": "demo-arm",
+    "humanPresent": true
+   },
+   "save": "arm",
+   "note": {
+    "en": "Counter arm: cuts under its camera, cracks the eggs; the person heats and sautes."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan[0].by": "device",
+    "plan[4].op": "cw.op.saute",
+    "plan[4].by": "human"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "shakshuka",
+    "deviceId": "demo-hob-robot-basic",
+    "humanPresent": true
+   },
+   "save": "basic",
+   "note": {
+    "en": "Hob robot without thermometers: heating is a logged estimate."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan[3].rung": "model"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "shakshuka",
+    "deviceId": "demo-hob-robot",
+    "humanPresent": true
+   },
+   "save": "robot",
+   "note": {
+    "en": "Hob robot with thermometers: heating is verified by the pan thermometer."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan[3].rung": "cw.sense.pan_surface_temp"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "shakshuka",
+    "deviceId": "demo-oven",
+    "humanPresent": true
+   },
+   "save": "oven",
+   "note": {
+    "en": "Smart oven: it lists cw.op.heat, so the dry run gives it the pan-heating step as an estimate and leaves the rest to the person. The dry run matches operations, not equipment; the recipe's equipment list is a separate check."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan[3].by": "device",
+    "plan[3].rung": "model",
+    "plan[4].by": "human"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "shakshuka",
+    "deviceId": "demo-fryer-robot",
+    "humanPresent": true
+   },
+   "save": "fryer",
+   "note": {
+    "en": "Fryer robot: same as the hob robot for this dish, thirteen steps by the device."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 13
+   }
+  }
+ ],
+ "cli": [
+  "cookwala dryrun examples/shakshuka.cookwala.json --device examples/capabilities/demo-arm.json --human-present",
+  "cookwala dryrun examples/shakshuka.cookwala.json --device examples/capabilities/demo-hob-robot-basic.json --human-present",
+  "cookwala dryrun examples/shakshuka.cookwala.json --device examples/capabilities/demo-hob-robot.json --human-present",
+  "cookwala dryrun examples/shakshuka.cookwala.json --device examples/capabilities/demo-oven.json --human-present",
+  "cookwala dryrun examples/shakshuka.cookwala.json --device examples/capabilities/demo-fryer-robot.json --human-present"
+ ],
+ "outcome": {
+  "en": "You can reproduce any home-page result from code, and you have seen one limit of the dry run worth knowing: it checks operations and sensors, not whether the device owns the pan. Next: scenario 020 checks a temperature trace against an envelope."
+ },
+ "tags": [
+  "demo",
+  "presets",
+  "dry-run"
+ ]
+}

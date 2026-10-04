@@ -1,0 +1,134 @@
+{
+ "id": "027",
+ "slug": "ops-that-never-fall-back-to-time",
+ "audience": "researcher",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Operations that never fall back to time: toasting, reducing, cutting"
+ },
+ "goal": {
+  "en": "Operations that need constant attention end their ladder with a person, not a timer. Without the sensor and without the person the answer is null, and a dry run refuses the step."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.toast",
+    "sensors": [],
+    "allowModel": true,
+    "humanPresent": false
+   },
+   "save": "toastAlone",
+   "note": {
+    "en": "Toasting, no sensor, no person: null. Its ladder has no model rung either."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.toast",
+    "sensors": [],
+    "allowModel": true,
+    "humanPresent": true
+   },
+   "save": "toastHuman",
+   "note": {
+    "en": "Toasting with a person: the human rung."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.toast",
+    "sensors": [
+     "cw.sense.color_vision"
+    ],
+    "allowModel": false,
+    "humanPresent": false
+   },
+   "save": "toastCamera",
+   "note": {
+    "en": "Toasting with a colour camera: the sensor rung, no person needed for verification."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.reduce",
+    "sensors": [],
+    "allowModel": false,
+    "humanPresent": false
+   },
+   "save": "reduceAlone",
+   "note": {
+    "en": "Reducing a sauce without a thermometer, a scale or a person: null."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.reduce",
+    "sensors": [
+     "cw.sense.mass"
+    ],
+    "allowModel": false,
+    "humanPresent": false
+   },
+   "save": "reduceScale",
+   "note": {
+    "en": "A scale verifies a reduction by mass."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.cut",
+    "sensors": [],
+    "allowModel": true,
+    "humanPresent": false
+   },
+   "save": "cutAlone",
+   "note": {
+    "en": "Cutting with no camera and nobody present: null."
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "Three nulls and three rungs."
+   },
+   "expect": {
+    "toastAlone": null,
+    "toastHuman": "human",
+    "toastCamera": "cw.sense.color_vision",
+    "reduceAlone": null,
+    "reduceScale": "cw.sense.mass",
+    "cutAlone": null
+   }
+  }
+ ],
+ "cli": [
+  "curl -s -X POST http://localhost:7878/v1/tools/ladder -H 'Content-Type: application/json' -d '{\"op\": \"cw.op.toast\", \"sensors\": [], \"allowModel\": true, \"humanPresent\": false}'",
+  "curl -s -X POST http://localhost:7878/v1/tools/ladder -H 'Content-Type: application/json' -d '{\"op\": \"cw.op.reduce\", \"sensors\": [\"cw.sense.mass\"], \"allowModel\": false, \"humanPresent\": false}'"
+ ],
+ "outcome": {
+  "en": "You can separate the vocabulary into operations a timer may verify and operations that need a sensor or a person, which is the first question for any unattended-cooking study. Next: scenario 030 shows the refusal this produces in a dry run."
+ },
+ "tags": [
+  "sensor-ladder",
+  "attention",
+  "toast",
+  "reduce",
+  "cut"
+ ]
+}

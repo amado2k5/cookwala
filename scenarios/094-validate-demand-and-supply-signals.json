@@ -1,0 +1,23 @@
+{
+ "id": "094",
+ "slug": "validate-demand-and-supply-signals",
+ "audience": "farmer",
+ "northStar": ["hunger"],
+ "level": "beginner",
+ "title": {"en": "Validate a demand signal and a supply signal"},
+ "goal": {"en": "A DemandSignal says how much of an ingredient class kitchens in a region planned to use in a past week (42 sources, published 9 days after the week, no prices); a SupplySignal says a class is in glut, open to all. Validate both examples and hash the supply signal."},
+ "docs": ["/docs/SUPPLY-SIGNALS/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "validate", "args": {"kind": "supply", "doc": {"$file": "examples/supply/demand-signal.json"}}, "save": "demand", "note": {"en": "Validate the example DemandSignal (legume, Cairo, week of 2026-11-02). The reference hub's validate checks the document against the schema file's root; this schema keeps its kinds under $defs, so today this call reports ok for any document, and `cookwala validate` (the CLI line) is the real check."}, "expect": {"ok": true}},
+  {"op": "validate", "args": {"kind": "supply", "doc": {"$file": "examples/supply/supply-signal.json"}}, "save": "supply", "note": {"en": "Validate the example SupplySignal (tomato glut, Beheira, week of 2026-10-05, harvest window to 18 October)."}, "expect": {"ok": true}},
+  {"op": "hash", "args": {"doc": {"$file": "examples/supply/supply-signal.json"}}, "save": "h", "note": {"en": "Hash the supply signal: a signal is public, free and identical for every reader, and the hash lets any reader prove it."}, "expect": {"hash": "sha256:eba53b0bb96f2745349ec9c1565b7dff698ad062c1d209a9ddbf4de4c7bf7f03"}}
+ ],
+ "cli": [
+  "cookwala validate",
+  "cookwala hash examples/supply/supply-signal.json",
+  "jq '{sources: .contributingSources, delayDays, prices}' examples/supply/demand-signal.json"
+ ],
+ "outcome": {"en": "You know the two documents a cooperative or a program publishes and why they are aggregated, delayed and price-free. The policy check is check_signal() in tools/cookwala_ref.py with vectors in conformance/profiles/signal.json. Next: 095 validates a kitchen and a production run."},
+ "tags": ["supply", "farmers", "signals"]
+}

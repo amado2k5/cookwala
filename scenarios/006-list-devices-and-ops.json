@@ -1,0 +1,79 @@
+{
+ "id": "006",
+ "slug": "list-devices-and-ops",
+ "audience": "developer",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "List the demo devices, the operation vocabulary and the recipes a hub can plan"
+ },
+ "goal": {
+  "en": "Three catalog calls give you everything a dry run works with: capability documents by id, the fifty-seven operations with their envelopes and sensor ladders, and the recipe ids the hub holds."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "getDevices",
+   "save": "devices",
+   "note": {
+    "en": "Six capability documents: the example arm and the five presets of the home-page demo."
+   },
+   "expect": {
+    "devices.demo-oven.actor.kind": "appliance",
+    "devices.robot-arm.capabilities.ops.length": 3,
+    "devices.demo-fryer-robot.capabilities.sensors.length": 6,
+    "devices.demo-hob-robot-basic.capabilities.sensors.length": 1
+   }
+  },
+  {
+   "op": "getOps",
+   "save": "ops",
+   "note": {
+    "en": "The operation vocabulary. Deep frying has a one-rung ladder; simmering is water at 85 to 96 degC."
+   },
+   "expect": {
+    "name": "ops",
+    "version": "0.2.0",
+    "entries.length": 57,
+    "entries[30].id": "cw.op.deep_fry",
+    "entries[30].envelope.sensorLadder.length": 1,
+    "entries[32].id": "cw.op.simmer",
+    "entries[32].envelope.tempC.min": 85,
+    "entries[32].envelope.tempC.max": 96
+   }
+  },
+  {
+   "op": "listRecipes",
+   "save": "recipes",
+   "note": {
+    "en": "The nine example recipes, sorted by id."
+   },
+   "expect": {
+    "recipes.length": 9,
+    "recipes[0]": "basbousa",
+    "recipes[8]": "shakshuka"
+   }
+  }
+ ],
+ "cli": [
+  "curl -s http://localhost:7878/v1/tools/devices",
+  "curl -s http://localhost:7878/v1/tools/vocab/ops",
+  "curl -s http://localhost:7878/v1/tools/recipes"
+ ],
+ "outcome": {
+  "en": "You can look up any operation envelope by index or id and any device by its file name. Next: scenario 009 asks the sensor ladder which rung a device can satisfy."
+ },
+ "tags": [
+  "vocabulary",
+  "devices",
+  "catalog"
+ ]
+}

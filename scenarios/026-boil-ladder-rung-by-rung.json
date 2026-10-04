@@ -1,0 +1,119 @@
+{
+ "id": "026",
+ "slug": "boil-ladder-rung-by-rung",
+ "audience": "robot_maker",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "The boiling ladder rung by rung: thermometer, boil detector, estimate, time"
+ },
+ "goal": {
+  "en": "Boiling is unattended-safe, so its ladder ends in time. Walk it with different sensor sets and see that a pan thermometer does not verify a pot of water."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.boil",
+    "sensors": [
+     "cw.sense.liquid_temp"
+    ],
+    "allowModel": true,
+    "humanPresent": false
+   },
+   "save": "thermometer",
+   "note": {
+    "en": "A liquid thermometer is the first rung."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.boil",
+    "sensors": [
+     "cw.sense.boil_detect"
+    ],
+    "allowModel": true,
+    "humanPresent": false
+   },
+   "save": "detector",
+   "note": {
+    "en": "A boil detector (bubbles, sound or steam) is the second."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.boil",
+    "sensors": [],
+    "allowModel": true,
+    "humanPresent": false
+   },
+   "save": "estimate",
+   "note": {
+    "en": "Neither, estimates allowed: a logged model estimate."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.boil",
+    "sensors": [],
+    "allowModel": false,
+    "humanPresent": false
+   },
+   "save": "time",
+   "note": {
+    "en": "Neither, estimates forbidden: time alone."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.boil",
+    "sensors": [
+     "cw.sense.pan_surface_temp"
+    ],
+    "allowModel": false,
+    "humanPresent": false
+   },
+   "save": "wrongSensor",
+   "note": {
+    "en": "A pan-surface thermometer is not on the boiling ladder, so it changes nothing: time again."
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "Four rungs, in order."
+   },
+   "expect": {
+    "thermometer": "cw.sense.liquid_temp",
+    "detector": "cw.sense.boil_detect",
+    "estimate": "model",
+    "time": "time",
+    "wrongSensor": "time"
+   }
+  }
+ ],
+ "cli": [
+  "curl -s -X POST http://localhost:7878/v1/tools/ladder -H 'Content-Type: application/json' -d '{\"op\": \"cw.op.boil\", \"sensors\": [\"cw.sense.boil_detect\"], \"allowModel\": true, \"humanPresent\": false}'",
+  "curl -s -X POST http://localhost:7878/v1/tools/ladder -H 'Content-Type: application/json' -d '{\"op\": \"cw.op.boil\", \"sensors\": [\"cw.sense.pan_surface_temp\"], \"allowModel\": false, \"humanPresent\": false}'"
+ ],
+ "outcome": {
+  "en": "You can choose sensors for a product by reading ladders: a boil detector is enough for boiling, a pan thermometer is not. Next: scenario 027 lists the operations that never fall back to time."
+ },
+ "tags": [
+  "sensor-ladder",
+  "boil"
+ ]
+}

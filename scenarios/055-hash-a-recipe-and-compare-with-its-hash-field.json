@@ -1,0 +1,22 @@
+{
+ "id": "055",
+ "slug": "hash-a-recipe-and-compare-with-its-hash-field",
+ "audience": "recipe_publisher",
+ "northStar": ["health"],
+ "level": "beginner",
+ "title": {"en": "Hash a recipe and compare it with the hash field the file carries"},
+ "goal": {"en": "A published recipe carries its own content hash. Compute the hash of the koshari file, fetch the hub's copy and read the field inside it, and hash that copy too: all three agree."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "hash", "args": {"doc": {"$file": "examples/koshari.cookwala.json"}}, "save": "file", "note": {"en": "Hash the koshari file from the repository."}, "expect": {"hash": "sha256:f7fc3745af51465fb7a849faa5b5927eeaa44030a703318bb293381fef8b3f45"}},
+  {"op": "getRecipe", "args": {"id": "koshari"}, "save": "recipe", "note": {"en": "Fetch the hub's copy; its hash field carries the same value."}, "expect": {"hash": "sha256:f7fc3745af51465fb7a849faa5b5927eeaa44030a703318bb293381fef8b3f45", "id": "example-koshari"}},
+  {"op": "hash", "args": {"doc": {"$var": "recipe"}}, "save": "again", "note": {"en": "Hash the fetched copy. The hash and signature fields are excluded from the computation, so a document can carry its own hash."}, "expect": {"hash": "sha256:f7fc3745af51465fb7a849faa5b5927eeaa44030a703318bb293381fef8b3f45"}}
+ ],
+ "cli": [
+  "cookwala hash examples/koshari.cookwala.json",
+  "grep '\"hash\"' examples/koshari.cookwala.json"
+ ],
+ "outcome": {"en": "You can check that a recipe file is the revision it says it is. Next: scenario 047 shows the hub refusing a request whose hash does not match."},
+ "tags": ["hash", "recipe", "canonical-json"]
+}

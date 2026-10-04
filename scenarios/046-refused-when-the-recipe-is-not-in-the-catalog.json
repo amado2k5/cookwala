@@ -1,0 +1,21 @@
+{
+ "id": "046",
+ "slug": "refused-when-the-recipe-is-not-in-the-catalog",
+ "audience": "developer",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "A request for a recipe the hub does not hold is refused"},
+ "goal": {"en": "A hub only cooks recipes it can fetch and hash. Ask for the catalog, then request a recipe id that is not in it and read the refusal."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "listRecipes", "save": "recipes", "note": {"en": "The runner's hub holds the nine example recipes."}, "expect": {"recipes.length": 9, "recipes[8]": "shakshuka"}},
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-046-unknown", "recipe": "cw:cookwala.ai:example-nothing", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-046-unknown-a"}, "idempotencyKey": "ex-046-unknown-key", "humanPresent": true}, "save": "refused", "note": {"en": "Request a recipe reference the hub cannot resolve. The refusal reason is missing_capability and the detail says the recipe is not in the catalog."}, "expect": {"state": "refused", "refusal.reason": "missing_capability", "refusal.detail": "recipe not found in this hub's catalog"}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "curl -s http://localhost:7878/v1/tools/recipes"
+ ],
+ "outcome": {"en": "You know a hub refuses what it cannot find rather than guessing. Next: scenario 047 covers a hash that does not match."},
+ "tags": ["execution", "refusal", "catalog"]
+}

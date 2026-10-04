@@ -1,0 +1,22 @@
+{
+ "id": "086",
+ "slug": "facet-travel-rules-never-derived-consented",
+ "audience": "regulator",
+ "northStar": ["health", "robots"],
+ "level": "intermediate",
+ "title": {"en": "Three travel rules: never, derived, consented, and a consent that cannot override never"},
+ "goal": {"en": "The facet registry (vocab/facets.json) gives each of its 139 facets a travel rule: 45 never leave the home, 81 leave only as derived constraints, 13 may be disclosed by consent. Hand the derivation one facet of each kind plus an unknown id and read the reasons."},
+ "docs": ["/docs/HOUSEHOLD-CONTEXT/", "/trust/", "/docs/CORE/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "deriveConstraints", "args": {"facets": [{"facet": "cw.facet.household.health.conditions"}, {"facet": "cw.facet.household.health.allergies"}, {"facet": "cw.facet.self.identity"}, {"facet": "cw.facet.mandate.authority"}, {"facet": "cw.facet.made.up"}], "role": "planner"}, "save": "travel", "note": {"en": "Five facets for a planner: a health condition (never), an allergy (derived), the device identity (consented), the mandate authority (never) and an id that is not in the registry."}, "expect": {"constraints.length": 1, "constraints[0].type": "allergen_block", "disclosed.length": 0, "withheld.length": 4}},
+  {"op": "assert", "note": {"en": "Each withheld facet carries its rule: never_travels, no_consent, never_travels, unknown_facet. An unknown id is withheld, not passed through."}, "expect": {"travel.withheld[0].reason": "never_travels", "travel.withheld[1].reason": "no_consent", "travel.withheld[2].reason": "never_travels", "travel.withheld[3].reason": "unknown_facet"}},
+  {"op": "deriveConstraints", "args": {"facets": [{"facet": "cw.facet.household.health.conditions"}], "role": "planner", "consents": [{"id": "cg-test-1", "grantedBy": "owner", "scope": {"facets": ["cw.facet.household.health.conditions"]}, "recipientRole": "planner", "purpose": "test", "grantedAt": "2026-10-04T12:00:00Z", "withdrawable": true}]}, "save": "override", "note": {"en": "A consent grant that names the health condition for the planner changes nothing: consent cannot move a facet out of never."}, "expect": {"disclosed.length": 0, "withheld.length": 1, "withheld[0].reason": "never_travels"}}
+ ],
+ "cli": [
+  "jq '[.entries[].travel] | group_by(.) | map({(.[0]): length}) | add' vocab/facets.json",
+  "jq '.entries | length' vocab/facets.json"
+ ],
+ "outcome": {"en": "You can audit the registry's travel rules yourself and know that a privacy class may be raised, never lowered, and that never is never. Next: 087 validates the household documents."},
+ "tags": ["household", "privacy", "registry", "travel-rules"]
+}

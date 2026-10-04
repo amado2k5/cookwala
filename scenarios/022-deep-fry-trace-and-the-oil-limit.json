@@ -1,0 +1,150 @@
+{
+ "id": "022",
+ "slug": "deep-fry-trace-and-the-oil-limit",
+ "audience": "robot_maker",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "A deep-fry trace inside the band, one that runs hot, and the limit that cuts heat at 200 degC"
+ },
+ "goal": {
+  "en": "Deep frying is oil at 160 to 190 degC with a one-rung ladder. The envelope check reads the trace; the SafetyLimits pack says what the device does when oil passes 200 degC: cut heat."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.deep_fry",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 150
+     },
+     {
+      "t": 60,
+      "tempC": 170
+     },
+     {
+      "t": 120,
+      "tempC": 178
+     },
+     {
+      "t": 180,
+      "tempC": 175
+     }
+    ],
+    "target": {
+     "value": 175,
+     "tolerance": 10
+    }
+   },
+   "save": "ok",
+   "note": {
+    "en": "Oil warms to 170, 178 and 175 degC with the koshari target of 175 plus or minus 10."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "targetOk": true,
+    "reason": "ok"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.deep_fry",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 150
+     },
+     {
+      "t": 60,
+      "tempC": 170
+     },
+     {
+      "t": 120,
+      "tempC": 185
+     },
+     {
+      "t": 180,
+      "tempC": 205
+     }
+    ],
+    "target": {
+     "value": 175,
+     "tolerance": 10
+    }
+   },
+   "save": "hot",
+   "note": {
+    "en": "The oil climbs to 205 degC: it left the envelope."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "targetOk": false,
+    "reason": "left_envelope"
+   }
+  },
+  {
+   "op": "safetyLimits",
+   "save": "limits",
+   "note": {
+    "en": "The first limit in the default pack applies to frying and deep frying: above 200 degC the device cuts heat on its own."
+   },
+   "expect": {
+    "limits[0].id": "oil.max_temp",
+    "limits[0].kind": "max_temp",
+    "limits[0].max": 200,
+    "limits[0].action": "cut_heat",
+    "limits[0].appliesTo.ops[1]": "cw.op.deep_fry"
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.deep_fry",
+    "sensors": [
+     "cw.sense.vision",
+     "cw.sense.pan_surface_temp"
+    ],
+    "allowModel": true,
+    "humanPresent": true
+   },
+   "save": "rung",
+   "note": {
+    "en": "Without an oil thermometer there is no rung, even with a person watching."
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "The ladder answer is null."
+   },
+   "expect": {
+    "rung": null
+   }
+  }
+ ],
+ "cli": [
+  "printf '[{\"t\": 0, \"tempC\": 150}, {\"t\": 30, \"tempC\": 170}, {\"t\": 60, \"tempC\": 178}, {\"t\": 90, \"tempC\": 175}]' > trace.json && cookwala envelope cw.op.deep_fry trace.json --target 175 --tolerance 10",
+  "printf '[{\"t\": 0, \"tempC\": 150}, {\"t\": 30, \"tempC\": 170}, {\"t\": 60, \"tempC\": 185}, {\"t\": 90, \"tempC\": 205}]' > trace.json && cookwala envelope cw.op.deep_fry trace.json --target 175 --tolerance 10",
+  "curl -s http://localhost:7878/v1/safety-limits"
+ ],
+ "outcome": {
+  "en": "You know the three facts a fryer must implement: the band, the single rung, and the local limit above it. Next: scenario 034 plans koshari on the fryer robot with estimates forbidden."
+ },
+ "tags": [
+  "envelope",
+  "deep-fry",
+  "safety-limits"
+ ]
+}

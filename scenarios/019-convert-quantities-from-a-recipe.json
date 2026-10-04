@@ -1,0 +1,107 @@
+{
+ "id": "019",
+ "slug": "convert-quantities-from-a-recipe",
+ "audience": "home_cook",
+ "northStar": [
+  "health"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Convert quantities read from a recipe document"
+ },
+ "goal": {
+  "en": "Recipes carry exact metric quantities and a display string per language. Read a quantity, convert it to the unit on your spoon, and scale the yield of a batch."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "getRecipe",
+   "args": {
+    "id": "shakshuka"
+   },
+   "save": "shakshuka",
+   "note": {
+    "en": "Shakshuka's first ingredient is 30 ml of olive oil, displayed as \"2 tbsp olive oil\"."
+   },
+   "expect": {
+    "ingredients[0].qty.value": 30,
+    "ingredients[0].qty.unit": "ml",
+    "ingredients[0].display.en": "2 tbsp olive oil"
+   }
+  },
+  {
+   "op": "convert",
+   "args": {
+    "value": {
+     "$var": "shakshuka",
+     "path": "ingredients[0].qty.value"
+    },
+    "unit": {
+     "$var": "shakshuka",
+     "path": "ingredients[0].qty.unit"
+    },
+    "to": "tbsp"
+   },
+   "save": "spoons",
+   "note": {
+    "en": "Convert that quantity, taken from the document, to tablespoons."
+   },
+   "expect": {
+    "value": 2.0,
+    "unit": "tbsp"
+   }
+  },
+  {
+   "op": "getRecipe",
+   "args": {
+    "id": "koshari"
+   },
+   "save": "koshari",
+   "note": {
+    "en": "Koshari yields six servings and 3,200 g in total."
+   },
+   "expect": {
+    "yield.servings": 6,
+    "yield.totalMass.value": 3200,
+    "yield.totalMass.unit": "g"
+   }
+  },
+  {
+   "op": "convert",
+   "args": {
+    "value": {
+     "$var": "koshari",
+     "path": "yield.totalMass.value"
+    },
+    "unit": "g",
+    "to": "kg"
+   },
+   "save": "kg",
+   "note": {
+    "en": "The total mass in kilograms."
+   },
+   "expect": {
+    "value": 3.2,
+    "unit": "kg"
+   }
+  }
+ ],
+ "cli": [
+  "curl -s http://localhost:7878/v1/tools/recipes/shakshuka | head -40",
+  "cookwala convert 30 ml tbsp",
+  "cookwala convert 3200 g kg"
+ ],
+ "outcome": {
+  "en": "You can read and convert any quantity in a recipe without touching its text, which stays a display aid. Next: scenario 020 moves from quantities to temperatures."
+ },
+ "tags": [
+  "units",
+  "recipe-format"
+ ]
+}

@@ -1,0 +1,106 @@
+{
+ "id": "035",
+ "slug": "plan-with-the-devices-own-capabilities",
+ "audience": "agent_builder",
+ "northStar": [
+  "robots"
+ ],
+ "level": "intermediate",
+ "title": {
+  "en": "Ask the device what it can do, then dry-run against its own answer"
+ },
+ "goal": {
+  "en": "An agent should not assume a device from a catalog. Read the capability document from the Core API and pass it to the dry run as the device, so the plan is made against what the device itself declared."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "capabilities",
+   "save": "caps",
+   "note": {
+    "en": "The hub's device: the example arm with cut, crack and transfer."
+   },
+   "expect": {
+    "actor.id": "robot:arm-1",
+    "capabilities.ops.length": 3
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "shakshuka",
+    "device": {
+     "$var": "caps"
+    },
+    "humanPresent": true
+   },
+   "save": "withPerson",
+   "note": {
+    "en": "Shakshuka against the device's own document, a person present: the arm cuts, the person cooks."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 13,
+    "plan[0].by": "device",
+    "plan[3].by": "human"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "shakshuka",
+    "device": {
+     "$var": "caps"
+    },
+    "humanPresent": false
+   },
+   "save": "alone",
+   "note": {
+    "en": "Nobody present: refused before motion."
+   },
+   "expect": {
+    "state": "refused",
+    "refusal.reason": "needs_human_present"
+   }
+  },
+  {
+   "op": "dryRun",
+   "args": {
+    "recipeId": "koshari",
+    "device": {
+     "$var": "caps"
+    },
+    "humanPresent": true
+   },
+   "save": "koshari",
+   "note": {
+    "en": "Koshari against the same document: the arm cuts the onions; the person does the other nineteen steps, including the frying."
+   },
+   "expect": {
+    "state": "accepted",
+    "plan.length": 20,
+    "plan[10].by": "device",
+    "plan[13].by": "human"
+   }
+  }
+ ],
+ "cli": [
+  "curl -s http://localhost:7878/v1/capabilities > device.json",
+  "cookwala dryrun examples/shakshuka.cookwala.json --device device.json --human-present",
+  "cookwala dryrun examples/koshari.cookwala.json --device device.json --human-present"
+ ],
+ "outcome": {
+  "en": "Your agent plans against the live device, never a cached idea of it, and can say which steps it will ask the household to do. Scenario 018 shows what happens when the agent then sends a request."
+ },
+ "tags": [
+  "agent",
+  "capabilities",
+  "dry-run"
+ ]
+}

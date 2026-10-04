@@ -1,0 +1,24 @@
+{
+ "id": "063",
+ "slug": "rejection-reason-codes-temp-date-pack-allerg-qty",
+ "audience": "food_safety_officer",
+ "northStar": ["health", "hunger"],
+ "level": "beginner",
+ "title": {"en": "Rejection reason codes, part one: TEMP, DATE, PACK, ALLERG, QTY"},
+ "goal": {"en": "Each SMS reason code maps to one value of the profile's RejectReason enum, so a rejection recorded by phone and one recorded by API read the same."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "parseSms", "args": {"text": "HAND A7K 10 REJ 2 TEMP T9"}, "save": "temp", "note": {"en": "TEMP: temperature out of range."}, "expect": {"reason": "temp_out_of_range", "reasonCode": "TEMP", "tempC": 9.0}},
+  {"op": "parseSms", "args": {"text": "HAND A7K 10 REJ 2 DATE"}, "save": "date", "note": {"en": "DATE: past the use-by date."}, "expect": {"reason": "past_use_by"}},
+  {"op": "parseSms", "args": {"text": "HAND A7K 10 REJ 2 PACK"}, "save": "pack", "note": {"en": "PACK: packaging damaged."}, "expect": {"reason": "packaging_damaged"}},
+  {"op": "parseSms", "args": {"text": "HAND A7K 10 REJ 2 ALLERG"}, "save": "allerg", "note": {"en": "ALLERG: allergens not labelled."}, "expect": {"reason": "allergen_unlabelled"}},
+  {"op": "parseSms", "args": {"text": "HAND A7K 10 REJ 2 QTY"}, "save": "qty", "note": {"en": "QTY: quantity does not match the claim."}, "expect": {"reason": "quantity_mismatch"}}
+ ],
+ "cli": [
+  "cookwala sms \"HAND A7K 10 REJ 2 TEMP T9\"",
+  "cookwala sms \"HAND A7K 10 REJ 2 ALLERG\""
+ ],
+ "outcome": {"en": "You know the five food-safety reasons. Next: scenario 064 has the logistics reasons."},
+ "tags": ["sms", "rejection", "reason-codes", "humanitarian"]
+}

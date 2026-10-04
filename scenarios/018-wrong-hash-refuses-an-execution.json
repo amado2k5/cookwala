@@ -1,0 +1,123 @@
+{
+ "id": "018",
+ "slug": "wrong-hash-refuses-an-execution",
+ "audience": "agent_builder",
+ "northStar": [
+  "robots"
+ ],
+ "level": "intermediate",
+ "title": {
+  "en": "An execution request with the wrong recipe hash is refused; the right hash still needs a person"
+ },
+ "goal": {
+  "en": "An agent sends an ExecuteRequest naming a recipe and its hash. The executor compares the hash with the revision it holds and refuses a mismatch; with the right hash, the device's own dry run still applies. Nothing heats up in this scenario."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/API/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "getRecipe",
+   "args": {
+    "id": "shakshuka"
+   },
+   "save": "recipe",
+   "note": {
+    "en": "Fetch the recipe the agent wants cooked."
+   },
+   "expect": {
+    "id": "example-shakshuka"
+   }
+  },
+  {
+   "op": "hash",
+   "args": {
+    "doc": {
+     "$var": "recipe"
+    }
+   },
+   "save": "h",
+   "note": {
+    "en": "Compute the hash the request must carry."
+   },
+   "expect": {
+    "hash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841"
+   }
+  },
+  {
+   "op": "startExecution",
+   "args": {
+    "request": {
+     "core": "0.2.0",
+     "kind": "ExecuteRequest",
+     "id": "sc018-wrong-hash",
+     "recipe": "cw:cookwala.ai:example-shakshuka",
+     "recipeHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+     "requestedBy": "agent:scenario-018",
+     "idempotencyKey": "sc018-wrong-hash"
+    },
+    "idempotencyKey": "sc018-wrong-hash",
+    "humanPresent": true
+   },
+   "save": "wrong",
+   "note": {
+    "en": "Send a request with a zero hash: HTTP 202 with state refused, reason recipe_hash_mismatch. A refusal is a result, not an error."
+   },
+   "expect": {
+    "state": "refused",
+    "refusal.reason": "recipe_hash_mismatch"
+   }
+  },
+  {
+   "op": "startExecution",
+   "args": {
+    "request": {
+     "core": "0.2.0",
+     "kind": "ExecuteRequest",
+     "id": "sc018-right-hash",
+     "recipe": "cw:cookwala.ai:example-shakshuka",
+     "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841",
+     "requestedBy": "agent:scenario-018",
+     "idempotencyKey": "sc018-right-hash"
+    },
+    "idempotencyKey": "sc018-right-hash",
+    "humanPresent": false
+   },
+   "save": "right",
+   "note": {
+    "en": "Send the right hash with nobody present: the hub's device is the example arm, and cutting needs a person. Refused before any motion."
+   },
+   "expect": {
+    "state": "refused",
+    "refusal.reason": "needs_human_present",
+    "refusal.node": "n1"
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "The hub told the agent which hash it holds."
+   },
+   "expect": {
+    "wrong.refusal.detail": "this hub holds sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841"
+   }
+  }
+ ],
+ "cli": [
+  "cookwala hash examples/shakshuka.cookwala.json",
+  "curl -s -X POST http://localhost:7878/v1/executions -H 'Content-Type: application/json' -H 'Idempotency-Key: sc018-wrong-hash' -d '{\"core\": \"0.2.0\", \"kind\": \"ExecuteRequest\", \"id\": \"sc018-wrong-hash\", \"recipe\": \"cw:cookwala.ai:example-shakshuka\", \"recipeHash\": \"sha256:0000000000000000000000000000000000000000000000000000000000000000\", \"requestedBy\": \"agent:scenario-018\", \"idempotencyKey\": \"sc018-wrong-hash\", \"x-hub-human-present\": true}'"
+ ],
+ "outcome": {
+  "en": "You have seen two refusals an agent must handle before cooking starts, and that both arrive as a status, not a crash. Scenarios 040 onwards start, watch, stop and log an accepted execution."
+ },
+ "tags": [
+  "execution",
+  "hash",
+  "refusal",
+  "agent"
+ ]
+}

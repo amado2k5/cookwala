@@ -1,0 +1,24 @@
+{
+ "id": "054",
+ "slug": "verify-signed-documents-against-key-records",
+ "audience": "insurer",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "Verify signed documents against key records: ok, tampered, revoked, unknown, unsigned"},
+ "goal": {"en": "A signature is checked against a list of KeyRecords. The conformance vectors carry a valid signature, a tampered document, a revoked key and an unknown key; an unsigned document gives its own reason."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "verify", "args": {"doc": {"$file": "conformance/signature.json", "path": "1.input.document"}, "keys": {"$file": "conformance/signature.json", "path": "1.input.keys"}}, "save": "valid", "note": {"en": "A recall signed with a key whose record is valid: ok."}, "expect": {"ok": true, "reason": "ok"}},
+  {"op": "verify", "args": {"doc": {"$file": "conformance/signature.json", "path": "2.input.document"}, "keys": {"$file": "conformance/signature.json", "path": "2.input.keys"}}, "save": "tampered", "note": {"en": "The same document with one field changed: bad_signature."}, "expect": {"ok": false, "reason": "bad_signature"}},
+  {"op": "verify", "args": {"doc": {"$file": "conformance/signature.json", "path": "3.input.document"}, "keys": {"$file": "conformance/signature.json", "path": "3.input.keys"}}, "save": "revoked", "note": {"en": "Signed after the key was revoked: key_revoked."}, "expect": {"ok": false, "reason": "key_revoked"}},
+  {"op": "verify", "args": {"doc": {"$file": "conformance/signature.json", "path": "4.input.document"}, "keys": {"$file": "conformance/signature.json", "path": "4.input.keys"}}, "save": "unknown", "note": {"en": "A key id that no record matches: unknown_key."}, "expect": {"ok": false, "reason": "unknown_key"}},
+  {"op": "verify", "args": {"doc": {"$file": "examples/core/incident.json"}, "keys": []}, "save": "unsigned", "note": {"en": "The example incident report carries no signature at all: unsigned."}, "expect": {"ok": false, "reason": "unsigned"}}
+ ],
+ "cli": [
+  "cookwala verify examples/core/recall.json",
+  "cookwala conformance"
+ ],
+ "outcome": {"en": "You can tell the five answers apart and know that only ok means a document may be trusted. Next: scenario 059 reads an execution log the way an insurer would."},
+ "tags": ["signature", "verify", "key-record", "trust"]
+}

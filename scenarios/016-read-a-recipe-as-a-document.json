@@ -1,0 +1,89 @@
+{
+ "id": "016",
+ "slug": "read-a-recipe-as-a-document",
+ "audience": "teacher",
+ "northStar": [
+  "health"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Read a recipe as a document: yield, allergens, steps, end conditions and a critical control point"
+ },
+ "goal": {
+  "en": "A Cookwala recipe is a typed document a class can read without any device: how much it makes, which allergens it carries, which operation each step is, and the measurable condition that ends it."
+ },
+ "docs": [
+  "/docs/RECIPE-FORMAT/",
+  "/docs/CORE/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "getRecipe",
+   "args": {
+    "id": "kofta-oven"
+   },
+   "save": "kofta",
+   "note": {
+    "en": "Kofta in the oven: four servings, no declared allergens, ten steps; the bake ends when the core probe reads 71 degC, a critical control point for ground meat."
+   },
+   "expect": {
+    "id": "example-kofta-oven",
+    "yield.servings": 4,
+    "verification.level": "V1",
+    "safety.allergens.us9.length": 0,
+    "process.nodes.length": 10,
+    "process.nodes[7].op": "cw.op.bake",
+    "process.nodes[7].params.tempC": 200,
+    "process.nodes[7].until.all[0].sensor": "cw.sense.core_temp",
+    "process.nodes[7].until.all[0].gte": 71,
+    "process.nodes[7].ccp": "ccp_ground_meat"
+   }
+  },
+  {
+   "op": "getRecipe",
+   "args": {
+    "id": "shakshuka"
+   },
+   "save": "shakshuka",
+   "note": {
+    "en": "Shakshuka declares eggs under both the EU and US allergen lists and may be scaled from half to double."
+   },
+   "expect": {
+    "verification.level": "V2",
+    "safety.allergens.eu14[0]": "eggs",
+    "safety.allergens.us9[0]": "eggs",
+    "yield.scaling.minScale": 0.5,
+    "yield.scaling.maxScale": 2
+   }
+  },
+  {
+   "op": "safetyLimits",
+   "save": "limits",
+   "note": {
+    "en": "The number in the recipe is not arbitrary: the default limits pack has the same 71 degC minimum for ground meat, with its source."
+   },
+   "expect": {
+    "limits[4].id": "core.ground_meat",
+    "limits[4].min": 71,
+    "limits[4].action": "ask_human"
+   }
+  }
+ ],
+ "cli": [
+  "curl -s http://localhost:7878/v1/tools/recipes/kofta-oven",
+  "curl -s http://localhost:7878/v1/tools/recipes/shakshuka",
+  "curl -s http://localhost:7878/v1/safety-limits"
+ ],
+ "outcome": {
+  "en": "You can show students where a safe temperature comes from and how a recipe states it as a condition a sensor can check. Next: scenario 036 looks at the knife-work rules in the vocabulary."
+ },
+ "tags": [
+  "recipe-format",
+  "allergens",
+  "ccp",
+  "education"
+ ]
+}

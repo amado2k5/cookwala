@@ -1,0 +1,22 @@
+{
+ "id": "100",
+ "slug": "verify-recall-against-issuer-not-relay",
+ "audience": "food_safety_officer",
+ "northStar": ["health", "robots"],
+ "level": "intermediate",
+ "title": {"en": "A recall through a mirror: verify against the issuer, never the relay"},
+ "goal": {"en": "Federation has no centre, so a recall may arrive through a mirror. The three federation vectors show it: the issuer's signature still verifies after relaying, the mirror's own signature proves nothing, and a mirror that edits the recall breaks the signature."},
+ "docs": ["/docs/FEDERATION/", "/docs/CORE/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "verify", "args": {"doc": {"$file": "conformance/profiles/federation.json", "path": "0.input.document"}, "keys": {"$file": "conformance/profiles/federation.json", "path": "0.input.keys"}}, "save": "relayed", "note": {"en": "The recall rc-100 (action block) republished by a mirror, checked with the issuer's key: ok."}, "expect": {"ok": true, "reason": "ok"}},
+  {"op": "verify", "args": {"doc": {"$file": "conformance/profiles/federation.json", "path": "1.input.document"}, "keys": {"$file": "conformance/profiles/federation.json", "path": "1.input.keys"}}, "save": "resigned", "note": {"en": "The same recall re-signed by the mirror with its own key: unknown_key when only the issuer is trusted."}, "expect": {"ok": false, "reason": "unknown_key"}},
+  {"op": "verify", "args": {"doc": {"$file": "conformance/profiles/federation.json", "path": "2.input.document"}, "keys": {"$file": "conformance/profiles/federation.json", "path": "2.input.keys"}}, "save": "altered", "note": {"en": "A mirror that changes block to warn: bad_signature, even with the mirror's key also in the trust list."}, "expect": {"ok": false, "reason": "bad_signature"}}
+ ],
+ "cli": [
+  "cookwala conformance",
+  "jq '.[] | {id, expected}' conformance/profiles/federation.json"
+ ],
+ "outcome": {"en": "You know why a hub resolves the issuer's key from the issuer's own discovery document and verifies byte for byte, and why cookwala.ai is one entry on a trust list, not a root."},
+ "tags": ["federation", "recall", "signature", "verify"]
+}

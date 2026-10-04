@@ -1,0 +1,24 @@
+{
+ "id": "097",
+ "slug": "agent-mandate-scope-refusal",
+ "audience": "agent_builder",
+ "northStar": ["robots"],
+ "level": "advanced",
+ "title": {"en": "An agent request without start_cooking in its mandate is refused"},
+ "goal": {"en": "Core rule 6.5: an agent's request carries an AgentMandate and the executor refuses what is outside it (mandate_scope). Start shakshuka twice with the recipe's real hash: once with a planning-only mandate, once with start_cooking, then stop the accepted run."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "getRecipe", "args": {"id": "shakshuka"}, "save": "recipe", "note": {"en": "Fetch shakshuka; its id is example-shakshuka and the hub addresses it as cw:cookwala.ai:example-shakshuka."}, "expect": {"id": "example-shakshuka"}},
+  {"op": "hash", "args": {"doc": {"$var": "recipe"}}, "save": "h", "note": {"en": "The request must carry the recipe hash; a wrong one is refused as recipe_hash_mismatch before the mandate is even read."}, "expect": {"hash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841"}},
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-097-planning-only", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "requestedBy": "agent:planner-example", "idempotencyKey": "scenario-097-planning-only", "mandate": {"principal": "person-1", "agent": "agent:planner-example", "scopes": ["plan_meals", "search_recipes"], "expires": "2027-01-01T00:00:00Z"}}, "idempotencyKey": "scenario-097-planning-only", "humanPresent": true}, "save": "refused", "note": {"en": "An agent with scopes plan_meals and search_recipes asks the device to cook: refused, reason mandate_scope. The refusal is a result with HTTP 202, not an error."}, "expect": {"state": "refused", "refusal.reason": "mandate_scope"}},
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-097-with-scope", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "requestedBy": "agent:planner-example", "idempotencyKey": "scenario-097-with-scope", "mandate": {"principal": "person-1", "agent": "agent:planner-example", "scopes": ["plan_meals", "start_cooking"], "confirmBefore": ["any_payment"], "expires": "2027-01-01T00:00:00Z"}}, "idempotencyKey": "scenario-097-with-scope", "humanPresent": true}, "save": "accepted", "note": {"en": "The same request under a mandate that includes start_cooking is accepted; the device still runs its own dry run and limits first."}, "expect": {"state": "accepted", "id": "ex-097-with-scope"}},
+  {"op": "stopExecution", "args": {"id": "ex-097-with-scope", "reason": "requested"}, "save": "stopped", "note": {"en": "Stop it: a stop is never refused for authorization once the caller can reach the executor (Core rule 6.2)."}, "expect": {"state": "stopping"}}
+ ],
+ "cli": [
+  "curl -s -X POST ${COOKWALA_HUB:-http://localhost:7878}/v1/executions -H 'Content-Type: application/json' -H 'Idempotency-Key: scenario-097-planning-only' -d '{\"core\":\"0.2.0\",\"kind\":\"ExecuteRequest\",\"id\":\"ex-097-planning-only\",\"recipe\":\"cw:cookwala.ai:example-shakshuka\",\"recipeHash\":\"sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841\",\"requestedBy\":\"agent:planner-example\",\"idempotencyKey\":\"scenario-097-planning-only\",\"mandate\":{\"principal\":\"person-1\",\"agent\":\"agent:planner-example\",\"scopes\":[\"plan_meals\"],\"expires\":\"2027-01-01T00:00:00Z\"},\"x-hub-human-present\":true}'",
+  "cookwala hash examples/shakshuka.cookwala.json"
+ ],
+ "outcome": {"en": "You have seen the executor enforce the mandate; the MCP server's check_mandate tool does the same check before a request is sent, and irreversible and safety_override always need the principal's confirmation. Next: 098 reads recipe text in two languages."},
+ "tags": ["agents", "mandate", "refusal", "execution"]
+}

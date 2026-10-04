@@ -1,0 +1,24 @@
+{
+ "id": "088",
+ "slug": "your-home-seen-by-three-roles",
+ "audience": "home_cook",
+ "northStar": ["health", "robots"],
+ "level": "beginner",
+ "title": {"en": "Your home as a grocer, a neighbour's robot and an insurer would see it"},
+ "goal": {"en": "Run the same twelve household facts through three recipient roles and count what each receives: five constraints, three, none. No value ever appears: a budget cap is a cap, not your income."},
+ "docs": ["/docs/HOUSEHOLD-CONTEXT/", "/trust/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "grocer"}, "save": "grocer", "note": {"en": "The grocer: allergen block, labelling, delivery window, access point, budget cap."}, "expect": {"constraints.length": 5, "withheld.length": 9}},
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "other_robot"}, "save": "robot", "note": {"en": "A second robot: no-movement zone, pet-safe storage, available equipment."}, "expect": {"constraints.length": 3, "withheld.length": 8}},
+  {"op": "deriveConstraints", "args": {"facets": {"$file": "examples/household/context.json", "path": "facets"}, "role": "insurer"}, "save": "insurer", "note": {"en": "An insurer: nothing from this household, which has no device fault facet."}, "expect": {"constraints.length": 0, "withheld.length": 12}},
+  {"op": "assert", "note": {"en": "In every answer the disclosed list is empty: no raw fact travelled to anyone."}, "expect": {"grocer.disclosed.length": 0, "robot.disclosed.length": 0, "insurer.disclosed.length": 0, "grocer.constraints[4].type": "budget_cap"}}
+ ],
+ "cli": [
+  "cookwala constraints examples/household/context.json --role grocer",
+  "cookwala constraints examples/household/context.json --role other_robot",
+  "cookwala constraints examples/household/context.json --role insurer"
+ ],
+ "outcome": {"en": "You can see, for any role, what leaves your home before it leaves. Next: 089 follows one allergy to two different recipients."},
+ "tags": ["household", "privacy", "home"]
+}

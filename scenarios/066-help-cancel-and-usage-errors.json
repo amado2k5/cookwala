@@ -1,0 +1,26 @@
+{
+ "id": "066",
+ "slug": "help-cancel-and-usage-errors",
+ "audience": "developer",
+ "northStar": ["hunger"],
+ "level": "beginner",
+ "title": {"en": "HELP, CANCEL and the errors a gateway must answer"},
+ "goal": {"en": "Besides the five commands, the grammar has HELP and CANCEL, and four error codes a gateway turns into a reply: usage, bad_date, unknown_command and empty. An error means nothing is written."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "parseSms", "args": {"text": "HELP"}, "save": "help", "note": {"en": "HELP: the gateway replies with one example per command, plain ASCII, under 160 characters."}, "expect": {"ok": true, "command": "HELP"}},
+  {"op": "parseSms", "args": {"text": "CANCEL A7K"}, "save": "cancel", "note": {"en": "Withdraw an offer by id."}, "expect": {"ok": true, "command": "CANCEL", "id": "A7K"}},
+  {"op": "parseSms", "args": {"text": "CANCEL"}, "save": "cancelUsage", "note": {"en": "CANCEL without an id: usage."}, "expect": {"ok": false, "error": "usage"}},
+  {"op": "parseSms", "args": {"text": "hello there"}, "save": "unknown", "note": {"en": "A message that starts with no known keyword: unknown_command."}, "expect": {"ok": false, "error": "unknown_command"}},
+  {"op": "parseSms", "args": {"text": "OFFER YOGURT C"}, "save": "noKg", "note": {"en": "An OFFER without a quantity: usage."}, "expect": {"ok": false, "error": "usage"}},
+  {"op": "parseSms", "args": {"text": "OFFER 36KG YOGURT"}, "save": "noStorage", "note": {"en": "An OFFER without a storage code: usage."}, "expect": {"ok": false, "error": "usage"}},
+  {"op": "parseSms", "args": {"text": ""}, "save": "empty", "note": {"en": "An empty message: empty."}, "expect": {"ok": false, "error": "empty"}}
+ ],
+ "cli": [
+  "cookwala sms \"HELP\"",
+  "cookwala sms \"hello there\""
+ ],
+ "outcome": {"en": "You can build the reply side of a gateway from these codes. Next: scenario 067 covers the safety checks a gateway applies before writing."},
+ "tags": ["sms", "errors", "gateway"]
+}

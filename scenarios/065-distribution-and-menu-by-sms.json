@@ -1,0 +1,24 @@
+{
+ "id": "065",
+ "slug": "distribution-and-menu-by-sms",
+ "audience": "school_program",
+ "northStar": ["hunger", "health"],
+ "level": "beginner",
+ "title": {"en": "Record a distribution and its per-meal menu by SMS"},
+ "goal": {"en": "DIST records meals, people and kilograms for today at the sender's site. MENU adds per-meal nutrients that the school and sodium rule packs compare with their limits."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "parseSms", "args": {"text": "DIST 410 MEALS 410 PEOPLE 96KG"}, "save": "dist", "note": {"en": "A school program served 410 meals to 410 people from 96 kg."}, "expect": {"ok": true, "command": "DIST", "meals": 410, "people": 410, "kg": 96.0}},
+  {"op": "parseSms", "args": {"text": "MENU D12 KCAL650 SODIUM540 FV95"}, "save": "menu", "note": {"en": "Per-meal energy, sodium and fruit-and-vegetable grams for distribution D12."}, "expect": {"command": "MENU", "distribution": "D12", "perMeal.energyKcal": 650.0, "perMeal.sodiumMg": 540.0, "perMeal.fruitVegG": 95.0}},
+  {"op": "parseSms", "args": {"text": "MENU D12 KCAL650 PROTEIN22 FV120"}, "save": "protein", "note": {"en": "PROTEIN is the fourth nutrient the grammar knows."}, "expect": {"perMeal.proteinG": 22.0}},
+  {"op": "parseSms", "args": {"text": "DIST 410 MEALS"}, "save": "usage", "note": {"en": "An incomplete DIST is a usage error."}, "expect": {"ok": false, "error": "usage"}},
+  {"op": "parseSms", "args": {"text": "MENU D12 SALT5"}, "save": "usage2", "note": {"en": "An unknown nutrient word is a usage error, not a silent zero."}, "expect": {"ok": false, "error": "usage"}}
+ ],
+ "cli": [
+  "cookwala sms \"DIST 410 MEALS 410 PEOPLE 96KG\"",
+  "cookwala sms \"MENU D12 KCAL650 SODIUM540 FV95\""
+ ],
+ "outcome": {"en": "You can report a day's meals and menu from a phone. Next: scenario 072 shows which nutrients the rule packs read."},
+ "tags": ["sms", "distribution", "menu", "school-meals"]
+}

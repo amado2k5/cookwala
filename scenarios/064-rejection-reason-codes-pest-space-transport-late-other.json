@@ -1,0 +1,25 @@
+{
+ "id": "064",
+ "slug": "rejection-reason-codes-pest-space-transport-late-other",
+ "audience": "kitchen_operator",
+ "northStar": ["hunger"],
+ "level": "beginner",
+ "title": {"en": "Rejection reason codes, part two: PEST, SPACE, TRANSPORT, LATE, OTHER"},
+ "goal": {"en": "The remaining codes cover contamination and logistics. A word the grammar does not know is kept as the code and recorded as other, so nothing is lost and nothing is invented."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "parseSms", "args": {"text": "HAND A7K 10 REJ 2 PEST"}, "save": "pest", "note": {"en": "PEST: pests or contamination."}, "expect": {"reason": "pests_or_contamination"}},
+  {"op": "parseSms", "args": {"text": "HAND A7K 10 REJ 2 SPACE"}, "save": "space", "note": {"en": "SPACE: the receiver has no capacity."}, "expect": {"reason": "no_capacity"}},
+  {"op": "parseSms", "args": {"text": "HAND A7K 10 REJ 2 TRANSPORT"}, "save": "transport", "note": {"en": "TRANSPORT: no transport."}, "expect": {"reason": "no_transport"}},
+  {"op": "parseSms", "args": {"text": "HAND A7K 10 REJ 2 LATE"}, "save": "late", "note": {"en": "LATE: arrived late."}, "expect": {"reason": "arrived_late"}},
+  {"op": "parseSms", "args": {"text": "HAND A7K 10 REJ 2 OTHER"}, "save": "other", "note": {"en": "OTHER."}, "expect": {"reason": "other", "reasonCode": "OTHER"}},
+  {"op": "parseSms", "args": {"text": "HAND A7K 10 REJ 2 BADWORD"}, "save": "unknown", "note": {"en": "An unknown word becomes other, and the word itself is kept as reasonCode."}, "expect": {"reason": "other", "reasonCode": "BADWORD"}}
+ ],
+ "cli": [
+  "cookwala sms \"HAND A7K 10 REJ 2 PEST\"",
+  "cookwala sms \"HAND A7K 10 REJ 2 BADWORD\""
+ ],
+ "outcome": {"en": "You know all ten reason codes and how unknown words are handled. Next: scenario 065 records a distribution."},
+ "tags": ["sms", "rejection", "reason-codes", "humanitarian"]
+}

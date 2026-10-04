@@ -1,0 +1,24 @@
+{
+ "id": "050",
+ "slug": "duplicate-execution-id-is-a-conflict",
+ "audience": "developer",
+ "northStar": ["robots"],
+ "level": "beginner",
+ "title": {"en": "The same execution id with a new Idempotency-Key is a 409 conflict"},
+ "goal": {"en": "The Idempotency-Key makes a retry safe; the execution id makes the run unique. Reusing the id with a different key is a conflict, while the original key still returns the original run."},
+ "docs": ["/docs/CORE/", "/docs/HUB/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-050-dup", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-050-dup-a"}, "idempotencyKey": "ex-050-dup-k1", "humanPresent": true}, "save": "first", "note": {"en": "Start a run with key ex-050-dup-k1."}, "expect": {"state": "accepted", "id": "ex-050-dup"}},
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-050-dup", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-050-dup-a"}, "idempotencyKey": "ex-050-dup-k2", "humanPresent": true}, "save": "conflict", "note": {"en": "Send the same request with a different key. The id already exists, so the answer is a Problem with title conflict."}, "expect": {"title": "conflict", "detail": "execution id already exists"}},
+  {"op": "wait", "note": {"en": "The first run advances to the step that needs a person."}, "seconds": 4},
+  {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-050-dup", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-050-dup-a"}, "idempotencyKey": "ex-050-dup-k1", "humanPresent": true}, "save": "retry", "note": {"en": "Send it again with the original key: the hub returns the first run, at its current state."}, "expect": {"id": "ex-050-dup", "state": "needs_human", "seq": 6}}
+ ],
+ "cli": [
+  "cookwala hub --recipes examples --speed 200",
+  "jq '. + {\"x-hub-human-present\": true}' examples/core/execute-request.json | curl -s -X POST http://localhost:7878/v1/executions -H 'Content-Type: application/json' -H 'Idempotency-Key: ex-2026-10-04-001-a' -d @-",
+  "jq '. + {\"x-hub-human-present\": true}' examples/core/execute-request.json | curl -s -X POST http://localhost:7878/v1/executions -H 'Content-Type: application/json' -H 'Idempotency-Key: ex-2026-10-04-001-b' -d @-"
+ ],
+ "outcome": {"en": "You know how the two identifiers divide the work: one for retries, one for the run. Next: scenario 051 moves to the catalog side with an incident report."},
+ "tags": ["execution", "idempotency", "conflict", "409"]
+}

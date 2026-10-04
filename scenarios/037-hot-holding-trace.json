@@ -1,0 +1,146 @@
+{
+ "id": "037",
+ "slug": "hot-holding-trace",
+ "audience": "food_safety_officer",
+ "northStar": [
+  "health"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Hot holding: the trace, the band, the two-hour limit"
+ },
+ "goal": {
+  "en": "Hot holding keeps cooked food at 60 to 85 degC. The envelope check reads the probe trace; the limits pack says what counts as time out of temperature control and what the device does about it."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.hold",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 75
+     },
+     {
+      "t": 1800,
+      "tempC": 68
+     },
+     {
+      "t": 3600,
+      "tempC": 63
+     }
+    ]
+   },
+   "save": "ok",
+   "note": {
+    "en": "A pot held at 75, 68 and 63 degC over an hour: inside the band."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "reason": "ok"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.hold",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 75
+     },
+     {
+      "t": 1800,
+      "tempC": 62
+     },
+     {
+      "t": 3600,
+      "tempC": 55
+     }
+    ]
+   },
+   "save": "cold",
+   "note": {
+    "en": "The same pot falling to 55 degC: left the envelope."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "reason": "left_envelope"
+   }
+  },
+  {
+   "op": "safetyLimits",
+   "save": "limits",
+   "note": {
+    "en": "The default pack: below 60 degC for more than two hours the food is discarded or reheated; the device alerts."
+   },
+   "expect": {
+    "limits[7].id": "hold.hot",
+    "limits[7].kind": "time_temp",
+    "limits[7].min": 60,
+    "limits[7].holdFor": "PT2H",
+    "limits[7].action": "alert",
+    "limits[7].source": "WHO Five Keys to Safer Food"
+   }
+  },
+  {
+   "op": "getOps",
+   "save": "ops",
+   "note": {
+    "en": "The vocabulary names the hazard: time and temperature."
+   },
+   "expect": {
+    "entries[49].id": "cw.op.hold",
+    "entries[49].envelope.tempC.min": 60,
+    "entries[49].envelope.tempC.max": 85,
+    "entries[49].envelope.hazards[0]": "cw.hz.time_temperature"
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.hold",
+    "sensors": [
+     "cw.sense.core_temp"
+    ],
+    "allowModel": true,
+    "humanPresent": false
+   },
+   "save": "probe",
+   "note": {
+    "en": "With a core probe the hold is verified by the probe; the ladder falls back to estimate and time for devices without one."
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "The probe rung."
+   },
+   "expect": {
+    "probe": "cw.sense.core_temp"
+   }
+  }
+ ],
+ "cli": [
+  "printf '[{\"t\": 0, \"tempC\": 75}, {\"t\": 30, \"tempC\": 68}, {\"t\": 60, \"tempC\": 63}]' > trace.json && cookwala envelope cw.op.hold trace.json",
+  "printf '[{\"t\": 0, \"tempC\": 75}, {\"t\": 30, \"tempC\": 62}, {\"t\": 60, \"tempC\": 55}]' > trace.json && cookwala envelope cw.op.hold trace.json",
+  "curl -s http://localhost:7878/v1/safety-limits"
+ ],
+ "outcome": {
+  "en": "You can audit a holding log with the same four words a device uses and point to the limit and its source. The humanitarian profile (scenarios 060 onwards) applies the same rule to distributions."
+ },
+ "tags": [
+  "hold",
+  "envelope",
+  "safety-limits",
+  "who-five-keys"
+ ]
+}

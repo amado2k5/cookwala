@@ -1,0 +1,132 @@
+{
+ "id": "009",
+ "slug": "sensor-ladder-for-several-ops",
+ "audience": "robot_maker",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Ask the sensor ladder which rung a device can satisfy for simmering, sauteing and deep frying"
+ },
+ "goal": {
+  "en": "Each operation envelope lists ways to verify the step, best first. The ladder tool returns the first rung a device can satisfy, or null when the step must be refused."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.simmer",
+    "sensors": [
+     "cw.sense.liquid_temp"
+    ],
+    "allowModel": true,
+    "humanPresent": false
+   },
+   "save": "simmerSensor",
+   "note": {
+    "en": "Simmering with a liquid thermometer: the sensor is the first rung."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.simmer",
+    "sensors": [],
+    "allowModel": true,
+    "humanPresent": false
+   },
+   "save": "simmerModel",
+   "note": {
+    "en": "No thermometer, estimates allowed: a logged model estimate."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.simmer",
+    "sensors": [],
+    "allowModel": false,
+    "humanPresent": false
+   },
+   "save": "simmerTime",
+   "note": {
+    "en": "No thermometer, no estimates: simmering may run on time alone, because it is unattended-safe."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.saute",
+    "sensors": [],
+    "allowModel": false,
+    "humanPresent": false
+   },
+   "save": "sauteAlone",
+   "note": {
+    "en": "Sauteing with nothing and nobody: null. Its last rung is a person watching."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.saute",
+    "sensors": [],
+    "allowModel": false,
+    "humanPresent": true
+   },
+   "save": "sauteHuman",
+   "note": {
+    "en": "The same with a person present: the human rung."
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.deep_fry",
+    "sensors": [],
+    "allowModel": true,
+    "humanPresent": true
+   },
+   "save": "fryHuman",
+   "note": {
+    "en": "Deep frying with a person present but no oil thermometer: still null. The ladder has one rung."
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "The six answers."
+   },
+   "expect": {
+    "simmerSensor": "cw.sense.liquid_temp",
+    "simmerModel": "model",
+    "simmerTime": "time",
+    "sauteAlone": null,
+    "sauteHuman": "human",
+    "fryHuman": null
+   }
+  }
+ ],
+ "cli": [
+  "curl -s -X POST http://localhost:7878/v1/tools/ladder -H 'Content-Type: application/json' -d '{\"op\": \"cw.op.simmer\", \"sensors\": [\"cw.sense.liquid_temp\"], \"allowModel\": true, \"humanPresent\": false}'",
+  "curl -s -X POST http://localhost:7878/v1/tools/ladder -H 'Content-Type: application/json' -d '{\"op\": \"cw.op.saute\", \"sensors\": [], \"allowModel\": false, \"humanPresent\": false}'",
+  "curl -s -X POST http://localhost:7878/v1/tools/ladder -H 'Content-Type: application/json' -d '{\"op\": \"cw.op.deep_fry\", \"sensors\": [], \"allowModel\": true, \"humanPresent\": true}'"
+ ],
+ "outcome": {
+  "en": "You can predict, per operation, which sensors a device needs so that a plan does not fall back to a person. Next: scenario 026 walks the boiling ladder rung by rung."
+ },
+ "tags": [
+  "sensor-ladder",
+  "simmer",
+  "saute",
+  "deep-fry"
+ ]
+}

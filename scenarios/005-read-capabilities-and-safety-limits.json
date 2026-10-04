@@ -1,0 +1,88 @@
+{
+ "id": "005",
+ "slug": "read-capabilities-and-safety-limits",
+ "audience": "appliance_maker",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Read what a device says about itself: capabilities, safety limits, conformance, recalls"
+ },
+ "goal": {
+  "en": "The four GET endpoints of the Core API answer before any cooking: what the device can do, which limits it enforces locally, what it claims to conform to, and which recipe revisions are recalled."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "capabilities",
+   "save": "caps",
+   "note": {
+    "en": "The reference hub simulates the example robot arm: three operations and one vision sensor."
+   },
+   "expect": {
+    "actor.id": "robot:arm-1",
+    "actor.kind": "robot",
+    "roles[0]": "executor",
+    "capabilities.ops.length": 3,
+    "capabilities.sensors.length": 1
+   }
+  },
+  {
+   "op": "safetyLimits",
+   "save": "limits",
+   "note": {
+    "en": "The draft default limits pack: fourteen limits, the first one cuts heat when frying oil passes 200 degC."
+   },
+   "expect": {
+    "id": "cookwala-default",
+    "status": "draft",
+    "limits.length": 14,
+    "limits[0].id": "oil.max_temp",
+    "limits[0].max": 200,
+    "limits[0].action": "cut_heat"
+   }
+  },
+  {
+   "op": "conformance",
+   "save": "conf",
+   "note": {
+    "en": "The hub declares the executor class itself; it has no third-party report, and says so."
+   },
+   "expect": {
+    "claims[0]": "executor",
+    "report": null
+   }
+  },
+  {
+   "op": "recalls",
+   "save": "recalls",
+   "note": {
+    "en": "No recall is in force for the hub."
+   },
+   "expect": {
+    "length": 0
+   }
+  }
+ ],
+ "cli": [
+  "curl -s http://localhost:7878/v1/capabilities",
+  "curl -s http://localhost:7878/v1/safety-limits",
+  "curl -s http://localhost:7878/v1/conformance",
+  "curl -s http://localhost:7878/v1/recalls"
+ ],
+ "outcome": {
+  "en": "You know the shape of a capability document and a SafetyLimits pack, and that the disclaimer in the pack asks makers to replace it with limits from their own safety case. Next: scenario 006 lists the demo devices and the operation vocabulary."
+ },
+ "tags": [
+  "capabilities",
+  "safety-limits",
+  "core-api"
+ ]
+}

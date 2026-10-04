@@ -1,0 +1,23 @@
+{
+ "id": "073",
+ "slug": "validate-humanitarian-documents",
+ "audience": "developer",
+ "northStar": ["hunger"],
+ "level": "beginner",
+ "title": {"en": "Validate documents against the Humanitarian Profile schema"},
+ "goal": {"en": "The validate operation takes a schema name and a document. Validate the example offer, claim and manifest as humanitarian documents, then validate the offer as a recipe to see what errors look like."},
+ "docs": ["/docs/HUMANITARIAN-PROFILE/", "/humanitarian/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "validate", "args": {"kind": "humanitarian", "doc": {"$file": "examples/humanitarian/offer.json"}}, "save": "offer", "note": {"en": "The example offer against the humanitarian schema."}, "expect": {"ok": true, "errors.length": 0}},
+  {"op": "validate", "args": {"kind": "humanitarian", "doc": {"$file": "examples/humanitarian/claim.json"}}, "save": "claim", "note": {"en": "The example claim."}, "expect": {"ok": true}},
+  {"op": "validate", "args": {"kind": "humanitarian", "doc": {"$file": "examples/humanitarian/manifest.json"}}, "save": "manifest", "note": {"en": "The manifest that lists the example documents."}, "expect": {"ok": true}},
+  {"op": "validate", "args": {"kind": "recipe", "doc": {"$file": "examples/humanitarian/offer.json"}}, "save": "wrong", "note": {"en": "The offer validated as a recipe: ok false and a list of errors, one per missing required recipe field plus one for the unknown properties."}, "expect": {"ok": false, "errors.length": 12}}
+ ],
+ "cli": [
+  "cookwala validate",
+  "cookwala humanitarian examples/humanitarian/offer.json examples/humanitarian/claim.json"
+ ],
+ "outcome": {"en": "You can validate documents from any language through the hub. Next: scenario 075 validates an impact summary."},
+ "tags": ["validate", "schema", "humanitarian"]
+}

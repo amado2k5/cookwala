@@ -1,0 +1,164 @@
+{
+ "id": "038",
+ "slug": "cold-chain-in-the-kitchen",
+ "audience": "dietitian",
+ "northStar": [
+  "health"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Cold chain in the kitchen: chilling and marinating traces"
+ },
+ "goal": {
+  "en": "Chilling and marinating happen at 0 to 5 degC. A fridge that never gets there, or a marinade that warms to 7 degC, fails the check; a fridge thermometer is the first rung for both."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.chill",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 20
+     },
+     {
+      "t": 600,
+      "tempC": 8
+     },
+     {
+      "t": 1200,
+      "tempC": 4
+     },
+     {
+      "t": 1800,
+      "tempC": 3
+     }
+    ]
+   },
+   "save": "ok",
+   "note": {
+    "en": "A salad cooling from 20 to 8, 4 and 3 degC: the band is reached and held."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "reason": "ok"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.chill",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 20
+     },
+     {
+      "t": 600,
+      "tempC": 8
+     },
+     {
+      "t": 1200,
+      "tempC": 7
+     }
+    ]
+   },
+   "save": "warmFridge",
+   "note": {
+    "en": "A fridge that stays at 7 degC: never reached the band."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "reason": "never_reached_envelope"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.marinate",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 4
+     },
+     {
+      "t": 3600,
+      "tempC": 4
+     },
+     {
+      "t": 7200,
+      "tempC": 7
+     }
+    ]
+   },
+   "save": "marinade",
+   "note": {
+    "en": "A marinade at 4 degC that warms to 7 degC after two hours: left the envelope."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "reason": "left_envelope"
+   }
+  },
+  {
+   "op": "getOps",
+   "save": "ops",
+   "note": {
+    "en": "Both operations share the 0 to 5 degC band; marinating names the time-temperature hazard."
+   },
+   "expect": {
+    "entries[47].id": "cw.op.chill",
+    "entries[47].envelope.tempC.max": 5,
+    "entries[17].id": "cw.op.marinate",
+    "entries[17].envelope.tempC.max": 5,
+    "entries[17].envelope.hazards[0]": "cw.hz.time_temperature"
+   }
+  },
+  {
+   "op": "ladder",
+   "args": {
+    "op": "cw.op.chill",
+    "sensors": [
+     "cw.sense.fridge_temp"
+    ],
+    "allowModel": false,
+    "humanPresent": false
+   },
+   "save": "fridge",
+   "note": {
+    "en": "A fridge thermometer is the first rung for chilling."
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "The fridge rung."
+   },
+   "expect": {
+    "fridge": "cw.sense.fridge_temp"
+   }
+  }
+ ],
+ "cli": [
+  "printf '[{\"t\": 0, \"tempC\": 20}, {\"t\": 30, \"tempC\": 8}, {\"t\": 60, \"tempC\": 4}, {\"t\": 90, \"tempC\": 3}]' > trace.json && cookwala envelope cw.op.chill trace.json",
+  "printf '[{\"t\": 0, \"tempC\": 4}, {\"t\": 30, \"tempC\": 4}, {\"t\": 60, \"tempC\": 7}]' > trace.json && cookwala envelope cw.op.marinate trace.json",
+  "curl -s http://localhost:7878/v1/tools/vocab/ops"
+ ],
+ "outcome": {
+  "en": "You can check cold steps with the same tool as hot ones and advise which sensor a kitchen needs for them. The same bands return in the humanitarian profile's cold-chain checks."
+ },
+ "tags": [
+  "chill",
+  "marinate",
+  "cold-chain",
+  "envelope"
+ ]
+}

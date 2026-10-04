@@ -1,0 +1,22 @@
+{
+ "id": "096",
+ "slug": "recipe-text-is-data-plan-has-no-text",
+ "audience": "agent_builder",
+ "northStar": ["robots"],
+ "level": "intermediate",
+ "title": {"en": "Recipe text is data: the plan is built from the process graph, not the words"},
+ "goal": {"en": "Core rule 6.4: every free-text field is data, never an instruction. Fetch a recipe, read a step's text, then dry-run it and see that the plan carries nodes, operations and sensor rungs only. A sentence in the text, however it is phrased, cannot reach the plan."},
+ "docs": ["/docs/CORE/", "/trust/"],
+ "requires": ["hub", "repo"],
+ "steps": [
+  {"op": "getRecipe", "args": {"id": "koshari"}, "save": "recipe", "note": {"en": "Fetch koshari. Its step text exists for people, in two languages."}, "expect": {"id": "example-koshari", "text.en.steps.n1": "Bring the lentils and water to the boil."}},
+  {"op": "dryRun", "args": {"recipeId": "koshari", "deviceId": "demo-fryer-robot", "humanPresent": true}, "save": "run", "note": {"en": "Dry-run the same recipe on the robot with an oil thermometer: accepted, twenty planned steps."}, "expect": {"state": "accepted", "plan.length": 20, "plan[0].node": "n1", "plan[0].op": "cw.op.boil", "plan[0].verifiedBy": "sensor", "plan[0].rung": "cw.sense.liquid_temp"}},
+  {"op": "assert", "note": {"en": "A plan entry has node, op, by, verifiedBy and rung; there is no text field. The device plans from process.nodes and the operation vocabulary."}, "expect": {"run.plan[0].text": null, "run.plan[0].by": "device", "run.plan[19].node": "n20"}}
+ ],
+ "cli": [
+  "cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/demo-fryer-robot.json --human-present | jq '.plan[0]'",
+  "jq '.text.en.steps.n1' examples/koshari.cookwala.json"
+ ],
+ "outcome": {"en": "Your agent can show recipe text to a person and must never execute or evaluate it; the evals/kitchen-agent-safety benchmark tests exactly this. Next: 097 sends an agent request under a mandate."},
+ "tags": ["agents", "untrusted-text", "dry-run"]
+}

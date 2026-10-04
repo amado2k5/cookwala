@@ -1,0 +1,156 @@
+{
+ "id": "020",
+ "slug": "simmer-trace-inside-and-outside",
+ "audience": "developer",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "Check a simmer trace against its envelope: inside, left it, missed the target"
+ },
+ "goal": {
+  "en": "An envelope is the safe band for the medium. The check tolerates the warm-up, then requires every reading to stay in the band and, once the recipe target is reached, near it."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.simmer",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 60
+     },
+     {
+      "t": 30,
+      "tempC": 88
+     },
+     {
+      "t": 60,
+      "tempC": 92
+     },
+     {
+      "t": 90,
+      "tempC": 94
+     }
+    ],
+    "target": {
+     "value": 94,
+     "tolerance": 3
+    }
+   },
+   "save": "ok",
+   "note": {
+    "en": "Warm-up to 88, then 92 and 94 degC with a target of 94 plus or minus 3: inside the band, target held."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "targetOk": true,
+    "reason": "ok"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.simmer",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 60
+     },
+     {
+      "t": 30,
+      "tempC": 90
+     },
+     {
+      "t": 60,
+      "tempC": 94
+     },
+     {
+      "t": 90,
+      "tempC": 99
+     }
+    ],
+    "target": {
+     "value": 94,
+     "tolerance": 3
+    }
+   },
+   "save": "left",
+   "note": {
+    "en": "The same pot reaches 99 degC: that is a boil, not a simmer."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "targetOk": false,
+    "reason": "left_envelope"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.simmer",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 86
+     },
+     {
+      "t": 30,
+      "tempC": 94
+     },
+     {
+      "t": 60,
+      "tempC": 88
+     }
+    ],
+    "target": {
+     "value": 94,
+     "tolerance": 3
+    }
+   },
+   "save": "missed",
+   "note": {
+    "en": "Inside the band but it drifted away from the target after reaching it."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "targetOk": false,
+    "reason": "missed_target"
+   }
+  },
+  {
+   "op": "getOps",
+   "save": "ops",
+   "note": {
+    "en": "The band itself, from the vocabulary."
+   },
+   "expect": {
+    "entries[32].id": "cw.op.simmer",
+    "entries[32].envelope.medium": "water",
+    "entries[32].envelope.tempC.min": 85,
+    "entries[32].envelope.tempC.max": 96
+   }
+  }
+ ],
+ "cli": [
+  "printf '[{\"t\": 0, \"tempC\": 60}, {\"t\": 30, \"tempC\": 88}, {\"t\": 60, \"tempC\": 92}, {\"t\": 90, \"tempC\": 94}]' > trace.json && cookwala envelope cw.op.simmer trace.json --target 94 --tolerance 3",
+  "printf '[{\"t\": 0, \"tempC\": 60}, {\"t\": 30, \"tempC\": 90}, {\"t\": 60, \"tempC\": 94}, {\"t\": 90, \"tempC\": 99}]' > trace.json && cookwala envelope cw.op.simmer trace.json --target 94 --tolerance 3"
+ ],
+ "outcome": {
+  "en": "You can tell an envelope violation from a missed target, and you know the warm-up is not a violation. Next: scenario 021 moves the boiling band with altitude."
+ },
+ "tags": [
+  "envelope",
+  "simmer",
+  "trace"
+ ]
+}

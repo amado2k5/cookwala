@@ -1,0 +1,140 @@
+{
+ "id": "024",
+ "slug": "saute-trace-and-attention",
+ "audience": "home_cook",
+ "northStar": [
+  "robots"
+ ],
+ "level": "beginner",
+ "title": {
+  "en": "A saute trace, and why sauteing is never left alone"
+ },
+ "goal": {
+  "en": "Sauteing is a pan surface at 150 to 210 degC, with continuous attention and two hazards named in the vocabulary. The trace check is the same as for any envelope; the attention rules are what make a robot ask for a person."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/QUICKSTART/"
+ ],
+ "requires": [
+  "hub"
+ ],
+ "steps": [
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.saute",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 120
+     },
+     {
+      "t": 30,
+      "tempC": 165
+     },
+     {
+      "t": 60,
+      "tempC": 180
+     },
+     {
+      "t": 90,
+      "tempC": 190
+     }
+    ]
+   },
+   "save": "ok",
+   "note": {
+    "en": "The pan warms to 165, 180 and 190 degC: inside the band."
+   },
+   "expect": {
+    "envelopeOk": true,
+    "reason": "ok"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.saute",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 120
+     },
+     {
+      "t": 30,
+      "tempC": 165
+     },
+     {
+      "t": 60,
+      "tempC": 200
+     },
+     {
+      "t": 90,
+      "tempC": 215
+     }
+    ]
+   },
+   "save": "hot",
+   "note": {
+    "en": "It climbs to 215 degC: that is searing temperature, outside the saute band."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "reason": "left_envelope"
+   }
+  },
+  {
+   "op": "checkEnvelope",
+   "args": {
+    "op": "cw.op.saute",
+    "trace": [
+     {
+      "t": 0,
+      "tempC": 120
+     },
+     {
+      "t": 30,
+      "tempC": 140
+     }
+    ]
+   },
+   "save": "cold",
+   "note": {
+    "en": "A pan that reached 140 degC never got hot enough to saute."
+   },
+   "expect": {
+    "envelopeOk": false,
+    "reason": "never_reached_envelope"
+   }
+  },
+  {
+   "op": "getOps",
+   "save": "ops",
+   "note": {
+    "en": "The vocabulary says it may not run unattended, needs continuous attention, and names hot oil burns and pan fire as hazards."
+   },
+   "expect": {
+    "entries[26].id": "cw.op.saute",
+    "entries[26].envelope.unattended": false,
+    "entries[26].envelope.attention": "continuous",
+    "entries[26].envelope.hazards[0]": "cw.hz.burn.hot_oil",
+    "entries[26].envelope.hazards[1]": "cw.hz.fire.pan"
+   }
+  }
+ ],
+ "cli": [
+  "printf '[{\"t\": 0, \"tempC\": 120}, {\"t\": 30, \"tempC\": 165}, {\"t\": 60, \"tempC\": 180}, {\"t\": 90, \"tempC\": 190}]' > trace.json && cookwala envelope cw.op.saute trace.json",
+  "printf '[{\"t\": 0, \"tempC\": 120}, {\"t\": 30, \"tempC\": 165}, {\"t\": 60, \"tempC\": 200}, {\"t\": 90, \"tempC\": 215}]' > trace.json && cookwala envelope cw.op.saute trace.json",
+  "curl -s http://localhost:7878/v1/tools/vocab/ops"
+ ],
+ "outcome": {
+  "en": "You can read a pan log against the band and you know why a robot refuses to saute when nobody is home (scenario 011). Next: scenario 025 shows what happens when a recipe asks for a temperature outside the band."
+ },
+ "tags": [
+  "envelope",
+  "saute",
+  "attention",
+  "hazards"
+ ]
+}
