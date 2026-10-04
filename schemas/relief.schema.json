@@ -2,148 +2,772 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/relief.schema.json",
   "title": "Cookwala Relief (feeding programs, needs, pledges, allocations, impact)",
+  "x-cookwala-status": "experimental",
   "description": "The humanitarian layer of Cookwala: lets food organizations, food banks, community kitchens, schools, governments, donors, grocers, restaurants and robot operators coordinate a global, federated 'assembly line' that feeds people, including those who cannot pay. Needs are aggregated (never individual beneficiaries); supply arrives as pledges (food, surplus, kitchen and robot capacity, transport, volunteers, funds expressed as meals); an allocator matches them; kitchens run normal Cookwala sessions; impact is reported openly. Use $defs Program, Need, Pledge, Allocation, ImpactReport. Fields carry optional HXL hashtags for interoperability with humanitarian data systems.",
   "$defs": {
-    "Hxl": { "type": "string", "pattern": "^#[a-z_]+(\\+[a-z_]+)*$", "description": "Humanitarian Exchange Language tag, e.g. #adm1+name, #affected+f+children." },
+    "Hxl": {
+      "type": "string",
+      "pattern": "^#[a-z_]+(\\+[a-z_]+)*$",
+      "description": "Humanitarian Exchange Language tag, e.g. #adm1+name, #affected+f+children."
+    },
     "Place": {
       "type": "object",
       "properties": {
-        "country": { "type": "string", "pattern": "^[A-Z]{2}$" },
-        "admin1": { "type": "string" },
-        "admin2": { "type": "string" },
-        "pcode": { "type": "string", "description": "OCHA place code when available." },
-        "site": { "type": "string", "description": "Camp, school, kitchen or distribution point id." },
-        "lat": { "type": "number" },
-        "lon": { "type": "number" },
-        "radiusKm": { "type": "number" }
+        "country": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "admin1": {
+          "type": "string"
+        },
+        "admin2": {
+          "type": "string"
+        },
+        "pcode": {
+          "type": "string",
+          "description": "OCHA place code when available."
+        },
+        "site": {
+          "type": "string",
+          "description": "Camp, school, kitchen or distribution point id."
+        },
+        "lat": {
+          "type": "number"
+        },
+        "lon": {
+          "type": "number"
+        },
+        "radiusKm": {
+          "type": "number"
+        }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "RationStandard": {
       "type": "object",
       "description": "Nutrition and ration rules for a program. Defaults follow widely used humanitarian minimums (e.g. Sphere: about 2,100 kcal per person per day for general food rations); programs set their own.",
       "properties": {
-        "kcalPerPersonDay": { "type": "number" },
-        "proteinPctEnergy": { "$ref": "common.schema.json#/$defs/Range" },
-        "fatPctEnergy": { "$ref": "common.schema.json#/$defs/Range" },
-        "micronutrients": { "type": "array", "items": { "type": "string" }, "description": "e.g. iron, vitamin_a, iodine (fortified foods)." },
+        "kcalPerPersonDay": {
+          "type": "number"
+        },
+        "proteinPctEnergy": {
+          "$ref": "common.schema.json#/$defs/Range"
+        },
+        "fatPctEnergy": {
+          "$ref": "common.schema.json#/$defs/Range"
+        },
+        "micronutrients": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "e.g. iron, vitamin_a, iodine (fortified foods)."
+        },
         "groups": {
           "type": "array",
-          "items": { "type": "object", "properties": { "group": { "enum": ["infant_6_23m", "child", "adolescent", "adult", "pregnant_lactating", "elderly", "malnourished_mam", "malnourished_sam"] }, "kcalPerDay": { "type": "number" }, "notes": { "type": "string" } } }
+          "items": {
+            "type": "object",
+            "properties": {
+              "group": {
+                "enum": [
+                  "infant_6_23m",
+                  "child",
+                  "adolescent",
+                  "adult",
+                  "pregnant_lactating",
+                  "elderly",
+                  "malnourished_mam",
+                  "malnourished_sam"
+                ]
+              },
+              "kcalPerDay": {
+                "type": "number"
+              },
+              "notes": {
+                "type": "string"
+              }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
+            }
+          }
         },
-        "standardRef": { "type": "string", "description": "e.g. sphere-2018, wfp-school-meals, national guideline id." }
+        "standardRef": {
+          "type": "string",
+          "description": "e.g. sphere-2018, wfp-school-meals, national guideline id."
+        }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Program": {
       "type": "object",
-      "required": ["cookwala", "id", "name", "operator", "type", "area"],
+      "required": [
+        "cookwala",
+        "id",
+        "name",
+        "operator",
+        "type",
+        "area"
+      ],
       "properties": {
-        "cookwala": { "$ref": "common.schema.json#/$defs/SpecVersion" },
-        "id": { "type": "string" },
-        "name": { "type": "string" },
-        "operator": { "type": "string", "description": "Provider id of the organization running it." },
-        "partners": { "type": "array", "items": { "type": "string" } },
-        "type": { "enum": ["emergency_relief", "school_meals", "community_kitchen", "food_bank", "soup_kitchen", "elderly_meals", "refugee_camp", "disaster_response", "surplus_rescue", "pay_it_forward", "other"] },
-        "area": { "type": "array", "items": { "$ref": "#/$defs/Place" } },
-        "period": { "type": "object", "properties": { "from": { "type": "string", "format": "date" }, "to": { "type": "string", "format": "date" } } },
-        "rations": { "$ref": "#/$defs/RationStandard" },
-        "policyPacks": { "type": "array", "items": { "type": "string" }, "description": "Food safety + dietary (e.g. dietary.halal) + humanitarian.sphere." },
-        "kitchens": { "type": "array", "items": { "type": "string" }, "description": "Hub/catalog URLs of participating kitchens." },
-        "catalogs": { "type": "array", "items": { "type": "string" }, "description": "Recipe catalogs used: local, culturally appropriate, from local ingredients." },
-        "accepts": { "type": "array", "items": { "enum": ["food", "surplus_food", "cooked_meals", "kitchen_capacity", "robot_capacity", "transport", "volunteers", "cold_storage", "funds", "fuel", "equipment"] } },
-        "contact": { "type": "string" },
-        "transparency": { "type": "object", "properties": { "impactFeed": { "type": "string" }, "iati": { "type": "string", "description": "IATI activity identifier when reporting aid flows." }, "hdx": { "type": "string" } } },
-        "meta": { "$ref": "common.schema.json#/$defs/Meta" }
+        "cookwala": {
+          "$ref": "common.schema.json#/$defs/SpecVersion"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "operator": {
+          "type": "string",
+          "description": "Provider id of the organization running it."
+        },
+        "partners": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "enum": [
+            "emergency_relief",
+            "school_meals",
+            "community_kitchen",
+            "food_bank",
+            "soup_kitchen",
+            "elderly_meals",
+            "refugee_camp",
+            "disaster_response",
+            "surplus_rescue",
+            "pay_it_forward",
+            "other"
+          ]
+        },
+        "area": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Place"
+          }
+        },
+        "period": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "format": "date"
+            },
+            "to": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
+          }
+        },
+        "rations": {
+          "$ref": "#/$defs/RationStandard"
+        },
+        "policyPacks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Food safety + dietary (e.g. dietary.halal) + humanitarian.sphere."
+        },
+        "kitchens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Hub/catalog URLs of participating kitchens."
+        },
+        "catalogs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Recipe catalogs used: local, culturally appropriate, from local ingredients."
+        },
+        "accepts": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "food",
+              "surplus_food",
+              "cooked_meals",
+              "kitchen_capacity",
+              "robot_capacity",
+              "transport",
+              "volunteers",
+              "cold_storage",
+              "funds",
+              "fuel",
+              "equipment"
+            ]
+          }
+        },
+        "contact": {
+          "type": "string"
+        },
+        "transparency": {
+          "type": "object",
+          "properties": {
+            "impactFeed": {
+              "type": "string"
+            },
+            "iati": {
+              "type": "string",
+              "description": "IATI activity identifier when reporting aid flows."
+            },
+            "hdx": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
+          }
+        },
+        "meta": {
+          "$ref": "common.schema.json#/$defs/Meta"
+        }
       },
-      "patternProperties": { "^x-": {} }
+      "patternProperties": {
+        "^x-": {}
+      },
+      "unevaluatedProperties": false
     },
     "Need": {
       "type": "object",
-      "required": ["cookwala", "id", "program", "place", "window", "people"],
+      "required": [
+        "cookwala",
+        "id",
+        "program",
+        "place",
+        "window",
+        "people"
+      ],
       "description": "Aggregated demand at a place and time. No names, no individual data.",
       "properties": {
-        "cookwala": { "$ref": "common.schema.json#/$defs/SpecVersion" },
-        "id": { "type": "string" },
-        "program": { "type": "string" },
-        "place": { "$ref": "#/$defs/Place" },
-        "window": { "type": "object", "required": ["from", "to"], "properties": { "from": { "$ref": "common.schema.json#/$defs/DateTime" }, "to": { "$ref": "common.schema.json#/$defs/DateTime" } } },
-        "people": { "type": "integer", "minimum": 1, "x-hxl": "#affected" },
-        "groups": { "type": "array", "items": { "type": "object", "properties": { "group": { "type": "string" }, "count": { "type": "integer" } } } },
-        "mealsPerDay": { "type": "integer", "minimum": 1 },
-        "form": { "enum": ["hot_meals", "packed_meals", "dry_rations", "mixed"] },
-        "dietary": { "type": "array", "items": { "type": "string" } },
-        "allergensToAvoid": { "type": "array", "items": { "type": "string" } },
-        "constraints": { "type": "object", "description": "Cooking/serving constraints at the site: no fuel, no water, no refrigeration, no utensils, access window.", "additionalProperties": true },
-        "priority": { "enum": ["critical", "high", "normal"], "description": "Set by the program using its own vulnerability criteria." },
-        "status": { "enum": ["open", "partially_covered", "covered", "closed"] },
-        "meta": { "$ref": "common.schema.json#/$defs/Meta" }
+        "cookwala": {
+          "$ref": "common.schema.json#/$defs/SpecVersion"
+        },
+        "id": {
+          "type": "string"
+        },
+        "program": {
+          "type": "string"
+        },
+        "place": {
+          "$ref": "#/$defs/Place"
+        },
+        "window": {
+          "type": "object",
+          "required": [
+            "from",
+            "to"
+          ],
+          "properties": {
+            "from": {
+              "$ref": "common.schema.json#/$defs/DateTime"
+            },
+            "to": {
+              "$ref": "common.schema.json#/$defs/DateTime"
+            }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
+          }
+        },
+        "people": {
+          "type": "integer",
+          "minimum": 1,
+          "x-hxl": "#affected"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "group": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer"
+              }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
+            }
+          }
+        },
+        "mealsPerDay": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "form": {
+          "enum": [
+            "hot_meals",
+            "packed_meals",
+            "dry_rations",
+            "mixed"
+          ]
+        },
+        "dietary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allergensToAvoid": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "constraints": {
+          "type": "object",
+          "description": "Cooking/serving constraints at the site: no fuel, no water, no refrigeration, no utensils, access window.",
+          "additionalProperties": true
+        },
+        "priority": {
+          "enum": [
+            "critical",
+            "high",
+            "normal"
+          ],
+          "description": "Set by the program using its own vulnerability criteria."
+        },
+        "status": {
+          "enum": [
+            "open",
+            "partially_covered",
+            "covered",
+            "closed"
+          ]
+        },
+        "meta": {
+          "$ref": "common.schema.json#/$defs/Meta"
+        }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Pledge": {
       "type": "object",
-      "required": ["cookwala", "id", "from", "kind", "available"],
+      "required": [
+        "cookwala",
+        "id",
+        "from",
+        "kind",
+        "available"
+      ],
       "description": "Something a participant commits to give: food, surplus, cooking or robot capacity, transport, cold storage, volunteers, fuel, equipment or funds expressed as meals.",
       "properties": {
-        "cookwala": { "$ref": "common.schema.json#/$defs/SpecVersion" },
-        "id": { "type": "string" },
-        "from": { "type": "string", "description": "Provider id (grocer, restaurant, farm, donor, robot operator, kitchen...)." },
-        "kind": { "enum": ["food", "surplus_food", "cooked_meals", "kitchen_capacity", "robot_capacity", "transport", "cold_storage", "volunteers", "funds", "fuel", "equipment"] },
+        "cookwala": {
+          "$ref": "common.schema.json#/$defs/SpecVersion"
+        },
+        "id": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string",
+          "description": "Provider id (grocer, restaurant, farm, donor, robot operator, kitchen...)."
+        },
+        "kind": {
+          "enum": [
+            "food",
+            "surplus_food",
+            "cooked_meals",
+            "kitchen_capacity",
+            "robot_capacity",
+            "transport",
+            "cold_storage",
+            "volunteers",
+            "funds",
+            "fuel",
+            "equipment"
+          ]
+        },
         "items": {
           "type": "array",
-          "items": { "type": "object", "properties": { "ingredientId": { "type": "string" }, "recipeId": { "type": "string" }, "qty": { "$ref": "common.schema.json#/$defs/Quantity" }, "servings": { "type": "number" }, "useBy": { "$ref": "common.schema.json#/$defs/DateTime" }, "storage": { "enum": ["ambient", "chilled", "frozen", "hot_held"] }, "dietary": { "type": "array", "items": { "type": "string" } }, "allergens": { "type": "array", "items": { "type": "string" } } } }
+          "items": {
+            "type": "object",
+            "properties": {
+              "ingredientId": {
+                "type": "string"
+              },
+              "recipeId": {
+                "type": "string"
+              },
+              "qty": {
+                "$ref": "common.schema.json#/$defs/Quantity"
+              },
+              "servings": {
+                "type": "number"
+              },
+              "useBy": {
+                "$ref": "common.schema.json#/$defs/DateTime"
+              },
+              "storage": {
+                "enum": [
+                  "ambient",
+                  "chilled",
+                  "frozen",
+                  "hot_held"
+                ]
+              },
+              "dietary": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "allergens": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
+            }
+          }
         },
         "capacity": {
           "type": "object",
           "description": "For kitchen/robot/transport/storage/volunteer pledges.",
-          "properties": { "mealsPerHour": { "type": "number" }, "hours": { "type": "array", "items": { "type": "string" } }, "kitchen": { "type": "string" }, "vehicles": { "type": "integer" }, "coldStorageL": { "type": "number" }, "people": { "type": "integer" } }
+          "properties": {
+            "mealsPerHour": {
+              "type": "number"
+            },
+            "hours": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "kitchen": {
+              "type": "string"
+            },
+            "vehicles": {
+              "type": "integer"
+            },
+            "coldStorageL": {
+              "type": "number"
+            },
+            "people": {
+              "type": "integer"
+            }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
+          }
         },
-        "funds": { "type": "object", "properties": { "meals": { "type": "integer", "description": "Funds expressed as number of meals sponsored." }, "amount": { "$ref": "common.schema.json#/$defs/Money" }, "channel": { "type": "string", "description": "The program's own donation channel; Cookwala never handles payments." } } },
-        "available": { "type": "object", "required": ["from", "to"], "properties": { "from": { "$ref": "common.schema.json#/$defs/DateTime" }, "to": { "$ref": "common.schema.json#/$defs/DateTime" } } },
-        "place": { "$ref": "#/$defs/Place" },
-        "conditions": { "type": "array", "items": { "type": "string" } },
-        "foodSafety": { "type": "object", "description": "Required for surplus/cooked food: when cooked, how held, temperatures logged.", "properties": { "cookedAt": { "$ref": "common.schema.json#/$defs/DateTime" }, "holding": { "type": "string" }, "tempLog": { "type": "string" }, "ccpRecords": { "type": "boolean" } } },
-        "anonymous": { "type": "boolean" },
-        "meta": { "$ref": "common.schema.json#/$defs/Meta" }
+        "funds": {
+          "type": "object",
+          "properties": {
+            "meals": {
+              "type": "integer",
+              "description": "Funds expressed as number of meals sponsored."
+            },
+            "amount": {
+              "$ref": "common.schema.json#/$defs/Money"
+            },
+            "channel": {
+              "type": "string",
+              "description": "The program's own donation channel; Cookwala never handles payments."
+            }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
+          }
+        },
+        "available": {
+          "type": "object",
+          "required": [
+            "from",
+            "to"
+          ],
+          "properties": {
+            "from": {
+              "$ref": "common.schema.json#/$defs/DateTime"
+            },
+            "to": {
+              "$ref": "common.schema.json#/$defs/DateTime"
+            }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
+          }
+        },
+        "place": {
+          "$ref": "#/$defs/Place"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "foodSafety": {
+          "type": "object",
+          "description": "Required for surplus/cooked food: when cooked, how held, temperatures logged.",
+          "properties": {
+            "cookedAt": {
+              "$ref": "common.schema.json#/$defs/DateTime"
+            },
+            "holding": {
+              "type": "string"
+            },
+            "tempLog": {
+              "type": "string"
+            },
+            "ccpRecords": {
+              "type": "boolean"
+            }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
+          }
+        },
+        "anonymous": {
+          "type": "boolean"
+        },
+        "meta": {
+          "$ref": "common.schema.json#/$defs/Meta"
+        }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Allocation": {
       "type": "object",
-      "required": ["cookwala", "id", "need", "assignments"],
+      "required": [
+        "cookwala",
+        "id",
+        "need",
+        "assignments"
+      ],
       "description": "The allocator's plan for covering a need from pledges: which supply goes to which kitchen, what gets cooked (production plans), how it moves, and what remains uncovered.",
       "properties": {
-        "cookwala": { "$ref": "common.schema.json#/$defs/SpecVersion" },
-        "id": { "type": "string" },
-        "need": { "type": "string" },
+        "cookwala": {
+          "$ref": "common.schema.json#/$defs/SpecVersion"
+        },
+        "id": {
+          "type": "string"
+        },
+        "need": {
+          "type": "string"
+        },
         "assignments": {
           "type": "array",
-          "items": { "type": "object", "properties": { "pledge": { "type": "string" }, "to": { "type": "string" }, "items": { "type": "array" }, "pickupAt": { "$ref": "common.schema.json#/$defs/DateTime" }, "deliverBy": { "$ref": "common.schema.json#/$defs/DateTime" }, "transport": { "type": "string" } } }
+          "items": {
+            "type": "object",
+            "properties": {
+              "pledge": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              },
+              "items": {
+                "type": "array"
+              },
+              "pickupAt": {
+                "$ref": "common.schema.json#/$defs/DateTime"
+              },
+              "deliverBy": {
+                "$ref": "common.schema.json#/$defs/DateTime"
+              },
+              "transport": {
+                "type": "string"
+              }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
+            }
+          }
         },
-        "production": { "type": "array", "items": { "$ref": "advice.schema.json#/$defs/ProductionPlan" } },
-        "coverage": { "type": "object", "properties": { "meals": { "type": "integer" }, "kcalPerPersonDay": { "type": "number" }, "pct": { "type": "number" } } },
-        "gaps": { "type": "array", "items": { "type": "object", "properties": { "what": { "type": "string" }, "qty": { "type": "number" }, "unit": { "type": "string" } } } },
-        "solver": { "type": "object", "properties": { "name": { "type": "string" }, "status": { "type": "string" }, "objective": { "type": "string" } } },
-        "approvedBy": { "type": "string" }
+        "production": {
+          "type": "array",
+          "items": {
+            "$ref": "advice.schema.json#/$defs/ProductionPlan"
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "properties": {
+            "meals": {
+              "type": "integer"
+            },
+            "kcalPerPersonDay": {
+              "type": "number"
+            },
+            "pct": {
+              "type": "number"
+            }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
+          }
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "what": {
+                "type": "string"
+              },
+              "qty": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string"
+              }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
+            }
+          }
+        },
+        "solver": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "objective": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
+          }
+        },
+        "approvedBy": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "ImpactReport": {
       "type": "object",
-      "required": ["cookwala", "program", "period", "meals"],
+      "required": [
+        "cookwala",
+        "program",
+        "period",
+        "meals"
+      ],
       "description": "Open, aggregated impact data. No personal data.",
       "properties": {
-        "cookwala": { "$ref": "common.schema.json#/$defs/SpecVersion" },
-        "program": { "type": "string" },
-        "place": { "$ref": "#/$defs/Place" },
-        "period": { "type": "object", "properties": { "from": { "type": "string", "format": "date" }, "to": { "type": "string", "format": "date" } } },
-        "meals": { "type": "integer", "minimum": 0, "x-hxl": "#output+meals" },
-        "peopleReached": { "type": "integer", "minimum": 0, "x-hxl": "#reached" },
-        "kcalPerPersonDayAvg": { "type": "number" },
-        "costPerMeal": { "$ref": "common.schema.json#/$defs/Money" },
-        "surplusRescuedKg": { "type": "number" },
-        "wasteKg": { "type": "number" },
-        "energyKWhPerMeal": { "type": "number" },
-        "robotShare": { "type": "number", "minimum": 0, "maximum": 1, "description": "Share of cooking steps performed by robots." },
-        "foodSafetyIncidents": { "type": "integer" },
-        "gapsUnmet": { "type": "integer" },
-        "hxl": { "type": "object", "additionalProperties": { "$ref": "#/$defs/Hxl" }, "description": "Field → HXL tag mapping for export." }
+        "cookwala": {
+          "$ref": "common.schema.json#/$defs/SpecVersion"
+        },
+        "program": {
+          "type": "string"
+        },
+        "place": {
+          "$ref": "#/$defs/Place"
+        },
+        "period": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "format": "date"
+            },
+            "to": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
+          }
+        },
+        "meals": {
+          "type": "integer",
+          "minimum": 0,
+          "x-hxl": "#output+meals"
+        },
+        "peopleReached": {
+          "type": "integer",
+          "minimum": 0,
+          "x-hxl": "#reached"
+        },
+        "kcalPerPersonDayAvg": {
+          "type": "number"
+        },
+        "costPerMeal": {
+          "$ref": "common.schema.json#/$defs/Money"
+        },
+        "surplusRescuedKg": {
+          "type": "number"
+        },
+        "wasteKg": {
+          "type": "number"
+        },
+        "energyKWhPerMeal": {
+          "type": "number"
+        },
+        "robotShare": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Share of cooking steps performed by robots."
+        },
+        "foodSafetyIncidents": {
+          "type": "integer"
+        },
+        "gapsUnmet": {
+          "type": "integer"
+        },
+        "hxl": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/Hxl"
+          },
+          "description": "Field → HXL tag mapping for export."
+        }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     }
   }

@@ -11,6 +11,8 @@ known cost, with minimal waste. See [MISSION.md](MISSION.md) and [HEALTH.md](HEA
 
 The architecture that ties everything together is the **Cookwala Protocol** ([PROTOCOL.md](PROTOCOL.md)): context-rich, signed Missions passed between providers and executed as living plans. Recipes follow the layered format in [RECIPE-FORMAT.md](RECIPE-FORMAT.md). Prior art is reviewed in [PRIOR-ART.md](PRIOR-ART.md).
 
+> **Start with [CORE.md](CORE.md).** Cookwala Core 0.2 is the normative part; everything else in this plan is vision or an experimental profile.
+
 Status: draft v0.1, 2026-10-03. Owner: fifi.cooking. Repo: https://github.com/amado2k5/cookwala
 
 > "First and largest" is the positioning goal. Our landscape scan ([RESEARCH.md](RESEARCH.md))

@@ -1,0 +1,89 @@
+{
+ "profile": "0.1.0",
+ "kind": "Offer",
+ "id": "of-2026-11-02-001",
+ "donor": "did:web:greengrocer.example",
+ "state": "offered",
+ "version": 1,
+ "items": [
+  {
+   "lineId": "1",
+   "name": "Tomatoes",
+   "ingredientId": "cw.ing.tomato",
+   "kg": 120,
+   "storage": "ambient",
+   "dateMark": {
+    "kind": "best_before",
+    "date": "2026-11-04"
+   },
+   "allergens": []
+  },
+  {
+   "lineId": "2",
+   "name": "Red lentils",
+   "ingredientId": "cw.ing.lentils_red",
+   "kg": 200,
+   "storage": "ambient",
+   "dateMark": {
+    "kind": "best_before",
+    "date": "2027-03-01"
+   },
+   "allergens": []
+  },
+  {
+   "lineId": "3",
+   "name": "Yogurt cups",
+   "gtin": "6221234567890",
+   "kg": 36,
+   "units": 240,
+   "storage": "chilled",
+   "dateMark": {
+    "kind": "use_by",
+    "date": "2026-11-05"
+   },
+   "allergens": [
+    "milk"
+   ]
+  },
+  {
+   "lineId": "4",
+   "name": "Cooked rice trays",
+   "kg": 18,
+   "storage": "hot_held",
+   "cooked": true,
+   "cookedAt": "2026-11-02T13:30:00+02:00",
+   "allergens": []
+  }
+ ],
+ "window": {
+  "from": "2026-11-02T18:00:00+02:00",
+  "to": "2026-11-03T08:00:00+02:00"
+ },
+ "site": {
+  "country": "EG",
+  "admin1": "Cairo",
+  "admin2": "Nasr City",
+  "siteName": "Supermarket loading bay",
+  "lat": 30.06,
+  "lon": 31.33
+ },
+ "readings": [
+  {
+   "at": "2026-11-02T17:55:00+02:00",
+   "tempC": 4.1,
+   "method": "fridge_display",
+   "lineId": "3"
+  },
+  {
+   "at": "2026-11-02T17:55:00+02:00",
+   "tempC": 66,
+   "method": "probe",
+   "lineId": "4"
+  }
+ ],
+ "needs": [
+  "refrigerated_vehicle",
+  "same_day"
+ ],
+ "note": "Loading bay closes at 21:00; ring the bell."
+}

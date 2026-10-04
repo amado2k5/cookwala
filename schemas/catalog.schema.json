@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/catalog.schema.json",
   "title": "Cookwala Catalog (index) documents",
+  "x-cookwala-status": "core",
   "description": "Static documents served by any Cookwala index (the reference index at cookwala.ai or a mirror). Use the $defs by name: Discovery (/.well-known/cookwala.json), Manifest (/v1/manifest.json), IndexEntry (items of /v1/index/{lang}/{page}.json), Changes (/v1/changes/{sinceVersion}.json), Vocabulary (/v1/vocab/{name}.json).",
   "$defs": {
     "Discovery": {
@@ -33,34 +34,9 @@
         "keys": {
           "type": "array",
           "items": {
-            "type": "object",
-            "required": [
-              "kid",
-              "kty",
-              "crv",
-              "x"
-            ],
-            "properties": {
-              "kid": {
-                "type": "string"
-              },
-              "kty": {
-                "const": "OKP"
-              },
-              "crv": {
-                "const": "Ed25519"
-              },
-              "x": {
-                "type": "string"
-              },
-              "use": {
-                "type": "string"
-              },
-              "expires": {
-                "type": "string"
-              }
-            }
-          }
+            "$ref": "common.schema.json#/$defs/KeyRecord"
+          },
+          "description": "Public keys of the catalog, with validity and revocation. Verifiers cache them for offline use."
         },
         "endpoints": {
           "type": "object",
@@ -106,7 +82,35 @@
             },
             "reports": {
               "type": "string"
+            },
+            "coreApi": {
+              "type": "string",
+              "description": "Core API description (api/core.openapi.yaml)."
+            },
+            "recalls": {
+              "type": "string",
+              "description": "Recall feed (GET, ?since=)."
+            },
+            "incidents": {
+              "type": "string",
+              "description": "Anonymous incident reports (POST)."
+            },
+            "schemaBundle": {
+              "type": "string",
+              "description": "All schemas in one file for offline validation."
+            },
+            "conformance": {
+              "type": "string",
+              "description": "Conformance vectors."
+            },
+            "safetyLimits": {
+              "type": "string",
+              "description": "Default safety-limits pack."
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "mirrors": {
@@ -167,6 +171,10 @@
             "docs": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "federation": {
@@ -189,12 +197,20 @@
                   "priority": {
                     "type": "integer"
                   }
+                },
+                "unevaluatedProperties": false,
+                "patternProperties": {
+                  "^x-": {}
                 }
               }
             },
             "registry": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "extensions": {
@@ -208,6 +224,10 @@
           "type": "string",
           "description": "URL of the operator's market Provider document."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Manifest": {
@@ -244,6 +264,10 @@
             "languages": {
               "type": "integer"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "languages": {
@@ -270,12 +294,20 @@
               "bytes": {
                 "type": "integer"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
         "signature": {
           "$ref": "common.schema.json#/$defs/Signature"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "IndexEntry": {
@@ -373,6 +405,10 @@
         "thumb": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Changes": {
@@ -401,6 +437,10 @@
               "hash": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -420,6 +460,10 @@
                   "duplicate"
                 ]
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -437,10 +481,18 @@
               "message": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           },
           "description": "Devices must stop executing recalled revisions."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Vocabulary": {
@@ -531,6 +583,10 @@
                   "matter": {
                     "type": "string"
                   }
+                },
+                "unevaluatedProperties": false,
+                "patternProperties": {
+                  "^x-": {}
                 }
               },
               "deprecated": {
@@ -538,10 +594,155 @@
               },
               "replacedBy": {
                 "type": "string"
+              },
+              "envelope": {
+                "type": "object",
+                "unevaluatedProperties": false,
+                "patternProperties": {
+                  "^x-": {}
+                },
+                "description": "ops only: the physical meaning of the operation. Executors must keep the medium inside tempC (and pressureKPa) unless the recipe sets a narrower target inside it; conformance vectors in testMethod check this.",
+                "properties": {
+                  "medium": {
+                    "enum": [
+                      "water",
+                      "oil",
+                      "air",
+                      "steam",
+                      "pan_surface",
+                      "product",
+                      "ambient",
+                      "pressure",
+                      "radiant",
+                      "none"
+                    ]
+                  },
+                  "tempC": {
+                    "type": "object",
+                    "required": [
+                      "min",
+                      "max"
+                    ],
+                    "unevaluatedProperties": false,
+                    "properties": {
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    }
+                  },
+                  "pressureKPa": {
+                    "type": "object",
+                    "required": [
+                      "min",
+                      "max"
+                    ],
+                    "unevaluatedProperties": false,
+                    "properties": {
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    }
+                  },
+                  "agitation": {
+                    "enum": [
+                      "none",
+                      "occasional",
+                      "frequent",
+                      "continuous"
+                    ]
+                  },
+                  "lid": {
+                    "enum": [
+                      "on",
+                      "off",
+                      "any"
+                    ]
+                  },
+                  "sensorLadder": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^(cw\\.sense\\.[a-z0-9_]+|x-[a-z0-9-]+\\.[a-z0-9_.-]+|model|time|human)$"
+                    },
+                    "description": "Ways to verify the step, best first. model = a logged estimate; time = nominal time only; human = a person confirms. If the ladder has no entry the executor can satisfy, the step must not run."
+                  },
+                  "attention": {
+                    "enum": [
+                      "none",
+                      "periodic",
+                      "monitor",
+                      "continuous"
+                    ]
+                  },
+                  "unattended": {
+                    "type": "boolean"
+                  },
+                  "hazards": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "note": {
+                    "type": "string"
+                  },
+                  "testMethod": {
+                    "type": "string"
+                  }
+                }
+              },
+              "convert": {
+                "type": "object",
+                "required": [
+                  "to",
+                  "factor"
+                ],
+                "unevaluatedProperties": false,
+                "properties": {
+                  "to": {
+                    "type": "string"
+                  },
+                  "factor": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  }
+                },
+                "description": "units only: exact conversion to a base unit."
+              },
+              "surfaceTempC": {
+                "type": "object",
+                "required": [
+                  "min",
+                  "max"
+                ],
+                "unevaluatedProperties": false,
+                "properties": {
+                  "min": {
+                    "type": "number"
+                  },
+                  "max": {
+                    "type": "number"
+                  }
+                },
+                "description": "heat levels only."
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "RegistryEntry": {
@@ -596,6 +797,10 @@
         "addedAt": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     }
   }

@@ -2,8 +2,8 @@
 // vendor's app. Same family, house, faults and seed; no shared Mission, no providers or failover,
 // no budget thresholds, no decision rights, no reconciliation, no device leases, no standard
 // playbooks, no signed ledger. Whatever the robot can't handle falls back on the humans.
-import { rng, clone, clock, round } from './util.js?v=0.1.2';
-import { createWorld, kitchenLux, SPOTS } from './world.js?v=0.1.2';
+import { rng, clone, clock, round } from './util.js?v=0.1.3';
+import { createWorld, kitchenLux, SPOTS } from './world.js?v=0.1.3';
 
 const DRAIN = { walk: 0.36, manipulate: 0.26, monitor: 0.14, idle: 0.04, docked: 0 };
 

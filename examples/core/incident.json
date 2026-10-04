@@ -1,0 +1,18 @@
+{
+ "core": "0.2.0",
+ "kind": "IncidentReport",
+ "id": "inc-2026-0001",
+ "date": "2026-09-28",
+ "category": "cw.incident.overheat",
+ "severity": "medium",
+ "outcome": "near_miss",
+ "op": "cw.op.fry",
+ "deviceModel": "Example KR-2",
+ "safetyLimitsFired": [
+  "oil.max_temp"
+ ],
+ "description": "Oil reached 201 °C while the robot waited for a delivery; heat was cut automatically.",
+ "contributingFactors": [
+  "agent_instruction"
+ ]
+}

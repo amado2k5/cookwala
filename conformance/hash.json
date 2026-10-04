@@ -1,0 +1,61 @@
+[
+ {
+  "id": "hash-rfc8785-example",
+  "kind": "hash",
+  "description": "RFC 8785 section 3.2.2 example: canonical text must match exactly.",
+  "input": {
+   "numbers": [
+    333333333.3333333,
+    1e+30,
+    4.5,
+    0.002,
+    1e-27
+   ],
+   "string": "€$\u000f\nA'B\"\\\\\"/",
+   "literals": [
+    null,
+    true,
+    false
+   ]
+  },
+  "expected": {
+   "canonical": "{\"literals\":[null,true,false],\"numbers\":[333333333.3333333,1e+30,4.5,0.002,1e-27],\"string\":\"€$\\u000f\\nA'B\\\"\\\\\\\\\\\"/\"}",
+   "hash": "sha256:2d5e01a318d0f0879ab568c4be289c8b1f64ef8921a53c6277d5e069978baacb"
+  }
+ },
+ {
+  "id": "hash-key-order-utf16",
+  "kind": "hash",
+  "description": "Keys sort by UTF-16 code units: \"é\" (U+00E9) after \"z\", and an astral character before \"ﬀ\" (U+FB00).",
+  "input": {
+   "z": 1,
+   "é": 2,
+   "a": 3,
+   "😀": 4,
+   "ﬀ": 5
+  },
+  "expected": {
+   "canonical": "{\"a\":3,\"z\":1,\"é\":2,\"😀\":4,\"ﬀ\":5}",
+   "hash": "sha256:cc33f17452d265eaa80c9c6da572256d763cdb0d43f365aab1043a3e4c400724"
+  }
+ },
+ {
+  "id": "hash-excludes-hash-and-signature",
+  "kind": "hash",
+  "description": "hash and signature fields are excluded before hashing.",
+  "input": {
+   "id": "r1",
+   "revision": 3,
+   "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+   "signature": {
+    "alg": "EdDSA",
+    "kid": "x",
+    "sig": "AA"
+   }
+  },
+  "expected": {
+   "canonical": "{\"id\":\"r1\",\"revision\":3}",
+   "hash": "sha256:7109125541aba1adbf55944eb58c11708b6743146b13b68e0e2945f5c2154a2b"
+  }
+ }
+]

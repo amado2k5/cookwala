@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/session.schema.json",
   "title": "Cookwala Cook Session",
+  "x-cookwala-status": "experimental",
   "description": "One execution of one or more recipes in one kitchen, coordinated by a Cookwala Hub. It holds the plan (who does what, when, with which resources), live task states, resource leases, handoffs, CCP records and policy decisions. Task states match the A2A task lifecycle so agents can follow along.",
   "type": "object",
   "required": [
@@ -92,6 +93,10 @@
             },
             "description": "Optional ingredients the diner chose to skip."
           }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+          "^x-": {}
         }
       }
     },
@@ -124,6 +129,10 @@
           "pregnant": {
             "type": "boolean"
           }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+          "^x-": {}
         }
       }
     },
@@ -157,6 +166,10 @@
               "paused"
             ]
           }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+          "^x-": {}
         }
       }
     },
@@ -192,9 +205,17 @@
               "reason": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "leases": {
@@ -242,6 +263,10 @@
           "corrective": {
             "type": "string"
           }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+          "^x-": {}
         }
       }
     },
@@ -288,6 +313,10 @@
               "overriddenBy": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -297,6 +326,10 @@
         "acknowledgedAt": {
           "$ref": "common.schema.json#/$defs/DateTime"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "shoppingList": {
@@ -321,6 +354,10 @@
             "type": "string"
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "meta": {
@@ -442,6 +479,10 @@
         "a2aTaskId": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Lease": {
@@ -488,6 +529,10 @@
             "revoked"
           ]
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Handoff": {
@@ -538,10 +583,15 @@
           "type": "boolean",
           "default": true
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     }
   },
   "patternProperties": {
     "^x-": {}
-  }
+  },
+  "unevaluatedProperties": false
 }

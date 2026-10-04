@@ -1,6 +1,6 @@
 {
  "name": "ops",
- "version": "0.1.0",
+ "version": "0.2.0",
  "entries": [
   {
    "id": "cw.op.dispense",
@@ -103,13 +103,31 @@
       "type": "string"
      },
      "tempC": {
-      "type": "number"
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
    "sensors": [],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "water",
+    "tempC": {
+     "min": 0,
+     "max": 60
+    },
+    "agitation": "none",
+    "lid": "any",
+    "sensorLadder": [
+     "cw.sense.liquid_temp",
+     "time"
+    ],
+    "attention": "none",
+    "unattended": true,
+    "hazards": [],
+    "testMethod": "conformance/ops/soak.json"
    }
   },
   {
@@ -161,6 +179,18 @@
    "sensors": [],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "none",
+    "attention": "continuous",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.cut"
+    ],
+    "sensorLadder": [
+     "cw.sense.vision",
+     "human"
+    ]
    }
   },
   {
@@ -187,6 +217,18 @@
    "sensors": [],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "none",
+    "attention": "continuous",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.cut"
+    ],
+    "sensorLadder": [
+     "cw.sense.vision",
+     "human"
+    ]
    }
   },
   {
@@ -251,6 +293,18 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "none",
+    "attention": "continuous",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.cut"
+    ],
+    "sensorLadder": [
+     "cw.sense.vision",
+     "human"
+    ]
    }
   },
   {
@@ -278,6 +332,18 @@
    "sensors": [],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "none",
+    "attention": "continuous",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.cut"
+    ],
+    "sensorLadder": [
+     "cw.sense.vision",
+     "human"
+    ]
    }
   },
   {
@@ -444,6 +510,18 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "none",
+    "attention": "continuous",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.cut"
+    ],
+    "sensorLadder": [
+     "cw.sense.vision",
+     "human"
+    ]
    }
   },
   {
@@ -482,12 +560,35 @@
     "properties": {
      "refrigerate": {
       "type": "boolean"
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
    "sensors": [],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "product",
+    "tempC": {
+     "min": 0,
+     "max": 5
+    },
+    "agitation": "none",
+    "lid": "any",
+    "sensorLadder": [
+     "cw.sense.fridge_temp",
+     "time"
+    ],
+    "attention": "none",
+    "unattended": true,
+    "hazards": [
+     "cw.hz.time_temperature"
+    ],
+    "testMethod": "conformance/ops/marinate.json"
    }
   },
   {
@@ -691,6 +792,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -707,6 +812,26 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "pan_surface",
+    "tempC": {
+     "min": 20,
+     "max": 250
+    },
+    "agitation": "occasional",
+    "lid": "any",
+    "sensorLadder": [
+     "cw.sense.pan_surface_temp",
+     "model",
+     "time"
+    ],
+    "attention": "monitor",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.burn.hot_surface"
+    ],
+    "testMethod": "conformance/ops/heat.json"
    }
   },
   {
@@ -758,6 +883,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -774,6 +903,26 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "product",
+    "tempC": {
+     "min": 30,
+     "max": 60
+    },
+    "agitation": "frequent",
+    "lid": "any",
+    "sensorLadder": [
+     "cw.sense.product_temp",
+     "model",
+     "time"
+    ],
+    "attention": "monitor",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.scorch"
+    ],
+    "testMethod": "conformance/ops/melt.json"
    }
   },
   {
@@ -825,6 +974,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -841,6 +994,27 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "pan_surface",
+    "tempC": {
+     "min": 150,
+     "max": 210
+    },
+    "agitation": "frequent",
+    "lid": "off",
+    "sensorLadder": [
+     "cw.sense.pan_surface_temp",
+     "model",
+     "time"
+    ],
+    "attention": "continuous",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.burn.hot_oil",
+     "cw.hz.fire.pan"
+    ],
+    "testMethod": "conformance/ops/saute.json"
    }
   },
   {
@@ -892,6 +1066,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -908,6 +1086,28 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "pan_surface",
+    "tempC": {
+     "min": 200,
+     "max": 260
+    },
+    "agitation": "none",
+    "lid": "off",
+    "sensorLadder": [
+     "cw.sense.pan_surface_temp",
+     "model",
+     "time"
+    ],
+    "attention": "continuous",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.burn.hot_oil",
+     "cw.hz.fire.pan",
+     "cw.hz.smoke"
+    ],
+    "testMethod": "conformance/ops/sear.json"
    }
   },
   {
@@ -959,6 +1159,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -975,6 +1179,27 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "pan_surface",
+    "tempC": {
+     "min": 200,
+     "max": 260
+    },
+    "agitation": "continuous",
+    "lid": "off",
+    "sensorLadder": [
+     "cw.sense.pan_surface_temp",
+     "model",
+     "time"
+    ],
+    "attention": "continuous",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.burn.hot_oil",
+     "cw.hz.fire.pan"
+    ],
+    "testMethod": "conformance/ops/stir_fry.json"
    }
   },
   {
@@ -1026,6 +1251,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1042,6 +1271,27 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "oil",
+    "tempC": {
+     "min": 160,
+     "max": 190
+    },
+    "agitation": "occasional",
+    "lid": "off",
+    "sensorLadder": [
+     "cw.sense.oil_temp",
+     "model",
+     "time"
+    ],
+    "attention": "continuous",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.burn.hot_oil",
+     "cw.hz.fire.oil"
+    ],
+    "testMethod": "conformance/ops/fry.json"
    }
   },
   {
@@ -1100,6 +1350,10 @@
      },
      "batchMaxG": {
       "type": "number"
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1116,6 +1370,26 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "oil",
+    "tempC": {
+     "min": 160,
+     "max": 190
+    },
+    "agitation": "none",
+    "lid": "off",
+    "sensorLadder": [
+     "cw.sense.oil_temp"
+    ],
+    "attention": "continuous",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.burn.hot_oil",
+     "cw.hz.fire.oil"
+    ],
+    "testMethod": "conformance/ops/deep_fry.json",
+    "note": "No fallback to time: an executor without an oil-temperature sensor must not deep-fry. Oil above 200 °C or smoking: cut heat and stop."
    }
   },
   {
@@ -1167,6 +1441,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1183,6 +1461,29 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "water",
+    "tempC": {
+     "min": 98,
+     "max": 102
+    },
+    "agitation": "occasional",
+    "lid": "any",
+    "sensorLadder": [
+     "cw.sense.liquid_temp",
+     "cw.sense.boil_detect",
+     "model",
+     "time"
+    ],
+    "attention": "periodic",
+    "unattended": true,
+    "hazards": [
+     "cw.hz.burn.steam",
+     "cw.hz.boil_over"
+    ],
+    "testMethod": "conformance/ops/boil.json",
+    "note": "Water boils below 100 °C at altitude (about −1 °C per 300 m); executors adjust the band by the kitchen altitude."
    }
   },
   {
@@ -1234,6 +1535,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1250,6 +1555,29 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "water",
+    "tempC": {
+     "min": 85,
+     "max": 96
+    },
+    "agitation": "occasional",
+    "lid": "any",
+    "sensorLadder": [
+     "cw.sense.liquid_temp",
+     "cw.sense.bubble_vision",
+     "model",
+     "time"
+    ],
+    "attention": "periodic",
+    "unattended": true,
+    "hazards": [
+     "cw.hz.burn.steam",
+     "cw.hz.scorch"
+    ],
+    "testMethod": "conformance/ops/simmer.json",
+    "note": "Small, steady bubbles; liquid below a rolling boil."
    }
   },
   {
@@ -1301,6 +1629,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1317,6 +1649,26 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "water",
+    "tempC": {
+     "min": 70,
+     "max": 85
+    },
+    "agitation": "none",
+    "lid": "off",
+    "sensorLadder": [
+     "cw.sense.liquid_temp",
+     "model",
+     "time"
+    ],
+    "attention": "periodic",
+    "unattended": true,
+    "hazards": [
+     "cw.hz.burn.steam"
+    ],
+    "testMethod": "conformance/ops/poach.json"
    }
   },
   {
@@ -1368,6 +1720,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1384,6 +1740,27 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "steam",
+    "tempC": {
+     "min": 95,
+     "max": 102
+    },
+    "agitation": "none",
+    "lid": "on",
+    "sensorLadder": [
+     "cw.sense.chamber_temp",
+     "model",
+     "time"
+    ],
+    "attention": "periodic",
+    "unattended": true,
+    "hazards": [
+     "cw.hz.burn.steam",
+     "cw.hz.dry_pan"
+    ],
+    "testMethod": "conformance/ops/steam.json"
    }
   },
   {
@@ -1435,6 +1812,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1451,6 +1832,27 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "water",
+    "tempC": {
+     "min": 85,
+     "max": 96
+    },
+    "agitation": "occasional",
+    "lid": "on",
+    "sensorLadder": [
+     "cw.sense.liquid_temp",
+     "cw.sense.oven_temp",
+     "model",
+     "time"
+    ],
+    "attention": "periodic",
+    "unattended": true,
+    "hazards": [
+     "cw.hz.scorch"
+    ],
+    "testMethod": "conformance/ops/braise.json"
    }
   },
   {
@@ -1512,6 +1914,10 @@
        "quick",
        "timed"
       ]
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1529,6 +1935,32 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "pressure",
+    "tempC": {
+     "min": 110,
+     "max": 121
+    },
+    "agitation": "none",
+    "lid": "on",
+    "sensorLadder": [
+     "cw.sense.pressure",
+     "cw.sense.liquid_temp",
+     "time"
+    ],
+    "attention": "monitor",
+    "unattended": true,
+    "hazards": [
+     "cw.hz.pressure_release",
+     "cw.hz.burn.steam"
+    ],
+    "testMethod": "conformance/ops/pressure_cook.json",
+    "pressureKPa": {
+     "min": 50,
+     "max": 100
+    },
+    "note": "Gauge pressure about 50–100 kPa. Never open under pressure."
    }
   },
   {
@@ -1580,6 +2012,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1596,6 +2032,27 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "water",
+    "tempC": {
+     "min": 90,
+     "max": 102
+    },
+    "agitation": "frequent",
+    "lid": "off",
+    "sensorLadder": [
+     "cw.sense.liquid_temp",
+     "cw.sense.mass",
+     "model",
+     "time"
+    ],
+    "attention": "monitor",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.scorch"
+    ],
+    "testMethod": "conformance/ops/reduce.json"
    }
   },
   {
@@ -1647,6 +2104,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1663,6 +2124,28 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "pan_surface",
+    "tempC": {
+     "min": 120,
+     "max": 180
+    },
+    "agitation": "frequent",
+    "lid": "off",
+    "sensorLadder": [
+     "cw.sense.pan_surface_temp",
+     "cw.sense.color_vision",
+     "model",
+     "time"
+    ],
+    "attention": "monitor",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.burn.sugar",
+     "cw.hz.scorch"
+    ],
+    "testMethod": "conformance/ops/caramelize.json"
    }
   },
   {
@@ -1714,6 +2197,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1730,6 +2217,27 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "pan_surface",
+    "tempC": {
+     "min": 140,
+     "max": 200
+    },
+    "agitation": "frequent",
+    "lid": "off",
+    "sensorLadder": [
+     "cw.sense.pan_surface_temp",
+     "cw.sense.color_vision",
+     "time"
+    ],
+    "attention": "monitor",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.scorch",
+     "cw.hz.smoke"
+    ],
+    "testMethod": "conformance/ops/toast.json"
    }
   },
   {
@@ -1798,6 +2306,10 @@
        "middle",
        "high"
       ]
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1814,6 +2326,27 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "air",
+    "tempC": {
+     "min": 120,
+     "max": 250
+    },
+    "agitation": "none",
+    "lid": "any",
+    "sensorLadder": [
+     "cw.sense.oven_temp",
+     "cw.sense.core_temp",
+     "model",
+     "time"
+    ],
+    "attention": "periodic",
+    "unattended": true,
+    "hazards": [
+     "cw.hz.burn.hot_surface"
+    ],
+    "testMethod": "conformance/ops/bake.json"
    }
   },
   {
@@ -1868,6 +2401,10 @@
      },
      "ovenMode": {
       "type": "string"
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1884,6 +2421,28 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "air",
+    "tempC": {
+     "min": 160,
+     "max": 250
+    },
+    "agitation": "none",
+    "lid": "off",
+    "sensorLadder": [
+     "cw.sense.oven_temp",
+     "cw.sense.core_temp",
+     "model",
+     "time"
+    ],
+    "attention": "periodic",
+    "unattended": true,
+    "hazards": [
+     "cw.hz.burn.hot_surface",
+     "cw.hz.smoke"
+    ],
+    "testMethod": "conformance/ops/roast.json"
    }
   },
   {
@@ -1946,6 +2505,10 @@
      },
      "turn": {
       "type": "integer"
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1962,6 +2525,27 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "radiant",
+    "tempC": {
+     "min": 200,
+     "max": 320
+    },
+    "agitation": "occasional",
+    "lid": "any",
+    "sensorLadder": [
+     "cw.sense.grill_temp",
+     "cw.sense.core_temp",
+     "time"
+    ],
+    "attention": "monitor",
+    "unattended": false,
+    "hazards": [
+     "cw.hz.fire.flare_up",
+     "cw.hz.smoke"
+    ],
+    "testMethod": "conformance/ops/grill.json"
    }
   },
   {
@@ -1979,6 +2563,10 @@
     "properties": {
      "method": {
       "type": "string"
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -1987,6 +2575,27 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "air",
+    "tempC": {
+     "min": 90,
+     "max": 135
+    },
+    "agitation": "none",
+    "lid": "on",
+    "sensorLadder": [
+     "cw.sense.chamber_temp",
+     "cw.sense.core_temp",
+     "time"
+    ],
+    "attention": "periodic",
+    "unattended": true,
+    "hazards": [
+     "cw.hz.smoke",
+     "cw.hz.co"
+    ],
+    "testMethod": "conformance/ops/smoke.json"
    }
   },
   {
@@ -2028,7 +2637,8 @@
     "type": "object",
     "properties": {
      "tempC": {
-      "type": "number"
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -2038,6 +2648,23 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "ambient",
+    "tempC": {
+     "min": 24,
+     "max": 38
+    },
+    "agitation": "none",
+    "lid": "any",
+    "sensorLadder": [
+     "cw.sense.ambient_temp",
+     "time"
+    ],
+    "attention": "none",
+    "unattended": true,
+    "hazards": [],
+    "testMethod": "conformance/ops/proof.json"
    }
   },
   {
@@ -2060,6 +2687,10 @@
        "shallow_tray",
        "blast"
       ]
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -2068,6 +2699,27 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "product",
+    "tempC": {
+     "min": -1,
+     "max": 60
+    },
+    "agitation": "none",
+    "lid": "any",
+    "sensorLadder": [
+     "cw.sense.core_temp",
+     "model",
+     "time"
+    ],
+    "attention": "periodic",
+    "unattended": true,
+    "hazards": [
+     "cw.hz.time_temperature"
+    ],
+    "testMethod": "conformance/ops/cool.json",
+    "note": "Two-stage cooling: from 60 °C to 21 °C within 2 h, then to 5 °C within 4 more hours. Large batches are a critical control point."
    }
   },
   {
@@ -2084,7 +2736,8 @@
     "type": "object",
     "properties": {
      "tempC": {
-      "type": "number"
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -2093,6 +2746,24 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "ambient",
+    "tempC": {
+     "min": 0,
+     "max": 5
+    },
+    "agitation": "none",
+    "lid": "any",
+    "sensorLadder": [
+     "cw.sense.fridge_temp",
+     "cw.sense.core_temp",
+     "time"
+    ],
+    "attention": "none",
+    "unattended": true,
+    "hazards": [],
+    "testMethod": "conformance/ops/chill.json"
    }
   },
   {
@@ -2110,6 +2781,10 @@
     "properties": {
      "scrapeEveryMin": {
       "type": "number"
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -2118,6 +2793,23 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "ambient",
+    "tempC": {
+     "min": -40,
+     "max": -18
+    },
+    "agitation": "none",
+    "lid": "any",
+    "sensorLadder": [
+     "cw.sense.freezer_temp",
+     "time"
+    ],
+    "attention": "none",
+    "unattended": true,
+    "hazards": [],
+    "testMethod": "conformance/ops/freeze.json"
    }
   },
   {
@@ -2169,6 +2861,10 @@
         ]
        }
       }
+     },
+     "tempC": {
+      "type": "number",
+      "description": "Target temperature of the envelope medium. Must lie within envelope.tempC."
      }
     }
    },
@@ -2185,6 +2881,27 @@
    ],
    "links": {
     "ieee1872": "IEEE 1872.1-2024 Task (to be mapped)"
+   },
+   "envelope": {
+    "medium": "product",
+    "tempC": {
+     "min": 60,
+     "max": 85
+    },
+    "agitation": "occasional",
+    "lid": "any",
+    "sensorLadder": [
+     "cw.sense.core_temp",
+     "model",
+     "time"
+    ],
+    "attention": "periodic",
+    "unattended": true,
+    "hazards": [
+     "cw.hz.time_temperature"
+    ],
+    "testMethod": "conformance/ops/hold.json",
+    "note": "Hot holding at or above 60 °C (WHO Five Keys). Below 60 °C for more than 2 h counts as time out of temperature control."
    }
   },
   {

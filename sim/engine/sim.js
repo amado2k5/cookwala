@@ -1,8 +1,8 @@
 // Cookwala virtual kitchen simulation: one evening, one dinner Mission, many actors.
 // Deterministic for a given seed + toggles, producing a list of replayable frames.
-import { rng, clone, clock, iso, money, round, sha256, canonical } from './util.js?v=0.1.2';
-import { createWorld, kitchenLux, SPOTS } from './world.js?v=0.1.2';
-import { Mission } from './protocol.js?v=0.1.2';
+import { rng, clone, clock, iso, money, round, sha256, canonical } from './util.js?v=0.1.3';
+import { createWorld, kitchenLux, SPOTS } from './world.js?v=0.1.3';
+import { Mission } from './protocol.js?v=0.1.3';
 
 export const LANES = [
   { id: 'mom', label: 'Mom', group: 'family' },
@@ -592,7 +592,7 @@ export function simulate({ seed = 7, toggles = [] } = {}) {
     requirementsMet: M.doc.requirements.filter((r) => r.status.startsWith('satisfied')).map((r) => r.id),
     requirementsDropped: M.doc.requirements.filter((r) => r.status === 'dropped').map((r) => r.id),
     consumedPct: Math.round(consumed * 100), wasteG: st.dish === 'add-001' ? 60 : 90,
-    costActual: money(M.doc.budgets.find((b) => b.id === 'b-cost').status.spent.amount + 0.6),
+    costActual: money(Number(M.doc.budgets.find((b) => b.id === 'b-cost').status.spent.amount) + 0.6),
     feedback: [on('lowLight') ? 'Mom: onions a bit coarse, still great.' : 'Mom: perfect.', 'Adam: more juice next time.', 'Dad: thanks for plating mine first.'],
     lessons: M.doc.execution.log.filter((l) => l.kind === 'lesson').map((l) => l.text)
   };
@@ -618,7 +618,7 @@ export function simulate({ seed = 7, toggles = [] } = {}) {
     findings: M.findings,
     summary: {
       seed, toggles, protocol: true, servedAt: clock(Math.max(serveT, 150)), result: M.doc.outcome.result, battery: robot.battery, frames: frames.length, ledger: M.doc.ledger.length, actualNeed: trueNeed, unused: actualNeed,
-      lateMin: Math.max(0, Math.round(Math.max(serveT, 150) - 150)), cost: M.doc.outcome.costActual.amount, overBudget: M.doc.outcome.costActual.amount > 15,
+      lateMin: Math.max(0, Math.round(Math.max(serveT, 150) - 150)), cost: Number(M.doc.outcome.costActual.amount), overBudget: Number(M.doc.outcome.costActual.amount) > 15,
       ranOut: st.handedOff, humanInterventions: humans.length, humanMinutes: humans.reduce((s, h) => s + h.minutes, 0), deviations: M.doc.adaptations.length,
       wasteG: M.doc.outcome.wasteG, records: M.doc.ledger.length, decisionsDocumented: M.doc.decisions.length, dish: st.dish, problems: M.findings.length
     }
@@ -667,13 +667,13 @@ function initialMission(world, toggles, seed) {
       tasks: ['cook', 'prep', 'clean_dishes', 'set_table', 'serve_to_table', 'remind_people', 'receive_delivery', 'open_door_for_delivery', 'clean_floor'],
       zones: ['kitchen', 'dining', 'hallway', 'living'], stairs: false,
       hardNos: ['never open the door to unknown people', 'no deep-frying when kids are home', 'never disable safety locks on a child’s request'],
-      caution: 'extra_slow', autonomyLevel: 'CA2', spendingLimit: { amount: 20, currency: U },
+      caution: 'extra_slow', autonomyLevel: 'CA2', spendingLimit: { amount: '20.00', currency: U },
       mayAddParties: [IDS.plannerA, IDS.plannerB, IDS.grocerA, IDS.grocerB, IDS.arbiter, IDS.energyA, IDS.energyB],
       authority: [{ who: IDS.mom, level: 10 }, { who: IDS.dad, level: 10 }, { who: IDS.sara, level: 2, scopes: ['drinks', 'dessert_choice'] }, { who: IDS.adam, level: 2, scopes: ['drinks'] }]
     },
     context: { facets: [], mode: { preset: 'budget', robots: [{ actorId: 'robot:neo-1', level: 'medium', pct: 58, minReservePct: 15 }] } },
     routing: {
-      topology: 'hybrid', maxHops: 3, budget: { amount: 1, currency: U },
+      topology: 'hybrid', maxHops: 3, budget: { amount: '1.00', currency: U },
       providers: [
         { role: 'planner', candidates: [{ provider: IDS.plannerA, pace: 'primary' }, { provider: IDS.plannerB, pace: 'alternate' }, { provider: 'local:hub-reasoner', pace: 'contingency' }], view: ['derived constraints only'], timeoutS: 20 },
         { role: 'grocer', candidates: [{ provider: IDS.grocerA, pace: 'primary' }, { provider: IDS.grocerB, pace: 'alternate' }], view: ['order lines', 'delivery window', 'door policy'], timeoutS: 60 },
@@ -696,10 +696,10 @@ function initialMission(world, toggles, seed) {
     decisionRights: [
       { class: 'discard_food', decider: 'safety_kernel' },
       { class: 'contact_emergency', decider: 'holder', default: 'call if anaphylaxis signs or fire' },
-      { class: 'substitute_ingredient', decider: 'arbiter', who: [IDS.arbiter], limits: { quality: 'minor', extraCost: { amount: 1, currency: U } }, beyondLimits: 'household_human', timeout: 'PT2M', onTimeout: 'take_safest' },
+      { class: 'substitute_ingredient', decider: 'arbiter', who: [IDS.arbiter], limits: { quality: 'minor', extraCost: { amount: '1.00', currency: U } }, beyondLimits: 'household_human', timeout: 'PT2M', onTimeout: 'take_safest' },
       { class: 'accept_deviation', decider: 'holder', limits: { quality: 'minor', identityPreserved: true }, beyondLimits: 'household_human' },
       { class: 'drop_optional', decider: 'holder' },
-      { class: 'change_provider', decider: 'holder', limits: { extraCost: { amount: 2, currency: U } }, beyondLimits: 'household_human' },
+      { class: 'change_provider', decider: 'holder', limits: { extraCost: { amount: '2.00', currency: U } }, beyondLimits: 'household_human' },
       { class: 'spend_more', decider: 'household_human', who: [IDS.mom], timeout: 'PT10M', onTimeout: 'take_default', default: 'cheaper mode' },
       { class: 'delay', decider: 'holder', limits: { delay: 'PT15M' }, beyondLimits: 'household_human' },
       { class: 'change_dish', decider: 'household_human', who: [IDS.mom], timeout: 'PT10M', onTimeout: 'take_default', default: 'alternate dish from inventory' },
@@ -715,7 +715,7 @@ function initialMission(world, toggles, seed) {
       { level: 4, to: 'maker_support', when: ['robot_fault'] }, { level: 5, to: 'emergency_services', when: ['fire', 'medical'] }
     ],
     budgets: [
-      { id: 'b-cost', kind: 'cost', scope: 'mission', unit: U, limit: { amount: 20, currency: U }, plan: { amount: 15, currency: U }, controller: 'holder', thresholds: [{ at: 0.75, on: 'forecast', action: 'notify', to: IDS.mom }, { at: 0.85, on: 'forecast', action: 'require_approval', to: 'spend_more' }, { at: 1.0, on: 'actual', action: 'abort' }], status: { spent: { amount: 0, currency: U }, committed: { amount: 0, currency: U }, forecastAtCompletion: { amount: 0, currency: U }, state: 'ok' } },
+      { id: 'b-cost', kind: 'cost', scope: 'mission', unit: U, limit: { amount: '20.00', currency: U }, plan: { amount: '15.00', currency: U }, controller: 'holder', thresholds: [{ at: 0.75, on: 'forecast', action: 'notify', to: IDS.mom }, { at: 0.85, on: 'forecast', action: 'require_approval', to: 'spend_more' }, { at: 1.0, on: 'actual', action: 'abort' }], status: { spent: { amount: '0.00', currency: U }, committed: { amount: '0.00', currency: U }, forecastAtCompletion: { amount: '0.00', currency: U }, state: 'ok' } },
       { id: 'b-time', kind: 'time', scope: 'mission', unit: 'datetime', limit: iso(165), plan: iso(150), controller: 'holder', thresholds: [{ at: 1.0, on: 'forecast', action: 'escalate', to: 'household:mom' }], status: { state: 'ok' } },
       { id: 'b-battery', kind: 'robot_battery', scope: 'robot:neo-1', unit: 'pct', limit: 43, controller: 'holder', thresholds: [{ at: 1.0, on: 'actual', action: 'pause', to: 'holder' }], status: { spent: 0, state: 'ok' } },
       { id: 'b-retries', kind: 'retries', scope: 'role:grocer', unit: 'count', limit: 2, controller: 'holder', thresholds: [{ at: 1.0, on: 'actual', action: 'switch_fallback' }], status: { spent: 0, state: 'ok' } },

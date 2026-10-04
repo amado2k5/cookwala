@@ -1,5 +1,7 @@
 # The Cookwala Protocol: Missions, Context and Swarm Coordination
 
+> **Status: experimental profile.** Not part of Cookwala Core. See [CORE.md](CORE.md) section 10 for what is normative today.
+
 **Status:** architecture vision, draft 0.1 (2026-10-03). It builds on the existing
 Cookwala specs (recipes, sessions, advice, profiles, market, relief) and defines the layer
 that ties them together.

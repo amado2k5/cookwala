@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/order.schema.json",
   "title": "Cookwala Order Intent",
+  "x-cookwala-status": "experimental",
   "description": "A shopping list or ready-meal order derived from a plan and the inventory. Cookwala never carries payment credentials. An adapter turns an OrderIntent into a UCP / ACP checkout (grocery or delivery merchant); payment authorization stays with the merchant and AP2-style user mandates. Orders are never placed without an approval record unless the user set a standing budget rule.",
   "type": "object",
   "required": [
@@ -87,8 +88,16 @@
               "maxUnitPrice": {
                 "$ref": "common.schema.json#/$defs/Money"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+          "^x-": {}
         }
       }
     },
@@ -121,6 +130,10 @@
           "endpoint": {
             "type": "string"
           }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+          "^x-": {}
         }
       }
     },
@@ -149,6 +162,10 @@
                 "type": "string"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "approvedBy": {
@@ -161,6 +178,10 @@
           "type": "string",
           "description": "Reference to the payment-protocol mandate (e.g. AP2), never the credential itself."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "state": {
@@ -196,6 +217,10 @@
         "coldChainRequired": {
           "type": "boolean"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "meta": {
@@ -204,5 +229,6 @@
   },
   "patternProperties": {
     "^x-": {}
-  }
+  },
+  "unevaluatedProperties": false
 }

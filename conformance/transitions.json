@@ -1,0 +1,139 @@
+[
+ {
+  "id": "exec-accepted-preparing",
+  "kind": "execution_transition",
+  "description": "Execution accepted -> preparing",
+  "input": {
+   "from": "accepted",
+   "to": "preparing"
+  },
+  "expected": {
+   "allowed": true
+  }
+ },
+ {
+  "id": "exec-running-completed",
+  "kind": "execution_transition",
+  "description": "Execution running -> completed",
+  "input": {
+   "from": "running",
+   "to": "completed"
+  },
+  "expected": {
+   "allowed": true
+  }
+ },
+ {
+  "id": "exec-completed-running",
+  "kind": "execution_transition",
+  "description": "Execution completed -> running",
+  "input": {
+   "from": "completed",
+   "to": "running"
+  },
+  "expected": {
+   "allowed": false
+  }
+ },
+ {
+  "id": "exec-refused-running",
+  "kind": "execution_transition",
+  "description": "Execution refused -> running",
+  "input": {
+   "from": "refused",
+   "to": "running"
+  },
+  "expected": {
+   "allowed": false
+  }
+ },
+ {
+  "id": "exec-stopping-running",
+  "kind": "execution_transition",
+  "description": "Execution stopping -> running",
+  "input": {
+   "from": "stopping",
+   "to": "running"
+  },
+  "expected": {
+   "allowed": false
+  }
+ },
+ {
+  "id": "exec-paused-running",
+  "kind": "execution_transition",
+  "description": "Execution paused -> running",
+  "input": {
+   "from": "paused",
+   "to": "running"
+  },
+  "expected": {
+   "allowed": true
+  }
+ },
+ {
+  "id": "mission-ready-committed-holder",
+  "kind": "mission_transition",
+  "description": "Mission ready -> committed by holder",
+  "input": {
+   "from": "ready",
+   "to": "committed",
+   "role": "holder"
+  },
+  "expected": {
+   "allowed": true
+  }
+ },
+ {
+  "id": "mission-ready-committed-executor",
+  "kind": "mission_transition",
+  "description": "Mission ready -> committed by executor",
+  "input": {
+   "from": "ready",
+   "to": "committed",
+   "role": "executor"
+  },
+  "expected": {
+   "allowed": false
+  }
+ },
+ {
+  "id": "mission-closed-executing-holder",
+  "kind": "mission_transition",
+  "description": "Mission closed -> executing by holder",
+  "input": {
+   "from": "closed",
+   "to": "executing",
+   "role": "holder"
+  },
+  "expected": {
+   "allowed": false
+  }
+ },
+ {
+  "id": "mission-executing-degraded-executor",
+  "kind": "mission_transition",
+  "description": "Mission executing -> degraded by executor",
+  "input": {
+   "from": "executing",
+   "to": "degraded",
+   "role": "executor"
+  },
+  "expected": {
+   "allowed": true
+  }
+ },
+ {
+  "id": "mission-draft-executing-holder",
+  "kind": "mission_transition",
+  "description": "Mission draft -> executing by holder",
+  "input": {
+   "from": "draft",
+   "to": "executing",
+   "role": "holder"
+  },
+  "expected": {
+   "allowed": false
+  }
+ }
+]

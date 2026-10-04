@@ -73,7 +73,7 @@
     "wasteEstimateG": 0,
     "cost": {
      "total": {
-      "amount": 2.1,
+      "amount": "2.10",
       "currency": "USD"
      }
     }

@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/inventory.schema.json",
   "title": "Cookwala Inventory",
+  "x-cookwala-status": "experimental",
   "description": "What food is in the kitchen (fridge, freezer, pantry, robot dispensers). Matter covers fridge state but not contents, so Cookwala defines it. Published by smart fridges, pantry scales, receipt scanners or humans; read by planners to decide what can be cooked and what to order.",
   "type": "object",
   "required": [
@@ -49,6 +50,10 @@
           "actor": {
             "$ref": "common.schema.json#/$defs/Actor"
           }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+          "^x-": {}
         }
       }
     },
@@ -134,10 +139,15 @@
           "type": "string",
           "description": "Session id holding this item for a planned cook."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     }
   },
   "patternProperties": {
     "^x-": {}
-  }
+  },
+  "unevaluatedProperties": false
 }

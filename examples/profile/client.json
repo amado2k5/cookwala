@@ -35,7 +35,7 @@
    "mode": "moderate",
    "period": "week",
    "amount": {
-    "amount": 120,
+    "amount": "120.00",
     "currency": "USD"
    }
   }

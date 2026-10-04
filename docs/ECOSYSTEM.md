@@ -1,5 +1,7 @@
 # Cookwala Ecosystem and Marketplace
 
+> **Status: experimental profile.** Not part of Cookwala Core. See [CORE.md](CORE.md) section 10 for what is normative today.
+
 Cookwala is a protocol, not a store. It gives every participant in the food-to-table
 lifecycle a defined place, a standard way to be discovered, and a standard way to plug in
 their own requirements, flows and standards.

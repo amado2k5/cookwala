@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/market.schema.json",
   "title": "Cookwala Market (providers, offers, quotes)",
+  "x-cookwala-status": "experimental",
   "description": "Lets grocers, ingredient suppliers, restaurants, meal-kit makers, robot and cookware makers, chefs and recipe publishers, certifiers, repairers, energy and delivery services, and extension/AI vendors publish who they are and what they offer, so kitchens, robots and agents can discover them through the protocol. Cookwala defines discovery and description only: price negotiation, checkout and payment go through the provider's own systems or open commerce protocols (UCP, ACP, AP2). No payment credentials ever travel in Cookwala documents. Use $defs Provider, Offer, OfferFeed, QuoteRequest, Quote.",
   "$defs": {
     "Role": {
@@ -81,6 +82,10 @@
           "type": "boolean",
           "description": "Set by the index/hub after checking the VC; never trusted from the provider itself."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Area": {
@@ -110,11 +115,19 @@
             "lon": {
               "type": "number"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "online": {
           "type": "boolean"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Pricing": {
@@ -146,6 +159,10 @@
         "taxIncluded": {
           "type": "boolean"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Provider": {
@@ -222,6 +239,10 @@
             "support": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "standards": {
@@ -237,7 +258,8 @@
       },
       "patternProperties": {
         "^x-": {}
-      }
+      },
+      "unevaluatedProperties": false
     },
     "Offer": {
       "type": "object",
@@ -362,6 +384,10 @@
                 "type": "string"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "area": {
@@ -391,6 +417,10 @@
             "packaging": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "license": {
@@ -416,6 +446,10 @@
             "url": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "meta": {
@@ -424,7 +458,8 @@
       },
       "patternProperties": {
         "^x-": {}
-      }
+      },
+      "unevaluatedProperties": false
     },
     "OfferFeed": {
       "type": "object",
@@ -456,6 +491,10 @@
         "signature": {
           "$ref": "common.schema.json#/$defs/Signature"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "QuoteRequest": {
@@ -502,6 +541,10 @@
                   "constraints": {
                     "type": "object"
                   }
+                },
+                "unevaluatedProperties": false,
+                "patternProperties": {
+                  "^x-": {}
                 }
               }
             },
@@ -520,6 +563,10 @@
                 "type": "string"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "replyTo": {
@@ -528,6 +575,10 @@
         "expires": {
           "$ref": "common.schema.json#/$defs/DateTime"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Quote": {
@@ -563,6 +614,10 @@
               "price": {
                 "$ref": "common.schema.json#/$defs/Money"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -581,11 +636,19 @@
             "url": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "signature": {
           "$ref": "common.schema.json#/$defs/Signature"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     }
   }

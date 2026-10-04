@@ -41,6 +41,9 @@ roadmap).
 |---|---|
 | **Try it: virtual kitchen simulator** | [cookwala.ai/sim](https://cookwala.ai/sim/) · [docs/SIMULATION.md](docs/SIMULATION.md) · [findings](docs/SIM-FINDINGS.md) |
 | **Try it: country, one-year simulator** | [cookwala.ai/sim/country](https://cookwala.ai/sim/country/) · [docs/COUNTRY-SIMULATION.md](docs/COUNTRY-SIMULATION.md) |
+| **Cookwala Core 0.2 (normative)** | The small core devices implement first: [docs/CORE.md](docs/CORE.md) · [api/core.openapi.yaml](api/core.openapi.yaml) · [conformance/](conformance) |
+| **Action plan** | How Cookwala answers its critics, reviewers and partners: [docs/ACTION-PLAN.md](docs/ACTION-PLAN.md) |
+| **Humanitarian Profile (draft)** | Personal-data-free food rescue for food banks and kitchens: [docs/HUMANITARIAN-PROFILE.md](docs/HUMANITARIAN-PROFILE.md) |
 | **Try it: world, five-year simulator** | [cookwala.ai/sim/world](https://cookwala.ai/sim/world/) · [docs/WORLD-SIMULATION.md](docs/WORLD-SIMULATION.md) |
 | **Try it: two-city, one-month simulator** | [cookwala.ai/sim/city](https://cookwala.ai/sim/city/) · [docs/CITY-SIMULATION.md](docs/CITY-SIMULATION.md) |
 | **The Cookwala Protocol: missions, context, swarm coordination** | [docs/PROTOCOL.md](docs/PROTOCOL.md) |

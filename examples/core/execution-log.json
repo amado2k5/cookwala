@@ -1,0 +1,88 @@
+{
+ "core": "0.2.0",
+ "kind": "ExecutionLog",
+ "id": "log-7f3a",
+ "recipe": "cw:cookwala.ai:example-shakshuka",
+ "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841",
+ "device": {
+  "vendor": "Example Robotics",
+  "model": "KR-2",
+  "firmware": "2.4.1",
+  "safetyLimits": "cookwala-default@0.2.0"
+ },
+ "startedAt": "2026-10-04T18:20:00+03:00",
+ "endedAt": "2026-10-04T19:22:00+03:00",
+ "outcome": "served",
+ "servings": 4,
+ "steps": [
+  {
+   "node": "n4",
+   "op": "cw.op.heat",
+   "verifiedBy": "sensor",
+   "envelopeOk": true,
+   "summary": [
+    {
+     "sensor": "cw.sense.pan_surface_temp",
+     "unit": "degC",
+     "min": 24,
+     "max": 176,
+     "end": 171
+    }
+   ]
+  },
+  {
+   "node": "n5",
+   "op": "cw.op.saute",
+   "verifiedBy": "model",
+   "envelopeOk": true,
+   "deviation": {
+    "kind": "extended_time",
+    "detail": "Onions needed 9 min instead of 6–10 nominal; within maxTime."
+   }
+  },
+  {
+   "node": "n7",
+   "op": "cw.op.simmer",
+   "verifiedBy": "sensor",
+   "envelopeOk": true,
+   "summary": [
+    {
+     "sensor": "cw.sense.liquid_temp",
+     "unit": "degC",
+     "min": 71,
+     "max": 95.2,
+     "end": 93.8
+    }
+   ]
+  },
+  {
+   "node": "n11",
+   "op": "cw.op.simmer",
+   "verifiedBy": "human",
+   "envelopeOk": true
+  }
+ ],
+ "safetyEvents": [],
+ "humanInterventions": [
+  {
+   "kind": "confirm",
+   "minutes": 1
+  }
+ ],
+ "energyKwh": 0.9,
+ "wasteG": 35,
+ "rating": {
+  "score": 4,
+  "comment": "A little salty."
+ },
+ "consent": {
+  "dataset": "research_only",
+  "grantedBy": "acct-opaque-91",
+  "grantedAt": "2026-09-01T00:00:00Z",
+  "withdrawable": true
+ },
+ "privacy": {
+  "personalData": "none",
+  "timePrecision": "day"
+ }
+}

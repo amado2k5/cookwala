@@ -29,7 +29,7 @@
    "pricing": {
     "model": "per_unit",
     "price": {
-     "amount": 11.5,
+     "amount": "11.50",
      "currency": "USD"
     },
     "unit": "kg"
@@ -60,7 +60,7 @@
    "pricing": {
     "model": "per_unit",
     "price": {
-     "amount": 6,
+     "amount": "6.00",
      "currency": "USD"
     }
    },

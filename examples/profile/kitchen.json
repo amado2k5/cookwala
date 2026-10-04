@@ -15,7 +15,7 @@
    ],
    "price": {
     "perMJ": {
-     "amount": 0.012,
+     "amount": "0.01",
      "currency": "USD"
     }
    }

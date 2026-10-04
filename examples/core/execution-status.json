@@ -1,0 +1,25 @@
+{
+ "core": "0.2.0",
+ "kind": "ExecutionStatus",
+ "id": "exe-7f3a",
+ "request": "ex-2026-10-04-001",
+ "state": "running",
+ "seq": 14,
+ "updatedAt": "2026-10-04T18:41:10+03:00",
+ "step": {
+  "node": "n7",
+  "op": "cw.op.simmer",
+  "startedAt": "2026-10-04T18:35:02+03:00",
+  "progress": 0.4,
+  "verifiedBy": "sensor",
+  "readings": [
+   {
+    "sensor": "cw.sense.liquid_temp",
+    "value": 93.5,
+    "unit": "degC",
+    "at": "2026-10-04T18:41:08+03:00"
+   }
+  ]
+ },
+ "eta": "2026-10-04T19:24:00+03:00"
+}

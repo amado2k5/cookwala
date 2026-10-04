@@ -1,0 +1,357 @@
+[
+ {
+  "id": "env-simmer-ok",
+  "kind": "envelope",
+  "description": "cw.op.simmer trace check",
+  "input": {
+   "op": "cw.op.simmer",
+   "readings": [
+    {
+     "t": 0,
+     "tempC": 40
+    },
+    {
+     "t": 30,
+     "tempC": 70
+    },
+    {
+     "t": 60,
+     "tempC": 88
+    },
+    {
+     "t": 90,
+     "tempC": 92
+    },
+    {
+     "t": 120,
+     "tempC": 94
+    },
+    {
+     "t": 150,
+     "tempC": 93
+    },
+    {
+     "t": 180,
+     "tempC": 95
+    }
+   ],
+   "target": {
+    "value": 94,
+    "tolerance": 3
+   },
+   "altitudeM": 0
+  },
+  "expected": {
+   "envelopeOk": true,
+   "targetOk": true,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "env-simmer-boils",
+  "kind": "envelope",
+  "description": "cw.op.simmer trace check",
+  "input": {
+   "op": "cw.op.simmer",
+   "readings": [
+    {
+     "t": 0,
+     "tempC": 60
+    },
+    {
+     "t": 30,
+     "tempC": 90
+    },
+    {
+     "t": 60,
+     "tempC": 94
+    },
+    {
+     "t": 90,
+     "tempC": 99
+    },
+    {
+     "t": 120,
+     "tempC": 100
+    },
+    {
+     "t": 150,
+     "tempC": 100
+    }
+   ],
+   "target": null,
+   "altitudeM": 0
+  },
+  "expected": {
+   "envelopeOk": false,
+   "targetOk": null,
+   "reason": "left_envelope"
+  }
+ },
+ {
+  "id": "env-simmer-target-too-hot",
+  "kind": "envelope",
+  "description": "cw.op.simmer trace check",
+  "input": {
+   "op": "cw.op.simmer",
+   "readings": [
+    {
+     "t": 0,
+     "tempC": 90
+    },
+    {
+     "t": 30,
+     "tempC": 95
+    }
+   ],
+   "target": {
+    "value": 99,
+    "tolerance": 1
+   },
+   "altitudeM": 0
+  },
+  "expected": {
+   "envelopeOk": false,
+   "targetOk": false,
+   "reason": "target_outside_envelope"
+  }
+ },
+ {
+  "id": "env-boil-altitude",
+  "kind": "envelope",
+  "description": "cw.op.boil trace check at 2400 m",
+  "input": {
+   "op": "cw.op.boil",
+   "readings": [
+    {
+     "t": 0,
+     "tempC": 60
+    },
+    {
+     "t": 30,
+     "tempC": 85
+    },
+    {
+     "t": 60,
+     "tempC": 93
+    },
+    {
+     "t": 90,
+     "tempC": 93
+    },
+    {
+     "t": 120,
+     "tempC": 93
+    }
+   ],
+   "target": null,
+   "altitudeM": 2400
+  },
+  "expected": {
+   "envelopeOk": true,
+   "targetOk": null,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "env-boil-sea-level-too-cool",
+  "kind": "envelope",
+  "description": "cw.op.boil trace check",
+  "input": {
+   "op": "cw.op.boil",
+   "readings": [
+    {
+     "t": 0,
+     "tempC": 60
+    },
+    {
+     "t": 30,
+     "tempC": 85
+    },
+    {
+     "t": 60,
+     "tempC": 93
+    },
+    {
+     "t": 90,
+     "tempC": 93
+    },
+    {
+     "t": 120,
+     "tempC": 93
+    }
+   ],
+   "target": null,
+   "altitudeM": 0
+  },
+  "expected": {
+   "envelopeOk": false,
+   "targetOk": null,
+   "reason": "never_reached_envelope"
+  }
+ },
+ {
+  "id": "env-deep-fry-overheat",
+  "kind": "envelope",
+  "description": "cw.op.deep_fry trace check",
+  "input": {
+   "op": "cw.op.deep_fry",
+   "readings": [
+    {
+     "t": 0,
+     "tempC": 120
+    },
+    {
+     "t": 30,
+     "tempC": 165
+    },
+    {
+     "t": 60,
+     "tempC": 175
+    },
+    {
+     "t": 90,
+     "tempC": 185
+    },
+    {
+     "t": 120,
+     "tempC": 205
+    }
+   ],
+   "target": {
+    "value": 175,
+    "tolerance": 10
+   },
+   "altitudeM": 0
+  },
+  "expected": {
+   "envelopeOk": false,
+   "targetOk": false,
+   "reason": "left_envelope"
+  }
+ },
+ {
+  "id": "env-hold-ok",
+  "kind": "envelope",
+  "description": "cw.op.hold trace check",
+  "input": {
+   "op": "cw.op.hold",
+   "readings": [
+    {
+     "t": 0,
+     "tempC": 70
+    },
+    {
+     "t": 30,
+     "tempC": 66
+    },
+    {
+     "t": 60,
+     "tempC": 64
+    },
+    {
+     "t": 90,
+     "tempC": 63
+    }
+   ],
+   "target": null,
+   "altitudeM": 0
+  },
+  "expected": {
+   "envelopeOk": true,
+   "targetOk": null,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "env-hold-too-cool",
+  "kind": "envelope",
+  "description": "cw.op.hold trace check",
+  "input": {
+   "op": "cw.op.hold",
+   "readings": [
+    {
+     "t": 0,
+     "tempC": 70
+    },
+    {
+     "t": 30,
+     "tempC": 64
+    },
+    {
+     "t": 60,
+     "tempC": 58
+    },
+    {
+     "t": 90,
+     "tempC": 55
+    }
+   ],
+   "target": null,
+   "altitudeM": 0
+  },
+  "expected": {
+   "envelopeOk": false,
+   "targetOk": null,
+   "reason": "left_envelope"
+  }
+ },
+ {
+  "id": "ladder-deep-fry-no-oil-sensor",
+  "kind": "envelope",
+  "description": "Sensor ladder for cw.op.deep_fry; null means the step must be refused.",
+  "input": {
+   "op": "cw.op.deep_fry",
+   "sensors": [],
+   "allowModel": true,
+   "humanPresent": true
+  },
+  "expected": {
+   "choice": null
+  }
+ },
+ {
+  "id": "ladder-simmer-no-sensor-uses-model",
+  "kind": "envelope",
+  "description": "Sensor ladder for cw.op.simmer; null means the step must be refused.",
+  "input": {
+   "op": "cw.op.simmer",
+   "sensors": [],
+   "allowModel": true,
+   "humanPresent": false
+  },
+  "expected": {
+   "choice": "model"
+  }
+ },
+ {
+  "id": "ladder-simmer-sensor",
+  "kind": "envelope",
+  "description": "Sensor ladder for cw.op.simmer; null means the step must be refused.",
+  "input": {
+   "op": "cw.op.simmer",
+   "sensors": [
+    "cw.sense.liquid_temp"
+   ],
+   "allowModel": true,
+   "humanPresent": false
+  },
+  "expected": {
+   "choice": "cw.sense.liquid_temp"
+  }
+ },
+ {
+  "id": "ladder-cut-needs-vision-or-human",
+  "kind": "envelope",
+  "description": "Sensor ladder for cw.op.cut; null means the step must be refused.",
+  "input": {
+   "op": "cw.op.cut",
+   "sensors": [],
+   "allowModel": true,
+   "humanPresent": false
+  },
+  "expected": {
+   "choice": null
+  }
+ }
+]

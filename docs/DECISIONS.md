@@ -1,5 +1,7 @@
 # Decisions, Commitments, Budgets and Degraded Operation
 
+> **Status: experimental profile.** Not part of Cookwala Core. See [CORE.md](CORE.md) section 10 for what is normative today.
+
 How each party signs, commits, fails and closes its part of a Mission; who decides what
 when the robot doesn't know; what can be dropped, what needs a plan B or C, and what
 can never be compromised; how cost and time are kept under control; and how a robot

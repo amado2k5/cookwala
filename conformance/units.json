@@ -1,0 +1,72 @@
+[
+ {
+  "id": "units-tbsp-ml",
+  "kind": "units",
+  "description": "2 tbsp = 30 ml exactly.",
+  "input": {
+   "value": 2,
+   "unit": "tbsp",
+   "to": "ml"
+  },
+  "expected": {
+   "value": 30
+  }
+ },
+ {
+  "id": "units-cup-flour-g",
+  "kind": "units",
+  "description": "1 cup of flour at 0.53 g/ml = 127.2 g.",
+  "input": {
+   "value": 1,
+   "unit": "cup",
+   "to": "g",
+   "density": 0.53
+  },
+  "expected": {
+   "value": 127.2
+  }
+ },
+ {
+  "id": "units-no-density",
+  "kind": "units",
+  "description": "Volume to mass without a density is an error, never a guess.",
+  "input": {
+   "value": 1,
+   "unit": "cup",
+   "to": "g"
+  },
+  "expected": {
+   "error": "needs_density"
+  }
+ },
+ {
+  "id": "units-relative-tolerance-on-degC",
+  "kind": "units",
+  "description": "A relative tolerance on a temperature is invalid; use toleranceAbs.",
+  "input": {
+   "quantity": {
+    "value": 94,
+    "unit": "degC",
+    "tolerance": 0.05
+   }
+  },
+  "expected": {
+   "schemaValid": false
+  }
+ },
+ {
+  "id": "units-absolute-tolerance-on-degC",
+  "kind": "units",
+  "description": "toleranceAbs on a temperature is valid.",
+  "input": {
+   "quantity": {
+    "value": 94,
+    "unit": "degC",
+    "toleranceAbs": 3
+   }
+  },
+  "expected": {
+   "schemaValid": true
+  }
+ }
+]

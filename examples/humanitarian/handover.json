@@ -1,0 +1,60 @@
+{
+ "profile": "0.1.0",
+ "kind": "Handover",
+ "id": "ho-2026-11-02-031",
+ "offer": "of-2026-11-02-001",
+ "claim": "cl-2026-11-02-014",
+ "from": "did:web:greengrocer.example",
+ "to": "did:web:foodbank.example",
+ "at": "2026-11-02T19:40:00+02:00",
+ "site": {
+  "country": "EG",
+  "admin1": "Cairo",
+  "admin2": "Nasr City",
+  "siteName": "Supermarket loading bay",
+  "lat": 30.06,
+  "lon": 31.33
+ },
+ "readings": [
+  {
+   "at": "2026-11-02T19:38:00+02:00",
+   "tempC": 4.6,
+   "method": "probe",
+   "lineId": "3"
+  },
+  {
+   "at": "2026-11-02T19:39:00+02:00",
+   "tempC": 52,
+   "method": "probe",
+   "lineId": "4"
+  }
+ ],
+ "lines": [
+  {
+   "lineId": "1",
+   "kgAccepted": 112,
+   "kgRejected": 8,
+   "reason": "packaging_damaged"
+  },
+  {
+   "lineId": "2",
+   "kgAccepted": 200
+  },
+  {
+   "lineId": "3",
+   "kgAccepted": 36
+  },
+  {
+   "lineId": "4",
+   "kgAccepted": 0,
+   "kgRejected": 18,
+   "reason": "temp_out_of_range"
+  }
+ ],
+ "outcome": "partly_accepted",
+ "checkedBy": "trained_staff",
+ "rulePack": "who-codex-basic@0.1.0",
+ "findings": [
+  "safety.hot_hold_min"
+ ]
+}

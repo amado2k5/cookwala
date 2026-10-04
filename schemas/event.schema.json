@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/event.schema.json",
   "title": "Cookwala Event",
+  "x-cookwala-status": "core",
   "description": "Every message on the kitchen event bus (MQTT, WebSocket, SSE, webhooks) is a CloudEvents 1.0 JSON event with a type from the cookwala catalog below. Safety events have priority and must be delivered to every participant.",
   "type": "object",
   "required": [
@@ -61,6 +62,20 @@
     },
     "data": {
       "type": "object"
+    },
+    "cookwalaseq": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "CloudEvents extension: sequence number per subject (execution, session or Mission). Consumers use it to order events and detect gaps; id is the deduplication key (delivery is at least once)."
+    },
+    "cookwalalatency": {
+      "enum": [
+        "local_safety",
+        "realtime",
+        "interactive",
+        "background"
+      ],
+      "description": "CloudEvents extension: latency class. local_safety events only REPORT what a device already did locally; no safety function may depend on receiving them."
     }
   },
   "allOf": [
@@ -265,7 +280,15 @@
             "cookwala.mission.degradation",
             "cookwala.mission.adaptation",
             "cookwala.mission.decision",
-            "cookwala.mission.closed"
+            "cookwala.mission.closed",
+            "cookwala.device.heartbeat",
+            "cookwala.execution.accepted",
+            "cookwala.execution.refused",
+            "cookwala.execution.state_changed",
+            "cookwala.execution.step",
+            "cookwala.execution.completed",
+            "cookwala.safety.limit_fired",
+            "cookwala.recall.published"
           ]
         },
         {
@@ -312,6 +335,10 @@
           "type": "boolean",
           "description": "True when the hub matched it to recipe safety.environment.smokeExpected; never suppresses alarms, only adds context for humans."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "TaskData": {
@@ -345,6 +372,10 @@
         "reason": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "TelemetryData": {
@@ -378,9 +409,17 @@
               "confidence": {
                 "type": "number"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "InventoryData": {
@@ -395,6 +434,10 @@
         "storage": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "NotifyData": {
@@ -434,6 +477,10 @@
               "label": {
                 "$ref": "common.schema.json#/$defs/LangMap"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -449,6 +496,10 @@
         "relatesTo": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "TeamData": {
@@ -503,6 +554,10 @@
                 "type": "string"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "award": {
@@ -517,12 +572,24 @@
                 "type": "string"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "deadline": {
           "$ref": "common.schema.json#/$defs/DateTime"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     }
+  },
+  "unevaluatedProperties": false,
+  "patternProperties": {
+    "^x-": {}
   }
 }

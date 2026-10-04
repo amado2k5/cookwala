@@ -1,5 +1,7 @@
 # Health: the right food, the right amount, for the right person
 
+> **Status: experimental profile.** Not part of Cookwala Core. See [CORE.md](CORE.md) section 10 for what is normative today.
+
 Second mission pillar, next to [ending hunger](MISSION.md): **make people healthier.**
 The goal is to deliver the right food, cooked the right way, in the right amount, at the
 right time, for each person, at an exact and known cost, with as little waste as possible.

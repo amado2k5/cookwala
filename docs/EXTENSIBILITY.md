@@ -1,5 +1,7 @@
 # Cookwala Extensibility, Federation and Profiles
 
+> **Status: experimental profile.** Not part of Cookwala Core. See [CORE.md](CORE.md) section 10 for what is normative today.
+
 Cookwala is meant to be **customizable in any way**. Anyone can add:
 
 - their own recipes;

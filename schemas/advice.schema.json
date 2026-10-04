@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/advice.schema.json",
   "title": "Cookwala Advice (reasoning requests and responses)",
+  "x-cookwala-status": "experimental",
   "description": "Questions a robot, appliance, agent or person asks the Cookwala reasoner (what can I cook, how do I fix this mistake, how do we split the work, how do I store it, what should I cook for N people), and the structured, safety-checked answers. Served statelessly by the index (POST /v1/advise/{intent}) and with full kitchen context by a hub (POST /cookwala/v1/advise/{intent}). Use $defs AdviceRequest and AdviceResponse.",
   "$defs": {
     "Intent": {
@@ -64,7 +65,11 @@
             "name"
           ]
         }
-      ]
+      ],
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
+      }
     },
     "DinerGroup": {
       "type": "object",
@@ -117,6 +122,10 @@
           },
           "description": "e.g. low_sodium, diabetic, renal (used only for filtering, never stored)."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Constraints": {
@@ -225,6 +234,10 @@
             "sugarGMax": {
               "type": "number"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "energy": {
@@ -257,6 +270,10 @@
             "delivery"
           ]
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Context": {
@@ -326,6 +343,10 @@
             "startedAt": {
               "$ref": "common.schema.json#/$defs/DateTime"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "diners": {
@@ -368,6 +389,10 @@
           },
           "description": "Only when asking a local hub/advisor; the public index rejects requests containing person data."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Incident": {
@@ -413,6 +438,10 @@
           },
           "description": "Local references to photos/frames (kept local unless the user opts in)."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Query": {
@@ -457,6 +486,10 @@
         "servings": {
           "type": "number"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "SubstituteQuery": {
@@ -488,6 +521,10 @@
         "qtyAvailable": {
           "$ref": "common.schema.json#/$defs/Quantity"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "RecoverQuery": {
@@ -508,6 +545,10 @@
           ],
           "default": "save_this_dish"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "RepurposeQuery": {
@@ -541,11 +582,19 @@
             "qty": {
               "$ref": "common.schema.json#/$defs/Quantity"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "incident": {
           "$ref": "#/$defs/Incident"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "AdaptEquipmentQuery": {
@@ -570,6 +619,10 @@
             "type": "string"
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "TeamPlanQuery": {
@@ -592,6 +645,10 @@
               "servings": {
                 "type": "number"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -622,6 +679,10 @@
           "default": true,
           "description": "Split divisible work (chopping 2 kg onions) across actors."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "StoreQuery": {
@@ -693,7 +754,11 @@
             "description"
           ]
         }
-      ]
+      ],
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
+      }
     },
     "FeedQuery": {
       "type": "object",
@@ -733,6 +798,10 @@
           "type": "boolean",
           "description": "Plan make-ahead + storage for later meals."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "RescaleQuery": {
@@ -754,6 +823,10 @@
           "$ref": "#/$defs/IngredientInput",
           "description": "Scale to what I have of this."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "RetimeQuery": {
@@ -771,6 +844,10 @@
         "guestsLate": {
           "$ref": "common.schema.json#/$defs/Duration"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "DiagnoseQuery": {
@@ -798,9 +875,17 @@
               "since": {
                 "$ref": "common.schema.json#/$defs/Duration"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "AdviceRequest": {
@@ -1133,6 +1218,10 @@
                   "horizon": {
                     "$ref": "common.schema.json#/$defs/Duration"
                   }
+                },
+                "unevaluatedProperties": false,
+                "patternProperties": {
+                  "^x-": {}
                 }
               }
             }
@@ -1157,7 +1246,11 @@
             ]
           }
         }
-      ]
+      ],
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
+      }
     },
     "SafetyVerdict": {
       "type": "object",
@@ -1193,6 +1286,10 @@
             "type": "string"
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "PatchOp": {
@@ -1257,7 +1354,11 @@
           "$ref": "common.schema.json#/$defs/LangMap"
         }
       },
-      "description": "One semantic change. In knowledge playbooks, string values may contain {placeholders} (e.g. {nodeId}, {salt_ratio}) that the reasoner resolves from the incident, answers and recipe."
+      "description": "One semantic change. In knowledge playbooks, string values may contain {placeholders} (e.g. {nodeId}, {salt_ratio}) that the reasoner resolves from the incident, answers and recipe.",
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
+      }
     },
     "RecipePatch": {
       "type": "object",
@@ -1282,6 +1383,10 @@
             "hash": {
               "$ref": "common.schema.json#/$defs/Hash"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "ops": {
@@ -1305,6 +1410,10 @@
           "type": "boolean",
           "description": "Patched graph passed schema + semantic validation + policy."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "PlannedTask": {
@@ -1344,6 +1453,10 @@
         "instructions": {
           "$ref": "common.schema.json#/$defs/LangMap"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "TeamPlan": {
@@ -1377,6 +1490,10 @@
               "utilization": {
                 "type": "number"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1412,6 +1529,10 @@
               "at": {
                 "$ref": "common.schema.json#/$defs/Duration"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1432,6 +1553,10 @@
               "until": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1464,6 +1589,10 @@
             "seconds": {
               "type": "number"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "assumptions": {
@@ -1472,6 +1601,10 @@
             "type": "string"
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "StoragePlan": {
@@ -1523,9 +1656,17 @@
                   "within": {
                     "$ref": "common.schema.json#/$defs/Duration"
                   }
+                },
+                "unevaluatedProperties": false,
+                "patternProperties": {
+                  "^x-": {}
                 }
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "portioning": {
@@ -1537,6 +1678,10 @@
             "massPerPortionG": {
               "type": "number"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "containers": {
@@ -1571,6 +1716,10 @@
               "microwaveSafe": {
                 "type": "boolean"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1610,6 +1759,10 @@
             "notes": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "discardIf": {
@@ -1632,9 +1785,17 @@
               "tradeoffs": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "ProductionPlan": {
@@ -1666,6 +1827,10 @@
               "serveDay": {
                 "type": "integer"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1692,6 +1857,10 @@
               "utilization": {
                 "type": "number"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1713,6 +1882,10 @@
             "type": "string"
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Option": {
@@ -1808,6 +1981,10 @@
                   "ratio": {
                     "type": "number"
                   }
+                },
+                "unevaluatedProperties": false,
+                "patternProperties": {
+                  "^x-": {}
                 }
               }
             },
@@ -1822,6 +1999,10 @@
               "minimum": 0,
               "maximum": 1
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "impact": {
@@ -1848,6 +2029,10 @@
             "notes": {
               "$ref": "common.schema.json#/$defs/LangMap"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "requires": {
@@ -1874,6 +2059,10 @@
             "human": {
               "type": "boolean"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "safety": {
@@ -1911,6 +2100,10 @@
               "detail": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1923,6 +2116,10 @@
         "portionPlan": {
           "$ref": "#/$defs/PortionPlan"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Question": {
@@ -1962,6 +2159,10 @@
         "why": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "AdviceResponse": {
@@ -2054,6 +2255,10 @@
                     "none"
                   ]
                 }
+              },
+              "unevaluatedProperties": false,
+              "patternProperties": {
+                "^x-": {}
               }
             },
             "checks": {
@@ -2062,11 +2267,19 @@
                 "type": "string"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "generatedAt": {
           "$ref": "common.schema.json#/$defs/DateTime"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "PortionPlan": {
@@ -2122,6 +2335,10 @@
                   "sodiumMg": {
                     "type": "number"
                   }
+                },
+                "unevaluatedProperties": false,
+                "patternProperties": {
+                  "^x-": {}
                 }
               },
               "dayProgress": {
@@ -2138,6 +2355,10 @@
                 },
                 "description": "e.g. 'serve before adding salt', 'IDDSI 5 minced', 'no sauce'."
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -2154,6 +2375,10 @@
             "use": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "wasteEstimateG": {
@@ -2171,8 +2396,16 @@
                 "$ref": "common.schema.json#/$defs/Money"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "PersonalizeQuery": {
@@ -2217,6 +2450,10 @@
             ]
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     }
   }

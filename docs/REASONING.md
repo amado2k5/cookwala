@@ -1,5 +1,7 @@
 # Cookwala Reasoning: how robots ask, decide and course-correct
 
+> **Status: experimental profile.** Not part of Cookwala Core. See [CORE.md](CORE.md) section 10 for what is normative today.
+
 A recipe index answers "give me recipe X". A cook, human or robot, needs much more than
 that:
 

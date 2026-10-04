@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/mission.schema.json",
   "title": "Cookwala Mission",
+  "x-cookwala-status": "experimental",
   "description": "The shared, signed, living document of the Cookwala Protocol (docs/PROTOCOL.md): intent, mandate, context facets, credentials, routing, requirements with criticality, fallbacks (PACE), decision rights, escalation, contributions with commitment lifecycle, the bound plan, execution, outcome and a hash-chained ledger. Decision governance is described in docs/DECISIONS.md.",
   "type": "object",
   "required": [
@@ -66,6 +67,10 @@
         "deadline": {
           "$ref": "common.schema.json#/$defs/DateTime"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "intent": {
@@ -109,6 +114,10 @@
           "$ref": "advice.schema.json#/$defs/AdviceRequest",
           "description": "Structured request when the intent maps to a reasoner intent."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "mandate": {
@@ -203,10 +212,18 @@
                   "type": "string"
                 }
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           },
           "description": "Whose instructions win (higher level wins within scope)."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "context": {
@@ -227,6 +244,10 @@
         "mode": {
           "$ref": "profile.schema.json#/$defs/OperatingMode"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "credentials": {
@@ -247,6 +268,10 @@
           "selective": {
             "type": "boolean"
           }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+          "^x-": {}
         }
       }
     },
@@ -314,9 +339,17 @@
               "leader": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "requirements": {
@@ -341,6 +374,10 @@
         "deadline": {
           "$ref": "common.schema.json#/$defs/DateTime"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "decisionRights": {
@@ -384,6 +421,10 @@
               "servings": {
                 "type": "number"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -405,6 +446,10 @@
               "playbook": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -428,9 +473,17 @@
               "everyS": {
                 "type": "number"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "execution": {
@@ -469,9 +522,17 @@
               "ref": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "outcome": {
@@ -521,6 +582,10 @@
             "type": "string"
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "state": {
@@ -598,6 +663,10 @@
               "type": "string"
             }
           }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+          "^x-": {}
         }
       },
       "description": "Who plays which role in this Mission (see docs/DECISIONS.md)."
@@ -632,6 +701,43 @@
       "type": "array",
       "items": {
         "$ref": "#/$defs/Reconciliation"
+      }
+    },
+    "eventLog": {
+      "type": "object",
+      "required": [
+        "headSeq",
+        "head"
+      ],
+      "unevaluatedProperties": false,
+      "description": "Where the authoritative event log lives and which head this projection was derived from.",
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "sequencer": {
+          "type": "string"
+        },
+        "headSeq": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "head": {
+          "$ref": "common.schema.json#/$defs/Hash"
+        },
+        "mode": {
+          "enum": [
+            "full",
+            "hash_only"
+          ]
+        }
+      }
+    },
+    "checkpoints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Checkpoint"
       }
     }
   },
@@ -683,6 +789,10 @@
                 "type": "string"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "observedAt": {
@@ -710,6 +820,10 @@
             "type": "string"
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "ProviderSlot": {
@@ -749,6 +863,10 @@
               "endpoint": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -780,6 +898,10 @@
           },
           "description": "Capability tags this role covers, e.g. estimate:robot_energy, estimate:duration, assess:criticality. Several roles/providers may share a tag; their outputs become competing assessments."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Criticality": {
@@ -834,6 +956,10 @@
           "type": "string",
           "description": "Contribution or decision id."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Pace": {
@@ -852,6 +978,10 @@
         "emergency": {
           "$ref": "#/$defs/Fallback"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Fallback": {
@@ -877,12 +1007,20 @@
             "extraTime": {
               "$ref": "common.schema.json#/$defs/Duration"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "needsApproval": {
           "type": "string",
           "description": "Decision class or actor that must approve before switching."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "DecisionRight": {
@@ -957,6 +1095,10 @@
             "need": {
               "type": "integer"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "beyondLimits": {
@@ -977,6 +1119,10 @@
         "default": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "EscalationStep": {
@@ -1012,6 +1158,10 @@
         "then": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Contribution": {
@@ -1088,6 +1238,10 @@
             "insurer": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "status": {
@@ -1124,6 +1278,10 @@
         "signature": {
           "$ref": "common.schema.json#/$defs/Signature"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Failure": {
@@ -1177,6 +1335,10 @@
         "message": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Decision": {
@@ -1244,6 +1406,10 @@
               "confidence": {
                 "type": "number"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1257,6 +1423,10 @@
         "signature": {
           "$ref": "common.schema.json#/$defs/Signature"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Closure": {
@@ -1303,6 +1473,10 @@
               "signature": {
                 "$ref": "common.schema.json#/$defs/Signature"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1333,9 +1507,17 @@
               "error": {
                 "type": "number"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "LedgerEntry": {
@@ -1347,7 +1529,7 @@
         "action",
         "prev"
       ],
-      "description": "Append-only, hash-chained, signed. Modeled on EPCIS event dimensions (what, when, where, why, who).",
+      "description": "Append-only, hash-chained, signed. Modeled on EPCIS event dimensions (what, when, where, why, who). Deprecated in favour of MissionEvent (same fields plus hash); kept for 0.1 documents.",
       "properties": {
         "seq": {
           "type": "integer",
@@ -1402,6 +1584,10 @@
         "signature": {
           "$ref": "common.schema.json#/$defs/Signature"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Budget": {
@@ -1485,6 +1671,10 @@
                 "type": "string",
                 "description": "Who is notified/asked (decision class, role or person)."
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1520,12 +1710,20 @@
             "updatedAt": {
               "$ref": "common.schema.json#/$defs/DateTime"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "carryOver": {
           "type": "boolean",
           "description": "Unspent amount returns to a parent budget (meal plan, week)."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "MeterEntry": {
@@ -1564,6 +1762,10 @@
         "signature": {
           "$ref": "common.schema.json#/$defs/Signature"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Degradation": {
@@ -1635,6 +1837,10 @@
           },
           "description": "Ops, sensors or cues affected (cw.op.cut, cw.sense.translucent...)."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Adaptation": {
@@ -1724,6 +1930,10 @@
             "extraCost": {
               "$ref": "common.schema.json#/$defs/Money"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "safety": {
@@ -1743,6 +1953,10 @@
             "ended"
           ]
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Distribution": {
@@ -1770,6 +1984,10 @@
         "max": {
           "type": "number"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Assessment": {
@@ -1846,6 +2064,10 @@
               "note": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1892,6 +2114,10 @@
             "meanAbsError": {
               "type": "number"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "at": {
@@ -1900,6 +2126,10 @@
         "signature": {
           "$ref": "common.schema.json#/$defs/Signature"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "ReconcileRule": {
@@ -1963,6 +2193,10 @@
             "escalate"
           ]
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Reconciliation": {
@@ -2011,6 +2245,10 @@
                 ]
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "rounds": {
@@ -2033,6 +2271,10 @@
                   "type": "string"
                 }
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           },
           "description": "Requests for more evidence/rebuttals (e.g. robot measured battery; provider re-estimated)."
@@ -2068,6 +2310,10 @@
                 "type": "string"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "consequences": {
@@ -2083,7 +2329,164 @@
         "signature": {
           "$ref": "common.schema.json#/$defs/Signature"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
+      }
+    },
+    "MissionEvent": {
+      "type": "object",
+      "required": [
+        "mission",
+        "seq",
+        "at",
+        "actor",
+        "type",
+        "prev",
+        "hash"
+      ],
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
+      },
+      "description": "One entry of the Mission event log. The log is the source of truth; the Mission document is a projection derived by replaying it (tools/mission_reducer.py). One sequencer per Mission (normally the holder's hub) assigns seq and prev, so the chain never forks; other parties submit proposals and receive the sequenced event back.",
+      "properties": {
+        "mission": {
+          "type": "string"
+        },
+        "seq": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "at": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "actor": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "created",
+            "facet_added",
+            "view_granted",
+            "contribution_offered",
+            "contribution_accepted",
+            "contribution_rejected",
+            "committed",
+            "progress",
+            "fulfilled",
+            "failed",
+            "withdrawn",
+            "compensated",
+            "decision",
+            "escalated",
+            "approved",
+            "state_changed",
+            "closed",
+            "custom",
+            "assessment",
+            "reconciled"
+          ]
+        },
+        "transition": {
+          "type": "object",
+          "unevaluatedProperties": false,
+          "properties": {
+            "from": {
+              "$ref": "#/properties/state"
+            },
+            "to": {
+              "$ref": "#/properties/state"
+            }
+          },
+          "description": "For state_changed: checked against profiles/mission/transitions.json."
+        },
+        "payload": {
+          "type": "object",
+          "description": "Type-specific body. Personal content may be replaced by a Disclosure digest."
+        },
+        "payloadDigest": {
+          "$ref": "common.schema.json#/$defs/Hash",
+          "description": "Hash-only mode: the payload is stored off-log in erasable storage and only its hash is kept here."
+        },
+        "prev": {
+          "type": "string",
+          "pattern": "^(genesis|sha256:[0-9a-f]{64})$"
+        },
+        "hash": {
+          "$ref": "common.schema.json#/$defs/Hash",
+          "description": "sha256 of the RFC 8785 canonical JSON of this event without hash and signature."
+        },
+        "signature": {
+          "$ref": "common.schema.json#/$defs/Signature"
+        },
+        "proposedBy": {
+          "$ref": "common.schema.json#/$defs/Signature",
+          "description": "When the actor is not the sequencer: the actor's signature over the proposal."
+        }
+      }
+    },
+    "Checkpoint": {
+      "type": "object",
+      "required": [
+        "mission",
+        "seq",
+        "head",
+        "at",
+        "sequencer",
+        "signature"
+      ],
+      "unevaluatedProperties": false,
+      "description": "A signed statement of the log head, counter-signed by witnesses (another party in the Mission or an external transparency service, e.g. IETF SCITT). A sequencer that rewrites history after a witnessed checkpoint is detectable.",
+      "properties": {
+        "mission": {
+          "type": "string"
+        },
+        "seq": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "head": {
+          "$ref": "common.schema.json#/$defs/Hash"
+        },
+        "at": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+        },
+        "sequencer": {
+          "type": "string"
+        },
+        "signature": {
+          "$ref": "common.schema.json#/$defs/Signature"
+        },
+        "witnesses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "actor",
+              "signature"
+            ],
+            "unevaluatedProperties": false,
+            "properties": {
+              "actor": {
+                "type": "string"
+              },
+              "at": {
+                "$ref": "common.schema.json#/$defs/DateTime"
+              },
+              "signature": {
+                "$ref": "common.schema.json#/$defs/Signature"
+              },
+              "receipt": {
+                "type": "string",
+                "description": "Transparency-service receipt, if any."
+              }
+            }
+          }
+        }
       }
     }
-  }
+  },
+  "unevaluatedProperties": false
 }

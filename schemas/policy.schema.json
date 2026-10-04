@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/policy.schema.json",
   "title": "Cookwala Policy Pack",
+  "x-cookwala-status": "experimental",
   "description": "Machine-checkable local rules (food safety, allergen disclosure, dietary, venue, appliance/robot operation). Evaluated by a hub or device against a recipe + session + capability set. Informational and best-effort: packs cite their legal sources and are not legal advice.",
   "type": "object",
   "required": [
@@ -78,6 +79,10 @@
           "section": {
             "type": "string"
           }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+          "^x-": {}
         }
       }
     },
@@ -167,6 +172,10 @@
         "source": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Expr": {
@@ -250,5 +259,6 @@
   },
   "patternProperties": {
     "^x-": {}
-  }
+  },
+  "unevaluatedProperties": false
 }

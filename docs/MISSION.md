@@ -1,5 +1,7 @@
 # Mission: everyone eats
 
+> **Status: experimental profile.** Not part of Cookwala Core. See [CORE.md](CORE.md) section 10 for what is normative today.
+
 **Cookwala's ultimate goal is to help end world hunger.** Every part of it points that way:
 
 - the standard, the free index and the reasoning engines;

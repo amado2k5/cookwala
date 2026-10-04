@@ -1,0 +1,14 @@
+{
+ "core": "0.2.0",
+ "kind": "ExecutionStatus",
+ "id": "exe-7f3b",
+ "request": "ex-2026-10-04-002",
+ "state": "refused",
+ "seq": 1,
+ "updatedAt": "2026-10-04T18:00:01+03:00",
+ "refusal": {
+  "reason": "missing_sensor_no_fallback",
+  "node": "n3",
+  "detail": "cw.op.deep_fry needs an oil-temperature sensor; this device has none and the operation allows no fallback."
+ }
+}

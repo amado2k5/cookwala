@@ -1,5 +1,5 @@
 {
-  "cookwala": "0.1.0",
+  "cookwala": "0.2.0",
   "name": "Cookwala",
   "operator": "fifi.cooking",
   "versions": [
@@ -14,7 +14,13 @@
     "vocab": "https://cookwala.ai/v1/vocab/{name}.json",
     "policies": "https://cookwala.ai/v1/policies/{id}.json",
     "schemas": "https://cookwala.ai/v1/schemas/{name}.schema.json",
-    "openapi": "https://cookwala.ai/v1/api/index.openapi.yaml"
+    "openapi": "https://cookwala.ai/v1/api/index.openapi.yaml",
+    "coreApi": "https://cookwala.ai/v1/api/core.openapi.yaml",
+    "recalls": "https://cookwala.ai/v1/recalls",
+    "incidents": "https://cookwala.ai/v1/incidents",
+    "schemaBundle": "https://cookwala.ai/v1/schemas/bundle.json",
+    "conformance": "https://cookwala.ai/v1/conformance/",
+    "safetyLimits": "https://cookwala.ai/v1/profiles/core/safety-limits.default.json"
   },
   "mirrors": [],
   "contact": "https://github.com/amado2k5/cookwala/issues",

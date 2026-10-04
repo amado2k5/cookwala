@@ -1,0 +1,29 @@
+{
+ "profile": "0.1.0",
+ "kind": "Manifest",
+ "org": "did:web:foodbank.example",
+ "roles": [
+  "food_bank",
+  "transporter"
+ ],
+ "levels": [
+  "H0",
+  "H1",
+  "H2"
+ ],
+ "rulePacks": [
+  "who-codex-basic@0.1.0"
+ ],
+ "endpoints": {
+  "api": "https://foodbank.example/cookwala/h/v0",
+  "sms": "+20 0000 0000",
+  "csvTemplates": "https://cookwala.ai/v1/profiles/humanitarian/templates/"
+ },
+ "auditLog": "hash_only",
+ "dataProtection": {
+  "personalData": "none",
+  "retentionDays": 730,
+  "hosting": "In-country cloud region"
+ },
+ "contact": "ops@foodbank.example"
+}

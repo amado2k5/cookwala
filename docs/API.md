@@ -26,7 +26,7 @@ validate against [`schemas/`](../schemas).
 - **Ids:** recipe ids are stable and shared with fifi.cooking (`fah-234`, `w-ma-001`).
   Vocabulary ids are `cw.<vocab>.<name>`, vendor extensions `x-<vendor>.<name>`.
 - **Integrity:** `hash` = `sha256` over RFC 8785 canonical JSON without `hash`/`signature`.
-  The manifest is signed with Ed25519 (detached JWS). Clients verify before executing.
+  The manifest is signed with Ed25519 over its RFC 8785 hash (docs/CORE.md section 5). Clients verify before executing.
 - **Caching:** static files are immutable per catalog version. Add `?v=<version>`.
 - **i18n:** `lang` parameter (BCP 47). Text fields are `LangMap`s. Machines never depend
   on text.

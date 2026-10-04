@@ -13,7 +13,7 @@
  "meals": 18400,
  "peopleReached": 2100,
  "costPerMeal": {
-  "amount": 0.42,
+  "amount": "0.42",
   "currency": "USD"
  },
  "surplusRescuedKg": 5300,

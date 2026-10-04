@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/recipe.schema.json",
   "title": "Cookwala Recipe",
+  "x-cookwala-status": "core",
   "description": "A recipe a machine can plan, check against local policy, execute and verify. Media type application/vnd.cookwala+json; file extension .cookwala.json. Layers: L0 semantics (dish, yield, ingredients, equipment, nutrition, cost, text), L1 process graph, L2 bindings, L3 safety. L4 policies live in policy.schema.json documents.",
   "type": "object",
   "required": [
@@ -62,6 +63,10 @@
           "type": "string",
           "description": "URL of the schema.org Recipe JSON-LD."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "verification": {
@@ -140,6 +145,10 @@
         "collection": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "license": {
@@ -159,6 +168,10 @@
         "url": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "meta": {
@@ -198,6 +211,10 @@
         "culturalNotes": {
           "$ref": "common.schema.json#/$defs/LangMap"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "sensory": {
@@ -247,6 +264,10 @@
                   "to_taste"
                 ]
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -260,8 +281,16 @@
             "cookedG": {
               "type": "number"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "prep": {
@@ -286,6 +315,10 @@
                 "type": "string",
                 "description": "Zone, e.g. counter-left."
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -303,6 +336,10 @@
               "sanitized": {
                 "type": "boolean"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -324,6 +361,10 @@
               "node": {
                 "$ref": "#/$defs/Node"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           },
           "description": "Soak, thaw, marinate, preheat: scheduled ahead by planners."
@@ -338,6 +379,10 @@
         "estimatedPrepTime": {
           "$ref": "common.schema.json#/$defs/Duration"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "service": {
@@ -374,6 +419,10 @@
               "optional": {
                 "type": "boolean"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -412,6 +461,10 @@
             "perPersonMax": {
               "type": "number"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "packable": {
@@ -426,8 +479,16 @@
             "notes": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "acceptance": {
@@ -450,6 +511,10 @@
         "r3": {
           "type": "boolean"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     }
   },
@@ -495,6 +560,10 @@
               "type": "integer",
               "minimum": 0
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "reviewedBy": {
@@ -507,6 +576,10 @@
         "notes": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Dish": {
@@ -592,9 +665,17 @@
               "node": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Yield": {
@@ -628,8 +709,16 @@
             "note": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Prep": {
@@ -680,8 +769,16 @@
             "duration": {
               "$ref": "common.schema.json#/$defs/Duration"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Ingredient": {
@@ -753,6 +850,10 @@
               "note": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -797,8 +898,16 @@
               },
               "description": "Ingredient ids that can extend it (e.g. lentils for minced meat)."
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Equipment": {
@@ -847,8 +956,16 @@
             "ovenSafe": {
               "type": "boolean"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Node": {
@@ -907,6 +1024,10 @@
             "extendBy": {
               "$ref": "common.schema.json#/$defs/Duration"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "attention": {
@@ -943,6 +1064,10 @@
             "reason": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "humanOptional": {
@@ -966,6 +1091,10 @@
             "canPause": {
               "type": "boolean"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "hazards": {
@@ -1003,6 +1132,10 @@
               "maxTime": {
                 "$ref": "common.schema.json#/$defs/Duration"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1077,6 +1210,10 @@
               "label": {
                 "$ref": "common.schema.json#/$defs/LangMap"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1127,6 +1264,10 @@
                 "$ref": "#/$defs/FoodState"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "failureModes": {
@@ -1164,6 +1305,10 @@
                 "type": "string",
                 "description": "cw.pb.* id to run."
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           },
           "description": "Known ways this step goes wrong, how to spot them early, and which playbook recovers."
@@ -1203,6 +1348,10 @@
               },
               "description": "e.g. clean_gloves, wash_after_raw_meat, allergen_clean."
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "space": {
@@ -1217,8 +1366,16 @@
             "keepClearOfChildren": {
               "type": "boolean"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Process": {
@@ -1264,6 +1421,10 @@
                   "lag": {
                     "$ref": "common.schema.json#/$defs/Duration"
                   }
+                },
+                "unevaluatedProperties": false,
+                "patternProperties": {
+                  "^x-": {}
                 }
               }
             }
@@ -1298,9 +1459,17 @@
               "storage": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Hazard": {
@@ -1330,6 +1499,10 @@
           "type": "object",
           "description": "Hard envelope, e.g. {\"oilTempMaxC\": 200, \"maxFillPct\": 50}."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "CCP": {
@@ -1381,6 +1554,10 @@
           "default": true,
           "description": "Executor must log readings to the session record."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Safety": {
@@ -1450,6 +1627,10 @@
                 "type": "string"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "dietary": {
@@ -1491,6 +1672,10 @@
               "note": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -1513,6 +1698,10 @@
                 "type": "string"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "abort": {
@@ -1545,6 +1734,10 @@
               },
               "description": "Nodes during which the executor must not leave the cooking zone unattended."
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "environment": {
@@ -1567,8 +1760,16 @@
             "childrenPetsKeepAway": {
               "type": "boolean"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Requirements": {
@@ -1604,6 +1805,10 @@
             "advanced"
           ]
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Nutrition": {
@@ -1633,11 +1838,19 @@
             "sodiumMg": {
               "type": "number"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "basis": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Cost": {
@@ -1661,6 +1874,10 @@
             "type": "number"
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Storage": {
@@ -1681,12 +1898,20 @@
             "method": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "coolingRequired": {
           "type": "boolean",
           "description": "If true, leftover cooling is a CCP (see policy packs)."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Text": {
@@ -1721,6 +1946,10 @@
           },
           "description": "Original human steps in order, as published on the source site."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "FoodState": {
@@ -1751,6 +1980,10 @@
         "description": {
           "$ref": "common.schema.json#/$defs/LangMap"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "SensoryTarget": {
@@ -1805,6 +2038,10 @@
               "minimum": 0,
               "maximum": 5
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "servingTempC": {
@@ -1819,6 +2056,10 @@
             "type": "string"
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     }
   },

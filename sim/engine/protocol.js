@@ -1,5 +1,5 @@
 // Cookwala Protocol helpers: build and evolve a Mission document per schemas/mission.schema.json.
-import { sha256, canonical, iso, money, round } from './util.js?v=0.1.2';
+import { sha256, canonical, iso, money, round } from './util.js?v=0.1.3';
 
 const SIG = (actor, payload) => ({ alg: 'EdDSA', kid: `${actor}#sim-key`, sig: `sim-${sha256(actor + canonical(payload)).slice(0, 32)}` });
 
@@ -88,7 +88,7 @@ export class Mission {
   meter(t, budgetId, amount, kind, ref, by) {
     const b = this.doc.budgets.find((x) => x.id === budgetId);
     const isMoney = b.kind === 'cost';
-    const value = (v) => (v && typeof v === 'object' ? v.amount : v || 0);
+    const value = (v) => (v && typeof v === 'object' ? Number(v.amount) : v || 0);
     this.doc.meters.push({ budget: budgetId, amount: isMoney ? money(amount) : round(amount), kind, ref, at: iso(t), by });
     const s = b.status;
     if (kind === 'spent') { s.spent = isMoney ? money(value(s.spent) + amount) : round(value(s.spent) + amount); }
@@ -99,7 +99,7 @@ export class Mission {
   }
 
   checkBudget(t, b) {
-    const value = (v) => (v && typeof v === 'object' ? v.amount : v || 0);
+    const value = (v) => (v && typeof v === 'object' ? Number(v.amount) : v || 0);
     const limit = value(b.limit);
     const s = b.status;
     const actual = value(s.spent);

@@ -1,0 +1,173 @@
+{
+ "name": "units",
+ "version": "0.2.0",
+ "entries": [
+  {
+   "id": "cw.unit.tsp",
+   "label": {
+    "en": "teaspoon",
+    "ar": "ملعقة صغيرة"
+   },
+   "definition": "Exactly 5 ml.",
+   "convert": {
+    "to": "ml",
+    "factor": 5
+   }
+  },
+  {
+   "id": "cw.unit.tbsp",
+   "label": {
+    "en": "tablespoon",
+    "ar": "ملعقة كبيرة"
+   },
+   "definition": "Exactly 15 ml.",
+   "convert": {
+    "to": "ml",
+    "factor": 15
+   }
+  },
+  {
+   "id": "cw.unit.cup",
+   "label": {
+    "en": "cup",
+    "ar": "كوب"
+   },
+   "definition": "Exactly 240 ml (the US legal cup). Recipes that mean a different cup must convert to ml.",
+   "convert": {
+    "to": "ml",
+    "factor": 240
+   }
+  },
+  {
+   "id": "cw.unit.pinch",
+   "label": {
+    "en": "pinch",
+    "ar": "رشة"
+   },
+   "definition": "About 0.36 g of a fine solid such as salt; dispensers use this mass.",
+   "convert": {
+    "to": "g",
+    "factor": 0.36
+   }
+  },
+  {
+   "id": "cw.unit.dash",
+   "label": {
+    "en": "dash",
+    "ar": "رشة سائل"
+   },
+   "definition": "About 0.6 ml of liquid.",
+   "convert": {
+    "to": "ml",
+    "factor": 0.6
+   }
+  },
+  {
+   "id": "cw.unit.l",
+   "label": {
+    "en": "litre"
+   },
+   "convert": {
+    "to": "ml",
+    "factor": 1000
+   }
+  },
+  {
+   "id": "cw.unit.kg",
+   "label": {
+    "en": "kilogram"
+   },
+   "convert": {
+    "to": "g",
+    "factor": 1000
+   }
+  },
+  {
+   "id": "cw.unit.mg",
+   "label": {
+    "en": "milligram"
+   },
+   "convert": {
+    "to": "g",
+    "factor": 0.001
+   }
+  },
+  {
+   "id": "cw.heat.very_low",
+   "label": {
+    "en": "very low"
+   },
+   "definition": "Hob heat level: pan surface 90–120 °C at steady state with a thin film of oil. For liquids, the level that holds the operation envelope.",
+   "surfaceTempC": {
+    "min": 90,
+    "max": 120
+   }
+  },
+  {
+   "id": "cw.heat.low",
+   "label": {
+    "en": "low"
+   },
+   "definition": "Hob heat level: pan surface 120–150 °C at steady state with a thin film of oil. For liquids, the level that holds the operation envelope.",
+   "surfaceTempC": {
+    "min": 120,
+    "max": 150
+   }
+  },
+  {
+   "id": "cw.heat.medium_low",
+   "label": {
+    "en": "medium low"
+   },
+   "definition": "Hob heat level: pan surface 150–170 °C at steady state with a thin film of oil. For liquids, the level that holds the operation envelope.",
+   "surfaceTempC": {
+    "min": 150,
+    "max": 170
+   }
+  },
+  {
+   "id": "cw.heat.medium",
+   "label": {
+    "en": "medium"
+   },
+   "definition": "Hob heat level: pan surface 170–190 °C at steady state with a thin film of oil. For liquids, the level that holds the operation envelope.",
+   "surfaceTempC": {
+    "min": 170,
+    "max": 190
+   }
+  },
+  {
+   "id": "cw.heat.medium_high",
+   "label": {
+    "en": "medium high"
+   },
+   "definition": "Hob heat level: pan surface 190–210 °C at steady state with a thin film of oil. For liquids, the level that holds the operation envelope.",
+   "surfaceTempC": {
+    "min": 190,
+    "max": 210
+   }
+  },
+  {
+   "id": "cw.heat.high",
+   "label": {
+    "en": "high"
+   },
+   "definition": "Hob heat level: pan surface 210–240 °C at steady state with a thin film of oil. For liquids, the level that holds the operation envelope.",
+   "surfaceTempC": {
+    "min": 210,
+    "max": 240
+   }
+  },
+  {
+   "id": "cw.heat.max",
+   "label": {
+    "en": "max"
+   },
+   "definition": "Hob heat level: pan surface 240–280 °C at steady state with a thin film of oil. For liquids, the level that holds the operation envelope.",
+   "surfaceTempC": {
+    "min": 240,
+    "max": 280
+   }
+  }
+ ]
+}

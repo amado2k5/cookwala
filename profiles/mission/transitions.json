@@ -1,0 +1,277 @@
+{
+ "profile": "mission",
+ "version": "0.2.0",
+ "description": "Legal Mission state transitions. A sequencer must reject any state_changed event whose (from, to) pair is not listed, or whose actor role is not allowed for the target state. Final states have no transitions.",
+ "initial": "draft",
+ "final": [
+  "closed",
+  "failed",
+  "cancelled"
+ ],
+ "transitions": [
+  {
+   "from": "draft",
+   "to": "open",
+   "allowedRoles": [
+    "holder",
+    "initiator",
+    "executor",
+    "arbiter"
+   ]
+  },
+  {
+   "from": "draft",
+   "to": "cancelled",
+   "allowedRoles": [
+    "initiator",
+    "holder"
+   ]
+  },
+  {
+   "from": "open",
+   "to": "enriching",
+   "allowedRoles": [
+    "holder",
+    "initiator",
+    "executor",
+    "arbiter"
+   ]
+  },
+  {
+   "from": "open",
+   "to": "ready",
+   "allowedRoles": [
+    "holder",
+    "initiator",
+    "executor",
+    "arbiter"
+   ]
+  },
+  {
+   "from": "open",
+   "to": "cancelled",
+   "allowedRoles": [
+    "initiator",
+    "holder"
+   ]
+  },
+  {
+   "from": "enriching",
+   "to": "ready",
+   "allowedRoles": [
+    "holder",
+    "initiator",
+    "executor",
+    "arbiter"
+   ]
+  },
+  {
+   "from": "enriching",
+   "to": "open",
+   "allowedRoles": [
+    "holder",
+    "initiator",
+    "executor",
+    "arbiter"
+   ]
+  },
+  {
+   "from": "enriching",
+   "to": "cancelled",
+   "allowedRoles": [
+    "initiator",
+    "holder"
+   ]
+  },
+  {
+   "from": "enriching",
+   "to": "failed",
+   "allowedRoles": [
+    "holder",
+    "executor"
+   ]
+  },
+  {
+   "from": "ready",
+   "to": "committed",
+   "allowedRoles": [
+    "holder"
+   ]
+  },
+  {
+   "from": "ready",
+   "to": "enriching",
+   "allowedRoles": [
+    "holder",
+    "initiator",
+    "executor",
+    "arbiter"
+   ]
+  },
+  {
+   "from": "ready",
+   "to": "cancelled",
+   "allowedRoles": [
+    "initiator",
+    "holder"
+   ]
+  },
+  {
+   "from": "committed",
+   "to": "executing",
+   "allowedRoles": [
+    "holder",
+    "initiator",
+    "executor",
+    "arbiter"
+   ]
+  },
+  {
+   "from": "committed",
+   "to": "cancelled",
+   "allowedRoles": [
+    "initiator",
+    "holder"
+   ]
+  },
+  {
+   "from": "committed",
+   "to": "failed",
+   "allowedRoles": [
+    "holder",
+    "executor"
+   ]
+  },
+  {
+   "from": "executing",
+   "to": "paused",
+   "allowedRoles": [
+    "holder",
+    "executor",
+    "initiator"
+   ]
+  },
+  {
+   "from": "executing",
+   "to": "degraded",
+   "allowedRoles": [
+    "holder",
+    "executor"
+   ]
+  },
+  {
+   "from": "executing",
+   "to": "closing",
+   "allowedRoles": [
+    "holder",
+    "initiator",
+    "executor",
+    "arbiter"
+   ]
+  },
+  {
+   "from": "executing",
+   "to": "failed",
+   "allowedRoles": [
+    "holder",
+    "executor"
+   ]
+  },
+  {
+   "from": "paused",
+   "to": "executing",
+   "allowedRoles": [
+    "holder",
+    "initiator",
+    "executor",
+    "arbiter"
+   ]
+  },
+  {
+   "from": "paused",
+   "to": "degraded",
+   "allowedRoles": [
+    "holder",
+    "executor"
+   ]
+  },
+  {
+   "from": "paused",
+   "to": "closing",
+   "allowedRoles": [
+    "holder",
+    "initiator",
+    "executor",
+    "arbiter"
+   ]
+  },
+  {
+   "from": "paused",
+   "to": "cancelled",
+   "allowedRoles": [
+    "initiator",
+    "holder"
+   ]
+  },
+  {
+   "from": "paused",
+   "to": "failed",
+   "allowedRoles": [
+    "holder",
+    "executor"
+   ]
+  },
+  {
+   "from": "degraded",
+   "to": "executing",
+   "allowedRoles": [
+    "holder",
+    "initiator",
+    "executor",
+    "arbiter"
+   ]
+  },
+  {
+   "from": "degraded",
+   "to": "paused",
+   "allowedRoles": [
+    "holder",
+    "executor",
+    "initiator"
+   ]
+  },
+  {
+   "from": "degraded",
+   "to": "closing",
+   "allowedRoles": [
+    "holder",
+    "initiator",
+    "executor",
+    "arbiter"
+   ]
+  },
+  {
+   "from": "degraded",
+   "to": "failed",
+   "allowedRoles": [
+    "holder",
+    "executor"
+   ]
+  },
+  {
+   "from": "closing",
+   "to": "closed",
+   "allowedRoles": [
+    "holder"
+   ]
+  },
+  {
+   "from": "closing",
+   "to": "failed",
+   "allowedRoles": [
+    "holder",
+    "executor"
+   ]
+  }
+ ]
+}

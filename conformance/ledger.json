@@ -1,0 +1,373 @@
+[
+ {
+  "id": "ledger-valid-chain",
+  "kind": "ledger",
+  "description": "Three sequenced, signed events form a valid chain.",
+  "input": {
+   "events": [
+    {
+     "mission": "m-001",
+     "seq": 0,
+     "at": "2026-10-04T17:00:00Z",
+     "actor": "mom",
+     "type": "created",
+     "prev": "genesis",
+     "hash": "sha256:699a829626384e27ebd0aec215f1a64ffe823a29f845c36ccb1455b520ccda27",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "sig": "9bSY8ah29zd9Ksey5IluJWOcxr_wZteJh9NleJUpAvFaQpo9Fy21zzn3IXTI1eBYaqrRHHHqfAqBP6A3-n2gBA",
+      "signedAt": "2026-10-04T17:00:00Z"
+     }
+    },
+    {
+     "mission": "m-001",
+     "seq": 1,
+     "at": "2026-10-04T17:01:00Z",
+     "actor": "hub:home",
+     "type": "state_changed",
+     "prev": "sha256:699a829626384e27ebd0aec215f1a64ffe823a29f845c36ccb1455b520ccda27",
+     "transition": {
+      "from": "draft",
+      "to": "open"
+     },
+     "hash": "sha256:51e984e8676a823cbd2aa0d006239c1e16a8f2bea21917d6385f3a1945f6b51a",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "sig": "BUwLdhJHS3nDNrD49Z18Ngt7-1EBWVr-AU6U6gVXXkuu9dpWlvVnIM9Mkbt029IXvu9tjvr-aI5oOjq28QkVAQ",
+      "signedAt": "2026-10-04T17:01:00Z"
+     }
+    },
+    {
+     "mission": "m-001",
+     "seq": 2,
+     "at": "2026-10-04T17:02:00Z",
+     "actor": "grocer:a",
+     "type": "contribution_offered",
+     "prev": "sha256:51e984e8676a823cbd2aa0d006239c1e16a8f2bea21917d6385f3a1945f6b51a",
+     "payload": {
+      "ref": "c-grocerA"
+     },
+     "hash": "sha256:1861eb802712e55cddbb716b06addbe4d7dfd95b9e942be187dd635ac3f15d15",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "sig": "Ul80vQ-auHURIsmeDWTC2rd1h2ieWlUaWU2zJ-WWhJJKcbb-i8KgJYy4HCP-1WhSrdXdenG2gymHeTHnGMQVAQ",
+      "signedAt": "2026-10-04T17:02:00Z"
+     }
+    }
+   ],
+   "keys": [
+    {
+     "kid": "did:web:hub.example#seq-1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "hub:home",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:grocer.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "grocer:a",
+     "validFrom": "2026-01-01T00:00:00Z"
+    }
+   ]
+  },
+  "expected": {
+   "ok": true,
+   "reason": "ok",
+   "head": "sha256:1861eb802712e55cddbb716b06addbe4d7dfd95b9e942be187dd635ac3f15d15"
+  }
+ },
+ {
+  "id": "ledger-edited-event",
+  "kind": "ledger",
+  "description": "Editing an event breaks its hash.",
+  "input": {
+   "events": [
+    {
+     "mission": "m-001",
+     "seq": 0,
+     "at": "2026-10-04T17:00:00Z",
+     "actor": "mom",
+     "type": "created",
+     "prev": "genesis",
+     "hash": "sha256:699a829626384e27ebd0aec215f1a64ffe823a29f845c36ccb1455b520ccda27",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "sig": "9bSY8ah29zd9Ksey5IluJWOcxr_wZteJh9NleJUpAvFaQpo9Fy21zzn3IXTI1eBYaqrRHHHqfAqBP6A3-n2gBA",
+      "signedAt": "2026-10-04T17:00:00Z"
+     }
+    },
+    {
+     "mission": "m-001",
+     "seq": 1,
+     "at": "2026-10-04T17:01:00Z",
+     "actor": "mallory",
+     "type": "state_changed",
+     "prev": "sha256:699a829626384e27ebd0aec215f1a64ffe823a29f845c36ccb1455b520ccda27",
+     "transition": {
+      "from": "draft",
+      "to": "open"
+     },
+     "hash": "sha256:51e984e8676a823cbd2aa0d006239c1e16a8f2bea21917d6385f3a1945f6b51a",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "sig": "BUwLdhJHS3nDNrD49Z18Ngt7-1EBWVr-AU6U6gVXXkuu9dpWlvVnIM9Mkbt029IXvu9tjvr-aI5oOjq28QkVAQ",
+      "signedAt": "2026-10-04T17:01:00Z"
+     }
+    },
+    {
+     "mission": "m-001",
+     "seq": 2,
+     "at": "2026-10-04T17:02:00Z",
+     "actor": "grocer:a",
+     "type": "contribution_offered",
+     "prev": "sha256:51e984e8676a823cbd2aa0d006239c1e16a8f2bea21917d6385f3a1945f6b51a",
+     "payload": {
+      "ref": "c-grocerA"
+     },
+     "hash": "sha256:1861eb802712e55cddbb716b06addbe4d7dfd95b9e942be187dd635ac3f15d15",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "sig": "Ul80vQ-auHURIsmeDWTC2rd1h2ieWlUaWU2zJ-WWhJJKcbb-i8KgJYy4HCP-1WhSrdXdenG2gymHeTHnGMQVAQ",
+      "signedAt": "2026-10-04T17:02:00Z"
+     }
+    }
+   ],
+   "keys": [
+    {
+     "kid": "did:web:hub.example#seq-1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "hub:home",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:grocer.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "grocer:a",
+     "validFrom": "2026-01-01T00:00:00Z"
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "hash_mismatch_at_1"
+  }
+ },
+ {
+  "id": "ledger-checkpoint-valid",
+  "kind": "ledger",
+  "description": "A checkpoint signed by the sequencer and a witness matches the head.",
+  "input": {
+   "events": [
+    {
+     "mission": "m-001",
+     "seq": 0,
+     "at": "2026-10-04T17:00:00Z",
+     "actor": "mom",
+     "type": "created",
+     "prev": "genesis",
+     "hash": "sha256:699a829626384e27ebd0aec215f1a64ffe823a29f845c36ccb1455b520ccda27",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "sig": "9bSY8ah29zd9Ksey5IluJWOcxr_wZteJh9NleJUpAvFaQpo9Fy21zzn3IXTI1eBYaqrRHHHqfAqBP6A3-n2gBA",
+      "signedAt": "2026-10-04T17:00:00Z"
+     }
+    },
+    {
+     "mission": "m-001",
+     "seq": 1,
+     "at": "2026-10-04T17:01:00Z",
+     "actor": "hub:home",
+     "type": "state_changed",
+     "prev": "sha256:699a829626384e27ebd0aec215f1a64ffe823a29f845c36ccb1455b520ccda27",
+     "transition": {
+      "from": "draft",
+      "to": "open"
+     },
+     "hash": "sha256:51e984e8676a823cbd2aa0d006239c1e16a8f2bea21917d6385f3a1945f6b51a",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "sig": "BUwLdhJHS3nDNrD49Z18Ngt7-1EBWVr-AU6U6gVXXkuu9dpWlvVnIM9Mkbt029IXvu9tjvr-aI5oOjq28QkVAQ",
+      "signedAt": "2026-10-04T17:01:00Z"
+     }
+    },
+    {
+     "mission": "m-001",
+     "seq": 2,
+     "at": "2026-10-04T17:02:00Z",
+     "actor": "grocer:a",
+     "type": "contribution_offered",
+     "prev": "sha256:51e984e8676a823cbd2aa0d006239c1e16a8f2bea21917d6385f3a1945f6b51a",
+     "payload": {
+      "ref": "c-grocerA"
+     },
+     "hash": "sha256:1861eb802712e55cddbb716b06addbe4d7dfd95b9e942be187dd635ac3f15d15",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "sig": "Ul80vQ-auHURIsmeDWTC2rd1h2ieWlUaWU2zJ-WWhJJKcbb-i8KgJYy4HCP-1WhSrdXdenG2gymHeTHnGMQVAQ",
+      "signedAt": "2026-10-04T17:02:00Z"
+     }
+    }
+   ],
+   "checkpoint": {
+    "mission": "m-001",
+    "seq": 2,
+    "head": "sha256:1861eb802712e55cddbb716b06addbe4d7dfd95b9e942be187dd635ac3f15d15",
+    "at": "2026-10-04T17:05:00Z",
+    "sequencer": "hub:home",
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:hub.example#seq-1",
+     "sig": "RG1J6S8NG0Y6qPOjGl1GeyKDfBLjN4u69CyP9h6pg3hU9675HmQUhv2-z9Gx58ZvIgchMwdykGrqORWSpDSyAQ"
+    },
+    "witnesses": [
+     {
+      "actor": "grocer:a",
+      "at": "2026-10-04T17:06:00Z",
+      "signature": {
+       "alg": "EdDSA",
+       "kid": "did:web:grocer.example#k1",
+       "sig": "GIhjVSL2E1Z51xX-oUPZfNKwG5SoKv3J28-GXMXRjwsnSGxRu8q3gyjm2XXmB-4i0r_7nqciFhcHaUldxZgPBw"
+      }
+     }
+    ]
+   },
+   "keys": [
+    {
+     "kid": "did:web:hub.example#seq-1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "hub:home",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:grocer.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "grocer:a",
+     "validFrom": "2026-01-01T00:00:00Z"
+    }
+   ]
+  },
+  "expected": {
+   "ok": true,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "ledger-rewrite-detected",
+  "kind": "ledger",
+  "description": "The sequencer rewrote event 2 after a witnessed checkpoint: the rewritten chain is internally valid but no longer matches the checkpoint.",
+  "input": {
+   "events": [
+    {
+     "mission": "m-001",
+     "seq": 0,
+     "at": "2026-10-04T17:00:00Z",
+     "actor": "mom",
+     "type": "created",
+     "prev": "genesis",
+     "hash": "sha256:699a829626384e27ebd0aec215f1a64ffe823a29f845c36ccb1455b520ccda27",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "sig": "9bSY8ah29zd9Ksey5IluJWOcxr_wZteJh9NleJUpAvFaQpo9Fy21zzn3IXTI1eBYaqrRHHHqfAqBP6A3-n2gBA",
+      "signedAt": "2026-10-04T17:00:00Z"
+     }
+    },
+    {
+     "mission": "m-001",
+     "seq": 1,
+     "at": "2026-10-04T17:01:00Z",
+     "actor": "hub:home",
+     "type": "state_changed",
+     "prev": "sha256:699a829626384e27ebd0aec215f1a64ffe823a29f845c36ccb1455b520ccda27",
+     "transition": {
+      "from": "draft",
+      "to": "open"
+     },
+     "hash": "sha256:51e984e8676a823cbd2aa0d006239c1e16a8f2bea21917d6385f3a1945f6b51a",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "sig": "BUwLdhJHS3nDNrD49Z18Ngt7-1EBWVr-AU6U6gVXXkuu9dpWlvVnIM9Mkbt029IXvu9tjvr-aI5oOjq28QkVAQ",
+      "signedAt": "2026-10-04T17:01:00Z"
+     }
+    },
+    {
+     "mission": "m-001",
+     "seq": 2,
+     "at": "2026-10-04T17:02:00Z",
+     "actor": "grocer:b",
+     "type": "contribution_offered",
+     "prev": "sha256:51e984e8676a823cbd2aa0d006239c1e16a8f2bea21917d6385f3a1945f6b51a",
+     "payload": {
+      "ref": "c-grocerB"
+     },
+     "hash": "sha256:c058ff0e0a992beae674f671ef11f6d69291bfc14c024e245c12bd10ce35ed44",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "sig": "3uq6ZyX6zKWwejPcWUPijjfWtLKhBLZYTLJttzzveKE1563pA5YMc7s5GuTWBiIL3dF37iLQTITvNEPnPeicDA",
+      "signedAt": "2026-10-04T17:02:00Z"
+     }
+    }
+   ],
+   "checkpoint": {
+    "mission": "m-001",
+    "seq": 2,
+    "head": "sha256:1861eb802712e55cddbb716b06addbe4d7dfd95b9e942be187dd635ac3f15d15",
+    "at": "2026-10-04T17:05:00Z",
+    "sequencer": "hub:home",
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:hub.example#seq-1",
+     "sig": "RG1J6S8NG0Y6qPOjGl1GeyKDfBLjN4u69CyP9h6pg3hU9675HmQUhv2-z9Gx58ZvIgchMwdykGrqORWSpDSyAQ"
+    },
+    "witnesses": [
+     {
+      "actor": "grocer:a",
+      "at": "2026-10-04T17:06:00Z",
+      "signature": {
+       "alg": "EdDSA",
+       "kid": "did:web:grocer.example#k1",
+       "sig": "GIhjVSL2E1Z51xX-oUPZfNKwG5SoKv3J28-GXMXRjwsnSGxRu8q3gyjm2XXmB-4i0r_7nqciFhcHaUldxZgPBw"
+      }
+     }
+    ]
+   },
+   "keys": [
+    {
+     "kid": "did:web:hub.example#seq-1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "hub:home",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:grocer.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "grocer:a",
+     "validFrom": "2026-01-01T00:00:00Z"
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "head_mismatch"
+  }
+ }
+]

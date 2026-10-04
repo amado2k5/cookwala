@@ -54,7 +54,7 @@
   "caution": "extra_slow",
   "autonomyLevel": "CA2",
   "spendingLimit": {
-   "amount": 20,
+   "amount": "20.00",
    "currency": "USD"
   },
   "mayAddParties": [
@@ -200,7 +200,7 @@
   "topology": "hybrid",
   "maxHops": 3,
   "budget": {
-   "amount": 1,
+   "amount": "1.00",
    "currency": "USD"
   },
   "providers": [
@@ -446,7 +446,7 @@
    "limits": {
     "quality": "minor",
     "extraCost": {
-     "amount": 1,
+     "amount": "1.00",
      "currency": "USD"
     }
    },
@@ -471,7 +471,7 @@
    "decider": "holder",
    "limits": {
     "extraCost": {
-     "amount": 2,
+     "amount": "2.00",
      "currency": "USD"
     }
    },
@@ -568,11 +568,11 @@
    "scope": "mission",
    "unit": "USD",
    "limit": {
-    "amount": 20,
+    "amount": "20.00",
     "currency": "USD"
    },
    "plan": {
-    "amount": 15,
+    "amount": "15.00",
     "currency": "USD"
    },
    "controller": "holder",
@@ -597,15 +597,15 @@
    ],
    "status": {
     "spent": {
-     "amount": 11.9,
+     "amount": "11.90",
      "currency": "USD"
     },
     "committed": {
-     "amount": 2.1,
+     "amount": "2.10",
      "currency": "USD"
     },
     "forecastAtCompletion": {
-     "amount": 17.2,
+     "amount": "17.20",
      "currency": "USD"
     },
     "variance": 0.147,
@@ -789,7 +789,7 @@
      "basmati 1 kg"
     ],
     "total": {
-     "amount": 9.8,
+     "amount": "9.80",
      "currency": "USD"
     }
    }

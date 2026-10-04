@@ -1,0 +1,3 @@
+offer_id,donor_org,country,admin1,admin2,site_name,item,kg,storage,date_kind,date,allergens,temp_c,temp_method,available_from,available_to,needs,note
+#x_offer,#org+donor,#country+code,#adm1+name,#adm2+name,#loc+name,#item+name,#value+kg,#x_storage,#x_date+kind,#date,#x_allergens,#x_temp+c,#x_temp+method,#date+start,#date+end,#x_needs,#description
+of-2026-11-02-001,did:web:greengrocer.example,EG,Cairo,Nasr City,Supermarket loading bay,Yogurt cups,36,chilled,use_by,2026-11-05,milk,4.1,fridge_display,2026-11-02T18:00:00+02:00,2026-11-03T08:00:00+02:00,refrigerated_vehicle,

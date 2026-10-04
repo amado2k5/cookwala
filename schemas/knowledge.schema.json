@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/knowledge.schema.json",
   "title": "Cookwala Knowledge Packs",
+  "x-cookwala-status": "experimental",
   "description": "Culinary and food-safety knowledge the reasoner uses beyond recipes: recovery playbooks, ingredient functional roles, substitution rules, transformations (repurposing intermediates), storage profiles and energy models. Anyone can publish a knowledge pack (public or private); packs are merged by priority, and safety rules can only be tightened by lower-priority packs, never loosened.",
   "type": "object",
   "required": [
@@ -56,6 +57,10 @@
           "url": {
             "type": "string"
           }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+          "^x-": {}
         }
       }
     },
@@ -231,6 +236,10 @@
                 "type": "string"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "safetyGate": {
@@ -260,6 +269,10 @@
               "ruleRef": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -327,6 +340,10 @@
                   "notes": {
                     "type": "string"
                   }
+                },
+                "unevaluatedProperties": false,
+                "patternProperties": {
+                  "^x-": {}
                 }
               },
               "priority": {
@@ -335,6 +352,10 @@
               "notes": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -356,9 +377,17 @@
               "url": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "RoleEntry": {
@@ -415,6 +444,10 @@
                 "minimum": 0,
                 "maximum": 1
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -428,6 +461,10 @@
         "notes": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Substitution": {
@@ -456,6 +493,10 @@
               "ratio": {
                 "type": "number"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           },
           "minItems": 1
@@ -508,6 +549,10 @@
         "notes": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "Transformation": {
@@ -546,6 +591,10 @@
                   "type": "string"
                 }
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -556,6 +605,10 @@
         "notes": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "StorageProfile": {
@@ -583,6 +636,10 @@
             "max": {
               "type": "number"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "freezerMonths": {
@@ -594,6 +651,10 @@
             "max": {
               "type": "number"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "freezeQuality": {
@@ -636,6 +697,10 @@
             "type": "string"
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "EnergyModel": {
@@ -673,7 +738,12 @@
             "type": "string"
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     }
-  }
+  },
+  "unevaluatedProperties": false
 }

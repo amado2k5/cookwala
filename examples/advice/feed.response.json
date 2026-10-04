@@ -45,7 +45,7 @@
      }
     ],
     "costTotal": {
-     "amount": 52,
+     "amount": "52.00",
      "currency": "USD"
     },
     "constraintsMet": [

@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/profile.schema.json",
   "title": "Cookwala Profiles and Operating Modes",
+  "x-cookwala-status": "experimental",
   "description": "Setup information about everything in the cooking lifecycle (clients/households, diners, kitchens, cookware, robots, organizations) and the Operating Mode that tells planners and advisors how to trade off energy, battery, ingredients, budget, time and quality. Profiles are owned by whoever creates them and can be private (local only), shared, or public, hosted in any catalog. Fields marked sensitive must never leave the owner's hub.",
   "type": "object",
   "required": [
@@ -158,6 +159,10 @@
         "canDockMidSession": {
           "type": "boolean"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "EnergySource": {
@@ -221,14 +226,26 @@
                   "perKWh": {
                     "$ref": "common.schema.json#/$defs/Money"
                   }
+                },
+                "unevaluatedProperties": false,
+                "patternProperties": {
+                  "^x-": {}
                 }
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "co2eKgPerKWh": {
           "type": "number"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "OperatingMode": {
@@ -295,6 +312,10 @@
             "gasAvailable": {
               "type": "boolean"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "robots": {
@@ -359,8 +380,16 @@
                 "minKcalPerPersonDay": {
                   "type": "number"
                 }
+              },
+              "unevaluatedProperties": false,
+              "patternProperties": {
+                "^x-": {}
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "budget": {
@@ -396,6 +425,10 @@
             "preferPantry": {
               "type": "boolean"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "time": {
@@ -446,6 +479,10 @@
             "humanEffort": {
               "type": "number"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "relief": {
@@ -470,8 +507,16 @@
               "type": "boolean",
               "description": "Plan for no robots/appliances: guided human steps, fuel-efficient methods, minimal water."
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "ClientProfile": {
@@ -550,8 +595,16 @@
                   "type": "number",
                   "description": "Max extra cost accepted for preferred sourcing."
                 }
+              },
+              "unevaluatedProperties": false,
+              "patternProperties": {
+                "^x-": {}
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "dietary": {
@@ -601,9 +654,17 @@
                   "rule": {
                     "type": "string"
                   }
+                },
+                "unevaluatedProperties": false,
+                "patternProperties": {
+                  "^x-": {}
                 }
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "locale": {
@@ -622,6 +683,10 @@
                 "imperial"
               ]
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "consent": {
@@ -636,6 +701,10 @@
             "useCloudAdvice": {
               "type": "boolean"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "members": {
@@ -645,7 +714,8 @@
           },
           "description": "Per-person nutrition profiles (sensitive, local-only)."
         }
-      }
+      },
+      "description": "Kind-specific fields; the profile root (which applies this through allOf) rejects unknown fields."
     },
     "KitchenProfile": {
       "type": "object",
@@ -683,6 +753,10 @@
                   "type": "string"
                 }
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -698,6 +772,10 @@
             "pantryL": {
               "type": "number"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "altitudeM": {
@@ -716,6 +794,10 @@
                 "hard"
               ]
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "ventilation": {
@@ -732,7 +814,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "description": "Kind-specific fields; the profile root (which applies this through allOf) rejects unknown fields."
     },
     "CookwareItem": {
       "type": "object",
@@ -827,6 +910,10 @@
           },
           "description": "e.g. halal_only, allergen_free (cross-contact control)."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "CookwareProfile": {
@@ -841,7 +928,8 @@
       },
       "required": [
         "items"
-      ]
+      ],
+      "description": "Kind-specific fields; the profile root (which applies this through allOf) rejects unknown fields."
     },
     "RobotProfile": {
       "type": "object",
@@ -873,6 +961,10 @@
                 "type": "number"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "home": {
@@ -887,6 +979,10 @@
                 "type": "string"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "maintenance": {
@@ -901,9 +997,14 @@
                 "type": "string"
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         }
-      }
+      },
+      "description": "Kind-specific fields; the profile root (which applies this through allOf) rejects unknown fields."
     },
     "OrganizationProfile": {
       "type": "object",
@@ -947,7 +1048,8 @@
           },
           "description": "Catalogs this organization publishes or trusts."
         }
-      }
+      },
+      "description": "Kind-specific fields; the profile root (which applies this through allOf) rejects unknown fields."
     },
     "NutritionTargets": {
       "type": "object",
@@ -1009,6 +1111,10 @@
           },
           "description": "References used, e.g. mifflin_st_jeor, who_sodium_2023, dri_tables."
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "PersonNutrition": {
@@ -1135,6 +1241,10 @@
               "type": "string",
               "format": "date"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "appetite": {
@@ -1144,7 +1254,12 @@
             "hearty"
           ]
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     }
-  }
+  },
+  "unevaluatedProperties": false
 }

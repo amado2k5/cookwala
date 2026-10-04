@@ -1,0 +1,65 @@
+{
+ "profile": "0.1.0",
+ "kind": "Distribution",
+ "id": "di-2026-11-03-kitchen-7",
+ "org": "did:web:kitchen7.example",
+ "orgRole": "community_kitchen",
+ "site": {
+  "country": "EG",
+  "admin1": "Cairo",
+  "admin2": "Ain Shams",
+  "siteName": "Community kitchen 7"
+ },
+ "date": "2026-11-03",
+ "form": "hot_meals",
+ "meals": 410,
+ "people": {
+  "total": 410,
+  "children": 150,
+  "adults": 220,
+  "elderly": 40
+ },
+ "kgUsed": 96,
+ "kgRescuedUsed": 61,
+ "offers": [
+  "of-2026-11-02-001"
+ ],
+ "menu": {
+  "recipes": [
+   "Lentil soup (shorbet ads)",
+   "Tomato rice",
+   "Yogurt"
+  ],
+  "perMeal": {
+   "energyKcal": 720,
+   "proteinG": 27,
+   "fatG": 19,
+   "saturatedFatG": 5,
+   "transFatG": 0.1,
+   "freeSugarsG": 9,
+   "sodiumMg": 1150,
+   "fruitVegG": 180,
+   "fibreG": 11
+  }
+ },
+ "cost": {
+  "food": {
+   "amount": "2140.00",
+   "currency": "EGP"
+  },
+  "transport": {
+   "amount": "350.00",
+   "currency": "EGP"
+  },
+  "energy": {
+   "amount": "260.50",
+   "currency": "EGP"
+  }
+ },
+ "volunteerMinutes": 1260,
+ "rulePack": "who-codex-basic@0.1.0",
+ "findings": [
+  "nutrition.sodium_per_meal"
+ ],
+ "safetyIncidents": 0
+}

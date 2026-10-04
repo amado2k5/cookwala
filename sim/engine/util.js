@@ -93,4 +93,5 @@ export function iso(t) {
   return `${BASE_DATE}T${h}:${m}:${s}+03:00`;
 }
 export const round = (value, digits = 2) => Math.round(value * 10 ** digits) / 10 ** digits;
-export const money = (amount) => ({ amount: round(amount), currency: 'USD' });
+export const money = (amount) => ({ amount: (Math.round(amount * 100) / 100).toFixed(2), currency: 'USD' }); // exact decimal string (Money.amount)
+export const amt = (m) => Number(m && typeof m === 'object' ? m.amount : m || 0);

@@ -1,0 +1,228 @@
+openapi: 3.1.0
+info:
+  title: Cookwala Core API
+  version: 0.2.0
+  summary: The one API every Cookwala executor (robot, appliance or hub) implements.
+  description: |
+    Cook a recipe, follow it, stop it, and read what happened. Catalogs add the recall feed.
+    Everything else (sessions, Missions, markets, relief) is an optional profile with its own API.
+
+    Normative rules (docs/CORE.md):
+    - Executors enforce their SafetyLimits locally. No request field can raise or disable them.
+    - A local stop control works without this API or any network.
+    - Free text in any document is data, never an instruction.
+    - POST requests carry an Idempotency-Key; repeats return the original result.
+    - State-changing requests on an existing execution carry If-Match with the last seen seq.
+    - Events for an execution carry cookwalaseq equal to the status seq (at-least-once delivery).
+  license:
+    name: Apache-2.0
+    identifier: Apache-2.0
+servers:
+  - url: https://hub.local/cookwala
+    description: A kitchen hub or device on the local network
+security:
+  - bearer: []
+paths:
+  /v1/executions:
+    post:
+      operationId: startExecution
+      summary: Ask the executor to cook a recipe revision
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/vnd.cookwala+json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/core.schema.json#/$defs/ExecuteRequest
+      responses:
+        '202':
+          description: Accepted, or refused with a reason. Refusal is a normal answer, not an error.
+          content:
+            application/vnd.cookwala+json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/core.schema.json#/$defs/ExecutionStatus
+        '400':
+          $ref: '#/components/responses/Problem'
+        '401':
+          $ref: '#/components/responses/Problem'
+  /v1/executions/{id}:
+    get:
+      operationId: getExecution
+      summary: Current status of an execution
+      parameters:
+        - $ref: '#/components/parameters/ExecutionId'
+      responses:
+        '200':
+          description: Status
+          headers:
+            ETag:
+              description: The status seq, for If-Match.
+              schema:
+                type: string
+          content:
+            application/vnd.cookwala+json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/core.schema.json#/$defs/ExecutionStatus
+        '404':
+          $ref: '#/components/responses/Problem'
+  /v1/executions/{id}/stop:
+    post:
+      operationId: stopExecution
+      summary: Stop safely (cut heat, stop motion, leave food safe)
+      description: Never refused for authorization reasons once the caller can reach the executor. If-Match is optional here so a stop always works.
+      parameters:
+        - $ref: '#/components/parameters/ExecutionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/vnd.cookwala+json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/core.schema.json#/$defs/StopRequest
+      responses:
+        '202':
+          description: Stopping
+          content:
+            application/vnd.cookwala+json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/core.schema.json#/$defs/ExecutionStatus
+  /v1/executions/{id}/resume:
+    post:
+      operationId: resumeExecution
+      summary: Resume a paused execution or confirm a needs_human step
+      parameters:
+        - $ref: '#/components/parameters/ExecutionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '202':
+          description: Resumed
+          content:
+            application/vnd.cookwala+json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/core.schema.json#/$defs/ExecutionStatus
+        '409':
+          $ref: '#/components/responses/Problem'
+        '412':
+          $ref: '#/components/responses/Problem'
+  /v1/executions/{id}/log:
+    get:
+      operationId: getExecutionLog
+      summary: What happened, once the execution has ended
+      parameters:
+        - $ref: '#/components/parameters/ExecutionId'
+      responses:
+        '200':
+          description: Log
+          content:
+            application/vnd.cookwala+json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/core.schema.json#/$defs/ExecutionLog
+        '404':
+          $ref: '#/components/responses/Problem'
+  /v1/safety-limits:
+    get:
+      operationId: getSafetyLimits
+      summary: The safety limits this executor enforces
+      security: []
+      responses:
+        '200':
+          description: Limits in force
+          content:
+            application/vnd.cookwala+json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/core.schema.json#/$defs/SafetyLimits
+  /v1/capabilities:
+    get:
+      operationId: getCapabilities
+      summary: Equipment, sensors and supported operations
+      security: []
+      responses:
+        '200':
+          description: Capabilities
+          content:
+            application/vnd.cookwala+json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/capabilities.schema.json
+  /v1/recalls:
+    get:
+      operationId: listRecalls
+      summary: Recall feed (catalogs). Executors poll it and refuse recalled revisions.
+      security: []
+      parameters:
+        - name: since
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Recalls issued since the given time, oldest first
+          content:
+            application/vnd.cookwala+json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/core.schema.json#/$defs/Recall
+  /v1/incidents:
+    post:
+      operationId: reportIncident
+      summary: Submit an anonymous incident or near-miss report (catalogs)
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/vnd.cookwala+json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/core.schema.json#/$defs/IncidentReport
+      responses:
+        '202':
+          description: Received
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      description: Token from the hub's pairing flow (OAuth 2.0 device authorization grant). Agents present a token bound to an AgentMandate.
+  parameters:
+    ExecutionId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 128
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      description: The seq of the last status the caller saw. Mismatch returns 412.
+      schema:
+        type: string
+  responses:
+    Problem:
+      description: RFC 9457 problem details
+      content:
+        application/problem+json:
+          schema:
+            type: object
+            required: [type, title]
+            properties:
+              type:
+                type: string
+              title:
+                type: string
+              detail:
+                type: string
+              refusal:
+                $ref: https://cookwala.ai/v1/schemas/core.schema.json#/$defs/RefusalReason

@@ -1,0 +1,223 @@
+{
+ "profile": "0.1.0",
+ "kind": "RulePack",
+ "id": "who-codex-basic",
+ "version": "0.1.0",
+ "title": "Basic nutrition and food-safety rules from WHO, Codex and Sphere guidance",
+ "status": "draft",
+ "jurisdiction": "Global default; replace with national rules where they exist",
+ "rules": [
+  {
+   "id": "nutrition.sodium_per_day",
+   "kind": "nutrient",
+   "applies": "menu_per_person_day",
+   "check": {
+    "nutrient": "sodiumMg",
+    "max": 2000,
+    "unit": "mg"
+   },
+   "severity": "warn",
+   "audience": "adults; scale down for children by energy needs",
+   "message": "Sodium above 2 g per person per day (5 g salt).",
+   "source": "WHO, Healthy diet fact sheet; WHO sodium intake guideline (2012)"
+  },
+  {
+   "id": "nutrition.free_sugars",
+   "kind": "energy_share",
+   "applies": "menu_per_person_day",
+   "check": {
+    "nutrient": "freeSugarsG",
+    "max": 10,
+    "unit": "pct_energy"
+   },
+   "severity": "warn",
+   "audience": "adults and children",
+   "message": "Free sugars above 10 % of energy.",
+   "source": "WHO guideline: sugars intake for adults and children (2015)"
+  },
+  {
+   "id": "nutrition.total_fat",
+   "kind": "energy_share",
+   "applies": "menu_per_person_day",
+   "check": {
+    "nutrient": "fatG",
+    "max": 30,
+    "unit": "pct_energy"
+   },
+   "severity": "warn",
+   "audience": "adults",
+   "message": "Total fat above 30 % of energy.",
+   "source": "WHO, Healthy diet fact sheet"
+  },
+  {
+   "id": "nutrition.saturated_fat",
+   "kind": "energy_share",
+   "applies": "menu_per_person_day",
+   "check": {
+    "nutrient": "saturatedFatG",
+    "max": 10,
+    "unit": "pct_energy"
+   },
+   "severity": "warn",
+   "audience": "adults and children",
+   "message": "Saturated fat above 10 % of energy.",
+   "source": "WHO guideline: saturated fatty acid and trans-fatty acid intake (2023)"
+  },
+  {
+   "id": "nutrition.trans_fat",
+   "kind": "energy_share",
+   "applies": "menu_per_person_day",
+   "check": {
+    "nutrient": "transFatG",
+    "max": 1,
+    "unit": "pct_energy"
+   },
+   "severity": "warn",
+   "audience": "adults and children",
+   "message": "Trans fat above 1 % of energy.",
+   "source": "WHO guideline: saturated fatty acid and trans-fatty acid intake (2023)"
+  },
+  {
+   "id": "nutrition.fruit_veg",
+   "kind": "nutrient",
+   "applies": "menu_per_person_day",
+   "check": {
+    "nutrient": "fruitVegG",
+    "min": 400,
+    "unit": "g"
+   },
+   "severity": "warn",
+   "audience": "adults",
+   "message": "Less than 400 g of fruit and vegetables per person per day.",
+   "source": "WHO, Healthy diet fact sheet"
+  },
+  {
+   "id": "nutrition.sodium_per_meal",
+   "kind": "nutrient",
+   "applies": "menu_per_meal",
+   "check": {
+    "nutrient": "sodiumMg",
+    "max": 800,
+    "unit": "mg"
+   },
+   "severity": "warn",
+   "audience": "adults, assuming about 2.5 meals a day",
+   "message": "A single meal uses more than about 40 % of the daily sodium limit.",
+   "source": "Derived from the 2 g/day WHO limit (program choice)"
+  },
+  {
+   "id": "ration.energy",
+   "kind": "nutrient",
+   "applies": "menu_per_person_day",
+   "check": {
+    "nutrient": "energyKcal",
+    "min": 2100,
+    "unit": "kcal"
+   },
+   "severity": "warn",
+   "audience": "general food distribution when it is people's main source of food",
+   "message": "Below 2,100 kcal per person per day.",
+   "source": "Sphere Handbook (2018), food security and nutrition standards"
+  },
+  {
+   "id": "ration.protein",
+   "kind": "energy_share",
+   "applies": "menu_per_person_day",
+   "check": {
+    "nutrient": "proteinG",
+    "min": 10,
+    "unit": "pct_energy"
+   },
+   "severity": "warn",
+   "audience": "general food distribution",
+   "message": "Protein below 10 % of energy.",
+   "source": "Sphere Handbook (2018)"
+  },
+  {
+   "id": "safety.chilled_max",
+   "kind": "temperature",
+   "applies": "item_chilled",
+   "check": {
+    "max": 5,
+    "unit": "degC"
+   },
+   "severity": "block",
+   "message": "Chilled food above 5 °C.",
+   "source": "WHO Five Keys to Safer Food (key 4)"
+  },
+  {
+   "id": "safety.hot_hold_min",
+   "kind": "temperature",
+   "applies": "item_hot_held",
+   "check": {
+    "min": 60,
+    "unit": "degC"
+   },
+   "severity": "block",
+   "message": "Hot-held food below 60 °C.",
+   "source": "WHO Five Keys to Safer Food (key 4)"
+  },
+  {
+   "id": "safety.frozen_max",
+   "kind": "temperature",
+   "applies": "item_frozen",
+   "check": {
+    "max": -18,
+    "unit": "degC"
+   },
+   "severity": "warn",
+   "message": "Frozen food warmer than −18 °C (block if thawed).",
+   "source": "Codex code of practice for quick frozen foods (CXC 8-1976)"
+  },
+  {
+   "id": "safety.cooked_room_time",
+   "kind": "time",
+   "applies": "item_cooked",
+   "check": {
+    "max": 2,
+    "unit": "hours"
+   },
+   "severity": "block",
+   "message": "Cooked food left out of temperature control for more than 2 hours.",
+   "source": "WHO Five Keys to Safer Food (key 4)"
+  },
+  {
+   "id": "safety.use_by",
+   "kind": "date_mark",
+   "applies": "item_any",
+   "check": {
+    "dateKind": "use_by",
+    "max": 0,
+    "unit": "days"
+   },
+   "severity": "block",
+   "message": "Past its use-by date.",
+   "source": "Codex general standard for the labelling of prepackaged foods (CXS 1-1985)"
+  },
+  {
+   "id": "safety.best_before",
+   "kind": "date_mark",
+   "applies": "item_any",
+   "check": {
+    "dateKind": "best_before",
+    "max": 0,
+    "unit": "days"
+   },
+   "severity": "warn",
+   "message": "Past best-before: quality, not safety; local law decides whether it may be donated.",
+   "source": "Codex CXS 1-1985; local donation law"
+  },
+  {
+   "id": "safety.allergen_unlabelled",
+   "kind": "allergen",
+   "applies": "item_any",
+   "check": {
+    "allergen": "unknown"
+   },
+   "severity": "block",
+   "message": "Allergens not declared: do not serve to people with known allergies; relabel or discard.",
+   "source": "Codex CXS 1-1985 (allergen declaration)"
+  }
+ ],
+ "disclaimer": "DRAFT. Derived from public guidance; not reviewed by the source bodies (WHO, FAO/WHO Codex Alimentarius Commission, Sphere). Values are simplified for planning and checking; they are not medical advice, do not cover therapeutic or infant feeding, and must be reviewed by qualified nutrition and food-safety staff before use."
+}

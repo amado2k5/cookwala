@@ -1,0 +1,188 @@
+[
+ {
+  "id": "sig-rfc8032-test1",
+  "kind": "signature",
+  "description": "RFC 8032 test 1: Ed25519 over the empty message with the test-1 key.",
+  "input": {
+   "seed": "9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60",
+   "messageHex": ""
+  },
+  "expected": {
+   "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+   "signatureHex": "e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b"
+  }
+ },
+ {
+  "id": "sig-valid",
+  "kind": "signature",
+  "description": "A signed document verifies.",
+  "input": {
+   "document": {
+    "kind": "Recall",
+    "id": "rc-001",
+    "issuedAt": "2026-10-04T10:00:00Z",
+    "targets": [
+     {
+      "ref": "cw:cookwala.ai:shakshuka"
+     }
+    ],
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:hub.example#seq-1",
+     "sig": "tKlmCc8a9gg9ZHRDvHeaqP24bkbeNAMAu2yEvqfYxsaeaYCtoLpZzBG1qhjRwVg81EyewGRnoTbWi9JBnrX1CQ",
+     "signedAt": "2026-10-04T10:00:00Z"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:hub.example#seq-1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "hub:home",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:grocer.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "grocer:a",
+     "validFrom": "2026-01-01T00:00:00Z",
+     "revokedAt": "2026-09-01T00:00:00Z",
+     "revocationReason": "superseded"
+    }
+   ]
+  },
+  "expected": {
+   "ok": true,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "sig-tampered",
+  "kind": "signature",
+  "description": "Changing any signed field breaks the signature.",
+  "input": {
+   "document": {
+    "kind": "Recall",
+    "id": "rc-002",
+    "issuedAt": "2026-10-04T10:00:00Z",
+    "targets": [
+     {
+      "ref": "cw:cookwala.ai:shakshuka"
+     }
+    ],
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:hub.example#seq-1",
+     "sig": "tKlmCc8a9gg9ZHRDvHeaqP24bkbeNAMAu2yEvqfYxsaeaYCtoLpZzBG1qhjRwVg81EyewGRnoTbWi9JBnrX1CQ",
+     "signedAt": "2026-10-04T10:00:00Z"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:hub.example#seq-1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "hub:home",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:grocer.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "grocer:a",
+     "validFrom": "2026-01-01T00:00:00Z",
+     "revokedAt": "2026-09-01T00:00:00Z",
+     "revocationReason": "superseded"
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "bad_signature"
+  }
+ },
+ {
+  "id": "sig-revoked-key",
+  "kind": "signature",
+  "description": "A signature made after the key was revoked is invalid.",
+  "input": {
+   "document": {
+    "kind": "Recall",
+    "id": "rc-001",
+    "issuedAt": "2026-10-04T10:00:00Z",
+    "targets": [
+     {
+      "ref": "cw:cookwala.ai:shakshuka"
+     }
+    ],
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:grocer.example#k1",
+     "sig": "h7zXKZRctu-qrmGM1GVwgr6xcSm8ctukLpsRvpqh4LdN01qLoIo6Rm4g1JqdI68BiyMtOoj9myf60GF17gJqCQ",
+     "signedAt": "2026-09-15T00:00:00Z"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:hub.example#seq-1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "hub:home",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:grocer.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "grocer:a",
+     "validFrom": "2026-01-01T00:00:00Z",
+     "revokedAt": "2026-09-01T00:00:00Z",
+     "revocationReason": "superseded"
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "key_revoked"
+  }
+ },
+ {
+  "id": "sig-unknown-key",
+  "kind": "signature",
+  "description": "An unknown kid is rejected, never trusted.",
+  "input": {
+   "document": {
+    "kind": "Recall",
+    "id": "rc-001",
+    "issuedAt": "2026-10-04T10:00:00Z",
+    "targets": [
+     {
+      "ref": "cw:cookwala.ai:shakshuka"
+     }
+    ],
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:hub.example#seq-1",
+     "sig": "tKlmCc8a9gg9ZHRDvHeaqP24bkbeNAMAu2yEvqfYxsaeaYCtoLpZzBG1qhjRwVg81EyewGRnoTbWi9JBnrX1CQ",
+     "signedAt": "2026-10-04T10:00:00Z"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:grocer.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "grocer:a",
+     "validFrom": "2026-01-01T00:00:00Z",
+     "revokedAt": "2026-09-01T00:00:00Z",
+     "revocationReason": "superseded"
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "unknown_key"
+  }
+ }
+]

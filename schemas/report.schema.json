@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/report.schema.json",
   "title": "Cookwala Execution Report",
+  "x-cookwala-status": "experimental",
   "description": "Anonymous, opt-in report a hub or device sends to the index after a session (POST /v1/reports). Drives verification levels (V3) and recipe fixes. No personal data, no images unless the user opts in, no location finer than country.",
   "type": "object",
   "required": [
@@ -95,6 +96,10 @@
           "note": {
             "type": "string"
           }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+          "^x-": {}
         }
       }
     },
@@ -112,6 +117,10 @@
           "value": {
             "type": "number"
           }
+        },
+        "unevaluatedProperties": false,
+        "patternProperties": {
+          "^x-": {}
         }
       }
     },
@@ -138,5 +147,6 @@
   },
   "patternProperties": {
     "^x-": {}
-  }
+  },
+  "unevaluatedProperties": false
 }

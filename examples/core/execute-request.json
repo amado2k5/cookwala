@@ -1,0 +1,46 @@
+{
+ "core": "0.2.0",
+ "kind": "ExecuteRequest",
+ "id": "ex-2026-10-04-001",
+ "recipe": "cw:cookwala.ai:example-shakshuka",
+ "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841",
+ "servings": 4,
+ "serveBy": "2026-10-04T19:30:00+03:00",
+ "requestedBy": "agent:planner-1",
+ "idempotencyKey": "ex-2026-10-04-001-a",
+ "mandate": {
+  "principal": "household:h-42/person:p-1",
+  "agent": "agent:planner-1",
+  "agentInfo": {
+   "vendor": "example-ai",
+   "model": "any-model",
+   "version": "1"
+  },
+  "scopes": [
+   "plan_meals",
+   "start_cooking",
+   "stop_cooking",
+   "order_groceries"
+  ],
+  "spendCap": {
+   "amount": "20.00",
+   "currency": "USD"
+  },
+  "perOrderCap": {
+   "amount": "15.00",
+   "currency": "USD"
+  },
+  "confirmBefore": [
+   "payment_over_cap",
+   "irreversible",
+   "safety_override",
+   "diet_or_allergen_change"
+  ],
+  "expires": "2026-10-04T23:59:00+03:00"
+ },
+ "allergenBlocks": [
+  "peanuts",
+  "sesame"
+ ],
+ "operatingMode": "energy_saver"
+}

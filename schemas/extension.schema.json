@@ -2,94 +2,355 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/extension.schema.json",
   "title": "Cookwala Extension Manifest",
+  "x-cookwala-status": "experimental",
   "description": "Declares an extension anyone can build and host anywhere: new fields (x- namespace), vocabularies, knowledge packs, policy packs, filters, rankers, advisors, planners' cost terms, AI models, agents, tools, device adapters, flows, UI cards, or marketplace connectors. Hubs and indexes load extensions the operator trusts. Core safety checks always run after every extension and cannot be disabled or loosened by one.",
   "type": "object",
-  "required": ["cookwala", "id", "name", "version", "publisher", "provides", "permissions"],
+  "required": [
+    "cookwala",
+    "id",
+    "name",
+    "version",
+    "publisher",
+    "provides",
+    "permissions"
+  ],
   "properties": {
-    "cookwala": { "$ref": "common.schema.json#/$defs/SpecVersion" },
-    "id": { "type": "string", "pattern": "^x-[a-z0-9-]+(\\.[a-z0-9-]+)*$", "description": "Namespace owned by the publisher, e.g. x-acme or x-acme.halal-plus. Fields it adds are prefixed with this id." },
-    "name": { "type": "string" },
-    "version": { "type": "string" },
-    "description": { "$ref": "common.schema.json#/$defs/LangMap" },
+    "cookwala": {
+      "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^x-[a-z0-9-]+(\\.[a-z0-9-]+)*$",
+      "description": "Namespace owned by the publisher, e.g. x-acme or x-acme.halal-plus. Fields it adds are prefixed with this id."
+    },
+    "name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "description": {
+      "$ref": "common.schema.json#/$defs/LangMap"
+    },
     "publisher": {
       "type": "object",
-      "required": ["name"],
-      "properties": { "name": { "type": "string" }, "url": { "type": "string" }, "contact": { "type": "string" }, "did": { "type": "string" } }
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "contact": {
+          "type": "string"
+        },
+        "did": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
+      }
     },
-    "license": { "type": "string" },
-    "compat": { "type": "object", "properties": { "cookwala": { "type": "string", "description": "SemVer range, e.g. ^0.1 || ^1." } } },
+    "license": {
+      "type": "string"
+    },
+    "compat": {
+      "type": "object",
+      "properties": {
+        "cookwala": {
+          "type": "string",
+          "description": "SemVer range, e.g. ^0.1 || ^1."
+        }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
+      }
+    },
     "provides": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/Contribution" }
+      "items": {
+        "$ref": "#/$defs/Contribution"
+      }
     },
     "permissions": {
       "type": "object",
       "description": "What data and actions the extension needs. The operator grants or denies each; sensitive data is never granted by default.",
       "properties": {
-        "read": { "type": "array", "items": { "enum": ["recipes", "catalog", "inventory", "session", "telemetry", "profiles.client", "profiles.client.sensitive", "profiles.kitchen", "profiles.cookware", "profiles.robot", "orders", "events", "mode"] } },
-        "write": { "type": "array", "items": { "enum": ["advice", "inventory", "orders.intent", "notify", "session.patch_proposal", "catalog.private", "events.custom"] } },
-        "network": { "type": "array", "items": { "type": "string" }, "description": "Hosts the extension may call (empty = offline only)." },
-        "actuate": { "type": "boolean", "const": false, "description": "Extensions never actuate devices directly; they propose, the hub decides." }
+        "read": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "recipes",
+              "catalog",
+              "inventory",
+              "session",
+              "telemetry",
+              "profiles.client",
+              "profiles.client.sensitive",
+              "profiles.kitchen",
+              "profiles.cookware",
+              "profiles.robot",
+              "orders",
+              "events",
+              "mode"
+            ]
+          }
+        },
+        "write": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "advice",
+              "inventory",
+              "orders.intent",
+              "notify",
+              "session.patch_proposal",
+              "catalog.private",
+              "events.custom"
+            ]
+          }
+        },
+        "network": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Hosts the extension may call (empty = offline only)."
+        },
+        "actuate": {
+          "type": "boolean",
+          "const": false,
+          "description": "Extensions never actuate devices directly; they propose, the hub decides."
+        }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "runtime": {
       "type": "object",
       "description": "How it runs. Pure data contributions need no runtime.",
       "properties": {
-        "kind": { "enum": ["data", "wasm", "http", "mcp", "a2a", "container"] },
-        "entry": { "type": "string", "description": "WASM component URL/path, HTTP base URL, MCP endpoint, AgentCard URL or OCI image." },
-        "timeoutMs": { "type": "integer", "minimum": 1 },
-        "offline": { "type": "boolean" }
+        "kind": {
+          "enum": [
+            "data",
+            "wasm",
+            "http",
+            "mcp",
+            "a2a",
+            "container"
+          ]
+        },
+        "entry": {
+          "type": "string",
+          "description": "WASM component URL/path, HTTP base URL, MCP endpoint, AgentCard URL or OCI image."
+        },
+        "timeoutMs": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "offline": {
+          "type": "boolean"
+        }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
-    "pricing": { "$ref": "market.schema.json#/$defs/Pricing" },
-    "integrity": { "type": "object", "properties": { "hash": { "$ref": "common.schema.json#/$defs/Hash" }, "signature": { "$ref": "common.schema.json#/$defs/Signature" } } },
-    "meta": { "$ref": "common.schema.json#/$defs/Meta" }
+    "pricing": {
+      "$ref": "market.schema.json#/$defs/Pricing"
+    },
+    "integrity": {
+      "type": "object",
+      "properties": {
+        "hash": {
+          "$ref": "common.schema.json#/$defs/Hash"
+        },
+        "signature": {
+          "$ref": "common.schema.json#/$defs/Signature"
+        }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
+      }
+    },
+    "meta": {
+      "$ref": "common.schema.json#/$defs/Meta"
+    }
   },
-  "patternProperties": { "^x-": {} },
+  "patternProperties": {
+    "^x-": {}
+  },
   "$defs": {
     "Hook": {
       "enum": [
-        "reasoner.parse", "reasoner.retrieve", "reasoner.filter", "reasoner.generate", "reasoner.verify", "reasoner.rank", "reasoner.explain",
-        "planner.cost_terms", "planner.constraints", "planner.post_plan",
-        "policy.evaluate", "session.before_start", "session.on_event", "session.after_complete",
-        "catalog.ingest", "catalog.enrich", "catalog.search_filter", "catalog.search_rank",
-        "inventory.ingest", "order.route", "notify.deliver", "sense.classify"
+        "reasoner.parse",
+        "reasoner.retrieve",
+        "reasoner.filter",
+        "reasoner.generate",
+        "reasoner.verify",
+        "reasoner.rank",
+        "reasoner.explain",
+        "planner.cost_terms",
+        "planner.constraints",
+        "planner.post_plan",
+        "policy.evaluate",
+        "session.before_start",
+        "session.on_event",
+        "session.after_complete",
+        "catalog.ingest",
+        "catalog.enrich",
+        "catalog.search_filter",
+        "catalog.search_rank",
+        "inventory.ingest",
+        "order.route",
+        "notify.deliver",
+        "sense.classify"
       ]
     },
     "Contribution": {
       "type": "object",
-      "required": ["type"],
+      "required": [
+        "type"
+      ],
       "properties": {
         "type": {
           "enum": [
-            "fields", "vocabulary", "knowledge", "policy_pack", "playbooks", "recipes",
-            "filter", "ranker", "advisor", "intent", "planner_terms", "model", "sensor_classifier",
-            "agent", "tool", "adapter", "flow", "ui_card", "market_connector", "profile_kind", "mode_preset"
+            "fields",
+            "vocabulary",
+            "knowledge",
+            "policy_pack",
+            "playbooks",
+            "recipes",
+            "filter",
+            "ranker",
+            "advisor",
+            "intent",
+            "planner_terms",
+            "model",
+            "sensor_classifier",
+            "agent",
+            "tool",
+            "adapter",
+            "flow",
+            "ui_card",
+            "market_connector",
+            "profile_kind",
+            "mode_preset"
           ]
         },
-        "id": { "type": "string" },
-        "hooks": { "type": "array", "items": { "$ref": "#/$defs/Hook" } },
-        "schema": { "type": "string", "description": "For 'fields': JSON Schema (URL) of the x- fields and which documents they attach to." },
-        "attachesTo": { "type": "array", "items": { "enum": ["recipe", "node", "ingredient", "capabilities", "policy", "session", "inventory", "order", "profile", "advice_request", "advice_response", "offer", "event"] } },
-        "intent": { "type": "string", "description": "For 'intent': new advisor intent name, e.g. x-acme.wine_free_pairing; request/response schemas below." },
-        "requestSchema": { "type": "string" },
-        "responseSchema": { "type": "string" },
+        "id": {
+          "type": "string"
+        },
+        "hooks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Hook"
+          }
+        },
+        "schema": {
+          "type": "string",
+          "description": "For 'fields': JSON Schema (URL) of the x- fields and which documents they attach to."
+        },
+        "attachesTo": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "recipe",
+              "node",
+              "ingredient",
+              "capabilities",
+              "policy",
+              "session",
+              "inventory",
+              "order",
+              "profile",
+              "advice_request",
+              "advice_response",
+              "offer",
+              "event"
+            ]
+          }
+        },
+        "intent": {
+          "type": "string",
+          "description": "For 'intent': new advisor intent name, e.g. x-acme.wine_free_pairing; request/response schemas below."
+        },
+        "requestSchema": {
+          "type": "string"
+        },
+        "responseSchema": {
+          "type": "string"
+        },
         "model": {
           "type": "object",
           "description": "For 'model' / 'sensor_classifier': bring-your-own AI.",
           "properties": {
-            "roles": { "type": "array", "items": { "enum": ["parse", "propose", "explain", "translate", "vision_cue", "embed", "rerank"] } },
-            "cues": { "type": "array", "items": { "type": "string" }, "description": "cw.sense.* vision cues it can classify." },
-            "accuracy": { "type": "object", "additionalProperties": { "type": "number" }, "description": "Declared accuracy per cue/task on the Cookwala benchmark." },
-            "local": { "type": "boolean" }
+            "roles": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "parse",
+                  "propose",
+                  "explain",
+                  "translate",
+                  "vision_cue",
+                  "embed",
+                  "rerank"
+                ]
+              }
+            },
+            "cues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "cw.sense.* vision cues it can classify."
+            },
+            "accuracy": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              },
+              "description": "Declared accuracy per cue/task on the Cookwala benchmark."
+            },
+            "local": {
+              "type": "boolean"
+            }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
-        "flow": { "type": "string", "description": "URL of a flow document (flow.schema.json)." },
-        "data": { "type": "string", "description": "URL of the contributed data (vocabulary, knowledge pack, policy pack, recipes catalog)." },
-        "priority": { "type": "integer", "description": "Order among extensions at the same hook (lower first)." }
+        "flow": {
+          "type": "string",
+          "description": "URL of a flow document (flow.schema.json)."
+        },
+        "data": {
+          "type": "string",
+          "description": "URL of the contributed data (vocabulary, knowledge pack, policy pack, recipes catalog)."
+        },
+        "priority": {
+          "type": "integer",
+          "description": "Order among extensions at the same hook (lower first)."
+        }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     }
-  }
+  },
+  "unevaluatedProperties": false
 }

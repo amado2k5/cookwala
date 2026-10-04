@@ -1,6 +1,6 @@
-import { simulate, LANES, STAGES, TOGGLES, PRESETS } from './engine/sim.js?v=0.1.2';
-import { simulateAlone } from './engine/alone.js?v=0.1.2';
-import { ROOMS, SPOTS } from './engine/world.js?v=0.1.2';
+import { simulate, LANES, STAGES, TOGGLES, PRESETS } from './engine/sim.js?v=0.1.3';
+import { simulateAlone } from './engine/alone.js?v=0.1.3';
+import { ROOMS, SPOTS } from './engine/world.js?v=0.1.3';
 
 const $ = (sel) => document.querySelector(sel);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -145,7 +145,7 @@ function render() {
 function renderStatus(f) {
   const w = f.world; const m = f.mission;
   let fc = f.costSoFar || 0;
-  if (m) { const cost = m.budgets.find((b) => b.id === 'b-cost').status; fc = Math.max(cost.forecastAtCompletion?.amount || 0, (cost.spent?.amount || 0) + (cost.committed?.amount || 0)); }
+  if (m) { const cost = m.budgets.find((b) => b.id === 'b-cost').status; fc = Math.max(Number(cost.forecastAtCompletion?.amount || 0), Number(cost.spent?.amount || 0) + Number(cost.committed?.amount || 0)); }
   const batt = w.battery;
   const pills = [
     `<span class="pill ${batt <= 15 ? 'bad' : batt < 25 ? 'warn' : 'good'}">🔋 ${batt.toFixed(0)}%${w.docked ? (w.charging ? ' ⚡' : ' docked') : ''}</span>`,
@@ -287,9 +287,9 @@ function renderInspector() {
     };
     const b = (id) => m.budgets.find((x) => x.id === id);
     const cost = b('b-cost').status;
-    const fc = Math.max(cost.forecastAtCompletion?.amount || 0, (cost.spent?.amount || 0) + (cost.committed?.amount || 0));
+    const fc = Math.max(Number(cost.forecastAtCompletion?.amount || 0), Number(cost.spent?.amount || 0) + Number(cost.committed?.amount || 0));
     body.innerHTML = `<div class="gauges">
-      ${g('Cost: spent', cost.spent?.amount || 0, 20, [0.75, 0.85], '$', `committed $${(cost.committed?.amount || 0).toFixed(2)}`)}
+      ${g('Cost: spent', Number(cost.spent?.amount || 0), 20, [0.75, 0.85], '$', `committed $${Number(cost.committed?.amount || 0).toFixed(2)}`)}
       ${g('Cost: forecast at completion', fc, 20, [0.75, 0.85], '$', `state ${cost.state}`)}
       ${g('Robot battery used (net)', Math.max(0, 58 - f.world.battery), 43, [], '', `now ${f.world.battery.toFixed(1)}%, reserve 15%`)}
       ${g('Grocer retries', b('b-retries').status.spent || 0, 2)}

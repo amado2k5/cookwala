@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cookwala.ai/v1/schemas/capabilities.schema.json",
   "title": "Cookwala Capability Manifest",
+  "x-cookwala-status": "core",
   "description": "Published by every participant in a Cookwala kitchen (robot, appliance, sensor, hub, agent, service) so a hub can match recipe steps to who can do them. Served by the device at /.well-known/cookwala-device.json, registered with the hub (POST /devices), or provided by the vendor's cloud. Self-declared; the hub treats safety claims as claims.",
   "type": "object",
   "required": [
@@ -54,6 +55,10 @@
         "mobile": {
           "type": "boolean"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "capabilities": {
@@ -100,6 +105,10 @@
               "skill": {
                 "type": "string"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -137,6 +146,10 @@
                 "type": "boolean",
                 "description": "Whether local regulation/vendor allows remote start."
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -160,6 +173,10 @@
               "count": {
                 "type": "integer"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -189,6 +206,10 @@
                   "type": "string"
                 }
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -215,6 +236,10 @@
               "accuracyG": {
                 "type": "number"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -247,6 +272,10 @@
                 ]
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "inventory": {
@@ -277,6 +306,10 @@
                 ]
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "notify": {
@@ -298,6 +331,10 @@
                 ]
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "languages": {
@@ -306,6 +343,10 @@
             "type": "string"
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "safety": {
@@ -337,6 +378,10 @@
               "selfDeclared": {
                 "type": "boolean"
               }
+            },
+            "unevaluatedProperties": false,
+            "patternProperties": {
+              "^x-": {}
             }
           }
         },
@@ -382,8 +427,16 @@
                 "V3"
               ]
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "interfaces": {
@@ -400,6 +453,10 @@
             "topicPrefix": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "matter": {
@@ -419,9 +476,17 @@
                   "deviceType": {
                     "type": "string"
                   }
+                },
+                "unevaluatedProperties": false,
+                "patternProperties": {
+                  "^x-": {}
                 }
               }
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "ros2": {
@@ -433,6 +498,10 @@
             "actionServer": {
               "type": "string"
             }
+          },
+          "unevaluatedProperties": false,
+          "patternProperties": {
+            "^x-": {}
           }
         },
         "a2a": {
@@ -449,6 +518,10 @@
         "vendorCloud": {
           "type": "string"
         }
+      },
+      "unevaluatedProperties": false,
+      "patternProperties": {
+        "^x-": {}
       }
     },
     "signature": {
@@ -467,5 +540,6 @@
   },
   "patternProperties": {
     "^x-": {}
-  }
+  },
+  "unevaluatedProperties": false
 }

@@ -80,7 +80,7 @@
  "pricing": {
   "model": "subscription",
   "price": {
-   "amount": 3,
+   "amount": "3.00",
    "currency": "USD"
   },
   "period": "month"

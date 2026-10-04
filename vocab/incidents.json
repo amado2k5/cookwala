@@ -271,6 +271,20 @@
    "label": {
     "en": "color wrong"
    }
+  },
+  {
+   "id": "cw.incident.overheat",
+   "label": {
+    "en": "Overheating"
+   },
+   "definition": "Oil, pan or appliance exceeded a safety limit."
+  },
+  {
+   "id": "cw.incident.untrusted_instruction",
+   "label": {
+    "en": "Instruction in untrusted text"
+   },
+   "definition": "Text in a recipe, note or message tried to instruct an agent or device; it was ignored."
   }
  ]
 }

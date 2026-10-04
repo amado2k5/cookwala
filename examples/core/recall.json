@@ -1,0 +1,24 @@
+{
+ "core": "0.2.0",
+ "kind": "Recall",
+ "id": "rc-2026-10-001",
+ "issuedAt": "2026-10-04T10:00:00Z",
+ "issuer": "cookwala.ai",
+ "targets": [
+  {
+   "ref": "cw:cookwala.ai:fah-123",
+   "allRevisions": true
+  }
+ ],
+ "severity": "high",
+ "reason": "food_safety",
+ "action": "block_and_stop_running",
+ "detail": "Example only: the frying step had no oil-temperature limit. Replaced by revision 4.",
+ "replacement": "cw:cookwala.ai:fah-123",
+ "signature": {
+  "alg": "EdDSA",
+  "kid": "https://cookwala.ai#test-key-1",
+  "sig": "V6BAoFRmk18nZIlt_V3IJutINXVU88OOdx8L7CNfYpa7DsJksNjiGMH7YT5tTbfcZBTX0F1wXK5XsIvtEYEhCA",
+  "signedAt": "2026-10-04T10:00:00Z"
+ }
+}
