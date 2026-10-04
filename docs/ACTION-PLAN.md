@@ -61,7 +61,7 @@ and the evidence that closes it.
 | C25 | Western-centric vocabulary | Claude, translators, cuisine experts | World-cuisine coverage starting with fifirecipes' Egyptian recipes; communities govern their own techniques | W11 | 20 non-Western techniques defined with tests |
 | C26 | Founder dependency, no IP policy, no neutral home | Red team, Anthropic lens, WFP | Foundation, charter, patent pledge, trademark policy, governing seats for food banks, low-income countries, labour and privacy | W8 | Accepted by a foundation |
 | C27 | Who pays for the index, moderation and safety review | Red team | A company that sells services (certification, hub software, dataset licences, grocer fees) next to a free standard | W10 | First paying customer or grant |
-| C28 | Labour displacement | Unions, red team | Engage early; prioritise uses that help people who can't cook (elderly, disabled, community kitchens); offer unions a governance seat | W11, W8 | Labour representative invited |
+| C28 | Labour displacement | Unions, red team | Engage early; prioritise uses that help people who want to cook for themselves and cannot use a stove today, and community kitchens; offer unions a governance seat | W11, W8 | Labour representative invited |
 | C29 | Religious dietary rules for robot preparation | Halal and kosher authorities | Dietary-compliance profile written with certifiers | W11 | Draft reviewed by one certifier |
 | C30 | No formal external review yet | All technical reviewers | Sequenced review program (section 5) | W9 | Six external reviews received and published |
 
@@ -155,7 +155,7 @@ and the evidence that closes it.
 
 ### W6. Humanitarian pilot (Egypt first)
 - **Partners:** the Egyptian Food Bank (or another member of the Global FoodBanking Network)
-  as pilot partner; the WFP Innovation Accelerator as funding route.
+  as pilot partner; the WFP Innovation Accelerator as funding route. These are targets we have not approached; none has been contacted or has agreed to anything.
 - **Approvals and reviews:**
   - university ethics approval;
   - a data-responsibility review against ICRC and OCHA guidance;
@@ -194,7 +194,7 @@ See section 5.
   fits).
 - **Revenue:** certification, hub software, consented dataset licences, grocer and marketplace
   fees. Free forever for relief.
-- **Funding pipeline:** WFP Innovation Accelerator, foundations (Rockefeller, Bezos Earth
+- **Funding pipeline (targets only; none approached):** WFP Innovation Accelerator, foundations (Rockefeller, Bezos Earth
   Fund, Google.org), the Anthology Fund (only with pilot data), regional programs (ITIDA, Hub71).
 
 ### W11. Inclusion, culture and labour

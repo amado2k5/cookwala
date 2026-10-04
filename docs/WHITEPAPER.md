@@ -36,7 +36,7 @@ work for people, and this paper says exactly how far it goes toward each.
 4. **People who cannot cook for themselves.** Older people, people with disabilities and
    people recovering from illness depend on others for food. Machines that could help them are
    the ones with the highest stakes for safety and dignity.
-5. **The most intimate dataset ever collected.** A robot that cooks well knows a household's
+5. **One of the most intimate datasets a home can produce.** A robot that cooks well knows a household's
    schedules, layout, children, health, religion and budget. No rule says what it may do with
    them.
 
@@ -143,7 +143,7 @@ Dignity rules govern every page about people served.
 
 ## 9. Conformance
 
-Conformance is running code: 101 public vectors (hashing including the RFC 8785 example,
+Conformance is running code: 106 public vectors (hashing including the RFC 8785 example,
 signatures including an RFC 8032 key, revocation, disclosure, event chains, units,
 envelopes, ladders, state machines, disclosure policy, registry rules, SMS grammar, signal
 policy, relay verification). A claim is a signed `ConformanceReport` naming the vectors run,

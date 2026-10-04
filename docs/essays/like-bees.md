@@ -40,6 +40,7 @@ from an empty shelf, as the pandemic showed. The supply-signal design says reser
 of the plan, not waste.
 
 What nature cannot teach is fairness. A hive has no notion that the far field deserves
-foragers. Cookwala's answer is governance with seats for the people the system is for, and
+foragers. Cookwala's answer is governance with a seat for a labour or consumer voice and a proposed seat for the people the
+system is for, and
 signals that are public and identical for every reader. That is not a natural mechanism. It is
 a political one, and it is the part that will decide whether this works.

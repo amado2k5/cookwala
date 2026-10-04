@@ -2,6 +2,26 @@
 
 Newest first. Each entry: date, phase, what was done, what is next, blockers.
 
+## 2026-10-04 · P9 Self-critique: nine viewpoints, fixes applied
+
+- Reviews from investor, food-agency officer, farmer, home cook, robotics professor,
+  food-safety regulator, teacher, policy adviser and philosopher viewpoints, plus an Arabic
+  editor and a static accessibility scan; findings and status in `SELF-CRITIQUE.md`.
+- Truth fixes: self-written critiques no longer described as outside critics or "in the voice
+  of" named agencies; present-tense capability claims made conditional; "certification" sold by
+  the company replaced by test-lab services with third-party certificates; hype phrases cut;
+  founder TODOs moved out of user-facing copy; counts injected from the repository (106 vectors).
+- Safety fixes in the SMS path: missing temperature blocks a handover, hot food below 60 °C and
+  chilled-class food declared ambient are refused before listing, partial rejection
+  (`HAND <id> <kg> REJ <kg> <REASON>`), reason codes, harvest date, Arabic-Indic digits, a
+  readable HELP; five new vectors (106/106).
+- Pilot protocol: evaluator time log for burden, baseline from existing records, H3 reframed,
+  detectability statement, survey consent. Policy clauses: gross-negligence carve-out,
+  limits aligned to Core, thresholds moved to a schedule, recall duty scoped.
+- Recipes: koshari, molokhia, kofta, basbousa, salata baladi and rice fixed and re-hashed.
+- Arabic: status chips, nav and assistive strings in Arabic; terminology collisions resolved.
+- Open for the founder: see the pull request.
+
 ## 2026-10-04 · P5 to P8: story, design system, site build, pages, verification
 
 - Story documents committed (stakeholders, messaging, impact, whitepaper in English and
@@ -29,7 +49,7 @@ Newest first. Each entry: date, phase, what was done, what is next, blockers.
   registry and directory API with honest `registry.json` and `directory.json`, Humanitarian
   0.2 (origin, food classes, reviews, ImpactSummary, SMS parser, four flows, pilot protocol),
   three draft rule packs with a review template and claims policy, fleet and supply schemas,
-  conformance reports and 57 profile vectors (101 total).
+  conformance reports and 57 profile vectors (101 total at the time; 106 after the SMS grammar grew).
 - SDKs: `sdk/python` (editable install, `cookwala` CLI with 14 subcommands), `sdk/typescript`
   (types generated from all 24 schemas by `tools/gen_ts_types.py`, type-checked; the browser
   dry run moved here as the single source), `sdk/mcp` (stdio MCP server, 8 tools), `hub/`

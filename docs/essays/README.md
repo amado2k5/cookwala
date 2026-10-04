@@ -9,7 +9,7 @@ change a default go through an RFC.
 |---|---|
 | [Who inherits a recipe?](inheriting-culinary-culture.md) | When a machine cooks a grandmother's dish, whose knowledge is it, and how does it stay hers? |
 | [Dignity in automated care](dignity-in-automated-care.md) | What does it mean to be fed by a machine, and what must never be automated? |
-| [What a household robot may know](what-a-household-robot-may-know.md) | The most intimate dataset ever assembled is about to be collected by appliances. What are the rules? |
+| [What a household robot may know](what-a-household-robot-may-know.md) | One of the most intimate datasets a home can produce is about to be collected by appliances. What are the rules? |
 | [Refusal as a virtue](refusal-as-a-virtue.md) | Why the most important thing a cooking machine can do is decline. |
 | [Like bees](like-bees.md) | Can a global food system coordinate without a controller? What nature does and does not teach. |
 

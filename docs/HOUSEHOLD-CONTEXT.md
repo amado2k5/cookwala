@@ -37,6 +37,7 @@ picture and gives everyone else only a **constraint**.
 | planner (AI or software that plans the meal) | allergen block, diet rule, avoid ingredient, serve window, budget cap, heat sources, equipment, texture level, portion count, presence required, caution level, robot runtime, serving form, cuisine, spice, quiet hours, no-movement zones, pet-safe storage, child-safe zones |
 | device maker | robot runtime, device fault summary; device self-state facets by consent |
 | other robot | no-movement zones, quiet hours, child-safe zones, pet-safe storage, equipment |
+| insurer | device fault summary only (counts of faults by category, no times, no household facts), and only when the household has named an insurer as a recipient; RFC-0001 lists this as the role most likely to be removed if a privacy review objects |
 | program (food bank, school) | nothing |
 | dataset | nothing |
 
@@ -56,8 +57,7 @@ picture and gives everyone else only a **constraint**.
 
 ## 5. The local incident memory
 
-The founder asked what the robot remembers about alarms, conflicts, give-ups and lessons
-(`prompts/SESSION-PROMPTS.md` M41). `LocalIncident` holds it: date, category from
+RFC-0001 asks what the robot remembers about alarms, conflicts, give-ups and lessons. `LocalIncident` holds it: date, category from
 `vocab/incidents.json`, who was involved by kind, a note and a lesson. It never leaves the
 home. The public, anonymous `IncidentReport` in Core is a different document that every
 maker learns from.

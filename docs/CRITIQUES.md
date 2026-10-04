@@ -28,7 +28,7 @@ response and its status. Reviews from outside are welcome and will be listed her
 | The ledger proved little | Key records with revocation, witnessed checkpoints, rewrite detection |
 | Undefined event delivery; safety on the bus | Sequence numbers, latency classes, heartbeats, "safety is local" |
 | API surfaces drift | Core OpenAPI; every reference checked in CI |
-| No verifier | Reference library and 44 conformance vectors |
+| No verifier | Reference library and 106 conformance vectors |
 
 ## Reviews we are asking for
 

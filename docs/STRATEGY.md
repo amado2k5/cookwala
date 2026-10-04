@@ -139,7 +139,7 @@ to check all three on the device.
 | Pillar | Promise | Proof we can show today |
 |---|---|---|
 | **Safe by design** | Devices refuse rather than guess, and enforce limits locally | Operation envelopes for 32 operations; safety-limits pack; dry run; conformance |
-| **Verifiable** | Anyone can check a recipe, a device and a record | Signatures, key revocation, event-log checkpoints; 44 vectors incl. RFC results |
+| **Verifiable** | Anyone can check a recipe, a device and a record | Signatures, key revocation, event-log checkpoints; 106 vectors incl. RFC results |
 | **Open and neutral** | Royalty-free, model-agnostic, device-agnostic | Licences; governance path; no API keys |
 | **Every cuisine** | Built from real home cooking, multilingual | fifi.cooking corpus; Arabic and English; world-cuisines plan |
 | **Useful before robots** | Kitchens and food banks benefit now | Humanitarian Profile, SMS/CSV, rule pack, concept note |

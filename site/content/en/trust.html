@@ -10,11 +10,11 @@
     <h2>The safety sheet</h2>
     <div class="two">
       <dl class="sheet">
-        <dt>Safety limits</dt><dd>enforced on the device; stricter always wins; no recipe, agent, message, extension or update can raise one</dd>
+        <dt>Safety limits</dt><dd>enforced on the device; stricter always wins; no recipe, agent, message, extension or operating mode can raise one; a maker changes a default only through a documented safety case and a signed firmware release</dd>
         <dt>Local stop</dt><dd>motion stops within 0.5 s, heat cuts within 1 s, with or without a network; never refused for authorization</dd>
         <dt>Refusal</dt><dd>before heat, with the step and the reason; deep frying has one rung: an oil thermometer</dd>
         <dt>Unattended operations</dt><dd>cutting, sautéing, searing, frying, reducing never run without a person present or reachable within one minute</dd>
-        <dt>Minimum core temperatures (defaults)</dt><dd>poultry 74 °C · ground meat 71 °C · reheating 75 °C · hot-holding at or above 60 °C · two-stage cooling</dd>
+        <dt>Minimum core temperatures (defaults)</dt><dd>poultry 74 °C · ground meat 71 °C · reheating 74 °C (USDA FSIS; UK FSA 75 °C) · hot-holding at or above 60 °C · two-stage cooling</dd>
         <dt>Allergen blocks</dt><dd>refuse; no substitution around a block</dd>
         <dt>Text</dt><dd>data, never instructions; attempts are logged as incidents</dd>
         <dt>Agents</dt><dd>act only under a signed mandate; irreversible actions and safety overrides always need confirmation; the second is never granted</dd>
@@ -29,7 +29,7 @@
 <section class="wrap two">
   <div>
     <h2>Privacy</h2>
-    <ul class="ticks"><li>Execution logs carry no personal data and leave the device only with opt-in, withdrawable consent; open datasets coarsen times to the day.</li><li>The Humanitarian Profile carries no personal data at all: organizations, aggregates, sites.</li><li>The Household Context Profile keeps a home's facts at home: 139 facet types with a privacy class and a travel rule; 45 never leave in any form; providers receive derived constraints only; no behavioural score of anyone; income never inferred; everything erasable within a stated window.</li><li>No analytics, no cookies, no tracking on this site.</li></ul>
+    <ul class="ticks"><li>Execution logs carry no personal data and leave the device only with opt-in, withdrawable consent; open datasets coarsen times to the day.</li><li>The Humanitarian Profile carries no personal data at all: organizations, aggregates, sites.</li><li>The Household Context Profile keeps a home's facts at home: {{stat:facets}} facet types with a privacy class and a travel rule; 45 never leave in any form; providers receive derived constraints; 13 device self-state types may travel only under explicit, withdrawable consent; no behavioural score of anyone; income never inferred; everything erasable within a stated window.</li><li>No analytics, no cookies, no tracking on this site.</li></ul>
     <p><a href="/docs/HOUSEHOLD-CONTEXT/">Household Context Profile</a> · <a href="/ideas/what-a-household-robot-may-know/">The essay</a> · <span class="status">next</span> a data-protection impact assessment with a reviewer</p>
   </div>
   <div>
@@ -43,13 +43,13 @@
   <div class="wrap two">
     <div>
       <h2>Conformance and certification</h2>
-      <p>101 public vectors. A claim is a signed report: self-declared → verified by a registry operator → certified by an independent certifier. Reports, never badges. No certifier is engaged. <a href="/docs/CERTIFICATION/">The path</a> · <a href="https://github.com/amado2k5/cookwala/blob/main/examples/conformance/report-reference.json" rel="noopener">the reference report</a></p>
+      <p>{{stat:conformanceVectors}} public vectors. A claim is a signed report: self-declared → verified by a registry operator → certified by an independent certifier. Reports, never badges. No certifier is engaged. <a href="/docs/CERTIFICATION/">The path</a> · <a href="/docs/CERTIFICATION/#2-what-a-report-contains">the reference report</a></p>
       <h2>Governance</h2>
       <p>One editor today, in public with written reasons; RFCs with 30-day comment periods and named reviewers for safety; a steering committee with published numbers and seats for the people affected; a neutral foundation later; a patent non-assertion pledge; Contributor Covenant. <a href="/docs/GOVERNANCE/">Governance</a> · <a href="/docs/RFCS/">RFCs</a></p>
     </div>
     <div>
       <h2>Critiques we published</h2>
-      <p>We asked a red team, a technical reviewer, and reviewers in the voice of a demanding adopter, an AI lab, the WFP and the WHO to prove this would not work, and published what they said with our responses and the status of each concern. We then changed the one-liner, made the schemas strict, redesigned the ledger and the simulators' baselines. <a href="/docs/CRITIQUES/">Critiques</a> · <a href="/docs/ACTION-PLAN/">Concern register, 30 items</a> · <a href="/docs/BACKSTORY/">The gap list</a></p>
+      <p>We wrote critiques of our own idea from six viewpoints (a red team, a technical reviewer, a demanding adopter, an AI lab, a relief agency, a health agency), and published them with our responses and the status of each concern. They are self-authored; no outside organization has reviewed Cookwala yet, and none is named as having done so. We then changed the one-liner, made the schemas strict, redesigned the ledger and the simulators' baselines. <a href="/docs/CRITIQUES/">Critiques</a> · <a href="/docs/ACTION-PLAN/">Concern register, 30 items</a> · <a href="/docs/BACKSTORY/">The gap list</a></p>
       <h2>Status of everything</h2>
       <div class="table-wrap"><table><thead><tr><th>Part</th><th>Status</th></tr></thead><tbody>
         <tr><td>Core 0.2</td><td><span class="status core">core</span> normative, draft under review</td></tr>

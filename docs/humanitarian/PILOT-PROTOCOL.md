@@ -17,10 +17,10 @@ hunger in a city.
 |---|---|---|---|
 | H1 | More surplus reaches kitchens | kilograms rescued per week (first-leg `Handover.kgAccepted`) | at least 10 % more than baseline |
 | H2 | Food moves faster | median minutes from `Offer` to `claimed` | at least 20 % shorter than baseline |
-| H3 | Less is rejected for safety reasons at handover | `kgRejected` by reason | no increase; `temp_out_of_range` falls |
-| H4 | Menus meet the nutrition rules more often | nutrition pass rate on `Distribution.menu` | rises or stays, never falls |
+| H3 | Rejections are recorded and donors improve | share of handovers with a recorded reason for every rejected line; share of offers arriving within the temperature band | reasons recorded 100 % of the time; the in-band share rises. More recorded rejections in the first weeks is expected and is not a failure |
+| H4 | Menus meet the nutrition rules more often | nutrition pass rate on `Distribution.menu`, labelled `self_reported` when nutrients are typed and `measured` only when derived from linked recipes and portion masses | rises or stays, never falls |
 | H5 | Cost per meal does not rise | (food + transport + staff + energy) / meals | no more than 5 % higher |
-| H6 | Staff and volunteers find it no harder | minutes of recording per 100 kg; a short survey | not worse than baseline |
+| H6 | Staff and volunteers find it no harder | minutes of recording per 100 kg from the evaluator's weekly time log (`templates/time-log.csv`, one row per recording session; not `volunteerMinutes`, which is kitchen labour); an anonymous survey | not worse than baseline |
 | Safety | No safety incident is caused by the tools | `safetyIncidents`, block findings acted on | zero attributable incidents |
 
 The exact thresholds are set with the partner before the start and pre-registered (a dated
@@ -28,9 +28,17 @@ file in the program's repository or a public registry such as the Open Science F
 
 ## 3. Baseline
 
-Four weeks of the program's current practice, recorded with the same measures by hand (the
-CSV templates work for this), before any Cookwala tool is used. Without a baseline there is no
-result.
+Four weeks of the program's current practice, transcribed by the evaluator from the program's
+existing records (phone logs, delivery notes, receipts, waste counts) into the same measures.
+Staff do not fill Cookwala templates during the baseline, so the baseline is not shaped by the
+tool it measures. Without a baseline there is no result.
+
+What a pilot this size can show: with one program, about five donors and twelve pilot weeks,
+only large effects are detectable. The pre-registration states the minimum number of weekly
+observations per measure and the comparison method (week-on-week ranges against the baseline
+weeks, with the same weeks of the year where seasonal supply or Ramadan would otherwise explain
+the difference). A 10 % change that falls inside the week-to-week spread is reported as "not
+distinguishable", not as a result.
 
 ## 4. Design
 
@@ -52,6 +60,8 @@ result.
 - A data-responsibility review against the ICRC Handbook on Data Protection in Humanitarian
   Action and OCHA's data-responsibility guidelines is done before the start and recorded.
 - University or institutional ethics approval where the partner requires it.
+- The staff and volunteer survey (H6) is voluntary, anonymous and reported only in aggregate; its
+  questions are pre-registered with the hypotheses, and no answer is linked to a person or shift.
 - Hosting in-country where the program or the law requires it; retention set in the
   `Manifest`; deletion after the pilot unless the partner keeps the documents.
 
@@ -67,7 +77,7 @@ result.
 ## 7. Kill criteria
 
 Stop the pilot early if any safety incident is attributed to the tools, if recording time per
-100 kg is more than double the baseline after week four, or if the partner asks. Stopping is a
+100 kg in the time log is more than double the baseline after week four, or if the partner asks. Stopping is a
 result and is published.
 
 ## 8. Publication

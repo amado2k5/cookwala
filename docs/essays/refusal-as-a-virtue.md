@@ -25,8 +25,8 @@ Why call this a virtue and not a limitation? Because the alternative is a machin
 confident. A confident machine in a kitchen is a machine that will, eventually, be confident
 and wrong with hot oil and a child nearby. The history of safety engineering, from aviation's
 envelope protection to the interlocks on industrial presses, is a history of deciding in
-advance what a system will refuse to do regardless of what it is told. Kitchens are the last
-room in the house without that history.
+advance what a system will refuse to do regardless of what it is told. Kitchens have interlocks
+for gas and electricity, but none for what is being cooked.
 
 There is a cost, and we count it. A device that refuses more is less useful, and a standard
 that refuses too much will be ignored. The design accepts estimates where they are safe
@@ -36,7 +36,9 @@ refuses what a human would have accepted; we want that number.
 
 There is also a dignity in it. A machine that says "I cannot check this; will you watch?"
 treats the person in the kitchen as the authority. A machine that guesses treats them as a
-bystander.
+bystander. The question has a cost when it is asked of someone who cannot watch; the essay on
+[dignity in automated care](dignity-in-automated-care.md) says what we do not yet know about
+that case.
 
 The last refusal is the one we hope is never needed: the stop control on the device that works
 without a network, cuts heat within a second and is never refused for lack of authorization.

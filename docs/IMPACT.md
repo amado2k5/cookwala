@@ -12,7 +12,7 @@ contributes.
 |---|---|---|
 | People who faced hunger in 2023 | about 733 million | measured by the source: FAO, IFAD, UNICEF, WFP, WHO, *The State of Food Security and Nutrition in the World 2024* |
 | People moderately or severely food insecure in 2023 | about 2.3 billion | measured by the source: SOFI 2024 |
-| Food lost between harvest and retail | about 13 % of food produced | measured by the source: FAO, *The State of Food and Agriculture 2019* |
+| Food lost between harvest and retail | about 14 % of food produced | measured by the source: FAO, *The State of Food and Agriculture 2019* (UNEP rounds the same figure to 13 %) |
 | Food wasted at retail, food service and households in 2022 | about 1.05 billion tonnes; about 132 kg per person; about 79 kg per person in households | measured by the source: UNEP, *Food Waste Index Report 2024* |
 
 **Cookwala's mechanisms:** surplus offers that reach a kitchen before the food spoils, with a
@@ -24,7 +24,7 @@ policy, which drive most hunger.
 
 **Modelled, illustrative, not a forecast:** the country simulator's mixed rollout rescues
 meals equal to about 4.7 % of what its fictional food-insecure population needs; the world
-simulator's "protocol, no robots" scenario reaches about 40 million of roughly 770 million
+simulator's "protocol, no robots" scenario reaches about 40 million of roughly 770 million (the simulator's assumed baseline, a round-up of the 733 million measured above)
 hungry people through rescue alone. Both say the same thing: rescue matters and is not
 enough.
 

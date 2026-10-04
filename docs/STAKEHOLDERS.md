@@ -32,7 +32,7 @@ git clone https://github.com/amado2k5/cookwala && cd cookwala && pip install -e 
 cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/robot-arm.json
 # refused: cw.op.boil, missing_capability (and later: no oil thermometer, no deep frying)
 cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/robot-arm.json --human-present
-cookwala conformance --report report.json          # 101 vectors; a signed-ready report
+cookwala conformance --report report.json          # 106 vectors; a signed-ready report
 ```
 
 **Flow.** Dry run → implement the Core API against the reference hub → pass conformance →
@@ -119,7 +119,7 @@ safety with a format that checks itself.
   later, read supply and demand signals.
 - *Cooks and chefs:* turn one recipe you know by heart into a Cookwala recipe; review the
   step sentences in your language; later, record consented sessions with credit.
-- *Schools:* use the eight example recipes as teaching cases; add your own.
+- *Schools:* use the nine example recipes as teaching cases; add your own.
 
 **First success.** Cooks: `cookwala init`, write one recipe with an end condition for every
 heat step, validate it. Farmers: send one SMS offer to a program that runs the profile (none

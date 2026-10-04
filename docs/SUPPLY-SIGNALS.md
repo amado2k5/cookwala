@@ -36,7 +36,7 @@ counsel and a statistician should set them.
 
 ## 4. What the founder's idea becomes
 
-The macro loop (`prompts/SESSION-PROMPTS.md` M45): planned cooking → aggregated demand →
+The macro loop (RFC-0007): planned cooking → aggregated demand →
 farms and stores plan to need → less grown, moved and thrown away. The city, country and
 world simulators show the size of the effect under their assumptions (illustrative, not a
 forecast). These two documents are the smallest honest step toward it.

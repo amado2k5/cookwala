@@ -6,7 +6,7 @@
 ## 1. Why
 
 The founder asked for the same protocol in a restaurant, a wedding, a donation drive or a
-food factory (`prompts/SESSION-PROMPTS.md` M46). The brief adds school-meal programs and
+food factory (RFC-0005). The brief adds school-meal programs and
 disaster kitchens. Core covers one device cooking one recipe; the Humanitarian Profile covers
 moving surplus and counting meals. Between them sits the **kitchen**: stations, devices,
 people, many batches, a serve window, critical control points, and the link from a device's

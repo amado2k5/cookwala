@@ -17,7 +17,7 @@
     </div>
   </header>
 
-  <section class="controls" aria-label="Scenario">
+  <main id="main" tabindex="-1"><section class="controls" aria-label="Scenario">
     <label>Scenario <select id="preset"></select></label>
     <label>Cookwala protocol <select id="protoMode"><option value="planned">As planned per province</option><option value="off">Off everywhere: robots alone</option><option value="all">On everywhere from January</option></select></label>
     <label>Show <select id="metric"></select></label>
@@ -73,5 +73,6 @@
   <footer class="foot muted small">Deterministic. Code: <a href="https://github.com/amado2k5/cookwala/tree/main/sim/country">sim/country</a> · write-up: <a href="https://github.com/amado2k5/cookwala/blob/main/docs/COUNTRY-SIMULATION.md">COUNTRY-SIMULATION.md</a></footer>
   <div id="tip" class="tip" role="status" hidden></div>
   <script type="module" src="country.js?v=0.3.1"></script>
+</main>
 </body>
 </html>

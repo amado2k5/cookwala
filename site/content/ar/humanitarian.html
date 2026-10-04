@@ -11,28 +11,28 @@
   <div class="wrap">
     <h2>المسار من البداية إلى النهاية</h2>
     <ol class="steps">
-      <li><p><b>عرض.</b> يرسل متجر أو مزرعة أو مطعم أو مطبخ ما عنده: الكيلوغرامات والتخزين والحرارة وتاريخ الصلاحية ومسببات الحساسية. <code>OFFER 36KG YOGURT C 4C UB0511</code> أو <code>FARM 120KG TOMATO A BB0411</code>.</p></li>
+      <li><p><b>عرض.</b> يرسل متجر أو مزرعة أو متعهد تموين أو مطبخ ما عنده: الكيلوغرامات والتخزين والحرارة وتاريخ الصلاحية ومسببات الحساسية. <code>OFFER 36KG YOGURT C 4C UB0511</code> أو <code>FARM 120KG TOMATO A BB0411</code>.</p></li>
       <li><p><b>حجز.</b> يحجز بنك طعام أو مطبخ أو برنامج الكل أو جزءًا، ضمن أولوية ينشرها البرنامج. <code>CLAIM A7K ALL</code>.</p></li>
-      <li><p><b>تسليم مع فحص سلسلة التبريد.</b> عند كل تغيير حيازة يسجل شخص مدرَّب الحرارة والكيلوغرامات المقبولة أو المرفوضة بسبب. الطعام الساخن دون 60 درجة يُرفض. <code>HAND A7K 36 T4.6</code>.</p></li>
+      <li><p><b>تسليم مع فحص سلسلة التبريد.</b> عند كل تغيير حيازة يسجل شخص مدرَّب الحرارة والكيلوغرامات المقبولة أو المرفوضة بسبب. لا يُسجَّل سطر يحتاج تحكمًا حراريًا بلا قراءة حرارة؛ والطعام الساخن دون 60 درجة يُرفض. <code>HAND A7K 36 T4.6</code>، أو <code>HAND A7K 30 REJ 6 PACK T4.6</code> لرفض جزء منه.</p></li>
       <li><p><b>مطبخ.</b> يطبخ مطبخ مجتمعي أو مدرسي أو إغاثي أو روبوتي؛ وتستطيع دورة الإنتاج تسجيل حرارات الطهي والحفظ الساخن والتبريد (ملف المطابخ التجريبي).</p></li>
       <li><p><b>توزيع.</b> الوجبات والأشخاص في موقع في يوم، أعدادًا فقط؛ وأي عدد دون عشرة «أقل من عشرة». <code>DIST 410 MEALS 410 PEOPLE 96KG</code>؛ والمغذيات لكل وجبة بـ<code>MENU</code>.</p></li>
-      <li><p><b>أثر.</b> ملخص يُحسب من الوثائق ولا يُكتب يدويًا: الكيلوغرامات المنقذة، والوجبات، ونسبة اجتياز التغذية، وتكلفة الوجبة، ووقت الحجز، وملاحظات السلامة وحوادثها، كلٌّ بمنهجه وعدد الوثائق وراءه.</p></li>
+      <li><p><b>أثر.</b> ملخص يُحسب من الوثائق: الكيلوغرامات المنقذة، والوجبات، وتكلفة الوجبة، ووقت الحجز، وملاحظات السلامة وحوادثها، كلٌّ بمنهجه وعدد الوثائق وراءه. نسبة اجتياز التغذية <span class="kind assumed">مُبلَّغ عنها ذاتيًا</span> ما لم تُشتق العناصر الغذائية من وصفات مرتبطة وأوزان الحصص.</p></li>
     </ol>
   </div>
 </section>
 
 <section id="sms" class="wrap" aria-labelledby="sms-h">
-  <div class="sec-head"><h2 id="sms-h">عرض الرسائل النصية</h2><p>اكتب الرسائل التي يرسلها متبرع وبنك طعام، أو اضغط الأزرار. تحوّلها البوابة في متصفحك إلى وثائق الملف، وتطبّق ثلاث قواعد سلسلة تبريد، وتحسب الملخص. لا يُرسل شيء إلى أي مكان.</p></div>
+  <div class="sec-head"><h2 id="sms-h">عرض الرسائل النصية</h2><p>اكتب الرسائل التي يرسلها متبرع وبنك طعام، أو اضغط الأزرار. تحوّلها البوابة في متصفحك إلى وثائق الملف، وتطبّق فحوص سلسلة التبريد (قراءة ناقصة، مبرَّد فوق 5 درجات، ساخن دون 60 درجة، صنف يحتاج تبريدًا أُعلن بلا تبريد)، وتحسب الملخص. لا يُرسل شيء إلى أي مكان.</p></div>
   <div class="demo">
     <div class="sms">
       <div>
         <div class="phone" id="smsPhone" aria-live="polite"></div>
         <form id="smsForm"><input id="smsInput" type="text" placeholder="OFFER 36KG YOGURT C 4C UB0511" aria-label="رسالة نصية" autocomplete="off"><button type="submit" class="btn primary">أرسل</button></form>
-        <p class="cta"><button type="button" class="btn" data-sms="OFFER 36KG YOGURT C 4C UB0511">عرض زبادي</button><button type="button" class="btn" data-sms="FARM 120KG TOMATO A BB0411">مزرعة تعرض طماطم</button><button type="button" class="btn" data-sms="OFFER 18KG COOKED RICE H T52C">أرز ساخن عند 52 درجة</button><button type="button" class="btn" data-sms="CLAIM OF-001 ALL">حجز</button><button type="button" class="btn" data-sms="HAND OF-001 36 T4.6">تسليم عند 4.6 درجة</button><button type="button" class="btn" data-sms="HAND OF-003 0 REJ 18 TEMP T52">رفض الأرز</button><button type="button" class="btn" data-sms="DIST 410 MEALS 410 PEOPLE 96KG">توزيع</button><button type="button" class="btn" data-sms="MENU DI-007 KCAL650 SODIUM540 FV95">قائمة الطعام</button><button type="button" class="btn" data-sms="HELP">مساعدة</button></p>
+        <p class="cta"><button type="button" class="btn" data-sms="OFFER 36KG YOGURT C 4C UB0511">عرض زبادي</button><button type="button" class="btn" data-sms="FARM 120KG TOMATO A HV0411">مزرعة تعرض طماطم</button><button type="button" class="btn" data-sms="OFFER 18KG COOKED RICE H T52C">أرز ساخن عند 52 درجة</button><button type="button" class="btn" data-sms="CLAIM OF-001 ALL">حجز</button><button type="button" class="btn" data-sms="HAND OF-001 36 T4.6">تسليم عند 4.6 درجة</button><button type="button" class="btn" data-sms="HAND OF-002 30 REJ 6 PACK">تسليم 30 كغ ورفض 6</button><button type="button" class="btn" data-sms="OFFER 12KG YOGURT A">زبادي معروض بلا تبريد</button><button type="button" class="btn" data-sms="HAND OF-003 0 REJ 18 TEMP T52">رفض الأرز</button><button type="button" class="btn" data-sms="DIST 410 MEALS 410 PEOPLE 96KG">توزيع</button><button type="button" class="btn" data-sms="MENU DI-007 KCAL650 SODIUM540 FV95">قائمة الطعام</button><button type="button" class="btn" data-sms="HELP">مساعدة</button></p>
       </div>
       <div class="docs-out"><p class="note">الوثائق (الأحدث أولًا) وملخص الأثر:</p><div id="smsDocs"></div><pre class="code" id="smsSummary"></pre></div>
     </div>
-    <p class="note">القواعد منفَّذة في <code>tools/cookwala_ref.py</code> ومختبَرة بـ19 متّجه مطابقة. تربط البوابة الحقيقية رقم هاتف مسجلًا بمنظمة، لا بشخص أبدًا. معرّفات العروض في هذا العرض OF-001 وOF-002…</p>
+    <p class="note">القواعد منفَّذة في <code>tools/cookwala_ref.py</code> ومختبَرة بـ24 متّجه مطابقة. الكلمات المفتاحية بالإنجليزية، والأرقام العربية والهندية مقبولة معًا. تربط البوابة الحقيقية رقم هاتف مسجلًا بمنظمة، لا بشخص أبدًا. معرّفات العروض في هذا العرض OF-001 وOF-002…</p>
   </div>
 </section>
 
@@ -42,10 +42,10 @@
     <div class="cards">
       <a class="card" href="https://github.com/amado2k5/cookwala/tree/main/examples/humanitarian/flows/food-bank-cairo" rel="noopener"><h3>بنك طعام في القاهرة</h3><p>هواتف وجداول بيانات (المستوى H0). طماطم وزبادي وخبز من سوبرماركت؛ رُفض 6 كجم لتلف التغليف؛ 380 وجبة ساخنة في مطبخ مجتمعي.</p><span class="go">الوثائق والملخص ←</span></a>
       <a class="card" href="https://github.com/amado2k5/cookwala/tree/main/examples/humanitarian/flows/school-meals" rel="noopener"><h3>برنامج تغذية مدرسية</h3><p>رُفضت مكسرات كاملة عند التسليم لأن البرنامج يخدم أطفالًا دون الخامسة؛ ورُصد غداء فيه 640 ملجم صوديوم بحزمة المدارس.</p><span class="go">الوثائق والملخص ←</span></a>
-      <a class="card" href="https://github.com/amado2k5/cookwala/tree/main/examples/humanitarian/flows/disaster-kitchen" rel="noopener"><h3>مطبخ كوارث</h3><p>رُفض أرز مطبوخ عند 49 درجة؛ 650 وجبة ساخنة بسجلات حفظ ساخن وتبريد في دورة إنتاج؛ ضُبطت وحدة حفظ دون 60 درجة وأُعيد تسخين الدفعة.</p><span class="go">الوثائق والملخص ←</span></a>
+      <a class="card" href="https://github.com/amado2k5/cookwala/tree/main/examples/fleet/production-run-disaster.json" rel="noopener"><h3>مطبخ كوارث</h3><p>رُفض أرز مطبوخ عند 49 درجة في <a href="https://github.com/amado2k5/cookwala/tree/main/examples/humanitarian/flows/disaster-kitchen" rel="noopener">التدفق</a>؛ 650 وجبة ساخنة بسجلات حفظ ساخن وتبريد في دورة إنتاج؛ ضُبطت وحدة حفظ دون 60 درجة وأُعيد تسخين الدفعة.</p><span class="go">الوثائق والملخص ←</span></a>
       <a class="card" href="https://github.com/amado2k5/cookwala/tree/main/examples/humanitarian/flows/robot-kitchen" rel="noopener"><h3>مطبخ روبوتي</h3><p>طماطم تعاونية زراعية بالرسائل؛ خطوات الأجهزة تنفيذات نواة مرتبطة بدورة الإنتاج؛ 900 عبوة معدودة ولا أحد مسمّى.</p><span class="go">الوثائق والملخص ←</span></a>
     </div>
-    <p class="note">الأربعة وثائق توضيحية كُتبت لاختبار المخطط؛ لا تصف أي منظمة أو حدث حقيقي.</p>
+    <p class="note">الوثائق الأربع كلها توضيحية، كُتبت لاختبار المخطط؛ لا تصف أي منظمة أو حدث حقيقي.</p>
   </div>
 </section>
 
@@ -57,7 +57,7 @@
   </div>
   <div>
     <h2>قواعد سلامة الغذاء والتغذية، قابلة للمراجعة</h2>
-    <p>أربع حزم قواعد مسوّدة مشتقة من إرشادات منظمة الصحة العالمية وكودكس وسفير العامة: سلسلة التبريد، والوقت خارج التحكم الحراري، وتواريخ الصلاحية، ومسببات الحساسية؛ والصوديوم والسكريات الحرة والدهون والخضار والفواكه؛ وقواعد رعاية للأطفال دون الخامسة والحوامل وكبار السن وضعيفي المناعة؛ وأنماط الوجبات المدرسية؛ وخفض الصوديوم.</p>
+    <p>أربع حزم قواعد مسوّدة مشتقة من الإرشادات العامة لمنظمة الصحة العالمية ودستور الأغذية (كودكس) ومعايير «سفير» (Sphere): سلسلة التبريد، وقاعدة الساعتين للطعام المطبوخ خارج التحكم الحراري، وتواريخ الصلاحية، ومسببات الحساسية (مراحل التبريد وإعادة التسخين تُسجَّل في دورة إنتاج المطبخ لا في هذه الحزم)؛ والصوديوم والسكريات الحرة والدهون والخضار والفواكه؛ وقواعد رعاية للأطفال دون الخامسة والحوامل وكبار السن وضعيفي المناعة؛ وأنماط الوجبات المدرسية؛ وخفض الصوديوم.</p>
     <p>تقول كل حزمة من راجعها بالمهنة. لم تُراجع أي منها بعد؛ وهذا أول ما نطلبه من أخصائيي التغذية ومسؤولي سلامة الغذاء. <a href="/docs/REVIEW-TEMPLATE/">نموذج المراجعة من ساعتين</a> · <a href="/docs/CLAIMS-POLICY/">ما لا ندّعيه أبدًا</a></p>
   </div>
 </section>

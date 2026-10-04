@@ -9,7 +9,7 @@ the repository or is marked as a gap.
 |---|---|---|
 | Operation envelopes for 56 operations (temperature bands, sensor ladders, hazards) | `vocab/ops.json` | test conditions for thermal and physics simulation; comparison with culinary science |
 | 101 conformance vectors (hashing, signatures, revocation, ledgers, units, envelopes, state machines, disclosure policy, registry rules, SMS grammar, signal policy, relay verification) | `conformance/` | independent implementations; formal analysis |
-| Eight example recipes in English and Arabic with end conditions, hazards and critical control points | `examples/*.cookwala.json` | planning, vision-language grounding, translation studies |
+| Nine example recipes in English and Arabic with end conditions, hazards and critical control points | `examples/*.cookwala.json` | planning, vision-language grounding, translation studies |
 | Four deterministic simulators (home, two cities, a country, the world) with the protocol on and off and every assumption listed | `sim/` | agent-based modelling, sensitivity analysis, critique |
 | Execution-log format with consent, and exporters to LeRobotDataset v3 tasks and OpenTelemetry traces | `schemas/core.schema.json`, `tools/execlog_export.py` | robot learning datasets; observability |
 | Facet registry for household context with privacy classes and travel rules | `vocab/facets.json` | privacy engineering, HCI, ethics |

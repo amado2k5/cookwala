@@ -30,8 +30,9 @@ cook named it.
 
 **Learning from a kitchen needs the kitchen's consent and credit.** Execution logs leave a
 home only with opt-in consent, carry no personal data, and are published with a data card
-that names the contributing cooks. A dataset that teaches robots molokhia should credit the
-households whose molokhia it was.
+that credits contributing cooks by the name or pseudonym each chose, or collectively where they
+chose not to be named. A dataset that teaches robots molokhia should credit the cooks whose
+molokhia it was, on their terms; a credit is never a household's address, schedule or absence.
 
 Three objections we take seriously. First, credit is not compensation; if a dataset of home
 cooking becomes a commercial model, attribution alone is thin. The standard's answer today is

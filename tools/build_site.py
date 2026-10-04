@@ -25,6 +25,15 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import md  # noqa: E402
+_md_render = md.render
+
+
+def _render_md(text, *a, lang='en', **kw):
+    md.ANCHOR_LABEL = 'رابط إلى هذا القسم' if lang == 'ar' else 'Link to this section'
+    return _md_render(text, *a, **kw)
+
+
+md.render = _render_md
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
@@ -194,11 +203,11 @@ class Builder:
         body = body.replace('{{lang_prefix}}', '' if lang == 'en' else '/ar')
         layout = self.deck_layout if meta.get('layout') == 'deck' else self.layout
         return fill(layout, {
-            'lang': lang, 'dir': 'rtl' if lang == 'ar' else 'ltr', 'title': html.escape(meta.get('title', 'Cookwala')), 'description': html.escape(meta.get('description', S['tagline'])),
+            'lang': lang, 'dir': 'rtl' if lang == 'ar' else 'ltr', 'title': html.escape(meta.get('title', 'Cookwala')), 'description': html.escape(re.sub(r'\{\{stat:(\w+)\}\}', lambda m: self.stat(m.group(1)), meta.get('description', S['tagline']))),
             'canonical': BASE_URL + self.path_for(lang, path), 'alt_lang': other, 'alt_url': BASE_URL + self.path_for(other, path), 'alt_label': S['switch'],
             'alt_href': self.path_for(other, path), 'nav': nav, 'more': more, 'more_label': S['more_label'], 'content': body, 'scripts': scripts, 'brand': S['brand'],
             'tagline': S['tagline'], 'footer_origin': S['footer_origin'], 'footer_licences': S['footer_licences'], 'footer_links': ''.join(f'<a href="{self.path_for(lang, p) if p.startswith("/") and not p.startswith("/.well") else p}">{html.escape(l)}</a>' for l, p in S['footer']),
-            'year': self.year, 'skip': S['skip'], 'menu': S['menu'], 'theme': S['theme'], 'font_link': S['font_link'], 'body_class': meta.get('bodyClass', ''), 'home': self.path_for(lang, '/'), 'prev': S['prev'], 'next': S['next'],
+            'year': self.year, 'skip': S['skip'], 'menu': S['menu'], 'theme': S['theme'], 'font_link': S['font_link'], 'body_class': meta.get('bodyClass', ''), 'nav_label': S['nav_label'], 'discovery_title': S['discovery_title'], 'llms_title': S['llms_title'], 'home': self.path_for(lang, '/'), 'prev': S['prev'], 'next': S['next'],
         })
 
     # ---- content pages
@@ -281,7 +290,7 @@ class Builder:
                 'lang': 'en', 'dir': 'ltr', 'title': html.escape(title) + ' · Cookwala Docs', 'description': html.escape(self.first_para(text)),
                 'canonical': f'{BASE_URL}/docs/{doc_id}/', 'sidebar': sidebar.replace(f'data-id="{doc_id}"', f'data-id="{doc_id}" aria-current="page"'),
                 'crumb': f'{html.escape(S["docgroups"][group])} / {html.escape(title)}', 'content': body, 'onpage': onpage, 'pager': pager,
-                'edit': REPO + src, 'raw': f'/docs/md/{doc_id}.md', 'brand': S['brand'], 'skip': S['skip'], 'font_link': S['font_link'], 'year': self.year, 'home': '/',
+                'edit': REPO + src, 'raw': f'/docs/md/{doc_id}.md', 'brand': S['brand'], 'skip': S['skip'], 'font_link': S['font_link'], 'year': self.year, 'home': '/', 'nav_label': S['nav_label'],
                 'status': self.status_tag(status), 'onpage_label': S['onpage'], 'filter_label': S['filter'], 'copy': S['copy'], 'edit_label': S['edit'], 'md_label': S['markdown'], 'menu': S['menu'], 'theme': S['theme'],
                 'nav': self.nav_html('en', '/docs/')[0], 'more': self.nav_html('en', '/docs/')[1], 'more_label': S['more_label'], 'ar_note': '',
             })

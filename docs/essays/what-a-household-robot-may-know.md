@@ -6,7 +6,7 @@ come home, who is diabetic, which medication must not meet grapefruit, whether t
 who may open the door to a courier, whether the family is tight on money this month, when
 they pray, how fast they eat, what they throw away.
 
-He was right that a good cook knows these things. He was also describing the most intimate
+He was right that a good cook knows these things. He was also describing one of the most intimate
 dataset any device has ever held about a family, and the same facts are a burglar's plan
 (who is away, which door), a profiler's dream (religion, health, income) and an insurer's
 rating sheet (how they eat).

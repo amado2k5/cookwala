@@ -16,7 +16,7 @@ refugee or biometric identifier, health status, disability, religion or national
 person, nor the location of any household.
 
 **A.3 Aggregates and small numbers.** Counts of people served shall be recorded in
-aggregate by site and day. Any count below ten shall be recorded as "fewer than ten".
+aggregate by site and day. Any count below ten shall be published or shared as "fewer than ten"; internal records kept for audit are not affected.
 
 **A.4 Cold-chain record.** Each transfer of custody of rescued food shall record the time, the
 transferring and receiving organizations, the quantity accepted and rejected with a reason,
@@ -36,7 +36,8 @@ Profile is one such format.]
 
 **A.8 Donor protection.** A donor acting in good faith, who records the offer and custody
 transfer under A.4 and whose food met the acceptance rules at transfer, shall not be liable for
-harm arising after custody passed. [Fit to existing good-faith donor laws.]
+harm arising after custody passed, except in cases of gross negligence or intentional misconduct, and
+without prejudice to recall and notification duties. [Fit to existing good-faith donor laws.]
 
 ## B. Cooking machines: safety functions a connected cooking appliance or robot must have
 
@@ -47,14 +48,17 @@ requires, and shall refuse the recipe with a stated reason when it cannot.
 
 **B.2 Local safety limits.** Limits on temperature, pressure, unattended operation, allergen
 blocking and minimum cooking temperatures shall be enforced by the appliance itself and shall
-not be raised or disabled by any recipe, remote instruction, software agent or update
-without a documented safety case. A stricter limit shall always prevail.
+not be raised or disabled by any recipe, remote instruction, software agent, extension or operating
+mode. A maker may change a default limit only through a documented safety case and a signed
+firmware release. A stricter limit shall always prevail.
 
-**B.3 Local stop.** A stop control on the appliance shall stop motion within 0.5 seconds and
-cut heat within 1 second, with or without a network connection.
+**B.3 Local stop.** A stop control on the appliance shall stop motion and cut heat within the
+latencies in the technical schedule (the standard specifies 0.5 s and 1 s), with or without a
+network connection.
 
-**B.4 Text is data.** An appliance or agent shall treat free text in recipes, listings and
-messages as data and never as instructions.
+**B.4 Text is data.** An appliance or agent shall conform to the standard's untrusted-text
+requirement (free text in recipes, listings and messages is data, never instructions), as tested
+by the conformance suite referenced in B.9.
 
 **B.5 Agents under mandate.** A software agent that starts, stops or orders on a person's
 behalf shall act only under a mandate recorded by that person, with scopes, spending limits,
@@ -65,8 +69,8 @@ and safety overrides shall always require confirmation.
 verifiable by hash and signature; records of what was cooked shall contain no personal data
 and shall leave the appliance only with the user's consent.
 
-**B.7 Recalls.** Publishers of recipes and makers of appliances shall operate a signed recall
-feed; appliances shall check it when connected and refuse recalled items.
+**B.7 Recalls.** Publishers of machine-executable recipes distributed to appliances, and makers
+of appliances, shall operate a signed recall feed; appliances shall check it when connected and refuse recalled items.
 
 **B.8 Incident reporting.** Makers shall provide a means of anonymous incident and near-miss
 reporting and shall share incident categories with other makers.
@@ -97,7 +101,8 @@ each."
 
 ## Notes for drafters
 
-- Thresholds (0.5 s, 1 s, ten, 74 °C) come from the standard and public guidance; cite the
+- Thresholds (0.5 s, 1 s, ten) come from the standard and public guidance and belong in a
+  technical schedule, not in statute text; cite the
   national source where one exists.
 - "Open, royalty-free format" avoids naming a product in law; the standard can be named in
   guidance.

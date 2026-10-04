@@ -9,10 +9,13 @@ the standard offers.
 |---|---|---|---|
 | **Self-declared** | The maker or publisher | Ran the public vectors with the public tool and published a `ConformanceReport` (`schemas/conformance.schema.json`), signed with its own key | the report, with the suites and counts; never a badge |
 | **Verified** | A registry operator | Reproduced the run against the same vector set hash and counter-signed the report | the report plus the verifier |
-| **Certified** | An independent certifier | Ran the suite plus hardware and safety-case checks under a published scheme and granted the mark | the report, the certifier, the mark |
+| **Certified** | An independent certifier (none exists today) | Ran the suite plus hardware and safety-case checks under a published scheme and granted the mark | the report, the certifier, the mark |
 
 A report that fails any vector of a class may not claim that class. The registry shows
 reports, not badges.
+
+Today the only registry operator is the specification maintainer (cookwala.ai), so "verified" adds
+no independence until a second registry exists; the status is still shown as self-verification.
 
 ## 2. What a report contains
 

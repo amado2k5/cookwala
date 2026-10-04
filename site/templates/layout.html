@@ -8,8 +8,8 @@
   <link rel="canonical" href="{{canonical}}">
   <link rel="alternate" hreflang="{{alt_lang}}" href="{{alt_url}}">
   <link rel="alternate" hreflang="{{lang}}" href="{{canonical}}">
-  <link rel="alternate" type="application/json" href="/.well-known/cookwala.json" title="Cookwala discovery">
-  <link rel="alternate" type="text/plain" href="/llms.txt" title="Docs for AI readers">
+  <link rel="alternate" type="application/json" href="/.well-known/cookwala.json" title="{{discovery_title}}">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="{{llms_title}}">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f6f7f8" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1113" media="(prefers-color-scheme: dark)">
@@ -30,7 +30,7 @@
   <div class="wrap nav-in">
     <a class="brand" href="{{home}}" aria-label="{{brand}}"><span class="mark" aria-hidden="true"></span>{{brand}}</a>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">{{menu}}</button>
-    <nav id="menu" aria-label="Main">
+    <nav id="menu" aria-label="{{nav_label}}">
       {{nav}}
       <details class="more"><summary>{{more_label}}</summary><div class="more-list">{{more}}</div></details>
       <a class="lang" href="{{alt_href}}" hreflang="{{alt_lang}}" lang="{{alt_lang}}">{{alt_label}}</a>

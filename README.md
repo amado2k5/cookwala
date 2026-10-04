@@ -15,7 +15,7 @@ and healthier meals, machines that can feed people who cannot cook for themselve
 organizations acting as one network. Evidence, with labels, is in [docs/IMPACT.md](docs/IMPACT.md).
 
 Cookwala started as "the world's first and largest robot cooking recipes index and CLI", from
-one family's Egyptian recipes on fifi.cooking. The index and the CLI are here; "largest" is a goal,
+one family's Egyptian recipes on fifi.cooking. The index and the CLI are here; "first" and "largest" were the original ambition, not claims;
 not a claim. Everything is open, royalty-free, model-neutral and device-neutral.
 
 **Status:** Core 0.2 is a draft under public review; everything else is a draft or experimental
@@ -43,7 +43,8 @@ profile. Live at [cookwala.ai](https://cookwala.ai). Nothing is deployed in the 
 ```bash
 python -m venv .venv && .venv/bin/pip install jsonschema pyyaml graphql-core cryptography
 .venv/bin/python tools/validate_specs.py      # schemas, examples, vocabularies, facet registry, APIs
-.venv/bin/python tools/run_conformance.py     # 101 vectors (Core and profiles); --report writes a ConformanceReport
+.venv/bin/python tools/run_conformance.py     # 106 vectors (Core and profiles); --report writes a ConformanceReport
+.venv/bin/pip install -e sdk/python           # the `cookwala` command used in the table above
 node sim/run.mjs                              # the four simulators
 bash tools/build_site.sh _site                # the website
 ```

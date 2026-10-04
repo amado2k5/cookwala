@@ -1,7 +1,7 @@
 # Lesson kit: cooking, units, safety, fair sharing and machines that follow rules
 
 **Status:** draft, 2026-10-04. Five lessons for ages 11 to 16, adaptable up or down, in
-English and Arabic. Everything needed is free: the browser dry run, the example recipes, the
+English; the example recipes carry Arabic step text, and an Arabic lesson kit is next. Everything needed is free: the browser dry run, the example recipes, the
 simulators and this page. No account, no app, no personal data. Teachers may copy and adapt
 under CC BY 4.0.
 
@@ -30,7 +30,7 @@ under CC BY 4.0.
 - **Question:** how does anyone know chicken is cooked?
 - **Activity:** read the molokhia recipe's critical control point: core temperature at or
   above 74 °C. Compare with the kofta recipe (71 °C for ground beef) and the ful medames
-  reheat (75 °C). Discuss why reheating has a limit and why cooked rice must not sit out
+  reheat (75 °C; the default limit is 74 °C, USDA FSIS, and the UK FSA says 75 °C). Discuss why reheating has a limit and why cooked rice must not sit out
   (`storage.coolingRequired`).
 - **Role play:** one student is the device; the recipe says "simmer until soft". The device
   has no thermometer and no camera. What should it do? (Refuse, or ask a person.)

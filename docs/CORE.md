@@ -223,7 +223,7 @@ and it has real users.
 | Agents | Mandate inside Missions only | `AgentMandate` in common; required for agent requests |
 | Safety | Declared in recipes | Also enforced locally through SafetyLimits; recalls; incident reports |
 | Data | No dataset model | Consented, personal-data-free ExecutionLog |
-| Conformance | Schema validation only | 44 vectors plus a reference implementation |
+| Conformance | Schema validation only | 106 vectors (44 Core, 62 profile) plus a reference implementation |
 
 To migrate a 0.1 document: convert °F to °C; replace relative tolerances on temperatures with
 `toleranceAbs`; turn money amounts into decimal strings; remove or rename unknown fields to

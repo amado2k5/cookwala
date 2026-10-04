@@ -16,7 +16,7 @@
     </div>
   </header>
 
-  <section class="controls" aria-label="Scenario settings">
+  <main id="main" tabindex="-1"><section class="controls" aria-label="Scenario settings">
     <label class="preset">Scenario <select id="preset"></select></label>
     <div id="cityControls" class="city-controls"></div>
     <label class="seed">Seed <input id="seed" type="number" value="11" min="1" max="9999"></label>
@@ -57,5 +57,6 @@
   <footer class="foot muted small">Deterministic: same seed + settings = same month. Code: <a href="https://github.com/amado2k5/cookwala/tree/main/sim/city">sim/city</a>.</footer>
   <div id="tip" class="tip" role="status" hidden></div>
   <script type="module" src="city.js?v=0.2.2"></script>
+</main>
 </body>
 </html>

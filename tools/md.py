@@ -52,6 +52,9 @@ def inline(text, link_rewriter=None):
     return ''.join(out)
 
 
+ANCHOR_LABEL = 'Link to this section'
+
+
 def render(md, link_rewriter=None, heading_offset=0, collect=None):
     """Render Markdown. collect, if a list, receives (level, id, text) for h2/h3."""
     lines = md.replace('\r\n', '\n').split('\n')
@@ -80,7 +83,7 @@ def render(md, link_rewriter=None, heading_offset=0, collect=None):
             flush(); level = min(6, len(m.group(1)) + heading_offset); text = m.group(2)
             text_html = inline(text, link_rewriter); _id = hid(text)
             if collect is not None and level in (2, 3): collect.append((level, _id, re.sub(r'<[^>]+>', '', text_html)))
-            anchor = f' <a class="anchor" href="#{_id}" aria-label="Link to this section">#</a>' if level > 1 else ''
+            anchor = f' <a class="anchor" href="#{_id}" aria-label="{html.escape(ANCHOR_LABEL)}">#</a>' if level > 1 else ''
             out.append(f'<h{level} id="{_id}">{text_html}{anchor}</h{level}>'); i += 1; continue
         if re.match(r'^(-{3,}|\*{3,}|_{3,})\s*$', line):
             flush(); out.append('<hr>'); i += 1; continue

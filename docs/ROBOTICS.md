@@ -6,10 +6,10 @@ in a form any robot, appliance, simulator or learning pipeline can read and chec
 
 ## Where it fits
 
-| Layer | Examples (2026) | What Cookwala adds |
+| Layer | Examples of the layer (2026; no integration with any of them exists) | What Cookwala adds |
 |---|---|---|
 | Robots and appliances | Figure 03, 1X NEO, Unitree G1/H2, Pollen Reachy, kitchen robots (Moley, Miso, Chef Robotics), smart ovens | A device-independent recipe it can dry-run, refuse or cook; on-device safety limits |
-| Middleware | ROS 2, ros-controls, Open-RMF (fleets), Matter (appliances) | ROS 2 actions for recipes and steps; an Open-RMF task for multi-robot kitchens; a Matter binding |
+| Middleware | ROS 2, ros-controls, Open-RMF (fleets), Matter (appliances) | ROS 2 actions for recipes and steps (`bindings/ros2`); a draft Matter op mapping (`bindings/matter.json`, unverified); an Open-RMF task is a planned contribution |
 | Robot learning | LeRobot (Hugging Face), NVIDIA Isaac GR00T, Physical Intelligence π models, Figure Helix | Natural-language step tasks and step segments for datasets; done criteria as evaluation targets |
 | Simulation | NVIDIA Isaac Sim / Isaac Lab, Gazebo, MuJoCo | Operation envelopes and conformance vectors as test conditions |
 | AI agents | MCP, A2A, Claude, OpenAI and open models | AgentMandate, untrusted-text rule, kitchen agent-safety benchmark |
@@ -34,8 +34,9 @@ to **Open-RMF** as tasks.
 
 ## LeRobot and robot-learning datasets
 
-LeRobot's loop is teleoperate → record → train → deploy, and its LeRobotDataset v3 stores
-natural-language tasks in `meta/tasks.jsonl`. Cookwala recipes already contain one sentence
+LeRobot's loop is teleoperate → record → train → deploy, and its LeRobotDataset v2.1 stores
+natural-language tasks in `meta/tasks.jsonl` (v3 moved metadata to parquet; the exporter writes the
+v2.1-style file today and a v3 writer is next). Cookwala recipes already contain one sentence
 per step, and execution logs record when each step started and ended.
 
 ```bash

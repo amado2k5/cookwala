@@ -19,7 +19,7 @@ not endorsed by any government or agency.
 
 ## What an open standard offers
 
-Cookwala Core 0.2 is a small standard that a device maker can implement in about a week. It
+Cookwala Core 0.2 is a small standard that we estimate a device maker could implement in about a week (assumed; no maker has implemented it yet). It
 defines:
 
 - **Operation envelopes:** every heat operation has a physical temperature band and a
@@ -34,7 +34,7 @@ defines:
   instructions.
 - **Anonymous incident reporting**, modelled on aviation's confidential reporting, so every
   maker learns from each near miss.
-- **A conformance suite** (101 public test vectors) and a report format behind any claim.
+- **A conformance suite** (106 public test vectors) and a report format behind any claim.
 
 The **Humanitarian Profile** adds a data standard for food donation with **no personal
 data**: organizations only, aggregate counts, temperature checks at every handover, and
@@ -45,10 +45,10 @@ professionals and replaceable by national rules. It works by SMS and spreadsheet
 
 | Action | Effort | Effect |
 |---|---|---|
-| Ask the national standards body to review Core 0.2 and comment publicly | weeks | A technical basis for guidance on cooking machines; interoperability with ISO 13482 and IEC 60335 work |
-| Reference "refusal before heat", on-device safety limits and incident reporting in guidance for connected cooking appliances | months | Makers have a concrete target; consumers get machines that refuse rather than guess |
-| Adopt the Humanitarian Profile's data-protection rules for food-donation programs (no personal data, aggregates, small-cell suppression) | months | Food rescue that protects the people it serves and produces comparable numbers |
+| Ask the national standards body to review Core 0.2 and comment publicly | weeks | A technical basis for guidance on cooking machines; complementary to ISO 13482 and IEC 60335, which it does not replace |
 | Fund a 12-week pre-registered pilot with a school-meal or food-bank program | months | Evidence, published whatever it shows |
+| Review the Humanitarian Profile's data-protection rules for food-donation programs (no personal data, aggregates, small-cell suppression); its rule packs are unreviewed drafts | months | Food rescue that protects the people it serves and produces comparable numbers |
+| Reference "refusal before heat", on-device safety limits and incident reporting in guidance for connected cooking appliances, after independent review and two implementations | later | Makers have a concrete target; consumers get machines that refuse rather than guess |
 | Use the model language (`MODEL-LANGUAGE.md`) for donor-protection and data clauses | at drafting | Clauses that match a working data standard |
 | Run a national registry node and recall feed | months | Recalls of unsafe recipes and devices reach kitchens without depending on a foreign server |
 
