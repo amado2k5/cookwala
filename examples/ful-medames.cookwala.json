@@ -1,0 +1,511 @@
+{
+ "$schema": "https://cookwala.ai/v1/schemas/recipe.schema.json",
+ "cookwala": "0.2.0",
+ "id": "example-ful-medames",
+ "revision": 1,
+ "updated": "2026-10-04",
+ "verification": {
+  "level": "V1",
+  "evidence": {
+   "simulatorRuns": 0,
+   "humanReviews": 1,
+   "fieldReports": 0
+  },
+  "reviewedBy": "cookwala.ai editorial (structure only)",
+  "notes": "Example recipe written to exercise the standard: structured steps, end conditions, hazards and critical control points. Not simulated and not field-verified; values are typical home-cooking values, not measurements."
+ },
+ "dish": {
+  "names": {
+   "en": "Ful medames",
+   "ar": "فول مدمس"
+  },
+  "cuisine": [
+   "EG"
+  ],
+  "course": "breakfast",
+  "tags": [
+   "fava",
+   "breakfast",
+   "vegan",
+   "budget",
+   "reheat"
+  ]
+ },
+ "yield": {
+  "servings": 4,
+  "totalMass": {
+   "value": 1050,
+   "unit": "g"
+  }
+ },
+ "ingredients": [
+  {
+   "ref": "ful",
+   "ingredientId": "cw.ing.fava_beans_cooked",
+   "qty": {
+    "value": 800,
+    "unit": "g",
+    "tolerance": 0.1
+   },
+   "display": {
+    "en": "800 g cooked fava beans (2 cans, with liquid)",
+    "ar": "800 جم فول مدمس مطبوخ (علبتان مع السائل)"
+   }
+  },
+  {
+   "ref": "water",
+   "ingredientId": "cw.ing.water",
+   "qty": {
+    "value": 100,
+    "unit": "ml",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "100 ml water",
+    "ar": "100 مل ماء"
+   }
+  },
+  {
+   "ref": "garlic",
+   "ingredientId": "cw.ing.garlic",
+   "qty": {
+    "value": 6,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "2 garlic cloves",
+    "ar": "فصان ثوم"
+   }
+  },
+  {
+   "ref": "cumin",
+   "ingredientId": "cw.ing.cumin_ground",
+   "qty": {
+    "value": 3,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1½ tsp ground cumin",
+    "ar": "1½ ملعقة صغيرة كمون"
+   },
+   "scaling": "sublinear"
+  },
+  {
+   "ref": "salt",
+   "ingredientId": "cw.ing.salt",
+   "qty": {
+    "value": 4,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "¾ tsp salt",
+    "ar": "¾ ملعقة صغيرة ملح"
+   },
+   "scaling": "sublinear",
+   "toTaste": true
+  },
+  {
+   "ref": "lemon",
+   "ingredientId": "cw.ing.lemon_juice",
+   "qty": {
+    "value": 30,
+    "unit": "ml",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "juice of 1 lemon",
+    "ar": "عصير ليمونة"
+   }
+  },
+  {
+   "ref": "oil",
+   "ingredientId": "cw.ing.olive_oil",
+   "qty": {
+    "value": 30,
+    "unit": "ml",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "2 tbsp olive oil",
+    "ar": "2 ملعقة كبيرة زيت زيتون"
+   }
+  },
+  {
+   "ref": "tomato",
+   "ingredientId": "cw.ing.tomato",
+   "qty": {
+    "value": 100,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1 tomato, diced",
+    "ar": "طماطم واحدة مقطعة"
+   },
+   "optional": true
+  },
+  {
+   "ref": "parsley",
+   "ingredientId": "cw.ing.parsley",
+   "qty": {
+    "value": 10,
+    "unit": "g",
+    "tolerance": 0.5
+   },
+   "display": {
+    "en": "a handful of parsley, chopped",
+    "ar": "حفنة بقدونس مفروم"
+   },
+   "optional": true
+  }
+ ],
+ "equipment": [
+  {
+   "ref": "pot",
+   "class": "cw.eq.vessel.pot.sauce",
+   "constraints": {
+    "capacityMl": {
+     "min": 2000
+    },
+    "lid": true
+   }
+  },
+  {
+   "ref": "hob",
+   "class": "cw.eq.heat.hob"
+  },
+  {
+   "ref": "knife",
+   "class": "cw.eq.tool.knife.chef"
+  },
+  {
+   "ref": "board",
+   "class": "cw.eq.tool.cutting_board"
+  },
+  {
+   "ref": "masher",
+   "class": "cw.eq.tool.masher",
+   "optional": true
+  },
+  {
+   "ref": "probe",
+   "class": "cw.eq.sensor.probe"
+  }
+ ],
+ "process": {
+  "nodes": [
+   {
+    "id": "n1",
+    "op": "cw.op.crush",
+    "inputs": [
+     "garlic"
+    ],
+    "output": "garlic_paste",
+    "params": {
+     "texture": "paste"
+    }
+   },
+   {
+    "id": "n2",
+    "op": "cw.op.simmer",
+    "inputs": [
+     "ful",
+     "water"
+    ],
+    "output": "ful_hot",
+    "equipment": [
+     "pot",
+     "hob"
+    ],
+    "params": {
+     "heat": "medium_low",
+     "lid": "on",
+     "target": {
+      "sensor": "cw.sense.liquid_temp",
+      "value": 90,
+      "unit": "degC",
+      "tolerance": 5
+     },
+     "stir": {
+      "intervalS": 120,
+      "style": "gentle"
+     }
+    },
+    "until": {
+     "all": [
+      {
+       "sensor": "cw.sense.core_temp",
+       "gte": 75
+      }
+     ],
+     "minTime": "PT8M",
+     "maxTime": "PT15M"
+    },
+    "onTimeout": "extend",
+    "ccp": "ccp_reheat",
+    "hazards": [
+     "hz_steam",
+     "hz_scorch"
+    ],
+    "attention": "periodic"
+   },
+   {
+    "id": "n3",
+    "op": "cw.op.crush",
+    "inputs": [
+     "ful_hot"
+    ],
+    "output": "ful_mashed",
+    "equipment": [
+     "masher"
+    ],
+    "params": {
+     "texture": "coarse"
+    },
+    "optional": true
+   },
+   {
+    "id": "n4",
+    "op": "cw.op.season",
+    "inputs": [
+     "ful_mashed",
+     "garlic_paste",
+     "cumin",
+     "salt",
+     "lemon",
+     "oil"
+    ],
+    "output": "ful_seasoned",
+    "params": {
+     "method": "taste_adjust",
+     "ingredients": [
+      "salt",
+      "lemon",
+      "cumin"
+     ]
+    },
+    "humanOptional": true
+   },
+   {
+    "id": "n5",
+    "op": "cw.op.cut",
+    "inputs": [
+     "tomato"
+    ],
+    "output": "tomato_diced",
+    "equipment": [
+     "knife",
+     "board"
+    ],
+    "params": {
+     "shape": "dice",
+     "size": {
+      "value": 8,
+      "unit": "mm"
+     }
+    },
+    "hazards": [
+     "hz_knife"
+    ],
+    "optional": true
+   },
+   {
+    "id": "n6",
+    "op": "cw.op.garnish",
+    "inputs": [
+     "ful_seasoned",
+     "tomato_diced",
+     "parsley"
+    ],
+    "output": "ful_served",
+    "params": {
+     "method": "scatter"
+    },
+    "optional": true
+   },
+   {
+    "id": "n7",
+    "op": "cw.op.serve",
+    "inputs": [
+     "ful_served"
+    ],
+    "params": {
+     "serveWithin": "PT20M",
+     "keepHot": {
+      "gte": 60,
+      "unit": "degC"
+     }
+    }
+   }
+  ],
+  "edges": "implicit-from-inputs",
+  "parallelGroups": [
+   [
+    "n1",
+    "n5"
+   ]
+  ]
+ },
+ "safety": {
+  "hazards": [
+   {
+    "id": "hz_knife",
+    "type": "cw.hz.cut.knife",
+    "severity": "medium",
+    "mitigation": [
+     "keep_human_clear_of_blade",
+     "stable_board"
+    ]
+   },
+   {
+    "id": "hz_steam",
+    "type": "cw.hz.burn.steam",
+    "severity": "medium",
+    "mitigation": [
+     "lift_lid_away_from_user"
+    ]
+   },
+   {
+    "id": "hz_scorch",
+    "type": "cw.hz.scorch",
+    "severity": "low",
+    "mitigation": [
+     "stir_bottom",
+     "lowest_heat_for_lid_on_steps"
+    ]
+   }
+  ],
+  "ccps": [
+   {
+    "id": "ccp_reheat",
+    "hazard": "pathogen.clostridium_perfringens",
+    "node": "n2",
+    "criticalLimit": "core temperature at or above 75 °C when reheating pre-cooked beans",
+    "limit": {
+     "sensor": "cw.sense.core_temp",
+     "gte": 75
+    },
+    "monitoring": [
+     "cw.sense.core_temp"
+    ],
+    "corrective": "keep simmering until the probe reads 75 °C; if the beans were out of the fridge for more than 2 h before reheating, discard"
+   }
+  ],
+  "allergens": {
+   "eu14": [],
+   "us9": [],
+   "mayContain": []
+  },
+  "dietary": [
+   {
+    "claim": "halal",
+    "basis": "ingredients",
+    "ruleset": "cw.ruleset.halal.v1"
+   },
+   {
+    "claim": "vegan",
+    "basis": "ingredients"
+   },
+   {
+    "claim": "gluten_free",
+    "basis": "ingredients",
+    "note": "Serve with gluten-free bread for a gluten-free meal."
+   }
+  ],
+  "supervision": {
+   "default": "unattended_ok",
+   "reasons": {
+    "n5": "knife"
+   }
+  },
+  "abort": {
+   "steps": [
+    "heat_off",
+    "lid_on",
+    "alert_user"
+   ],
+   "neverLeave": []
+  }
+ },
+ "nutrition": {
+  "perServing": {
+   "kcal": 290,
+   "protein": 15,
+   "fat": 9,
+   "carbs": 38,
+   "fiber": 11,
+   "sugar": 3,
+   "sodiumMg": 480
+  },
+  "basis": "Typical composition tables, estimate per serving; not measured"
+ },
+ "storage": {
+  "fridgeDays": 2,
+  "freezerDays": 30,
+  "reheat": {
+   "minCoreC": 75,
+   "method": "simmer with a splash of water"
+  },
+  "coolingRequired": true
+ },
+ "text": {
+  "en": {
+   "title": "Ful medames",
+   "intro": "Egypt's everyday breakfast: slow-cooked fava beans warmed with garlic, cumin, lemon and olive oil.",
+   "steps": {
+    "n1": "Crush the garlic to a paste.",
+    "n2": "Warm the beans with the water in a covered pot over medium-low heat, stirring gently, until a probe in the centre reads 75 °C.",
+    "n3": "Mash part of the beans for a creamier texture, if you like.",
+    "n4": "Stir in the garlic, cumin, salt, lemon juice and olive oil; taste and adjust.",
+    "n5": "Dice the tomato.",
+    "n6": "Top with tomato and parsley.",
+    "n7": "Serve hot with bread."
+   }
+  },
+  "ar": {
+   "title": "فول مدمس",
+   "intro": "فطور المصريين اليومي: فول مدمس يُسخّن مع الثوم والكمون والليمون وزيت الزيتون.",
+   "steps": {
+    "n1": "اهرسي الثوم حتى يصبح عجينة.",
+    "n2": "سخّني الفول مع الماء في حلة مغطاة على نار متوسطة هادئة مع التقليب بلطف حتى يصل الترمومتر في الوسط إلى 75 درجة.",
+    "n3": "اهرسي جزءًا من الفول للحصول على قوام كريمي إذا أحببت.",
+    "n4": "أضيفي الثوم والكمون والملح وعصير الليمون وزيت الزيتون، وتذوّقي وعدّلي.",
+    "n5": "قطّعي الطماطم مكعبات.",
+    "n6": "زيّني بالطماطم والبقدونس.",
+    "n7": "قدّميه ساخنًا مع الخبز."
+   }
+  }
+ },
+ "source": {
+  "name": "cookwala.ai",
+  "url": "https://cookwala.ai/",
+  "citation": "Cookwala example recipe, written for the standard"
+ },
+ "license": "CC-BY-4.0",
+ "layers": {
+  "r1": true,
+  "r2": false,
+  "r3": true
+ },
+ "identity": {
+  "essential": [
+   "ful",
+   "cumin",
+   "lemon",
+   "oil"
+  ],
+  "flexible": [
+   "tomato",
+   "parsley",
+   "garlic"
+  ],
+  "neverAdd": [],
+  "culturalNotes": {
+   "en": "Eaten with baladi bread, often with tahini, boiled eggs or pickles alongside."
+  }
+ },
+ "hash": "sha256:a1a24d6915f625fff50e924721b04b847dc43bf02067bdc5c5f4c72d66f36b95"
+}

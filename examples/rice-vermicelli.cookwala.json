@@ -1,0 +1,558 @@
+{
+ "$schema": "https://cookwala.ai/v1/schemas/recipe.schema.json",
+ "cookwala": "0.2.0",
+ "id": "example-rice-vermicelli",
+ "revision": 1,
+ "updated": "2026-10-04",
+ "verification": {
+  "level": "V1",
+  "evidence": {
+   "simulatorRuns": 0,
+   "humanReviews": 1,
+   "fieldReports": 0
+  },
+  "reviewedBy": "cookwala.ai editorial (structure only)",
+  "notes": "Example recipe written to exercise the standard: structured steps, end conditions, hazards and critical control points. Not simulated and not field-verified; values are typical home-cooking values, not measurements."
+ },
+ "dish": {
+  "names": {
+   "en": "Egyptian rice with vermicelli",
+   "ar": "رز بالشعرية"
+  },
+  "cuisine": [
+   "EG"
+  ],
+  "course": "side",
+  "tags": [
+   "rice",
+   "vermicelli",
+   "side",
+   "staple"
+  ]
+ },
+ "yield": {
+  "servings": 6,
+  "totalMass": {
+   "value": 1400,
+   "unit": "g"
+  }
+ },
+ "ingredients": [
+  {
+   "ref": "rice",
+   "ingredientId": "cw.ing.rice_short",
+   "qty": {
+    "value": 400,
+    "unit": "g",
+    "tolerance": 0.1
+   },
+   "display": {
+    "en": "400 g short-grain rice",
+    "ar": "400 جم أرز مصري"
+   }
+  },
+  {
+   "ref": "vermicelli",
+   "ingredientId": "cw.ing.vermicelli_wheat",
+   "qty": {
+    "value": 60,
+    "unit": "g",
+    "tolerance": 0.2
+   },
+   "display": {
+    "en": "60 g vermicelli",
+    "ar": "60 جم شعرية"
+   }
+  },
+  {
+   "ref": "ghee",
+   "ingredientId": "cw.ing.ghee",
+   "qty": {
+    "value": 30,
+    "unit": "ml",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "2 tbsp ghee or oil",
+    "ar": "2 ملعقة كبيرة سمن أو زيت"
+   }
+  },
+  {
+   "ref": "water",
+   "ingredientId": "cw.ing.water",
+   "qty": {
+    "value": 700,
+    "unit": "ml",
+    "tolerance": 0.1
+   },
+   "display": {
+    "en": "700 ml hot water",
+    "ar": "700 مل ماء ساخن"
+   }
+  },
+  {
+   "ref": "salt",
+   "ingredientId": "cw.ing.salt",
+   "qty": {
+    "value": 5,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1 tsp salt",
+    "ar": "ملعقة صغيرة ملح"
+   },
+   "scaling": "sublinear"
+  }
+ ],
+ "equipment": [
+  {
+   "ref": "pot",
+   "class": "cw.eq.vessel.pot.sauce",
+   "constraints": {
+    "capacityMl": {
+     "min": 2500
+    },
+    "lid": true
+   }
+  },
+  {
+   "ref": "hob",
+   "class": "cw.eq.heat.hob"
+  },
+  {
+   "ref": "colander",
+   "class": "cw.eq.tool.colander"
+  },
+  {
+   "ref": "spoon",
+   "class": "cw.eq.tool.spoon.wooden"
+  },
+  {
+   "ref": "probe",
+   "class": "cw.eq.sensor.probe",
+   "optional": true
+  }
+ ],
+ "process": {
+  "nodes": [
+   {
+    "id": "n1",
+    "op": "cw.op.wash",
+    "inputs": [
+     "rice"
+    ],
+    "output": "rice_washed",
+    "equipment": [
+     "colander"
+    ],
+    "params": {
+     "repeats": 3
+    }
+   },
+   {
+    "id": "n2",
+    "op": "cw.op.drain",
+    "inputs": [
+     "rice_washed"
+    ],
+    "output": "rice_drained",
+    "equipment": [
+     "colander"
+    ],
+    "params": {
+     "keepLiquid": false
+    },
+    "until": {
+     "minTime": "PT10M",
+     "maxTime": "PT30M"
+    },
+    "onTimeout": "extend"
+   },
+   {
+    "id": "n3",
+    "op": "cw.op.heat",
+    "inputs": [
+     "ghee"
+    ],
+    "output": "hot_ghee",
+    "equipment": [
+     "pot",
+     "hob"
+    ],
+    "params": {
+     "heat": "medium",
+     "target": {
+      "sensor": "cw.sense.pan_surface_temp",
+      "value": 165,
+      "unit": "degC",
+      "tolerance": 15
+     }
+    },
+    "until": {
+     "any": [
+      {
+       "sensor": "cw.sense.pan_surface_temp",
+       "gte": 150
+      },
+      {
+       "vision": "cw.sense.oil_shimmer"
+      }
+     ],
+     "minTime": "PT1M",
+     "maxTime": "PT4M"
+    },
+    "onTimeout": "extend",
+    "hazards": [
+     "hz_oil"
+    ],
+    "attention": "continuous"
+   },
+   {
+    "id": "n4",
+    "op": "cw.op.toast",
+    "inputs": [
+     "hot_ghee",
+     "vermicelli"
+    ],
+    "output": "vermicelli_golden",
+    "params": {
+     "heat": "medium",
+     "stir": {
+      "intervalS": 15,
+      "style": "normal"
+     },
+     "target": {
+      "sensor": "cw.sense.pan_surface_temp",
+      "value": 165,
+      "unit": "degC",
+      "tolerance": 20
+     }
+    },
+    "until": {
+     "all": [
+      {
+       "vision": "cw.sense.color_golden",
+       "target": "vermicelli"
+      }
+     ],
+     "minTime": "PT2M",
+     "maxTime": "PT4M"
+    },
+    "onTimeout": "ask_human",
+    "hazards": [
+     "hz_oil",
+     "hz_scorch"
+    ],
+    "attention": "continuous",
+    "notes": {
+     "en": "Vermicelli goes from golden to burnt in seconds; stir constantly."
+    }
+   },
+   {
+    "id": "n5",
+    "op": "cw.op.saute",
+    "inputs": [
+     "vermicelli_golden",
+     "rice_drained"
+    ],
+    "output": "rice_coated",
+    "params": {
+     "heat": "medium",
+     "stir": {
+      "intervalS": 20
+     }
+    },
+    "until": {
+     "minTime": "PT1M",
+     "maxTime": "PT2M"
+    },
+    "onTimeout": "extend",
+    "hazards": [
+     "hz_oil"
+    ],
+    "attention": "continuous"
+   },
+   {
+    "id": "n6",
+    "op": "cw.op.boil",
+    "inputs": [
+     "rice_coated",
+     "water",
+     "salt"
+    ],
+    "output": "rice_boiling",
+    "params": {
+     "heat": "high",
+     "lid": "off",
+     "target": {
+      "sensor": "cw.sense.liquid_temp",
+      "value": 100,
+      "unit": "degC",
+      "tolerance": 2
+     }
+    },
+    "until": {
+     "any": [
+      {
+       "sensor": "cw.sense.liquid_temp",
+       "gte": 98
+      },
+      {
+       "vision": "cw.sense.boil_detect"
+      }
+     ],
+     "minTime": "PT2M",
+     "maxTime": "PT8M"
+    },
+    "onTimeout": "extend",
+    "hazards": [
+     "hz_steam",
+     "hz_boilover"
+    ],
+    "attention": "monitor"
+   },
+   {
+    "id": "n7",
+    "op": "cw.op.simmer",
+    "inputs": [
+     "rice_boiling"
+    ],
+    "output": "rice_cooked",
+    "params": {
+     "heat": "very_low",
+     "lid": "on",
+     "target": {
+      "sensor": "cw.sense.liquid_temp",
+      "value": 94,
+      "unit": "degC",
+      "tolerance": 2
+     }
+    },
+    "until": {
+     "all": [
+      {
+       "vision": "cw.sense.liquid_absorbed"
+      }
+     ],
+     "minTime": "PT12M",
+     "maxTime": "PT16M"
+    },
+    "onTimeout": "ask_human",
+    "hazards": [
+     "hz_scorch",
+     "hz_steam"
+    ],
+    "attention": "periodic",
+    "notes": {
+     "en": "Do not lift the lid or stir while the rice steams."
+    }
+   },
+   {
+    "id": "n8",
+    "op": "cw.op.rest",
+    "inputs": [
+     "rice_cooked"
+    ],
+    "output": "rice_rested",
+    "params": {
+     "cover": true
+    },
+    "until": {
+     "minTime": "PT8M",
+     "maxTime": "PT15M"
+    },
+    "onTimeout": "extend"
+   },
+   {
+    "id": "n9",
+    "op": "cw.op.serve",
+    "inputs": [
+     "rice_rested"
+    ],
+    "params": {
+     "serveWithin": "PT30M",
+     "keepHot": {
+      "gte": 60,
+      "unit": "degC"
+     }
+    }
+   }
+  ],
+  "edges": "implicit-from-inputs"
+ },
+ "safety": {
+  "hazards": [
+   {
+    "id": "hz_oil",
+    "type": "cw.hz.burn.hot_oil",
+    "severity": "high",
+    "mitigation": [
+     "oil_temp_max_200C",
+     "lid_ready",
+     "no_water_contact"
+    ]
+   },
+   {
+    "id": "hz_scorch",
+    "type": "cw.hz.scorch",
+    "severity": "low",
+    "mitigation": [
+     "stir_bottom",
+     "lowest_heat_for_lid_on_steps"
+    ]
+   },
+   {
+    "id": "hz_steam",
+    "type": "cw.hz.burn.steam",
+    "severity": "medium",
+    "mitigation": [
+     "lift_lid_away_from_user"
+    ]
+   },
+   {
+    "id": "hz_boilover",
+    "type": "cw.hz.boilover",
+    "severity": "medium",
+    "mitigation": [
+     "pot_max_fill_66pct",
+     "reduce_heat_at_boil"
+    ]
+   }
+  ],
+  "ccps": [
+   {
+    "id": "ccp_rice_cooling",
+    "hazard": "toxin.bacillus_cereus",
+    "node": "n9",
+    "criticalLimit": "serve within 30 minutes, or cool leftovers from 60 °C to 21 °C within 2 h and refrigerate at or below 5 °C within 4 h; reheat to 75 °C once only",
+    "monitoring": [
+     "cw.sense.core_temp",
+     "time"
+    ],
+    "corrective": "discard rice left at room temperature for more than 2 h"
+   }
+  ],
+  "allergens": {
+   "eu14": [
+    "cereals_gluten"
+   ],
+   "us9": [
+    "wheat"
+   ],
+   "mayContain": [
+    "milk"
+   ]
+  },
+  "dietary": [
+   {
+    "claim": "halal",
+    "basis": "ingredients",
+    "ruleset": "cw.ruleset.halal.v1"
+   },
+   {
+    "claim": "vegetarian",
+    "basis": "ingredients"
+   }
+  ],
+  "supervision": {
+   "default": "presence_required",
+   "reasons": {
+    "n3": "hot fat",
+    "n4": "burns in seconds",
+    "n5": "hot fat"
+   }
+  },
+  "abort": {
+   "steps": [
+    "heat_off",
+    "lid_on",
+    "alert_user"
+   ],
+   "neverLeave": [
+    "n3",
+    "n4",
+    "n5"
+   ]
+  }
+ },
+ "nutrition": {
+  "perServing": {
+   "kcal": 300,
+   "protein": 6,
+   "fat": 6,
+   "carbs": 56,
+   "fiber": 1,
+   "sugar": 0,
+   "sodiumMg": 330
+  },
+  "basis": "Typical composition tables, estimate per serving; not measured"
+ },
+ "storage": {
+  "fridgeDays": 1,
+  "freezerDays": 30,
+  "reheat": {
+   "minCoreC": 75,
+   "method": "steam or microwave until piping hot; reheat once"
+  },
+  "coolingRequired": true
+ },
+ "text": {
+  "en": {
+   "title": "Egyptian rice with vermicelli",
+   "intro": "The rice that sits beside almost every Egyptian main: short-grain rice with toasted vermicelli, steamed by absorption.",
+   "steps": {
+    "n1": "Rinse the rice three times until the water runs almost clear.",
+    "n2": "Drain well for 10 to 30 minutes.",
+    "n3": "Heat the ghee in the pot over medium heat.",
+    "n4": "Toast the vermicelli, stirring without stopping, until golden brown.",
+    "n5": "Add the rice and stir for a minute to coat every grain.",
+    "n6": "Pour in the hot water and salt; bring to the boil.",
+    "n7": "Turn the heat to the lowest setting, cover tightly and steam until the water is absorbed (12 to 16 minutes).",
+    "n8": "Rest, covered, off the heat for 8 to 15 minutes, then fluff.",
+    "n9": "Serve hot within 30 minutes."
+   }
+  },
+  "ar": {
+   "title": "رز بالشعرية",
+   "intro": "الأرز الذي يرافق كل الأطباق المصرية الرئيسية تقريبًا: أرز مصري مع شعرية محمّرة، يُطهى بالتشرّب.",
+   "steps": {
+    "n1": "اغسلي الأرز ثلاث مرات حتى يصفو الماء تقريبًا.",
+    "n2": "صفّيه جيدًا من 10 إلى 30 دقيقة.",
+    "n3": "سخّني السمن في الحلة على نار متوسطة.",
+    "n4": "حمّري الشعرية مع التقليب المستمر حتى تصبح ذهبية.",
+    "n5": "أضيفي الأرز وقلّبي دقيقة حتى تتغلف الحبوب.",
+    "n6": "اسكبي الماء الساخن والملح واتركيه يغلي.",
+    "n7": "اخفضي النار إلى أقل درجة، وغطّي الحلة بإحكام حتى يتشرب الأرز الماء (12 إلى 16 دقيقة).",
+    "n8": "ارفعيه عن النار واتركيه مغطى من 8 إلى 15 دقيقة ثم فكّكيه بالشوكة.",
+    "n9": "قدّميه ساخنًا خلال 30 دقيقة."
+   }
+  }
+ },
+ "source": {
+  "name": "cookwala.ai",
+  "url": "https://cookwala.ai/",
+  "citation": "Cookwala example recipe, written for the standard"
+ },
+ "license": "CC-BY-4.0",
+ "layers": {
+  "r1": true,
+  "r2": false,
+  "r3": true
+ },
+ "identity": {
+  "essential": [
+   "rice",
+   "vermicelli",
+   "ghee"
+  ],
+  "flexible": [
+   "salt"
+  ],
+  "neverAdd": [],
+  "culturalNotes": {
+   "en": "The ratio of water to rice is set by the rice; adjust once for your brand and keep it."
+  }
+ },
+ "hash": "sha256:9533e7d866091243e9007af99962e8205d0c4eaf5321f2eaee825f82fb78f123"
+}

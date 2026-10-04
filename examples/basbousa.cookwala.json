@@ -1,0 +1,793 @@
+{
+ "$schema": "https://cookwala.ai/v1/schemas/recipe.schema.json",
+ "cookwala": "0.2.0",
+ "id": "example-basbousa",
+ "revision": 1,
+ "updated": "2026-10-04",
+ "verification": {
+  "level": "V1",
+  "evidence": {
+   "simulatorRuns": 0,
+   "humanReviews": 1,
+   "fieldReports": 0
+  },
+  "reviewedBy": "cookwala.ai editorial (structure only)",
+  "notes": "Example recipe written to exercise the standard: structured steps, end conditions, hazards and critical control points. Not simulated and not field-verified; values are typical home-cooking values, not measurements."
+ },
+ "dish": {
+  "names": {
+   "en": "Basbousa",
+   "ar": "بسبوسة"
+  },
+  "cuisine": [
+   "EG"
+  ],
+  "course": "dessert",
+  "tags": [
+   "semolina",
+   "cake",
+   "syrup",
+   "dessert",
+   "oven"
+  ]
+ },
+ "yield": {
+  "servings": 12,
+  "totalMass": {
+   "value": 1600,
+   "unit": "g"
+  }
+ },
+ "ingredients": [
+  {
+   "ref": "semolina",
+   "ingredientId": "cw.ing.semolina_fine",
+   "qty": {
+    "value": 300,
+    "unit": "g",
+    "tolerance": 0.1
+   },
+   "display": {
+    "en": "300 g fine semolina",
+    "ar": "300 جم سميد ناعم"
+   }
+  },
+  {
+   "ref": "sugar",
+   "ingredientId": "cw.ing.sugar_white",
+   "qty": {
+    "value": 100,
+    "unit": "g",
+    "tolerance": 0.1
+   },
+   "display": {
+    "en": "100 g sugar",
+    "ar": "100 جم سكر"
+   }
+  },
+  {
+   "ref": "coconut",
+   "ingredientId": "cw.ing.coconut_desiccated",
+   "qty": {
+    "value": 50,
+    "unit": "g",
+    "tolerance": 0.2
+   },
+   "display": {
+    "en": "50 g desiccated coconut",
+    "ar": "50 جم جوز هند مبشور"
+   },
+   "optional": true
+  },
+  {
+   "ref": "baking_powder",
+   "ingredientId": "cw.ing.baking_powder",
+   "qty": {
+    "value": 8,
+    "unit": "g",
+    "tolerance": 0.2
+   },
+   "display": {
+    "en": "2 tsp baking powder",
+    "ar": "2 ملعقة صغيرة بيكنج بودر"
+   },
+   "scaling": "sublinear"
+  },
+  {
+   "ref": "yogurt",
+   "ingredientId": "cw.ing.yogurt_plain",
+   "qty": {
+    "value": 200,
+    "unit": "g",
+    "tolerance": 0.1
+   },
+   "display": {
+    "en": "200 g plain yogurt",
+    "ar": "200 جم زبادي"
+   }
+  },
+  {
+   "ref": "ghee",
+   "ingredientId": "cw.ing.ghee",
+   "qty": {
+    "value": 100,
+    "unit": "g",
+    "tolerance": 0.1
+   },
+   "display": {
+    "en": "100 g ghee or butter",
+    "ar": "100 جم سمن أو زبدة"
+   }
+  },
+  {
+   "ref": "tahini",
+   "ingredientId": "cw.ing.tahini",
+   "qty": {
+    "value": 15,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1 tbsp tahini for the tray",
+    "ar": "ملعقة كبيرة طحينة للصاج"
+   },
+   "optional": true
+  },
+  {
+   "ref": "almonds",
+   "ingredientId": "cw.ing.almonds_blanched",
+   "qty": {
+    "value": 20,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "12 blanched almonds",
+    "ar": "12 حبة لوز مقشر"
+   },
+   "optional": true
+  },
+  {
+   "ref": "syrup_sugar",
+   "ingredientId": "cw.ing.sugar_white",
+   "qty": {
+    "value": 300,
+    "unit": "g",
+    "tolerance": 0.1
+   },
+   "display": {
+    "en": "300 g sugar for the syrup",
+    "ar": "300 جم سكر للشربات"
+   }
+  },
+  {
+   "ref": "syrup_water",
+   "ingredientId": "cw.ing.water",
+   "qty": {
+    "value": 200,
+    "unit": "ml",
+    "tolerance": 0.1
+   },
+   "display": {
+    "en": "200 ml water",
+    "ar": "200 مل ماء"
+   }
+  },
+  {
+   "ref": "lemon",
+   "ingredientId": "cw.ing.lemon_juice",
+   "qty": {
+    "value": 10,
+    "unit": "ml",
+    "tolerance": 0.4
+   },
+   "display": {
+    "en": "2 tsp lemon juice",
+    "ar": "2 ملعقة صغيرة عصير ليمون"
+   }
+  }
+ ],
+ "equipment": [
+  {
+   "ref": "oven",
+   "class": "cw.eq.heat.oven",
+   "constraints": {
+    "maxTempC": 250
+   }
+  },
+  {
+   "ref": "tray",
+   "class": "cw.eq.vessel.tray.baking",
+   "constraints": {
+    "diameterMm": {
+     "min": 240,
+     "max": 300
+    }
+   }
+  },
+  {
+   "ref": "bowl",
+   "class": "cw.eq.tool.bowl.mixing"
+  },
+  {
+   "ref": "pot",
+   "class": "cw.eq.vessel.pot.sauce",
+   "constraints": {
+    "capacityMl": {
+     "min": 1000
+    }
+   }
+  },
+  {
+   "ref": "hob",
+   "class": "cw.eq.heat.hob"
+  },
+  {
+   "ref": "spatula",
+   "class": "cw.eq.tool.spatula"
+  },
+  {
+   "ref": "knife",
+   "class": "cw.eq.tool.knife.chef"
+  },
+  {
+   "ref": "probe",
+   "class": "cw.eq.sensor.probe",
+   "optional": true
+  }
+ ],
+ "process": {
+  "nodes": [
+   {
+    "id": "n1",
+    "op": "cw.op.melt",
+    "inputs": [
+     "ghee"
+    ],
+    "output": "ghee_melted",
+    "equipment": [
+     "pot",
+     "hob"
+    ],
+    "params": {
+     "heat": "low",
+     "tempC": 45
+    },
+    "until": {
+     "all": [
+      {
+       "vision": "cw.sense.fully_melted"
+      }
+     ],
+     "minTime": "PT1M",
+     "maxTime": "PT4M"
+    },
+    "onTimeout": "extend",
+    "attention": "monitor"
+   },
+   {
+    "id": "n2",
+    "op": "cw.op.mix",
+    "inputs": [
+     "semolina",
+     "sugar",
+     "coconut",
+     "baking_powder"
+    ],
+    "output": "dry_mix",
+    "equipment": [
+     "bowl"
+    ],
+    "params": {
+     "untilEven": true
+    },
+    "hazards": [
+     "hz_allergen_gluten"
+    ]
+   },
+   {
+    "id": "n3",
+    "op": "cw.op.mix",
+    "inputs": [
+     "dry_mix",
+     "yogurt",
+     "ghee_melted"
+    ],
+    "output": "batter",
+    "equipment": [
+     "bowl"
+    ],
+    "params": {
+     "speed": "gentle",
+     "untilEven": true
+    },
+    "hazards": [
+     "hz_allergen_milk"
+    ],
+    "notes": {
+     "en": "Mix only until combined; the batter is thick."
+    }
+   },
+   {
+    "id": "n4",
+    "op": "cw.op.transfer",
+    "inputs": [
+     "batter",
+     "tahini"
+    ],
+    "output": "batter_in_tray",
+    "equipment": [
+     "tray",
+     "spatula"
+    ],
+    "params": {
+     "method": "scoop"
+    },
+    "notes": {
+     "en": "Grease the tray with tahini, scoop the batter in and spread it 2 cm thick and smooth the top; score diamonds and press an almond on each."
+    }
+   },
+   {
+    "id": "n5",
+    "op": "cw.op.rest",
+    "inputs": [
+     "batter_in_tray",
+     "almonds"
+    ],
+    "output": "batter_rested",
+    "params": {
+     "cover": false
+    },
+    "until": {
+     "minTime": "PT10M",
+     "maxTime": "PT20M"
+    },
+    "onTimeout": "extend"
+   },
+   {
+    "id": "n6",
+    "op": "cw.op.heat",
+    "inputs": [
+     "oven"
+    ],
+    "output": "oven_hot",
+    "equipment": [
+     "oven"
+    ],
+    "params": {
+     "heat": "medium_high",
+     "tempC": 180,
+     "target": {
+      "sensor": "cw.sense.oven_temp",
+      "value": 180,
+      "unit": "degC",
+      "tolerance": 10
+     }
+    },
+    "until": {
+     "all": [
+      {
+       "sensor": "cw.sense.oven_temp",
+       "gte": 175
+      }
+     ],
+     "minTime": "PT8M",
+     "maxTime": "PT20M"
+    },
+    "onTimeout": "extend",
+    "hazards": [
+     "hz_oven"
+    ],
+    "attention": "none"
+   },
+   {
+    "id": "n7",
+    "op": "cw.op.bake",
+    "inputs": [
+     "batter_rested",
+     "oven_hot"
+    ],
+    "output": "cake_baked",
+    "equipment": [
+     "oven",
+     "tray"
+    ],
+    "params": {
+     "heat": "medium_high",
+     "tempC": 180,
+     "ovenMode": "conventional",
+     "rack": "middle",
+     "target": {
+      "sensor": "cw.sense.oven_temp",
+      "value": 180,
+      "unit": "degC",
+      "tolerance": 10
+     }
+    },
+    "until": {
+     "all": [
+      {
+       "vision": "cw.sense.color_golden_brown",
+       "target": "batter_rested"
+      }
+     ],
+     "any": [
+      {
+       "sensor": "cw.sense.core_temp",
+       "target": "batter_rested",
+       "gte": 95,
+       "optional": true
+      }
+     ],
+     "minTime": "PT30M",
+     "maxTime": "PT42M"
+    },
+    "onTimeout": "extend",
+    "hazards": [
+     "hz_oven"
+    ],
+    "attention": "periodic"
+   },
+   {
+    "id": "n8",
+    "op": "cw.op.boil",
+    "inputs": [
+     "syrup_sugar",
+     "syrup_water"
+    ],
+    "output": "syrup_boiling",
+    "equipment": [
+     "pot",
+     "hob"
+    ],
+    "params": {
+     "heat": "medium_high",
+     "lid": "off",
+     "target": {
+      "sensor": "cw.sense.liquid_temp",
+      "value": 100,
+      "unit": "degC",
+      "tolerance": 2
+     }
+    },
+    "until": {
+     "any": [
+      {
+       "sensor": "cw.sense.liquid_temp",
+       "gte": 98
+      },
+      {
+       "vision": "cw.sense.boil_detect"
+      }
+     ],
+     "minTime": "PT3M",
+     "maxTime": "PT8M"
+    },
+    "onTimeout": "extend",
+    "hazards": [
+     "hz_sugar",
+     "hz_steam"
+    ],
+    "attention": "continuous",
+    "notes": {
+     "en": "Stir only until the sugar dissolves, then leave it."
+    }
+   },
+   {
+    "id": "n9",
+    "op": "cw.op.reduce",
+    "inputs": [
+     "syrup_boiling",
+     "lemon"
+    ],
+    "output": "syrup",
+    "params": {
+     "heat": "medium",
+     "lid": "off",
+     "target": {
+      "sensor": "cw.sense.liquid_temp",
+      "value": 100,
+      "unit": "degC",
+      "tolerance": 2
+     }
+    },
+    "until": {
+     "minTime": "PT4M",
+     "maxTime": "PT7M",
+     "any": [
+      {
+       "sensor": "cw.sense.liquid_temp",
+       "gte": 103,
+       "optional": true
+      },
+      {
+       "vision": "cw.sense.syrup_light_coat"
+      }
+     ]
+    },
+    "onTimeout": "ask_human",
+    "hazards": [
+     "hz_sugar"
+    ],
+    "attention": "continuous",
+    "notes": {
+     "en": "Thin syrup, not caramel. It thickens as it cools."
+    }
+   },
+   {
+    "id": "n10",
+    "op": "cw.op.transfer",
+    "inputs": [
+     "syrup"
+    ],
+    "output": "cake_soaked",
+    "into": "cake_baked",
+    "params": {
+     "method": "pour"
+    },
+    "hazards": [
+     "hz_sugar",
+     "hz_oven"
+    ],
+    "attention": "continuous",
+    "notes": {
+     "en": "Pour the hot syrup evenly over the cake the moment it leaves the oven."
+    }
+   },
+   {
+    "id": "n11",
+    "op": "cw.op.cool",
+    "inputs": [
+     "cake_soaked"
+    ],
+    "output": "cake_cooled",
+    "params": {
+     "method": "room",
+     "tempC": 30
+    },
+    "until": {
+     "all": [
+      {
+       "sensor": "cw.sense.core_temp",
+       "lte": 35
+      }
+     ],
+     "minTime": "PT30M",
+     "maxTime": "PT90M"
+    },
+    "onTimeout": "extend",
+    "attention": "none"
+   },
+   {
+    "id": "n12",
+    "op": "cw.op.cut",
+    "inputs": [
+     "cake_cooled"
+    ],
+    "output": "basbousa_pieces",
+    "equipment": [
+     "knife"
+    ],
+    "params": {
+     "shape": "diamond",
+     "size": {
+      "value": 50,
+      "unit": "mm"
+     }
+    },
+    "hazards": [
+     "hz_knife"
+    ]
+   },
+   {
+    "id": "n13",
+    "op": "cw.op.serve",
+    "inputs": [
+     "basbousa_pieces"
+    ],
+    "params": {
+     "serveWithin": "PT24H"
+    }
+   }
+  ],
+  "edges": "implicit-from-inputs",
+  "parallelGroups": [
+   [
+    "n1",
+    "n2"
+   ],
+   [
+    "n7",
+    "n8"
+   ]
+  ]
+ },
+ "safety": {
+  "hazards": [
+   {
+    "id": "hz_knife",
+    "type": "cw.hz.cut.knife",
+    "severity": "medium",
+    "mitigation": [
+     "keep_human_clear_of_blade",
+     "stable_board"
+    ]
+   },
+   {
+    "id": "hz_oven",
+    "type": "cw.hz.burn.hot_surface",
+    "severity": "medium",
+    "mitigation": [
+     "oven_mitts_or_heat_rated_gripper",
+     "open_door_slowly"
+    ]
+   },
+   {
+    "id": "hz_sugar",
+    "type": "cw.hz.burn.hot_sugar",
+    "severity": "high",
+    "mitigation": [
+     "no_bare_skin_near_syrup",
+     "pot_handle_turned_in",
+     "never_add_water_to_hot_sugar"
+    ]
+   },
+   {
+    "id": "hz_steam",
+    "type": "cw.hz.burn.steam",
+    "severity": "medium",
+    "mitigation": [
+     "lift_lid_away_from_user"
+    ]
+   },
+   {
+    "id": "hz_allergen_milk",
+    "type": "cw.hz.allergen.cross_contact",
+    "severity": "medium",
+    "mitigation": [
+     "clean_tools_after_dairy"
+    ]
+   },
+   {
+    "id": "hz_allergen_gluten",
+    "type": "cw.hz.allergen.cross_contact",
+    "severity": "medium",
+    "mitigation": [
+     "clean_surfaces_after_flour"
+    ]
+   }
+  ],
+  "allergens": {
+   "eu14": [
+    "cereals_gluten",
+    "milk",
+    "sesame",
+    "nuts"
+   ],
+   "us9": [
+    "wheat",
+    "milk",
+    "sesame",
+    "tree_nuts"
+   ],
+   "mayContain": []
+  },
+  "dietary": [
+   {
+    "claim": "halal",
+    "basis": "ingredients",
+    "ruleset": "cw.ruleset.halal.v1"
+   },
+   {
+    "claim": "vegetarian",
+    "basis": "ingredients"
+   }
+  ],
+  "supervision": {
+   "default": "presence_required",
+   "reasons": {
+    "n8": "boiling sugar",
+    "n9": "boiling sugar",
+    "n10": "hot syrup over a hot tray"
+   }
+  },
+  "abort": {
+   "steps": [
+    "heat_off",
+    "alert_user"
+   ],
+   "neverLeave": [
+    "n8",
+    "n9",
+    "n10"
+   ]
+  }
+ },
+ "nutrition": {
+  "perServing": {
+   "kcal": 330,
+   "protein": 4,
+   "fat": 11,
+   "carbs": 56,
+   "fiber": 1,
+   "sugar": 38,
+   "sodiumMg": 90
+  },
+  "basis": "Typical composition tables, estimate per serving; not measured"
+ },
+ "storage": {
+  "fridgeDays": 4,
+  "coolingRequired": false
+ },
+ "text": {
+  "en": {
+   "title": "Basbousa",
+   "intro": "Semolina cake soaked in lemon syrup, cut in diamonds with an almond on each: the dessert of every Egyptian gathering.",
+   "steps": {
+    "n1": "Melt the ghee gently.",
+    "n2": "Mix the semolina, sugar, coconut and baking powder.",
+    "n3": "Stir in the yogurt and melted ghee until just combined.",
+    "n4": "Grease the tray with tahini, spread the batter 2 cm thick, score diamonds and press an almond on each.",
+    "n5": "Rest 10 to 20 minutes.",
+    "n6": "Preheat the oven to 180 °C.",
+    "n7": "Bake on the middle rack until deep golden (30 to 42 minutes).",
+    "n8": "Meanwhile bring the sugar and water to the boil, stirring only until the sugar dissolves.",
+    "n9": "Add the lemon juice and boil 4 to 7 minutes to a thin syrup. Do not let it caramelize.",
+    "n10": "Pour the hot syrup over the cake as soon as it comes out of the oven.",
+    "n11": "Cool until barely warm (30 to 90 minutes).",
+    "n12": "Cut along the scored diamonds.",
+    "n13": "Serve at room temperature."
+   }
+  },
+  "ar": {
+   "title": "بسبوسة",
+   "intro": "كيك السميد المشرب بشربات الليمون، يُقطّع معينات وعلى كل واحدة لوزة: حلوى كل مناسبة مصرية.",
+   "steps": {
+    "n1": "ذوّبي السمن على نار هادئة.",
+    "n2": "اخلطي السميد والسكر وجوز الهند والبيكنج بودر.",
+    "n3": "أضيفي الزبادي والسمن المذاب وقلّبي حتى يتجانس فقط.",
+    "n4": "ادهني الصاج بالطحينة، وافردي الخليط بسماكة 2 سم، وخططيه معينات وضعي حبة لوز على كل منها.",
+    "n5": "اتركيه من 10 إلى 20 دقيقة.",
+    "n6": "سخّني الفرن إلى 180 درجة.",
+    "n7": "اخبزيه على الرف الأوسط حتى يصبح ذهبيًا داكنًا (30 إلى 42 دقيقة).",
+    "n8": "في الوقت نفسه اتركي السكر والماء يغليان مع التقليب حتى يذوب السكر فقط.",
+    "n9": "أضيفي عصير الليمون واتركيه يغلي 4 إلى 7 دقائق حتى يصبح شربات خفيفًا. لا تتركيه يتكرمل.",
+    "n10": "اسكبي الشربات الساخن على البسبوسة فور خروجها من الفرن.",
+    "n11": "اتركيها حتى تبرد (30 إلى 90 دقيقة).",
+    "n12": "قطّعيها على خطوط المعينات.",
+    "n13": "قدّميها بحرارة الغرفة."
+   }
+  }
+ },
+ "source": {
+  "name": "cookwala.ai",
+  "url": "https://cookwala.ai/",
+  "citation": "Cookwala example recipe, written for the standard"
+ },
+ "license": "CC-BY-4.0",
+ "layers": {
+  "r1": true,
+  "r2": false,
+  "r3": true
+ },
+ "identity": {
+  "essential": [
+   "semolina",
+   "syrup_sugar",
+   "ghee"
+  ],
+  "flexible": [
+   "coconut",
+   "almonds",
+   "tahini",
+   "yogurt"
+  ],
+  "neverAdd": [
+   "alcohol"
+  ],
+  "culturalNotes": {
+   "en": "Syrup goes on hot cake; the ratio of syrup decides whether it is soft or sticky."
+  }
+ },
+ "hash": "sha256:7a7c41c703b8c6146e146ad35c14965bbe2b86ac5d64d4a5e7e44efc17b5b297"
+}

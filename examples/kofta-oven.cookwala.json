@@ -1,0 +1,615 @@
+{
+ "$schema": "https://cookwala.ai/v1/schemas/recipe.schema.json",
+ "cookwala": "0.2.0",
+ "id": "example-kofta-oven",
+ "revision": 1,
+ "updated": "2026-10-04",
+ "verification": {
+  "level": "V1",
+  "evidence": {
+   "simulatorRuns": 0,
+   "humanReviews": 1,
+   "fieldReports": 0
+  },
+  "reviewedBy": "cookwala.ai editorial (structure only)",
+  "notes": "Example recipe written to exercise the standard: structured steps, end conditions, hazards and critical control points. Not simulated and not field-verified; values are typical home-cooking values, not measurements."
+ },
+ "dish": {
+  "names": {
+   "en": "Oven-baked beef kofta",
+   "ar": "كفتة لحم في الفرن"
+  },
+  "cuisine": [
+   "EG"
+  ],
+  "course": "main",
+  "tags": [
+   "beef",
+   "kofta",
+   "oven",
+   "protein"
+  ]
+ },
+ "yield": {
+  "servings": 4,
+  "totalMass": {
+   "value": 850,
+   "unit": "g"
+  }
+ },
+ "ingredients": [
+  {
+   "ref": "beef",
+   "ingredientId": "cw.ing.beef_ground",
+   "qty": {
+    "value": 600,
+    "unit": "g",
+    "tolerance": 0.1
+   },
+   "display": {
+    "en": "600 g ground beef (halal)",
+    "ar": "600 جم لحم بقري مفروم حلال"
+   },
+   "allergens": []
+  },
+  {
+   "ref": "onion",
+   "ingredientId": "cw.ing.onion_yellow",
+   "qty": {
+    "value": 150,
+    "unit": "g",
+    "tolerance": 0.25
+   },
+   "display": {
+    "en": "1 onion",
+    "ar": "بصلة واحدة"
+   }
+  },
+  {
+   "ref": "parsley",
+   "ingredientId": "cw.ing.parsley",
+   "qty": {
+    "value": 30,
+    "unit": "g",
+    "tolerance": 0.4
+   },
+   "display": {
+    "en": "a bunch of parsley",
+    "ar": "حزمة بقدونس"
+   }
+  },
+  {
+   "ref": "garlic",
+   "ingredientId": "cw.ing.garlic",
+   "qty": {
+    "value": 6,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "2 garlic cloves",
+    "ar": "فصان ثوم"
+   }
+  },
+  {
+   "ref": "salt",
+   "ingredientId": "cw.ing.salt",
+   "qty": {
+    "value": 6,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1 tsp salt",
+    "ar": "ملعقة صغيرة ملح"
+   },
+   "scaling": "sublinear"
+  },
+  {
+   "ref": "pepper",
+   "ingredientId": "cw.ing.black_pepper_ground",
+   "qty": {
+    "value": 2,
+    "unit": "g",
+    "tolerance": 0.4
+   },
+   "display": {
+    "en": "1 tsp black pepper",
+    "ar": "ملعقة صغيرة فلفل أسود"
+   },
+   "scaling": "sublinear"
+  },
+  {
+   "ref": "cumin",
+   "ingredientId": "cw.ing.cumin_ground",
+   "qty": {
+    "value": 3,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1½ tsp ground cumin",
+    "ar": "1½ ملعقة صغيرة كمون"
+   },
+   "scaling": "sublinear"
+  },
+  {
+   "ref": "allspice",
+   "ingredientId": "cw.ing.allspice_ground",
+   "qty": {
+    "value": 1,
+    "unit": "g",
+    "tolerance": 0.5
+   },
+   "display": {
+    "en": "½ tsp allspice",
+    "ar": "نصف ملعقة صغيرة بهارات"
+   },
+   "scaling": "sublinear"
+  },
+  {
+   "ref": "oil",
+   "ingredientId": "cw.ing.olive_oil",
+   "qty": {
+    "value": 15,
+    "unit": "ml",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1 tbsp oil for the tray",
+    "ar": "ملعقة كبيرة زيت للصاج"
+   }
+  }
+ ],
+ "equipment": [
+  {
+   "ref": "oven",
+   "class": "cw.eq.heat.oven",
+   "constraints": {
+    "maxTempC": 250
+   }
+  },
+  {
+   "ref": "tray",
+   "class": "cw.eq.vessel.tray.baking"
+  },
+  {
+   "ref": "grater",
+   "class": "cw.eq.tool.grater"
+  },
+  {
+   "ref": "knife",
+   "class": "cw.eq.tool.knife.chef"
+  },
+  {
+   "ref": "board",
+   "class": "cw.eq.tool.cutting_board"
+  },
+  {
+   "ref": "bowl",
+   "class": "cw.eq.tool.bowl.mixing"
+  },
+  {
+   "ref": "probe",
+   "class": "cw.eq.sensor.probe"
+  },
+  {
+   "ref": "fridge",
+   "class": "cw.eq.cold.fridge"
+  }
+ ],
+ "process": {
+  "nodes": [
+   {
+    "id": "n1",
+    "op": "cw.op.grate",
+    "inputs": [
+     "onion"
+    ],
+    "output": "onion_grated",
+    "equipment": [
+     "grater"
+    ],
+    "params": {
+     "fineness": "fine"
+    },
+    "hazards": [
+     "hz_knife"
+    ]
+   },
+   {
+    "id": "n2",
+    "op": "cw.op.cut",
+    "inputs": [
+     "parsley"
+    ],
+    "output": "parsley_chopped",
+    "equipment": [
+     "knife",
+     "board"
+    ],
+    "params": {
+     "shape": "mince"
+    },
+    "hazards": [
+     "hz_knife"
+    ]
+   },
+   {
+    "id": "n3",
+    "op": "cw.op.crush",
+    "inputs": [
+     "garlic"
+    ],
+    "output": "garlic_paste",
+    "params": {
+     "texture": "paste"
+    }
+   },
+   {
+    "id": "n4",
+    "op": "cw.op.mix",
+    "inputs": [
+     "beef",
+     "onion_grated",
+     "parsley_chopped",
+     "garlic_paste",
+     "salt",
+     "pepper",
+     "cumin",
+     "allspice"
+    ],
+    "output": "kofta_mix",
+    "equipment": [
+     "bowl"
+    ],
+    "params": {
+     "speed": "normal",
+     "untilEven": true
+    },
+    "hazards": [
+     "hz_raw_meat"
+    ],
+    "notes": {
+     "en": "Squeeze excess juice from the grated onion first. Wash hands, tools and grippers after touching raw meat."
+    }
+   },
+   {
+    "id": "n5",
+    "op": "cw.op.form",
+    "inputs": [
+     "kofta_mix"
+    ],
+    "output": "kofta_shaped",
+    "params": {
+     "shape": "finger",
+     "count": 12,
+     "massG": 70
+    },
+    "hazards": [
+     "hz_raw_meat"
+    ]
+   },
+   {
+    "id": "n6",
+    "op": "cw.op.chill",
+    "inputs": [
+     "kofta_shaped"
+    ],
+    "output": "kofta_chilled",
+    "equipment": [
+     "fridge"
+    ],
+    "params": {
+     "tempC": 4
+    },
+    "until": {
+     "minTime": "PT20M",
+     "maxTime": "PT2H"
+    },
+    "onTimeout": "extend",
+    "ccp": "ccp_raw_hold"
+   },
+   {
+    "id": "n7",
+    "op": "cw.op.heat",
+    "inputs": [
+     "oil"
+    ],
+    "output": "tray_oiled",
+    "equipment": [
+     "oven",
+     "tray"
+    ],
+    "params": {
+     "heat": "high",
+     "tempC": 220,
+     "target": {
+      "sensor": "cw.sense.oven_temp",
+      "value": 220,
+      "unit": "degC",
+      "tolerance": 10
+     }
+    },
+    "until": {
+     "all": [
+      {
+       "sensor": "cw.sense.oven_temp",
+       "gte": 210
+      }
+     ],
+     "minTime": "PT8M",
+     "maxTime": "PT20M"
+    },
+    "onTimeout": "extend",
+    "hazards": [
+     "hz_oven"
+    ],
+    "attention": "none",
+    "notes": {
+     "en": "Preheat the oven to 220 °C with the oiled tray inside."
+    }
+   },
+   {
+    "id": "n8",
+    "op": "cw.op.bake",
+    "inputs": [
+     "kofta_chilled",
+     "tray_oiled"
+    ],
+    "output": "kofta_baked",
+    "equipment": [
+     "oven",
+     "tray"
+    ],
+    "params": {
+     "heat": "high",
+     "tempC": 220,
+     "ovenMode": "conventional",
+     "rack": "middle",
+     "target": {
+      "sensor": "cw.sense.oven_temp",
+      "value": 220,
+      "unit": "degC",
+      "tolerance": 10
+     }
+    },
+    "until": {
+     "all": [
+      {
+       "sensor": "cw.sense.core_temp",
+       "target": "kofta_chilled",
+       "gte": 71
+      }
+     ],
+     "minTime": "PT14M",
+     "maxTime": "PT22M"
+    },
+    "onTimeout": "extend",
+    "ccp": "ccp_ground_meat",
+    "hazards": [
+     "hz_oven"
+    ],
+    "attention": "periodic"
+   },
+   {
+    "id": "n9",
+    "op": "cw.op.rest",
+    "inputs": [
+     "kofta_baked"
+    ],
+    "output": "kofta_rested",
+    "params": {
+     "cover": true
+    },
+    "until": {
+     "minTime": "PT3M",
+     "maxTime": "PT6M"
+    },
+    "onTimeout": "extend"
+   },
+   {
+    "id": "n10",
+    "op": "cw.op.serve",
+    "inputs": [
+     "kofta_rested"
+    ],
+    "params": {
+     "serveWithin": "PT30M",
+     "keepHot": {
+      "gte": 60,
+      "unit": "degC"
+     }
+    }
+   }
+  ],
+  "edges": "implicit-from-inputs",
+  "parallelGroups": [
+   [
+    "n1",
+    "n2",
+    "n3"
+   ]
+  ]
+ },
+ "safety": {
+  "hazards": [
+   {
+    "id": "hz_knife",
+    "type": "cw.hz.cut.knife",
+    "severity": "medium",
+    "mitigation": [
+     "keep_human_clear_of_blade",
+     "stable_board"
+    ]
+   },
+   {
+    "id": "hz_raw_meat",
+    "type": "cw.hz.pathogen.raw_meat",
+    "severity": "high",
+    "mitigation": [
+     "dedicated_board",
+     "wash_tools_and_grippers_after_contact",
+     "no_cross_contact_with_ready_food"
+    ]
+   },
+   {
+    "id": "hz_oven",
+    "type": "cw.hz.burn.hot_surface",
+    "severity": "medium",
+    "mitigation": [
+     "oven_mitts_or_heat_rated_gripper",
+     "open_door_slowly"
+    ]
+   }
+  ],
+  "ccps": [
+   {
+    "id": "ccp_raw_hold",
+    "hazard": "pathogen.raw_meat",
+    "node": "n6",
+    "criticalLimit": "raw mixture kept at or below 5 °C and for at most 2 h before baking",
+    "monitoring": [
+     "cw.sense.fridge_temp",
+     "time"
+    ],
+    "corrective": "bake now, or discard if above 5 °C for more than 2 h"
+   },
+   {
+    "id": "ccp_ground_meat",
+    "hazard": "pathogen.e_coli_salmonella",
+    "node": "n8",
+    "criticalLimit": "core temperature of every piece at or above 71 °C",
+    "limit": {
+     "sensor": "cw.sense.core_temp",
+     "gte": 71
+    },
+    "monitoring": [
+     "cw.sense.core_temp"
+    ],
+    "corrective": "return to the oven and re-probe the thickest piece; never serve below 71 °C"
+   }
+  ],
+  "allergens": {
+   "eu14": [],
+   "us9": [],
+   "mayContain": []
+  },
+  "dietary": [
+   {
+    "claim": "halal",
+    "basis": "certified",
+    "note": "Halal only when the beef is halal-certified; the ingredient list cannot prove this."
+   },
+   {
+    "claim": "gluten_free",
+    "basis": "ingredients"
+   },
+   {
+    "claim": "dairy_free",
+    "basis": "ingredients"
+   }
+  ],
+  "supervision": {
+   "default": "unattended_ok",
+   "reasons": {
+    "n1": "grater",
+    "n2": "knife",
+    "n4": "raw meat hygiene",
+    "n7": "hot oven"
+   }
+  },
+  "abort": {
+   "steps": [
+    "heat_off",
+    "alert_user"
+   ],
+   "neverLeave": []
+  }
+ },
+ "nutrition": {
+  "perServing": {
+   "kcal": 380,
+   "protein": 32,
+   "fat": 26,
+   "carbs": 4,
+   "fiber": 1,
+   "sugar": 2,
+   "sodiumMg": 640
+  },
+  "basis": "Typical composition tables, estimate per serving; not measured"
+ },
+ "storage": {
+  "fridgeDays": 2,
+  "freezerDays": 60,
+  "reheat": {
+   "minCoreC": 75,
+   "method": "oven 180 °C, covered"
+  },
+  "coolingRequired": true
+ },
+ "text": {
+  "en": {
+   "title": "Oven-baked beef kofta",
+   "intro": "Spiced ground-beef fingers baked instead of grilled: a weeknight kofta with a measurable finish, 71 °C at the centre.",
+   "steps": {
+    "n1": "Grate the onion finely and squeeze out the juice.",
+    "n2": "Chop the parsley finely.",
+    "n3": "Crush the garlic.",
+    "n4": "Mix the beef with the onion, parsley, garlic and spices until even. Wash everything that touched raw meat.",
+    "n5": "Shape into 12 fingers of about 70 g each.",
+    "n6": "Chill for 20 minutes so they hold their shape (no more than 2 hours).",
+    "n7": "Preheat the oven to 220 °C with the oiled tray inside.",
+    "n8": "Bake on the middle rack until the thickest piece reads 71 °C at the centre (14 to 22 minutes).",
+    "n9": "Rest 3 minutes, covered.",
+    "n10": "Serve hot with rice, salad and tahini."
+   }
+  },
+  "ar": {
+   "title": "كفتة لحم في الفرن",
+   "intro": "أصابع كفتة لحم متبلة تُخبز في الفرن بدل الشواء: كفتة أيام الأسبوع مع نهاية قابلة للقياس، 71 درجة في المركز.",
+   "steps": {
+    "n1": "ابشري البصل ناعمًا واعصري ماءه.",
+    "n2": "افرمي البقدونس ناعمًا.",
+    "n3": "اهرسي الثوم.",
+    "n4": "اخلطي اللحم مع البصل والبقدونس والثوم والبهارات حتى يتجانس. اغسلي كل ما لمس اللحم النيء.",
+    "n5": "شكّلي 12 أصبعًا بوزن 70 جم تقريبًا.",
+    "n6": "ضعيها في الثلاجة 20 دقيقة لتثبت (لا تتجاوز ساعتين).",
+    "n7": "سخّني الفرن إلى 220 درجة مع الصاج المدهون بداخله.",
+    "n8": "اخبزيها على الرف الأوسط حتى يصل مركز أكبر قطعة إلى 71 درجة (14 إلى 22 دقيقة).",
+    "n9": "اتركيها 3 دقائق مغطاة.",
+    "n10": "قدّميها ساخنة مع الأرز والسلطة والطحينة."
+   }
+  }
+ },
+ "source": {
+  "name": "cookwala.ai",
+  "url": "https://cookwala.ai/",
+  "citation": "Cookwala example recipe, written for the standard"
+ },
+ "license": "CC-BY-4.0",
+ "layers": {
+  "r1": true,
+  "r2": false,
+  "r3": true
+ },
+ "identity": {
+  "essential": [
+   "beef",
+   "onion",
+   "parsley",
+   "cumin"
+  ],
+  "flexible": [
+   "allspice",
+   "garlic"
+  ],
+  "neverAdd": [
+   "pork"
+  ],
+  "culturalNotes": {
+   "en": "Street kofta is grilled over charcoal; this oven version is written so a device can check doneness."
+  }
+ },
+ "hash": "sha256:68b30055eeac55484e208a1ff44ead9b261eac2a1ef1e47b56e4cdea3d74feae"
+}

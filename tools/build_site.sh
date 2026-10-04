@@ -8,6 +8,7 @@ cd "$ROOT"
 rm -rf "$OUT"
 mkdir -p "$OUT"/v1/{schemas,vocab,api,recipes,bindings,profiles} "$OUT"/docs/md "$OUT"/sim
 cp -R site/. "$OUT"/
+cp sdk/typescript/src/dryrun.js "$OUT"/assets/dryrun.js   # single source for the browser dry run (also the TS SDK)
 cp -R schemas/. "$OUT"/v1/schemas/
 cp schemas/context.jsonld "$OUT"/v1/context.jsonld
 cp vocab/*.json "$OUT"/v1/vocab/

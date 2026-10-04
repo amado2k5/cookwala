@@ -1,0 +1,23 @@
+# Cookwala ROS 2 interfaces
+
+`cookwala_msgs` is a ROS 2 interface package (ament_cmake) with two actions that mirror the
+Core 0.2 API:
+
+| Action | Goal | Feedback | Result |
+|---|---|---|---|
+| `ExecuteRecipe` | `ExecuteRequest` (recipe ref, hash, servings, idempotency key, full request JSON) | `ExecutionStatus` fields (seq, state, node, op, progress, rung, medium temperature, human needed) | final state, refusal reason, `ExecutionLog` JSON |
+| `ExecuteNode` | one recipe node, its envelope, an optional narrower target | progress, medium temperature, target reached | envelope ok, rung used, step summary, deviation |
+
+Cancelling a goal is a `StopRequest`: the server must stop safely. Safety limits are enforced
+by the device; nothing in a goal can change them.
+
+```bash
+# in a ROS 2 workspace
+ln -s /path/to/cookwala/bindings/ros2/cookwala_msgs src/cookwala_msgs
+colcon build --packages-select cookwala_msgs
+ros2 interface show cookwala_msgs/action/ExecuteRecipe
+```
+
+JSON fields are carried as strings so the ROS 2 types never drift from the schemas; validate
+them with `schemas/bundle.json`. A bridge node that maps these actions to the HTTP Core API
+(the reference hub in `hub/`) is a good first contribution; see `docs/ROBOTICS.md`.

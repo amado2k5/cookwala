@@ -2,6 +2,24 @@
 
 Newest first. Each entry: date, phase, what was done, what is next, blockers.
 
+## 2026-10-04 · P3 Standard and P4 SDKs, hub, recipes
+
+- Standard (commit ed04550): facets registry (139 types), household schema and local API,
+  registry and directory API with honest `registry.json` and `directory.json`, Humanitarian
+  0.2 (origin, food classes, reviews, ImpactSummary, SMS parser, four flows, pilot protocol),
+  three draft rule packs with a review template and claims policy, fleet and supply schemas,
+  conformance reports and 57 profile vectors (101 total).
+- SDKs: `sdk/python` (editable install, `cookwala` CLI with 14 subcommands), `sdk/typescript`
+  (types generated from all 24 schemas by `tools/gen_ts_types.py`, type-checked; the browser
+  dry run moved here as the single source), `sdk/mcp` (stdio MCP server, 8 tools), `hub/`
+  (Core API with a simulated device, Dockerfile; smoke-tested: refusal, acceptance, progress,
+  stop, log), `bindings/ros2/cookwala_msgs` interface package.
+- Recipes: eight example recipes (lentil soup, ful medames, rice with vermicelli, salata
+  baladi, oven kofta, molokhia, koshari, basbousa), V1, English and Arabic, every heat step
+  inside its envelope, hazards and critical control points explicit; all validate.
+- Next: P5 stakeholders, messaging, impact, concept note, education, policy, essays,
+  whitepaper; then the site.
+
 ## 2026-10-04 · P1 Research and P2 Architecture review
 
 - Four parallel research passes covered 23 sites (robotics products, standards and

@@ -1,0 +1,22 @@
+{
+  "name": "@cookwala/sdk",
+  "version": "0.2.0",
+  "description": "Cookwala TypeScript types generated from the JSON Schemas, plus the browser dry run (can this device cook this recipe?). Open standard for cooking safely: people, kitchens and robots.",
+  "license": "Apache-2.0",
+  "homepage": "https://cookwala.ai",
+  "repository": {"type": "git", "url": "https://github.com/amado2k5/cookwala", "directory": "sdk/typescript"},
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {"types": "./src/index.ts", "default": "./src/index.ts"},
+    "./dryrun": "./src/dryrun.js"
+  },
+  "files": ["src", "README.md"],
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "generate": "python3 ../../tools/gen_ts_types.py"
+  },
+  "devDependencies": {"typescript": "^5.6.0"},
+  "keywords": ["cooking", "robots", "food-safety", "standard", "recipes", "json-schema"]
+}

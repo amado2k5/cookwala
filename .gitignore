@@ -8,3 +8,6 @@ __pycache__/
 _site/
 sim/out/
 .venv-cw/
+*.egg-info/
+sdk/typescript/node_modules/
+sdk/typescript/dist/

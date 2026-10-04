@@ -1,0 +1,753 @@
+{
+ "$schema": "https://cookwala.ai/v1/schemas/recipe.schema.json",
+ "cookwala": "0.2.0",
+ "id": "example-lentil-soup",
+ "revision": 1,
+ "updated": "2026-10-04",
+ "verification": {
+  "level": "V1",
+  "evidence": {
+   "simulatorRuns": 0,
+   "humanReviews": 1,
+   "fieldReports": 0
+  },
+  "reviewedBy": "cookwala.ai editorial (structure only)",
+  "notes": "Example recipe written to exercise the standard: structured steps, end conditions, hazards and critical control points. Not simulated and not field-verified; values are typical home-cooking values, not measurements."
+ },
+ "dish": {
+  "names": {
+   "en": "Egyptian lentil soup",
+   "ar": "شوربة عدس"
+  },
+  "cuisine": [
+   "EG"
+  ],
+  "course": "soup",
+  "tags": [
+   "lentils",
+   "soup",
+   "vegan",
+   "budget",
+   "one-pot"
+  ]
+ },
+ "yield": {
+  "servings": 6,
+  "totalMass": {
+   "value": 1900,
+   "unit": "g"
+  }
+ },
+ "ingredients": [
+  {
+   "ref": "oil",
+   "ingredientId": "cw.ing.olive_oil",
+   "qty": {
+    "value": 20,
+    "unit": "ml",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1½ tbsp olive oil",
+    "ar": "1½ ملعقة كبيرة زيت زيتون"
+   }
+  },
+  {
+   "ref": "onion",
+   "ingredientId": "cw.ing.onion_yellow",
+   "qty": {
+    "value": 150,
+    "unit": "g",
+    "tolerance": 0.25
+   },
+   "display": {
+    "en": "1 onion",
+    "ar": "بصلة واحدة"
+   },
+   "prep": {
+    "op": "cut",
+    "shape": "dice",
+    "size": {
+     "value": 10,
+     "unit": "mm"
+    }
+   }
+  },
+  {
+   "ref": "carrot",
+   "ingredientId": "cw.ing.carrot",
+   "qty": {
+    "value": 100,
+    "unit": "g",
+    "tolerance": 0.25
+   },
+   "display": {
+    "en": "1 carrot",
+    "ar": "جزرة واحدة"
+   },
+   "prep": {
+    "op": "cut",
+    "shape": "dice",
+    "size": {
+     "value": 10,
+     "unit": "mm"
+    }
+   }
+  },
+  {
+   "ref": "tomato",
+   "ingredientId": "cw.ing.tomato",
+   "qty": {
+    "value": 150,
+    "unit": "g",
+    "tolerance": 0.25
+   },
+   "display": {
+    "en": "1 tomato, chopped",
+    "ar": "طماطم واحدة مقطعة"
+   }
+  },
+  {
+   "ref": "garlic",
+   "ingredientId": "cw.ing.garlic",
+   "qty": {
+    "value": 6,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "2 garlic cloves",
+    "ar": "فصان ثوم"
+   }
+  },
+  {
+   "ref": "lentils",
+   "ingredientId": "cw.ing.lentils_red",
+   "qty": {
+    "value": 250,
+    "unit": "g",
+    "tolerance": 0.1
+   },
+   "display": {
+    "en": "250 g red lentils, rinsed",
+    "ar": "250 جم عدس أصفر مغسول"
+   }
+  },
+  {
+   "ref": "water",
+   "ingredientId": "cw.ing.water",
+   "qty": {
+    "value": 1200,
+    "unit": "ml",
+    "tolerance": 0.1
+   },
+   "display": {
+    "en": "1.2 l water",
+    "ar": "1.2 لتر ماء"
+   }
+  },
+  {
+   "ref": "cumin",
+   "ingredientId": "cw.ing.cumin_ground",
+   "qty": {
+    "value": 3,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1½ tsp ground cumin",
+    "ar": "1½ ملعقة صغيرة كمون"
+   },
+   "scaling": "sublinear"
+  },
+  {
+   "ref": "salt",
+   "ingredientId": "cw.ing.salt",
+   "qty": {
+    "value": 6,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1 tsp salt, to taste",
+    "ar": "ملعقة صغيرة ملح حسب الرغبة"
+   },
+   "scaling": "sublinear",
+   "toTaste": true
+  },
+  {
+   "ref": "lemon",
+   "ingredientId": "cw.ing.lemon_juice",
+   "qty": {
+    "value": 30,
+    "unit": "ml",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "juice of 1 lemon",
+    "ar": "عصير ليمونة"
+   },
+   "optional": true
+  }
+ ],
+ "equipment": [
+  {
+   "ref": "pot",
+   "class": "cw.eq.vessel.pot.sauce",
+   "constraints": {
+    "capacityMl": {
+     "min": 3000
+    },
+    "lid": true
+   }
+  },
+  {
+   "ref": "hob",
+   "class": "cw.eq.heat.hob",
+   "constraints": {
+    "powerW": {
+     "min": 1500
+    }
+   }
+  },
+  {
+   "ref": "knife",
+   "class": "cw.eq.tool.knife.chef"
+  },
+  {
+   "ref": "board",
+   "class": "cw.eq.tool.cutting_board"
+  },
+  {
+   "ref": "spoon",
+   "class": "cw.eq.tool.spoon.wooden"
+  },
+  {
+   "ref": "blender",
+   "class": "cw.eq.tool.blender.immersion",
+   "optional": true
+  },
+  {
+   "ref": "ladle",
+   "class": "cw.eq.tool.ladle"
+  },
+  {
+   "ref": "probe",
+   "class": "cw.eq.sensor.probe",
+   "optional": true
+  }
+ ],
+ "process": {
+  "nodes": [
+   {
+    "id": "n1",
+    "op": "cw.op.cut",
+    "inputs": [
+     "onion"
+    ],
+    "output": "onion_diced",
+    "equipment": [
+     "knife",
+     "board"
+    ],
+    "params": {
+     "shape": "dice",
+     "size": {
+      "value": 10,
+      "unit": "mm"
+     }
+    },
+    "hazards": [
+     "hz_knife"
+    ]
+   },
+   {
+    "id": "n2",
+    "op": "cw.op.cut",
+    "inputs": [
+     "carrot"
+    ],
+    "output": "carrot_diced",
+    "equipment": [
+     "knife",
+     "board"
+    ],
+    "params": {
+     "shape": "dice",
+     "size": {
+      "value": 10,
+      "unit": "mm"
+     }
+    },
+    "hazards": [
+     "hz_knife"
+    ]
+   },
+   {
+    "id": "n3",
+    "op": "cw.op.crush",
+    "inputs": [
+     "garlic"
+    ],
+    "output": "garlic_crushed",
+    "params": {
+     "texture": "paste"
+    }
+   },
+   {
+    "id": "n4",
+    "op": "cw.op.heat",
+    "inputs": [
+     "oil"
+    ],
+    "output": "hot_oil",
+    "equipment": [
+     "pot",
+     "hob"
+    ],
+    "params": {
+     "heat": "medium",
+     "target": {
+      "sensor": "cw.sense.pan_surface_temp",
+      "value": 160,
+      "unit": "degC",
+      "tolerance": 15
+     }
+    },
+    "until": {
+     "any": [
+      {
+       "sensor": "cw.sense.pan_surface_temp",
+       "gte": 150
+      },
+      {
+       "vision": "cw.sense.oil_shimmer"
+      }
+     ],
+     "minTime": "PT1M",
+     "maxTime": "PT4M"
+    },
+    "onTimeout": "extend",
+    "hazards": [
+     "hz_oil"
+    ],
+    "attention": "continuous"
+   },
+   {
+    "id": "n5",
+    "op": "cw.op.saute",
+    "inputs": [
+     "hot_oil",
+     "onion_diced",
+     "carrot_diced",
+     "garlic_crushed"
+    ],
+    "output": "veg_soft",
+    "params": {
+     "heat": "medium",
+     "stir": {
+      "intervalS": 40
+     }
+    },
+    "until": {
+     "all": [
+      {
+       "vision": "cw.sense.translucent",
+       "target": "onion_diced"
+      }
+     ],
+     "minTime": "PT5M",
+     "maxTime": "PT9M"
+    },
+    "onTimeout": "ask_human",
+    "hazards": [
+     "hz_oil",
+     "hz_splatter"
+    ],
+    "attention": "monitor"
+   },
+   {
+    "id": "n6",
+    "op": "cw.op.boil",
+    "inputs": [
+     "veg_soft",
+     "lentils",
+     "tomato",
+     "water"
+    ],
+    "output": "soup_boiling",
+    "params": {
+     "heat": "high",
+     "lid": "off",
+     "target": {
+      "sensor": "cw.sense.liquid_temp",
+      "value": 100,
+      "unit": "degC",
+      "tolerance": 2
+     }
+    },
+    "until": {
+     "any": [
+      {
+       "sensor": "cw.sense.liquid_temp",
+       "gte": 98
+      },
+      {
+       "vision": "cw.sense.boil_detect"
+      }
+     ],
+     "minTime": "PT5M",
+     "maxTime": "PT15M"
+    },
+    "onTimeout": "extend",
+    "hazards": [
+     "hz_boilover",
+     "hz_steam"
+    ],
+    "attention": "monitor"
+   },
+   {
+    "id": "n7",
+    "op": "cw.op.simmer",
+    "inputs": [
+     "soup_boiling"
+    ],
+    "output": "soup_cooked",
+    "params": {
+     "heat": "low",
+     "lid": "ajar",
+     "target": {
+      "sensor": "cw.sense.liquid_temp",
+      "value": 92,
+      "unit": "degC",
+      "tolerance": 4
+     },
+     "stir": {
+      "intervalS": 300,
+      "style": "scrape"
+     }
+    },
+    "until": {
+     "all": [
+      {
+       "vision": "cw.sense.lentils_soft"
+      }
+     ],
+     "minTime": "PT20M",
+     "maxTime": "PT35M"
+    },
+    "onTimeout": "extend",
+    "hazards": [
+     "hz_scorch",
+     "hz_steam"
+    ],
+    "attention": "periodic"
+   },
+   {
+    "id": "n8",
+    "op": "cw.op.blend",
+    "inputs": [
+     "soup_cooked"
+    ],
+    "output": "soup_smooth",
+    "equipment": [
+     "blender"
+    ],
+    "params": {
+     "speed": "low",
+     "texture": "smooth",
+     "hotLiquid": true
+    },
+    "hazards": [
+     "hz_hot_liquid"
+    ],
+    "attention": "continuous",
+    "optional": true,
+    "notes": {
+     "en": "Move the pot off the heat before blending; keep the blender head below the surface."
+    }
+   },
+   {
+    "id": "n9",
+    "op": "cw.op.season",
+    "inputs": [
+     "soup_smooth",
+     "cumin",
+     "salt",
+     "lemon"
+    ],
+    "output": "soup_seasoned",
+    "params": {
+     "method": "taste_adjust",
+     "ingredients": [
+      "salt",
+      "lemon"
+     ]
+    },
+    "humanOptional": true
+   },
+   {
+    "id": "n10",
+    "op": "cw.op.hold",
+    "inputs": [
+     "soup_seasoned"
+    ],
+    "output": "soup_hot",
+    "params": {
+     "heat": "very_low",
+     "lid": "on",
+     "target": {
+      "sensor": "cw.sense.core_temp",
+      "value": 68,
+      "unit": "degC",
+      "tolerance": 6
+     }
+    },
+    "until": {
+     "all": [
+      {
+       "sensor": "cw.sense.core_temp",
+       "gte": 60
+      }
+     ],
+     "maxTime": "PT45M"
+    },
+    "onTimeout": "ask_human",
+    "ccp": "ccp_hot_hold",
+    "attention": "periodic"
+   },
+   {
+    "id": "n11",
+    "op": "cw.op.serve",
+    "inputs": [
+     "soup_hot"
+    ],
+    "params": {
+     "serveWithin": "PT45M",
+     "keepHot": {
+      "gte": 60,
+      "unit": "degC"
+     }
+    }
+   }
+  ],
+  "edges": "implicit-from-inputs",
+  "parallelGroups": [
+   [
+    "n1",
+    "n2",
+    "n3"
+   ]
+  ]
+ },
+ "safety": {
+  "hazards": [
+   {
+    "id": "hz_knife",
+    "type": "cw.hz.cut.knife",
+    "severity": "medium",
+    "mitigation": [
+     "keep_human_clear_of_blade",
+     "stable_board"
+    ]
+   },
+   {
+    "id": "hz_oil",
+    "type": "cw.hz.burn.hot_oil",
+    "severity": "high",
+    "mitigation": [
+     "oil_temp_max_200C",
+     "lid_ready",
+     "no_water_contact"
+    ]
+   },
+   {
+    "id": "hz_splatter",
+    "type": "cw.hz.splatter",
+    "severity": "low",
+    "mitigation": [
+     "partial_lid"
+    ]
+   },
+   {
+    "id": "hz_boilover",
+    "type": "cw.hz.boilover",
+    "severity": "medium",
+    "mitigation": [
+     "pot_max_fill_66pct",
+     "reduce_heat_at_boil"
+    ]
+   },
+   {
+    "id": "hz_steam",
+    "type": "cw.hz.burn.steam",
+    "severity": "medium",
+    "mitigation": [
+     "lift_lid_away_from_user"
+    ]
+   },
+   {
+    "id": "hz_scorch",
+    "type": "cw.hz.scorch",
+    "severity": "low",
+    "mitigation": [
+     "stir_bottom",
+     "lowest_heat_for_lid_on_steps"
+    ]
+   },
+   {
+    "id": "hz_hot_liquid",
+    "type": "cw.hz.burn.hot_liquid",
+    "severity": "high",
+    "mitigation": [
+     "blend_below_rim",
+     "immersion_blender_fully_submerged",
+     "move_pot_off_heat"
+    ]
+   }
+  ],
+  "ccps": [
+   {
+    "id": "ccp_hot_hold",
+    "hazard": "pathogen.clostridium_perfringens",
+    "node": "n10",
+    "criticalLimit": "core temperature at or above 60 °C while held; cooled leftovers from 60 °C to 21 °C within 2 h then to 5 °C within 4 h",
+    "monitoring": [
+     "cw.sense.core_temp"
+    ],
+    "corrective": "reheat to 75 °C core if it fell below 60 °C for under 2 h; discard beyond 2 h"
+   }
+  ],
+  "allergens": {
+   "eu14": [],
+   "us9": [],
+   "mayContain": []
+  },
+  "dietary": [
+   {
+    "claim": "halal",
+    "basis": "ingredients",
+    "ruleset": "cw.ruleset.halal.v1"
+   },
+   {
+    "claim": "vegan",
+    "basis": "ingredients"
+   },
+   {
+    "claim": "gluten_free",
+    "basis": "ingredients"
+   },
+   {
+    "claim": "nut_free",
+    "basis": "ingredients"
+   }
+  ],
+  "supervision": {
+   "default": "presence_required",
+   "reasons": {
+    "n4": "hot oil",
+    "n5": "hot oil",
+    "n8": "blending hot liquid"
+   }
+  },
+  "abort": {
+   "steps": [
+    "heat_off",
+    "lid_on",
+    "alert_user"
+   ],
+   "neverLeave": [
+    "n4",
+    "n5",
+    "n8"
+   ]
+  }
+ },
+ "nutrition": {
+  "perServing": {
+   "kcal": 210,
+   "protein": 12,
+   "fat": 4,
+   "carbs": 32,
+   "fiber": 8,
+   "sugar": 4,
+   "sodiumMg": 420
+  },
+  "basis": "Typical composition tables, estimate per serving; not measured"
+ },
+ "storage": {
+  "fridgeDays": 3,
+  "freezerDays": 60,
+  "reheat": {
+   "minCoreC": 75,
+   "method": "simmer, stirring"
+  },
+  "coolingRequired": true
+ },
+ "text": {
+  "en": {
+   "title": "Egyptian lentil soup",
+   "intro": "A thick, warming red-lentil soup eaten across Egypt in winter: cheap, filling and ready in under an hour.",
+   "steps": {
+    "n1": "Dice the onion.",
+    "n2": "Dice the carrot.",
+    "n3": "Crush the garlic.",
+    "n4": "Heat the oil in the pot over medium heat until it shimmers.",
+    "n5": "Cook the onion, carrot and garlic, stirring, until the onion is soft and translucent.",
+    "n6": "Add the lentils, tomato and water. Bring to the boil, uncovered; skim any foam.",
+    "n7": "Lower the heat and simmer, lid ajar, stirring the bottom now and then, until the lentils have broken down (20 to 35 minutes).",
+    "n8": "Take the pot off the heat and blend smooth with the stick blender kept under the surface. Skip for a rustic soup.",
+    "n9": "Season with cumin, salt and lemon juice; taste and adjust.",
+    "n10": "Keep hot, at or above 60 °C, lid on, until serving.",
+    "n11": "Serve hot, within 45 minutes, with lemon and toasted bread."
+   }
+  },
+  "ar": {
+   "title": "شوربة عدس",
+   "intro": "شوربة عدس أصفر دافئة ومغذية تُؤكل في مصر كلها في الشتاء: زهيدة ومشبعة وتجهز في أقل من ساعة.",
+   "steps": {
+    "n1": "قطّعي البصل مكعبات.",
+    "n2": "قطّعي الجزر مكعبات.",
+    "n3": "اهرسي الثوم.",
+    "n4": "سخّني الزيت في الحلة على نار متوسطة حتى يلمع.",
+    "n5": "شوّحي البصل والجزر والثوم مع التقليب حتى يلين البصل ويصبح شفافًا.",
+    "n6": "أضيفي العدس والطماطم والماء واتركيه حتى يغلي بدون غطاء، وأزيلي الرغوة.",
+    "n7": "اخفضي النار واتركيه يطهو على نار هادئة مع تحريك القاع من وقت لآخر حتى يتفتت العدس (20 إلى 35 دقيقة).",
+    "n8": "ارفعي الحلة من على النار واضربي الشوربة بالخلاط اليدوي مع إبقاء رأسه تحت السطح. يمكن تخطي هذه الخطوة.",
+    "n9": "تبّلي بالكمون والملح وعصير الليمون، وتذوّقي وعدّلي.",
+    "n10": "احتفظي بها ساخنة عند 60 درجة أو أكثر مع الغطاء حتى التقديم.",
+    "n11": "قدّميها ساخنة خلال 45 دقيقة مع الليمون والخبز المحمّص."
+   }
+  }
+ },
+ "source": {
+  "name": "cookwala.ai",
+  "url": "https://cookwala.ai/",
+  "citation": "Cookwala example recipe, written for the standard"
+ },
+ "license": "CC-BY-4.0",
+ "layers": {
+  "r1": true,
+  "r2": false,
+  "r3": true
+ },
+ "identity": {
+  "essential": [
+   "lentils",
+   "cumin",
+   "onion"
+  ],
+  "flexible": [
+   "carrot",
+   "tomato",
+   "lemon"
+  ],
+  "neverAdd": [
+   "cream"
+  ],
+  "culturalNotes": {
+   "en": "Served with lemon wedges and toasted or fried bread cubes."
+  }
+ },
+ "hash": "sha256:5432d5df9697fba4c54b2f2f1ae9bd92ad45115fcd655c3a7a69052ea95c6942"
+}

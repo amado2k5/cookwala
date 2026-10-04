@@ -1,0 +1,113 @@
+"""`cookwala` command line. Every subcommand ends in something you can check.
+
+    cookwala hash RECIPE.json                      sha256 over RFC 8785 canonical JSON
+    cookwala verify DOC.json --keys KEYS.json      signature, key validity, revocation
+    cookwala dryrun RECIPE.json --device CAPS.json [--human-present] [--no-model]
+    cookwala envelope OP TRACE.json [--target 94 --tolerance 3] [--altitude 1500]
+    cookwala convert 2 tbsp ml | cookwala convert 1 cup g --density 0.53
+    cookwala sms "OFFER 36KG YOGURT C 4C UB0511"
+    cookwala constraints CONTEXT.json --role grocer
+    cookwala validate                              every schema, example, vocabulary and API in the repo
+    cookwala conformance [--report report.json]    Core and profile vectors; writes a ConformanceReport
+    cookwala humanitarian [--pack P ...] FILE...   rule-pack findings on offers, handovers, distributions
+    cookwala export lerobot|otel RECIPE LOG OUT    datasets and traces, with consent
+    cookwala init my-dish                          scaffold a recipe, validate it, hash it
+    cookwala hub [--port 7878]                     run the reference hub (Core API, simulated device)
+    cookwala mcp                                   run the MCP server on stdio
+"""
+import json
+import pathlib
+import runpy
+import subprocess
+import sys
+
+from . import ROOT, ref
+
+
+def _load(p):
+    return json.loads(pathlib.Path(p).read_text())
+
+
+def _tool(name, args):
+    return subprocess.call([sys.executable, str(ROOT / 'tools' / name), *args], cwd=ROOT)
+
+
+def cmd_hash(a):
+    print(ref.doc_hash(_load(a[0]))); return 0
+
+
+def cmd_verify(a):
+    keys = _load(a[a.index('--keys') + 1]) if '--keys' in a else []
+    ok, why = ref.verify(_load(a[0]), keys); print(why); return 0 if ok else 1
+
+
+def cmd_dryrun(a):
+    dev = _load(a[a.index('--device') + 1])
+    res = ref.dry_run(_load(a[0]), dev, '--human-present' in a, '--no-model' not in a)
+    print(json.dumps(res, indent=1, ensure_ascii=False)); return 0 if res['state'] == 'accepted' else 1
+
+
+def cmd_envelope(a):
+    op, trace = a[0], _load(a[1])
+    target = {'value': float(a[a.index('--target') + 1]), 'tolerance': float(a[a.index('--tolerance') + 1]) if '--tolerance' in a else 0} if '--target' in a else None
+    alt = float(a[a.index('--altitude') + 1]) if '--altitude' in a else 0
+    res = ref.check_envelope(op, trace, target, alt); print(json.dumps(res)); return 0 if res['envelopeOk'] else 1
+
+
+def cmd_convert(a):
+    density = float(a[a.index('--density') + 1]) if '--density' in a else None
+    try:
+        print(round(ref.convert(float(a[0]), a[1], a[2], density), 6)); return 0
+    except ValueError as e:
+        print(f'error: {e}'); return 1
+
+
+def cmd_sms(a):
+    print(json.dumps(ref.parse_sms(' '.join(a)), ensure_ascii=False)); return 0
+
+
+def cmd_constraints(a):
+    ctx = _load(a[0]); role = a[a.index('--role') + 1]
+    print(json.dumps(ref.derive_constraints(ctx.get('facets', []), role, ctx.get('consents')), indent=1)); return 0
+
+
+def cmd_validate(a): return _tool('validate_specs.py', a)
+def cmd_conformance(a): return _tool('run_conformance.py', a)
+def cmd_humanitarian(a): return _tool('humanitarian_check.py', a)
+def cmd_export(a): return _tool('execlog_export.py', a)
+
+
+def cmd_init(a):
+    """Scaffold a recipe from the shakshuka example, renamed, then hash it. Edit it, then `cookwala validate`."""
+    name = a[0] if a else 'my-dish'
+    src = _load(ROOT / 'examples' / 'shakshuka.cookwala.json')
+    src['id'] = name; src['revision'] = 1; src['verification'] = {'level': 'V0', 'notes': 'Scaffold from the Cookwala example. Replace every value; raise the level only with evidence.'}
+    src['dish']['names'] = {'en': name.replace('-', ' ').title(), 'ar': ''}; src.pop('hash', None); src.pop('signature', None)
+    out = pathlib.Path(f'{name}.cookwala.json'); out.write_text(json.dumps(src, indent=1, ensure_ascii=False) + '\n')
+    print(f'wrote {out}  hash {ref.doc_hash(src)}\nNext: edit it, then run `cookwala dryrun {out} --device {ROOT}/examples/capabilities/robot-arm.json --human-present`.'); return 0
+
+
+def cmd_hub(a):
+    sys.argv = ['cookwala_hub.py', *a]; runpy.run_path(str(ROOT / 'hub' / 'cookwala_hub.py'), run_name='__main__'); return 0
+
+
+def cmd_mcp(a):
+    sys.argv = ['cookwala_mcp.py', *a]; runpy.run_path(str(ROOT / 'sdk' / 'mcp' / 'cookwala_mcp.py'), run_name='__main__'); return 0
+
+
+COMMANDS = {'hash': cmd_hash, 'verify': cmd_verify, 'dryrun': cmd_dryrun, 'envelope': cmd_envelope, 'convert': cmd_convert, 'sms': cmd_sms, 'constraints': cmd_constraints,
+            'validate': cmd_validate, 'conformance': cmd_conformance, 'humanitarian': cmd_humanitarian, 'export': cmd_export, 'init': cmd_init, 'hub': cmd_hub, 'mcp': cmd_mcp}
+
+
+def main(argv=None):
+    argv = sys.argv[1:] if argv is None else argv
+    if not argv or argv[0] in ('-h', '--help', 'help') or argv[0] not in COMMANDS:
+        print(__doc__); return 0 if argv and argv[0] in ('-h', '--help', 'help') else 2
+    try:
+        return COMMANDS[argv[0]](argv[1:])
+    except (IndexError, FileNotFoundError, KeyError) as e:
+        print(f'usage error: {e}\n'); print(__doc__); return 2
+
+
+if __name__ == '__main__':
+    sys.exit(main())

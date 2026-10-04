@@ -1,0 +1,470 @@
+{
+ "$schema": "https://cookwala.ai/v1/schemas/recipe.schema.json",
+ "cookwala": "0.2.0",
+ "id": "example-salata-baladi",
+ "revision": 1,
+ "updated": "2026-10-04",
+ "verification": {
+  "level": "V1",
+  "evidence": {
+   "simulatorRuns": 0,
+   "humanReviews": 1,
+   "fieldReports": 0
+  },
+  "reviewedBy": "cookwala.ai editorial (structure only)",
+  "notes": "Example recipe written to exercise the standard: structured steps, end conditions, hazards and critical control points. Not simulated and not field-verified; values are typical home-cooking values, not measurements."
+ },
+ "dish": {
+  "names": {
+   "en": "Egyptian salad (salata baladi)",
+   "ar": "سلطة بلدي"
+  },
+  "cuisine": [
+   "EG"
+  ],
+  "course": "salad",
+  "tags": [
+   "salad",
+   "raw",
+   "vegan",
+   "no-cook",
+   "quick"
+  ]
+ },
+ "yield": {
+  "servings": 4,
+  "totalMass": {
+   "value": 700,
+   "unit": "g"
+  }
+ },
+ "ingredients": [
+  {
+   "ref": "tomato",
+   "ingredientId": "cw.ing.tomato",
+   "qty": {
+    "value": 300,
+    "unit": "g",
+    "tolerance": 0.25
+   },
+   "display": {
+    "en": "3 tomatoes",
+    "ar": "3 طماطم"
+   }
+  },
+  {
+   "ref": "cucumber",
+   "ingredientId": "cw.ing.cucumber",
+   "qty": {
+    "value": 200,
+    "unit": "g",
+    "tolerance": 0.25
+   },
+   "display": {
+    "en": "2 small cucumbers",
+    "ar": "خيارتان صغيرتان"
+   }
+  },
+  {
+   "ref": "onion",
+   "ingredientId": "cw.ing.onion_yellow",
+   "qty": {
+    "value": 80,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "½ onion",
+    "ar": "نصف بصلة"
+   }
+  },
+  {
+   "ref": "pepper",
+   "ingredientId": "cw.ing.bell_pepper_green",
+   "qty": {
+    "value": 60,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1 small green pepper",
+    "ar": "فلفل أخضر صغير"
+   },
+   "optional": true
+  },
+  {
+   "ref": "parsley",
+   "ingredientId": "cw.ing.parsley",
+   "qty": {
+    "value": 20,
+    "unit": "g",
+    "tolerance": 0.4
+   },
+   "display": {
+    "en": "a bunch of parsley",
+    "ar": "حزمة بقدونس"
+   }
+  },
+  {
+   "ref": "lemon",
+   "ingredientId": "cw.ing.lemon_juice",
+   "qty": {
+    "value": 30,
+    "unit": "ml",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "juice of 1 lemon",
+    "ar": "عصير ليمونة"
+   }
+  },
+  {
+   "ref": "oil",
+   "ingredientId": "cw.ing.olive_oil",
+   "qty": {
+    "value": 20,
+    "unit": "ml",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "1½ tbsp olive oil",
+    "ar": "1½ ملعقة كبيرة زيت زيتون"
+   }
+  },
+  {
+   "ref": "salt",
+   "ingredientId": "cw.ing.salt",
+   "qty": {
+    "value": 3,
+    "unit": "g",
+    "tolerance": 0.3
+   },
+   "display": {
+    "en": "½ tsp salt",
+    "ar": "نصف ملعقة صغيرة ملح"
+   },
+   "scaling": "sublinear",
+   "toTaste": true
+  },
+  {
+   "ref": "cumin",
+   "ingredientId": "cw.ing.cumin_ground",
+   "qty": {
+    "value": 1,
+    "unit": "g",
+    "tolerance": 0.5
+   },
+   "display": {
+    "en": "½ tsp ground cumin",
+    "ar": "نصف ملعقة صغيرة كمون"
+   },
+   "scaling": "sublinear",
+   "optional": true
+  }
+ ],
+ "equipment": [
+  {
+   "ref": "knife",
+   "class": "cw.eq.tool.knife.chef"
+  },
+  {
+   "ref": "board",
+   "class": "cw.eq.tool.cutting_board"
+  },
+  {
+   "ref": "bowl",
+   "class": "cw.eq.tool.bowl.mixing",
+   "constraints": {
+    "capacityMl": {
+     "min": 2000
+    }
+   }
+  },
+  {
+   "ref": "colander",
+   "class": "cw.eq.tool.colander"
+  },
+  {
+   "ref": "whisk",
+   "class": "cw.eq.tool.whisk",
+   "optional": true
+  },
+  {
+   "ref": "fridge",
+   "class": "cw.eq.cold.fridge",
+   "optional": true
+  }
+ ],
+ "process": {
+  "nodes": [
+   {
+    "id": "n1",
+    "op": "cw.op.wash",
+    "inputs": [
+     "tomato",
+     "cucumber",
+     "pepper",
+     "parsley"
+    ],
+    "output": "veg_washed",
+    "equipment": [
+     "colander"
+    ],
+    "params": {
+     "repeats": 2
+    }
+   },
+   {
+    "id": "n2",
+    "op": "cw.op.cut",
+    "inputs": [
+     "veg_washed"
+    ],
+    "output": "veg_diced",
+    "equipment": [
+     "knife",
+     "board"
+    ],
+    "params": {
+     "shape": "dice",
+     "size": {
+      "value": 8,
+      "unit": "mm"
+     },
+     "remove": [
+      "stem",
+      "seeds"
+     ]
+    },
+    "hazards": [
+     "hz_knife"
+    ],
+    "notes": {
+     "en": "Tomato, cucumber and pepper to 8 mm dice; parsley finely chopped."
+    }
+   },
+   {
+    "id": "n3",
+    "op": "cw.op.cut",
+    "inputs": [
+     "onion"
+    ],
+    "output": "onion_fine",
+    "equipment": [
+     "knife",
+     "board"
+    ],
+    "params": {
+     "shape": "dice",
+     "size": {
+      "value": 4,
+      "unit": "mm"
+     }
+    },
+    "hazards": [
+     "hz_knife"
+    ]
+   },
+   {
+    "id": "n4",
+    "op": "cw.op.whisk",
+    "inputs": [
+     "lemon",
+     "oil",
+     "salt",
+     "cumin"
+    ],
+    "output": "dressing",
+    "equipment": [
+     "bowl",
+     "whisk"
+    ],
+    "params": {
+     "stage": "combined"
+    }
+   },
+   {
+    "id": "n5",
+    "op": "cw.op.mix",
+    "inputs": [
+     "veg_diced",
+     "onion_fine",
+     "dressing"
+    ],
+    "output": "salad",
+    "equipment": [
+     "bowl"
+    ],
+    "params": {
+     "speed": "gentle",
+     "untilEven": true
+    }
+   },
+   {
+    "id": "n6",
+    "op": "cw.op.chill",
+    "inputs": [
+     "salad"
+    ],
+    "output": "salad_chilled",
+    "equipment": [
+     "fridge"
+    ],
+    "params": {
+     "tempC": 4
+    },
+    "until": {
+     "minTime": "PT10M",
+     "maxTime": "PT40M"
+    },
+    "onTimeout": "skip_optional",
+    "optional": true
+   },
+   {
+    "id": "n7",
+    "op": "cw.op.serve",
+    "inputs": [
+     "salad_chilled"
+    ],
+    "params": {
+     "serveWithin": "PT30M"
+    }
+   }
+  ],
+  "edges": "implicit-from-inputs",
+  "parallelGroups": [
+   [
+    "n2",
+    "n3",
+    "n4"
+   ]
+  ]
+ },
+ "safety": {
+  "hazards": [
+   {
+    "id": "hz_knife",
+    "type": "cw.hz.cut.knife",
+    "severity": "medium",
+    "mitigation": [
+     "keep_human_clear_of_blade",
+     "stable_board"
+    ]
+   }
+  ],
+  "allergens": {
+   "eu14": [],
+   "us9": [],
+   "mayContain": []
+  },
+  "dietary": [
+   {
+    "claim": "halal",
+    "basis": "ingredients",
+    "ruleset": "cw.ruleset.halal.v1"
+   },
+   {
+    "claim": "vegan",
+    "basis": "ingredients"
+   },
+   {
+    "claim": "gluten_free",
+    "basis": "ingredients"
+   },
+   {
+    "claim": "nut_free",
+    "basis": "ingredients"
+   }
+  ],
+  "supervision": {
+   "default": "unattended_ok",
+   "reasons": {
+    "n2": "knife",
+    "n3": "knife"
+   }
+  },
+  "abort": {
+   "steps": [
+    "stop_motion",
+    "retract_arm",
+    "alert_user"
+   ],
+   "neverLeave": []
+  }
+ },
+ "nutrition": {
+  "perServing": {
+   "kcal": 85,
+   "protein": 2,
+   "fat": 5,
+   "carbs": 9,
+   "fiber": 3,
+   "sugar": 5,
+   "sodiumMg": 300
+  },
+  "basis": "Typical composition tables, estimate per serving; not measured"
+ },
+ "storage": {
+  "fridgeDays": 1,
+  "coolingRequired": false
+ },
+ "text": {
+  "en": {
+   "title": "Egyptian salad (salata baladi)",
+   "intro": "The fresh chopped salad on every Egyptian table: tomato, cucumber, onion and parsley with lemon and olive oil. No heat, so a robot arm with a camera can make it on its own.",
+   "steps": {
+    "n1": "Wash the vegetables and the parsley well.",
+    "n2": "Dice the tomato, cucumber and pepper small; chop the parsley finely.",
+    "n3": "Chop the onion very fine.",
+    "n4": "Whisk the lemon juice, olive oil, salt and cumin.",
+    "n5": "Toss everything together gently.",
+    "n6": "Chill for a few minutes if there is time.",
+    "n7": "Serve within half an hour, before the tomato weeps."
+   }
+  },
+  "ar": {
+   "title": "سلطة بلدي",
+   "intro": "السلطة الطازجة على كل مائدة مصرية: طماطم وخيار وبصل وبقدونس بالليمون وزيت الزيتون. بلا نار، فيستطيع ذراع آلي بكاميرا إعدادها وحده.",
+   "steps": {
+    "n1": "اغسلي الخضار والبقدونس جيدًا.",
+    "n2": "قطّعي الطماطم والخيار والفلفل مكعبات صغيرة، وافرمي البقدونس ناعمًا.",
+    "n3": "افرمي البصل ناعمًا جدًا.",
+    "n4": "اخفقي عصير الليمون وزيت الزيتون والملح والكمون.",
+    "n5": "اخلطي كل شيء بلطف.",
+    "n6": "ضعيها في الثلاجة بضع دقائق إن توفر الوقت.",
+    "n7": "قدّميها خلال نصف ساعة قبل أن تُخرج الطماطم ماءها."
+   }
+  }
+ },
+ "source": {
+  "name": "cookwala.ai",
+  "url": "https://cookwala.ai/",
+  "citation": "Cookwala example recipe, written for the standard"
+ },
+ "license": "CC-BY-4.0",
+ "layers": {
+  "r1": true,
+  "r2": false,
+  "r3": true
+ },
+ "identity": {
+  "essential": [
+   "tomato",
+   "cucumber",
+   "lemon"
+  ],
+  "flexible": [
+   "onion",
+   "pepper",
+   "parsley",
+   "cumin"
+  ],
+  "neverAdd": [
+   "mayonnaise"
+  ],
+  "culturalNotes": {
+   "en": "Chopped small, dressed just before eating."
+  }
+ },
+ "hash": "sha256:eb9304feb1aaae5ae5b87a25185f2e44ab1c42df9677f426c500d99ba8d723ba"
+}
