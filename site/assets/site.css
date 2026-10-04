@@ -138,7 +138,7 @@ pre.code { position: relative; }
 .controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
 .controls label { display: flex; gap: 8px; align-items: center; color: var(--ink-2); font-size: 14px; max-width: 100%; min-width: 0; flex: 1 1 240px; }
 .controls label.check { flex-basis: auto; }
-.controls select, .controls input[type="text"], .controls input[type="number"] { max-width: 100%; min-width: 0; flex: 0 1 auto; width: 6em; font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
+.controls select, .controls input[type="text"], .controls input[type="number"] { max-width: 100%; min-width: 0; flex: 1 1 8em; width: auto; font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
 .controls .check input { accent-color: var(--ember); width: 16px; height: 16px; }
 .verdict { border-radius: 10px; padding: 12px 14px; font-weight: 500; border: 1px solid var(--line); background: var(--paper); }
 .verdict.ok { border-color: var(--ok); } .verdict.bad { border-color: var(--bad); }
