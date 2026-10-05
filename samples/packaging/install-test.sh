@@ -107,7 +107,7 @@ t_arch() {
 }
 
 t_alpine() {
-  docker run --rm -v "$BUILD:/b:ro" "${cavol[@]}" "$MIRROR/alpine:3.20" sh -c '[ -f /ca.crt ] && cat /ca.crt >> /etc/ssl/certs/ca-certificates.crt; apk add -q alpine-sdk python3 >/dev/null 2>&1; adduser -D b; addgroup b abuild; mkdir -p /home/b/a/cookwala-samples /home/b/src && cp /b/manifests/alpine/APKBUILD /home/b/a/cookwala-samples/ && cp /b/*.pyz /home/b/src/ && chown -R b /home/b; su b -c "abuild-keygen -a -n >/dev/null 2>&1; cd ~/a/cookwala-samples && SRCDEST=~/src abuild -r >/dev/null 2>&1" && cp /home/b/.abuild/*.rsa.pub /etc/apk/keys/ && apk add -q /home/b/packages/a/x86_64/cookwala-samples-*.apk && cookwala-samples demo | grep -q "6 runs: 3 completed" && apk del -q cookwala-samples' \
+  docker run --rm -v "$BUILD:/b:ro" "${cavol[@]}" "$MIRROR/alpine:3.20" sh -c '[ -f /ca.crt ] && cat /ca.crt >> /etc/ssl/certs/ca-certificates.crt; apk add -q alpine-sdk python3 >/dev/null 2>&1; adduser -D b; addgroup b abuild; mkdir -p /home/b/a/cookwala-samples /home/b/src && cp /b/manifests/alpine/APKBUILD /home/b/a/cookwala-samples/ && cp /b/*.pyz /home/b/src/ && chown -R b /home/b; su b -c "abuild-keygen -a -n >/dev/null 2>&1" && cp /home/b/.abuild/*.rsa.pub /etc/apk/keys/ && su b -c "cd ~/a/cookwala-samples && SRCDEST=~/src abuild -r >/dev/null 2>&1" && apk add -q /home/b/packages/a/x86_64/cookwala-samples-*.apk && cookwala-samples demo | grep -q "6 runs: 3 completed" && apk del -q cookwala-samples' \
     && ok alpine "abuild -r (sha256 and check()); apk add, run, apk del" || bad alpine "abuild or apk"
 }
 
