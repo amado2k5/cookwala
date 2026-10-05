@@ -18,7 +18,8 @@ a self-made claim to an independent mark.
      (vendor, model, firmware or tool and version), suites run with totals and failed vector
      ids, the hash of the vector set used, the tool version and repository commit, date,
      `status` (`self_declared`, `verified`, `certified`), verifier or certifier (an
-     organization), optional signature;
+     organization), and a signature by the publisher (required; verified and certified
+     reports also name the verifier);
    - **`ProfileVector`**: the vector format for profile suites (`kind` is any lower-case
      token), so Core's `ConformanceVector` enum stays frozen.
 2. **Tooling:** `run_conformance.py --report out.json` writes a `ConformanceReport`; profile

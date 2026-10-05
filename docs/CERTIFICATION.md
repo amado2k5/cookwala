@@ -23,11 +23,19 @@ Core version, the class claimed (`recipe_publisher`, `executor`, `catalog`, `age
 `verifier`) or a profile claim (`humanitarian:H1`, `household`, `registry`, `fleet`,
 `supply`), the subject (product, vendor, version), the suites run with totals and failed
 vector ids, the hash of the vector set, the tool and commit, the date, the status and the
-verifier. Example: `examples/conformance/report-reference.json`, produced by
+verifier, and a signature: a report without one does not validate and the tool will not write one.
+The vector set is identified by `conformance/VECTORS-HASH.txt`, written when the vectors are
+generated and checked on every run; a report whose `vectorsHash` differs was not run against the
+published vectors. Example: `examples/conformance/report-reference.json`, produced by
 
 ```bash
-python tools/run_conformance.py --report report.json
+python tools/run_conformance.py --report report.json --key <seed hex> --kid did:web:you.example#k1
+python tools/run_conformance.py --verify-report report.json --keys your-keys.json
 ```
+
+The example is signed with the public RFC 8032 test key (`conformance/keys/report-test-keys.json`)
+so that it validates; a signature by that key is never a claim by anyone. A real report is signed
+with the publisher's own key, published as a `KeyRecord` where its other keys live.
 
 ## 3. Classes and what they prove
 

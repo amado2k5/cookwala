@@ -5,18 +5,47 @@
  "x-cookwala-status": "profile-draft",
  "description": "RFC-0008. A ConformanceReport is the signed record behind any claim of conformance: which class, which vectors, which tool, on what, when, checked by whom. ProfileVector is the vector format for profile suites in conformance/profiles/, so Core's ConformanceVector enum stays frozen.",
  "$defs": {
-  "Version": {"type": "string", "pattern": "^0\\.1\\.[0-9]+$"},
+  "Version": {
+   "type": "string",
+   "pattern": "^0\\.1\\.[0-9]+$"
+  },
   "ConformanceReport": {
    "type": "object",
-   "required": ["profile", "kind", "id", "core", "claim", "subject", "suites", "vectorsHash", "tool", "date", "status"],
+   "required": [
+    "profile",
+    "kind",
+    "id",
+    "core",
+    "claim",
+    "subject",
+    "suites",
+    "vectorsHash",
+    "tool",
+    "date",
+    "status",
+    "signature"
+   ],
    "unevaluatedProperties": false,
-   "patternProperties": {"^x-": {}},
+   "patternProperties": {
+    "^x-": {}
+   },
    "description": "A claim of conformance that anyone can reproduce. A report that fails any vector of a class may not claim that class.",
    "properties": {
-    "profile": {"$ref": "#/$defs/Version"},
-    "kind": {"const": "ConformanceReport"},
-    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._:-]{2,95}$"},
-    "core": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$", "description": "Core version the vectors belong to."},
+    "profile": {
+     "$ref": "#/$defs/Version"
+    },
+    "kind": {
+     "const": "ConformanceReport"
+    },
+    "id": {
+     "type": "string",
+     "pattern": "^[a-z0-9][a-z0-9._:-]{2,95}$"
+    },
+    "core": {
+     "type": "string",
+     "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+     "description": "Core version the vectors belong to."
+    },
     "claim": {
      "type": "string",
      "pattern": "^(recipe_publisher|executor|catalog|agent|verifier|humanitarian:H[0-3]|household|registry|fleet|supply)$",
@@ -24,14 +53,31 @@
     },
     "subject": {
      "type": "object",
-     "required": ["name"],
+     "required": [
+      "name"
+     ],
      "unevaluatedProperties": false,
-     "patternProperties": {"^x-": {}},
+     "patternProperties": {
+      "^x-": {}
+     },
      "properties": {
-      "name": {"type": "string", "maxLength": 120, "description": "Product, device model or software name."},
-      "vendor": {"type": "string", "maxLength": 120},
-      "version": {"type": "string", "maxLength": 60, "description": "Firmware or software version."},
-      "capabilitiesHash": {"$ref": "common.schema.json#/$defs/Hash"}
+      "name": {
+       "type": "string",
+       "maxLength": 120,
+       "description": "Product, device model or software name."
+      },
+      "vendor": {
+       "type": "string",
+       "maxLength": 120
+      },
+      "version": {
+       "type": "string",
+       "maxLength": 60,
+       "description": "Firmware or software version."
+      },
+      "capabilitiesHash": {
+       "$ref": "common.schema.json#/$defs/Hash"
+      }
      }
     },
     "suites": {
@@ -39,48 +85,138 @@
      "minItems": 1,
      "items": {
       "type": "object",
-      "required": ["suite", "total", "passed"],
+      "required": [
+       "suite",
+       "total",
+       "passed"
+      ],
       "unevaluatedProperties": false,
       "properties": {
-       "suite": {"type": "string", "pattern": "^[a-z0-9_/-]+$", "description": "Vector file stem, e.g. hash, envelope, profiles/disclosure_policy."},
-       "total": {"type": "integer", "minimum": 0},
-       "passed": {"type": "integer", "minimum": 0},
-       "failed": {"type": "array", "items": {"type": "string"}, "description": "Ids of failed vectors."}
+       "suite": {
+        "type": "string",
+        "pattern": "^[a-z0-9_/-]+$",
+        "description": "Vector file stem, e.g. hash, envelope, profiles/disclosure_policy."
+       },
+       "total": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "passed": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "failed": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "description": "Ids of failed vectors."
+       }
       }
      }
     },
-    "vectorsHash": {"$ref": "common.schema.json#/$defs/Hash", "description": "sha256 of the RFC 8785 canonical JSON of the sorted list of (suite, vector id, expected) used."},
+    "vectorsHash": {
+     "$ref": "common.schema.json#/$defs/Hash",
+     "description": "sha256 of the RFC 8785 canonical JSON of the sorted list of (suite, vector id, expected) used."
+    },
     "tool": {
      "type": "object",
-     "required": ["name", "version"],
+     "required": [
+      "name",
+      "version"
+     ],
      "unevaluatedProperties": false,
      "properties": {
-      "name": {"type": "string", "maxLength": 80},
-      "version": {"type": "string", "maxLength": 60},
-      "commit": {"type": "string", "pattern": "^[0-9a-f]{7,40}$"}
+      "name": {
+       "type": "string",
+       "maxLength": 80
+      },
+      "version": {
+       "type": "string",
+       "maxLength": 60
+      },
+      "commit": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{7,40}$"
+      }
      }
     },
-    "date": {"type": "string", "format": "date"},
-    "status": {"enum": ["self_declared", "verified", "certified"], "description": "self_declared: published by the maker. verified: reproduced by a registry operator. certified: an independent certifier with hardware and safety-case checks."},
-    "verifier": {"type": "string", "maxLength": 120, "description": "Organization that verified or certified; required when status is not self_declared."},
-    "notes": {"$ref": "common.schema.json#/$defs/UntrustedText"},
-    "hash": {"$ref": "common.schema.json#/$defs/Hash"},
-    "signature": {"$ref": "common.schema.json#/$defs/Signature"}
+    "date": {
+     "type": "string",
+     "format": "date"
+    },
+    "status": {
+     "enum": [
+      "self_declared",
+      "verified",
+      "certified"
+     ],
+     "description": "self_declared: published by the maker. verified: reproduced by a registry operator. certified: an independent certifier with hardware and safety-case checks."
+    },
+    "verifier": {
+     "type": "string",
+     "maxLength": 120,
+     "description": "Organization that verified or certified; required when status is not self_declared."
+    },
+    "notes": {
+     "$ref": "common.schema.json#/$defs/UntrustedText"
+    },
+    "hash": {
+     "$ref": "common.schema.json#/$defs/Hash"
+    },
+    "signature": {
+     "$ref": "common.schema.json#/$defs/Signature",
+     "description": "Required for every status. Self-declared: the maker's key. Verified: the registry operator counter-signs. Certified: the certifier's key. Over the report's hash (CORE.md section 5)."
+    }
    },
-   "if": {"properties": {"status": {"enum": ["verified", "certified"]}}},
-   "then": {"required": ["verifier"]}
+   "if": {
+    "properties": {
+     "status": {
+      "enum": [
+       "verified",
+       "certified"
+      ]
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "verifier"
+    ]
+   }
   },
   "ProfileVector": {
    "type": "object",
-   "required": ["id", "kind", "description", "input", "expected"],
+   "required": [
+    "id",
+    "kind",
+    "description",
+    "input",
+    "expected"
+   ],
    "unevaluatedProperties": false,
    "description": "A test vector for a profile suite. kind is any lower-case token the runner knows (disclosure_policy, registry_name, registry_version, sms_parse, signal_policy, signature...).",
    "properties": {
-    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,95}$"},
-    "kind": {"type": "string", "pattern": "^[a-z][a-z0-9_]{1,40}$"},
-    "profile": {"type": "string", "maxLength": 40, "description": "Profile the vector belongs to, e.g. household, registry, humanitarian."},
-    "rfc": {"type": "string", "pattern": "^[0-9]{4}$"},
-    "description": {"type": "string"},
+    "id": {
+     "type": "string",
+     "pattern": "^[a-z0-9][a-z0-9._-]{1,95}$"
+    },
+    "kind": {
+     "type": "string",
+     "pattern": "^[a-z][a-z0-9_]{1,40}$"
+    },
+    "profile": {
+     "type": "string",
+     "maxLength": 40,
+     "description": "Profile the vector belongs to, e.g. household, registry, humanitarian."
+    },
+    "rfc": {
+     "type": "string",
+     "pattern": "^[0-9]{4}$"
+    },
+    "description": {
+     "type": "string"
+    },
     "input": {},
     "expected": {}
    }

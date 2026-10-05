@@ -1,0 +1,10 @@
+[
+ {
+  "kid": "did:web:example.test#report-test-key",
+  "alg": "EdDSA",
+  "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+  "actor": "test",
+  "validFrom": "2026-01-01T00:00:00Z",
+  "x-note": "The RFC 8032 test key. It signs examples/conformance/report-reference.json so the example validates; a signature by this key is never a claim by anyone."
+ }
+]

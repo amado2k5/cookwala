@@ -162,3 +162,8 @@ for vid, desc, recipe, caps, human, limits in [
 assert [v['expected']['state'] for v in vecs] == ['accepted', 'refused', 'refused', 'refused', 'refused', 'refused', 'accepted'], [v['expected'] for v in vecs]
 assert vecs[-1]['expected']['by'] == ['human'] and vecs[3]['expected']['reason'] == 'safety_limit'
 write('dryrun', vecs)
+
+# ---- the identity of this vector set, checked by run_conformance.py and quoted by every report
+import run_conformance  # noqa: E402
+(OUT / 'VECTORS-HASH.txt').write_text(run_conformance.vectors_hash() + '\n')
+print('VECTORS-HASH.txt:', run_conformance.vectors_hash())

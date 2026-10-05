@@ -37,7 +37,8 @@ jobs:
       - name: Check humanitarian examples against the rule packs
         run: |
           python tools/humanitarian_check.py --pack profiles/humanitarian/who-codex-basic.rulepack.json --pack profiles/humanitarian/care-vulnerable-groups.rulepack.json --pack profiles/humanitarian/school-meals-basic.rulepack.json --pack profiles/humanitarian/sodium-reduction.rulepack.json examples/humanitarian/*.json examples/humanitarian/flows/*/*.json
-          python tools/run_conformance.py --report /tmp/report.json
+          python tools/run_conformance.py --report /tmp/report.json --key 9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60 --kid did:web:example.test#report-test-key --note "CI run signed with the public RFC 8032 test key; not a claim"
+          python tools/run_conformance.py --verify-report /tmp/report.json --keys conformance/keys/report-test-keys.json
       - name: Assemble site
         run: bash tools/build_site.sh _site && find _site -type f | sort
       - if: github.event_name != 'pull_request'
