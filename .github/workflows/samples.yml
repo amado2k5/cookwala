@@ -175,12 +175,21 @@ jobs:
         env: {NODE_AUTH_TOKEN: '${{ secrets.NPM_TOKEN }}'}
       - uses: actions/setup-dotnet@v4
         with: {dotnet-version: '8.0.x'}
+      # NuGet trusted publishing: nuget.org trusts this workflow (policy: owner amado2k5, repo cookwala, workflow samples.yml,
+      # environment release) and hands out a short-lived key; no stored secret. A NUGET_API_KEY secret, if set, is used instead.
+      - name: NuGet login (trusted publishing)
+        id: nuget-login
+        if: env.NUGET_API_KEY == ''
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER || 'amado2026' }}
       - name: NuGet (library and dotnet tool)
-        if: env.NUGET_API_KEY != ''
         working-directory: samples/dotnet
+        env:
+          NUGET_PUSH_KEY: ${{ env.NUGET_API_KEY || steps.nuget-login.outputs.NUGET_API_KEY }}
         run: |
           dotnet pack -c Release -o nupkgs
-          dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" --skip-duplicate
+          dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "$NUGET_PUSH_KEY" --skip-duplicate
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
