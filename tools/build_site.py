@@ -56,6 +56,7 @@ FONTS = {
     'zh': 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
     'ko': 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
 }
+CONTACT_EMAIL = ''  # set to hello@cookwala.ai once the mailbox or forwarding exists; empty keeps the GitHub-only note
 GLOSSED_PAGES = {'/', '/why/', '/goals/', '/trust/', '/humanitarian/'}
 SCRIPT_OF = {'ar': 'arabic', 'ur': 'arabic', 'fa': 'arabic', 'ps': 'arabic', 'he': 'hebrew', 'ru': 'cyrillic', 'el': 'greek', 'hi': 'devanagari', 'te': 'telugu', 'ja': 'ja', 'zh': 'zh', 'ko': 'ko'}
 AUTONYM = {'en': 'English', 'ar': 'العربية', 'fr': 'Français', 'es': 'Español', 'ja': '日本語', 'hi': 'हिन्दी', 'pt': 'Português', 'ru': 'Русский', 'zh': '简体中文', 'de': 'Deutsch', 'it': 'Italiano', 'el': 'Ελληνικά', 'ur': 'اردو', 'fa': 'فارسی', 'tr': 'Türkçe', 'ku': 'Kurdî', 'id': 'Bahasa Indonesia', 'sw': 'Kiswahili', 'ko': '한국어', 'nl': 'Nederlands', 'ps': 'پښتو', 'he': 'עברית', 'pl': 'Polski', 'sv': 'Svenska', 'te': 'తెలుగు'}
@@ -259,6 +260,15 @@ class Builder:
         more = ''.join(f'<a href="{self.path_for(lang, p)}">{html.escape(label)}</a>' for label, p in S['more'])
         return items, more
 
+    def hero_cards(self, lang):
+        H = self.strings[lang].get('hero') or self.strings['en']['hero']
+        return '<div class="cards hero-cards">' + ''.join(f'<a class="card" href="{self.path_for(lang, c[3])}"><h3>{html.escape(c[0])}</h3><p>{html.escape(c[1])}</p><span class="go">{html.escape(c[2])} →</span></a>' for c in H['cards']) + '</div>'
+
+    def origin_block(self, lang):
+        O = self.strings[lang].get('origin') or self.strings['en']['origin']
+        return (f'<section class="band" aria-labelledby="origin-h"><div class="wrap narrow"><h2 id="origin-h">{html.escape(O["h"])}</h2>'
+                f'<p class="lead">{html.escape(O["p"])}</p><p class="note">— <a href="https://github.com/amado2k5" rel="noopener">{html.escape(O["by"])}</a></p></div></section>')
+
     def position_block(self, lang):
         P = self.strings[lang].get('position') or self.strings['en']['position']
         rows = ''.join(f'<tr><th scope="row">{html.escape(a)}</th><td>{html.escape(b)}</td></tr>' for a, b in P['rows'])
@@ -323,6 +333,11 @@ class Builder:
         body = body.replace('{{chip}}', chip)
         if '<div class="stats" id="stats"' in body: body = self.stats_html(lang, body)
         body = re.sub(r'\{\{diagram:(\w+)\}\}', lambda m: read(f'site/templates/diagrams/{m.group(1)}.svg'), body)
+        if '{{contact_block}}' in body:
+            S_ = self.strings[lang]
+            body = body.replace('{{contact_block}}', f'<p><b>{html.escape(S_.get("contact_email_label", "Email"))}:</b> <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a></p>' if CONTACT_EMAIL else f'<p class="note">{S_.get("contact_pending", "")}</p>')
+        if '{{hero_cards}}' in body: body = body.replace('{{hero_cards}}', self.hero_cards(lang))
+        if '{{origin_block}}' in body: body = body.replace('{{origin_block}}', self.origin_block(lang))
         if '{{position_block}}' in body: body = body.replace('{{position_block}}', self.position_block(lang))
         if '{{sdk_cards}}' in body: body = body.replace('{{sdk_cards}}', self.sb.sdk_cards(lang))
         if '{{scenario_list}}' in body: body = body.replace('{{scenario_list}}', self.sb.list_html(lang))

@@ -1,17 +1,15 @@
 <!--meta {"title": "Cookwala: the open standard for cooking safely", "description": "An open, royalty-free standard for cooking safely: people, kitchens and robots. What to make, when it's done, and what must never happen, checked on the device. Try the live dry run.", "path": "/", "status": "core", "scripts": ["dryrun.js", "demo.js", "pathfinder.js"]} -->
 <section class="hero wrap">
   {{chip}}
-  <h1>The open standard for cooking safely.<br><span class="soft">People, kitchens and robots.</span></h1>
+  <h1>{{s:hero.h1}}</h1>
+  <p class="lead">{{s:hero.sub}}</p>
   <ol class="triad" aria-label="What a Cookwala recipe says">
     <li><b>What to make.</b> Recipes as steps a machine can plan.</li>
     <li><b>When it's done.</b> Temperatures, food-state cues and times it can measure.</li>
     <li><b>What must never happen.</b> Safety limits the device enforces itself.</li>
   </ol>
-  <div class="cta">
-    <a class="btn primary" href="#demo">Try the dry run</a>
-    <a class="btn" href="/developers/">Start building</a>
-    <a class="btn" href="/humanitarian/">Rescue food by SMS</a>
-  </div>
+  <div class="cta"><a class="btn primary" href="#demo">{{s:try_dryrun}}</a></div>
+  {{hero_cards}}
 </section>
 
 <section id="demo" class="band" aria-labelledby="demo-h">
@@ -54,7 +52,7 @@
 
 <section class="band" aria-labelledby="prob-h">
   <div class="wrap">
-    <h2 id="prob-h">Robots are learning to move. Nobody had written down how to cook.</h2>
+    <h2 id="prob-h">Why now</h2>
     <div class="three">
       <p>Home robots are shipping and kitchen robots are taking orders. Each maker writes its own closed recipes, mostly from a few cuisines, and decides alone what "simmer" or "done" means.</p>
       <p>Unsafe food causes about 600 million illnesses a year <span class="kind measured" title="WHO, Estimates of the global burden of foodborne diseases, 2015">measured · WHO</span>. About 14 % of food is lost before it reaches a shop <span class="kind measured" title="FAO, The State of Food and Agriculture 2019">measured · FAO</span>, while about 733 million people faced hunger in 2023 <span class="kind measured" title="FAO, IFAD, UNICEF, WFP, WHO: SOFI 2024">measured · SOFI 2024</span>.</p>
@@ -113,6 +111,9 @@
   </div>
   <p><a class="btn primary" href="/goals/">How this helps: hunger, health, robots, with diagrams →</a> <a href="/impact/">Every number, with its source and label →</a></p>
 </section>
+
+{{origin_block}}
+
 
 <section class="band" aria-labelledby="road-h">
   <div class="wrap">

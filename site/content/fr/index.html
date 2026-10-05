@@ -1,17 +1,15 @@
 <!--meta {"title": "Cookwala : la norme ouverte pour cuisiner en toute sécurité", "description": "Une norme ouverte et libre de droits pour cuisiner en toute sécurité : les personnes, les cuisines et les robots. Ce qu'il faut préparer, quand c'est prêt, et ce qui ne doit jamais arriver, vérifié sur l'appareil. Essayez le dry run en direct.", "path": "/", "status": "core", "scripts": ["dryrun.js", "demo.js", "pathfinder.js"]} -->
 <section class="hero wrap">
   {{chip}}
-  <h1>La norme ouverte pour cuisiner en toute sécurité.<br><span class="soft">Les personnes, les cuisines et les robots.</span></h1>
+  <h1>{{s:hero.h1}}</h1>
+  <p class="lead">{{s:hero.sub}}</p>
   <ol class="triad" aria-label="What a Cookwala recipe says">
     <li><b>Ce qu'il faut préparer.</b> Des recettes sous forme d'étapes qu'une machine peut planifier.</li>
     <li><b>Quand c'est prêt.</b> Les températures, les indices d'état des aliments et les durées qu'elle peut mesurer.</li>
     <li><b>Ce qui ne doit jamais arriver.</b> Les limites de sécurité que l'appareil applique lui-même.</li>
   </ol>
-  <div class="cta">
-    <a class="btn primary" href="#demo">Try the dry run</a>
-    <a class="btn" href="/developers/">Start building</a>
-    <a class="btn" href="/humanitarian/">Rescue food by SMS</a>
-  </div>
+  <div class="cta"><a class="btn primary" href="#demo">{{s:try_dryrun}}</a></div>
+  {{hero_cards}}
 </section>
 
 <section id="demo" class="band" aria-labelledby="demo-h">
@@ -54,7 +52,7 @@
 
 <section class="band" aria-labelledby="prob-h">
   <div class="wrap">
-    <h2 id="prob-h">Les robots apprennent à se déplacer. Personne n'avait écrit comment cuisiner.</h2>
+    <h2 id="prob-h">Pourquoi maintenant</h2>
     <div class="three">
       <p>Les robots domestiques sont en cours d'expédition et les robots de cuisine prennent les commandes. Chaque fabricant écrit ses propres recettes fermées, provenant principalement de quelques cuisines, et décide seul de ce que « simmer » ou « done » signifie.</p>
       <p>Une alimentation non sûre cause environ 600 millions de maladies par an <span class="kind measured" title="WHO, Estimates of the global burden of foodborne diseases, 2015">measured · WHO</span>. Environ 14 % de la nourriture est perdue avant d'atteindre un magasin <span class="kind measured" title="FAO, The State of Food and Agriculture 2019">measured · FAO</span>, tandis qu'environ 733 millions de personnes ont souffert de la faim en 2023 <span class="kind measured" title="FAO, IFAD, UNICEF, WFP, WHO: SOFI 2024">measured · SOFI 2024</span>.</p>
@@ -112,6 +110,9 @@
   </div>
   <p><a href="/impact/">Chaque nombre, avec sa source et son étiquette →</a></p>
 </section>
+
+{{origin_block}}
+
 
 <section class="band" aria-labelledby="road-h">
   <div class="wrap">

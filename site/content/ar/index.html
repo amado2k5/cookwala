@@ -1,17 +1,15 @@
 <!--meta {"title": "كوكوالا: المعيار المفتوح للطهي الآمن", "description": "معيار مفتوح بلا رسوم للطهي الآمن: للناس والمطابخ والروبوتات. ماذا نطبخ، ومتى ينضج، وما الذي لا يجوز أن يحدث أبدًا، يتحقق منه الجهاز. جرّب التجربة الجافة المباشرة.", "path": "/", "status": "core", "scripts": ["dryrun.js", "demo.js", "pathfinder.js"]} -->
 <section class="hero wrap">
   {{chip}}
-  <h1>المعيار المفتوح للطهي الآمن.<br><span class="soft">للناس والمطابخ والروبوتات.</span></h1>
+  <h1>{{s:hero.h1}}</h1>
+  <p class="lead">{{s:hero.sub}}</p>
   <ol class="triad" aria-label="ما تقوله وصفة كوكوالا">
     <li><b>ماذا نطبخ.</b> وصفات كخطوات تستطيع الآلة التخطيط لها.</li>
     <li><b>متى ينضج.</b> درجات حرارة وإشارات حالة الطعام وأزمنة تستطيع قياسها.</li>
     <li><b>ما الذي لا يجوز أن يحدث أبدًا.</b> حدود سلامة يفرضها الجهاز على نفسه.</li>
   </ol>
-  <div class="cta">
-    <a class="btn primary" href="#demo">جرّب التجربة الجافة</a>
-    <a class="btn" href="/ar/developers/">ابدأ البناء</a>
-    <a class="btn" href="/ar/humanitarian/">أنقذ طعامًا بالرسائل النصية</a>
-  </div>
+  <div class="cta"><a class="btn primary" href="#demo">{{s:try_dryrun}}</a></div>
+  {{hero_cards}}
 </section>
 
 <section id="demo" class="band" aria-labelledby="demo-h">
@@ -52,7 +50,7 @@
 
 <section class="band" aria-labelledby="prob-h">
   <div class="wrap">
-    <h2 id="prob-h">تتعلم الروبوتات الحركة. لكن أحدًا لم يكتب كيف نطبخ.</h2>
+    <h2 id="prob-h">لماذا الآن</h2>
     <div class="three">
       <p>روبوتات المنازل تُشحن وروبوتات المطابخ تتلقى الطلبات. يكتب كل صانع وصفاته المغلقة، من بضعة مطابخ غالبًا، ويقرر وحده ما معنى «نار هادئة» أو «نضج».</p>
       <p>يسبب الطعام غير الآمن نحو 600 مليون حالة مرض سنويًا <span class="kind measured" title="منظمة الصحة العالمية، تقديرات العبء العالمي للأمراض المنقولة بالغذاء، 2015">مُحصى · WHO</span>. ونحو 14٪ من الطعام يُفقد قبل أن يصل إلى المتجر <span class="kind measured" title="الفاو، حالة الأغذية والزراعة 2019">مُحصى · FAO</span>، بينما واجه نحو 733 مليون شخص الجوع في 2023 <span class="kind measured" title="تقرير حالة الأمن الغذائي والتغذية في العالم 2024">مُحصى · SOFI 2024</span>.</p>
@@ -111,6 +109,9 @@
   </div>
   <p><a class="btn primary" href="/ar/goals/">كيف يساعد هذا: الجوع والصحة والروبوتات، بالرسوم ←</a> <a href="/ar/impact/">كل رقم بمصدره وتصنيفه ←</a></p>
 </section>
+
+{{origin_block}}
+
 
 <section class="band" aria-labelledby="road-h">
   <div class="wrap">

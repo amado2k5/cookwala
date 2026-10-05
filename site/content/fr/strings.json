@@ -379,5 +379,43 @@
    ]
   ]
  },
- "path_note": "Chaque élément prévu a une porte : la seule chose qui doit arriver d'abord. Si vous pouvez en ouvrir une (un relecteur, un appareil, une banque alimentaire, un financement), dites-le dans les <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">discussions GitHub</a> ; une adresse directe suivra de la part du fondateur."
+ "path_note": "Chaque élément prévu a une porte : la seule chose qui doit arriver d'abord. Si vous pouvez en ouvrir une (un relecteur, un appareil, une banque alimentaire, un financement), dites-le dans les <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">discussions GitHub</a> ; une adresse directe suivra de la part du fondateur.",
+ "hero": {
+  "h1": "Les robots apprennent à bouger. Personne n'avait écrit comment cuisiner.",
+  "sub": "Cookwala est la norme ouverte pour cuisiner en sécurité : les personnes, les cuisines et les robots.",
+  "cards": [
+   [
+    "Fabricants d'appareils",
+    "Des recettes que votre four, votre plaque ou votre robot vérifie avant de chauffer, et refuse quand il ne peut pas vérifier une étape.",
+    "Quoi implémenter en une semaine",
+    "/for/device-makers/"
+   ],
+   [
+    "Développeurs",
+    "Un dry run dans le navigateur, un paquet Python, un hub de référence et 131 vecteurs de conformité publics.",
+    "Démarrage en cinq minutes",
+    "/developers/"
+   ],
+   [
+    "Banques alimentaires",
+    "Offre, demande, remise avec contrôle de température, distribution et résumé d'impact, par SMS et tableur, sans données personnelles.",
+    "Le profil humanitaire",
+    "/humanitarian/"
+   ],
+   [
+    "Financeurs et partenaires",
+    "Ce qui existe, compté ; ce qui n'existe pas, dit ; et la seule preuve qui changerait le verdict de tout lecteur extérieur.",
+    "Où nous en sommes",
+    "/investors/"
+   ]
+  ]
+ },
+ "origin": {
+  "h": "Tout a commencé par un livre de cuisine familial",
+  "p": "L'archive de cuisine égyptienne de ma famille, les recettes de la Dre Fatma Alkawokgy (1943 à 2026), est publiée sur fifi.cooking en 25 langues. Elles ont été écrites pour des personnes. « Faire frire jusqu'à ce que ce soit doré. » « Couvrir d'eau. » « Laisser mijoter jusqu'à ce que ce soit prêt. » Quiconque a grandi dans cette cuisine sait exactement ce que ces lignes veulent dire. Une machine ne le sait pas, ni un étranger. Quand j'ai voulu décrire un de ces plats pour qu'un four, un robot ou une banque alimentaire puisse le vérifier avant de cuisiner, j'ai découvert que personne n'avait écrit ce qu'est « mijoter », quand le poulet est sûr, ni quand une étape doit être refusée. Cookwala est ma tentative de l'écrire, en public, pour que les plats survivent aux machines et que les machines refusent plutôt que deviner.",
+  "by": "le fondateur"
+ },
+ "try_dryrun": "Essayer le dry run",
+ "contact_pending": "Une adresse de contact direct pour les programmes, les bailleurs de fonds et la presse sera ajoutée par le fondateur ; d'ici là, ouvrez un issue ou une discussion sur GitHub. Il n'y a pas de formulaire sur ce site car il n'y a pas de backend ni de notice de confidentialité pour l'accompagner.",
+ "contact_email_label": "Courriel pour les programmes, les financeurs et la presse"
 }

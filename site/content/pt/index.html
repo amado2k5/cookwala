@@ -1,17 +1,15 @@
 <!--meta {"title": "Cookwala: o padrão aberto para cozinhar com segurança", "description": "Um padrão aberto e livre de royalties para cozinhar com segurança: pessoas, cozinhas e robôs. O que fazer, quando estiver pronto e o que nunca deve acontecer, verificado no dispositivo. Experimente o dry run ao vivo.", "path": "/", "status": "core", "scripts": ["dryrun.js", "demo.js", "pathfinder.js"]} -->
 <section class="hero wrap">
   {{chip}}
-  <h1>O padrão aberto para cozinhar com segurança.<br><span class="soft">Pessoas, cozinhas e robôs.</span></h1>
+  <h1>{{s:hero.h1}}</h1>
+  <p class="lead">{{s:hero.sub}}</p>
   <ol class="triad" aria-label="What a Cookwala recipe says">
     <li><b>O que fazer.</b> Receitas como etapas que uma máquina pode planejar.</li>
     <li><b>Quando estiver pronto.</b> Temperaturas, sinais de estado do alimento e tempos que ela pode medir.</li>
     <li><b>O que nunca deve acontecer.</b> Limites de segurança que o próprio dispositivo impõe.</li>
   </ol>
-  <div class="cta">
-    <a class="btn primary" href="#demo">Try the dry run</a>
-    <a class="btn" href="/developers/">Start building</a>
-    <a class="btn" href="/humanitarian/">Rescue food by SMS</a>
-  </div>
+  <div class="cta"><a class="btn primary" href="#demo">{{s:try_dryrun}}</a></div>
+  {{hero_cards}}
 </section>
 
 <section id="demo" class="band" aria-labelledby="demo-h">
@@ -54,7 +52,7 @@
 
 <section class="band" aria-labelledby="prob-h">
   <div class="wrap">
-    <h2 id="prob-h">Os robôs estão a aprender a mover-se. Ninguém tinha escrito como cozinhar.</h2>
+    <h2 id="prob-h">Por que agora</h2>
     <div class="three">
       <p>Robôs domésticos estão sendo enviados e robôs de cozinha estão aceitando pedidos. Cada fabricante escreve suas próprias receitas fechadas, principalmente de algumas culinárias, e decide sozinho o que "simmer" ou "done" significa.</p>
       <p>Alimentos inseguros causam cerca de 600 milhões de doenças por ano <span class="kind measured" title="WHO, Estimates of the global burden of foodborne diseases, 2015">measured · WHO</span>. Cerca de 14 % dos alimentos são perdidos antes de chegarem a uma loja <span class="kind measured" title="FAO, The State of Food and Agriculture 2019">measured · FAO</span>, enquanto cerca de 733 milhões de pessoas enfrentaram a fome em 2023 <span class="kind measured" title="FAO, IFAD, UNICEF, WFP, WHO: SOFI 2024">measured · SOFI 2024</span>.</p>
@@ -112,6 +110,9 @@
   </div>
   <p><a class="btn primary" href="/goals/">Como isso ajuda: fome, saúde, robôs, com diagramas →</a> <a href="/impact/">Cada número, com sua fonte e rótulo →</a></p>
 </section>
+
+{{origin_block}}
+
 
 <section class="band" aria-labelledby="road-h">
   <div class="wrap">

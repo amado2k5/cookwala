@@ -379,5 +379,43 @@
    ]
   ]
  },
- "path_note": "Jeder geplante Punkt hat ein Tor: das eine, was zuerst geschehen muss. Wenn Sie eines öffnen können (ein Gutachter, ein Gerät, eine Lebensmittelbank, Finanzierung), sagen Sie es in den <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">GitHub-Diskussionen</a>; eine direkte Adresse folgt vom Gründer."
+ "path_note": "Jeder geplante Punkt hat ein Tor: das eine, was zuerst geschehen muss. Wenn Sie eines öffnen können (ein Gutachter, ein Gerät, eine Lebensmittelbank, Finanzierung), sagen Sie es in den <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">GitHub-Diskussionen</a>; eine direkte Adresse folgt vom Gründer.",
+ "hero": {
+  "h1": "Roboter lernen sich zu bewegen. Niemand hatte aufgeschrieben, wie man kocht.",
+  "sub": "Cookwala ist der offene Standard für sicheres Kochen: Menschen, Küchen und Roboter.",
+  "cards": [
+   [
+    "Gerätehersteller",
+    "Rezepte, die Ihr Ofen, Kochfeld oder Roboter prüft, bevor etwas aufheizt, und ablehnt, wenn ein Schritt nicht prüfbar ist.",
+    "Was Sie in einer Woche umsetzen",
+    "/for/device-makers/"
+   ],
+   [
+    "Entwickler",
+    "Ein Probelauf im Browser, ein Python-Paket, ein Referenz-Hub und 131 öffentliche Konformitätsvektoren.",
+    "Fünf-Minuten-Schnellstart",
+    "/developers/"
+   ],
+   [
+    "Lebensmittelbanken",
+    "Angebot, Anspruch, Übergabe mit Temperaturprüfung, Verteilung und Wirkungsbericht, per SMS und Tabelle, ohne personenbezogene Daten.",
+    "Das humanitäre Profil",
+    "/humanitarian/"
+   ],
+   [
+    "Förderer und Partner",
+    "Was existiert, gezählt; was nicht, gesagt; und der eine Beweis, der das Urteil jedes Außenstehenden ändern würde.",
+    "Wo wir stehen",
+    "/investors/"
+   ]
+  ]
+ },
+ "origin": {
+  "h": "Es begann mit einem Familienkochbuch",
+  "p": "Das Archiv ägyptischer Hausmannskost meiner Familie, die Rezepte von Dr. Fatma Alkawokgy (1943 bis 2026), ist auf fifi.cooking in 25 Sprachen veröffentlicht. Sie wurden für Menschen geschrieben. „Goldbraun braten.“ „Mit Wasser bedecken.“ „Köcheln lassen, bis es fertig ist.“ Wer in dieser Küche aufgewachsen ist, weiß genau, was diese Zeilen bedeuten. Eine Maschine weiß es nicht, ein Fremder auch nicht. Als ich eines dieser Gerichte so beschreiben wollte, dass ein Ofen, ein Roboter oder eine Lebensmittelbank es vor dem Kochen prüfen kann, stellte ich fest, dass niemand aufgeschrieben hatte, was „köcheln“ ist, wann Huhn sicher ist oder wann ein Schritt abgelehnt werden muss. Cookwala ist mein Versuch, das aufzuschreiben, öffentlich, damit die Gerichte die Maschinen überdauern und die Maschinen ablehnen statt zu raten.",
+  "by": "der Gründer"
+ },
+ "try_dryrun": "Probelauf testen",
+ "contact_pending": "Eine direkte Kontaktadresse für Programme, Förderer und die Presse wird vom Gründer hinzugefügt; bis dahin eröffnen Sie bitte ein Issue oder eine Diskussion auf GitHub. Es gibt kein Formular auf dieser Website, da es kein Backend und keinen dazugehörigen Datenschutzhinweis gibt.",
+ "contact_email_label": "E-Mail für Programme, Förderer und Presse"
 }

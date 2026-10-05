@@ -139,7 +139,7 @@
    ]
   ],
   "footer_origin": "Cookwala started from fifi.cooking, a family collection of Egyptian home recipes. Cookwala data is provided without warranty. Device makers and operators remain responsible for safe hardware and local law. Nothing on this site names a partner, user or pilot that does not exist.",
-  "footer_licences": "Code Apache-2.0 · specification CC BY 4.0 · vocabularies CC0 · patent non-assertion pledge · no tracking, no cookies.",
+  "footer_licences": "Code Apache-2.0 · specification CC BY 4.0 · vocabularies CC0 · patent non-assertion pledge · no cookies.",
   "status": {
    "core": "Core 0.2 · normative, under review",
    "draft": "Draft profile",
@@ -398,7 +398,45 @@
     ]
    ]
   },
-  "path_note": "Every planned item has a gate: the one thing that has to happen first. If you can open one (a reviewer, a device, a food bank, funding), say so in <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">GitHub Discussions</a>; a direct address will follow from the founder."
+  "path_note": "Every planned item has a gate: the one thing that has to happen first. If you can open one (a reviewer, a device, a food bank, funding), say so in <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">GitHub Discussions</a>; a direct address will follow from the founder.",
+  "hero": {
+   "h1": "Robots are learning to move. Nobody had written down how to cook.",
+   "sub": "Cookwala is the open standard for cooking safely: people, kitchens and robots.",
+   "cards": [
+    [
+     "Device makers",
+     "Recipes your oven, hob or robot can check before it heats anything, and refuse when it cannot verify a step.",
+     "What to implement in a week",
+     "/for/device-makers/"
+    ],
+    [
+     "Developers",
+     "A dry run in the browser, a Python package, a reference hub and 131 public conformance vectors.",
+     "Five-minute quickstart",
+     "/developers/"
+    ],
+    [
+     "Food banks",
+     "Offer, claim, handover with a temperature check, distribution and an impact summary, by SMS and spreadsheet, with no personal data.",
+     "The humanitarian profile",
+     "/humanitarian/"
+    ],
+    [
+     "Funders and partners",
+     "What exists, counted; what does not, stated; and the one proof that would change every outside reader's verdict.",
+     "Where this stands",
+     "/investors/"
+    ]
+   ]
+  },
+  "origin": {
+   "h": "It started with a family cookbook",
+   "p": "My family's archive of Egyptian home cooking, the recipes of Dr. Fatma Alkawokgy (1943 to 2026), is published at fifi.cooking in 25 languages. They were written for people. \"Fry until golden.\" \"Add water to cover.\" \"Let it simmer until it is ready.\" Anyone who grew up in that kitchen knows exactly what those lines mean. A machine does not, and neither does a stranger. When I tried to describe one of those dishes so that an oven, a robot or a food bank could check it before cooking, I found that nobody had written down what \"simmer\" is, when chicken is safe, or when a step must be refused. Cookwala is my attempt to write that down, in the open, so that the dishes outlive the machines and the machines refuse rather than guess.",
+   "by": "the founder"
+  },
+  "try_dryrun": "Try the dry run",
+  "contact_pending": "A direct contact address for programs, funders and press will be added by the founder; until then, open an issue or a discussion on GitHub. There is no form on this site because there is no backend and no privacy notice to go with one.",
+  "contact_email_label": "Email for programs, funders and press"
  },
  "ar": {
   "brand": "كوكوالا",
@@ -540,7 +578,7 @@
    ]
   ],
   "footer_origin": "بدأ كوكوالا من fifi.cooking، مجموعة عائلية من وصفات البيت المصري. تُقدَّم بيانات كوكوالا بلا ضمان، ويبقى صانعو الأجهزة ومشغّلوها مسؤولين عن سلامة العتاد والقانون المحلي. لا يذكر هذا الموقع شريكًا أو مستخدمًا أو تجربة لا وجود لها.",
-  "footer_licences": "الكود Apache-2.0 · المواصفة CC BY 4.0 · المفردات CC0 · تعهّد بعدم المطالبة ببراءات · لا تتبّع ولا كوكيز.",
+  "footer_licences": "الكود Apache-2.0 · المواصفة CC BY 4.0 · المفردات CC0 · تعهّد بعدم المطالبة ببراءات · لا كوكيز.",
   "status": {
    "core": "النواة 0.2 · معيارية، قيد المراجعة",
    "draft": "ملف مسوّدة",
@@ -795,6 +833,44 @@
     ]
    ]
   },
-  "path_note": "لكل بند مخطَّط بوابة: الشيء الوحيد الذي يجب أن يحدث أولًا. إن كان بوسعك فتح إحداها (مراجع، جهاز، بنك طعام، تمويل) فقل ذلك في <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">نقاشات GitHub</a>؛ وسيتبع عنوان مباشر من المؤسِّس."
+  "path_note": "لكل بند مخطَّط بوابة: الشيء الوحيد الذي يجب أن يحدث أولًا. إن كان بوسعك فتح إحداها (مراجع، جهاز، بنك طعام، تمويل) فقل ذلك في <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">نقاشات GitHub</a>؛ وسيتبع عنوان مباشر من المؤسِّس.",
+  "hero": {
+   "h1": "الروبوتات تتعلّم الحركة. ولم يكتب أحد كيف يُطهى الطعام.",
+   "sub": "كوكوالا هو المعيار المفتوح للطهي الآمن: للناس والمطابخ والروبوتات.",
+   "cards": [
+    [
+     "صانعو الأجهزة",
+     "وصفات يفحصها فرنك أو موقدك أو روبوتك قبل أن يسخّن أي شيء، ويرفضها حين لا يستطيع التحقق من خطوة.",
+     "ما الذي تطبّقه في أسبوع",
+     "/for/device-makers/"
+    ],
+    [
+     "المطوّرون",
+     "تشغيل جاف في المتصفح، حزمة بايثون، موزّع مرجعي و131 متّجه مطابقة عامًا.",
+     "بداية سريعة في خمس دقائق",
+     "/developers/"
+    ],
+    [
+     "بنوك الطعام",
+     "عرض، مطالبة، تسليم مع فحص حرارة، توزيع وملخّص أثر، بالرسائل النصية وجداول البيانات، بلا بيانات شخصية.",
+     "الملف الإنساني",
+     "/humanitarian/"
+    ],
+    [
+     "المموّلون والشركاء",
+     "ما هو موجود، محصيًا؛ وما ليس موجودًا، معلنًا؛ والدليل الوحيد الذي سيغيّر حكم كل قارئ خارجي.",
+     "أين نقف",
+     "/investors/"
+    ]
+   ]
+  },
+  "origin": {
+   "h": "بدأت بكتاب طبخ عائلي",
+   "p": "أرشيف عائلتي للطبخ المنزلي المصري، وصفات الدكتورة فاطمة القواقجي (1943 إلى 2026)، منشور على fifi.cooking بخمس وعشرين لغة. كُتبت للناس. «اقلِ حتى يصفرّ.» «أضف ماءً حتى يغمر.» «دعه على نار هادئة حتى يستوي.» كل من نشأ في ذلك المطبخ يعرف تمامًا معنى هذه الجمل. أما الآلة فلا تعرف، ولا الغريب. وحين حاولت أن أصف طبقًا منها بحيث يستطيع فرن أو روبوت أو بنك طعام فحصه قبل الطهي، وجدت أن أحدًا لم يكتب ما هو «النار الهادئة»، ولا متى يكون الدجاج آمنًا، ولا متى يجب رفض خطوة. كوكوالا محاولتي لكتابة ذلك علنًا، لتبقى الأطباق بعد الآلات، ولترفض الآلات بدل أن تخمّن.",
+   "by": "المؤسِّس"
+  },
+  "try_dryrun": "جرّب التشغيل الجاف",
+  "contact_pending": "سيضيف المؤسس عنوان اتصال مباشرًا للبرامج والمموّلين والصحافة؛ وحتى ذلك الحين افتح مسألة أو نقاشًا على GitHub. لا نموذج في هذا الموقع لأنه لا خلفية له ولا إشعار خصوصية يرافقه.",
+  "contact_email_label": "البريد الإلكتروني للبرامج والمموّلين والصحافة"
  }
 }

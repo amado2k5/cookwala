@@ -379,5 +379,43 @@
    ]
   ]
  },
- "path_note": "Cada elemento previsto tiene una puerta: lo único que debe ocurrir primero. Si puede abrir una (un revisor, un aparato, un banco de alimentos, financiación), dígalo en las <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">discusiones de GitHub</a>; el fundador publicará una dirección directa."
+ "path_note": "Cada elemento previsto tiene una puerta: lo único que debe ocurrir primero. Si puede abrir una (un revisor, un aparato, un banco de alimentos, financiación), dígalo en las <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">discusiones de GitHub</a>; el fundador publicará una dirección directa.",
+ "hero": {
+  "h1": "Los robots están aprendiendo a moverse. Nadie había escrito cómo cocinar.",
+  "sub": "Cookwala es el estándar abierto para cocinar con seguridad: personas, cocinas y robots.",
+  "cards": [
+   [
+    "Fabricantes de aparatos",
+    "Recetas que su horno, placa o robot comprueba antes de calentar nada, y rechaza cuando no puede verificar un paso.",
+    "Qué implementar en una semana",
+    "/for/device-makers/"
+   ],
+   [
+    "Desarrolladores",
+    "Un dry run en el navegador, un paquete Python, un hub de referencia y 131 vectores de conformidad públicos.",
+    "Inicio rápido en cinco minutos",
+    "/developers/"
+   ],
+   [
+    "Bancos de alimentos",
+    "Oferta, reclamación, entrega con control de temperatura, distribución y resumen de impacto, por SMS y hoja de cálculo, sin datos personales.",
+    "El perfil humanitario",
+    "/humanitarian/"
+   ],
+   [
+    "Financiadores y socios",
+    "Lo que existe, contado; lo que no, dicho; y la única prueba que cambiaría el veredicto de cualquier lector externo.",
+    "Dónde estamos",
+    "/investors/"
+   ]
+  ]
+ },
+ "origin": {
+  "h": "Empezó con un libro de cocina familiar",
+  "p": "El archivo de cocina casera egipcia de mi familia, las recetas de la Dra. Fatma Alkawokgy (1943 a 2026), está publicado en fifi.cooking en 25 idiomas. Se escribieron para personas. «Freír hasta que esté dorado.» «Cubrir con agua.» «Dejar a fuego lento hasta que esté listo.» Quien creció en esa cocina sabe exactamente qué significan esas líneas. Una máquina no, y un extraño tampoco. Cuando intenté describir uno de esos platos para que un horno, un robot o un banco de alimentos pudiera comprobarlo antes de cocinar, descubrí que nadie había escrito qué es «fuego lento», cuándo el pollo es seguro o cuándo hay que rechazar un paso. Cookwala es mi intento de escribirlo, en abierto, para que los platos sobrevivan a las máquinas y las máquinas rechacen en vez de adivinar.",
+  "by": "el fundador"
+ },
+ "try_dryrun": "Probar el dry run",
+ "contact_pending": "El fundador añadirá una dirección de contacto directo para programas, financiadores y prensa; hasta entonces, abra un issue o una discusión en GitHub. No hay ningún formulario en este sitio porque no hay un backend ni un aviso de privacidad que lo acompañe.",
+ "contact_email_label": "Correo para programas, financiadores y prensa"
 }
