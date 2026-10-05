@@ -20,7 +20,7 @@ professional), `decision` (founder), `good first issue`.
 |---|---|---|
 | D-01 | **The one-liner.** Decided 2026-10-05: the hero reads "Robots are learning to move. Nobody had written down how to cook." over "Cookwala is the open standard for cooking safely: people, kitchens and robots."; done. Earlier candidates for the record: Five candidates exist: the current "The open standard for cooking safely: people, kitchens and robots"; "Cookwala turns cooking knowledge into instructions machines can understand, and conditions they can verify"; "an open way to write recipes so that people, ovens and robots can all cook them safely, and refuse when they can't"; the hero line "Robots are learning to move. Nobody had written down how to cook."; and a pairing of the last two | Every page, the GitHub description and the social card repeat it |
 | D-02 | **Recipe rights per imported collection.** Decided 2026-10-05: the four uncredited-rights collections publish structured facts only (`text: facts`), `LicenseRef-source-credited` is defined in `LICENSES/`, and a collection moves to full text when its rights holder confirms in writing | done; the written confirmations remain to be obtained |
-| D-03 | **The signature scheme** (what bytes are signed). See P-01; it changes Core normative text and needs an RFC with its comment window | Revocation, recalls and checkpoints rest on it |
+| D-03 | **The signature scheme.** Done 2026-10-05 as RFC-0012 (Core 0.2.1): the signing header covers alg, hash, kid, kind and signedAt; comment window open to 2026-11-04 | done |
 | D-04 | **Origin story in the founder's voice.** Done 2026-10-05 on the home and why pages in six languages; the founder may still edit the wording | done |
 | D-05 | **Four audience cards under the hero.** Done 2026-10-05: device makers, developers, food banks, funders and partners | done |
 | D-06 | **Host analytics.** Keep the host's cookie-less beacon and keep disclosing it, or switch it off | The trust page now says what it does; the choice is the founder's |
@@ -34,8 +34,8 @@ professional), `decision` (founder), `good first issue`.
 
 | Id | Item | Label | Status |
 |---|---|---|---|
-| P-01 | Sign `{hash, kid, alg, signedAt}` as a protected header; one verification function for documents, events and checkpoints that enforces algorithm, validity window and revocation; a vector whose backdated signature must fail | standard, reference | open, see D-03 |
-| P-02 | Witnessed checkpoints: require at least one witness whose key differs from the sequencer's; add a fork vector (two valid checkpoints, same sequence, different heads) | standard, reference | open |
+| P-01 | Signing header, one verification path, backdated-signature vector | standard, reference | done (RFC-0012) |
+| P-02 | Witnessed checkpoints: independent witness required; fork vector | standard, reference | done (RFC-0012) |
 | P-03 | Selective disclosure: salt at least 128 bits of fresh randomness per value, never reused; verifier rejects short salts; a vector | standard, reference | open |
 | P-04 | Sensor-ladder rungs `model` and `time`: `model` requires a declared model capability with logged accuracy; `time` disallowed for operations carrying the time-temperature hazard | standard | open |
 | P-05 | Capability claims: a vision-cue vocabulary that excludes thermal sensor ids; capabilities documents signed by the maker and checked against the registry | standard | open; RFC-0011 covers health and calibration |

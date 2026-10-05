@@ -336,7 +336,8 @@
    "required": [
     "alg",
     "kid",
-    "sig"
+    "sig",
+    "signedAt"
    ],
    "properties": {
     "alg": {
@@ -353,10 +354,11 @@
     "sig": {
      "type": "string",
      "pattern": "^[A-Za-z0-9_-]+$",
-     "description": "Base64url signature over the SHA-256 hash string of the RFC 8785 canonical JSON (see docs/CORE.md section 5)."
+     "description": "Base64url signature over the RFC 8785 canonical JSON of the signing header {alg, hash, kid, kind, signedAt}, where hash is the document hash (RFC-0012; docs/CORE.md section 5)."
     },
     "signedAt": {
-     "$ref": "#/$defs/DateTime"
+     "$ref": "#/$defs/DateTime",
+     "description": "When the signature was made. Covered by the signature, so revocation and validity windows can be checked against it."
     }
    },
    "unevaluatedProperties": false,

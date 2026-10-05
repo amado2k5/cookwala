@@ -18,7 +18,7 @@
  "signature": {
   "alg": "EdDSA",
   "kid": "https://cookwala.ai#test-key-1",
-  "sig": "V6BAoFRmk18nZIlt_V3IJutINXVU88OOdx8L7CNfYpa7DsJksNjiGMH7YT5tTbfcZBTX0F1wXK5XsIvtEYEhCA",
-  "signedAt": "2026-10-04T10:00:00Z"
+  "signedAt": "2026-10-04T10:00:00Z",
+  "sig": "7RuAfq2LG-zy9MudGkIg8_HQegnwYdOBYNwLVX0222F8sKPUpqrAAGrqFrf0f2bgLE1nDrVWoFN18kiKBO6lBw"
  }
 }

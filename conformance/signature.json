@@ -29,8 +29,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "did:web:hub.example#seq-1",
-     "sig": "tKlmCc8a9gg9ZHRDvHeaqP24bkbeNAMAu2yEvqfYxsaeaYCtoLpZzBG1qhjRwVg81EyewGRnoTbWi9JBnrX1CQ",
-     "signedAt": "2026-10-04T10:00:00Z"
+     "signedAt": "2026-10-04T10:00:00Z",
+     "sig": "aGE0Ll4aJnUjrm0HGJnYaGVk7FihL46SCccT4IuvBVaB4z156HITVG5oWKVM6KDo_XnOPhMOjDNIhg_22Q1aDA"
     }
    },
    "keys": [
@@ -74,8 +74,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "did:web:hub.example#seq-1",
-     "sig": "tKlmCc8a9gg9ZHRDvHeaqP24bkbeNAMAu2yEvqfYxsaeaYCtoLpZzBG1qhjRwVg81EyewGRnoTbWi9JBnrX1CQ",
-     "signedAt": "2026-10-04T10:00:00Z"
+     "signedAt": "2026-10-04T10:00:00Z",
+     "sig": "aGE0Ll4aJnUjrm0HGJnYaGVk7FihL46SCccT4IuvBVaB4z156HITVG5oWKVM6KDo_XnOPhMOjDNIhg_22Q1aDA"
     }
    },
    "keys": [
@@ -119,8 +119,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "did:web:grocer.example#k1",
-     "sig": "h7zXKZRctu-qrmGM1GVwgr6xcSm8ctukLpsRvpqh4LdN01qLoIo6Rm4g1JqdI68BiyMtOoj9myf60GF17gJqCQ",
-     "signedAt": "2026-09-15T00:00:00Z"
+     "signedAt": "2026-09-15T00:00:00Z",
+     "sig": "SAO2BJWb8XuMiOQTsG2ktGrt0FxpsJRse1MvTDZCGPEDy4gf3sFt7UD6coqI5Kt2IdoUDl7EU_tBMJd1sE2_Cg"
     }
    },
    "keys": [
@@ -164,8 +164,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "did:web:hub.example#seq-1",
-     "sig": "tKlmCc8a9gg9ZHRDvHeaqP24bkbeNAMAu2yEvqfYxsaeaYCtoLpZzBG1qhjRwVg81EyewGRnoTbWi9JBnrX1CQ",
-     "signedAt": "2026-10-04T10:00:00Z"
+     "signedAt": "2026-10-04T10:00:00Z",
+     "sig": "aGE0Ll4aJnUjrm0HGJnYaGVk7FihL46SCccT4IuvBVaB4z156HITVG5oWKVM6KDo_XnOPhMOjDNIhg_22Q1aDA"
     }
    },
    "keys": [
@@ -183,6 +183,147 @@
   "expected": {
    "ok": false,
    "reason": "unknown_key"
+  }
+ },
+ {
+  "id": "sig-backdated-after-revocation",
+  "kind": "signature",
+  "description": "A signature made after revocation whose signedAt is edited to a date before it: signedAt is inside the signed header, so the edit breaks the signature (RFC-0012).",
+  "input": {
+   "document": {
+    "kind": "Recall",
+    "id": "rc-001",
+    "issuedAt": "2026-10-04T10:00:00Z",
+    "targets": [
+     {
+      "ref": "cw:cookwala.ai:shakshuka"
+     }
+    ],
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:grocer.example#k1",
+     "signedAt": "2026-08-01T00:00:00Z",
+     "sig": "SAO2BJWb8XuMiOQTsG2ktGrt0FxpsJRse1MvTDZCGPEDy4gf3sFt7UD6coqI5Kt2IdoUDl7EU_tBMJd1sE2_Cg"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:hub.example#seq-1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "hub:home",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:grocer.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "grocer:a",
+     "validFrom": "2026-01-01T00:00:00Z",
+     "revokedAt": "2026-09-01T00:00:00Z",
+     "revocationReason": "superseded"
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "bad_signature"
+  }
+ },
+ {
+  "id": "sig-missing-signed-at",
+  "kind": "signature",
+  "description": "A signature without signedAt cannot be checked against revocation: rejected as unsigned_time.",
+  "input": {
+   "document": {
+    "kind": "Recall",
+    "id": "rc-001",
+    "issuedAt": "2026-10-04T10:00:00Z",
+    "targets": [
+     {
+      "ref": "cw:cookwala.ai:shakshuka"
+     }
+    ],
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:hub.example#seq-1",
+     "sig": "aGE0Ll4aJnUjrm0HGJnYaGVk7FihL46SCccT4IuvBVaB4z156HITVG5oWKVM6KDo_XnOPhMOjDNIhg_22Q1aDA"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:hub.example#seq-1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "hub:home",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:grocer.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "grocer:a",
+     "validFrom": "2026-01-01T00:00:00Z",
+     "revokedAt": "2026-09-01T00:00:00Z",
+     "revocationReason": "superseded"
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "unsigned_time"
+  }
+ },
+ {
+  "id": "sig-kid-rebound",
+  "kind": "signature",
+  "description": "The same public key registered under another kid, and the signature relabelled with it: the kid is inside the signed header, so it fails.",
+  "input": {
+   "document": {
+    "kind": "Recall",
+    "id": "rc-001",
+    "issuedAt": "2026-10-04T10:00:00Z",
+    "targets": [
+     {
+      "ref": "cw:cookwala.ai:shakshuka"
+     }
+    ],
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:hub.example#seq-1-alias",
+     "signedAt": "2026-10-04T10:00:00Z",
+     "sig": "aGE0Ll4aJnUjrm0HGJnYaGVk7FihL46SCccT4IuvBVaB4z156HITVG5oWKVM6KDo_XnOPhMOjDNIhg_22Q1aDA"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:hub.example#seq-1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "hub:home",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:grocer.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "grocer:a",
+     "validFrom": "2026-01-01T00:00:00Z",
+     "revokedAt": "2026-09-01T00:00:00Z",
+     "revocationReason": "superseded"
+    },
+    {
+     "kid": "did:web:hub.example#seq-1-alias",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "hub:home",
+     "validFrom": "2026-01-01T00:00:00Z"
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "bad_signature"
   }
  }
 ]

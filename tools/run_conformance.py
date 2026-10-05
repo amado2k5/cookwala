@@ -46,6 +46,8 @@ def run(v):
     if k == 'disclosure':
         return {'ok': ref.verify_disclosure(i)}
     if k == 'ledger':
+        if 'checkpoints' in i:
+            return ref.detect_fork(*i['checkpoints'])
         if 'checkpoint' in i:
             ok, why, _ = ref.verify_chain(i['events'], i['keys'])
             if not ok: return {'ok': False, 'reason': why}

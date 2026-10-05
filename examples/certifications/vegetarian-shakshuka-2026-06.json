@@ -24,7 +24,7 @@
  "signature": {
   "alg": "EdDSA",
   "kid": "did:web:plant-based-society.example#k1",
-  "sig": "pQ4dPthN44NEJNdQ9m58WzHRoBTAMoVIanXYmNTeaTsBMIQzETd38TV0v-kkjLVWA6HCbV5GiJhAdpbfbBXDDw",
-  "signedAt": "2026-06-01T08:00:00Z"
+  "signedAt": "2026-06-01T08:00:00Z",
+  "sig": "ARZtsuOYgKklcYTpgJPlOIHgdjGrhxXwKT0s-xAKceDnmCadx1AcTEtCPkm_5s68KsgIHsBn-WCFU9bup2vtDg"
  }
 }

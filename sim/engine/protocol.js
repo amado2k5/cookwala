@@ -1,7 +1,8 @@
 // Cookwala Protocol helpers: build and evolve a Mission document per schemas/mission.schema.json.
 import { sha256, canonical, iso, money, round } from './util.js?v=0.1.3';
 
-const SIG = (actor, payload) => ({ alg: 'EdDSA', kid: `${actor}#sim-key`, sig: `sim-${sha256(actor + canonical(payload)).slice(0, 32)}` });
+// Simulated signature stub: not a real signature. signedAt is required by the schema (RFC-0012) and taken from the payload's own time.
+const SIG = (actor, payload) => ({ alg: 'EdDSA', kid: `${actor}#sim-key`, signedAt: payload.at || payload.decidedAt || payload.createdAt || payload.offeredAt || '2026-10-05T00:00:00Z', sig: `sim-${sha256(actor + canonical(payload)).slice(0, 32)}` });
 
 export class Mission {
   constructor(doc) {

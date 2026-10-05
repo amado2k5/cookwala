@@ -16,8 +16,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:hub.example#seq-1",
-      "sig": "9bSY8ah29zd9Ksey5IluJWOcxr_wZteJh9NleJUpAvFaQpo9Fy21zzn3IXTI1eBYaqrRHHHqfAqBP6A3-n2gBA",
-      "signedAt": "2026-10-04T17:00:00Z"
+      "signedAt": "2026-10-04T17:00:00Z",
+      "sig": "X9A6oWMqcIB09K6-WhdXgeaJrGvSHyZdDXknFdh4VCa8MJA1vwvKWH19v-BGkCDRxDcY1RTn07E48nI8XLmeBA"
      }
     },
     {
@@ -35,8 +35,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:hub.example#seq-1",
-      "sig": "BUwLdhJHS3nDNrD49Z18Ngt7-1EBWVr-AU6U6gVXXkuu9dpWlvVnIM9Mkbt029IXvu9tjvr-aI5oOjq28QkVAQ",
-      "signedAt": "2026-10-04T17:01:00Z"
+      "signedAt": "2026-10-04T17:01:00Z",
+      "sig": "ZOWNH3Tsz0c7r8TSSPALjsdGY7orXY8OvYKaAPffT3A1xChEAIjPEgptS3ChDOXrKJ5W2AeUroeEW32CoURqBw"
      }
     },
     {
@@ -53,8 +53,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:hub.example#seq-1",
-      "sig": "Ul80vQ-auHURIsmeDWTC2rd1h2ieWlUaWU2zJ-WWhJJKcbb-i8KgJYy4HCP-1WhSrdXdenG2gymHeTHnGMQVAQ",
-      "signedAt": "2026-10-04T17:02:00Z"
+      "signedAt": "2026-10-04T17:02:00Z",
+      "sig": "nuyRJHrbl6FJQwhqwZgvfzM4DNvTmmdqyGVtzgsvDTG4AUUTlk4KXVOlvhAp7iYBZShw_3oG3u0ANVHlgLebAw"
      }
     }
    ],
@@ -98,8 +98,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:hub.example#seq-1",
-      "sig": "9bSY8ah29zd9Ksey5IluJWOcxr_wZteJh9NleJUpAvFaQpo9Fy21zzn3IXTI1eBYaqrRHHHqfAqBP6A3-n2gBA",
-      "signedAt": "2026-10-04T17:00:00Z"
+      "signedAt": "2026-10-04T17:00:00Z",
+      "sig": "X9A6oWMqcIB09K6-WhdXgeaJrGvSHyZdDXknFdh4VCa8MJA1vwvKWH19v-BGkCDRxDcY1RTn07E48nI8XLmeBA"
      }
     },
     {
@@ -117,8 +117,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:hub.example#seq-1",
-      "sig": "BUwLdhJHS3nDNrD49Z18Ngt7-1EBWVr-AU6U6gVXXkuu9dpWlvVnIM9Mkbt029IXvu9tjvr-aI5oOjq28QkVAQ",
-      "signedAt": "2026-10-04T17:01:00Z"
+      "signedAt": "2026-10-04T17:01:00Z",
+      "sig": "ZOWNH3Tsz0c7r8TSSPALjsdGY7orXY8OvYKaAPffT3A1xChEAIjPEgptS3ChDOXrKJ5W2AeUroeEW32CoURqBw"
      }
     },
     {
@@ -135,8 +135,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:hub.example#seq-1",
-      "sig": "Ul80vQ-auHURIsmeDWTC2rd1h2ieWlUaWU2zJ-WWhJJKcbb-i8KgJYy4HCP-1WhSrdXdenG2gymHeTHnGMQVAQ",
-      "signedAt": "2026-10-04T17:02:00Z"
+      "signedAt": "2026-10-04T17:02:00Z",
+      "sig": "nuyRJHrbl6FJQwhqwZgvfzM4DNvTmmdqyGVtzgsvDTG4AUUTlk4KXVOlvhAp7iYBZShw_3oG3u0ANVHlgLebAw"
      }
     }
    ],
@@ -179,8 +179,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:hub.example#seq-1",
-      "sig": "9bSY8ah29zd9Ksey5IluJWOcxr_wZteJh9NleJUpAvFaQpo9Fy21zzn3IXTI1eBYaqrRHHHqfAqBP6A3-n2gBA",
-      "signedAt": "2026-10-04T17:00:00Z"
+      "signedAt": "2026-10-04T17:00:00Z",
+      "sig": "X9A6oWMqcIB09K6-WhdXgeaJrGvSHyZdDXknFdh4VCa8MJA1vwvKWH19v-BGkCDRxDcY1RTn07E48nI8XLmeBA"
      }
     },
     {
@@ -198,8 +198,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:hub.example#seq-1",
-      "sig": "BUwLdhJHS3nDNrD49Z18Ngt7-1EBWVr-AU6U6gVXXkuu9dpWlvVnIM9Mkbt029IXvu9tjvr-aI5oOjq28QkVAQ",
-      "signedAt": "2026-10-04T17:01:00Z"
+      "signedAt": "2026-10-04T17:01:00Z",
+      "sig": "ZOWNH3Tsz0c7r8TSSPALjsdGY7orXY8OvYKaAPffT3A1xChEAIjPEgptS3ChDOXrKJ5W2AeUroeEW32CoURqBw"
      }
     },
     {
@@ -216,8 +216,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:hub.example#seq-1",
-      "sig": "Ul80vQ-auHURIsmeDWTC2rd1h2ieWlUaWU2zJ-WWhJJKcbb-i8KgJYy4HCP-1WhSrdXdenG2gymHeTHnGMQVAQ",
-      "signedAt": "2026-10-04T17:02:00Z"
+      "signedAt": "2026-10-04T17:02:00Z",
+      "sig": "nuyRJHrbl6FJQwhqwZgvfzM4DNvTmmdqyGVtzgsvDTG4AUUTlk4KXVOlvhAp7iYBZShw_3oG3u0ANVHlgLebAw"
      }
     }
    ],
@@ -230,7 +230,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "did:web:hub.example#seq-1",
-     "sig": "RG1J6S8NG0Y6qPOjGl1GeyKDfBLjN4u69CyP9h6pg3hU9675HmQUhv2-z9Gx58ZvIgchMwdykGrqORWSpDSyAQ"
+     "signedAt": "2026-10-04T17:05:00Z",
+     "sig": "swkprtD9Pt1M2jegW-DgwZmQqbi4OxsqNI4Ia2B4Sdt7GgmqVmh8g11gWbWY8GJdAcWJf5LktLqKIfHxSj7LCg"
     },
     "witnesses": [
      {
@@ -239,7 +240,8 @@
       "signature": {
        "alg": "EdDSA",
        "kid": "did:web:grocer.example#k1",
-       "sig": "GIhjVSL2E1Z51xX-oUPZfNKwG5SoKv3J28-GXMXRjwsnSGxRu8q3gyjm2XXmB-4i0r_7nqciFhcHaUldxZgPBw"
+       "signedAt": "2026-10-04T17:06:00Z",
+       "sig": "LRtOgellRVkCT2k4yltyhN1wZt3-MW3XpjHWW3j8bc7idNak3cni2XtxmVXuyPx-BRN_qvqqSLUAh38bvWq6Bg"
       }
      }
     ]
@@ -267,9 +269,9 @@
   }
  },
  {
-  "id": "ledger-rewrite-detected",
+  "id": "ledger-checkpoint-no-witness",
   "kind": "ledger",
-  "description": "The sequencer rewrote event 2 after a witnessed checkpoint: the rewritten chain is internally valid but no longer matches the checkpoint.",
+  "description": "A checkpoint signed only by the sequencer is not witnessed: no_independent_witness (RFC-0012).",
   "input": {
    "events": [
     {
@@ -283,8 +285,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:hub.example#seq-1",
-      "sig": "9bSY8ah29zd9Ksey5IluJWOcxr_wZteJh9NleJUpAvFaQpo9Fy21zzn3IXTI1eBYaqrRHHHqfAqBP6A3-n2gBA",
-      "signedAt": "2026-10-04T17:00:00Z"
+      "signedAt": "2026-10-04T17:00:00Z",
+      "sig": "X9A6oWMqcIB09K6-WhdXgeaJrGvSHyZdDXknFdh4VCa8MJA1vwvKWH19v-BGkCDRxDcY1RTn07E48nI8XLmeBA"
      }
     },
     {
@@ -302,8 +304,271 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:hub.example#seq-1",
-      "sig": "BUwLdhJHS3nDNrD49Z18Ngt7-1EBWVr-AU6U6gVXXkuu9dpWlvVnIM9Mkbt029IXvu9tjvr-aI5oOjq28QkVAQ",
-      "signedAt": "2026-10-04T17:01:00Z"
+      "signedAt": "2026-10-04T17:01:00Z",
+      "sig": "ZOWNH3Tsz0c7r8TSSPALjsdGY7orXY8OvYKaAPffT3A1xChEAIjPEgptS3ChDOXrKJ5W2AeUroeEW32CoURqBw"
+     }
+    },
+    {
+     "mission": "m-001",
+     "seq": 2,
+     "at": "2026-10-04T17:02:00Z",
+     "actor": "grocer:a",
+     "type": "contribution_offered",
+     "prev": "sha256:51e984e8676a823cbd2aa0d006239c1e16a8f2bea21917d6385f3a1945f6b51a",
+     "payload": {
+      "ref": "c-grocerA"
+     },
+     "hash": "sha256:1861eb802712e55cddbb716b06addbe4d7dfd95b9e942be187dd635ac3f15d15",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "signedAt": "2026-10-04T17:02:00Z",
+      "sig": "nuyRJHrbl6FJQwhqwZgvfzM4DNvTmmdqyGVtzgsvDTG4AUUTlk4KXVOlvhAp7iYBZShw_3oG3u0ANVHlgLebAw"
+     }
+    }
+   ],
+   "checkpoint": {
+    "mission": "m-001",
+    "seq": 2,
+    "head": "sha256:1861eb802712e55cddbb716b06addbe4d7dfd95b9e942be187dd635ac3f15d15",
+    "at": "2026-10-04T17:05:00Z",
+    "sequencer": "hub:home",
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:hub.example#seq-1",
+     "signedAt": "2026-10-04T17:05:00Z",
+     "sig": "swkprtD9Pt1M2jegW-DgwZmQqbi4OxsqNI4Ia2B4Sdt7GgmqVmh8g11gWbWY8GJdAcWJf5LktLqKIfHxSj7LCg"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:hub.example#seq-1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "hub:home",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:grocer.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "grocer:a",
+     "validFrom": "2026-01-01T00:00:00Z"
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "no_independent_witness"
+  }
+ },
+ {
+  "id": "ledger-checkpoint-self-witnessed",
+  "kind": "ledger",
+  "description": "The sequencer witnessing its own checkpoint does not count.",
+  "input": {
+   "events": [
+    {
+     "mission": "m-001",
+     "seq": 0,
+     "at": "2026-10-04T17:00:00Z",
+     "actor": "mom",
+     "type": "created",
+     "prev": "genesis",
+     "hash": "sha256:699a829626384e27ebd0aec215f1a64ffe823a29f845c36ccb1455b520ccda27",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "signedAt": "2026-10-04T17:00:00Z",
+      "sig": "X9A6oWMqcIB09K6-WhdXgeaJrGvSHyZdDXknFdh4VCa8MJA1vwvKWH19v-BGkCDRxDcY1RTn07E48nI8XLmeBA"
+     }
+    },
+    {
+     "mission": "m-001",
+     "seq": 1,
+     "at": "2026-10-04T17:01:00Z",
+     "actor": "hub:home",
+     "type": "state_changed",
+     "prev": "sha256:699a829626384e27ebd0aec215f1a64ffe823a29f845c36ccb1455b520ccda27",
+     "transition": {
+      "from": "draft",
+      "to": "open"
+     },
+     "hash": "sha256:51e984e8676a823cbd2aa0d006239c1e16a8f2bea21917d6385f3a1945f6b51a",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "signedAt": "2026-10-04T17:01:00Z",
+      "sig": "ZOWNH3Tsz0c7r8TSSPALjsdGY7orXY8OvYKaAPffT3A1xChEAIjPEgptS3ChDOXrKJ5W2AeUroeEW32CoURqBw"
+     }
+    },
+    {
+     "mission": "m-001",
+     "seq": 2,
+     "at": "2026-10-04T17:02:00Z",
+     "actor": "grocer:a",
+     "type": "contribution_offered",
+     "prev": "sha256:51e984e8676a823cbd2aa0d006239c1e16a8f2bea21917d6385f3a1945f6b51a",
+     "payload": {
+      "ref": "c-grocerA"
+     },
+     "hash": "sha256:1861eb802712e55cddbb716b06addbe4d7dfd95b9e942be187dd635ac3f15d15",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "signedAt": "2026-10-04T17:02:00Z",
+      "sig": "nuyRJHrbl6FJQwhqwZgvfzM4DNvTmmdqyGVtzgsvDTG4AUUTlk4KXVOlvhAp7iYBZShw_3oG3u0ANVHlgLebAw"
+     }
+    }
+   ],
+   "checkpoint": {
+    "mission": "m-001",
+    "seq": 2,
+    "head": "sha256:1861eb802712e55cddbb716b06addbe4d7dfd95b9e942be187dd635ac3f15d15",
+    "at": "2026-10-04T17:05:00Z",
+    "sequencer": "hub:home",
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:hub.example#seq-1",
+     "signedAt": "2026-10-04T17:05:00Z",
+     "sig": "swkprtD9Pt1M2jegW-DgwZmQqbi4OxsqNI4Ia2B4Sdt7GgmqVmh8g11gWbWY8GJdAcWJf5LktLqKIfHxSj7LCg"
+    },
+    "witnesses": [
+     {
+      "actor": "hub:home",
+      "at": "2026-10-04T17:06:00Z",
+      "signature": {
+       "alg": "EdDSA",
+       "kid": "did:web:hub.example#seq-1",
+       "signedAt": "2026-10-04T17:06:00Z",
+       "sig": "TBIwaU_-wm3RBVR5GJBpZuI2gYlEPt_vl2k2xLnhwmvg3D4PLix8L4ZP2BudqnlFp4YWe1ikmCJVGneBV1BQBQ"
+      }
+     }
+    ]
+   },
+   "keys": [
+    {
+     "kid": "did:web:hub.example#seq-1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "hub:home",
+     "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:grocer.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "grocer:a",
+     "validFrom": "2026-01-01T00:00:00Z"
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "no_independent_witness"
+  }
+ },
+ {
+  "id": "ledger-fork-detected",
+  "kind": "ledger",
+  "description": "Two checkpoints of one log at the same seq with different heads: a fork or a rewrite, detectable by anyone holding both.",
+  "input": {
+   "checkpoints": [
+    {
+     "mission": "m-001",
+     "seq": 2,
+     "head": "sha256:1861eb802712e55cddbb716b06addbe4d7dfd95b9e942be187dd635ac3f15d15",
+     "at": "2026-10-04T17:05:00Z",
+     "sequencer": "hub:home",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "signedAt": "2026-10-04T17:05:00Z",
+      "sig": "swkprtD9Pt1M2jegW-DgwZmQqbi4OxsqNI4Ia2B4Sdt7GgmqVmh8g11gWbWY8GJdAcWJf5LktLqKIfHxSj7LCg"
+     },
+     "witnesses": [
+      {
+       "actor": "grocer:a",
+       "at": "2026-10-04T17:06:00Z",
+       "signature": {
+        "alg": "EdDSA",
+        "kid": "did:web:grocer.example#k1",
+        "signedAt": "2026-10-04T17:06:00Z",
+        "sig": "LRtOgellRVkCT2k4yltyhN1wZt3-MW3XpjHWW3j8bc7idNak3cni2XtxmVXuyPx-BRN_qvqqSLUAh38bvWq6Bg"
+       }
+      }
+     ]
+    },
+    {
+     "mission": "m-001",
+     "seq": 2,
+     "head": "sha256:abababababababababababababababababababababababababababababababab",
+     "at": "2026-10-04T17:05:00Z",
+     "sequencer": "hub:home",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "signedAt": "2026-10-04T17:05:00Z",
+      "sig": "swkprtD9Pt1M2jegW-DgwZmQqbi4OxsqNI4Ia2B4Sdt7GgmqVmh8g11gWbWY8GJdAcWJf5LktLqKIfHxSj7LCg"
+     },
+     "witnesses": [
+      {
+       "actor": "grocer:a",
+       "at": "2026-10-04T17:06:00Z",
+       "signature": {
+        "alg": "EdDSA",
+        "kid": "did:web:grocer.example#k1",
+        "signedAt": "2026-10-04T17:06:00Z",
+        "sig": "LRtOgellRVkCT2k4yltyhN1wZt3-MW3XpjHWW3j8bc7idNak3cni2XtxmVXuyPx-BRN_qvqqSLUAh38bvWq6Bg"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "expected": {
+   "fork": true,
+   "reason": "fork_detected"
+  }
+ },
+ {
+  "id": "ledger-rewrite-detected",
+  "kind": "ledger",
+  "description": "The sequencer rewrote event 2 after a witnessed checkpoint: the rewritten chain is internally valid but no longer matches the checkpoint.",
+  "input": {
+   "events": [
+    {
+     "mission": "m-001",
+     "seq": 0,
+     "at": "2026-10-04T17:00:00Z",
+     "actor": "mom",
+     "type": "created",
+     "prev": "genesis",
+     "hash": "sha256:699a829626384e27ebd0aec215f1a64ffe823a29f845c36ccb1455b520ccda27",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "signedAt": "2026-10-04T17:00:00Z",
+      "sig": "X9A6oWMqcIB09K6-WhdXgeaJrGvSHyZdDXknFdh4VCa8MJA1vwvKWH19v-BGkCDRxDcY1RTn07E48nI8XLmeBA"
+     }
+    },
+    {
+     "mission": "m-001",
+     "seq": 1,
+     "at": "2026-10-04T17:01:00Z",
+     "actor": "hub:home",
+     "type": "state_changed",
+     "prev": "sha256:699a829626384e27ebd0aec215f1a64ffe823a29f845c36ccb1455b520ccda27",
+     "transition": {
+      "from": "draft",
+      "to": "open"
+     },
+     "hash": "sha256:51e984e8676a823cbd2aa0d006239c1e16a8f2bea21917d6385f3a1945f6b51a",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:hub.example#seq-1",
+      "signedAt": "2026-10-04T17:01:00Z",
+      "sig": "ZOWNH3Tsz0c7r8TSSPALjsdGY7orXY8OvYKaAPffT3A1xChEAIjPEgptS3ChDOXrKJ5W2AeUroeEW32CoURqBw"
      }
     },
     {
@@ -320,8 +585,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:hub.example#seq-1",
-      "sig": "3uq6ZyX6zKWwejPcWUPijjfWtLKhBLZYTLJttzzveKE1563pA5YMc7s5GuTWBiIL3dF37iLQTITvNEPnPeicDA",
-      "signedAt": "2026-10-04T17:02:00Z"
+      "signedAt": "2026-10-04T17:02:00Z",
+      "sig": "Us1FGgOPpkObzje-MGOfU_yZmuwDEXeWXK8wuDhZCvpUFOHin5yUjRWr-OplA43IN9k0skmEEh3bYKoi_n4yCQ"
      }
     }
    ],
@@ -334,7 +599,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "did:web:hub.example#seq-1",
-     "sig": "RG1J6S8NG0Y6qPOjGl1GeyKDfBLjN4u69CyP9h6pg3hU9675HmQUhv2-z9Gx58ZvIgchMwdykGrqORWSpDSyAQ"
+     "signedAt": "2026-10-04T17:05:00Z",
+     "sig": "swkprtD9Pt1M2jegW-DgwZmQqbi4OxsqNI4Ia2B4Sdt7GgmqVmh8g11gWbWY8GJdAcWJf5LktLqKIfHxSj7LCg"
     },
     "witnesses": [
      {
@@ -343,7 +609,8 @@
       "signature": {
        "alg": "EdDSA",
        "kid": "did:web:grocer.example#k1",
-       "sig": "GIhjVSL2E1Z51xX-oUPZfNKwG5SoKv3J28-GXMXRjwsnSGxRu8q3gyjm2XXmB-4i0r_7nqciFhcHaUldxZgPBw"
+       "signedAt": "2026-10-04T17:06:00Z",
+       "sig": "LRtOgellRVkCT2k4yltyhN1wZt3-MW3XpjHWW3j8bc7idNak3cni2XtxmVXuyPx-BRN_qvqqSLUAh38bvWq6Bg"
       }
      }
     ]

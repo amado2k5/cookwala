@@ -34,7 +34,7 @@
  "signature": {
   "alg": "EdDSA",
   "kid": "did:web:halal-authority.example#k1",
-  "sig": "TobX9r0bYvbDqUoFIx9WJ3XuV-0UdzxKfSRJ35_WgG0n_rPabxy3W2RvRJKxzNvleA6Dsr2dVHOAalrQg_TRCA",
-  "signedAt": "2026-09-15T09:00:00Z"
+  "signedAt": "2026-09-15T09:00:00Z",
+  "sig": "YhBHS_tAmKni5eVCgDtrkh05X5MHaIHzE2s3d1yqj-8bnKvags9TRpNT1Uwu3MyaRnuF-J030RL__LxhfaFWBg"
  }
 }

@@ -59,7 +59,7 @@ print(cw.convert(1, "cup", "g", 0.53))       # 127.2 (flour)
 
 ```bash
 python tools/validate_specs.py     # schemas, examples, recipe temperatures, API references
-python tools/run_conformance.py    # 131 vectors (Core and profiles), incl. RFC 8785 and RFC 8032 results
+python tools/run_conformance.py    # 137 vectors (Core and profiles), incl. RFC 8785 and RFC 8032 results
 ```
 
 ## 6. Turn a cooking log into a trace or a dataset

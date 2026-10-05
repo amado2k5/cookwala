@@ -29,8 +29,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "did:web:halal-authority.example#k1",
-     "sig": "thiJh5ph9RiO-eBMhB5DT-grqOyI0zfAYu1k04eO_9Ht8V9bmKcky9LchNPr70g2-XrpnbaA8RevsrGPisHXAQ",
-     "signedAt": "2026-01-15T10:00:00Z"
+     "signedAt": "2026-01-15T10:00:00Z",
+     "sig": "ocDk3IwLbH0oYmei-TPylIUxIdm3v_sCPxy1Ths8cS2KJiZcwtYZz2VEH76fmn178A5v4CQpEOoQPjKpM2QhBg"
     }
    },
    "keys": [
@@ -87,8 +87,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "did:web:halal-authority.example#k1",
-     "sig": "aDOJKLHlV1KBHs_eBWwbvUPAuUJ85awUz4AmCdiKSPaSuO2PIhWQk4YKCuZfF8-fCP7WTrOazJf7Yg2VwGKSAQ",
-     "signedAt": "2025-02-01T00:00:00Z"
+     "signedAt": "2025-02-01T00:00:00Z",
+     "sig": "uUsCPeKSP3IlnDWhmQTXSxw8Q2iQ5YiIeJPlHP8_Y2nidVIzsjLfGpYx4BiJkQv1piUqi-Xlugane0MnyW-ICg"
     }
    },
    "keys": [
@@ -146,8 +146,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "did:web:halal-authority.example#k1",
-     "sig": "p0MeWXcD8f-264F4PSoeHB57TBKAsHSCRBB7dTnAqxQi3VKt8rTSsrMBk68pJenj5xMyIRuOzpioRLEQhOMLAQ",
-     "signedAt": "2026-02-01T00:00:00Z"
+     "signedAt": "2026-02-01T00:00:00Z",
+     "sig": "4mo2DClFFVcWI_Idem_omdPS9859HwM1Q7bA4j-fYDM92genLcsMJDnhDVgHsxDWzXLHiUEQ8kYQv8IcTlFyBg"
     }
    },
    "keys": [
@@ -203,8 +203,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "did:web:halal-authority.example#k1",
-     "sig": "thiJh5ph9RiO-eBMhB5DT-grqOyI0zfAYu1k04eO_9Ht8V9bmKcky9LchNPr70g2-XrpnbaA8RevsrGPisHXAQ",
-     "signedAt": "2026-01-15T10:00:00Z"
+     "signedAt": "2026-01-15T10:00:00Z",
+     "sig": "ocDk3IwLbH0oYmei-TPylIUxIdm3v_sCPxy1Ths8cS2KJiZcwtYZz2VEH76fmn178A5v4CQpEOoQPjKpM2QhBg"
     }
    },
    "keys": [
@@ -261,8 +261,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "did:web:halal-authority.example#k1",
-     "sig": "R2wNBKdz7FeT-UMSW77PXmGhbVfEFDheKvZKD3i7cvEeAOb0BDSfeQg-OlZECWEsQ_DoZ19AnZTWj5C_anofBA",
-     "signedAt": "2026-01-15T10:00:00Z"
+     "signedAt": "2026-01-15T10:00:00Z",
+     "sig": "CDlo_TgecAzdK4frMz3TOoJ0DZT5KambFuP5FsNymxXeG3U-ftoahZ9e7oKFExQ04hBltNyULOiDHe6oGUccCQ"
     }
    },
    "keys": [
@@ -369,8 +369,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "did:web:plant-based-society.example#k1",
-     "sig": "whHP259WCn8bZJpI6n3K9OAZvQK1cdw_woN5jH13Gqf-mb27Hgbw6kNH-IF_egDFtMuslAtW8cYJzfGPFTAlDg",
-     "signedAt": "2026-06-01T08:00:00Z"
+     "signedAt": "2026-06-01T08:00:00Z",
+     "sig": "ISuZdzPz9trPJbYqSRKXRPamqvwMyWv2CUUE6ZzOA_7TYPE-jV_1O-qptD7Rb2FQN3fjFj4pQtATBYdEUK4zBQ"
     }
    },
    "keys": [
@@ -420,8 +420,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:halal-authority.example#k1",
-      "sig": "thiJh5ph9RiO-eBMhB5DT-grqOyI0zfAYu1k04eO_9Ht8V9bmKcky9LchNPr70g2-XrpnbaA8RevsrGPisHXAQ",
-      "signedAt": "2026-01-15T10:00:00Z"
+      "signedAt": "2026-01-15T10:00:00Z",
+      "sig": "ocDk3IwLbH0oYmei-TPylIUxIdm3v_sCPxy1Ths8cS2KJiZcwtYZz2VEH76fmn178A5v4CQpEOoQPjKpM2QhBg"
      }
     },
     {
@@ -448,8 +448,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:halal-authority.example#k1",
-      "sig": "136fsi3vi8jhXJVMA4zx3ChFhp9lRgZno_PIhd9HqWhzEbulkzUB_RHQTUdUyxh441j946pfdgYP-z5lR-VyDA",
-      "signedAt": "2026-10-01T10:00:00Z"
+      "signedAt": "2026-10-01T10:00:00Z",
+      "sig": "UR6kyZ4xTPllK5sNn5k32YW-2VssJX8T5NLwPfrRO8FWP3pQ9YOZCShB0YTjJPYJ1TGDzsPracbXSu1UwX9GBw"
      }
     }
    ],
@@ -513,8 +513,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:halal-authority.example#k1",
-      "sig": "136fsi3vi8jhXJVMA4zx3ChFhp9lRgZno_PIhd9HqWhzEbulkzUB_RHQTUdUyxh441j946pfdgYP-z5lR-VyDA",
-      "signedAt": "2026-10-01T10:00:00Z"
+      "signedAt": "2026-10-01T10:00:00Z",
+      "sig": "UR6kyZ4xTPllK5sNn5k32YW-2VssJX8T5NLwPfrRO8FWP3pQ9YOZCShB0YTjJPYJ1TGDzsPracbXSu1UwX9GBw"
      }
     },
     {
@@ -540,8 +540,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:plant-based-society.example#k1",
-      "sig": "whHP259WCn8bZJpI6n3K9OAZvQK1cdw_woN5jH13Gqf-mb27Hgbw6kNH-IF_egDFtMuslAtW8cYJzfGPFTAlDg",
-      "signedAt": "2026-06-01T08:00:00Z"
+      "signedAt": "2026-06-01T08:00:00Z",
+      "sig": "ISuZdzPz9trPJbYqSRKXRPamqvwMyWv2CUUE6ZzOA_7TYPE-jV_1O-qptD7Rb2FQN3fjFj4pQtATBYdEUK4zBQ"
      }
     }
    ],
@@ -603,8 +603,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:halal-authority.example#k1",
-      "sig": "aDOJKLHlV1KBHs_eBWwbvUPAuUJ85awUz4AmCdiKSPaSuO2PIhWQk4YKCuZfF8-fCP7WTrOazJf7Yg2VwGKSAQ",
-      "signedAt": "2025-02-01T00:00:00Z"
+      "signedAt": "2025-02-01T00:00:00Z",
+      "sig": "uUsCPeKSP3IlnDWhmQTXSxw8Q2iQ5YiIeJPlHP8_Y2nidVIzsjLfGpYx4BiJkQv1piUqi-Xlugane0MnyW-ICg"
      }
     },
     {
@@ -632,8 +632,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:halal-authority.example#k1",
-      "sig": "p0MeWXcD8f-264F4PSoeHB57TBKAsHSCRBB7dTnAqxQi3VKt8rTSsrMBk68pJenj5xMyIRuOzpioRLEQhOMLAQ",
-      "signedAt": "2026-02-01T00:00:00Z"
+      "signedAt": "2026-02-01T00:00:00Z",
+      "sig": "4mo2DClFFVcWI_Idem_omdPS9859HwM1Q7bA4j-fYDM92genLcsMJDnhDVgHsxDWzXLHiUEQ8kYQv8IcTlFyBg"
      }
     },
     {
@@ -660,8 +660,8 @@
      "signature": {
       "alg": "EdDSA",
       "kid": "did:web:halal-authority.example#k1",
-      "sig": "136fsi3vi8jhXJVMA4zx3ChFhp9lRgZno_PIhd9HqWhzEbulkzUB_RHQTUdUyxh441j946pfdgYP-z5lR-VyDA",
-      "signedAt": "2026-10-01T10:00:00Z"
+      "signedAt": "2026-10-01T10:00:00Z",
+      "sig": "UR6kyZ4xTPllK5sNn5k32YW-2VssJX8T5NLwPfrRO8FWP3pQ9YOZCShB0YTjJPYJ1TGDzsPracbXSu1UwX9GBw"
      }
     }
    ],

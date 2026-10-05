@@ -52,6 +52,10 @@ doc = {'kind': 'Recall', 'id': 'rc-001', 'issuedAt': '2026-10-04T10:00:00Z', 'ta
 signed = {**doc, 'signature': ref.sign(doc, SEQ_SEED, KEYS[0]['kid'], '2026-10-04T10:00:00Z')}
 tampered = {**signed, 'id': 'rc-002'}
 late = {**doc, 'signature': ref.sign(doc, WIT_SEED, KEYS[1]['kid'], '2026-09-15T00:00:00Z')}
+backdated = {**doc, 'signature': {**late['signature'], 'signedAt': '2026-08-01T00:00:00Z'}}  # the attack RFC-0012 closes: signedAt is inside the signed header
+no_time = {**doc, 'signature': {k: v for k, v in signed['signature'].items() if k != 'signedAt'}}
+ALIAS = {**KEYS[0], 'kid': 'did:web:hub.example#seq-1-alias'}  # the same public key registered under a second id
+rebound = {**doc, 'signature': {**signed['signature'], 'kid': ALIAS['kid']}}
 sig_vectors = [
     {'id': 'sig-rfc8032-test1', 'kind': 'signature', 'description': 'RFC 8032 test 1: Ed25519 over the empty message with the test-1 key.',
      'input': {'seed': SEQ_SEED, 'messageHex': ''}, 'expected': {'publicKey': ref.public_key_from_seed(SEQ_SEED), 'signatureHex': 'e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b'}},
@@ -59,6 +63,9 @@ sig_vectors = [
     {'id': 'sig-tampered', 'kind': 'signature', 'description': 'Changing any signed field breaks the signature.', 'input': {'document': tampered, 'keys': KEYS}, 'expected': {'ok': False, 'reason': 'bad_signature'}},
     {'id': 'sig-revoked-key', 'kind': 'signature', 'description': 'A signature made after the key was revoked is invalid.', 'input': {'document': late, 'keys': KEYS}, 'expected': {'ok': False, 'reason': 'key_revoked'}},
     {'id': 'sig-unknown-key', 'kind': 'signature', 'description': 'An unknown kid is rejected, never trusted.', 'input': {'document': signed, 'keys': KEYS[1:]}, 'expected': {'ok': False, 'reason': 'unknown_key'}},
+    {'id': 'sig-backdated-after-revocation', 'kind': 'signature', 'description': 'A signature made after revocation whose signedAt is edited to a date before it: signedAt is inside the signed header, so the edit breaks the signature (RFC-0012).', 'input': {'document': backdated, 'keys': KEYS}, 'expected': {'ok': False, 'reason': 'bad_signature'}},
+    {'id': 'sig-missing-signed-at', 'kind': 'signature', 'description': 'A signature without signedAt cannot be checked against revocation: rejected as unsigned_time.', 'input': {'document': no_time, 'keys': KEYS}, 'expected': {'ok': False, 'reason': 'unsigned_time'}},
+    {'id': 'sig-kid-rebound', 'kind': 'signature', 'description': 'The same public key registered under another kid, and the signature relabelled with it: the kid is inside the signed header, so it fails.', 'input': {'document': rebound, 'keys': KEYS + [ALIAS]}, 'expected': {'ok': False, 'reason': 'bad_signature'}},
 ]
 write('signature', sig_vectors)
 
@@ -81,13 +88,12 @@ for i, (t, actor, extra) in enumerate([('created', 'mom', {}), ('state_changed',
 broken = [dict(e) for e in events]; broken[1] = {**broken[1], 'actor': 'mallory'}
 cp = {'mission': 'm-001', 'seq': 2, 'head': events[2]['hash'], 'at': '2026-10-04T17:05:00Z', 'sequencer': 'hub:home'}
 h = ref.doc_hash(cp, exclude=('signature', 'witnesses'))
-from cryptography.hazmat.primitives.asymmetric import ed25519  # noqa: E402
-sk1 = ed25519.Ed25519PrivateKey.from_private_bytes(bytes.fromhex(SEQ_SEED))
 KEYS_W = [KEYS[0], {**KEYS[1], 'revokedAt': None}]
 KEYS_W[1].pop('revokedAt'); KEYS_W[1].pop('revocationReason')
-sk2 = ed25519.Ed25519PrivateKey.from_private_bytes(bytes.fromhex(WIT_SEED))
-cp['signature'] = {'alg': 'EdDSA', 'kid': KEYS[0]['kid'], 'sig': ref.b64u(sk1.sign(h.encode()))}
-cp['witnesses'] = [{'actor': 'grocer:a', 'at': '2026-10-04T17:06:00Z', 'signature': {'alg': 'EdDSA', 'kid': KEYS[1]['kid'], 'sig': ref.b64u(sk2.sign(h.encode()))}}]
+cp['signature'] = ref.sign_hash(h, SEQ_SEED, KEYS[0]['kid'], '2026-10-04T17:05:00Z', 'Checkpoint')
+cp['witnesses'] = [{'actor': 'grocer:a', 'at': '2026-10-04T17:06:00Z', 'signature': ref.sign_hash(h, WIT_SEED, KEYS[1]['kid'], '2026-10-04T17:06:00Z', 'Checkpoint')}]
+cp_unwitnessed = {k: v for k, v in cp.items() if k != 'witnesses'}
+cp_self = {**cp, 'witnesses': [{'actor': 'hub:home', 'at': '2026-10-04T17:06:00Z', 'signature': ref.sign_hash(h, SEQ_SEED, KEYS[0]['kid'], '2026-10-04T17:06:00Z', 'Checkpoint')}]}
 rewritten = [dict(e) for e in events[:2]]
 alt = {'mission': 'm-001', 'seq': 2, 'at': '2026-10-04T17:02:00Z', 'actor': 'grocer:b', 'type': 'contribution_offered', 'prev': rewritten[1]['hash'], 'payload': {'ref': 'c-grocerB'}}
 rewritten.append(ref.sign_event(alt, SEQ_SEED, KEYS[0]['kid'], alt['at']))
@@ -95,6 +101,9 @@ write('ledger', [
     {'id': 'ledger-valid-chain', 'kind': 'ledger', 'description': 'Three sequenced, signed events form a valid chain.', 'input': {'events': events, 'keys': KEYS_W}, 'expected': {'ok': True, 'reason': 'ok', 'head': events[-1]['hash']}},
     {'id': 'ledger-edited-event', 'kind': 'ledger', 'description': 'Editing an event breaks its hash.', 'input': {'events': broken, 'keys': KEYS_W}, 'expected': {'ok': False, 'reason': 'hash_mismatch_at_1'}},
     {'id': 'ledger-checkpoint-valid', 'kind': 'ledger', 'description': 'A checkpoint signed by the sequencer and a witness matches the head.', 'input': {'events': events, 'checkpoint': cp, 'keys': KEYS_W}, 'expected': {'ok': True, 'reason': 'ok'}},
+    {'id': 'ledger-checkpoint-no-witness', 'kind': 'ledger', 'description': 'A checkpoint signed only by the sequencer is not witnessed: no_independent_witness (RFC-0012).', 'input': {'events': events, 'checkpoint': cp_unwitnessed, 'keys': KEYS_W}, 'expected': {'ok': False, 'reason': 'no_independent_witness'}},
+    {'id': 'ledger-checkpoint-self-witnessed', 'kind': 'ledger', 'description': 'The sequencer witnessing its own checkpoint does not count.', 'input': {'events': events, 'checkpoint': cp_self, 'keys': KEYS_W}, 'expected': {'ok': False, 'reason': 'no_independent_witness'}},
+    {'id': 'ledger-fork-detected', 'kind': 'ledger', 'description': 'Two checkpoints of one log at the same seq with different heads: a fork or a rewrite, detectable by anyone holding both.', 'input': {'checkpoints': [cp, {**cp, 'head': 'sha256:' + 'ab' * 32}]}, 'expected': {'fork': True, 'reason': 'fork_detected'}},
     {'id': 'ledger-rewrite-detected', 'kind': 'ledger', 'description': 'The sequencer rewrote event 2 after a witnessed checkpoint: the rewritten chain is internally valid but no longer matches the checkpoint.', 'input': {'events': rewritten, 'checkpoint': cp, 'keys': KEYS_W}, 'expected': {'ok': False, 'reason': 'head_mismatch'}},
 ])
 

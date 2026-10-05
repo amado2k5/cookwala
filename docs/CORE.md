@@ -1,6 +1,6 @@
 # Cookwala Core 0.2
 
-**Status:** draft, 2026-10-04. This is the normative part of Cookwala. MUST, SHOULD and MAY
+**Status:** draft 0.2.1, 2026-10-05 (RFC-0012 changed what a signature covers; comment window open until 2026-11-04). This is the normative part of Cookwala. MUST, SHOULD and MAY
 follow RFC 2119. Everything not listed here is an optional **profile** (section 10).
 
 A device should be able to implement Core in about a week. Core says **what to make, when it
@@ -83,8 +83,13 @@ bundle so that devices validate offline. Implementations MUST NOT fetch schemas 
 - **Hash.** `sha256:` plus the hex digest of the RFC 8785 canonical JSON of the document,
   without its `hash` and `signature` fields. The reference canonicalizer reproduces the RFC
   8785 example exactly.
-- **Signature.** Ed25519 (`EdDSA`) over the ASCII hash string. `ES256` is allowed for P-256
-  hardware keys. `kid` names a `KeyRecord`.
+- **Signature.** Ed25519 (`EdDSA`) over the RFC 8785 canonical JSON of the **signing header**
+  `{alg, hash, kid, kind, signedAt}`, where `hash` is the document hash and `kind` the document
+  kind when it has one (`Event` for log events, `Checkpoint` for checkpoints). `signedAt` is
+  required and covered by the signature, so revocation and validity are checked against a time
+  the signer cannot change afterwards; `kid` and `alg` are covered, so a signature cannot be
+  moved to another key id or algorithm. `ES256` is allowed for P-256 hardware keys. `kid` names
+  a `KeyRecord`. (RFC-0012; 0.2.0 signed the bare hash string.)
 - **Keys.** A `KeyRecord` gives the public key, its owner, a validity window and `revokedAt`.
   A signature whose `signedAt` falls after revocation, or outside the validity window, is
   invalid.
@@ -97,8 +102,9 @@ bundle so that devices validate offline. Implementations MUST NOT fetch schemas 
   value only to parties allowed to see them, and the signature still verifies.
 - **Event logs** (Mission profile):
   - One sequencer per log assigns `seq` and `prev`, so the chain never forks.
-  - Checkpoints are signed by the sequencer and counter-signed by witnesses, who may include
-    a transparency service such as IETF SCITT. A rewrite after a witnessed checkpoint is
+  - Checkpoints are signed by the sequencer and counter-signed by at least one witness whose
+    key is not the sequencer's; witnesses may include a transparency service such as IETF SCITT.
+    Two checkpoints of one log at the same `seq` with different heads prove a fork. A rewrite after a witnessed checkpoint is
     detectable.
   - In `hash_only` mode, payloads live in erasable storage and the log keeps only their hashes.
 
@@ -225,7 +231,8 @@ and it has real users.
 | Agents | Mandate inside Missions only | `AgentMandate` in common; required for agent requests |
 | Safety | Declared in recipes | Also enforced locally through SafetyLimits; recalls; incident reports |
 | Data | No dataset model | Consented, personal-data-free ExecutionLog |
-| Conformance | Schema validation only | 131 vectors (51 Core, 80 profile) plus a reference implementation |
+| Conformance | Schema validation only | 137 vectors (57 Core, 80 profile) plus a reference implementation |
+| Signature (0.2.1, RFC-0012) | Over the bare hash string; `signedAt` optional and unsigned | Over the signing header `{alg, hash, kid, kind, signedAt}`; `signedAt` required; one verification path for documents, events and checkpoints; checkpoints need an independent witness |
 
 To migrate a 0.1 document: convert °F to °C; replace relative tolerances on temperatures with
 `toleranceAbs`; turn money amounts into decimal strings; remove or rename unknown fields to

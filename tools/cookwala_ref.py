@@ -105,34 +105,65 @@ def public_key_from_seed(seed_hex):
     return b64u(sk.public_key().public_bytes(serialization.Encoding.Raw, serialization.PublicFormat.Raw))
 
 
-def sign(doc, seed_hex, kid, signed_at=None):
-    """Return a Signature object over doc_hash(doc). Ed25519 is deterministic, so vectors are reproducible."""
-    sk = _ed().Ed25519PrivateKey.from_private_bytes(bytes.fromhex(seed_hex))
-    sig = {'alg': 'EdDSA', 'kid': kid, 'sig': b64u(sk.sign(doc_hash(doc).encode('ascii')))}
-    if signed_at: sig['signedAt'] = signed_at
-    return sig
-
-
 def _time(s): return dt.datetime.fromisoformat(s.replace('Z', '+00:00'))
 
 
-def verify(doc, keys, now=None):
-    """Verify doc['signature'] against a list of KeyRecords. Returns (ok, reason)."""
-    sig = doc.get('signature')
-    if not sig: return False, 'unsigned'
-    rec = next((k for k in keys if k['kid'] == sig['kid']), None)
-    if not rec: return False, 'unknown_key'
-    if rec['alg'] != sig['alg']: return False, 'alg_mismatch'
-    when = _time(sig['signedAt']) if sig.get('signedAt') else (now or dt.datetime.now(dt.timezone.utc))
-    if when < _time(rec['validFrom']) or (rec.get('validTo') and when > _time(rec['validTo'])): return False, 'key_not_valid_at_signing_time'
-    if rec.get('revokedAt') and when >= _time(rec['revokedAt']): return False, 'key_revoked'
-    if sig['alg'] != 'EdDSA': return False, 'alg_not_supported_by_reference'
-    pk = _ed().Ed25519PublicKey.from_public_bytes(unb64u(rec['publicKey']))
+def _now_iso(): return dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+def signing_input(h, kid, alg, signed_at, kind=None):
+    """RFC-0012: the bytes a signature covers. Canonical JSON of the signing header, so the key id, the
+    algorithm, the signing time and the document kind are all under the signature; a verifier can trust
+    signedAt against revocation, and a signature cannot be moved to another key id or document kind."""
+    hdr = {'alg': alg, 'hash': h, 'kid': kid, 'signedAt': signed_at}
+    if kind: hdr['kind'] = kind
+    return canonical(hdr).encode('utf-8')
+
+
+def sign_hash(h, seed_hex, kid, signed_at=None, kind=None):
+    """Sign a hash string with an Ed25519 seed. Deterministic, so vectors are reproducible."""
+    signed_at = signed_at or _now_iso()
+    sk = _ed().Ed25519PrivateKey.from_private_bytes(bytes.fromhex(seed_hex))
+    return {'alg': 'EdDSA', 'kid': kid, 'signedAt': signed_at, 'sig': b64u(sk.sign(signing_input(h, kid, 'EdDSA', signed_at, kind)))}
+
+
+def sign(doc, seed_hex, kid, signed_at=None, kind=None):
+    """Return a Signature object for doc (over its hash, inside the RFC-0012 signing header)."""
+    return sign_hash(doc_hash(doc), seed_hex, kid, signed_at, kind or doc.get('kind'))
+
+
+def _key_for(sig, keys):
+    """Find and check the KeyRecord a signature names. Returns (record, reason)."""
+    if not sig: return None, 'unsigned'
+    if not sig.get('signedAt'): return None, 'unsigned_time'
+    rec = next((k for k in keys if k['kid'] == sig.get('kid')), None)
+    if not rec: return None, 'unknown_key'
+    if rec['alg'] != sig.get('alg'): return None, 'alg_mismatch'
+    if sig['alg'] != 'EdDSA': return None, 'alg_not_supported_by_reference'
     try:
-        pk.verify(unb64u(sig['sig']), doc_hash(doc).encode('ascii'))
+        when = _time(sig['signedAt'])
+    except (ValueError, TypeError):
+        return None, 'invalid_timestamp'
+    if when < _time(rec['validFrom']) or (rec.get('validTo') and when > _time(rec['validTo'])): return None, 'key_not_valid_at_signing_time'
+    if rec.get('revokedAt') and when >= _time(rec['revokedAt']): return None, 'key_revoked'
+    return rec, 'ok'
+
+
+def verify_signature(h, sig, keys, kind=None):
+    """The one verification path for documents, events and checkpoints (RFC-0012)."""
+    rec, why = _key_for(sig, keys)
+    if not rec: return False, why
+    try:
+        _ed().Ed25519PublicKey.from_public_bytes(unb64u(rec['publicKey'])).verify(unb64u(sig['sig']), signing_input(h, sig['kid'], sig['alg'], sig['signedAt'], kind))
         return True, 'ok'
     except Exception:
         return False, 'bad_signature'
+
+
+def verify(doc, keys, now=None):
+    """Verify doc['signature'] against a list of KeyRecords. Returns (ok, reason). `now` is accepted for
+    compatibility; the signing time comes from the signature itself and is covered by it."""
+    return verify_signature(doc_hash(doc), doc.get('signature'), keys, doc.get('kind'))
 
 # ---------------------------------------------------------------- selective disclosure
 
@@ -164,37 +195,40 @@ def verify_chain(events, keys=None):
     return True, 'ok', prev
 
 
-def _verify_hash(doc, h, keys):
-    sig = doc.get('signature')
-    rec = next((k for k in keys if k['kid'] == sig['kid']), None)
-    if not rec: return False, 'unknown_key'
-    if rec.get('revokedAt') and sig.get('signedAt') and _time(sig['signedAt']) >= _time(rec['revokedAt']): return False, 'key_revoked'
-    try:
-        _ed().Ed25519PublicKey.from_public_bytes(unb64u(rec['publicKey'])).verify(unb64u(sig['sig']), h.encode('ascii'))
-        return True, 'ok'
-    except Exception:
-        return False, 'bad_signature'
+def _verify_hash(doc, h, keys, kind='Event'):
+    return verify_signature(h, doc.get('signature'), keys, kind)
 
 
 def sign_event(ev, seed_hex, kid, signed_at=None):
     ev = dict(ev)
     ev['hash'] = event_hash(ev)
-    sk = _ed().Ed25519PrivateKey.from_private_bytes(bytes.fromhex(seed_hex))
-    ev['signature'] = {'alg': 'EdDSA', 'kid': kid, 'sig': b64u(sk.sign(ev['hash'].encode('ascii')))}
-    if signed_at: ev['signature']['signedAt'] = signed_at
+    ev['signature'] = sign_hash(ev['hash'], seed_hex, kid, signed_at or ev.get('at'), 'Event')
     return ev
 
 
 def verify_checkpoint(cp, events, keys):
-    """A checkpoint is valid if its head matches the event at cp.seq and every signature verifies over the checkpoint hash."""
+    """A checkpoint is valid if its head matches the event at cp.seq, the sequencer's signature and every
+    witness signature verify over the checkpoint hash (kind Checkpoint), and at least one witness signs
+    with a key id other than the sequencer's (RFC-0012: a self-witnessed checkpoint proves nothing)."""
     if cp['seq'] >= len(events) or events[cp['seq']]['hash'] != cp['head']: return False, 'head_mismatch'
     h = doc_hash(cp, exclude=('signature', 'witnesses'))
-    ok, why = _verify_hash(cp, h, keys)
+    ok, why = _verify_hash(cp, h, keys, 'Checkpoint')
     if not ok: return False, 'sequencer_' + why
+    independent = False
     for w in cp.get('witnesses', []):
-        ok, why = _verify_hash(w, h, keys)
+        ok, why = _verify_hash(w, h, keys, 'Checkpoint')
         if not ok: return False, 'witness_' + why
+        if (w.get('signature') or {}).get('kid') != cp['signature'].get('kid'): independent = True
+    if not independent: return False, 'no_independent_witness'
     return True, 'ok'
+
+
+def detect_fork(cp_a, cp_b):
+    """Two checkpoints of one log at the same seq with different heads prove a fork or a rewrite."""
+    same_log = cp_a.get('mission', cp_a.get('log')) == cp_b.get('mission', cp_b.get('log'))
+    if same_log and cp_a.get('seq') == cp_b.get('seq') and cp_a.get('head') != cp_b.get('head'):
+        return {'fork': True, 'reason': 'fork_detected'}
+    return {'fork': False, 'reason': 'ok'}
 
 
 def load_transitions():

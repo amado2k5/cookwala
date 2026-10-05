@@ -4,14 +4,14 @@
  "audience": "certifier",
  "northStar": ["robots"],
  "level": "intermediate",
- "title": {"en": "The hub's self-declared claim and the reference report with 131 vectors"},
- "goal": {"en": "A hub answers GET /v1/conformance with the classes it claims and a pointer to a report. The reference hub claims executor and has no report: self-declared. The reference report (claim verifier, 15 suites, 131 vectors, all passed on 2026-10-04) is the shape a certifier reads."},
+ "title": {"en": "The hub's self-declared claim and the reference report with 137 vectors"},
+ "goal": {"en": "A hub answers GET /v1/conformance with the classes it claims and a pointer to a report. The reference hub claims executor and has no report: self-declared. The reference report (claim verifier, 15 suites, 137 vectors, all passed on 2026-10-04) is the shape a certifier reads."},
  "docs": ["/docs/CERTIFICATION/", "/docs/CORE/"],
  "requires": ["hub", "repo"],
  "steps": [
   {"op": "conformance", "save": "claim", "note": {"en": "Ask the hub what it claims. report is null: a claim without a report is a self-declaration, which the note says plainly."}, "expect": {"claims": ["executor"], "report": null}},
   {"op": "validate", "args": {"kind": "conformance", "doc": {"$file": "examples/conformance/report-reference.json"}}, "save": "report", "note": {"en": "Validate the reference ConformanceReport produced by tools/run_conformance.py. The reference hub's validate checks the document against the schema file's root; this schema keeps its kinds under $defs, so today this call reports ok for any document, and `cookwala validate` (the CLI line) is the real check."}, "expect": {"ok": true}},
-  {"op": "hash", "args": {"doc": {"$file": "examples/conformance/report-reference.json"}}, "save": "h", "note": {"en": "Hash the report; this is the value a DirectoryEntry or a registry entry points at (scenario 091)."}, "expect": {"hash": "sha256:aeafe995daa4bd012c2e6e88abdbbaa99d0c3df7ef4c3f5f4ab6db1bcfd2968b"}}
+  {"op": "hash", "args": {"doc": {"$file": "examples/conformance/report-reference.json"}}, "save": "h", "note": {"en": "Hash the report; this is the value a DirectoryEntry or a registry entry points at (scenario 091)."}, "expect": {"hash": "sha256:85da323d7ac0c25cf8ff5e7041c266c894c83382deee8b80e9fe24640985bc58"}}
  ],
  "cli": [
   "curl -s ${COOKWALA_HUB:-http://localhost:7878}/v1/conformance",

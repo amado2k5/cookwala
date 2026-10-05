@@ -23,8 +23,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "https://catalog.example#k1",
-     "sig": "tRM99KjokuAF-a5B7IOAu2WJM09pFn42dGSxyY2rLhnnQ6nbswPscHqaovoXukjzmuT8F_HUqNaobqY-N8rYCw",
-     "signedAt": "2026-10-04T10:00:00Z"
+     "signedAt": "2026-10-04T10:00:00Z",
+     "sig": "wtjk5i9VYP120YmAEtgaVnDgtljvA00nnuR6aFxjWKLRQJ40TKh30Un_C5sfKtnSRBAmDhsLLxR4hEWQnj2YCw"
     }
    },
    "keys": [
@@ -73,8 +73,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "https://mirror.example#k1",
-     "sig": "BwAHqxw8o8wWmepoz_t4q0McKwYjwWwmJPXzpQLB7gwp82q4jTsZV4kokg5P0-rQZcO8WL9WU5D4NK4xZdf2BQ",
-     "signedAt": "2026-10-04T11:00:00Z"
+     "signedAt": "2026-10-04T11:00:00Z",
+     "sig": "_NVGINtOJTWCt5Bdx_26LtoTT_uSSuZirYn5-2Ni-YP1_EhUkoRazq1AxcBCL4HVhuRhnwTvpgBfuBJ9c4TMCw"
     }
    },
    "keys": [
@@ -116,8 +116,8 @@
     "signature": {
      "alg": "EdDSA",
      "kid": "https://catalog.example#k1",
-     "sig": "tRM99KjokuAF-a5B7IOAu2WJM09pFn42dGSxyY2rLhnnQ6nbswPscHqaovoXukjzmuT8F_HUqNaobqY-N8rYCw",
-     "signedAt": "2026-10-04T10:00:00Z"
+     "signedAt": "2026-10-04T10:00:00Z",
+     "sig": "wtjk5i9VYP120YmAEtgaVnDgtljvA00nnuR6aFxjWKLRQJ40TKh30Un_C5sfKtnSRBAmDhsLLxR4hEWQnj2YCw"
     }
    },
    "keys": [

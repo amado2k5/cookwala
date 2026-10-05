@@ -602,8 +602,8 @@ export function simulate({ seed = 7, toggles = [] } = {}) {
   M.doc.closure = {
     closedAt: iso(st.t + 1),
     calibration: M.doc.assessments.map((a) => ({ assessment: a.id, by: a.by, predicted: a.value, actual: trueNeed, withinInterval: trueNeed >= a.distribution.p10 && trueNeed <= a.distribution.p90, error: round(Math.abs(a.value - trueNeed), 1) })),
-    participants: M.doc.contributions.map((c) => ({ who: c.by, contributions: [c.id], final: c.status === 'failed' ? 'failed' : ['fulfilled', 'accepted'].includes(c.status) ? 'fulfilled' : 'released', signature: { alg: 'EdDSA', kid: `${c.by}#sim-key`, sig: 'sim-close' } })),
-    byHolder: { alg: 'EdDSA', kid: `${HOLDER}#sim-key`, sig: 'sim-close-holder' }
+    participants: M.doc.contributions.map((c) => ({ who: c.by, contributions: [c.id], final: c.status === 'failed' ? 'failed' : ['fulfilled', 'accepted'].includes(c.status) ? 'fulfilled' : 'released', signature: { alg: 'EdDSA', kid: `${c.by}#sim-key`, signedAt: '2026-10-05T00:00:00Z', sig: 'sim-close' } })),
+    byHolder: { alg: 'EdDSA', kid: `${HOLDER}#sim-key`, signedAt: '2026-10-05T00:00:00Z', sig: 'sim-close-holder' }
   };
   emit('kernel', null, 'action', `Calibration: actual robot energy use ${trueNeed} %`, M.doc.closure.calibration.map((c) => `${c.assessment}: predicted ${c.predicted} % ${c.withinInterval ? '✓ in interval' : '✗ outside interval'}`).join('; '));
   advanceTo(st.t + 1);
