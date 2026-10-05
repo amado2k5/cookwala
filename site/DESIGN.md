@@ -132,3 +132,17 @@ shown as text. The dry run and the walkthroughs run entirely in the browser.
 ## 15. Writing
 
 `docs/MESSAGING.md` applies to every string, in both languages.
+
+## Brand (2026-10-05)
+
+- **Mark:** a bowl with an ember above it (`site/assets/mark.svg`, also the favicon). The bowl is
+  drawn in `currentColor`, so it follows the theme; the ember keeps its warm gradient. Inline in
+  the header so it needs no extra request.
+- **Wordmark:** "Cookwala" set in Fraunces 600 (Google Fonts, loaded with the body fonts). In
+  Arabic-script editions the brand string is the local name in the body font.
+- **Logo and banner:** `site/assets/logo.svg` (mark + wordmark, for README and documents) and
+  `site/assets/banner.png` (1200 × 630, the `og:image` for link previews; rendered from a small
+  HTML page with headless Chrome, source in the session notes).
+- **Diagrams:** inline SVG under `site/templates/diagrams/`, placed with `{{diagram:name}}`;
+  every label is a site string (`goals.*`), so diagrams translate and switch theme with the page.
+  Boxes use `--surface` and `--line`; refusals and limits use `--ember`. No stock imagery.

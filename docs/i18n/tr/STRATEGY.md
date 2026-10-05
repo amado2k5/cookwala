@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STRATEGY.md -->
+
 # Cookwala stratejisi: mesaj, ürün, web sitesi, dokümanlar, geliştirici deneyimi
 
 **Durum:** 2026-10-04 tarihinde revize edildi (v2). Misyon, vizyon, hikaye, standart, web sitesi,

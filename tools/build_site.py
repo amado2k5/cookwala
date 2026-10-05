@@ -299,7 +299,8 @@ class Builder:
             for p_en in sorted((SITE / 'content' / 'en').glob('*.html')):
                 p = folder / p_en.name if (folder / p_en.name).exists() else p_en
                 meta, body = parse_fragment(p.read_text(encoding='utf-8'))
-                if p is p_en and lang != 'en': meta['title'] = f"{meta.get('title', 'Cookwala')} · {AUTONYM.get(lang, lang)}"  # English fallback until the translation lands
+                if lang != 'en' and (p is p_en or meta.get('title') == parse_fragment(p_en.read_text(encoding='utf-8'))[0].get('title')):
+                    meta['title'] = f"{meta.get('title', 'Cookwala')} · {AUTONYM.get(lang, lang)}"  # English fallback, or an untranslated title, until the translation lands
                 if 'path' not in meta:
                     meta['path'] = '/' if p.stem == 'index' else '/' + p.stem.replace('--', '/') + '/'
                 self.write(lang, meta['path'], self.page(lang, meta, body))

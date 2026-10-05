@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/WHITEPAPER.md -->
+
 # Cookwala : un standard ouvert pour cuisiner en toute sécurité
 
 **Livre blanc, version 0.2, 4 octobre 2026. Étape : draft.** Ce document décrit la

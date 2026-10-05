@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/WHITEPAPER.md -->
+
 # Cookwala: un estándar abierto para cocinar de forma segura
 
 **Whitepaper, versión 0.2, 4 October 2026. Stage: draft.** Este documento describe el

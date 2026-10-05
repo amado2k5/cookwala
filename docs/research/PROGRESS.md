@@ -10,7 +10,11 @@ Newest first. Each entry: date, phase, what was done, what is next, blockers.
   own navigation strings where they exist. Documentation: 16 to 18 documents per language in
   24 languages; the rest not translated.
 - `/goals/` ("How it helps"): three goals with diagrams, now/next/later/never, in the
-  navigation and on the home page; see SELF-CRITIQUE addendum.
+  navigation and on the home page; see SELF-CRITIQUE addendum. Diagrams moved to templates and
+  reused in the deck (slides 4, 6, 7, 8) and the whitepaper (sections 3, 6, 7, 8); two more added
+  (household facts, three loops).
+- Brand, at the founder's request: a bowl-and-ember mark, a Fraunces wordmark, a social banner
+  and a new favicon; see `site/DESIGN.md`.
 
 ## 2026-10-04 (evening) · Q1 to Q3: fifi.cooking import, SDK in 13 languages with 100 scenarios, the site in 25 languages
 
