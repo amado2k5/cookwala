@@ -248,7 +248,7 @@
     "Um piloto pré-registrado de 12 semanas com uma linha de base e um avaliador independente; adapte os rule packs com seu líder de segurança alimentar; execute seu próprio nó de registry."
    ]
   ],
-  "first": "<p>Preencha os três modelos CSV por um dia, então compute o resumo:</p><pre class=\"code\"><code>cookwala humanitarian --summary your-folder --org did:web:your-org.example --from 2026-11-01 --to 2026-11-30</code></pre><div class=\"output\">ImpactSummary: kgRescued 128 (measured, sum of Handover.lines.kgAccepted, n=2) · mealsServed 380 (measured) · timeToClaimMinutesMedian 22 (measured) …</div}",
+  "first": "<p>Os quatro modelos CSV (ofertas, entregas, distribuições, registro de tempo) são o rastro em papel; a ferramenta de resumo lê os documentos JSON. Execute-a no mês de exemplo do banco de alimentos e depois na sua própria pasta:</p><pre class=\"code\"><code>cookwala humanitarian --summary examples/humanitarian/flows/food-bank-cairo --org did:web:your-org.example --from 2026-11-01 --to 2026-11-30</code></pre><div class=\"output\">ImpactSummary: kgRescued 128 (measured, sum of Handover.lines.kgAccepted, n=2) · mealsServed 380 (measured) · timeToClaimMinutesMedian 22 (measured) …</div}",
   "flow": [
    "Offer → claim → handover com uma verificação de temperatura → distribution",
    "Resumo de impacto computado, nunca digitado",

@@ -121,6 +121,7 @@ class RecipeBuilder:
                 f'<p class="chip"><span class="dot {"exp" if level == "V0" else "draft"}" aria-hidden="true"></span>{html.escape(S["v0"] if level == "V0" else S["v1"])}</p>'
                 f'<h1>{html.escape(title)}</h1><p class="meta">{meta_line} · {html.escape(S["collection"])}: {html.escape(coll)} · <span class="lic">{html.escape(S["licence"])}: {html.escape(lic_txt)}</span></p>'
                 + (f'<p class="lead">{html.escape(intro)}</p>' if intro else '') + f'<p class="cta">{links}</p></section>'
+                f'<section class="wrap"><p class="note about">{S["about"].format(why=self.b.path_for(lang, "/why/"), recipes=self.b.path_for(lang, "/recipes/"), playground=self.b.path_for(lang, "/playground/"))}</p></section>'
                 f'<section class="wrap two"><div><h2>{html.escape(S["ingredients"])}</h2><ul class="ingredients">{ings}</ul>{al_html}{nut_html}</div>'
                 f'<div><h2>{html.escape(S["original_steps"] if level == "V0" else S["steps"])}</h2><ol class="steps">{steps_html}</ol></div></section>'
                 f'<section class="band"><div class="wrap"><p class="note">{html.escape(note)}</p><p class="note">{html.escape(S["source"])}: {html.escape(src.get("name", ""))}. {html.escape(src.get("citation", ""))}</p></div></section>')

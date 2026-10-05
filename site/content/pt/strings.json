@@ -29,6 +29,10 @@
    "/playground/"
   ],
   [
+   "Receitas",
+   "/recipes/"
+  ],
+  [
    "Humanitário",
    "/humanitarian/"
   ],
@@ -215,7 +219,8 @@
   "load_more": "Mostrar mais",
   "machine_text": "Este texto provém da tradução da receita no fifi.cooking e foi produzido por máquina.",
   "data": "Documento (JSON)",
-  "sidecar": "Text sidecar"
+  "sidecar": "Text sidecar",
+  "about": "Esta página é uma receita do índice aberto da Cookwala. Cookwala é o padrão aberto para cozinhar com segurança: um formato de receita que pessoas, aparelhos e robôs podem verificar antes de cozinhar. <a href=\"{why}\">Por que Cookwala</a> · <a href=\"{recipes}\">Todas as receitas</a> · <a href=\"{playground}\">Experimentar o dry run</a>"
  },
  "scenarios": {
   "title": "SDK e cenários",

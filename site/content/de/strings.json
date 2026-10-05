@@ -29,6 +29,10 @@
    "/playground/"
   ],
   [
+   "Rezepte",
+   "/recipes/"
+  ],
+  [
    "Humanitär",
    "/humanitarian/"
   ],
@@ -215,7 +219,8 @@
   "load_more": "Mehr anzeigen",
   "machine_text": "Dieser Text stammt aus der fifi.cooking Übersetzung des Rezepts und wurde maschinell erstellt.",
   "data": "Dokument (JSON)",
-  "sidecar": "Text-Sidecar"
+  "sidecar": "Text-Sidecar",
+  "about": "Diese Seite ist ein Rezept im offenen Cookwala-Index. Cookwala ist der offene Standard für sicheres Kochen: ein Rezeptformat, das Menschen, Geräte und Roboter vor dem Kochen prüfen können. <a href=\"{why}\">Warum Cookwala</a> · <a href=\"{recipes}\">Alle Rezepte</a> · <a href=\"{playground}\">Probelauf testen</a>"
  },
  "scenarios": {
   "title": "SDK und Szenarien",
