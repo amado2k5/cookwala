@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cookwala-samples"
+version = "0.1.0"
+description = "Cookwala sample clients, agents, orchestrators, gates, recovery and reporting for the Core 0.2 API; runs offline on simulated devices or against any Cookwala hub."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{name = "Cookwala maintainers"}]
+keywords = ["cooking", "robots", "food safety", "agents", "orchestration", "cookwala"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Libraries",
+  "Development Status :: 3 - Alpha",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://cookwala.ai"
+Repository = "https://github.com/amado2k5/cookwala"
+Source = "https://github.com/amado2k5/cookwala/tree/main/samples"
+
+[project.scripts]
+cookwala-samples = "cookwala_samples.cli:main"
+
+[tool.setuptools]
+packages = ["cookwala_samples", "cookwala_samples.data"]
+
+[tool.setuptools.package-data]
+"cookwala_samples.data" = ["bundle.json"]

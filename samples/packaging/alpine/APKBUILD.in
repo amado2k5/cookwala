@@ -1,0 +1,24 @@
+# Alpine: abuild -r   (apk add cookwala-samples)
+pkgname=cookwala-samples
+pkgver={{VERSION}}
+pkgrel=0
+pkgdesc="Cookwala sample clients, agents, orchestrators, gates, recovery and reporting"
+url="https://cookwala.ai"
+arch="noarch"
+license="Apache-2.0 AND CC-BY-4.0 AND CC0-1.0"
+depends="python3"
+source="$pkgname-$pkgver.pyz::{{BASE_URL}}/cookwala-samples-$pkgver.pyz"
+options="!strip"
+
+check() {
+	python3 "$srcdir/$pkgname-$pkgver.pyz" version
+}
+
+package() {
+	install -Dm644 "$srcdir/$pkgname-$pkgver.pyz" "$pkgdir/usr/lib/cookwala-samples/cookwala-samples.pyz"
+	mkdir -p "$pkgdir/usr/bin"
+	printf '#!/bin/sh\nexec python3 /usr/lib/cookwala-samples/cookwala-samples.pyz "$@"\n' > "$pkgdir/usr/bin/cookwala-samples"
+	chmod 755 "$pkgdir/usr/bin/cookwala-samples"
+}
+
+sha256sums="{{SHA256:pyz}}  $pkgname-$pkgver.pyz"

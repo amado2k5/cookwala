@@ -1,0 +1,14 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: cookwala-samples
+Source: https://github.com/amado2k5/cookwala/tree/main/samples
+
+Files: *
+Copyright: Cookwala maintainers
+License: Apache-2.0
+ On Debian systems the full text is in /usr/share/common-licenses/Apache-2.0.
+
+Files: cookwala_samples/data/bundle.json
+Copyright: Cookwala maintainers and the recipe sources named in each recipe
+License: CC0-1.0 and CC-BY-4.0
+ Vocabularies are CC0-1.0. Recipes are CC-BY-4.0; each recipe names its source
+ and licence in its own "source" and "license" fields.

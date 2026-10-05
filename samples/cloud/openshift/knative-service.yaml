@@ -1,0 +1,20 @@
+# OpenShift Serverless (Knative Serving): the same image, scaled to zero when idle.
+#   oc apply -f samples/cloud/openshift/knative-service.yaml      (or: kn service create cookwala-samples --image ...)
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: cookwala-samples
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "0"
+        autoscaling.knative.dev/max-scale: "5"
+    spec:
+      containers:
+        - image: ghcr.io/amado2k5/cookwala-samples:0.1.0
+          args: [serve]
+          env: [{name: BIND, value: 0.0.0.0}]
+          ports: [{containerPort: 8080}]
+          readinessProbe: {httpGet: {path: /health}}
+          resources: {requests: {cpu: 50m, memory: 64Mi}, limits: {cpu: 500m, memory: 256Mi}}

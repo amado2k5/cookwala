@@ -53,7 +53,7 @@
   [
    "SDK et scénarios",
    "/scenarios/"
-  ],
+  ], ["Exemples et paquets", "/samples/"],
   [
    "Registry et directory",
    "/registry/"
@@ -393,7 +393,7 @@
    ],
    [
     "Développeurs",
-    "Un dry run dans le navigateur, un paquet Python, un hub de référence et 131 vecteurs de conformité publics.",
+    "Un dry run dans le navigateur, un paquet Python, un hub de référence, 131 vecteurs de conformité publics, et des exemples d’agents et d’orchestrateurs en quatre langages.",
     "Démarrage en cinq minutes",
     "/developers/"
    ],

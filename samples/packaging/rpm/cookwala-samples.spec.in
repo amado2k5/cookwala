@@ -1,0 +1,36 @@
+# rpmbuild -ba cookwala-samples.spec  (with the .pyz in ~/rpmbuild/SOURCES); Fedora COPR, RHEL, openSUSE OBS
+Name:           cookwala-samples
+Version:        {{VERSION}}
+Release:        1%{?dist}
+Summary:        Cookwala sample clients, agents, orchestrators, gates, recovery and reporting
+License:        Apache-2.0 AND CC-BY-4.0 AND CC0-1.0
+URL:            https://cookwala.ai
+Source0:        {{BASE_URL}}/cookwala-samples-%{version}.pyz
+BuildArch:      noarch
+Requires:       python3 >= 3.9
+
+%description
+Runnable samples for the Cookwala Core 0.2 API, the open standard for cooking
+safely. Runs offline on simulated devices, or against any Cookwala hub.
+Samples, not certified software; the executor is always the authority.
+
+%prep
+
+%build
+
+%install
+install -Dm0644 %{SOURCE0} %{buildroot}%{_prefix}/lib/cookwala-samples/cookwala-samples.pyz
+install -d %{buildroot}%{_bindir}
+printf '#!/bin/sh\nexec python3 %{_prefix}/lib/cookwala-samples/cookwala-samples.pyz "$@"\n' > %{buildroot}%{_bindir}/cookwala-samples
+chmod 0755 %{buildroot}%{_bindir}/cookwala-samples
+
+%check
+python3 %{SOURCE0} version
+
+%files
+%{_bindir}/cookwala-samples
+%{_prefix}/lib/cookwala-samples/
+
+%changelog
+* Mon Oct 05 2026 Cookwala maintainers <noreply@cookwala.ai> - {{VERSION}}-1
+- First packaged release of the samples.

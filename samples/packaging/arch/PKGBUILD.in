@@ -1,0 +1,23 @@
+# Arch Linux / AUR: makepkg -si   (pacman -U cookwala-samples-*.pkg.tar.zst)
+pkgname=cookwala-samples
+pkgver={{VERSION}}
+pkgrel=1
+pkgdesc="Cookwala sample clients, agents, orchestrators, gates, recovery and reporting"
+arch=('any')
+url="https://cookwala.ai"
+license=('Apache-2.0' 'CC-BY-4.0' 'CC0-1.0')
+depends=('python')
+source=("{{BASE_URL}}/cookwala-samples-${pkgver}.pyz")
+sha256sums=('{{SHA256:pyz}}')
+noextract=("cookwala-samples-${pkgver}.pyz")
+
+check() {
+  python "cookwala-samples-${pkgver}.pyz" version
+}
+
+package() {
+  install -Dm0644 "cookwala-samples-${pkgver}.pyz" "${pkgdir}/usr/lib/cookwala-samples/cookwala-samples.pyz"
+  install -d "${pkgdir}/usr/bin"
+  printf '#!/bin/sh\nexec python /usr/lib/cookwala-samples/cookwala-samples.pyz "$@"\n' > "${pkgdir}/usr/bin/cookwala-samples"
+  chmod 0755 "${pkgdir}/usr/bin/cookwala-samples"
+}

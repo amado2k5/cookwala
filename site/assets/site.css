@@ -252,3 +252,22 @@ dfn.gloss:hover::after, dfn.gloss:focus-visible::after { content: attr(data-glos
 
 .hero-cards { margin-top: 22px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); } .hero-cards .card h3 { margin: 0; font-size: 17px; }
 .wrap.narrow { max-width: 760px; }
+
+/* Samples: distribution tiles (site/assets/dist-icons.svg) */
+.dist-group { margin: 28px 0 0; padding: 0; } .dist-group h3 { margin: 0 0 12px; }
+.dist-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.dist { display: grid; gap: 6px; align-content: start; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; min-width: 0; }
+.dist h4 { margin: 0; font-size: 16px; }
+.dist-icons { display: flex; gap: 8px; color: var(--ink); }
+.dist-ico { width: 28px; height: 28px; fill: currentColor; }
+.dist-cmd { display: block; font: 12.5px/1.5 var(--mono); background: var(--band); border-radius: 6px; padding: 6px 8px; overflow-wrap: anywhere; direction: ltr; text-align: left; }
+.dist-status { margin: 0; font: 500 11px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .03em; color: var(--warn); }
+.dist-status.repo { color: var(--ok); } .dist-status.deploy { color: var(--ink-2); }
+.dist-src { font-size: 14px; font-weight: 500; color: var(--ember); text-decoration: none; } .dist-src:hover { text-decoration: underline; }
+.role-grid .card h3 { display: flex; gap: 8px; align-items: baseline; } .role-grid .card h3 span { font: 500 12px/1 var(--mono); color: var(--ink-2); }
+.samples-highlight { padding-block: 8px 28px; }
+.highlight { border: 1px solid var(--line); border-inline-start: 4px solid var(--ember); background: var(--ember-soft); border-radius: var(--radius); padding: 22px; display: grid; gap: 12px; }
+.highlight h2, .highlight p { margin: 0; } .highlight .cta { margin: 0; }
+.dist-strip { display: flex; flex-wrap: wrap; gap: 12px; color: var(--ink); }
+.dist-strip .dist-ico { width: 24px; height: 24px; }
+.steps li { min-width: 0; } .output { overflow-wrap: anywhere; }  /* long commands and outputs must not widen the page on phones */

@@ -1,0 +1,67 @@
+# OpenShift: build the image from this repository and run the samples service behind a TLS Route.
+#   oc new-project cookwala-samples
+#   oc process -f samples/cloud/openshift/template.yaml -p NAME=cookwala-samples | oc apply -f -
+#   oc start-build cookwala-samples --follow
+# Or skip the build and run a published image: oc new-app ghcr.io/amado2k5/cookwala-samples:0.1.0 && oc expose service/cookwala-samples
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: cookwala-samples
+  annotations:
+    description: Cookwala samples as an HTTP service (simulated devices; nothing is cooked)
+    tags: python,cookwala
+parameters:
+  - {name: NAME, value: cookwala-samples, required: true}
+  - {name: GIT_URL, value: https://github.com/amado2k5/cookwala.git}
+  - {name: GIT_REF, value: main}
+objects:
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata: {name: "${NAME}"}
+  - apiVersion: build.openshift.io/v1
+    kind: BuildConfig
+    metadata: {name: "${NAME}"}
+    spec:
+      source:
+        git: {uri: "${GIT_URL}", ref: "${GIT_REF}"}
+        contextDir: samples
+      strategy:
+        dockerStrategy: {dockerfilePath: packaging/docker/Containerfile}
+      output:
+        to: {kind: ImageStreamTag, name: "${NAME}:latest"}
+      triggers: [{type: ConfigChange}]
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: "${NAME}"
+      annotations:
+        image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"${NAME}:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"samples\")].image"}]'
+    spec:
+      replicas: 1
+      selector: {matchLabels: {app: "${NAME}"}}
+      template:
+        metadata: {labels: {app: "${NAME}"}}
+        spec:
+          containers:
+            - name: samples
+              image: "${NAME}:latest"
+              args: [serve]
+              env: [{name: PORT, value: "8080"}, {name: BIND, value: 0.0.0.0}]
+              ports: [{containerPort: 8080, name: http}]
+              readinessProbe: {httpGet: {path: /health, port: http}}
+              livenessProbe: {httpGet: {path: /health, port: http}}
+              resources: {requests: {cpu: 50m, memory: 64Mi}, limits: {cpu: 500m, memory: 256Mi}}
+              securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}, runAsNonRoot: true, seccompProfile: {type: RuntimeDefault}}
+  - apiVersion: v1
+    kind: Service
+    metadata: {name: "${NAME}"}
+    spec:
+      selector: {app: "${NAME}"}
+      ports: [{name: http, port: 8080, targetPort: http}]
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata: {name: "${NAME}"}
+    spec:
+      to: {kind: Service, name: "${NAME}"}
+      port: {targetPort: http}
+      tls: {termination: edge, insecureEdgeTerminationPolicy: Redirect}

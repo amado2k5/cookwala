@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Cookwala samples as a Lambda function (simulated devices; gates, planner agent, orchestrator, recovery, reports)
+
+Parameters:
+  FunctionUrlAuth:
+    Type: String
+    AllowedValues: [AWS_IAM, NONE]
+    Default: AWS_IAM
+    Description: AWS_IAM keeps the Function URL private; NONE makes it public (the service never calls other hosts)
+
+Resources:
+  CookwalaSamples:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: handler.handler
+      Runtime: python3.12
+      Architectures: [arm64]
+      MemorySize: 256
+      Timeout: 15
+      FunctionUrlConfig:
+        AuthType: !Ref FunctionUrlAuth
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+
+Outputs:
+  FunctionUrl:
+    Value: !GetAtt CookwalaSamplesUrl.FunctionUrl
+  HttpApiUrl:
+    Value: !Sub https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/v1/samples

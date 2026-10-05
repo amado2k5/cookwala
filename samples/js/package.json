@@ -1,0 +1,64 @@
+{
+  "name": "@cookwala/samples",
+  "version": "0.1.0",
+  "description": "Cookwala sample clients, agents, orchestrators, gates, recovery and reporting for the Core 0.2 API; runs offline on simulated devices or against any Cookwala hub.",
+  "license": "Apache-2.0",
+  "author": "Cookwala maintainers",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./jcs": "./src/jcs.js",
+    "./data": "./src/data.js",
+    "./errors": "./src/errors.js",
+    "./simulator": "./src/simulator.js",
+    "./clients": "./src/clients.js",
+    "./gates": "./src/gates.js",
+    "./agents": "./src/agents.js",
+    "./recovery": "./src/recovery.js",
+    "./orchestrator": "./src/orchestrator.js",
+    "./reporting": "./src/reporting.js",
+    "./scenarios": "./src/scenarios.js",
+    "./service": "./src/service.js",
+    "./cli": "./src/cli.js",
+    "./data/bundle.json": "./data/bundle.json",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "cookwala-samples": "bin/cookwala-samples.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "data",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "demo": "node bin/cookwala-samples.js demo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amado2k5/cookwala",
+    "directory": "samples/js"
+  },
+  "homepage": "https://cookwala.ai",
+  "bugs": {
+    "url": "https://github.com/amado2k5/cookwala/issues"
+  },
+  "keywords": [
+    "cooking",
+    "robots",
+    "food safety",
+    "agents",
+    "orchestration",
+    "cookwala",
+    "rfc8785"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

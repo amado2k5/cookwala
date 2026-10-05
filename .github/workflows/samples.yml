@@ -1,0 +1,215 @@
+name: Samples (test, package, publish)
+
+# Tests every port of samples/ on every change; builds every package; publishes only on a
+# samples-v* tag, and only to the registries whose credentials are configured as repository secrets.
+on:
+  push:
+    branches: [main]
+    tags: ['samples-v*']
+    paths: ['samples/**', 'tools/cookwala_ref.py', 'vocab/**', 'profiles/core/**', 'examples/**', 'hub/**', '.github/workflows/samples.yml']
+  pull_request:
+    paths: ['samples/**', 'tools/cookwala_ref.py', 'vocab/**', 'profiles/core/**', 'examples/**', 'hub/**', '.github/workflows/samples.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bundle:
+    name: Bundle and versions are current
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python samples/tools/build_bundle.py --check
+      - run: python samples/packaging/build.py --check-versions
+
+  python:
+    name: Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: {python: ['3.9', '3.12', '3.13']}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '${{ matrix.python }}'}
+      - run: pip install jsonschema referencing
+      - run: python -m unittest discover -s samples/python/tests -v
+
+  js:
+    name: JavaScript (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: {node: ['18', '22']}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '${{ matrix.node }}'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: npm test
+        working-directory: samples/js
+      - run: npm pack --dry-run
+        working-directory: samples/js
+
+  java:
+    name: Java ${{ matrix.java }} (Maven and Gradle)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: {java: ['17', '21']}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '${{ matrix.java }}', cache: maven}
+      - run: mvn -B package
+        working-directory: samples/java
+      - uses: gradle/actions/setup-gradle@v4
+      - run: gradle --no-daemon build
+        working-directory: samples/java
+
+  dotnet:
+    name: .NET 8
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with: {dotnet-version: '8.0.x'}
+      - run: dotnet test
+        working-directory: samples/dotnet
+      - run: dotnet pack -c Release -o ../build/nuget
+        working-directory: samples/dotnet
+
+  packages:
+    name: Packages (pyz, wheel, sdist, deb, image, chart)
+    runs-on: ubuntu-latest
+    needs: [bundle, python]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install build twine
+      - run: python samples/packaging/build.py
+      - run: twine check samples/build/*.whl samples/build/*.tar.gz
+      - name: Install the .deb and run it
+        run: sudo dpkg -i samples/build/cookwala-samples_*_all.deb && cookwala-samples demo && sudo dpkg -r cookwala-samples
+      - name: Build and smoke-test the image (arbitrary uid, read-only root, as OpenShift runs it)
+        run: |
+          docker build -f samples/packaging/docker/Containerfile -t cookwala-samples:ci samples
+          docker run --rm cookwala-samples:ci demo --format csv
+          docker run -d --name samples-smoke -p 8080:8080 --read-only --user 12345 cookwala-samples:ci
+          sleep 2 && curl -fsS localhost:8080/health && curl -fsS 'localhost:8080/v1/samples/demo?format=markdown'
+      - uses: azure/setup-helm@v4
+      - run: helm lint samples/packaging/helm/cookwala-samples
+      - uses: actions/upload-artifact@v4
+        with: {name: samples-packages, path: samples/build/}
+
+  publish:
+    name: Publish (samples-v* tags only)
+    if: startsWith(github.ref, 'refs/tags/samples-v')
+    needs: [python, js, java, dotnet, packages]
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write     # GitHub release with the pyz, deb, wheel, sdist and rendered manifests
+      packages: write     # ghcr.io image, GitHub Packages
+      id-token: write     # PyPI trusted publishing, npm provenance
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+      MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+      MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+      MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      DOCKER_REGISTRY: ${{ secrets.ARTIFACTORY_DOCKER_REGISTRY }}
+      HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: {name: samples-packages, path: samples/build/}
+      - name: Tag matches samples/VERSION
+        run: test "samples-v$(cat samples/VERSION)" = "${GITHUB_REF_NAME}"
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            samples/build/*.pyz
+            samples/build/*.deb
+            samples/build/*.whl
+            samples/build/*.tar.gz
+            samples/build/SHA256SUMS
+      - name: PyPI (trusted publishing; configure the publisher on pypi.org first)
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with: {packages-dir: samples/build/, skip-existing: true}
+        continue-on-error: true
+      - uses: actions/setup-node@v4
+        with: {node-version: '22', registry-url: 'https://registry.npmjs.org'}
+      - name: npm
+        if: env.NPM_TOKEN != ''
+        run: npm publish --provenance --access public
+        working-directory: samples/js
+        env: {NODE_AUTH_TOKEN: '${{ secrets.NPM_TOKEN }}'}
+      - uses: actions/setup-dotnet@v4
+        with: {dotnet-version: '8.0.x'}
+      - name: NuGet (library and dotnet tool)
+        if: env.NUGET_API_KEY != ''
+        working-directory: samples/dotnet
+        run: |
+          dotnet pack -c Release -o nupkgs
+          dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" --skip-duplicate
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          server-id: central
+          server-username: MAVEN_CENTRAL_USERNAME
+          server-password: MAVEN_CENTRAL_PASSWORD
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+      - name: Maven Central
+        if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_GPG_PRIVATE_KEY != ''
+        run: mvn -B -Pcentral,sign deploy -DskipTests
+        working-directory: samples/java
+      - name: GitHub Packages (Maven)
+        run: gradle --no-daemon publishAllPublicationsToGitHubPackagesRepository
+        working-directory: samples/java
+        env: {GITHUB_ACTOR: '${{ github.actor }}', GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'}
+        continue-on-error: true
+      - name: ghcr.io image
+        run: |
+          v=$(cat samples/VERSION); img=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/cookwala-samples
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker build -f samples/packaging/docker/Containerfile -t "$img:$v" -t "$img:latest" samples
+          docker push "$img:$v" && docker push "$img:latest"
+      - name: Artifactory (every channel)
+        if: env.ARTIFACTORY_URL != ''
+        run: |
+          pip install twine
+          samples/packaging/artifactory/publish.sh pypi npm maven nuget debian generic $([ -n "$DOCKER_REGISTRY" ] && echo docker)
+      - name: Homebrew tap (amado2k5/homebrew-cookwala)
+        if: env.HOMEBREW_TAP_TOKEN != ''
+        run: |
+          git clone "https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/amado2k5/homebrew-cookwala.git" tap
+          mkdir -p tap/Formula && cp samples/build/manifests/homebrew/cookwala-samples.rb tap/Formula/
+          cd tap && git add Formula && git -c user.name=cookwala-release -c user.email=noreply@cookwala.ai commit -m "cookwala-samples $(cat ../samples/VERSION)" && git push
+
+  chocolatey:
+    name: Chocolatey (samples-v* tags only)
+    if: startsWith(github.ref, 'refs/tags/samples-v')
+    needs: [publish]
+    runs-on: windows-latest
+    environment: release
+    env:
+      CHOCO_API_KEY: ${{ secrets.CHOCO_API_KEY }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with: {name: samples-packages, path: build}
+      - name: Pack and push
+        if: env.CHOCO_API_KEY != ''
+        shell: pwsh
+        run: |
+          cd build/manifests/chocolatey
+          choco pack cookwala-samples.nuspec
+          choco push (Get-ChildItem *.nupkg).FullName --source https://push.chocolatey.org/ --api-key $env:CHOCO_API_KEY

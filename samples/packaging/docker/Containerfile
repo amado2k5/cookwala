@@ -1,0 +1,23 @@
+# OCI image for Docker Hub, GHCR, Quay, Amazon ECR, Azure Container Registry, OpenShift and Knative.
+#   docker build -f samples/packaging/docker/Containerfile -t cookwala-samples:0.1.0 samples
+#   docker run --rm -p 8080:8080 cookwala-samples:0.1.0          # the HTTP service
+#   docker run --rm cookwala-samples:0.1.0 demo                    # the CLI
+FROM python:3.12-slim
+
+LABEL org.opencontainers.image.title="cookwala-samples" \
+      org.opencontainers.image.description="Cookwala sample clients, agents, orchestrators, gates, recovery and reporting" \
+      org.opencontainers.image.url="https://cookwala.ai" \
+      org.opencontainers.image.source="https://github.com/amado2k5/cookwala" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      org.opencontainers.image.version="0.1.0"
+
+# Standard library only: no pip, no network during the build.
+COPY python/cookwala_samples /app/cookwala_samples
+
+# Any user id works (OpenShift assigns one at random); nothing is written to disk.
+USER 1001
+ENV PORT=8080 BIND=0.0.0.0 PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/app
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=3s CMD python -c "import urllib.request,os;urllib.request.urlopen('http://127.0.0.1:%s/health' % os.environ.get('PORT','8080'))"
+ENTRYPOINT ["python", "-m", "cookwala_samples"]
+CMD ["serve"]
