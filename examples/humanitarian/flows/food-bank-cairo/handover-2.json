@@ -38,6 +38,6 @@
  ],
  "outcome": "accepted",
  "checkedBy": "trained_staff",
- "rulePack": "who-codex-basic@0.1.0",
+ "rulePack": "basic-nutrition-food-safety@0.1.0",
  "findings": []
 }

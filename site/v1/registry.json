@@ -70,22 +70,19 @@
   {
    "kind": "rule_pack",
    "name": "ai.cookwala/who-codex-basic",
-   "description": "Draft nutrition and food-safety rules derived from public WHO, Codex and Sphere guidance. Needs professional review.",
+   "description": "Draft nutrition and food-safety rules derived from public WHO, Codex and Sphere guidance. Needs professional review. Renamed on 2026-10-05: see ai.cookwala/basic-nutrition-food-safety.",
    "version": "0.1.0",
-   "status": "active",
+   "status": "deleted",
    "url": "https://cookwala.ai/v1/profiles/humanitarian/who-codex-basic.rulepack.json",
    "sha256": "f2484c49a28d7950d716b4ba5575ace3051a26add559387e976da9d1b771bbec",
    "coreVersion": "0.2.0",
-   "verification": {
-    "method": "dns_txt",
-    "verifiedAt": "2026-10-04T12:00:00Z",
-    "by": "cookwala.ai"
-   },
    "publishedAt": "2026-10-04T12:00:00Z",
    "tags": [
     "humanitarian",
     "draft"
-   ]
+   ],
+   "deletedAt": "2026-10-05T00:00:00Z",
+   "replacedBy": "ai.cookwala/basic-nutrition-food-safety"
   },
   {
    "kind": "benchmark",
@@ -104,6 +101,21 @@
    "tags": [
     "agents",
     "safety",
+    "draft"
+   ]
+  },
+  {
+   "kind": "rule_pack",
+   "name": "ai.cookwala/basic-nutrition-food-safety",
+   "description": "Draft nutrition and food-safety rules derived from public WHO, Codex and Sphere guidance (sources, not partners; none has reviewed them). Needs professional review. Replaces ai.cookwala/who-codex-basic.",
+   "version": "0.1.0",
+   "status": "active",
+   "url": "https://cookwala.ai/v1/profiles/humanitarian/basic-nutrition-food-safety.rulepack.json",
+   "sha256": "4e1f28a2b381923897c6670a1a2a018b65bc1282caa1f49875708619c60b9608",
+   "coreVersion": "0.2.0",
+   "publishedAt": "2026-10-05T00:00:00Z",
+   "tags": [
+    "humanitarian",
     "draft"
    ]
   }

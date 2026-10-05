@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (alle), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; alle drafts in afwachting van professionele review, zie [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (alle), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; alle drafts in afwachting van professionele review, zie [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank in Cairo, school meals, disaster kitchen, robot kitchen), elk met een berekende `ImpactSummary`
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -110,7 +110,7 @@ Een `RulePack` bevat regels van zes soorten:
 
 Elke regel is ofwel `block` (niet accepteren of serveren) of `warn` (toegestaan, vastgelegd als een bevinding).
 
-Het standaardpakket `who-codex-basic@0.1.0` is een **concept afgeleid van publieke richtlijnen**: de WHO-richtlijnen voor een gezonde voeding, natrium, suikers en vetten, de WHO Five Keys to Safer Food, Codex-etikettering en codes voor diepvriesproducten, en de minimale rantsoenplanningcijfers van Sphere. Het is vereenvoudigd, geen medisch advies, sluit voeding voor zuigelingen en therapeutische voeding uit, en moet worden beoordeeld door gekwalificeerd personeel. Programma's moeten het kopiëren en aanpassen, `jurisdiction` instellen, en vastleggen wie het heeft beoordeeld in `reviewedBy`.
+Het standaardpakket `basic-nutrition-food-safety@0.1.0` is een **concept afgeleid van publieke richtlijnen**: de WHO-richtlijnen voor een gezonde voeding, natrium, suikers en vetten, de WHO Five Keys to Safer Food, Codex-etikettering en codes voor diepvriesproducten, en de minimale rantsoenplanningcijfers van Sphere. Het is vereenvoudigd, geen medisch advies, sluit voeding voor zuigelingen en therapeutische voeding uit, en moet worden beoordeeld door gekwalificeerd personeel. Programma's moeten het kopiëren en aanpassen, `jurisdiction` instellen, en vastleggen wie het heeft beoordeeld in `reviewedBy`.
 
 Ontvangers op niveau H2 voeren het pack uit bij elke handover en op elk menu, en registreren rule ids in `findings`. De reference checker rapporteert waar verklaarde en berekende findings verschillen.
 

@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (semua), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; semua draf menunggu tinjauan profesional, lihat [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (semua), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; semua draf menunggu tinjauan profesional, lihat [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank di Kairo, school meals, disaster kitchen, robot kitchen), masing-masing dengan `ImpactSummary` yang dihitung
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -115,7 +115,7 @@ Sebuah `RulePack` berisi aturan dari enam jenis:
 
 Setiap aturan adalah `block` (jangan terima atau sajikan) atau `warn` (diizinkan, dicatat sebagai temuan).
 
-Paket default `who-codex-basic@0.1.0` adalah **draft derived from public guidance**: panduan WHO tentang healthy-diet, sodium, sugars dan fats, WHO Five Keys to Safer Food, Codex labelling dan frozen-food codes, serta angka perencanaan ransum minimum Sphere. Ini disederhanakan, bukan saran medis, mengecualikan pemberian makan bayi dan terapeutik, dan harus ditinjau oleh staf yang berkualifikasi. Program harus menyalin dan mengadaptasinya, mengatur `jurisdiction`, dan mencatat siapa yang meninjaunya di `reviewedBy`.
+Paket default `basic-nutrition-food-safety@0.1.0` adalah **draft derived from public guidance**: panduan WHO tentang healthy-diet, sodium, sugars dan fats, WHO Five Keys to Safer Food, Codex labelling dan frozen-food codes, serta angka perencanaan ransum minimum Sphere. Ini disederhanakan, bukan saran medis, mengecualikan pemberian makan bayi dan terapeutik, dan harus ditinjau oleh staf yang berkualifikasi. Program harus menyalin dan mengadaptasinya, mengatur `jurisdiction`, dan mencatat siapa yang meninjaunya di `reviewedBy`.
 
 Penerima pada level H2 menjalankan pack pada setiap handover dan pada setiap menu, dan mencatat rule ids dalam `findings`. Pemeriksa referensi melaporkan di mana temuan yang dinyatakan dan dihitung tidak sesuai.
 

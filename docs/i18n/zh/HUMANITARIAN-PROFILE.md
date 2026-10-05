@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (全部), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; 所有草案均在等待专业评审，参见 [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (全部), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; 所有草案均在等待专业评审，参见 [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (开罗的 food bank, school meals, disaster kitchen, robot kitchen)，每个都包含一个计算出的 `ImpactSummary`
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -108,7 +108,7 @@ food banks、社区厨房、学校膳食计划、救济计划、捐赠者（杂�
 
 每条规则要么是 `block`（不接受或不提供服务），要么是 `warn`（允许，并记录为一项发现）。
 
-默认包 `who-codex-basic@0.1.0` 是一个**源自公共指南的草案**：包括 WHO 的 healthy-diet、sodium、sugars and fats 指南，WHO Five Keys to Safer Food，Codex labelling and frozen-food codes，以及 Sphere 的 minimum ration planning figures。它是简化版的，并非医疗建议，不包括婴儿和治疗性喂养，且必须由合格人员进行审查。程序应当复制并改编它，设置 `jurisdiction`，并在 `reviewedBy` 中记录审查人员。
+默认包 `basic-nutrition-food-safety@0.1.0` 是一个**源自公共指南的草案**：包括 WHO 的 healthy-diet、sodium、sugars and fats 指南，WHO Five Keys to Safer Food，Codex labelling and frozen-food codes，以及 Sphere 的 minimum ration planning figures。它是简化版的，并非医疗建议，不包括婴儿和治疗性喂养，且必须由合格人员进行审查。程序应当复制并改编它，设置 `jurisdiction`，并在 `reviewedBy` 中记录审查人员。
 
 H2 级别的接收器在每次交接和每个菜单上运行 rule pack，并将 rule ids 记录在 `findings` 中。参考检查器会报告声明的 findings 与计算出的 findings 不一致的地方。
 

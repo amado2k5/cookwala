@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - mifano: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (zote), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; rasimu zote zinazosubiri mapitio ya kitaalamu, tazama [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (zote), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; rasimu zote zinazosubiri mapitio ya kitaalamu, tazama [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - mtiririko uliofanyiwa kazi: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank jijini Cairo, school meals, disaster kitchen, robot kitchen), kila moja ikiwa na `ImpactSummary` iliyopigiwa hesabu
 - itifaki ya jaribio: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -110,7 +110,7 @@ sheria zozote za mzunguko lazima zichapishwe katika `Manifest` ya programu au to
 
 Kila kanuni ni ama `block` (usikubali au usitoe huduma) au `warn` (inaruhusiwa, inarekodiwa kama uvumbuzi).
 
-Paketi ya kawaida `who-codex-basic@0.1.0` ni **rasimu iliyotolewa kutoka kwa mwongozo wa umma**: mwongozo wa WHO wa healthy-diet, sodium, sugars na fats, WHO Five Keys to Safer Food, kanuni za Codex za labelling na frozen-food, na takwimu za Sphere za minimum ration planning. Imerahisishwa, si ushauri wa matibabu, haijumuishi kulisha watoto wachanga na therapeutic feeding, na lazima ipitiwe na wafanyakazi waliohitimu. Programu zinapaswa kuinakili na kuibadilisha, kuweka `jurisdiction`, na kurekodi nani aliipitia katika `reviewedBy`.
+Paketi ya kawaida `basic-nutrition-food-safety@0.1.0` ni **rasimu iliyotolewa kutoka kwa mwongozo wa umma**: mwongozo wa WHO wa healthy-diet, sodium, sugars na fats, WHO Five Keys to Safer Food, kanuni za Codex za labelling na frozen-food, na takwimu za Sphere za minimum ration planning. Imerahisishwa, si ushauri wa matibabu, haijumuishi kulisha watoto wachanga na therapeutic feeding, na lazima ipitiwe na wafanyakazi waliohitimu. Programu zinapaswa kuinakili na kuibadilisha, kuweka `jurisdiction`, na kurekodi nani aliipitia katika `reviewedBy`.
 
 Wapokeaji katika kiwango cha H2 huendesha pack katika kila handover na kwenye kila menu, na kurekodi rule ids
 kwenye `findings`. Mchunguzi wa marejeleo hutoa ripoti pale findings zilizotangazwa na zilizopigiwa hesabu zinapopingana.

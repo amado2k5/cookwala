@@ -53,7 +53,7 @@
  ],
  "outcome": "partly_accepted",
  "checkedBy": "trained_staff",
- "rulePack": "who-codex-basic@0.1.0",
+ "rulePack": "basic-nutrition-food-safety@0.1.0",
  "findings": [
   "care.hot_hold_min",
   "safety.hot_hold_min"

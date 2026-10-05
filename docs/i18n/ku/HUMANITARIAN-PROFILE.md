@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - mînak: [`examples/humanitarian/`](../examples/humanitarian)
-- pakên rêkan: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (hemû), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; hemû nûsî dema lêkolîna profesyonel li benda ne, binêre [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- pakên rêkan: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (hemû), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; hemû nûsî dema lêkolîna profesyonel li benda ne, binêre [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - rêberên xebatkirî: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank li Cairo, xwarinên dibistanê, metbexê karesatê, metbexê robotî), her yek bi `ImpactSummary` ku hatiye hesabkirin
 - protokola ceribandinê: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -109,7 +109,7 @@ her qaîdeya vegerê (rotation rules) divê di `Manifest`ê bernameyê an jî ma
 
 Her rêz an `block` e (qebûl neke an xizmetê nede) an jî `warn` e (destûr e, wekî dîtinek tê qeydkirin).
 
-Paketa default `who-codex-basic@0.1.0` **pêşniyareke ku ji rêberiya giştî derbas bûye**: rêberiya WHO ya ji bo xwarina saxlem, sodyum, şekir û rûn, Çar Kuncên WHO yên ji bo Xwarina Bêhtir, kodên Codex yên etiketkirinê û xwarinên berfireh (frozen-food), û ramanên plansaziyê yên rasyonê ya herî kêm a Sphere ye. Ew sadekirî ye, ne şîreta bijîşkî ye, xwarina zarokên nêzik û xwarina terapîtiqî dihewîne, û divê ji aliyê xebatkarên bajarî ve were nirxandin. Divê bername kopî bikin û li gorî xwe biguherînin, `jurisdiction` deynin, û nirxandina wê di `reviewedBy` de qeydkirin.
+Paketa default `basic-nutrition-food-safety@0.1.0` **pêşniyareke ku ji rêberiya giştî derbas bûye**: rêberiya WHO ya ji bo xwarina saxlem, sodyum, şekir û rûn, Çar Kuncên WHO yên ji bo Xwarina Bêhtir, kodên Codex yên etiketkirinê û xwarinên berfireh (frozen-food), û ramanên plansaziyê yên rasyonê ya herî kêm a Sphere ye. Ew sadekirî ye, ne şîreta bijîşkî ye, xwarina zarokên nêzik û xwarina terapîtiqî dihewîne, û divê ji aliyê xebatkarên bajarî ve were nirxandin. Divê bername kopî bikin û li gorî xwe biguherînin, `jurisdiction` deynin, û nirxandina wê di `reviewedBy` de qeydkirin.
 
 Girtinên di astê H2 de pakê di her teslîdkirinê de û li ser her menûyê dicîninê, û ID-yên rêkan di `findings` de qeyd dikin. Kontrolkera referansê raportê dide ku li ku encamên hatine daxwazkirin û encamên hatine hesabkirin ne li hev in.
 

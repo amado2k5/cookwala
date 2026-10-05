@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (అన్నీ), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; వృత్తిపరమైన సమీక్ష కోసం వేచి ఉన్న డ్రాఫ్ట్‌లన్నీ, [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md) చూడండి)
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (అన్నీ), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; వృత్తిపరమైన సమీక్ష కోసం వేచి ఉన్న డ్రాఫ్ట్‌లన్నీ, [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md) చూడండి)
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (Cairo లో food bank, school meals, disaster kitchen, robot kitchen), ప్రతిదీ ఒక గణించబడిన `ImpactSummary` తో
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -108,7 +108,7 @@ operational flow ని నిర్వహిస్తుంది.
 
 ప్రతి rule `block` (అంగీకరించకూడదు లేదా అందించకూడదు) లేదా `warn` (అనుమతించబడింది, ఒక finding గా నమోదు చేయబడింది).
 
-డిఫాల్ట్ ప్యాక్ `who-codex-basic@0.1.0` అనేది ఒక **public guidance నుండి రూపొందించబడిన draft**: WHO యొక్క healthy-diet, sodium, sugars మరియు fats guidance, WHO Five Keys to Safer Food, Codex labelling మరియు frozen-food codes, మరియు Sphere యొక్క minimum ration planning figures. ఇది సరళీకరించబడింది, ఇది వైద్య సలహా కాదు, శిశువు మరియు therapeutic feeding ను మినహాయించింది, మరియు దీనిని అర్హత కలిగిన సిబ్బంది ద్వారా సమీక్షించబడాలి. ప్రోగ్రామ్‌లు దీనిని కాపీ చేసి అనువదించుకోవాలి, `jurisdiction` ను సెట్ చేయాలి, మరియు ఎవరు సమీక్షించారో `reviewedBy` లో నమోదు చేయాలి.
+డిఫాల్ట్ ప్యాక్ `basic-nutrition-food-safety@0.1.0` అనేది ఒక **public guidance నుండి రూపొందించబడిన draft**: WHO యొక్క healthy-diet, sodium, sugars మరియు fats guidance, WHO Five Keys to Safer Food, Codex labelling మరియు frozen-food codes, మరియు Sphere యొక్క minimum ration planning figures. ఇది సరళీకరించబడింది, ఇది వైద్య సలహా కాదు, శిశువు మరియు therapeutic feeding ను మినహాయించింది, మరియు దీనిని అర్హత కలిగిన సిబ్బంది ద్వారా సమీక్షించబడాలి. ప్రోగ్రామ్‌లు దీనిని కాపీ చేసి అనువదించుకోవాలి, `jurisdiction` ను సెట్ చేయాలి, మరియు ఎవరు సమీక్షించారో `reviewedBy` లో నమోదు చేయాలి.
 
 H2 స్థాయి వద్ద ఉన్న Receivers ప్రతి handover మరియు ప్రతి menu వద్ద pack ను run చేస్తారు, మరియు rule ids ను `findings` లో record చేస్తారు. డిక్లేర్ చేయబడిన మరియు కంప్యూట్ చేయబడిన findings విభేదించినప్పుడు reference checker నివేదిస్తుంది.
 

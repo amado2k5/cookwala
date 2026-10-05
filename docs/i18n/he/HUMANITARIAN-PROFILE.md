@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (הכל), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; כל הטיוטות ממתינות לסקירה מקצועית, ראו [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (הכל), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; כל הטיוטות ממתינות לסקירה מקצועית, ראו [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank בקהיר, ארוחות בית ספר, מטבח אסון, מטבח רובוטי), כל אחד עם `ImpactSummary` מחושב
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -113,7 +113,7 @@ food banks, מטבחים קהילתיים, תוכניות ארוחות בית ס
 
 כל כלל הוא או `block` (אל תקבל או תגיש) או `warn` (מורשה, מתועד כממצא).
 
-החבילה ברירת המחדל `who-codex-basic@0.1.0` היא **טיוטה הנגזרת מהנחיות ציבוריות**: ההנחיות של WHO בנושא תזונה בריאה, נתרן, סוכרים ושומנים, חמשת המפתחות של WHO למזון בטוח יותר, קודי Codex לסימון ומזון קפוא, ונתוני תכנון המנות המינימליות של Sphere. היא מפושטת, אינה מהווה ייעוץ רפואי, אינה כוללת הזנה של תינוקות והזנה טיפולית, ויש לתת אותה לבדיקה על ידי צוות מוסמך. תוכניות צריכות להעתיק ולהתאים אותה, להגדיר `jurisdiction`, ולתעד מי בדק אותה ב-`reviewedBy`.
+החבילה ברירת המחדל `basic-nutrition-food-safety@0.1.0` היא **טיוטה הנגזרת מהנחיות ציבוריות**: ההנחיות של WHO בנושא תזונה בריאה, נתרן, סוכרים ושומנים, חמשת המפתחות של WHO למזון בטוח יותר, קודי Codex לסימון ומזון קפוא, ונתוני תכנון המנות המינימליות של Sphere. היא מפושטת, אינה מהווה ייעוץ רפואי, אינה כוללת הזנה של תינוקות והזנה טיפולית, ויש לתת אותה לבדיקה על ידי צוות מוסמך. תוכניות צריכות להעתיק ולהתאים אותה, להגדיר `jurisdiction`, ולתעד מי בדק אותה ב-`reviewedBy`.
 
 מקבלים ברמה H2 מריצים את ה-pack בכל handover ובכל תפריט, ומתעדים rule ids ב-`findings`. בודק ההתאמה (reference checker) מדווח במקומות שבהם findings שהוצהרו ו-findings שחושבו אינם תואמים.
 

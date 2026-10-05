@@ -7,7 +7,7 @@ state machine. Usage:
     python tools/humanitarian_check.py [--pack PACK.json ...] FILE...
     python tools/humanitarian_check.py --summary DIR --org did:web:... --from 2026-11-01 --to 2026-11-30 [--out summary.json]
 
---pack may be given several times (0.2: care-vulnerable-groups, school-meals-basic, sodium-reduction extend who-codex-basic).
+--pack may be given several times (0.2: care-vulnerable-groups, school-meals-basic, sodium-reduction extend basic-nutrition-food-safety).
 --summary computes an ImpactSummary (RFC-0003) from every Offer, Claim, Handover and Distribution in DIR.
 """
 import argparse
@@ -20,7 +20,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 SCHEMA = json.loads((ROOT / 'schemas' / 'humanitarian.schema.json').read_text())
-DEFAULT_PACK = ROOT / 'profiles' / 'humanitarian' / 'who-codex-basic.rulepack.json'
+DEFAULT_PACK = ROOT / 'profiles' / 'humanitarian' / 'basic-nutrition-food-safety.rulepack.json'
 
 # Offer state machine (docs/HUMANITARIAN-PROFILE.md section 5). Anything else is refused.
 TRANSITIONS = {

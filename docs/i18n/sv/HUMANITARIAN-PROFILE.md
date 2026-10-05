@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (alla), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; alla utkast väntar på professionell granskning, se [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (alla), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; alla utkast väntar på professionell granskning, se [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank i Kairo, skolmåltider, katastrofkök, robotkök), var och en med en beräknad `ImpactSummary`
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -115,7 +115,7 @@ En `RulePack` innehåller regler av sex slag:
 
 Varje regel är antingen `block` (acceptera eller servera inte) eller `warn` (tillåten, registrerad som en finding).
 
-Standardpaketet `who-codex-basic@0.1.0` är ett **utkast härlett från offentlig vägledning**: WHO:s
+Standardpaketet `basic-nutrition-food-safety@0.1.0` är ett **utkast härlett från offentlig vägledning**: WHO:s
 vägledning om healthy-diet, sodium, sugars och fats, WHO:s Five Keys to Safer Food, Codex
 labelling och frozen-food codes, samt Spheres siffror för minimum ration planning. Det är
 förenklat, inte medicinsk rådgivning, exkluderar spädbarnsmat och terapeutisk matning, och måste granskas

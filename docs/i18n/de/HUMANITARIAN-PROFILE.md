@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (alle), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; alle Entwürfe warten auf professionelle Prüfung, siehe [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (alle), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; alle Entwürfe warten auf professionelle Prüfung, siehe [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank in Kairo, Schulmahlzeiten, Katastrophenküche, Roboterküche), jeweils mit einem berechneten `ImpactSummary`
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -108,7 +108,7 @@ Ein `RulePack` enthält Regeln von sechs Arten:
 
 Jede Regel ist entweder `block` (nicht akzeptieren oder bereitstellen) oder `warn` (erlaubt, als Befund aufgezeichnet).
 
-Das Standard-Pack `who-codex-basic@0.1.0` ist ein **Entwurf, der aus öffentlichen Leitlinien abgeleitet wurde**: die WHO-Leitlinien zu gesunder Ernährung, Natrium, Zucker und Fetten, die WHO Five Keys to Safer Food, Codex-Kennzeichnungs- und Tiefkühlkost-Kodizes sowie die Sphere-Zahlen zur Mindestrationenplanung. Es ist vereinfacht, keine medizinische Beratung, schließt die Säuglings- und therapeutische Ernährung aus und muss von qualifiziertem Personal überprüft werden. Programme sollten es kopieren und anpassen, `jurisdiction` festlegen und aufzeichnen, wer es überprüft hat, in `reviewedBy`.
+Das Standard-Pack `basic-nutrition-food-safety@0.1.0` ist ein **Entwurf, der aus öffentlichen Leitlinien abgeleitet wurde**: die WHO-Leitlinien zu gesunder Ernährung, Natrium, Zucker und Fetten, die WHO Five Keys to Safer Food, Codex-Kennzeichnungs- und Tiefkühlkost-Kodizes sowie die Sphere-Zahlen zur Mindestrationenplanung. Es ist vereinfacht, keine medizinische Beratung, schließt die Säuglings- und therapeutische Ernährung aus und muss von qualifiziertem Personal überprüft werden. Programme sollten es kopieren und anpassen, `jurisdiction` festlegen und aufzeichnen, wer es überprüft hat, in `reviewedBy`.
 
 Empfänger auf Ebene H2 führen das Pack bei jeder Übergabe und bei jedem Menü aus und protokollieren rule ids in `findings`. Der Reference Checker meldet, wo deklarierte und berechnete findings voneinander abweichen.
 

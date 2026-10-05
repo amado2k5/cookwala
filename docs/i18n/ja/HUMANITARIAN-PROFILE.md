@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (すべて), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; すべてのドラフトは専門家によるレビュー待ちです。[`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md) を参照してください)
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (すべて), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; すべてのドラフトは専門家によるレビュー待ちです。[`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md) を参照してください)
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (カイロの food bank、school meals、disaster kitchen、robot kitchen)、それぞれに計算された `ImpactSummary` を含む
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -107,7 +107,7 @@ food banks、コミュニティキッチン、学校給食プログラム、救�
 
 各ルールは、`block`（受け入れまたは提供しない）または `warn`（許可されるが、所見として記録される）のいずれかです。
 
-デフォルトのパック `who-codex-basic@0.1.0` は、**公開ガイダンスから派生したドラフト**です：WHOのhealthy-diet、sodium、sugarsおよびfatsに関するガイダンス、WHO Five Keys to Safer Food、Codexのlabellingおよびfrozen-foodコード、そしてSphereのminimum ration planningの数値に基づいています。これは簡略化されており、医学的助言ではなく、乳幼児および治療食を除外しており、資格を持つスタッフによるレビューが必要です。プログラムはこれをコピーして適応させ、`jurisdiction` を設定し、誰がレビューしたかを `reviewedBy` に記録する必要があります。
+デフォルトのパック `basic-nutrition-food-safety@0.1.0` は、**公開ガイダンスから派生したドラフト**です：WHOのhealthy-diet、sodium、sugarsおよびfatsに関するガイダンス、WHO Five Keys to Safer Food、Codexのlabellingおよびfrozen-foodコード、そしてSphereのminimum ration planningの数値に基づいています。これは簡略化されており、医学的助言ではなく、乳幼児および治療食を除外しており、資格を持つスタッフによるレビューが必要です。プログラムはこれをコピーして適応させ、`jurisdiction` を設定し、誰がレビューしたかを `reviewedBy` に記録する必要があります。
 
 レベル H2 の Receivers は、すべての handover およびすべての menu で pack を実行し、rule ids を `findings` に記録します。reference checker は、宣言された findings と計算された findings が一致しない箇所を報告します。
 

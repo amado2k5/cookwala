@@ -5,7 +5,7 @@
  "version": "0.1.0",
  "title": "Care rules for children under five, pregnancy, older adults and immunocompromised people",
  "status": "draft",
- "extends": "who-codex-basic@0.1.0",
+ "extends": "basic-nutrition-food-safety@0.1.0",
  "jurisdiction": "Global default from public guidance; national rules replace it",
  "rules": [
   {

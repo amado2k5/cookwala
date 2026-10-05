@@ -5,7 +5,7 @@
  "version": "0.1.0",
  "title": "Basic school-meal nutrition rules per meal",
  "status": "draft",
- "extends": "who-codex-basic@0.1.0",
+ "extends": "basic-nutrition-food-safety@0.1.0",
  "jurisdiction": "Global default from public guidance; national standards replace it",
  "rules": [
   {

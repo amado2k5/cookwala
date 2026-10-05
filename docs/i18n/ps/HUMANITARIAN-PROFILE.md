@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (ټول), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; ټول مسودې د مسلکي بیاکتنې په انتظار دي، وګورئ [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (ټول), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; ټول مسودې د مسلکي بیاکتنې په انتظار دي، وګورئ [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (په قاهره کې food bank، ښوونځي کې خواړه، आपत्कालीन پخلنځی، روبوټ پخلنځی)، هر یو د محاسبه شوي `ImpactSummary` سره
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -107,7 +107,7 @@ food banks، ټولنیزې پخلنځي، د ښوونځي د ډوډۍ پروګ�
 
 هر قانون یا `block` دی (مه 받아 او خدمت مه کوئ) یا `warn` دی (اجازه ورکړل شوې، د یوې موندنې په توګه ثبت شوې).
 
-د پټ (default) پېک `who-codex-basic@0.1.0` یو **د عامه لارښوونو څخه اخیستل شوی مسودوي (draft derived from public guidance)** دی: د WHO healthy-diet، sodium، sugars او fats لارښوونه، د WHO Five Keys to Safer Food، د Codex labelling او frozen-food codes، او د Sphere لږ تر لږه د راشن پلان کولو ارقام. دا ساده شوی دی، طبي مشوره نه ده، د شتاسو او درملic تغذیه (therapeutic feeding) څخه ایستل شوی، او باید د وړتیا لرونکو کارمندانو لخوا بیاکتنه شي. پروګرامونه باید یې کاپي او تطبیق کړي، `jurisdiction` وټاکي، او دا چې څوک یې بیاکتنه کړې ده په `reviewedBy` کې ثبت کړي.
+د پټ (default) پېک `basic-nutrition-food-safety@0.1.0` یو **د عامه لارښوونو څخه اخیستل شوی مسودوي (draft derived from public guidance)** دی: د WHO healthy-diet، sodium، sugars او fats لارښوونه، د WHO Five Keys to Safer Food، د Codex labelling او frozen-food codes، او د Sphere لږ تر لږه د راشن پلان کولو ارقام. دا ساده شوی دی، طبي مشوره نه ده، د شتاسو او درملic تغذیه (therapeutic feeding) څخه ایستل شوی، او باید د وړتیا لرونکو کارمندانو لخوا بیاکتنه شي. پروګرامونه باید یې کاپي او تطبیق کړي، `jurisdiction` وټاکي، او دا چې څوک یې بیاکتنه کړې ده په `reviewedBy` کې ثبت کړي.
 
 په H2 کچې کې ترلاسه کونکي (Receivers) هر تسلیم (handover) او په هر مینو (menu) کې pack چلوي، او rule ids په `findings` کې ثبتوي. مرجع چک کول (reference checker) راپور ورکوي چې چیرته اعلان شوي او محاسبه شوي findings سره اختلاف لري.
 

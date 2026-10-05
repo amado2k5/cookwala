@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (όλα), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; όλα τα drafts αναμονής επαγγελματικής επανεξέτασης, δείτε [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (όλα), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; όλα τα drafts αναμονής επαγγελματικής επανεξέτασης, δείτε [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank στο القاهرة, school meals, disaster kitchen, robot kitchen), το καθένα με ένα υπολογισμένο `ImpactSummary`
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -111,7 +111,7 @@ operational flow.
 
 Κάθε κανόνας είναι είτε `block` (μη αποδοχή ή εξυπηρέτηση) είτε `warn` (επιτρέπεται, καταγράφεται ως εύρημα).
 
-Το προεπιλεγμένο pack `who-codex-basic@0.1.0` είναι ένα **draft derived from public guidance**: οι οδηγίες του WHO για healthy-diet, sodium, sugars και fats, τα WHO Five Keys to Safer Food, οι Codex labelling και frozen-food codes, και τα Sphere minimum ration planning figures. Είναι απλοποιημένο, όχι ιατρική συμβουλή, αποκλείει την infant και therapeutic feeding, και πρέπει να ελέγχεται από εξειδικευμένο προσωπικό. Τα προγράμματα πρέπει να το αντιγράφουν και να το προσαρμόζουν, να ορίζουν το `jurisdiction`, και να καταγράφουν ποιος το εξέτασε στο `reviewedBy`.
+Το προεπιλεγμένο pack `basic-nutrition-food-safety@0.1.0` είναι ένα **draft derived from public guidance**: οι οδηγίες του WHO για healthy-diet, sodium, sugars και fats, τα WHO Five Keys to Safer Food, οι Codex labelling και frozen-food codes, και τα Sphere minimum ration planning figures. Είναι απλοποιημένο, όχι ιατρική συμβουλή, αποκλείει την infant και therapeutic feeding, και πρέπει να ελέγχεται από εξειδικευμένο προσωπικό. Τα προγράμματα πρέπει να το αντιγράφουν και να το προσαρμόζουν, να ορίζουν το `jurisdiction`, και να καταγράφουν ποιος το εξέτασε στο `reviewedBy`.
 
 Οι δέκτες στο επίπεδο H2 εκτελούν το pack σε κάθε handover και σε κάθε μενού, και καταγράφουν τα rule ids στο `findings`. Ο ελεγκτής αναφοράς αναφέρει όπου τα δηλωμένα και τα υπολογισμένα findings διαφωνούν.
 

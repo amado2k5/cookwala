@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (सभी), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; सभी drafts पेशेवर समीक्षा की प्रतीक्षा में हैं, देखें [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (सभी), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; सभी drafts पेशेवर समीक्षा की प्रतीक्षा में हैं, देखें [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (Cairo में food bank, school meals, disaster kitchen, robot kitchen), प्रत्येक के साथ एक computed `ImpactSummary`
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -108,7 +108,7 @@ operational flow को संभालता है।
 
 प्रत्येक rule या तो `block` (स्वीकार न करें या सेवा न दें) है या `warn` (अनुमत, एक finding के रूप में दर्ज) है।
 
-डिफ़ॉल्ट पैक `who-codex-basic@0.1.0` एक **सार्वजनिक मार्गदर्शन से प्राप्त ड्राफ्ट है**: WHO का
+डिफ़ॉल्ट पैक `basic-nutrition-food-safety@0.1.0` एक **सार्वजनिक मार्गदर्शन से प्राप्त ड्राफ्ट है**: WHO का
 healthy-diet, sodium, sugars और fats मार्गदर्शन, WHO के Five Keys to Safer Food, Codex
 labelling और frozen-food कोड, और Sphere के minimum ration planning आंकड़े। यह
 सरलीकृत है, कोई चिकित्सा सलाह नहीं है, इसमें शिशु और चिकित्सीय आहार (therapeutic feeding) शामिल नहीं है, और इसे योग्य कर्मचारियों द्वारा समीक्षा की जानी चाहिए। कार्यक्रमों को इसे कॉपी और अनुकूलित करना चाहिए, `jurisdiction` सेट करना चाहिए, और `reviewedBy` में रिकॉर्ड करना चाहिए कि इसकी समीक्षा किसने की।

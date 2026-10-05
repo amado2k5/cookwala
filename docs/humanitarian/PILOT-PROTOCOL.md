@@ -48,7 +48,7 @@ distinguishable", not as a result.
   (a comparison site); if not possible, say so.
 - **Level:** start at H0 (SMS and spreadsheets). Move to H1 (API) only if the partner wants
   it and H0 ran for at least four weeks.
-- **Rule packs:** `who-codex-basic` plus, where children or older adults are served,
+- **Rule packs:** `basic-nutrition-food-safety` plus, where children or older adults are served,
   `care-vulnerable-groups`; adapted to national rules by the program's food-safety lead and
   recorded in `reviews`.
 - **Who records:** the program's trained staff, by role. No person is named in any document.

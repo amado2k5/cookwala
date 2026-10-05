@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (todos), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; todos los borradores esperando revisión profesional, ver [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (todos), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; todos los borradores esperando revisión profesional, ver [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank en El Cairo, school meals, disaster kitchen, robot kitchen), cada uno con un `ImpactSummary` computado
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -114,7 +114,7 @@ Un `RulePack` contiene reglas de seis tipos:
 
 Cada regla es ya sea `block` (no aceptar ni servir) o `warn` (permitido, registrado como un finding).
 
-El pack por defecto `who-codex-basic@0.1.0` es un **borrador derivado de orientación pública**: la orientación de la OMS sobre dieta saludable, sodio, azúcares y grasas, las Cinco Claves para la Inocuidad de los Alimentos de la OMS, los códigos de etiquetado y de alimentos congelados del Codex, y las cifras de planificación de raciones mínimas de Sphere. Es simplificado, no es asesoramiento médico, excluye la alimentación infantil y terapéutica, y debe ser revisado por personal cualificado. Los programas deben copiarlo y adaptarlo, establecer `jurisdiction` y registrar quién lo revisó en `reviewedBy`.
+El pack por defecto `basic-nutrition-food-safety@0.1.0` es un **borrador derivado de orientación pública**: la orientación de la OMS sobre dieta saludable, sodio, azúcares y grasas, las Cinco Claves para la Inocuidad de los Alimentos de la OMS, los códigos de etiquetado y de alimentos congelados del Codex, y las cifras de planificación de raciones mínimas de Sphere. Es simplificado, no es asesoramiento médico, excluye la alimentación infantil y terapéutica, y debe ser revisado por personal cualificado. Los programas deben copiarlo y adaptarlo, establecer `jurisdiction` y registrar quién lo revisó en `reviewedBy`.
 
 Los receptores en el nivel H2 ejecutan el pack en cada handover y en cada menú, y registran los rule ids en `findings`. El verificador de referencia informa dónde los findings declarados y computados no coinciden.
 

@@ -10,7 +10,7 @@ qualified professional checks them rule by rule and the review is recorded in th
 
 | File | Audience | Rules |
 |---|---|---|
-| `profiles/humanitarian/who-codex-basic.rulepack.json` | all | sodium, free sugars, fats, fruit and vegetables, rations, cold chain, time out of temperature control, date marks, allergens |
+| `profiles/humanitarian/basic-nutrition-food-safety.rulepack.json` | all | sodium, free sugars, fats, fruit and vegetables, rations, cold chain, time out of temperature control, date marks, allergens |
 | `profiles/humanitarian/care-vulnerable-groups.rulepack.json` | children under five, pregnancy, older adults, immunocompromised | foods to avoid, stricter hot-holding and cooked-rice time, sodium and energy per meal for older adults |
 | `profiles/humanitarian/school-meals-basic.rulepack.json` | school-age children | fruit and vegetables, sodium, free sugars, saturated fat, energy and protein per meal, choking, allergens |
 | `profiles/humanitarian/sodium-reduction.rulepack.json` | programs that adopt sodium reduction | per-meal warn and block tiers, per-day |
@@ -61,5 +61,5 @@ checker refuses a pack marked `reviewed` without such a review.
 
 ## 5. Time needed
 
-About two hours for `who-codex-basic`, one hour for each of the others. Reviews are
+About two hours for `basic-nutrition-food-safety`, one hour for each of the others. Reviews are
 voluntary unless a program funds them; the repository records the review, not the fee.

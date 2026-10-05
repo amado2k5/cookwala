@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (همه)، [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json)، [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json)، [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004؛ تمام پیش‌نویس‌ها در انتظار بررسی حرفه‌ای هستند، ببینید [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (همه)، [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json)، [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json)، [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004؛ تمام پیش‌نویس‌ها در انتظار بررسی حرفه‌ای هستند، ببینید [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank در قاهره، وعده‌های غذایی مدرسه، آشپزخانه بلایا، آشپزخانه رباتیک)، هر کدام با یک `ImpactSummary` محاسبه شده
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -106,7 +106,7 @@ food banks، آشپزخانه‌های محلی، برنامه‌های وعده
 
 هر قانون یا از نوع `block` است (پذیرش یا سرو نکنید) یا از نوع `warn` (مجاز است، به عنوان یک یافته ثبت می‌شود).
 
-بسته پیش‌فرض `who-codex-basic@0.1.0` یک **پیش‌نویس مشتق شده از راهنمایی‌های عمومی** است: راهنمایی‌های WHO در مورد رژیم غذایی سالم، سدیم، قندها و چربی‌ها، پنج کلید WHO برای غذای ایمن‌تر، کدهای برچسب‌گذاری Codex و غذاهای منجمد، و ارقام برنامه‌ریزی حداقل جیره Sphere. این بسته ساده‌سازی شده است، توصیه پزشکی نیست، تغذیه نوزاد و درمانی را شامل نمی‌شود، و باید توسط کارکنان واجد شرایط بازبینی شود. برنامه‌ها باید آن را کپی و تطبیق دهند، `jurisdiction` را تنظیم کنند، و اینکه چه کسی آن را بازبینی کرده است در `reviewedBy` ثبت کنند.
+بسته پیش‌فرض `basic-nutrition-food-safety@0.1.0` یک **پیش‌نویس مشتق شده از راهنمایی‌های عمومی** است: راهنمایی‌های WHO در مورد رژیم غذایی سالم، سدیم، قندها و چربی‌ها، پنج کلید WHO برای غذای ایمن‌تر، کدهای برچسب‌گذاری Codex و غذاهای منجمد، و ارقام برنامه‌ریزی حداقل جیره Sphere. این بسته ساده‌سازی شده است، توصیه پزشکی نیست، تغذیه نوزاد و درمانی را شامل نمی‌شود، و باید توسط کارکنان واجد شرایط بازبینی شود. برنامه‌ها باید آن را کپی و تطبیق دهند، `jurisdiction` را تنظیم کنند، و اینکه چه کسی آن را بازبینی کرده است در `reviewedBy` ثبت کنند.
 
 گیرنده‌ها در سطح H2 pack را در هر handover و در هر menu اجرا می‌کنند، و rule ids را در `findings` ثبت می‌کنند. بررسی‌کننده مرجع گزارش می‌دهد که در کجا findings اعلام‌شده و محاسبه‌شده با هم اختلاف دارند.
 

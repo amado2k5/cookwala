@@ -27,7 +27,7 @@ professional), `decision` (founder), `good first issue`.
 | D-07 | **Community Specification License** for the specification repository | Gives the patent framework `PATENTS.md` lacks |
 | D-08 | **A contact address** for programs, funders and press | Every "path forward" line ends at GitHub Discussions today |
 | D-09 | **Transparency log or public-chain anchoring** for event-log checkpoints and certifications | RFC-0010 models chain anchors as optional evidence only |
-| D-10 | **Rename the `who-codex-basic` rule pack** to a name that does not put WHO in a product name; a registry name change needs a tombstone and a new entry | The labelling fixes are done; the id remains |
+| D-10 | **Rename the `basic-nutrition-food-safety` rule pack** to a name that does not put WHO in a product name; a registry name change needs a tombstone and a new entry | The labelling fixes are done; the id remains |
 | D-11 | **Status badges in three states**: spec only, software ready, hardware pending, replacing normative/draft/experimental on the site | Says what runs, not how mature the document is |
 
 ## 2. The standard and the protocol

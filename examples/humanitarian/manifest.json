@@ -12,7 +12,7 @@
   "H2"
  ],
  "rulePacks": [
-  "who-codex-basic@0.1.0"
+  "basic-nutrition-food-safety@0.1.0"
  ],
  "endpoints": {
   "api": "https://foodbank.example/cookwala/h/v0",

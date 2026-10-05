@@ -332,7 +332,7 @@ class Handler(BaseHTTPRequestHandler):
         if name == 'humanitarian':
             import importlib.util
             spec = importlib.util.spec_from_file_location('humanitarian_check', ROOT / 'tools' / 'humanitarian_check.py'); hc = importlib.util.module_from_spec(spec); spec.loader.exec_module(hc)
-            pack = hc.merge_packs([ROOT / 'profiles' / 'humanitarian' / f'{p}.rulepack.json' for p in body.get('packs', ['who-codex-basic'])])
+            pack = hc.merge_packs([ROOT / 'profiles' / 'humanitarian' / f'{p}.rulepack.json' for p in body.get('packs', ['basic-nutrition-food-safety'])])
             out = []
             for doc in body['docs']:
                 f = hc.temperature_findings(doc, pack) + (hc.menu_findings(doc, pack) if doc.get('kind') == 'Distribution' else [])

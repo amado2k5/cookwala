@@ -7,7 +7,7 @@ registered dietitian and a food-safety officer. **Not medical advice.**
 ## Problem
 
 The founder's second goal is a healthier world (M24, M48). Today one draft rule pack
-(`who-codex-basic`) covers sodium, sugars, fats, rations and basic cold-chain rules. Missing:
+(`basic-nutrition-food-safety`) covers sodium, sugars, fats, rations and basic cold-chain rules. Missing:
 fruit and vegetables per meal, care for children, older people and pregnancy (foods to avoid,
 stricter reheating), school-meal patterns, a way to express "no raw egg" or "no unpasteurized
 dairy" (the rule kinds cannot say it), and a record of **who reviewed what**. Health content

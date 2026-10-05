@@ -4,13 +4,13 @@
  "audience": "registry_operator",
  "northStar": ["robots", "hunger"],
  "level": "beginner",
- "title": {"en": "Read the reference registry: five entries, all verified by DNS TXT"},
+ "title": {"en": "Read the reference registry: six entries, all verified by DNS TXT"},
  "goal": {"en": "The registry at cookwala.ai lists pointers to things that exist in this repository: a catalog, the example recipe collection, the default safety limits, one humanitarian rule pack and one agent benchmark. Read it from the hub and check names and verification."},
  "docs": ["/docs/REGISTRY/", "/docs/FEDERATION/"],
  "requires": ["hub", "repo"],
  "steps": [
-  {"op": "getRegistry", "save": "reg", "note": {"en": "Fetch the registry document. Names are namespace/name, the namespace proven once by a DNS TXT record."}, "expect": {"entries.length": 5, "registry": "https://cookwala.ai", "entries[0].kind": "catalog", "entries[0].name": "ai.cookwala/reference-catalog", "entries[0].verification.method": "dns_txt"}},
-  {"op": "assert", "note": {"en": "The other four entries: examples, safety limits, the WHO/Codex rule pack and the kitchen agent-safety benchmark, each with an exact version."}, "expect": {"reg.entries[1].name": "ai.cookwala/examples", "reg.entries[2].name": "ai.cookwala/safety-limits-default", "reg.entries[3].name": "ai.cookwala/who-codex-basic", "reg.entries[4].name": "ai.cookwala/kitchen-agent-safety", "reg.entries[4].kind": "benchmark", "reg.entries[3].version": "0.1.0"}},
+  {"op": "getRegistry", "save": "reg", "note": {"en": "Fetch the registry document. Names are namespace/name, the namespace proven once by a DNS TXT record."}, "expect": {"entries.length": 6, "registry": "https://cookwala.ai", "entries[0].kind": "catalog", "entries[0].name": "ai.cookwala/reference-catalog", "entries[0].verification.method": "dns_txt"}},
+  {"op": "assert", "note": {"en": "The other four entries: examples, safety limits, the WHO/Codex rule pack and the kitchen agent-safety benchmark, each with an exact version."}, "expect": {"reg.entries[1].name": "ai.cookwala/examples", "reg.entries[2].name": "ai.cookwala/safety-limits-default", "reg.entries[3].name": "ai.cookwala/who-codex-basic", "reg.entries[3].status": "deleted", "reg.entries[3].replacedBy": "ai.cookwala/basic-nutrition-food-safety", "reg.entries[5].name": "ai.cookwala/basic-nutrition-food-safety", "reg.entries[4].name": "ai.cookwala/kitchen-agent-safety", "reg.entries[4].kind": "benchmark", "reg.entries[3].version": "0.1.0"}},
   {"op": "assert", "note": {"en": "A file entry carries the sha256 of the file it points at, so a hub can check what it downloaded."}, "expect": {"reg.entries[2].sha256": "75ab08ca1988e3b7c462cae7a9f8ed0c4705fae80e4fa4ad213f3332bf4cd3c0", "reg.entries[2].verification.method": "dns_txt"}}
  ],
  "cli": [

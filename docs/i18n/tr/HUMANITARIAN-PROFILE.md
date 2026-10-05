@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (tümü), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; tüm taslaklar profesyonel inceleme bekliyor, bkz. [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (tümü), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; tüm taslaklar profesyonel inceleme bekliyor, bkz. [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (Kahire'deki food bank, okul yemekleri, afet mutfağı, robot mutfağı), her biri hesaplanmış bir `ImpactSummary` ile
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -107,7 +107,7 @@ Bir `RulePack` altı türde kural barındırır:
 
 Her bir kural ya `block` (kabul etme veya servis etme) ya da `warn` (izin verilir, bir bulgu olarak kaydedilir) şeklindedir.
 
-Varsayılan paket `who-codex-basic@0.1.0`, **kamu kılavuzlarından türetilmiş bir taslaktır**: WHO'nun healthy-diet, sodyum, şekerler ve yağlar kılavuzu, WHO Five Keys to Safer Food, Codex etiketleme ve dondurulmuş gıda kodları ve Sphere'in minimum rasyon planlama rakamları. Basitleştirilmiştir, tıbbi tavsiye değildir, bebek ve terapötik beslenmeyi hariç tutar ve yetkin personel tarafından gözden geçirilmelidir. Programlar bunu kopyalayıp uyarlamalı, `jurisdiction` belirlemeli ve kimin gözden geçirdiğini `reviewedBy` kısmına kaydetmelidir.
+Varsayılan paket `basic-nutrition-food-safety@0.1.0`, **kamu kılavuzlarından türetilmiş bir taslaktır**: WHO'nun healthy-diet, sodyum, şekerler ve yağlar kılavuzu, WHO Five Keys to Safer Food, Codex etiketleme ve dondurulmuş gıda kodları ve Sphere'in minimum rasyon planlama rakamları. Basitleştirilmiştir, tıbbi tavsiye değildir, bebek ve terapötik beslenmeyi hariç tutar ve yetkin personel tarafından gözden geçirilmelidir. Programlar bunu kopyalayıp uyarlamalı, `jurisdiction` belirlemeli ve kimin gözden geçirdiğini `reviewedBy` kısmına kaydetmelidir.
 
 H2 seviyesindeki alıcılar, her devir teslimde ve her menüde paketi çalıştırır ve kural id'lerini `findings` içinde kaydeder. Referans denetleyicisi, beyan edilen ve hesaplanan bulguların uyuşmadığı yerleri raporlar.
 

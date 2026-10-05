@@ -1,7 +1,7 @@
 {
  "profile": "0.1.0",
  "kind": "RulePack",
- "id": "who-codex-basic",
+ "id": "basic-nutrition-food-safety",
  "version": "0.1.0",
  "title": "Basic nutrition and food-safety rules from WHO, Codex and Sphere guidance",
  "status": "draft",

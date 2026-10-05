@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (تمام)، [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json)، [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json)، [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; تمام ڈرافٹس پیشہ ورانہ نظرثانی کے منتظر ہیں، دیکھیں [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (تمام)، [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json)، [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json)، [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; تمام ڈرافٹس پیشہ ورانہ نظرثانی کے منتظر ہیں، دیکھیں [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (قاہرہ میں food bank، اسکول کے کھانے، ڈیزاسٹر کچن، روبوٹ کچن)، ہر ایک کے ساتھ ایک محسوب شدہ `ImpactSummary`
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -108,7 +108,7 @@ restaurants، farms، caterers)، ٹرانسپورٹرز اور cold stores۔ ی
 
 ہر قاعدہ یا تو `block` (قبول نہ کریں یا فراہم نہ کریں) ہے یا `warn` (اجازت ہے، ایک finding کے طور پر ریکارڈ کیا گیا) ہے۔
 
-ڈیفالٹ پیک `who-codex-basic@0.1.0` ایک **public guidance سے اخذ کردہ ڈرافٹ ہے**: WHO کی
+ڈیفالٹ پیک `basic-nutrition-food-safety@0.1.0` ایک **public guidance سے اخذ کردہ ڈرافٹ ہے**: WHO کی
 healthy-diet, sodium, sugars اور fats guidance، WHO کے Five Keys to Safer Food، Codex
 labelling اور frozen-food codes، اور Sphere کے minimum ration planning figures۔ یہ
 سادہ کیا گیا ہے، طبی مشورہ نہیں ہے، اس میں شیر خوار بچوں اور therapeutic feeding کو شامل نہیں کیا گیا، اور اسے اہل عملے کے ذریعے نظرثانی کی جانی چاہیے۔ پروگراموں کو اسے کاپی اور ایڈاپٹ کرنا چاہیے، `jurisdiction` سیٹ کرنا چاہیے، اور `reviewedBy` میں ریکارڈ کرنا چاہیے کہ کس نے اس کی نظرثانی کی۔

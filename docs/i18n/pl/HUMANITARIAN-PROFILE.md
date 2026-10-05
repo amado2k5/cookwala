@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (wszystkie), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; wszystkie wersje robocze oczekujące na profesjonalną recenzję, patrz [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (wszystkie), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; wszystkie wersje robocze oczekujące na profesjonalną recenzję, patrz [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank w Kairze, posiłki szkolne, kuchnia kryzysowa, kuchnia robotyczna), każdy z obliczonym `ImpactSummary`
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -109,7 +109,7 @@ wszelkie reguły rotacji muszą zostać opublikowane w `Manifest` programu lub n
 
 Każda reguła to albo `block` (nie akceptuj ani nie serwuj) lub `warn` (dozwolone, odnotowane jako znalezisko).
 
-Domyślny pakiet `who-codex-basic@0.1.0` to **projekt wywodzący się z publicznych wytycznych**: wytycznych WHO dotyczących zdrowej diety, sodu, cukrów i tłuszczów, wytycznych WHO Five Keys to Safer Food, kodeksów Codex dotyczących etykietowania i mrożonej żywności oraz danych Sphere dotyczących planowania minimalnych racji. Jest on uproszczony, nie stanowi porady medycznej, wyklucza żywienie niemowląt i żywienie terapeutyczne i musi zostać sprawdzony przez wykwalifikowany personel. Programy powinny go skopiować i dostosować, ustawić `jurisdiction` oraz zarejestrować, kto go sprawdził, w `reviewedBy`.
+Domyślny pakiet `basic-nutrition-food-safety@0.1.0` to **projekt wywodzący się z publicznych wytycznych**: wytycznych WHO dotyczących zdrowej diety, sodu, cukrów i tłuszczów, wytycznych WHO Five Keys to Safer Food, kodeksów Codex dotyczących etykietowania i mrożonej żywności oraz danych Sphere dotyczących planowania minimalnych racji. Jest on uproszczony, nie stanowi porady medycznej, wyklucza żywienie niemowląt i żywienie terapeutyczne i musi zostać sprawdzony przez wykwalifikowany personel. Programy powinny go skopiować i dostosować, ustawić `jurisdiction` oraz zarejestrować, kto go sprawdził, w `reviewedBy`.
 
 Odbiorcy na poziomie H2 uruchamiają pakiet przy każdym przekazaniu i w każdym menu, oraz rejestrują identyfikatory reguł w `findings`. Sprawdzający zgodność raportuje miejsca, w których zadeklarowane i obliczone znaleziska są rozbieżne.
 

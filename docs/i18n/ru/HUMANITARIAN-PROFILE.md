@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (все), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; все черновики ожидают профессионального рецензирования, см. [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (все), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; все черновики ожидают профессионального рецензирования, см. [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank в Каире, школьное питание, кухня в чрезвычайных ситуациях, роботизированная кухня), каждый с вычисленным `ImpactSummary`
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -110,7 +110,7 @@ restaurants, farms, caterers), transporters and cold stores. Она охваты
 
 Каждое правило является либо `block` (не принимать или не подавать), либо `warn` (разрешено, записано как finding).
 
-Стандартный pack `who-codex-basic@0.1.0` — это **черновик, полученный на основе публичных рекомендаций**: рекомендаций WHO по здоровому питанию, натрию, сахарам и жирам, пяти принципов WHO для обеспечения безопасности пищевых продуктов, кодексов Codex по маркировке и замороженным продуктам, а также показателей планирования минимальных рационов Sphere. Он упрощен, не является медицинской рекомендацией, исключает детское и терапевтическое питание и должен быть проверен квалифицированным персоналом. Программы должны копировать и адаптировать его, устанавливать `jurisdiction` и записывать, кто его проверил, в `reviewedBy`.
+Стандартный pack `basic-nutrition-food-safety@0.1.0` — это **черновик, полученный на основе публичных рекомендаций**: рекомендаций WHO по здоровому питанию, натрию, сахарам и жирам, пяти принципов WHO для обеспечения безопасности пищевых продуктов, кодексов Codex по маркировке и замороженным продуктам, а также показателей планирования минимальных рационов Sphere. Он упрощен, не является медицинской рекомендацией, исключает детское и терапевтическое питание и должен быть проверен квалифицированным персоналом. Программы должны копировать и адаптировать его, устанавливать `jurisdiction` и записывать, кто его проверил, в `reviewedBy`.
 
 Получатели на уровне H2 запускают pack при каждой передаче и в каждом меню, и записывают rule ids в `findings`. Проверка соответствия сообщает о случаях, когда объявленные и вычисленные findings расходятся.
 

@@ -8,7 +8,7 @@ Network or any other organization named here.
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (all), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; all drafts awaiting professional review, see [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (all), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; all drafts awaiting professional review, see [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank in Cairo, school meals, disaster kitchen, robot kitchen), each with a computed `ImpactSummary`
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -115,7 +115,7 @@ A `RulePack` holds rules of six kinds:
 
 Each rule is either `block` (do not accept or serve) or `warn` (allowed, recorded as a finding).
 
-The default pack `who-codex-basic@0.1.0` is a **draft derived from public guidance**: WHO's
+The default pack `basic-nutrition-food-safety@0.1.0` is a **draft derived from public guidance**: WHO's
 healthy-diet, sodium, sugars and fats guidance, the WHO Five Keys to Safer Food, Codex
 labelling and frozen-food codes, and Sphere's minimum ration planning figures. It is
 simplified, not medical advice, excludes infant and therapeutic feeding, and must be reviewed

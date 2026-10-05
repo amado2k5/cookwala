@@ -16,7 +16,7 @@
  "capacityMealsPerHour": 350,
  "hotHold": {"units": 4, "minTempC": 60},
  "cooling": {"blastChiller": false, "iceBath": true, "coldStoreKg": 300},
- "rulePacks": ["who-codex-basic@0.1.0", "care-vulnerable-groups@0.1.0"],
+ "rulePacks": ["basic-nutrition-food-safety@0.1.0", "care-vulnerable-groups@0.1.0"],
  "staff": [{"role": "head_cook", "count": 1}, {"role": "cook", "count": 3}, {"role": "volunteer", "count": 8}, {"role": "food_safety_lead", "count": 1}],
  "operatingHours": [{"days": "daily", "from": "06:00", "to": "15:00"}],
  "meta": {"visibility": "shared", "sensitive": false}

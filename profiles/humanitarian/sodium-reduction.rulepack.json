@@ -5,7 +5,7 @@
  "version": "0.1.0",
  "title": "Sodium reduction rules for programs that adopt them",
  "status": "draft",
- "extends": "who-codex-basic@0.1.0",
+ "extends": "basic-nutrition-food-safety@0.1.0",
  "jurisdiction": "Global default derived from the WHO sodium guideline",
  "rules": [
   {

@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (الكل)، [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json)، [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json)، [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004؛ جميع المسودات في انتظار المراجعة المهنية، انظر [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (الكل)، [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json)، [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json)، [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004؛ جميع المسودات في انتظار المراجعة المهنية، انظر [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md))
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (food bank في القاهرة، وجبات مدرسية، مطبخ كوارث، مطبخ روبوت)، كل منها مع `ImpactSummary` محسوب
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -107,7 +107,7 @@
 
 كل قاعدة هي إما `block` (عدم القبول أو التقديم) أو `warn` (مسموح بها، وتُسجل كـ finding).
 
-إن الحزمة الافتراضية `who-codex-basic@0.1.0` هي **مسودة مشتقة من إرشادات عامة**: إرشادات منظمة الصحة العالمية بشأن النظام الغذائي الصحي، والصوديوم، والسكريات والدهون، والمفاتيح الخمسة لمنظمة الصحة العالمية لسلامة الغذاء، وقواعد Codex للبطاقات التعريفية والأغذية المجمدة، وأرقام تخطيط الحصص الدنيا من Sphere. إنها مبسطة، وليست نصيحة طبية، وتستثني تغذية الرضع والتغذية العلاجية، ويجب مراجعتها من قبل موظفين مؤهلين. يجب على البرامج نسخها وتكييفها، وتحديد `jurisdiction`، وتسجيل من قام بمراجعتها في `reviewedBy`.
+إن الحزمة الافتراضية `basic-nutrition-food-safety@0.1.0` هي **مسودة مشتقة من إرشادات عامة**: إرشادات منظمة الصحة العالمية بشأن النظام الغذائي الصحي، والصوديوم، والسكريات والدهون، والمفاتيح الخمسة لمنظمة الصحة العالمية لسلامة الغذاء، وقواعد Codex للبطاقات التعريفية والأغذية المجمدة، وأرقام تخطيط الحصص الدنيا من Sphere. إنها مبسطة، وليست نصيحة طبية، وتستثني تغذية الرضع والتغذية العلاجية، ويجب مراجعتها من قبل موظفين مؤهلين. يجب على البرامج نسخها وتكييفها، وتحديد `jurisdiction`، وتسجيل من قام بمراجعتها في `reviewedBy`.
 
 يقوم المستلمون في المستوى H2 بتشغيل الـ pack عند كل عملية تسليم وفي كل قائمة طعام، وتسجيل معرفات القواعد في `findings`. ويقوم فاحص المرجع بالإبلاغ عن المواضع التي تختلف فيها النتائج المعلنة والمحسوبة.
 

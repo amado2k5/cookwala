@@ -8,7 +8,7 @@
 
 - schema: [`schemas/humanitarian.schema.json`](../schemas/humanitarian.schema.json)
 - examples: [`examples/humanitarian/`](../examples/humanitarian)
-- rule packs: [`who-codex-basic`](../profiles/humanitarian/who-codex-basic.rulepack.json) (전체), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; 모든 초안은 전문가 검토 대기 중, [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md) 참조)
+- rule packs: [`basic-nutrition-food-safety`](../profiles/humanitarian/basic-nutrition-food-safety.rulepack.json) (전체), [`care-vulnerable-groups`](../profiles/humanitarian/care-vulnerable-groups.rulepack.json), [`school-meals-basic`](../profiles/humanitarian/school-meals-basic.rulepack.json), [`sodium-reduction`](../profiles/humanitarian/sodium-reduction.rulepack.json) (RFC-0004; 모든 초안은 전문가 검토 대기 중, [`docs/health/REVIEW-TEMPLATE.md`](health/REVIEW-TEMPLATE.md) 참조)
 - API: [`api/humanitarian.openapi.yaml`](../api/humanitarian.openapi.yaml)
 - worked flows: [`examples/humanitarian/flows/`](../examples/humanitarian/flows) (Cairo의 food bank, school meals, disaster kitchen, robot kitchen), 각각 계산된 `ImpactSummary` 포함
 - pilot protocol: [`docs/humanitarian/PILOT-PROTOCOL.md`](humanitarian/PILOT-PROTOCOL.md)
@@ -108,7 +108,7 @@ restaurants, farms, caterers), transporters and cold stores. 이는 네 가지 �
 
 각 규칙은 `block` (수락하거나 제공하지 않음) 또는 `warn` (허용됨, 결과로 기록됨) 중 하나입니다.
 
-기본 팩 `who-codex-basic@0.1.0`은 **공공 지침에서 파생된 초안**입니다: WHO의 healthy-diet, sodium, sugars and fats 지침, WHO Five Keys to Safer Food, Codex labelling 및 frozen-food codes, 그리고 Sphere의 minimum ration planning 수치들을 바탕으로 합니다. 이는 단순화된 것이며, 의학적 조언이 아니며, 영유아 및 치료용 급식을 제외하며, 자격을 갖춘 직원에 의해 검토되어야 합니다. 프로그램은 이를 복사 및 조정하고, `jurisdiction`을 설정하며, 누가 이를 검토했는지 `reviewedBy`에 기록해야 합니다.
+기본 팩 `basic-nutrition-food-safety@0.1.0`은 **공공 지침에서 파생된 초안**입니다: WHO의 healthy-diet, sodium, sugars and fats 지침, WHO Five Keys to Safer Food, Codex labelling 및 frozen-food codes, 그리고 Sphere의 minimum ration planning 수치들을 바탕으로 합니다. 이는 단순화된 것이며, 의학적 조언이 아니며, 영유아 및 치료용 급식을 제외하며, 자격을 갖춘 직원에 의해 검토되어야 합니다. 프로그램은 이를 복사 및 조정하고, `jurisdiction`을 설정하며, 누가 이를 검토했는지 `reviewedBy`에 기록해야 합니다.
 
 H2 레벨의 Receivers는 모든 handover 및 모든 menu에서 pack을 실행하며, rule ids를 `findings`에 기록합니다. reference checker는 선언된 findings와 계산된 findings가 일치하지 않는 지점을 보고합니다.
 

@@ -28,13 +28,13 @@
    },
    "expect": {
     "cookwala": "0.2.0",
-    "entries.length": 5,
+    "entries.length": 6,
     "entries[0].kind": "catalog",
     "entries[0].name": "ai.cookwala/reference-catalog",
     "entries[1].kind": "recipe_collection",
     "entries[2].kind": "safety_limits",
     "entries[3].kind": "rule_pack",
-    "entries[4].kind": "benchmark"
+    "entries[4].kind": "benchmark", "entries[3].status": "deleted", "entries[5].kind": "rule_pack", "entries[5].name": "ai.cookwala/basic-nutrition-food-safety"
    }
   },
   {
