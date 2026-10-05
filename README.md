@@ -1,3 +1,5 @@
+<p align="center"><img src="site/assets/logo.svg" width="320" alt="Cookwala"></p>
+
 # Cookwala
 
 **The open standard for cooking safely: people, kitchens and robots.**

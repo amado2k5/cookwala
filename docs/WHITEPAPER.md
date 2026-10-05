@@ -53,6 +53,8 @@ work for people, and this paper says exactly how far it goes toward each.
 
 ## 3. The solution in one page
 
+<figure class="diagram">{{diagram:loops}}</figure>
+
 A Cookwala recipe is a document with typed steps. Each heat step names an operation from a
 shared vocabulary; each operation has a physical **envelope** (simmer is water at 85 to 96 °C;
 deep frying is oil at 160 to 190 °C) and a **sensor ladder**: the ways a device may verify the
@@ -102,6 +104,8 @@ interface package, four simulators.
 
 ## 6. The operation model
 
+<figure class="diagram">{{diagram:robots}}</figure>
+
 Operations fall into three classes for a device and an agent:
 
 - **Read-only:** search, fetch, dry-run, explain, check. Always allowed.
@@ -118,6 +122,8 @@ safety overrides always require confirmation; the second is never granted.
 
 ## 7. Trust and security model
 
+<figure class="diagram">{{diagram:household}}</figure>
+
 Documents are hashed over RFC 8785 canonical JSON and signed with Ed25519 (or P-256 for
 hardware keys). Key records carry validity windows and revocation. Selective disclosure
 lets a signed document hide a sensitive value and still verify. Event logs have one sequencer
@@ -130,6 +136,9 @@ certification, which are weaker than law); inference from sequences of derived c
 (an open research problem); hardware failure, which no data standard prevents.
 
 ## 8. Food safety, nutrition and the humanitarian layer
+
+<figure class="diagram">{{diagram:hunger}}</figure>
+<figure class="diagram">{{diagram:health}}</figure>
 
 Critical control points are explicit in recipes and enforced by on-device limits (minimum core
 temperatures, hot-holding, two-stage cooling, reheating). Rule packs derived from WHO, Codex

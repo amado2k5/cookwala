@@ -1,0 +1,17 @@
+<svg viewBox="0 0 960 230" role="img" aria-label="{{s:goals.d1_store}} → {{s:goals.d1_offer}} → {{s:goals.d1_bank}} → {{s:goals.d1_claim}} → {{s:goals.d1_hand}} → {{s:goals.d1_kitchen}} → {{s:goals.d1_meals}} → {{s:goals.d1_summary}}">
+        <defs><marker id="arr-hunger" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+        <g class="dg-boxes">
+          <rect x="10" y="70" width="150" height="70" rx="12"/><text x="85" y="110" text-anchor="middle">{{s:goals.d1_store}}</text>
+          <rect x="250" y="70" width="150" height="70" rx="12"/><text x="325" y="110" text-anchor="middle">{{s:goals.d1_bank}}</text>
+          <rect x="460" y="55" width="240" height="100" rx="12" class="dg-check"/><text x="580" y="95" text-anchor="middle">{{s:goals.d1_hand}}</text><text x="580" y="125" text-anchor="middle" class="dg-warn">{{s:goals.d1_reject}}</text>
+          <rect x="760" y="70" width="150" height="70" rx="12"/><text x="835" y="110" text-anchor="middle">{{s:goals.d1_kitchen}}</text>
+        </g>
+        <g class="dg-arrows" marker-end="url(#arr-hunger)">
+          <line x1="160" y1="105" x2="248" y2="105"/><line x1="400" y1="105" x2="458" y2="105"/><line x1="700" y1="105" x2="758" y2="105"/>
+        </g>
+        <g class="dg-labels">
+          <text x="204" y="60" text-anchor="middle">{{s:goals.d1_offer}}</text><text x="430" y="60" text-anchor="middle">{{s:goals.d1_claim}}</text>
+          <text x="835" y="175" text-anchor="middle">{{s:goals.d1_meals}}</text><text x="480" y="210" text-anchor="middle">{{s:goals.d1_summary}}</text>
+        </g>
+        <path class="dg-dashed" d="M835 150 V190 H120 V145" fill="none" marker-end="url(#arr-hunger)"/>
+      </svg>

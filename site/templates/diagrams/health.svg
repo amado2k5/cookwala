@@ -1,0 +1,9 @@
+<svg viewBox="0 0 960 250" role="img" aria-label="{{s:goals.d2_device}}: {{s:goals.d2_core}}, {{s:goals.d2_hold}}, {{s:goals.d2_cool}}, {{s:goals.d2_reheat}}. {{s:goals.d2_packs}}: {{s:goals.d2_sodium}}, {{s:goals.d2_sugar}}, {{s:goals.d2_fat}}, {{s:goals.d2_fv}}. {{s:goals.d2_care}}. {{s:goals.d2_review}}">
+      <g class="dg-boxes">
+        <rect x="10" y="20" width="440" height="190" rx="14"/><text x="230" y="52" text-anchor="middle" class="dg-h">{{s:goals.d2_device}}</text>
+        <text x="40" y="92">• {{s:goals.d2_core}}</text><text x="40" y="124">• {{s:goals.d2_hold}}</text><text x="40" y="156">• {{s:goals.d2_cool}}</text><text x="40" y="188">• {{s:goals.d2_reheat}}</text>
+        <rect x="510" y="20" width="440" height="190" rx="14"/><text x="730" y="52" text-anchor="middle" class="dg-h">{{s:goals.d2_packs}}</text>
+        <text x="540" y="92">• {{s:goals.d2_sodium}} · {{s:goals.d2_sugar}}</text><text x="540" y="124">• {{s:goals.d2_fat}} · {{s:goals.d2_fv}}</text><text x="540" y="156">• {{s:goals.d2_care}}</text><text x="540" y="188" class="dg-warn">• {{s:goals.d2_review}}</text>
+      </g>
+      <text x="480" y="240" text-anchor="middle" class="dg-labels">measured · WHO, Codex, Sphere</text>
+    </svg>

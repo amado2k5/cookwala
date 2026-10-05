@@ -43,16 +43,16 @@ REPO = 'https://github.com/amado2k5/cookwala/blob/main/'
 LANGS = ['en', 'ar']  # extended at start-up with every site/content/<lang>/strings.json
 RTL = {'ar', 'ur', 'fa', 'he', 'ps'}
 FONTS = {
-    'latin': 'https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
-    'arabic': 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
-    'cyrillic': 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
-    'greek': 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
-    'hebrew': 'https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
-    'devanagari': 'https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
-    'telugu': 'https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
-    'ja': 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
-    'zh': 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
-    'ko': 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
+    'latin': 'https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
+    'arabic': 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
+    'cyrillic': 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
+    'greek': 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
+    'hebrew': 'https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
+    'devanagari': 'https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
+    'telugu': 'https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
+    'ja': 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
+    'zh': 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
+    'ko': 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
 }
 SCRIPT_OF = {'ar': 'arabic', 'ur': 'arabic', 'fa': 'arabic', 'ps': 'arabic', 'he': 'hebrew', 'ru': 'cyrillic', 'el': 'greek', 'hi': 'devanagari', 'te': 'telugu', 'ja': 'ja', 'zh': 'zh', 'ko': 'ko'}
 AUTONYM = {'en': 'English', 'ar': 'العربية', 'fr': 'Français', 'es': 'Español', 'ja': '日本語', 'hi': 'हिन्दी', 'pt': 'Português', 'ru': 'Русский', 'zh': '简体中文', 'de': 'Deutsch', 'it': 'Italiano', 'el': 'Ελληνικά', 'ur': 'اردو', 'fa': 'فارسی', 'tr': 'Türkçe', 'ku': 'Kurdî', 'id': 'Bahasa Indonesia', 'sw': 'Kiswahili', 'ko': '한국어', 'nl': 'Nederlands', 'ps': 'پښتو', 'he': 'עברית', 'pl': 'Polski', 'sv': 'Svenska', 'te': 'తెలుగు'}
@@ -271,6 +271,7 @@ class Builder:
         status = meta.get('status')
         chip = f'<p class="chip"><span class="dot {status}" aria-hidden="true"></span>{html.escape(S["status"].get(status, status))}</p>' if status else ''
         body = body.replace('{{chip}}', chip)
+        body = re.sub(r'\{\{diagram:(\w+)\}\}', lambda m: read(f'site/templates/diagrams/{m.group(1)}.svg'), body)
         if '{{sdk_cards}}' in body: body = body.replace('{{sdk_cards}}', self.sb.sdk_cards(lang))
         if '{{scenario_list}}' in body: body = body.replace('{{scenario_list}}', self.sb.list_html(lang))
         def s_lookup(m):
