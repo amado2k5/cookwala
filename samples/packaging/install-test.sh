@@ -122,7 +122,7 @@ t_conda() {
   [ -f "$BUILD/cookwala_samples-$V.tar.gz" ] || { bad conda "no sdist (pip install build, then build.py)"; return; }
   mkdir -p "$W/sdist" "$W/conda" && cp "$BUILD/cookwala_samples-$V.tar.gz" "$W/sdist/"; serve "$P_SDIST" "$W/sdist" || { bad conda "sdist server"; return; }
   sed "s#url: https://pypi.org/packages/source/c/cookwala-samples/#url: http://127.0.0.1:$P_SDIST/#" "$BUILD/manifests/conda/meta.yaml" > "$W/conda/meta.yaml"
-  docker run --rm --network host -v "$W/conda:/recipe:ro" "${cavol[@]}" mirror.gcr.io/condaforge/miniforge3:latest bash -c '[ -f /ca.crt ] && { conda config --set ssl_verify /ca.crt; export REQUESTS_CA_BUNDLE=/ca.crt SSL_CERT_FILE=/ca.crt; }; conda install -y -q conda-build >/dev/null 2>&1 && conda build -q /recipe --output-folder /tmp/out >/dev/null 2>&1 && conda create -y -q -n t -c /tmp/out -c conda-forge cookwala-samples >/dev/null 2>&1 && conda run -n t cookwala-samples demo | grep -q "6 runs: 3 completed"' \
+  docker run --rm --network host -v "$W/conda:/recipe:ro" "${cavol[@]}" mirror.gcr.io/condaforge/miniforge3:latest bash -c '[ -f /ca.crt ] && { conda config --set ssl_verify /ca.crt; export REQUESTS_CA_BUNDLE=/ca.crt SSL_CERT_FILE=/ca.crt; }; step() { "$@" > /tmp/step.log 2>&1 || { echo "  failed: $*"; tail -25 /tmp/step.log | sed "s/^/    | /"; exit 1; }; }; step conda install -y -q conda-build; step conda build -q /recipe --output-folder /tmp/out; step conda create -y -q -n t -c /tmp/out -c conda-forge cookwala-samples; conda run -n t cookwala-samples demo | grep -q "6 runs: 3 completed"' \
     && ok conda "conda build (with the recipe tests); conda create, run" || bad conda "conda build or install"
 }
 
