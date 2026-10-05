@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- cookwala-samples as a .NET tool: dotnet tool install -g Cookwala.Samples.Tool -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Cookwala.Samples.Cli</RootNamespace>
+    <AssemblyName>cookwala-samples</AssemblyName>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>cookwala-samples</ToolCommandName>
+    <PackageId>Cookwala.Samples.Tool</PackageId>
+    <Description>The cookwala-samples command: the Cookwala samples demo, gates, planner and orchestrator on simulated devices or against a Cookwala hub, plus a small HTTP service. Samples, not certified software.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Cookwala.Samples/Cookwala.Samples.csproj" />
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>

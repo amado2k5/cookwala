@@ -1,0 +1,18 @@
+<Project>
+  <!-- Shared package metadata for Cookwala.Samples and Cookwala.Samples.Tool. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Version>0.1.0</Version>
+    <Authors>Cookwala maintainers</Authors>
+    <Company>Cookwala</Company>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://cookwala.ai</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/amado2k5/cookwala</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>cooking;robots;food-safety;agents;orchestration;cookwala</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+</Project>
