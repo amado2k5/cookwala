@@ -190,7 +190,7 @@ class Builder:
                 except ValueError: continue
                 self.strings[d.name] = deep_merge(self.strings['en'], over)
                 if d.name not in LANGS: LANGS.append(d.name)
-                if (d / '.machine-translated').exists(): self.machine.add(d.name)
+                self.machine.add(d.name)  # only English and Arabic are written by people; everything else carries the notice
         for lang in LANGS:
             self.strings[lang]['font_link'] = FONTS.get(SCRIPT_OF.get(lang, 'latin'), FONTS['latin'])
             self.strings[lang]['switch'] = AUTONYM.get(lang, lang)

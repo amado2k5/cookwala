@@ -1,0 +1,63 @@
+<!--meta {"title": "Playground: dry run, envelope explorer, simulators", "description": "Ejecuta el dry run en nueve recetas y cualquier dispositivo que construyas, arrastra un trazo de temperatura a través de la banda segura de una operación, y reproduce cuatro simuladores del protocolo encendido y apagado. Todo se ejecuta en tu navegador.", "path": "/playground/", "scripts": ["dryrun.js", "demo.js", "envelope.js"]} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Playground</p>
+  <h1>Pruébalo en tu navegador</h1>
+  <p class="lead">Tres cosas para jugar: el dry run (¿puede este dispositivo cocinar esta receta?), el envelope explorer (¿cuándo deja de ser un simmer un simmer?) y cuatro simuladores que muestran el protocolo encendido y apagado. Nada aquí es un dispositivo real; todo se ejecuta en tu máquina.</p>
+</section>
+
+<section id="demo" class="band" aria-labelledby="demo-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="demo-h">Dry run: ¿puede este dispositivo cocinar esta receta?</h2><p>Nueve recetas, cinco ajustes preestablecidos de dispositivo, o construye tu propio dispositivo a partir de operaciones, sensores y señales de visión. El resultado es un enlace que puedes compartir.</p></div>
+    <div class="demo">
+      <form class="controls" id="demoForm" aria-label="Dry-run settings">
+        <label>Receta <select id="dRecipe"></select></label>
+        <label>Dispositivo <select id="dDevice"></select></label>
+        <label class="check"><input type="checkbox" id="dHuman" checked> Una persona está en la cocina</label>
+        <label class="check"><input type="checkbox" id="dModel" checked> Se permiten estimaciones registradas donde falta un sensor</label>
+      </form>
+      <details id="builder" open><summary>Construye tu propio dispositivo</summary><div class="builder" id="builderBody"></div></details>
+      <div class="verdict" id="verdict" role="status" aria-live="polite">Loading the recipe and the operation vocabulary…</div>
+      <div class="table-wrap"><table class="steps-t" id="steps"><thead><tr><th>Paso</th><th>Operación</th><th>Banda segura</th><th>Quién</th><th>Revisado por</th></tr></thead><tbody></tbody></table></div>
+      <div class="share"><span>Share this result</span><input id="shareUrl" type="text" readonly aria-label="Shareable link"><button type="button" class="btn" id="copyShare">Copiar</button></div>
+      <p class="note">Pruebe koshari en el dispositivo sin termómetros: las cebollas crujientes necesitan fritura profunda, y la fritura profunda tiene un peldaño, un termómetro de aceite. Pruebe salata baladi en el brazo de la encimera: sin calor, por lo que el brazo realiza el corte con su cámara.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="env-h">
+  <div class="sec-head"><h2 id="env-h">Explorador de la envolvente: ¿cuándo deja de ser un simmer un simmer?</h2><p>Seleccione una operación y arrastre los puntos de un trazado de temperatura. El verificador es la misma función que prueban los vectores de conformance: se permite el calentamiento, luego el nivel medio debe permanecer dentro de la banda; un objetivo de receta, una vez alcanzado, debe mantenerse. Las bandas de agua se desplazan con la altitud.</p></div>
+  <div class="demo envelope-demo">
+    <form class="controls" id="envForm" aria-label="Envelope settings">
+      <label>Operación <select id="envOp"></select></label>
+      <label>Altitud <input id="envAlt" type="number" value="0" min="0" max="5000" step="100"> m</label>
+      <label class="check"><input type="checkbox" id="envTarget"> Objetivo de receta <input id="envTargetV" type="number" value="94" step="1" aria-label="Target °C"> ± <input id="envTol" type="number" value="3" step="1" min="0" aria-label="Tolerance °C"> °C</label>
+    </form>
+    <div class="envelope">
+      <svg id="envSvg" viewBox="0 0 640 320" role="img" aria-labelledby="envTitle envDesc"><title id="envTitle">Temperature trace against the operation's safe band</title><desc id="envDesc">Drag the circles to change the trace. The shaded band is the envelope.</desc></svg>
+      <div>
+        <div class="verdict" id="envVerdict" role="status" aria-live="polite"></div>
+        <dl class="sheet" id="envSheet"></dl>
+        <p class="note" id="envNote"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" aria-labelledby="sim-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="sim-h">Simuladores, explicados para no expertos</h2><p>Cuatro modelos deterministas, cada uno jugable con el protocolo encendido y apagado, cada uno etiquetado como <span class="kind modelled">modelo modelled</span>. No predicen el futuro; muestran lo que se deriva de los supuestos escritos en cada página, y cada supuesto puede ser cambiado.</p></div>
+    <div class="cards">
+      <a class="card" href="/sim/"><h3>Un hogar</h3><p>Una familia le pide la cena a un robot. Observe cómo la solicitud viaja a través de proveedores, aprobaciones, interrupciones y un cierre; apague el protocolo y vea la misma noche con el robot solo.</p><span class="go">Play →</span></a>
+      <a class="card" href="/sim/city/"><h3>Dos ciudades, un mes</h3><p>Granjas, un hub mayorista, tiendas, 1.500 hogares por ciudad, camiones, basura y energía. Los robots solos empujan los residuos hacia arriba en la cadena; con planes compartidos, las pérdidas antes de los hogares disminuyen.</p><span class="go">Play →</span></a>
+      <a class="card" href="/sim/country/"><h3>Un país, un año</h3><p>Seis provincias adoptando a diferentes velocidades, estaciones, un programa de alivio. El rescate cubre aproximadamente el 5 % de la necesidad en el despliegue mixto: real, y no suficiente.</p><span class="go">Play →</span></a>
+      <a class="card" href="/sim/world/"><h3>El mundo, cinco años</h3><p>Diez regiones, tres escenarios de robots, protocolo encendido o apagado. El hambre está donde los robots no están; el protocolo ayuda a los países sin robots.</p><span class="go">Play →</span></a>
+    </div>
+    <p class="note">Cómo leerlos: un resultado es una diferencia entre dos ejecuciones del mismo modelo, no una medición del mundo. Las páginas de la ciudad y el país enumeran la calibración frente a las cifras de PNUMA y FAO y cada suposición de comportamiento. <a href="/docs/SIM-FINDINGS/">Lo que los simuladores encontraron</a>, incluyendo lo que hicieron mal.</p>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div><h2>Rescate de alimentos por SMS</h2><p>El recorrido por el Perfil Humanitario: escriba los mensajes que enviaría un food bank y observe cómo aparecen los documentos, los hallazgos de las reglas y el resumen de impacto.</p><a class="btn primary" href="/humanitarian/#sms">Open the walkthrough</a></div>
+  <div><h2>En la línea de comandos</h2><p>Todo en esta página es una función en la biblioteca de referencia. <a href="/developers/">The quickstart</a> realiza las mismas comprobaciones en una terminal; <a href="/docs/MCP/">the MCP server</a> se las proporciona a un agente de IA.</p></div>
+</section>
+

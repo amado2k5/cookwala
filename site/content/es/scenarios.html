@@ -1,0 +1,26 @@
+<!--meta {"title": "SDK y escenarios: {{stat:scenarios}} cosas que hacer, en {{stat:sdkLanguages}} idiomas", "description": "Un cliente hub con las mismas {{stat:sdkOperations}} operaciones en Python, TypeScript, JavaScript, Go, Rust, Java, Kotlin, C#, Swift, C++, Ruby, PHP y curl, y {{stat:scenarios}} escenarios paso a paso con la línea de comandos, el código y la salida grabada, cada uno ejecutado contra el hub de referencia.", "path": "/scenarios/", "status": "draft", "scripts": ["scenarios.js"]} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / {{s:scenarios.title}}</p>
+  {{chip}}
+  <h1>{{s:scenarios.title}}</h1>
+  <p class="lead">{{s:scenarios.lead}}</p>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>{{s:scenarios.languages}}</h2>
+    <p class="note">{{s:scenarios.sdk_note}}</p>
+    <div class="cards" id="sdkCards">{{sdk_cards}}</div>
+  </div>
+</section>
+
+<section class="wrap">
+  <form class="controls" id="scenarioFilter">
+    <label>{{s:scenarios.audience}} <select id="saud"><option value="">{{s:scenarios.all}}</option></select></label>
+    <label>{{s:scenarios.goal}} <select id="sgoal"><option value="">{{s:scenarios.all}}</option><option value="hunger">{{s:scenarios.goal_hunger}}</option><option value="health">{{s:scenarios.goal_health}}</option><option value="robots">{{s:scenarios.goal_robots}}</option></select></label>
+    <label>{{s:scenarios.level}} <select id="slevel"><option value="">{{s:scenarios.all}}</option><option value="beginner">beginner</option><option value="intermediate">intermediate</option><option value="advanced">advanced</option></select></label>
+  </form>
+  <p class="note" id="scount" aria-live="polite"></p>
+  <ol class="steps" id="slist">{{scenario_list}}</ol>
+</section>
+

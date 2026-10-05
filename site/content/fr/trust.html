@@ -1,0 +1,66 @@
+<!--meta {"title": "Confiance : sécurité, vie privée, sûreté, gouvernance, critiques, statut", "description": "Comment Cookwala assure la sécurité des cuisines et des données à domicile : sécurité appliquée sur l'appareil, refus avant chaleur, enregistrements signés, agents sous mandat, aucune donnée personnelle dans la couche humanitaire, critiques publiées, gouvernance ouverte, et le statut honnête de chaque élément.", "path": "/trust/"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Confiance</p>
+  <h1>La confiance est un nombre avec une unité, un enregistrement que vous pouvez vérifier, et une liste de nos erreurs</h1>
+  <p class="lead">Cette page rassemble le modèle de sécurité, les règles de vie privée, la politique de sûreté, la gouvernance, les critiques et le statut de chaque partie de Cookwala. Rien ici ne promet zéro dommage ; une norme qui le ferait serait mensongère.</p>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>La fiche de sécurité</h2>
+    <div class="two">
+      <dl class="sheet">
+        <dt>Limites de sécurité</dt><dd>appliquées sur l'appareil ; la plus stricte l'emporte toujours ; aucune recette, agent, message, extension ou mode de fonctionnement ne peut en augmenter une ; un fabricant ne modifie un défaut que par le biais d'un cas de sécurité documenté et d'une version de firmware signée</dd>
+        <dt>Arrêt local</dt><dd>le mouvement s'arrête en moins de 0,5 s, la chaleur est coupée en moins de 1 s, avec ou sans réseau ; jamais refusé pour autorisation</dd>
+        <dt>Refus</dt><dd>avant chaleur, avec l'étape et la raison ; la friture possède un échelon : un thermomètre à huile</dd>
+        <dt>Opérations non surveillées</dt><dd>couper, faire sauter, saisir, frire, réduire ne s'exécutent jamais sans une personne présente ou joignable en moins d'une minute</dd>
+        <dt>Températures à cœur minimales (par défaut)</dt><dd>volaille 74 °C · viande hachée 71 °C · réchauffage 74 °C (USDA FSIS ; UK FSA 75 °C) · maintien au chaud à 60 °C ou plus · refroidissement en deux étapes</dd>
+        <dt>Blocs d'allergènes</dt><dd>refuser ; aucune substitution autour d'un bloc</dd>
+        <dt>Text</dt><dd>données, jamais d'instructions ; les tentatives sont enregistrées comme des incidents</dd>
+        <dt>Agents</dt><dd>agir uniquement sous un mandat signé ; les actions irréversibles et les dépassements de sécurité nécessitent toujours une confirmation ; la seconde n'est jamais accordée</dd>
+        <dt>Rappels</dt><dd>flux signé ; les exécuteurs refusent les révisions rappelées ; block_and_stop_running arrête les exécutions en cours de manière sécurisée</dd>
+        <dt>Incidents</dt><dd>anonyme, date uniquement, modélisé sur le signalement confidentiel de l'aviation</dd>
+      </dl>
+      <div><p>Le pack de limites par défaut est un <b>brouillon pour la planification et les tests de conformance</b> ; les fabricants d'appareils le remplacent ou le renforcent selon leur propre dossier de sécurité, et aucune autorité ne l'a examiné. <a href="/v1/profiles/core/safety-limits.default.json">safety-limits.default.json</a> · <a href="/docs/CORE/">Core section 6</a></p><p class="note">Ce que la norme ne peut pas empêcher : une défaillance matérielle, un fabricant qui ment sur ce qu'il applique, une personne qui outrepasse une limite sur un appareil qui le permet. La conformance et la certification rendent ces événements détectables, pas impossibles.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div>
+    <h2>Confidentialité</h2>
+    <ul class="ticks"><li>Les logs d'exécution ne contiennent aucune donnée personnelle et ne laissent sur l'appareil qu'un consentement optionnel et révocable ; les jeux de données ouverts arrondissent les horaires au jour près.</li><li>Le Profil Humanitaire ne contient aucune donnée personnelle : organisations, agrégats, sites.</li><li>Le Profil Household Context garde les faits d'un foyer au sein du foyer : {{stat:facets}} types de facets avec une classe de confidentialité et une règle de transfert ; 45 ne quittent jamais le foyer sous quelque forme que ce soit ; les fournisseurs reçoivent des derived constraints ; 13 types d'auto-état de dispositif ne peuvent voyager que sous un consentement explicite et révocable ; aucun score comportemental de quiconque ; revenu jamais inféré ; tout est effaçable dans un délai imparti.</li><li>Pas d'analyses, pas de cookies, pas de suivi sur ce site.</li></ul>
+    <p><a href="/docs/HOUSEHOLD-CONTEXT/">Household Context Profile</a> · <a href="/ideas/what-a-household-robot-may-know/">L'essai</a> · <span class="status">next</span> une analyse d'impact relative à la protection des données avec un réviseur</p>
+  </div>
+  <div>
+    <h2>Sécurité</h2>
+    <ul class="ticks"><li>Hashes sur JSON canonique RFC 8785 ; signatures Ed25519 (P-256 pour les clés matérielles) ; enregistrements de clés avec validité et révocation ; divulgation sélective ; journaux d'événements avec un séquenceur et des points de contrôle témoins, de sorte qu'une réécriture est détectable ; les éléments relayés sont vérifiés par rapport à l'émetteur, jamais par rapport au relais.</li><li>Signalez les vulnérabilités en privé ; les problèmes de sécurité sont des problèmes de sûreté. Accusé de réception sous 3 jours ouvrables ; divulgation par défaut sous 90 jours.</li></ul>
+    <p><a href="/docs/SECURITY/">Politique de sécurité</a> · <a href="/.well-known/security.txt">security.txt</a> · <a href="/v1/conformance/signature.json">vecteurs de signature</a></p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>Conformité et certification</h2>
+      <p>{{stat:conformanceVectors}} vecteurs publics. Une réclamation est un rapport signé : auto-déclaré → vérifié par un opérateur de registry → certifié par un certificateur indépendant. Des rapports, jamais des badges. Aucun certificateur n'est engagé. <a href="/docs/CERTIFICATION/">Le parcours</a> · <a href="/docs/CERTIFICATION/#2-what-a-report-contains">le rapport de référence</a></p>
+      <h2>Gouvernance</h2>
+      <p>Un éditeur aujourd'hui, en public avec des raisons écrites ; des RFC avec des périodes de commentaires de 30 jours et des réviseurs nommés pour la sécurité ; un comité de direction avec des chiffres publiés et des sièges pour les personnes concernées ; une fondation neutre plus tard ; un engagement de non-assertion de brevet ; Contributor Covenant. <a href="/docs/GOVERNANCE/">Gouvernance</a> · <a href="/docs/RFCS/">RFCs</a></p>
+    </div>
+    <div>
+      <h2>Critiques que nous avons publiées</h2>
+      <p>Nous avons écrit des critiques de notre propre idée sous six points de vue (une red team, un réviseur technique, un adoptant exigeant, un laboratoire d'IA, une agence de secours, une agence de santé), et les avons publiées avec nos réponses et le statut de chaque préoccupation. Elles sont auto-rédigées ; aucune organisation extérieure n'a encore examiné Cookwala, et aucune n'est nommée comme l'ayant fait. Nous avons ensuite modifié la phrase d'accroche, rendu les schémas stricts, et redessiné le registre et les bases de référence des simulateurs. <a href="/docs/CRITIQUES/">Critiques</a> · <a href="/docs/ACTION-PLAN/">Registre des préoccupations, 30 éléments</a> · <a href="/docs/BACKSTORY/">La liste des écarts</a></p>
+      <h2>Statut de tout</h2>
+      <div class="table-wrap"><table><thead><tr><th>Partie</th><th>Statut</th></tr></thead><tbody>
+        <tr><td>Core 0.2</td><td><span class="status core">core</span> normatif, brouillon en cours de révision</td></tr>
+        <tr><td>Humanitaire 0.2, Household Context, Registry, rapports de conformance, Fédération</td><td>profils <span class="status">draft</span ></td></tr>
+        <tr><td>Cuisines et runs, signaux d'approvisionnement, Mission, Marché, Raisonnement, personnalisation de la santé, Extensions</td><td><span class="status">exp</span > expérimental</td></tr>
+        <tr><td>Rule packs</td><td><span class="status">draft</span> aucun n'a encore été examiné professionnellement</td></tr>
+        <tr><td>Simulateurs</td><td><span class="status model">model</span> illustratif, pas des prévisions</td></tr>
+        <tr><td>Pilotes, partenaires, certificateur, fondation</td><td><span class="status">planned</span> aucun n'existe</td></tr>
+        <tr><td>Services hébergés (publication du registry, page de statut)</td><td><span class="status">planned</span> fichiers statiques aujourd'hui</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>
+

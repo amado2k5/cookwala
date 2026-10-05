@@ -12,6 +12,9 @@ to done without the evidence named.
 | 101 conformance vectors (Core and profiles), conformance report format | done |
 | Reference library, Python package and CLI, TypeScript types, MCP server, reference hub, ROS 2 interface package | done (editable and source installs; registries next) |
 | Nine example recipes in English and Arabic | done (V1: structured, not field-verified) |
+| 1,881 fifi.cooking recipes imported at V0, text in 25 languages | done (RFC-0009; four collections await licence confirmation) |
+| SDK clients in 13 languages; 100 executed scenarios | done (Go, Rust, Kotlin, C#, PHP not yet compiled on CI) |
+| Site and documentation in 25 languages | in progress (English and Arabic by hand; the rest machine-translated and labelled) |
 | Humanitarian Profile 0.2: surplus to plate, SMS grammar and parser, four worked flows, impact summaries, pilot protocol, concept note | done (draft) |
 | Health rule packs (basic, care for vulnerable groups, school meals, sodium reduction) with a review template | done (drafts awaiting professional review) |
 | Household Context Profile with a 139-type facet registry and disclosure vectors | done (draft) |

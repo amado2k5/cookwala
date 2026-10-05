@@ -1,0 +1,35 @@
+<!--meta {"title": "Recetas: el índice, en 25 idiomas", "description": "Cada receta en el índice de Cookwala: {{stat:recipesV1}} escrita para el estándar en V1 y {{stat:recipesV0}} importada de fifi.cooking en V0, con ingredientes, pasos y nombres en 25 idiomas, cada uno como un documento que puedes hashear, realizar un dry run y citar.", "path": "/recipes/", "status": "draft", "scripts": ["recipes.js"]} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / {{s:recipes.title}}</p>
+  {{chip}}
+  <h1>{{s:recipes.title}}</h1>
+  <p class="lead">{{s:recipes.lead}}</p>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <form class="controls" id="recipeSearch" role="search">
+      <label>{{s:recipes.search}} <input id="rq" type="search" placeholder="{{s:recipes.placeholder}}" autocomplete="off"></label>
+      <label>{{s:recipes.level}} <select id="rlevel"><option value="">{{s:recipes.all}}</option><option value="V1">V1</option><option value="V0">V0</option></select></label>
+      <label>{{s:recipes.course}} <select id="rcourse"><option value="">{{s:recipes.all}}</option></select></label>
+      <label>{{s:recipes.collection}} <select id="rcoll"><option value="">{{s:recipes.all}}</option></select></label>
+    </form>
+    <p class="note" id="rcount" aria-live="polite"></p>
+    <div class="cards" id="rcards"></div>
+    <p class="cta"><button type="button" class="btn" id="rmore" hidden>{{s:recipes.load_more}}</button></p>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div>
+    <h2>V0 y V1</h2>
+    <p>{{s:recipes.v0_note}}</p>
+    <p>Las nueve recetas escritas para el estándar son V1: operaciones tipadas con parámetros, condiciones de finalización, tiempos de espera, peligros y puntos críticos de control, validadas y verificadas semánticamente; aún no simuladas y no verificadas en campo. Cada documento indica cuál es.</p>
+  </div>
+  <div>
+    <h2>De dónde vienen las recetas</h2>
+    <p>Las recetas importadas son la colección fifi.cooking: el archivo familiar de la Dra. Fatma Alkawokgy y otras cuatro colecciones (Chef Teta, <em>Osool El Tahy</em>, <em>Egyptian Cooking</em> de Samia Abdennour, y el canal Fatma Abu Haty), cada una acreditada en el documento. El archivo familiar se publica bajo CC BY 4.0; las otras colecciones se publican como hechos acreditados con la licencia bajo revisión por el fundador, y así lo indican. No se reclama nada sobre ninguna receta que el documento no contenga.</p>
+    <p>Cada receta es un documento JSON en <code>/v1/recipes/&lt;id&gt;.cookwala.json</code>, con sidecars de texto por idioma en <code>/v1/recipes/&lt;id&gt;/text/&lt;lang&gt;.json</code>, un índice paginado en <code>/v1/index/&lt;lang&gt;/&lt;page&gt;.json</code> y un manifiesto listo para firmar en <code>/v1/manifest.json</code>. La herramienta de exportación y su informe están en el repositorio (<code>tools/export_fifi.py</code>, <code>recipes/REPORT.md</code>).</p>
+  </div>
+</section>
+

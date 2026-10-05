@@ -1,0 +1,66 @@
+<!--meta {"title": "Confianza: seguridad, privacidad, protección, gobernanza, críticas, estado", "description": "Cómo Cookwala mantiene seguras las cocinas y los datos en el hogar: seguridad aplicada en el dispositivo, refusal before heat, registros firmados, agentes bajo mandato, sin datos personales en la capa humanitaria, críticas publicadas, gobernanza abierta y el estado honesto de todo.", "path": "/trust/"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Confianza</p>
+  <h1>La confianza es un número con una unidad, un registro que puedes consultar y una lista de lo que hicimos mal</h1>
+  <p class="lead">Esta página reúne el modelo de seguridad, las reglas de privacidad, la política de seguridad, la gobernanza, las críticas y el estado de cada parte de Cookwala. Nada aquí promete daño cero; un estándar que lo hiciera sería una mentira.</p>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>La hoja de seguridad</h2>
+    <div class="two">
+      <dl class="sheet">
+        <dt>Límites de seguridad</dt><dd>aplicados en el dispositivo; el más estricto siempre prevalece; ninguna receta, agente, mensaje, extensión o modo de operación puede aumentar uno; un fabricante cambia un valor predeterminado solo mediante un caso de seguridad documentado y una versión de firmware firmada</dd>
+        <dt>Parada local</dt><dd>el movimiento se detiene en menos de 0.5 s, el calor se corta en menos de 1 s, con o sin red; nunca se rechaza por autorización</dd>
+        <dt>Rechazo</dt><dd>antes de heat, con el paso y el motivo; la fritura profunda tiene un peldaño: un termómetro de aceite</dd>
+        <dt>Operaciones no supervisadas</dt><dd>cortar, saltear, sellar, freír, reducir nunca se ejecutan sin una persona presente o localizable en un minuto</dd>
+        <dt>Temperaturas internas mínimas (predeterminados)</dt><dd>aves de corral 74 °C · carne picada 71 °C · recalentamiento 74 °C (USDA FSIS; UK FSA 75 °C) · mantenimiento en caliente a 60 °C o más · enfriamiento en dos etapas</dd>
+        <dt>Bloques de alérgenos</dt><dd>rechazar; sin sustitución alrededor de un bloque</dd>
+        <dt>Text</dt><dd>datos, nunca instrucciones; los intentos se registran como incidentes</dd>
+        <dt>Agentes</dt><dd>actúe solo bajo un mandato firmado; las acciones irreversibles y las anulaciones de seguridad siempre requieren confirmación; la segunda nunca se concede</dd>
+        <dt>Retiradas de productos</dt><dd>feed firmado; los ejecutores rechazan revisiones con recall; block_and_stop_running detiene las ejecuciones de forma segura</dd>
+        <dt>Incidentes</dt><dd>anónimo, solo fecha, modelado según el reporte confidencial de la aviación</dd>
+      </dl>
+      <div><p>El paquete de límites predeterminado es un <b>borrador para pruebas de planificación y conformance</b>; los fabricantes de dispositivos lo reemplazan o lo endurecen según su propio caso de seguridad, y ninguna autoridad lo ha revisado. <a href="/v1/profiles/core/safety-limits.default.json">safety-limits.default.json</a> · <a href="/docs/CORE/">Core sección 6</a></p><p class="note">Lo que el estándar no puede prevenir: falla de hardware, un fabricante que miente sobre lo que aplica, una persona que anula un límite en un dispositivo que lo permite. La conformance y la certification hacen que esto sea detectable, no imposible.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div>
+    <h2>Privacidad</h2>
+    <ul class="ticks"><li>Los execution logs no contienen datos personales y dejan al dispositivo solo con el consentimiento opcional y revocable; los conjuntos de datos abiertos redondean los tiempos al día.</li><li>El Perfil Humanitario no contiene ningún dato personal: organizaciones, agregados, sitios.</li><li>El Perfil de Household Context mantiene los hechos de un hogar en el hogar: {{stat:facets}} tipos de facet con una clase de privacidad y una regla de viaje; 45 nunca salen en ninguna forma; los proveedores reciben derived constraints; 13 tipos de estado propio de dispositivo pueden viajar solo bajo consentimiento explícito y revocable; ninguna puntuación de comportamiento de nadie; ingresos nunca inferidos; todo borrable dentro de un periodo establecido.</li><li>Sin analíticas, sin cookies, sin seguimiento en este sitio.</li></ul>
+    <p><a href="/docs/HOUSEHOLD-CONTEXT/">Household Context Profile</a> · <a href="/ideas/what-a-household-robot-may-know/">El ensayo</a> · <span class="status">next</span> una evaluación de impacto de protección de datos con un revisor</p>
+  </div>
+  <div>
+    <h2>Seguridad</h2>
+    <ul class="ticks"><li>Hashes sobre RFC 8785 canonical JSON; firmas Ed25519 (P-256 para llaves de hardware); registros de llaves con validez y revocación; divulgación selectiva; registros de eventos con un secuenciador y puntos de control testimoniados, de modo que una reescritura es detectable; los elementos retransmitidos se verifican contra el emisor, nunca contra el retransmisor.</li><li>Reporte las vulnerabilidades de forma privada; los problemas de seguridad son problemas de protección. Reconocido en un plazo de 3 días hábiles; divulgación predeterminada de 90 días.</li></ul>
+    <p><a href="/docs/SECURITY/">Política de seguridad</a> · <a href="/.well-known/security.txt">security.txt</a> · <a href="/v1/conformance/signature.json">vectores de firma</a></p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>Conformidad y certificación</h2>
+      <p>{{stat:conformanceVectors}} vectores públicos. Una reclamación es un informe firmado: autodeclarado → verificado por un operador de un registry → certificado por un certificador independiente. Informes, nunca insignias. No se contrata a ningún certificador. <a href="/docs/CERTIFICATION/">El camino</a> · <a href="/docs/CERTIFICATION/#2-what-a-report-contains">el informe de referencia</a></p>
+      <h2>Gobernanza</h2>
+      <p>Un editor hoy, en público con razones escritas; RFCs con periodos de comentarios de 30 días y revisores designados para la seguridad; un comité de dirección con números publicados y puestos para las personas afectadas; una fundación neutral later; un compromiso de no reivindicación de patentes; Contributor Covenant. <a href="/docs/GOVERNANCE/">Gobernanza</a> · <a href="/docs/RFCS/">RFCs</a></p>
+    </div>
+    <div>
+      <h2>Críticas que publicamos</h2>
+      <p>Escribimos críticas de nuestra propia idea desde seis puntos de vista (un red team, un revisor técnico, un adoptante exigente, un laboratorio de IA, una agencia de ayuda, una agencia de salud), y las publicamos con nuestras respuestas y el estado de cada preocupación. Son de autoría propia; ninguna organización externa ha revisado Cookwala todavía, y ninguna figura como habiéndolo hecho. Luego cambiamos la frase de una sola línea, hicimos que los esquemas fueran estrictos, rediseñamos el libro de contabilidad y las líneas base de los simuladores. <a href="/docs/CRITIQUES/">Critiques</a> · <a href="/docs/ACTION-PLAN/">Concern register, 30 items</a> · <a href="/docs/BACKSTORY/">The gap list</a></p>
+      <h2>Estado de todo</h2>
+      <div class="table-wrap"><table><thead><tr><th>Parte</th><th>Estado</th></tr></thead><tbody>
+        <tr><td>Core 0.2</td><td><span class="status core">core</span> normativo, borrador bajo revisión</td></tr>
+        <tr><td>Humanitario 0.2, Household Context, Registry, informes de Conformance, Federación</td><td>perfiles <span class="status">draft</span></td></tr>
+        <tr><td>Cocinas y runs, señales de suministro, Misión, Mercado, Razonamiento, personalización de salud, Extensiones</td><td><span class="status">exp</span> experimental</td></tr>
+        <tr><td>Rule packs</td><td><span class="status">draft</span> ninguno revisado profesionalmente aún</td></tr>
+        <tr><td>Simuladores</td><td><span class="status model">model</span> ilustrativo, no pronósticos</td></tr>
+        <tr><td>Pilotos, socios, certificador, fundación</td><td><span class="status">planned</span> ninguno existe</td></tr>
+        <tr><td>Servicios alojados (publicación en el registry, página de estado)</td><td><span class="status">planned</span> archivos estáticos hoy</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>
+

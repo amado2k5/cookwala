@@ -1,0 +1,157 @@
+<!--meta {"title": "Cookwala: el estándar abierto para cocinar de forma segura", "description": "Un estándar abierto y libre de regalías para cocinar de forma segura: personas, cocinas y robots. Qué preparar, cuándo está listo y qué es lo que nunca debe suceder, verificado en el dispositivo. Prueba el dry run en vivo.", "path": "/", "status": "core", "scripts": ["dryrun.js", "demo.js", "pathfinder.js"]} -->
+<section class="hero wrap">
+  {{chip}}
+  <h1>El estándar abierto para cocinar de forma segura.<br><span class="soft">Personas, cocinas y robots.</span></h1>
+  <ol class="triad" aria-label="What a Cookwala recipe says">
+    <li><b>Qué preparar.</b> Recetas como pasos que una máquina puede planificar.</li>
+    <li><b>Cuándo está listo.</b> Temperaturas, señales del estado de los alimentos y tiempos que puede medir.</li>
+    <li><b>Qué es lo que nunca debe suceder.</b> Límites de seguridad que el propio dispositivo aplica.</li>
+  </ol>
+  <div class="cta">
+    <a class="btn primary" href="#demo">Try the dry run</a>
+    <a class="btn" href="/developers/">Start building</a>
+    <a class="btn" href="/humanitarian/">Rescue food by SMS</a>
+  </div>
+</section>
+
+<section id="demo" class="band" aria-labelledby="demo-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="demo-h">¿Puede este dispositivo cocinar esta receta?</h2>
+      <p>Un dispositivo Cookwala comprueba cada paso antes de calentar nada, y se niega en lugar de adivinar. Elige una receta, elige o construye un dispositivo y observa cómo cambia la respuesta. Esto ejecuta las mismas reglas que <code>cookwala dryrun</code>, totalmente en tu navegador.</p>
+    </div>
+    <div class="demo">
+      <form class="controls" id="demoForm" aria-label="Dry-run settings">
+        <label>Receta <select id="dRecipe"></select></label>
+        <label>Dispositivo <select id="dDevice"></select></label>
+        <label class="check"><input type="checkbox" id="dHuman" checked> Hay una persona en la cocina</label>
+        <label class="check"><input type="checkbox" id="dModel" checked> Se permiten estimaciones registradas donde falta un sensor</label>
+      </form>
+      <details id="builder"><summary>Construye tu propio dispositivo</summary>
+        <div class="builder" id="builderBody"></div>
+      </details>
+      <div class="verdict" id="verdict" role="status" aria-live="polite">Loading the recipe and the operation vocabulary…</div>
+      <div class="table-wrap"><table class="steps-t" id="steps"><thead><tr><th>Paso</th><th>Operación</th><th>Banda segura</th><th>Quién</th><th>Comprobado por</th></tr></thead><tbody></tbody></table></div>
+      <div class="share"><span>Share this result</span><input id="shareUrl" type="text" readonly aria-label="Shareable link"><button type="button" class="btn" id="copyShare">Copy</button></div>
+      <p class="note">Las bandas provienen de <a href="/v1/vocab/ops.json">the operation vocabulary</a>. "Estimate" es una estimación de modelo registrada; "time" es solo tiempo nominal. Un paso que nada puede verificar es rechazado. La fritura profunda tiene un peldaño: sin termómetro de aceite, no hay fritura profunda.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="path-h">
+  <div class="sec-head"><h2 id="path-h">Encuentra tu camino</h2><p>En menos de un minuto: por qué Cookwala es importante para usted, y una cosa que puede hacer hoy.</p></div>
+  <div class="pathfinder" id="pathfinder">
+    <div class="row">
+      <label>Soy <select id="pfWho" aria-label="Soy"></select></label>
+      <label>y quiero <select id="pfWant" aria-label="I want to"></select></label>
+    </div>
+    <div class="result" id="pfResult"></div>
+    <noscript><ul>
+      <li><a href="/for/developers/">Desarrolladores, fabricantes de robots y electrodomésticos, constructores de agentes de IA</a></li><li><a href="/for/companies/">Empresas, tenderos, restaurantes, aseguradoras</a></li><li><a href="/for/providers/">Proveedores: tenderos, granjas, entrega, energía, proveedores de IA, editores de recetas</a></li><li><a href="/for/food/">Agricultores, cocineros, chefs, escuelas culinarias</a></li><li><a href="/for/humanitarian/">ONG, bancos de alimentos, programas de comidas escolares y de ayuda</a></li><li><a href="/for/health/">Dietistas, oficiales de seguridad alimentaria, salud pública</a></li><li><a href="/for/education/">Profesores, catedráticos, investigadores, estudiantes</a></li><li><a href="/for/government/">Gobiernos, reguladores, legisladores, organismos de normalización</a></li><li><a href="/for/capital/">Inversores, filantropías, bancos de desarrollo</a></li><li><a href="/for/thought/">Filósofos, especialistas en ética, futuristas</a></li><li><a href="/for/everyone/">Todos</a></li>
+    </ul></noscript>
+  </div>
+</section>
+
+<section class="band" aria-labelledby="prob-h">
+  <div class="wrap">
+    <h2 id="prob-h">Los robots están aprendiendo a moverse. Nadie había escrito cómo cocinar.</h2>
+    <div class="three">
+      <p>Los robots domésticos se están enviando y los robots de cocina están tomando pedidos. Cada fabricante escribe sus propias recetas cerradas, principalmente de unas pocas cocinas, y decide por sí solo lo que significa "simmer" o "done".</p>
+      <p>Los alimentos inseguros causan alrededor de 600 millones de enfermedades al año <span class="kind measured" title="WHO, Estimates of the global burden of foodborne diseases, 2015">measured · WHO</span>. Alrededor del 13 % de los alimentos se pierden antes de llegar a una tienda <span class="kind measured" title="FAO, The State of Food and Agriculture 2019">measured · FAO</span>, mientras que alrededor de 733 millones de personas enfrentaron el hambre en 2023 <span class="kind measured" title="FAO, IFAD, UNICEF, WFP, WHO: SOFI 2024">measured · SOFI 2024</span>.</p>
+      <p>Cookwala es la capa abierta y compartida: una forma de describir una receta que una persona, un food bank, un horno o un humanoide puede leer, verificar y cocinar de forma segura, en cada cocina, con el nombre del cocinero en ella. <a href="/why/">Por qué esto, por qué now</a> · <a href="/impact/">Impacto, con fuentes</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="loop-h">
+  <h2 id="loop-h">Un bucle</h2>
+  <ol class="loop">
+    <li><span class="n">1</span><h3>Describe</h3><p>Write a recipe as steps with end conditions and hazards. Hash and sign it.</p><code>cookwala hash recipe.json</code></li>
+    <li><span class="n">2</span><h3>Check</h3><p>Validate it, then dry-run it against a device before cooking.</p><code>cookwala dryrun recipe.json --device oven.json</code></li>
+    <li><span class="n">3</span><h3>Cook</h3><p>The device runs it through the Core API or ROS 2, keeping every step inside its safe band.</p><code>POST /v1/executions</code></li>
+    <li><span class="n">4</span><h3>Learn</h3><p>With consent, the log becomes a trace and a training example for robots.</p><code>cookwala export lerobot …</code></li>
+  </ol>
+</section>
+
+<section class="band" aria-labelledby="three-h">
+  <div class="wrap">
+    <h2 id="three-h">Tres bucles, un estándar</h2>
+    <div class="cards">
+      <a class="card" href="/developers/"><h3>Cook</h3><p>Un dispositivo realiza un dry run de una receta firmada, rechaza o acepta, cocina dentro de envelopes, registra sin datos personales. Core 0.2, normativo.</p><span class="go">Quickstart →</span></a>
+      <a class="card" href="/humanitarian/"><h3>Rescate</h3><p>Offer → claim → handover con un control de temperatura → distribución → impacto con un método bajo cada número. Por SMS y hoja de cálculo, sin datos personales.</p><span class="go">Humanitarian Profile →</span></a>
+      <a class="card" href="/registry/"><h3>Buscar y publicar</h3><p>Recetas, dispositivos, rule packs, benchmarks bajo nombres probados con versiones y hashes exactos; un directory de organizaciones que solicitaron ser listadas.</p><span class="go">Registry →</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="proof-h">
+  <h2 id="proof-h">Qué existe hoy</h2>
+  <p class="sub">Contado desde el repositorio en cada compilación. Nada aquí es una proyección a menos que así se indique.</p>
+  <div class="stats" id="stats" aria-live="polite"></div>
+  <p class="note" id="statsMeta"></p>
+</section>
+
+<section class="band" aria-labelledby="safe-h">
+  <div class="wrap two">
+    <div>
+      <h2 id="safe-h">Seguro por diseño, verificable por cualquiera</h2>
+      <p>La seguridad se aplica en el dispositivo, no en la nube. Ninguna receta, agente, mensaje o extensión puede aumentar los límites de un dispositivo, y una parada local funciona sin red. Los agentes de IA actúan solo bajo un mandato firmado y tratan cada campo de texto como datos, nunca como instrucciones.</p>
+      <p>Cada receta y registro puede ser hasheado y firmado, las claves pueden ser revocadas, y los registros de eventos llevan puntos de control testimoniados. Las pruebas que lo demuestran son públicas: {{stat:conformanceVectors}} vectores.</p>
+      <p><a href="/docs/CORE/">Leer Core 0.2</a> · <a href="/trust/">Confianza</a> · <a href="/docs/CRITIQUES/">Críticas que publicamos</a></p>
+    </div>
+    <pre class="code" aria-label="Example operation envelope"><code>"cw.op.deep_fry": {
+  "envelope": {
+    "medium": "oil",
+    "tempC": { "min": 160, "max": 190 },
+    "unattended": false,
+    "sensorLadder": ["cw.sense.oil_temp"],
+    "note": "No oil-temperature sensor,
+             no deep frying."
+  }
+}</code></pre>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="mission-h">
+  <h2 id="mission-h">Por qué hacemos esto</h2>
+  <div class="three">
+    <div><h3>Ayuda a acabar con el hambre</h3><p>Que los alimentos que se tirarían lleguen a un plato de forma segura; programas que puedan comparar sus cifras; later, granjas y tiendas que planeen necesitarlos. El hambre tiene muchas causas: pobreza, conflicto, clima, precios, política. La parte de Cookwala es real y parcial, y nosotros decimos cuál.</p></div>
+    <div><h3>Haz que las personas estén más sanas</h3><p>Puntos de control críticos que un dispositivo debe cumplir; el mantenimiento en caliente y el enfriamiento que debe registrar; rule packs para sodio, azúcar, grasa, frutas y verduras y cuidado para niños y personas mayores, revisables por dietistas y oficiales de seguridad alimentaria.</p></div>
+    <div><h3>Pon a los robots a trabajar para las personas</h3><p>Robots que cocinen cada cocina de forma segura, aprendan con consentimiento y crédito, sirvan a personas que no pueden cocinar por sí mismas y devuelvan tiempo humano, con una voz laboral en la mesa donde esto se gobierna.</p></div>
+  </div>
+  <p><a href="/impact/">Cada número, con su fuente y etiqueta →</a></p>
+</section>
+
+<section class="band" aria-labelledby="road-h">
+  <div class="wrap">
+    <h2 id="road-h">Now, next, later</h2>
+    <div class="road">
+      <div><h3>Now</h3><ul><li>Estándar Core 0.2 y esquemas</li><li>Dry run, validador, vectores de conformance {{stat:conformanceVectors}}, informes de conformance</li><li>Paquete de Python y CLI, tipos de TypeScript, servidor MCP, hub de referencia, interfaces de ROS 2</li><li>{{stat:recipesV1}} recetas de ejemplo en V1 y {{stat:recipesV0}} recetas importadas de fifi.cooking en V0, con texto en 25 idiomas: <a href="/recipes/">el índice de recetas</a></li><li>Clientes SDK en {{stat:sdkLanguages}} idiomas y {{stat:scenarios}} escenarios ejecutados: <a href="/scenarios/">SDK y escenarios</a></li><li>Perfil Humanitario 0.2 con una gramática SMS y cuatro flujos trabajados</li><li>Perfil de Household Context: solo viajan las derived constraints</li><li>Cuatro simuladores, ilustrativos</li></ul></div>
+      <div><h3>Next</h3><ul><li>Revisión profesional de envelopes y rule packs</li><li>Un piloto de food bank (aún no financiado)</li><li>Resultados de la seguridad del agente por modelo</li><li>SDKs empaquetados; un servicio de registry</li><li>Un primer fabricante de dispositivos frente al hub de referencia</li><li>Core 0.3; un comité de dirección</li></ul></div>
+      <div><h3>Later</h3><ul><li>Un dispositivo real cocinando una receta de Cookwala, sin editar</li><li>Certification con un certificador independiente</li><li>Una base neutral para el estándar</li><li>Una red de colaboradores que enseña cada cocina a los robots, con crédito</li><li>Señales de suministro, tras la revisión de la ley de competencia</li></ul></div>
+    </div>
+    <p class="note"><a href="/roadmap/">La hoja de ruta con el estado de cada elemento</a> · <a href="/docs/CRITIQUES/">lo que hemos hecho mal hasta ahora</a></p>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="open-h">
+  <div class="two">
+    <div>
+      <h2 id="open-h">Abierto, y disponible para unirse hoy</h2>
+      <p>Libre de regalías. Código Apache-2.0, especificación CC BY 4.0, vocabularios CC0. Sin claves API. Agnóstico al modelo y agnóstico al dispositivo. Gobernado en público hoy, con un comité de dirección una vez que haya una segunda implementación independiente, y una fundación neutral later.</p>
+      <div class="cta"><a class="btn primary" href="/contribute/">Contribute</a><a class="btn" href="/docs/GOVERNANCE/">How decisions are made</a><a class="btn" href="/whitepaper/">Whitepaper</a></div>
+    </div>
+    <div>
+      <h3>Para desarrolladores y lectores de IA</h3>
+      <ul class="links">
+        <li><a href="/.well-known/cookwala.json">/.well-known/cookwala.json</a><span>discovery</span></li>
+        <li><a href="/v1/api/core.openapi.yaml">/v1/api/core.openapi.yaml</a><span>Core API</span></li>
+        <li><a href="/v1/schemas/bundle.json">/v1/schemas/bundle.json</a><span>todos los esquemas, sin conexión</span></li>
+        <li><a href="/v1/conformance/hash.json">/v1/conformance/</a><span>vectores de prueba</span></li>
+        <li><a href="/v1/registry.json">/v1/registry.json</a><span>registry</span></li>
+        <li><a href="/llms.txt">/llms.txt</a><span>mapa de documentos para IA</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
