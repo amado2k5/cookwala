@@ -130,6 +130,13 @@ class Simulator(unittest.TestCase):
         self.assertEqual(ex.get_execution(st['id'])['state'], 'stopped')
         self.assertEqual(ex.execution_log(st['id'])['outcome'], 'aborted_safe')
 
+    def test_stop_before_start(self):
+        ex = SimulatedExecutor.from_bundle('demo-hob-robot')
+        st = ex.start_execution(request_for('lentil-soup'), 'key-0000009', True)
+        self.assertEqual(ex.stop_execution(st['id'])['state'], 'stopped')
+        self.assertEqual(ex.execution_log(st['id'])['outcome'], 'aborted_safe')
+        self.assertEqual(ex.stop_execution(st['id'])['state'], 'stopped')  # stopping a stopped execution is still answered
+
     def test_refuses_before_heat(self):
         ex = SimulatedExecutor.from_bundle('demo-oven')
         self.assertEqual(ex.start_execution(request_for('lentil-soup'), 'key-0000003', False)['refusal']['reason'], 'missing_capability')

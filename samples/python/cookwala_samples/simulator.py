@@ -210,7 +210,9 @@ class SimulatedExecutor:
     def stop_execution(self, execution_id, reason='requested'):
         """Never refused once the caller reaches the executor (Core 6.2); no If-Match, no token."""
         ex = self._get(execution_id); st = ex['status']
-        if st['state'] not in FINAL and st['state'] != 'stopping':
+        if st['state'] == 'accepted':  # nothing has started: accepted -> stopped directly (the only legal path)
+            ex['stopReason'] = reason; self._set(ex, 'stopped'); self._finish(ex, 'aborted_safe')
+        elif st['state'] not in FINAL and st['state'] != 'stopping':
             self._set(ex, 'stopping'); ex['stopReason'] = reason
         return dict(st)
 
