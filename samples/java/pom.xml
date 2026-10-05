@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Cookwala samples for Java 17+: clients, agents, an orchestrator, gates, recovery and reporting for the Core 0.2 API.
+     No runtime dependencies. The shared data (../data/bundle.json) is put on the classpath at
+     ai/cookwala/samples/bundle.json at build time; it is never copied into this directory.
+
+       mvn -B package                         build, test, jar + sources + javadoc
+       java -jar target/cookwala-samples-0.1.0.jar demo
+       mvn -B deploy -Partifactory -Dartifactory.url=https://artifactory.example/libs-release-local
+       mvn -B deploy -Pcentral,sign           Maven Central (Sonatype Central Portal), signed -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>ai.cookwala</groupId>
+  <artifactId>cookwala-samples</artifactId>
+  <version>0.1.0</version>
+  <packaging>jar</packaging>
+
+  <name>Cookwala samples</name>
+  <description>Cookwala sample clients, agents, orchestrators, gates, recovery and reporting for the Core 0.2 API; runs offline on simulated devices or against any Cookwala hub. Samples, not certified software.</description>
+  <url>https://cookwala.ai</url>
+  <inceptionYear>2026</inceptionYear>
+
+  <licenses>
+    <license>
+      <name>Apache-2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>cookwala</id>
+      <name>Cookwala maintainers</name>
+      <url>https://cookwala.ai</url>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:https://github.com/amado2k5/cookwala.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/amado2k5/cookwala.git</developerConnection>
+    <url>https://github.com/amado2k5/cookwala</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/amado2k5/cookwala/issues</url>
+  </issueManagement>
+
+  <properties>
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <junit.version>5.11.4</junit.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <!-- The shared bundle, read in place: one source of truth for every port. -->
+      <resource>
+        <directory>../data</directory>
+        <includes>
+          <include>bundle.json</include>
+        </includes>
+        <targetPath>ai/cookwala/samples</targetPath>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <release>17</release>
+          <compilerArgs><arg>-Xlint:all,-serial</arg></compilerArgs>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.5.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>ai.cookwala.samples.Cli</mainClass>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+            <manifestEntries>
+              <Automatic-Module-Name>ai.cookwala.samples</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.3.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals><goal>jar-no-fork</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.11.2</version>
+        <configuration>
+          <doclint>none</doclint>
+          <quiet>true</quiet>
+          <source>17</source>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals><goal>jar</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <!-- JFrog Artifactory (or any Maven repository): -Partifactory -Dartifactory.url=...;
+         credentials in ~/.m2/settings.xml under <server><id>artifactory</id>. Activates by itself when artifactory.url is set. -->
+    <profile>
+      <id>artifactory</id>
+      <activation>
+        <property><name>artifactory.url</name></property>
+      </activation>
+      <distributionManagement>
+        <repository>
+          <id>artifactory</id>
+          <name>Artifactory releases</name>
+          <url>${artifactory.url}</url>
+        </repository>
+        <snapshotRepository>
+          <id>artifactory</id>
+          <name>Artifactory snapshots</name>
+          <url>${artifactory.url}</url>
+        </snapshotRepository>
+      </distributionManagement>
+    </profile>
+
+    <!-- Maven Central through the Sonatype Central Portal (the successor of OSSRH):
+         mvn -B deploy -Pcentral,sign; token in ~/.m2/settings.xml under <server><id>central</id>. -->
+    <profile>
+      <id>central</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.7.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>false</autoPublish>
+              <waitUntil>validated</waitUntil>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- Sign every artifact (Central requires it): -Psign, with -Dgpg.keyname=... or the default key. -->
+    <profile>
+      <id>sign</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.2.7</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals><goal>sign</goal></goals>
+                <configuration>
+                  <gpgArguments>
+                    <arg>--pinentry-mode</arg>
+                    <arg>loopback</arg>
+                  </gpgArguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

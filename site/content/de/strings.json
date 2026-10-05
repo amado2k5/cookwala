@@ -53,7 +53,7 @@
   [
    "SDK und Szenarien",
    "/scenarios/"
-  ],
+  ], ["Beispiele und Pakete", "/samples/"],
   [
    "Registry und Directory",
    "/registry/"
@@ -393,7 +393,7 @@
    ],
    [
     "Entwickler",
-    "Ein Probelauf im Browser, ein Python-Paket, ein Referenz-Hub und 131 öffentliche Konformitätsvektoren.",
+    "Ein Probelauf im Browser, ein Python-Paket, ein Referenz-Hub, 131 öffentliche Konformitätsvektoren sowie Beispiel-Agenten und -Orchestratoren in vier Sprachen.",
     "Fünf-Minuten-Schnellstart",
     "/developers/"
    ],

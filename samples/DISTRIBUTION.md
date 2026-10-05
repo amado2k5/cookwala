@@ -24,7 +24,7 @@ pass `--base-url` to point them at another host, such as an Artifactory generic 
 | **npm** | `npm i -g @cookwala/samples` · `npx @cookwala/samples demo` | `js/package.json` | CI on tag | `NPM_TOKEN`, the `@cookwala` npm scope |
 | **Maven Central (Maven, Gradle, sbt, Leiningen)** | `ai.cookwala:cookwala-samples:0.1.0` | `java/pom.xml`, `java/build.gradle.kts` | CI on tag | `MAVEN_CENTRAL_USERNAME/PASSWORD`, `MAVEN_GPG_PRIVATE_KEY/PASSPHRASE`, the `ai.cookwala` namespace |
 | **GitHub Packages (Maven)** | as above, with the GitHub Packages repository | `java/build.gradle.kts` | CI on tag | nothing extra (`GITHUB_TOKEN`) |
-| **NuGet** | `dotnet add package Cookwala.Samples` · `dotnet tool install -g Cookwala.Samples.Tool` | `dotnet/src/*/*.csproj` | CI on tag | `NUGET_API_KEY` |
+| **NuGet** | `dotnet add package Cookwala.Samples` · `dotnet tool install -g Cookwala.Samples.Tool` | `dotnet/Directory.Build.props`, `dotnet/src/*/*.csproj` | CI on tag | `NUGET_API_KEY` |
 | **Homebrew (macOS, Linux)** | `brew install amado2k5/cookwala/cookwala-samples` | `packaging/homebrew/cookwala-samples.rb.in` | CI on tag, to the tap repository | a tap repo `amado2k5/homebrew-cookwala`, `HOMEBREW_TAP_TOKEN` |
 | **Chocolatey (Windows)** | `choco install cookwala-samples` | `packaging/chocolatey/` | CI on tag (Windows runner) | `CHOCO_API_KEY`; community moderation before it is public |
 | **Scoop (Windows)** | `scoop bucket add cookwala https://github.com/amado2k5/scoop-cookwala` · `scoop install cookwala-samples` | `packaging/scoop/cookwala-samples.json.in` | by hand: copy the rendered manifest into a bucket repo | a bucket repository |
@@ -68,6 +68,10 @@ script); then point remote or virtual repositories at them as usual.
 | What | How |
 |---|---|
 | Python tests, including equality with the reference dry run for every example recipe and device, JSON Schema validation of every request, status, log and incident, and the demo against the reference hub over HTTP | `python -m unittest discover -s samples/python/tests` |
+| JavaScript: 40 tests (Node 22); Markdown and CSV demo reports byte-identical to Python; `npm pack` contains no tests | `npm test` in `samples/js` |
+| Java: 48 tests under both Maven and Gradle; demo identical to Python; sources and javadoc jars for Maven Central | `mvn -B package`, `gradle build` in `samples/java` |
+| .NET: 54 tests; demo identical to Python; both NuGet packages pack, and the dotnet tool installs from a local feed and runs | `dotnet test`, `dotnet pack` in `samples/dotnet` |
+| every port's demo against the reference hub over HTTP | each port's test suite |
 | pyz, wheel and sdist build; `twine check` passes; the wheel installs and runs | `packaging/build.py` |
 | the `.deb` installs with `dpkg -i`, runs, and removes cleanly | Ubuntu 24.04 |
 | the image builds without network, runs the demo, and serves HTTP as an arbitrary uid on a read-only root filesystem | Docker 29 |

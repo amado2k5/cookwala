@@ -54,7 +54,7 @@
    [
     "SDK and scenarios",
     "/scenarios/"
-   ],
+   ], ["Samples and packages", "/samples/"],
    [
     "Registry and directory",
     "/registry/"
@@ -412,7 +412,7 @@
     ],
     [
      "Developers",
-     "A dry run in the browser, a Python package, a reference hub and 131 public conformance vectors.",
+     "A dry run in the browser, a Python package, a reference hub, 131 public conformance vectors, and sample agents and orchestrators in four languages.",
      "Five-minute quickstart",
      "/developers/"
     ],
@@ -494,7 +494,7 @@
    [
     "حزمة التطوير والسيناريوهات",
     "/scenarios/"
-   ],
+   ], ["الأمثلة والحزم", "/samples/"],
    [
     "السجل والدليل",
     "/registry/"
@@ -848,7 +848,7 @@
     ],
     [
      "المطوّرون",
-     "تشغيل جاف في المتصفح، حزمة بايثون، موزّع مرجعي و131 متّجه مطابقة عامًا.",
+     "تشغيل جاف في المتصفح، حزمة بايثون، موزّع مرجعي، و131 متّجه مطابقة عامًا، وأمثلة لوكلاء ومنسّقين بأربع لغات.",
      "بداية سريعة في خمس دقائق",
      "/developers/"
     ],
