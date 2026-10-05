@@ -371,7 +371,34 @@
     "checkpoints?",
     "a signed summary of an event log that witnesses counter-sign, so a later rewrite can be detected"
    ]
-  ]
+  ],
+  "position": {
+   "h": "What it sits beside, and what it is not",
+   "lead": "None of these is a machine-checked contract between a recipe and a device. Cookwala is only that, and uses the others where they fit.",
+   "rows": [
+    [
+     "Schema.org Recipe",
+     "Describes a recipe for search engines: ingredients, times, nutrition. No operations, no end conditions, nothing a device verifies. A Cookwala recipe can be published with Schema.org fields for discovery."
+    ],
+    [
+     "LeRobot (Hugging Face)",
+     "A dataset format for what a robot did: observations and actions. It does not say what a recipe is or when a step is unsafe. Cookwala exports consented execution logs to it."
+    ],
+    [
+     "HACCP",
+     "A management system for people: hazards, critical control points, records. Cookwala encodes control points so a machine can check them; it does not replace a kitchen's HACCP plan."
+    ],
+    [
+     "Matter (CSA)",
+     "Device control: set an oven to a temperature, read a probe. Cookwala says what the oven should be asked to do and when to refuse; a mapping table lives in bindings/matter.json."
+    ],
+    [
+     "ROS 2",
+     "Robot middleware: how a robot moves and talks to itself. Cookwala sits above motion and ships ROS 2 interfaces for the task layer."
+    ]
+   ]
+  },
+  "path_note": "Every planned item has a gate: the one thing that has to happen first. If you can open one (a reviewer, a device, a food bank, funding), say so in <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">GitHub Discussions</a>; a direct address will follow from the founder."
  },
  "ar": {
   "brand": "كوكوالا",
@@ -741,6 +768,33 @@
     "نقاط تفتيش",
     "ملخّص موقَّع لسجل الأحداث يوقّعه شهود أيضًا، فيُكشف أي تعديل لاحق"
    ]
-  ]
+  ],
+  "position": {
+   "h": "ما يجاوره، وما ليس هو",
+   "lead": "لا شيء من هذه عقدٌ يتحقق منه الجهاز بين وصفة وجهاز. كوكوالا هو ذلك فقط، ويستعمل البقية حيث تناسب.",
+   "rows": [
+    [
+     "Schema.org Recipe",
+     "يصف وصفة لمحركات البحث: مقادير وأوقات وتغذية. لا عمليات ولا شروط إنهاء ولا شيء يتحقق منه جهاز. يمكن نشر وصفة كوكوالا بحقول Schema.org للاكتشاف."
+    ],
+    [
+     "LeRobot (Hugging Face)",
+     "صيغة مجموعات بيانات لما فعله الروبوت: مشاهدات وأفعال. لا تقول ما الوصفة ولا متى تكون خطوة غير آمنة. يصدّر كوكوالا سجلات التنفيذ بموافقة إليها."
+    ],
+    [
+     "HACCP",
+     "نظام إدارة للناس: مخاطر ونقاط تحكم حرجة وسجلات. يرمّز كوكوالا نقاط التحكم ليتحقق منها جهاز؛ ولا يحل محل خطة HACCP للمطبخ."
+    ],
+    [
+     "Matter (CSA)",
+     "تحكم بالأجهزة: ضبط فرن على حرارة، قراءة مسبار. يقول كوكوالا ما يُطلب من الفرن ومتى يُرفض؛ جدول الربط في bindings/matter.json."
+    ],
+    [
+     "ROS 2",
+     "طبقة وسيطة للروبوتات: كيف يتحرك الروبوت ويتخاطب داخليًا. يقع كوكوالا فوق الحركة ويقدّم واجهات ROS 2 لطبقة المهمة."
+    ]
+   ]
+  },
+  "path_note": "لكل بند مخطَّط بوابة: الشيء الوحيد الذي يجب أن يحدث أولًا. إن كان بوسعك فتح إحداها (مراجع، جهاز، بنك طعام، تمويل) فقل ذلك في <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">نقاشات GitHub</a>؛ وسيتبع عنوان مباشر من المؤسِّس."
  }
 }

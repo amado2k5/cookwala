@@ -352,5 +352,32 @@
    "checkpoints?",
    "eine signierte Zusammenfassung eines Ereignisprotokolls, von Zeugen gegengezeichnet, damit ein späteres Umschreiben erkennbar ist"
   ]
- ]
+ ],
+ "position": {
+  "h": "Woneben es steht, und was es nicht ist",
+  "lead": "Keines davon ist ein maschinell geprüfter Vertrag zwischen Rezept und Gerät. Cookwala ist nur das und nutzt die anderen, wo sie passen.",
+  "rows": [
+   [
+    "Schema.org Recipe",
+    "Beschreibt ein Rezept für Suchmaschinen: Zutaten, Zeiten, Nährwerte. Keine Operationen, keine Endbedingungen, nichts, was ein Gerät prüft. Ein Cookwala-Rezept kann mit Schema.org-Feldern veröffentlicht werden."
+   ],
+   [
+    "LeRobot (Hugging Face)",
+    "Ein Datensatzformat für das, was ein Roboter getan hat: Beobachtungen und Aktionen. Es sagt nicht, was ein Rezept ist oder wann ein Schritt unsicher ist. Cookwala exportiert eingewilligte Ausführungsprotokolle dorthin."
+   ],
+   [
+    "HACCP",
+    "Ein Managementsystem für Menschen: Gefahren, kritische Kontrollpunkte, Aufzeichnungen. Cookwala kodiert Kontrollpunkte, damit eine Maschine sie prüfen kann; es ersetzt keinen HACCP-Plan."
+   ],
+   [
+    "Matter (CSA)",
+    "Gerätesteuerung: einen Ofen auf Temperatur stellen, einen Fühler lesen. Cookwala sagt, was der Ofen tun soll und wann abzulehnen ist; die Zuordnung steht in bindings/matter.json."
+   ],
+   [
+    "ROS 2",
+    "Roboter-Middleware: wie ein Roboter sich bewegt und intern kommuniziert. Cookwala liegt über der Bewegung und liefert ROS-2-Schnittstellen für die Aufgabenebene."
+   ]
+  ]
+ },
+ "path_note": "Jeder geplante Punkt hat ein Tor: das eine, was zuerst geschehen muss. Wenn Sie eines öffnen können (ein Gutachter, ein Gerät, eine Lebensmittelbank, Finanzierung), sagen Sie es in den <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">GitHub-Diskussionen</a>; eine direkte Adresse folgt vom Gründer."
 }

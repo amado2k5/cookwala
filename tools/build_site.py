@@ -259,6 +259,12 @@ class Builder:
         more = ''.join(f'<a href="{self.path_for(lang, p)}">{html.escape(label)}</a>' for label, p in S['more'])
         return items, more
 
+    def position_block(self, lang):
+        P = self.strings[lang].get('position') or self.strings['en']['position']
+        rows = ''.join(f'<tr><th scope="row">{html.escape(a)}</th><td>{html.escape(b)}</td></tr>' for a, b in P['rows'])
+        return (f'<section class="wrap" aria-labelledby="pos-h"><h2 id="pos-h">{html.escape(P["h"])}</h2><p class="sub">{html.escape(P["lead"])}</p>'
+                f'<div class="table-wrap"><table class="position"><tbody>{rows}</tbody></table></div></section>')
+
     def gloss(self, lang, body):
         """Plain-English gloss on the first mention of a term, outside links, headings, code and diagrams (keyboard and screen-reader reachable)."""
         terms = self.strings[lang].get('gloss') or []
@@ -317,6 +323,7 @@ class Builder:
         body = body.replace('{{chip}}', chip)
         if '<div class="stats" id="stats"' in body: body = self.stats_html(lang, body)
         body = re.sub(r'\{\{diagram:(\w+)\}\}', lambda m: read(f'site/templates/diagrams/{m.group(1)}.svg'), body)
+        if '{{position_block}}' in body: body = body.replace('{{position_block}}', self.position_block(lang))
         if '{{sdk_cards}}' in body: body = body.replace('{{sdk_cards}}', self.sb.sdk_cards(lang))
         if '{{scenario_list}}' in body: body = body.replace('{{scenario_list}}', self.sb.list_html(lang))
         def s_lookup(m):
