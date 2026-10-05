@@ -43,8 +43,8 @@ REPO = 'https://github.com/amado2k5/cookwala/blob/main/'
 LANGS = ['en', 'ar']  # extended at start-up with every site/content/<lang>/strings.json
 RTL = {'ar', 'ur', 'fa', 'he', 'ps'}
 FONTS = {
-    'latin': 'https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
-    'arabic': 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
+    'latin': '/assets/fonts/latin.css',   # self-hosted (tools/fetch_fonts.py); no third-party request
+    'arabic': '/assets/fonts/arabic.css',  # self-hosted; the scripts below are not built yet and still point at Google Fonts
     'cyrillic': 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
     'greek': 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
     'hebrew': 'https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',

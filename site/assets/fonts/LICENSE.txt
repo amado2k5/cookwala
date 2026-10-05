@@ -1,0 +1,4 @@
+Geist and Geist Mono (Vercel), Fraunces (Undercase Type) and IBM Plex Sans Arabic (IBM) are
+licensed under the SIL Open Font License 1.1: https://openfontlicense.org/
+Files here are the subsets Google Fonts serves, downloaded by tools/fetch_fonts.py so that
+cookwala.ai pages make no request to a third party.
