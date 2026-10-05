@@ -5,5 +5,5 @@
         <rect x="510" y="20" width="440" height="190" rx="14"/><text x="730" y="52" text-anchor="middle" class="dg-h">{{s:goals.d2_packs}}</text>
         <text x="540" y="92">• {{s:goals.d2_sodium}} · {{s:goals.d2_sugar}}</text><text x="540" y="124">• {{s:goals.d2_fat}} · {{s:goals.d2_fv}}</text><text x="540" y="156">• {{s:goals.d2_care}}</text><text x="540" y="188" class="dg-warn">• {{s:goals.d2_review}}</text>
       </g>
-      <text x="480" y="240" text-anchor="middle" class="dg-labels">measured · WHO, Codex, Sphere</text>
+      <text x="480" y="240" text-anchor="middle" class="dg-labels">{{s:goals.d2_source}}</text>
     </svg>

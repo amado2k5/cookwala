@@ -267,7 +267,7 @@
    "d1_meals": "Meals counted",
    "d1_summary": "Impact summary, computed",
    "health_h": "Make people healthier",
-   "health_problem": "Unsafe food causes about 600 million illnesses a year; most people eat about twice the recommended salt. A cooking machine adds new ways to get it wrong, and new ways to get it right every time.",
+   "health_problem": "Unsafe food causes about 600 million illnesses a year <a href=\"/impact/#health\"><span class=\"kind measured\">measured</span> WHO</a>; adults eat about 11 g of salt a day against a guideline of under 5 g <a href=\"/impact/#health\"><span class=\"kind measured\">measured</span> WHO 2021</a>. A cooking machine adds new ways to get it wrong, and new ways to get it right every time.",
    "health_now": "Now: critical control points a device must meet and record (core temperatures, hot holding, cooling, reheating), and rule packs that flag sodium, free sugars, fats, fruit and vegetables on a menu, with care rules for children, pregnancy and older adults.",
    "health_next": "Next: a dietitian and a food-safety officer review each rule pack and sign the review record; the packs say they are unreviewed until then.",
    "health_later": "Later: national codes replace the defaults where they exist; clean cooking enters the model.",
@@ -318,7 +318,8 @@
    "lp_publish": "Find and publish",
    "lp_publish_steps": "proven names → exact versions → hashes → recalls",
    "lp_core": "One standard: Core 0.2 and its profiles, open and royalty-free",
-   "d3_accept2": "cook inside the envelope"
+   "d3_accept2": "cook inside the envelope",
+   "d2_source": "derived from public WHO, Codex and Sphere guidance; none has reviewed these packs"
   }
  },
  "ar": {
@@ -589,7 +590,7 @@
    "d1_meals": "وجبات معدودة",
    "d1_summary": "ملخص الأثر، محسوب",
    "health_h": "صحة أفضل للناس",
-   "health_problem": "يسبب الطعام غير الآمن نحو 600 مليون حالة مرض سنويًا؛ ويأكل معظم الناس نحو ضعف الملح الموصى به. وتضيف آلة الطهي طرقًا جديدة للخطأ، وطرقًا جديدة للصواب في كل مرة.",
+   "health_problem": "يسبب الطعام غير الآمن نحو 600 مليون حالة مرض سنويًا <a href=\"/ar/impact/#health\"><span class=\"kind measured\">مَقيس</span> منظمة الصحة العالمية</a>؛ ويأكل البالغون نحو 11 جم ملح يوميًا مقابل توصية بأقل من 5 جم <a href=\"/ar/impact/#health\"><span class=\"kind measured\">مَقيس</span> منظمة الصحة العالمية 2021</a>. وتضيف آلة الطهي طرقًا جديدة للخطأ، وطرقًا جديدة للصواب في كل مرة.",
    "health_now": "الآن: نقاط تحكم حرجة يجب على الجهاز استيفاؤها وتسجيلها (حرارة المركز، الحفظ الساخن، التبريد، إعادة التسخين)، وحزم قواعد ترصد الصوديوم والسكريات الحرة والدهون والخضار والفواكه في القائمة، مع قواعد رعاية للأطفال والحوامل وكبار السن.",
    "health_next": "بعدُ: يراجع أخصائي تغذية ومسؤول سلامة غذاء كل حزمة ويوقّعان سجل المراجعة؛ وتقول الحزم إنها غير مراجَعة حتى ذلك الحين.",
    "health_later": "لاحقًا: تحل القوانين الوطنية محل الافتراضات حيث توجد؛ ويدخل الطهي النظيف في النموذج.",
@@ -640,7 +641,8 @@
    "lp_publish": "بحث ونشر",
    "lp_publish_steps": "أسماء مثبتة ← إصدارات دقيقة ← بصمات ← سحب",
    "lp_core": "معيار واحد: النواة 0.2 وملفاتها، مفتوح وبلا رسوم",
-   "d3_accept2": "الطهي داخل المظروف"
+   "d3_accept2": "الطهي داخل المظروف",
+   "d2_source": "مستمدّة من إرشادات عامة لمنظمة الصحة العالمية وكودكس وسفير؛ لم تراجعها أي منها"
   }
  }
 }

@@ -16,6 +16,11 @@ schemas = len(list((ROOT / 'schemas').glob('*.schema.json')))
 recipes = list((ROOT / 'examples').glob('*.cookwala.json'))
 imported = list((ROOT / 'recipes').glob('*/*.cookwala.json'))
 scenarios = list((ROOT / 'scenarios').glob('[0-9][0-9][0-9]-*.json'))
+sdk_langs = len(list((ROOT / 'tools' / 'scenarios').glob('lang_*.py')))  # one renderer per language, curl included
+index_items = json.loads((ROOT / 'recipes' / 'INDEX.json').read_text()).get('items', [])
+title_langs = set()
+for it in index_items:
+    title_langs |= set(it.get('x-titles', []))
 langs = set()
 for r in recipes:
     langs |= set(json.loads(r.read_text()).get('text', {}).keys())
@@ -23,7 +28,7 @@ limits = len(json.loads((ROOT / 'profiles' / 'core' / 'safety-limits.default.jso
 rules = sum(len(json.loads(p.read_text())['rules']) for p in (ROOT / 'profiles' / 'humanitarian').glob('*.rulepack.json'))
 evals = __import__('yaml').safe_load((ROOT / 'evals' / 'kitchen-agent-safety' / 'promptfooconfig.yaml').read_text())['tests']
 facets = len(json.loads((ROOT / 'vocab' / 'facets.json').read_text())['entries'])
-AR = {'cooking operations with a physical definition': 'عملية طهي بتعريف فيزيائي', 'cooking operations in the vocabulary': 'عملية طهي في المفردات', 'conformance test vectors': 'متّجه اختبار مطابقة', 'JSON schemas': 'مخطط JSON', 'default on-device safety limits': 'حدّ سلامة افتراضي على الجهاز', 'agent-safety test cases': 'حالة اختبار لسلامة الوكلاء', 'food-safety and nutrition rules for food banks': 'قاعدة سلامة غذاء وتغذية لبنوك الطعام', 'recipes published in the index': 'وصفة منشورة في الفهرس', 'languages in published recipes': 'لغة في الوصفات المنشورة', 'playable simulators': 'محاكٍ قابل للتشغيل', 'fifi.cooking recipes planned for conversion': 'وصفة من fifi.cooking مخطَّط تحويلها', 'household and device facet types with privacy rules': 'نوع معلومة منزلية بقواعد خصوصية'}
+AR = {'cooking operations with a physical definition': 'عملية طهي بتعريف فيزيائي', 'cooking operations in the vocabulary': 'عملية طهي في المفردات', 'conformance test vectors': 'متّجه اختبار مطابقة', 'JSON schemas': 'مخطط JSON', 'default on-device safety limits': 'حدّ سلامة افتراضي على الجهاز', 'agent-safety test cases': 'حالة اختبار لسلامة الوكلاء', 'food-safety and nutrition rules for food banks': 'قاعدة سلامة غذاء وتغذية لبنوك الطعام', 'recipes published in the index': 'وصفة منشورة في الفهرس', 'languages in published recipes': 'لغة في الوصفات المنشورة', 'languages with recipe names; full text is Arabic and English': 'لغة لأسماء الوصفات؛ النص الكامل بالعربية والإنجليزية', 'languages with code samples and a client, curl counted': 'لغة بأمثلة برمجية وعميل، مع احتساب curl', 'playable simulators': 'محاكٍ قابل للتشغيل', 'fifi.cooking recipes planned for conversion': 'وصفة من fifi.cooking مخطَّط تحويلها', 'household and device facet types with privacy rules': 'نوع معلومة منزلية بقواعد خصوصية'}
 m = lambda v, label: {'value': v, 'label': label, 'labelAr': AR.get(label, label), 'kind': 'measured'}
 stats = {
     'generatedAt': dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds'),
@@ -41,12 +46,12 @@ stats = {
         'recipesV1': m(len(recipes), 'recipes written for the standard at V1'),
         'recipesV0': m(len(imported), 'recipes imported from fifi.cooking at V0'),
         'scenarios': m(len(scenarios), 'SDK scenarios, each executed against the reference hub'),
-        'sdkLanguages': m(13, 'languages with an SDK client and code samples'),
+        'sdkLanguages': m(sdk_langs, 'languages with code samples and a client, curl counted'),
         'sdkOperations': m(25, 'operations in every SDK client'),
-        'languages': m(25, 'languages in published recipes'),
+        'languages': m(len(title_langs | langs), 'languages with recipe names; full text is Arabic and English'),
         'simulators': m(4, 'playable simulators'),
         'facets': m(facets, 'household and device facet types with privacy rules'),
-        'recipesInConversion': {'value': 1881, 'label': 'fifi.cooking recipes planned for conversion', 'labelAr': AR['fifi.cooking recipes planned for conversion'], 'kind': 'planned'},
+        'recipesInConversion': {'value': len(imported), 'label': 'V0 recipes awaiting conversion to V1', 'labelAr': 'وصفة V0 تنتظر التحويل إلى V1', 'kind': 'planned'},
     },
 }
 out = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else 'stats.json')

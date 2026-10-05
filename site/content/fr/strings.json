@@ -266,7 +266,7 @@
   "d1_meals": "Repas comptés",
   "d1_summary": "Résumé de l'impact, calculé",
   "health_h": "Rendre les gens en meilleure santé",
-  "health_problem": "Une alimentation non sûre cause environ 600 millions de maladies par an ; la plupart des gens consomment environ deux fois la quantité de sel recommandée. Une machine de cuisson ajoute de nouvelles façons de se tromper, et de nouvelles façons de réussir à chaque fois.",
+  "health_problem": "Une alimentation non sûre cause environ 600 millions de maladies par an <a href=\"/fr/impact/#health\"><span class=\"kind measured\">mesuré</span> OMS</a> ; les adultes consomment environ 11 g de sel par jour contre une recommandation de moins de 5 g <a href=\"/fr/impact/#health\"><span class=\"kind measured\">mesuré</span> OMS 2021</a>. Une machine de cuisson ajoute de nouvelles façons de se tromper, et de nouvelles façons de réussir à chaque fois.",
   "health_now": "Now : points de contrôle critiques qu'un appareil doit respecter et enregistrer (températures à cœur, maintien au chaud, refroidissement, réchauffage), et rule packs qui signalent le sodium, les sucres libres, les graisses, les fruits et légumes sur un menu, avec des règles de précaution pour les enfants, la grossesse et les personnes âgées.",
   "health_next": "Next : un diététicien et un responsable de la sécurité alimentaire examinent chaque rule pack et signent le registre d'examen ; les packs indiquent qu'ils ne sont pas examinés jusqu'à ce moment-là.",
   "health_later": "Later : les codes nationaux remplacent les valeurs par défaut lorsqu'ils existent ; la cuisson propre entre dans le modèle.",
@@ -303,6 +303,7 @@
   "never_h": "Ce que nous ne revendiquerons jamais",
   "never_text": "Aucun utilisateur, partenaire, pilote ou approbation n'existe aujourd'hui, et le site l'indique partout où un lecteur pourrait penser le contraire. Les simulateurs sont illustratifs. Aucune recette n'est vérifiée sur le terrain. La sécurité et la confidentialité ne sont jamais plus faibles que Core 0.2.",
   "more": "Lire la suite",
-  "d3_accept2": "cuisiner dans l'enveloppe"
+  "d3_accept2": "cuisiner dans l'enveloppe",
+  "d2_source": "dérivés des recommandations publiques de l'OMS, du Codex et de Sphere ; aucun ne les a relus"
  }
 }

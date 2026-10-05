@@ -266,7 +266,7 @@
   "d1_meals": "Gezählte Mahlzeiten",
   "d1_summary": "Auswirkungszusammenfassung, berechnet",
   "health_h": "Menschen gesünder machen",
-  "health_problem": "Unsichere Lebensmittel verursachen jährlich etwa 600 Millionen Krankheiten; die meisten Menschen essen etwa das Doppelte der empfohlenen Salzmenge. Eine Kochmaschine bietet neue Wege, es falsch zu machen, und neue Wege, es jedes Mal richtig zu machen.",
+  "health_problem": "Unsichere Lebensmittel verursachen jährlich etwa 600 Millionen Krankheiten <a href=\"/de/impact/#health\"><span class=\"kind measured\">gemessen</span> WHO</a>; Erwachsene essen etwa 11 g Salz pro Tag gegenüber einer Empfehlung von unter 5 g <a href=\"/de/impact/#health\"><span class=\"kind measured\">gemessen</span> WHO 2021</a>. Eine Kochmaschine bietet neue Wege, es falsch zu machen, und neue Wege, es jedes Mal richtig zu machen.",
   "health_now": "Now: kritische Kontrollpunkte, die ein Gerät erfüllen und aufzeichnen muss (Kerntemperaturen, Warmhalten, Kühlen, Aufwärmen), und rule packs, die Natrium, freien Zucker, Fette, Obst und Gemüse auf einer Speisekarte kennzeichnen, mit Sorgfaltsregeln für Kinder, Schwangerschaft und ältere Erwachsene.",
   "health_next": "Next: ein Ernährungsberater und ein Lebensmittelsicherheitsbeauftragter überprüfen jedes rule pack und unterzeichnen das Prüfprotokoll; die packs geben an, dass sie bis dahin nicht überprüft wurden.",
   "health_later": "Später: Nationale Codes ersetzen die Standardwerte, sofern vorhanden; sauberes Kochen tritt in das Modell ein.",
@@ -303,6 +303,7 @@
   "never_h": "Was wir niemals behaupten werden",
   "never_text": "Heute existieren keine Nutzer, Partner, Piloten oder Endorsements, und die Website stellt dies überall klar, wo ein Leser etwas anderes denken könnte. Die Simulatoren sind illustrativ. Kein Rezept ist im Feld verifiziert. Sicherheit und Datenschutz sind niemals schwächer als Core 0.2.",
   "more": "Mehr lesen",
-  "d3_accept2": "innerhalb der Hülle kochen"
+  "d3_accept2": "innerhalb der Hülle kochen",
+  "d2_source": "abgeleitet aus öffentlichen Leitlinien von WHO, Codex und Sphere; keine hat diese Pakete geprüft"
  }
 }

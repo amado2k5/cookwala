@@ -266,7 +266,7 @@
   "d1_meals": "Refeições contadas",
   "d1_summary": "Resumo de impacto, computado",
   "health_h": "Tornar as pessoas mais saudáveis",
-  "health_problem": "Alimentos inseguros causam cerca de 600 milhões de doenças por ano; a maioria das pessoas consome cerca de duas vezes o sal recomendado. Uma máquina de cozinhar adiciona novas formas de errar, e novas formas de acertar todas as vezes.",
+  "health_problem": "Alimentos inseguros causam cerca de 600 milhões de doenças por ano <a href=\"/pt/impact/#health\"><span class=\"kind measured\">medido</span> OMS</a>; os adultos consomem cerca de 11 g de sal por dia contra uma recomendação de menos de 5 g <a href=\"/pt/impact/#health\"><span class=\"kind measured\">medido</span> OMS 2021</a>. Uma máquina de cozinhar adiciona novas formas de errar, e novas formas de acertar todas as vezes.",
   "health_now": "Now: pontos de controle críticos que um dispositivo deve atender e registrar (temperaturas centrais, manutenção a quente, resfriamento, reaquecimento), e rule packs que sinalizam sódio, açúcares livres, gorduras, frutas e vegetais em um menu, com regras de cuidado para crianças, gravidez e idosos.",
   "health_next": "Next: um nutricionista e um oficial de segurança alimentar revisam cada rule pack e assinam o registro de revisão; os packs dizem que não foram revisados até então.",
   "health_later": "Later: códigos nacionais substituem os padrões onde existem; o cozimento limpo entra no modelo.",
@@ -303,6 +303,7 @@
   "never_h": "O que nunca iremos reivindicar",
   "never_text": "Não existem utilizadores, parceiros, pilotos ou endossos hoje, e o site diz isso sempre que um leitor possa pensar o contrário. Os simuladores são ilustrativos. Nenhuma receita é verificada em campo. Segurança e privacidade nunca são mais fracas que o Core 0.2.",
   "more": "Leia mais",
-  "d3_accept2": "cozinhar dentro do envelope"
+  "d3_accept2": "cozinhar dentro do envelope",
+  "d2_source": "derivados de orientações públicas da OMS, do Codex e da Sphere; nenhum os revisou"
  }
 }

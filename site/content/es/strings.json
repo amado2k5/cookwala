@@ -266,7 +266,7 @@
   "d1_meals": "Comidas contadas",
   "d1_summary": "Resumen de impacto, computado",
   "health_h": "Hacer que las personas sean más saludables",
-  "health_problem": "Los alimentos inseguros causan alrededor de 600 millones de enfermedades al año; la mayoría de las personas consumen aproximadamente el doble de la sal recomendada. Una máquina de cocinar añade nuevas formas de hacerlo mal, y nuevas formas de hacerlo bien cada vez.",
+  "health_problem": "Los alimentos inseguros causan alrededor de 600 millones de enfermedades al año <a href=\"/es/impact/#health\"><span class=\"kind measured\">medido</span> OMS</a>; los adultos consumen unos 11 g de sal al día frente a una recomendación de menos de 5 g <a href=\"/es/impact/#health\"><span class=\"kind measured\">medido</span> OMS 2021</a>. Una máquina de cocinar añade nuevas formas de hacerlo mal, y nuevas formas de hacerlo bien cada vez.",
   "health_now": "Now: puntos de control críticos que un dispositivo debe cumplir y registrar (temperaturas centrales, mantenimiento en caliente, enfriamiento, recalentamiento), y rule packs que señalan el sodio, azúcares libres, grasas, frutas y verduras en un menú, con reglas de cuidado para niños, embarazo y adultos mayores.",
   "health_next": "Next: un dietista y un oficial de seguridad alimentaria revisan cada rule pack y firman el registro de revisión; los packs dicen que no han sido revisados hasta entonces.",
   "health_later": "Later: los códigos nacionales reemplazan los valores predeterminados donde existan; la cocina limpia entra en el modelo.",
@@ -303,6 +303,7 @@
   "never_h": "Lo que nunca reclamaremos",
   "never_text": "No existen usuarios, socios, pilotos o respaldos hoy en día, y el sitio lo dice allí donde un lector pudiera pensar lo contrario. Los simuladores son ilustrativos. Ninguna receta está verificada en campo. La seguridad y la privacidad nunca son más débiles que Core 0.2.",
   "more": "Leer más",
-  "d3_accept2": "cocinar dentro de la envolvente"
+  "d3_accept2": "cocinar dentro de la envolvente",
+  "d2_source": "derivados de orientaciones públicas de la OMS, el Codex y Sphere; ninguno los ha revisado"
  }
 }
