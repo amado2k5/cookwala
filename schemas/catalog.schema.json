@@ -824,6 +824,11 @@
          "never"
         ],
         "description": "facets only: whether a safety decision may rely on this fact. Inferred facts are never allowed."
+       },
+       "executable": {
+        "type": "boolean",
+        "default": true,
+        "description": "false: never runs on a device; a capabilities document that declares the operation is ignored and a dry run assigns the step to a person or refuses (cw.op.legacy_step, RFC-0009)."
        }
       },
       "unevaluatedProperties": false,

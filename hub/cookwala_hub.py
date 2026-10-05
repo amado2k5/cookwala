@@ -26,6 +26,7 @@ authentication beyond accepting any bearer token on the local network.
 """
 import argparse
 import json
+import os
 import pathlib
 import sys
 import threading
@@ -71,7 +72,7 @@ class Device:
     def start(self, req, human_present):
         now = time.time()
         recipe = self.find_recipe(req['recipe'])
-        status = {'core': '0.2.0', 'kind': 'ExecutionStatus', 'id': req['id'], 'seq': 0, 'state': 'accepted', 'recipe': req['recipe'], 'recipeHash': req.get('recipeHash'), 'updatedAt': ref_time(now)}
+        status = {'core': '0.2.0', 'kind': 'ExecutionStatus', 'id': req['id'], 'seq': 0, 'state': 'accepted', 'request': req['id'], 'updatedAt': ref_time(now)}
         if recipe is None:
             return self._refuse(status, 'missing_capability', 'recipe not found in this hub\'s catalog')
         if ref.doc_hash(recipe) != req.get('recipeHash'):
@@ -80,13 +81,20 @@ class Device:
             return self._refuse(status, 'recipe_recalled', 'a recall is in force for this revision')
         if req.get('mandate') and 'start_cooking' not in req['mandate'].get('scopes', []):
             return self._refuse(status, 'mandate_scope', 'the agent mandate lacks start_cooking')
-        blocks = set(req.get('allergenBlocks', [])) & set(recipe.get('safety', {}).get('allergens', []))
+        declared = recipe.get('safety', {}).get('allergens', {})
+        present = set()
+        if isinstance(declared, dict):
+            for lst in declared.values(): present.update(lst if isinstance(lst, list) else [])
+        else:
+            present.update(declared or [])
+        for ing in recipe.get('ingredients', []): present.update(ing.get('allergens', []) or [])
+        blocks = set(req.get('allergenBlocks', [])) & present
         if blocks:
             return self._refuse(status, 'allergen_block', f'recipe contains blocked allergen(s): {sorted(blocks)}')
-        dry = ref.dry_run(recipe, self.capabilities, human_present, True)
+        dry = ref.dry_run(recipe, self.capabilities, human_present, True, self.limits)
         if dry['state'] == 'refused':
             return self._refuse(status, dry['refusal']['reason'], dry['refusal']['detail'], dry['refusal']['node'])
-        status.update({'state': 'accepted', 'plan': dry['plan']})
+        status.update({'state': 'accepted', 'x-hub-plan': dry['plan']})  # the plan is hub-specific; ExecutionStatus carries the request
         ex = {'status': status, 'recipe': recipe, 'plan': dry['plan'], 'step': -1, 'stepStarted': None, 'log': {'steps': []}, 'startedAt': now, 'humanPresent': human_present, 'request': req}
         self.executions[req['id']] = ex
         return status
@@ -140,8 +148,8 @@ class Device:
             lo, hi = env['tempC']['min'], env['tempC']['max']
             target = (lo + hi) / 2
             warm = min(1.0, elapsed / max(30.0, dur * 0.2))
-            st['mediumTempC'] = round(22 + (target - 22) * warm, 1)
-        st['node'] = node['id']; st['op'] = node['op']; st['progress'] = round(min(1.0, elapsed / dur), 2); st['verifiedBy'] = p['verifiedBy']
+            st['x-hub-mediumTempC'] = round(22 + (target - 22) * warm, 1)
+        st['step'] = {'node': node['id'], 'op': node['op'], 'startedAt': ref_time(ex['stepStarted']), 'progress': round(min(1.0, elapsed / dur), 2), 'verifiedBy': p['verifiedBy']}
         if elapsed >= dur:
             self._close_step(ex, node, p)
             ex['step'] += 1; ex['stepStarted'] = now
@@ -153,9 +161,9 @@ class Device:
         st = ex['status']; p = ex['plan'][ex['step']]
         st['seq'] += 1
         if p['by'] == 'human':
-            st['state'] = 'needs_human'; st['humanNeeded'] = f"a person performs {p['op']}"
+            st['state'] = 'needs_human'; st['humanNeeded'] = {'why': f"a person performs {p['op']}"}
         elif p['verifiedBy'] == 'human':
-            st['state'] = 'needs_human'; st['humanNeeded'] = f"a person confirms {p['op']} is done"
+            st['state'] = 'needs_human'; st['humanNeeded'] = {'why': f"a person confirms {p['op']} is done"}
         else:
             st.pop('humanNeeded', None)
 
@@ -176,7 +184,7 @@ class Device:
 
     def _finish_log(self, ex, outcome):
         now = time.time()
-        ex['log'] = {'core': '0.2.0', 'kind': 'ExecutionLog', 'id': f"log-{ex['status']['id']}", 'recipe': ex['status']['recipe'], 'recipeHash': ex['status']['recipeHash'],
+        ex['log'] = {'core': '0.2.0', 'kind': 'ExecutionLog', 'id': f"log-{ex['status']['id']}", 'recipe': ex['request']['recipe'], 'recipeHash': ex['request']['recipeHash'],
                      'device': {'vendor': self.capabilities['actor'].get('vendor', 'reference'), 'model': self.capabilities['actor'].get('model', 'simulated'), 'firmware': 'hub-0.1', 'safetyLimits': f"{self.limits['id']}@{self.limits['version']}"},
                      'startedAt': ref_time(ex['startedAt']), 'endedAt': ref_time(now), 'outcome': outcome, 'servings': ex['request'].get('servings', ex['recipe']['yield']['servings']),
                      'steps': ex['log']['steps'], 'safetyEvents': [], 'humanInterventions': [{'kind': 'confirm', 'minutes': 1}] if any(p['verifiedBy'] == 'human' for p in ex['plan']) else [],
@@ -200,6 +208,8 @@ TOOLS = ['hash', 'verify', 'dryrun', 'envelope', 'sms', 'constraints', 'convert'
 
 class Handler(BaseHTTPRequestHandler):
     device: Device = None
+    token = None   # bearer token required on every request except OPTIONS and POST .../stop; None = open test bed
+    cors = None    # origin allowed to call this hub from a browser; None = no CORS headers
     server_version = 'cookwala-hub/0.1'
 
     def log_message(self, fmt, *args):
@@ -209,25 +219,35 @@ class Handler(BaseHTTPRequestHandler):
         data = json.dumps(body, ensure_ascii=False).encode()
         self.send_response(code)
         self.send_header('Content-Type', ctype); self.send_header('Content-Length', str(len(data)))
-        self.send_header('Access-Control-Allow-Origin', '*')
+        if self.cors: self.send_header('Access-Control-Allow-Origin', self.cors)
         for k, v in (headers or {}).items(): self.send_header(k, v)
         self.end_headers(); self.wfile.write(data)
 
-    def _problem(self, code, title, detail=None, refusal=None):
+    def _problem(self, code, title, detail=None, refusal=None, headers=None):
         body = {'type': f'https://cookwala.ai/errors/{title}', 'title': title}
         if detail: body['detail'] = detail
         if refusal: body['refusal'] = refusal
-        self._send(code, body, PROBLEM)
+        self._send(code, body, PROBLEM, headers)
+
+    def _authorized(self):
+        if self.token is None: return True
+        return self.headers.get('Authorization', '') == f'Bearer {self.token}'
+
+    def _unauthorized(self):
+        return self._problem(401, 'unauthorized', 'a bearer token is required', headers={'WWW-Authenticate': 'Bearer realm="cookwala"'})
 
     def _body(self):
         n = int(self.headers.get('Content-Length', 0))
         return json.loads(self.rfile.read(n) or b'{}')
 
     def do_OPTIONS(self):
-        self.send_response(204); self.send_header('Access-Control-Allow-Origin', '*'); self.send_header('Access-Control-Allow-Headers', '*'); self.send_header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS'); self.end_headers()
+        self.send_response(204)
+        if self.cors: self.send_header('Access-Control-Allow-Origin', self.cors); self.send_header('Access-Control-Allow-Headers', 'Authorization, Content-Type, Idempotency-Key, If-Match'); self.send_header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+        self.end_headers()
 
     def do_GET(self):
         d = self.device; path = self.path.split('?')[0]
+        if not self._authorized(): return self._unauthorized()
         if path == '/v1/capabilities': return self._send(200, d.capabilities)
         if path == '/v1/safety-limits': return self._send(200, d.limits)
         if path == '/v1/recalls': return self._send(200, [])
@@ -237,7 +257,7 @@ class Handler(BaseHTTPRequestHandler):
             with d.lock:
                 ex = d.executions.get(parts[3])
                 if not ex: return self._problem(404, 'not-found')
-                if len(parts) == 4: return self._send(200, ex['status'], headers={'ETag': str(ex['status']['seq'])})
+                if len(parts) == 4: return self._send(200, ex['status'], headers={'ETag': f'"{ex["status"]["seq"]}"'})  # a quoted entity-tag (RFC 9110)
                 if len(parts) == 5 and parts[4] == 'log':
                     if not ex.get('final') or not ex.get('log') or 'kind' not in (ex['log'] or {}): return self._problem(404, 'not-found', 'the log exists once the execution has ended')
                     return self._send(200, ex['log'])
@@ -256,6 +276,24 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, {'name': 'Cookwala reference hub', 'core': '0.2.0', 'endpoints': ['/v1/capabilities', '/v1/safety-limits', '/v1/executions', '/v1/recalls', '/v1/conformance', '/v1/tools/*'], 'tools': TOOLS, 'docs': 'https://cookwala.ai/docs/HUB/'}, 'application/json')
         self._problem(404, 'not-found')
 
+    _validators = {}
+
+    def _schema_errors(self, schema_file, kind, doc):
+        """Validate doc against schemas/<schema_file>#/$defs/<kind>; [] when valid or when jsonschema is missing."""
+        try:
+            from jsonschema import Draft202012Validator
+            from referencing import Registry, Resource
+        except ImportError:
+            return []
+        key = (schema_file, kind)
+        if key not in self._validators:
+            reg = Registry()
+            for p in (ROOT / 'schemas').glob('*.schema.json'):
+                s = json.loads(p.read_text()); reg = reg.with_resource(s['$id'], Resource.from_contents(s))
+            sid = json.loads((ROOT / 'schemas' / schema_file).read_text())['$id']
+            self._validators[key] = Draft202012Validator({'$ref': f'{sid}#/$defs/{kind}'}, registry=reg)
+        return [f"{'/'.join(map(str, e.absolute_path)) or '$'}: {e.message[:120]}" for e in self._validators[key].iter_errors(doc)]
+
     # ---- reference tools (not part of the Core API; the same functions the CLI exposes, over HTTP, so every language SDK can call them)
     def _tool(self, name, body):
         if name == 'hash': return {'hash': ref.doc_hash(body['doc'])}
@@ -265,7 +303,7 @@ class Handler(BaseHTTPRequestHandler):
         if name == 'dryrun':
             recipe = body.get('recipe') or json.loads((pathlib.Path(self.device.recipes_dir) / f"{body['recipeId']}.cookwala.json").read_text())
             device = body.get('device') or json.loads((ROOT / 'examples' / 'capabilities' / f"{body['deviceId']}.json").read_text())
-            return ref.dry_run(recipe, device, bool(body.get('humanPresent', False)), bool(body.get('allowModel', True)))
+            return ref.dry_run(recipe, device, bool(body.get('humanPresent', False)), bool(body.get('allowModel', True)), self.device.limits)
         if name == 'envelope': return ref.check_envelope(body['op'], body['trace'], body.get('target'), body.get('altitudeM', 0))
         if name == 'sms':
             cmd = ref.parse_sms(body['text']); out = dict(cmd)
@@ -315,6 +353,14 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         d = self.device; path = self.path.split('?')[0]
+        parts = path.split('/')
+        if path.startswith('/v1/executions/') and len(parts) == 5 and parts[4] == 'stop':
+            # Core 6.2: stop is never refused for authorization or for a missing header once the caller can reach the executor
+            with d.lock:
+                ex = d.executions.get(parts[3])
+                if not ex: return self._problem(404, 'not-found')
+                body = self._body(); return self._send(202, d.stop(ex, body.get('reason', 'requested')))
+        if not self._authorized(): return self._unauthorized()
         if path.startswith('/v1/tools/'): return self.do_POST_tool(path)
         idem = self.headers.get('Idempotency-Key')
         if not idem or len(idem) < 8: return self._problem(400, 'missing-idempotency-key', 'Idempotency-Key header (8..128 chars) is required on every POST')
@@ -330,18 +376,22 @@ class Handler(BaseHTTPRequestHandler):
                 st = d.start(req, human); d.idem[idem] = req['id']
                 return self._send(202, st)
         if path == '/v1/incidents':
+            try:
+                body = self._body()
+            except ValueError as e:
+                return self._problem(400, 'invalid-request', f'body is not JSON: {e}')
+            errs = self._schema_errors('core.schema.json', 'IncidentReport', body)
+            if errs: return self._problem(400, 'invalid-request', 'not a valid IncidentReport: ' + '; '.join(errs[:3]))
             return self._send(202, {'received': True})
         if path.startswith('/v1/executions/'):
             parts = path.split('/')
             with d.lock:
                 ex = d.executions.get(parts[3])
                 if not ex: return self._problem(404, 'not-found')
-                if parts[4] == 'stop':
-                    body = self._body(); return self._send(202, d.stop(ex, body.get('reason', 'requested')))
                 if parts[4] == 'resume':
                     im = self.headers.get('If-Match')
                     if im is None: return self._problem(428, 'if-match-required')
-                    if im != str(ex['status']['seq']): return self._problem(412, 'precondition-failed', f"seq is {ex['status']['seq']}")
+                    if im.strip().strip('"') != str(ex['status']['seq']): return self._problem(412, 'precondition-failed', f"seq is {ex['status']['seq']}")
                     return self._send(202, d.resume(ex))
         self._problem(404, 'not-found')
 
@@ -353,10 +403,14 @@ def main():
     ap.add_argument('--limits', default=str(ROOT / 'profiles' / 'core' / 'safety-limits.default.json'))
     ap.add_argument('--recipes', default=str(ROOT / 'examples'))
     ap.add_argument('--speed', type=float, default=20.0, help='simulated seconds per real second')
+    ap.add_argument('--token', default=os.environ.get('COOKWALA_HUB_TOKEN'), help='bearer token every request must carry (except stop); default: $COOKWALA_HUB_TOKEN; unset = open test bed')
+    ap.add_argument('--cors', default=None, help='browser origin allowed to call this hub, e.g. http://localhost:8000; default: none')
+    ap.add_argument('--bind', default='127.0.0.1', help='interface to listen on; 0.0.0.0 exposes the hub to the network')
     a = ap.parse_args()
     Handler.device = Device(json.loads(pathlib.Path(a.device).read_text()), json.loads(pathlib.Path(a.limits).read_text()), a.recipes, a.speed)
-    srv = ThreadingHTTPServer(('0.0.0.0', a.port), Handler)
-    print(f'Cookwala reference hub on http://localhost:{a.port}/v1  device={pathlib.Path(a.device).name}  limits={Handler.device.limits["id"]}  recipes={a.recipes}  speed=x{a.speed}')
+    Handler.token = a.token or None; Handler.cors = a.cors
+    srv = ThreadingHTTPServer((a.bind, a.port), Handler)
+    print(f'Cookwala reference hub on http://{a.bind}:{a.port}/v1  device={pathlib.Path(a.device).name}  limits={Handler.device.limits["id"]}  recipes={a.recipes}  speed=x{a.speed}  auth={"bearer token" if Handler.token else "NONE (open test bed; pass --token to require one)"}  cors={a.cors or "off"}')
     try:
         srv.serve_forever()
     except KeyboardInterrupt:

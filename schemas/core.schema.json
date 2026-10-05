@@ -1,932 +1,933 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cookwala.ai/v1/schemas/core.schema.json",
-  "title": "Cookwala Core",
-  "x-cookwala-status": "core",
-  "description": "The small, stable core of Cookwala (docs/CORE.md): how a device is asked to cook a recipe, how it reports status, how it logs what happened, the safety limits it enforces locally whatever anyone says, recalls of unsafe recipes or extensions, anonymous incident reports, and conformance test vectors. Everything outside this file, recipe.schema.json, capabilities.schema.json and common.schema.json is an optional profile.",
-  "$defs": {
-    "CoreVersion": {
-      "type": "string",
-      "pattern": "^0\\.2\\.[0-9]+$",
-      "description": "Core version. A reader accepts any patch of its minor version, rejects other minors with error unsupported_version, and ignores x- fields it does not know."
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://cookwala.ai/v1/schemas/core.schema.json",
+ "title": "Cookwala Core",
+ "x-cookwala-status": "core",
+ "description": "The small, stable core of Cookwala (docs/CORE.md): how a device is asked to cook a recipe, how it reports status, how it logs what happened, the safety limits it enforces locally whatever anyone says, recalls of unsafe recipes or extensions, anonymous incident reports, and conformance test vectors. Everything outside this file, recipe.schema.json, capabilities.schema.json and common.schema.json is an optional profile.",
+ "$defs": {
+  "CoreVersion": {
+   "type": "string",
+   "pattern": "^0\\.2\\.[0-9]+$",
+   "description": "Core version. A reader accepts any patch of its minor version, rejects other minors with error unsupported_version, and ignores x- fields it does not know."
+  },
+  "Id": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+  },
+  "ExecuteRequest": {
+   "type": "object",
+   "required": [
+    "core",
+    "kind",
+    "id",
+    "recipe",
+    "recipeHash",
+    "requestedBy",
+    "idempotencyKey"
+   ],
+   "unevaluatedProperties": false,
+   "patternProperties": {
+    "^x-": {}
+   },
+   "description": "Ask a device or hub to cook a recipe. The executor refuses (state refused) rather than guessing when it cannot meet a step's envelope, sensor ladder or safety limits.",
+   "properties": {
+    "core": {
+     "$ref": "#/$defs/CoreVersion"
     },
-    "Id": {
-      "type": "string",
-      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+    "kind": {
+     "const": "ExecuteRequest"
     },
-    "ExecuteRequest": {
+    "id": {
+     "$ref": "#/$defs/Id"
+    },
+    "recipe": {
+     "$ref": "common.schema.json#/$defs/GlobalRef"
+    },
+    "recipeHash": {
+     "$ref": "common.schema.json#/$defs/Hash",
+     "description": "The executor must cook exactly this revision; a mismatch is refused."
+    },
+    "servings": {
+     "type": "number",
+     "exclusiveMinimum": 0
+    },
+    "serveBy": {
+     "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "requestedBy": {
+     "type": "string",
+     "description": "Id of the human, or of the agent acting under mandate."
+    },
+    "mandate": {
+     "$ref": "common.schema.json#/$defs/AgentMandate",
+     "description": "Required when an AI agent sends the request; must include the start_cooking scope."
+    },
+    "allergenBlocks": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "Allergens that must not be present for these diners. Matched against the recipe and the inventory; any match refuses the request."
+    },
+    "operatingMode": {
+     "type": "string",
+     "description": "Id of an operating mode (profile.schema.json), e.g. energy saver."
+    },
+    "idempotencyKey": {
+     "type": "string",
+     "minLength": 8,
+     "maxLength": 128,
+     "description": "Repeating a request with the same key returns the original execution."
+    }
+   }
+  },
+  "RefusalReason": {
+   "enum": [
+    "unsupported_version",
+    "recipe_hash_mismatch",
+    "recipe_recalled",
+    "missing_equipment",
+    "missing_capability",
+    "missing_sensor_no_fallback",
+    "envelope_out_of_range",
+    "safety_limit",
+    "allergen_block",
+    "not_authorized",
+    "mandate_scope",
+    "needs_human_present",
+    "busy"
+   ]
+  },
+  "ExecutionState": {
+   "enum": [
+    "accepted",
+    "refused",
+    "preparing",
+    "running",
+    "paused",
+    "needs_human",
+    "stopping",
+    "stopped",
+    "completed",
+    "failed"
+   ],
+   "description": "Legal transitions: accepted→preparing|refused|stopped; preparing→running|needs_human|stopping|failed; running→paused|needs_human|stopping|completed|failed; paused→running|stopping; needs_human→running|stopping|failed; stopping→stopped. refused, stopped, completed and failed are final."
+  },
+  "ExecutionStatus": {
+   "type": "object",
+   "required": [
+    "core",
+    "kind",
+    "id",
+    "request",
+    "state",
+    "seq",
+    "updatedAt"
+   ],
+   "unevaluatedProperties": false,
+   "patternProperties": {
+    "^x-": {}
+   },
+   "properties": {
+    "core": {
+     "$ref": "#/$defs/CoreVersion"
+    },
+    "kind": {
+     "const": "ExecutionStatus"
+    },
+    "id": {
+     "$ref": "#/$defs/Id"
+    },
+    "request": {
+     "$ref": "#/$defs/Id"
+    },
+    "state": {
+     "$ref": "#/$defs/ExecutionState"
+    },
+    "seq": {
+     "type": "integer",
+     "minimum": 0,
+     "description": "Increments on every change; events carry the same sequence."
+    },
+    "updatedAt": {
+     "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "step": {
+     "type": "object",
+     "unevaluatedProperties": false,
+     "properties": {
+      "node": {
+       "type": "string"
+      },
+      "op": {
+       "$ref": "common.schema.json#/$defs/VocabId"
+      },
+      "startedAt": {
+       "$ref": "common.schema.json#/$defs/DateTime"
+      },
+      "progress": {
+       "type": "number",
+       "minimum": 0,
+       "maximum": 1
+      },
+      "verifiedBy": {
+       "$ref": "#/$defs/VerifiedBy"
+      },
+      "readings": {
+       "type": "array",
+       "items": {
+        "$ref": "#/$defs/Reading"
+       }
+      }
+     }
+    },
+    "eta": {
+     "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "refusal": {
+     "type": "object",
+     "required": [
+      "reason"
+     ],
+     "unevaluatedProperties": false,
+     "properties": {
+      "reason": {
+       "$ref": "#/$defs/RefusalReason"
+      },
+      "node": {
+       "type": "string"
+      },
+      "detail": {
+       "type": "string",
+       "maxLength": 500
+      }
+     }
+    },
+    "humanNeeded": {
+     "type": "object",
+     "unevaluatedProperties": false,
+     "properties": {
+      "why": {
+       "type": "string",
+       "maxLength": 300
+      },
+      "byWhen": {
+       "$ref": "common.schema.json#/$defs/DateTime"
+      }
+     }
+    }
+   }
+  },
+  "StopRequest": {
+   "type": "object",
+   "required": [
+    "core",
+    "kind",
+    "execution",
+    "requestedBy"
+   ],
+   "unevaluatedProperties": false,
+   "description": "Ask an executor to stop safely. Stopping never needs authorization beyond reaching the executor; a local stop on the device always works without the network.",
+   "properties": {
+    "core": {
+     "$ref": "#/$defs/CoreVersion"
+    },
+    "kind": {
+     "const": "StopRequest"
+    },
+    "execution": {
+     "$ref": "#/$defs/Id"
+    },
+    "requestedBy": {
+     "type": "string"
+    },
+    "reason": {
+     "type": "string",
+     "maxLength": 300
+    }
+   }
+  },
+  "VerifiedBy": {
+   "enum": [
+    "sensor",
+    "model",
+    "time",
+    "human"
+   ],
+   "description": "Which rung of the operation's sensor ladder confirmed the step."
+  },
+  "Reading": {
+   "type": "object",
+   "required": [
+    "sensor",
+    "value",
+    "unit"
+   ],
+   "unevaluatedProperties": false,
+   "properties": {
+    "sensor": {
+     "$ref": "common.schema.json#/$defs/VocabId"
+    },
+    "value": {
+     "type": "number"
+    },
+    "unit": {
+     "$ref": "common.schema.json#/$defs/Unit"
+    },
+    "at": {
+     "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "estimated": {
+     "type": "boolean",
+     "description": "true when the value comes from a model, not a sensor."
+    }
+   }
+  },
+  "ExecutionLog": {
+   "type": "object",
+   "required": [
+    "core",
+    "kind",
+    "id",
+    "recipe",
+    "recipeHash",
+    "device",
+    "startedAt",
+    "outcome",
+    "steps",
+    "consent",
+    "privacy"
+   ],
+   "unevaluatedProperties": false,
+   "patternProperties": {
+    "^x-": {}
+   },
+   "description": "What happened when a recipe was cooked. The record behind the cooking benchmark and the open dataset. Contains no personal data; shared beyond the device only with the consent given in consent.dataset.",
+   "properties": {
+    "core": {
+     "$ref": "#/$defs/CoreVersion"
+    },
+    "kind": {
+     "const": "ExecutionLog"
+    },
+    "id": {
+     "$ref": "#/$defs/Id"
+    },
+    "recipe": {
+     "$ref": "common.schema.json#/$defs/GlobalRef"
+    },
+    "recipeHash": {
+     "$ref": "common.schema.json#/$defs/Hash"
+    },
+    "device": {
+     "type": "object",
+     "required": [
+      "vendor",
+      "model"
+     ],
+     "unevaluatedProperties": false,
+     "properties": {
+      "vendor": {
+       "type": "string"
+      },
+      "model": {
+       "type": "string"
+      },
+      "firmware": {
+       "type": "string"
+      },
+      "capabilitiesHash": {
+       "$ref": "common.schema.json#/$defs/Hash"
+      },
+      "safetyLimits": {
+       "type": "string",
+       "description": "Id@version of the SafetyLimits pack in force."
+      }
+     }
+    },
+    "startedAt": {
+     "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "endedAt": {
+     "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "outcome": {
+     "enum": [
+      "served",
+      "partial",
+      "aborted_safe",
+      "refused",
+      "failed"
+     ]
+    },
+    "servings": {
+     "type": "number",
+     "minimum": 0
+    },
+    "steps": {
+     "type": "array",
+     "items": {
       "type": "object",
       "required": [
-        "core",
-        "kind",
-        "id",
-        "recipe",
-        "recipeHash",
-        "requestedBy",
-        "idempotencyKey"
+       "node",
+       "op",
+       "verifiedBy",
+       "envelopeOk"
       ],
       "unevaluatedProperties": false,
-      "patternProperties": {
-        "^x-": {}
-      },
-      "description": "Ask a device or hub to cook a recipe. The executor refuses (state refused) rather than guessing when it cannot meet a step's envelope, sensor ladder or safety limits.",
       "properties": {
-        "core": {
-          "$ref": "#/$defs/CoreVersion"
-        },
-        "kind": {
-          "const": "ExecuteRequest"
-        },
-        "id": {
-          "$ref": "#/$defs/Id"
-        },
-        "recipe": {
-          "$ref": "common.schema.json#/$defs/GlobalRef"
-        },
-        "recipeHash": {
-          "$ref": "common.schema.json#/$defs/Hash",
-          "description": "The executor must cook exactly this revision; a mismatch is refused."
-        },
-        "servings": {
-          "type": "number",
-          "exclusiveMinimum": 0
-        },
-        "serveBy": {
-          "$ref": "common.schema.json#/$defs/DateTime"
-        },
-        "requestedBy": {
-          "type": "string",
-          "description": "Id of the human, or of the agent acting under mandate."
-        },
-        "mandate": {
-          "$ref": "common.schema.json#/$defs/AgentMandate",
-          "description": "Required when an AI agent sends the request; must include the start_cooking scope."
-        },
-        "allergenBlocks": {
-          "type": "array",
-          "items": {
-            "type": "string"
+       "node": {
+        "type": "string"
+       },
+       "op": {
+        "$ref": "common.schema.json#/$defs/VocabId"
+       },
+       "startedAt": {
+        "$ref": "common.schema.json#/$defs/DateTime"
+       },
+       "endedAt": {
+        "$ref": "common.schema.json#/$defs/DateTime"
+       },
+       "verifiedBy": {
+        "$ref": "#/$defs/VerifiedBy"
+       },
+       "envelopeOk": {
+        "type": "boolean",
+        "description": "The medium stayed inside the op envelope (and the recipe target, if narrower) for the whole step."
+       },
+       "summary": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "required": [
+          "sensor",
+          "unit"
+         ],
+         "unevaluatedProperties": false,
+         "properties": {
+          "sensor": {
+           "$ref": "common.schema.json#/$defs/VocabId"
           },
-          "description": "Allergens that must not be present for these diners. Matched against the recipe and the inventory; any match refuses the request."
-        },
-        "operatingMode": {
-          "type": "string",
-          "description": "Id of an operating mode (profile.schema.json), e.g. energy saver."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 128,
-          "description": "Repeating a request with the same key returns the original execution."
+          "unit": {
+           "$ref": "common.schema.json#/$defs/Unit"
+          },
+          "min": {
+           "type": "number"
+          },
+          "max": {
+           "type": "number"
+          },
+          "end": {
+           "type": "number"
+          },
+          "estimated": {
+           "type": "boolean"
+          }
+         }
         }
-      }
-    },
-    "RefusalReason": {
-      "enum": [
-        "unsupported_version",
-        "recipe_hash_mismatch",
-        "recipe_recalled",
-        "missing_equipment",
-        "missing_capability",
-        "missing_sensor_no_fallback",
-        "envelope_out_of_range",
-        "safety_limit",
-        "allergen_block",
-        "not_authorized",
-        "mandate_scope",
-        "needs_human_present",
-        "busy"
-      ]
-    },
-    "ExecutionState": {
-      "enum": [
-        "accepted",
-        "refused",
-        "preparing",
-        "running",
-        "paused",
-        "needs_human",
-        "stopping",
-        "stopped",
-        "completed",
-        "failed"
-      ],
-      "description": "Legal transitions: accepted→preparing|refused|stopped; preparing→running|needs_human|stopping|failed; running→paused|needs_human|stopping|completed|failed; paused→running|stopping; needs_human→running|stopping|failed; stopping→stopped. refused, stopped, completed and failed are final."
-    },
-    "ExecutionStatus": {
-      "type": "object",
-      "required": [
-        "core",
-        "kind",
-        "id",
-        "request",
-        "state",
-        "seq",
-        "updatedAt"
-      ],
-      "unevaluatedProperties": false,
-      "patternProperties": {
-        "^x-": {}
-      },
-      "properties": {
-        "core": {
-          "$ref": "#/$defs/CoreVersion"
-        },
-        "kind": {
-          "const": "ExecutionStatus"
-        },
-        "id": {
-          "$ref": "#/$defs/Id"
-        },
-        "request": {
-          "$ref": "#/$defs/Id"
-        },
-        "state": {
-          "$ref": "#/$defs/ExecutionState"
-        },
-        "seq": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "Increments on every change; events carry the same sequence."
-        },
-        "updatedAt": {
-          "$ref": "common.schema.json#/$defs/DateTime"
-        },
-        "step": {
-          "type": "object",
-          "unevaluatedProperties": false,
-          "properties": {
-            "node": {
-              "type": "string"
-            },
-            "op": {
-              "$ref": "common.schema.json#/$defs/VocabId"
-            },
-            "startedAt": {
-              "$ref": "common.schema.json#/$defs/DateTime"
-            },
-            "progress": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
-            },
-            "verifiedBy": {
-              "$ref": "#/$defs/VerifiedBy"
-            },
-            "readings": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/Reading"
-              }
-            }
-          }
-        },
-        "eta": {
-          "$ref": "common.schema.json#/$defs/DateTime"
-        },
-        "refusal": {
-          "type": "object",
-          "required": [
-            "reason"
-          ],
-          "unevaluatedProperties": false,
-          "properties": {
-            "reason": {
-              "$ref": "#/$defs/RefusalReason"
-            },
-            "node": {
-              "type": "string"
-            },
-            "detail": {
-              "type": "string",
-              "maxLength": 500
-            }
-          }
-        },
-        "humanNeeded": {
-          "type": "object",
-          "unevaluatedProperties": false,
-          "properties": {
-            "why": {
-              "type": "string",
-              "maxLength": 300
-            },
-            "byWhen": {
-              "$ref": "common.schema.json#/$defs/DateTime"
-            }
-          }
-        }
-      }
-    },
-    "StopRequest": {
-      "type": "object",
-      "required": [
-        "core",
-        "kind",
-        "execution",
-        "requestedBy"
-      ],
-      "unevaluatedProperties": false,
-      "description": "Ask an executor to stop safely. Stopping never needs authorization beyond reaching the executor; a local stop on the device always works without the network.",
-      "properties": {
-        "core": {
-          "$ref": "#/$defs/CoreVersion"
-        },
-        "kind": {
-          "const": "StopRequest"
-        },
-        "execution": {
-          "$ref": "#/$defs/Id"
-        },
-        "requestedBy": {
-          "type": "string"
-        },
-        "reason": {
+       },
+       "deviation": {
+        "type": "object",
+        "required": [
+         "kind"
+        ],
+        "unevaluatedProperties": false,
+        "properties": {
+         "kind": {
+          "enum": [
+           "substitution",
+           "extended_time",
+           "shortened_time",
+           "temperature_excursion",
+           "skipped_optional",
+           "human_took_over",
+           "other"
+          ]
+         },
+         "detail": {
           "type": "string",
           "maxLength": 300
+         }
         }
+       }
       }
+     }
     },
-    "VerifiedBy": {
-      "enum": [
-        "sensor",
-        "model",
-        "time",
-        "human"
-      ],
-      "description": "Which rung of the operation's sensor ladder confirmed the step."
-    },
-    "Reading": {
+    "safetyEvents": {
+     "type": "array",
+     "items": {
       "type": "object",
       "required": [
-        "sensor",
-        "value",
-        "unit"
+       "at",
+       "limit",
+       "action"
       ],
       "unevaluatedProperties": false,
       "properties": {
-        "sensor": {
-          "$ref": "common.schema.json#/$defs/VocabId"
-        },
-        "value": {
-          "type": "number"
-        },
-        "unit": {
-          "$ref": "common.schema.json#/$defs/Unit"
-        },
-        "at": {
-          "$ref": "common.schema.json#/$defs/DateTime"
-        },
-        "estimated": {
-          "type": "boolean",
-          "description": "true when the value comes from a model, not a sensor."
-        }
+       "at": {
+        "$ref": "common.schema.json#/$defs/DateTime"
+       },
+       "limit": {
+        "type": "string",
+        "description": "SafetyLimit id that fired."
+       },
+       "action": {
+        "$ref": "#/$defs/LimitAction"
+       },
+       "node": {
+        "type": "string"
+       }
       }
+     }
     },
-    "ExecutionLog": {
+    "humanInterventions": {
+     "type": "array",
+     "items": {
       "type": "object",
       "required": [
-        "core",
-        "kind",
-        "id",
-        "recipe",
-        "recipeHash",
-        "device",
-        "startedAt",
-        "outcome",
-        "steps",
-        "consent",
-        "privacy"
+       "kind"
       ],
       "unevaluatedProperties": false,
-      "patternProperties": {
-        "^x-": {}
+      "properties": {
+       "at": {
+        "$ref": "common.schema.json#/$defs/DateTime"
+       },
+       "kind": {
+        "enum": [
+         "confirm",
+         "assist",
+         "take_over",
+         "stop",
+         "refill",
+         "other"
+        ]
+       },
+       "minutes": {
+        "type": "number",
+        "minimum": 0
+       }
+      }
+     }
+    },
+    "energyKwh": {
+     "type": "number",
+     "minimum": 0
+    },
+    "wasteG": {
+     "type": "number",
+     "minimum": 0
+    },
+    "rating": {
+     "type": "object",
+     "unevaluatedProperties": false,
+     "properties": {
+      "score": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 5
       },
-      "description": "What happened when a recipe was cooked. The record behind the cooking benchmark and the open dataset. Contains no personal data; shared beyond the device only with the consent given in consent.dataset.",
-      "properties": {
-        "core": {
-          "$ref": "#/$defs/CoreVersion"
-        },
-        "kind": {
-          "const": "ExecutionLog"
-        },
-        "id": {
-          "$ref": "#/$defs/Id"
-        },
-        "recipe": {
-          "$ref": "common.schema.json#/$defs/GlobalRef"
-        },
-        "recipeHash": {
-          "$ref": "common.schema.json#/$defs/Hash"
-        },
-        "device": {
-          "type": "object",
-          "required": [
-            "vendor",
-            "model"
-          ],
-          "unevaluatedProperties": false,
-          "properties": {
-            "vendor": {
-              "type": "string"
-            },
-            "model": {
-              "type": "string"
-            },
-            "firmware": {
-              "type": "string"
-            },
-            "capabilitiesHash": {
-              "$ref": "common.schema.json#/$defs/Hash"
-            },
-            "safetyLimits": {
-              "type": "string",
-              "description": "Id@version of the SafetyLimits pack in force."
-            }
-          }
-        },
-        "startedAt": {
-          "$ref": "common.schema.json#/$defs/DateTime"
-        },
-        "endedAt": {
-          "$ref": "common.schema.json#/$defs/DateTime"
-        },
-        "outcome": {
-          "enum": [
-            "served",
-            "partial",
-            "aborted_safe",
-            "refused",
-            "failed"
-          ]
-        },
-        "servings": {
-          "type": "number",
-          "minimum": 0
-        },
-        "steps": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "node",
-              "op",
-              "verifiedBy",
-              "envelopeOk"
-            ],
-            "unevaluatedProperties": false,
-            "properties": {
-              "node": {
-                "type": "string"
-              },
-              "op": {
-                "$ref": "common.schema.json#/$defs/VocabId"
-              },
-              "startedAt": {
-                "$ref": "common.schema.json#/$defs/DateTime"
-              },
-              "endedAt": {
-                "$ref": "common.schema.json#/$defs/DateTime"
-              },
-              "verifiedBy": {
-                "$ref": "#/$defs/VerifiedBy"
-              },
-              "envelopeOk": {
-                "type": "boolean",
-                "description": "The medium stayed inside the op envelope (and the recipe target, if narrower) for the whole step."
-              },
-              "summary": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "required": [
-                    "sensor",
-                    "unit"
-                  ],
-                  "unevaluatedProperties": false,
-                  "properties": {
-                    "sensor": {
-                      "$ref": "common.schema.json#/$defs/VocabId"
-                    },
-                    "unit": {
-                      "$ref": "common.schema.json#/$defs/Unit"
-                    },
-                    "min": {
-                      "type": "number"
-                    },
-                    "max": {
-                      "type": "number"
-                    },
-                    "end": {
-                      "type": "number"
-                    },
-                    "estimated": {
-                      "type": "boolean"
-                    }
-                  }
-                }
-              },
-              "deviation": {
-                "type": "object",
-                "required": [
-                  "kind"
-                ],
-                "unevaluatedProperties": false,
-                "properties": {
-                  "kind": {
-                    "enum": [
-                      "substitution",
-                      "extended_time",
-                      "shortened_time",
-                      "temperature_excursion",
-                      "skipped_optional",
-                      "human_took_over",
-                      "other"
-                    ]
-                  },
-                  "detail": {
-                    "type": "string",
-                    "maxLength": 300
-                  }
-                }
-              }
-            }
-          }
-        },
-        "safetyEvents": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "at",
-              "limit",
-              "action"
-            ],
-            "unevaluatedProperties": false,
-            "properties": {
-              "at": {
-                "$ref": "common.schema.json#/$defs/DateTime"
-              },
-              "limit": {
-                "type": "string",
-                "description": "SafetyLimit id that fired."
-              },
-              "action": {
-                "$ref": "#/$defs/LimitAction"
-              },
-              "node": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "humanInterventions": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "kind"
-            ],
-            "unevaluatedProperties": false,
-            "properties": {
-              "at": {
-                "$ref": "common.schema.json#/$defs/DateTime"
-              },
-              "kind": {
-                "enum": [
-                  "confirm",
-                  "assist",
-                  "take_over",
-                  "stop",
-                  "refill",
-                  "other"
-                ]
-              },
-              "minutes": {
-                "type": "number",
-                "minimum": 0
-              }
-            }
-          }
-        },
-        "energyKwh": {
-          "type": "number",
-          "minimum": 0
-        },
-        "wasteG": {
-          "type": "number",
-          "minimum": 0
-        },
-        "rating": {
-          "type": "object",
-          "unevaluatedProperties": false,
-          "properties": {
-            "score": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 5
-            },
-            "comment": {
-              "$ref": "common.schema.json#/$defs/UntrustedText"
-            }
-          }
-        },
-        "consent": {
-          "type": "object",
-          "required": [
-            "dataset"
-          ],
-          "unevaluatedProperties": false,
-          "description": "Opt-in only. Default none: the log stays on the device or hub.",
-          "properties": {
-            "dataset": {
-              "enum": [
-                "none",
-                "research_only",
-                "open"
-              ]
-            },
-            "grantedBy": {
-              "type": "string",
-              "description": "Opaque id of the household account; never a name."
-            },
-            "grantedAt": {
-              "$ref": "common.schema.json#/$defs/DateTime"
-            },
-            "withdrawable": {
-              "const": true
-            }
-          }
-        },
-        "privacy": {
-          "type": "object",
-          "required": [
-            "personalData"
-          ],
-          "unevaluatedProperties": false,
-          "properties": {
-            "personalData": {
-              "const": "none"
-            },
-            "timePrecision": {
-              "enum": [
-                "minute",
-                "hour",
-                "day"
-              ],
-              "description": "Times may be coarsened before sharing; day is the default for open datasets."
-            }
-          }
-        },
-        "signature": {
-          "$ref": "common.schema.json#/$defs/Signature"
-        }
+      "comment": {
+       "$ref": "common.schema.json#/$defs/UntrustedText"
       }
+     }
     },
-    "LimitAction": {
-      "enum": [
-        "refuse_start",
-        "cut_heat",
-        "stop_motion",
-        "stop_all",
-        "ask_human",
-        "alert"
-      ]
-    },
-    "SafetyLimit": {
-      "type": "object",
-      "required": [
-        "id",
-        "kind",
-        "action",
-        "source"
-      ],
-      "unevaluatedProperties": false,
-      "properties": {
-        "id": {
-          "type": "string",
-          "pattern": "^[a-z0-9._-]+$"
-        },
-        "kind": {
-          "enum": [
-            "max_temp",
-            "min_core_temp",
-            "time_temp",
-            "allergen_block",
-            "unattended",
-            "pressure",
-            "smoke_or_fire",
-            "stop",
-            "untrusted_input"
-          ]
-        },
-        "appliesTo": {
-          "type": "object",
-          "unevaluatedProperties": false,
-          "properties": {
-            "medium": {
-              "type": "string"
-            },
-            "ops": {
-              "type": "array",
-              "items": {
-                "$ref": "common.schema.json#/$defs/VocabId"
-              }
-            },
-            "foodClass": {
-              "type": "string"
-            }
-          }
-        },
-        "min": {
-          "type": "number"
-        },
-        "max": {
-          "type": "number"
-        },
-        "unit": {
-          "enum": [
-            "degC",
-            "kPa",
-            "s",
-            "min",
-            "h"
-          ]
-        },
-        "holdFor": {
-          "$ref": "common.schema.json#/$defs/Duration"
-        },
-        "action": {
-          "$ref": "#/$defs/LimitAction"
-        },
-        "message": {
-          "type": "string",
-          "maxLength": 200
-        },
-        "source": {
-          "type": "string",
-          "maxLength": 200
-        }
-      }
-    },
-    "SafetyLimits": {
-      "type": "object",
-      "required": [
-        "core",
-        "kind",
-        "id",
-        "version",
-        "limits",
-        "disclaimer"
-      ],
-      "unevaluatedProperties": false,
-      "patternProperties": {
-        "^x-": {}
+    "consent": {
+     "type": "object",
+     "required": [
+      "dataset"
+     ],
+     "unevaluatedProperties": false,
+     "description": "Opt-in only. Default none: the log stays on the device or hub.",
+     "properties": {
+      "dataset": {
+       "enum": [
+        "none",
+        "research_only",
+        "open"
+       ]
       },
-      "description": "Limits an executor enforces on the device itself. No recipe, agent, remote message, extension or operating mode can raise or disable them; only the device maker (and, more strictly, local law) can change them. A stricter limit always wins over a looser one.",
-      "properties": {
-        "core": {
-          "$ref": "#/$defs/CoreVersion"
-        },
-        "kind": {
-          "const": "SafetyLimits"
-        },
-        "id": {
-          "type": "string"
-        },
-        "version": {
-          "$ref": "common.schema.json#/$defs/SpecVersion"
-        },
-        "status": {
-          "enum": [
-            "draft",
-            "reviewed",
-            "adopted"
-          ]
-        },
-        "reviewedBy": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "limits": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "$ref": "#/$defs/SafetyLimit"
-          }
-        },
-        "disclaimer": {
-          "type": "string"
-        }
-      }
-    },
-    "Recall": {
-      "type": "object",
-      "required": [
-        "core",
-        "kind",
-        "id",
-        "issuedAt",
-        "issuer",
-        "targets",
-        "severity",
-        "reason",
-        "action",
-        "signature"
-      ],
-      "unevaluatedProperties": false,
-      "patternProperties": {
-        "^x-": {}
+      "grantedBy": {
+       "type": "string",
+       "description": "Opaque id of the household account; never a name."
       },
-      "description": "Withdraws a recipe revision, an extension or a rule pack. Catalogs publish recalls in a feed (GET /v1/recalls); executors check the feed when online and refuse recalled revisions within the window the action names.",
-      "properties": {
-        "core": {
-          "$ref": "#/$defs/CoreVersion"
-        },
-        "kind": {
-          "const": "Recall"
-        },
-        "id": {
-          "$ref": "#/$defs/Id"
-        },
-        "issuedAt": {
-          "$ref": "common.schema.json#/$defs/DateTime"
-        },
-        "issuer": {
-          "type": "string",
-          "description": "Catalog or authority issuing the recall; its key must be trusted by the executor."
-        },
-        "targets": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "type": "object",
-            "required": [
-              "ref"
-            ],
-            "unevaluatedProperties": false,
-            "properties": {
-              "ref": {
-                "$ref": "common.schema.json#/$defs/GlobalRef"
-              },
-              "hash": {
-                "$ref": "common.schema.json#/$defs/Hash"
-              },
-              "allRevisions": {
-                "type": "boolean"
-              }
-            }
-          }
-        },
-        "severity": {
-          "$ref": "common.schema.json#/$defs/Severity"
-        },
-        "reason": {
-          "enum": [
-            "food_safety",
-            "allergen",
-            "device_safety",
-            "security",
-            "legal",
-            "quality"
-          ]
-        },
-        "action": {
-          "enum": [
-            "block",
-            "block_and_stop_running",
-            "warn"
-          ]
-        },
-        "replacement": {
-          "$ref": "common.schema.json#/$defs/GlobalRef"
-        },
-        "detail": {
-          "type": "string",
-          "maxLength": 1000
-        },
-        "signature": {
-          "$ref": "common.schema.json#/$defs/Signature"
-        }
-      }
-    },
-    "IncidentReport": {
-      "type": "object",
-      "required": [
-        "core",
-        "kind",
-        "id",
-        "date",
-        "category",
-        "severity",
-        "description"
-      ],
-      "unevaluatedProperties": false,
-      "patternProperties": {
-        "^x-": {}
+      "grantedAt": {
+       "$ref": "common.schema.json#/$defs/DateTime"
       },
-      "description": "Anonymous near-miss or incident report, modelled on aviation's confidential reporting. No names, addresses, account ids or exact times; dates only.",
-      "properties": {
-        "core": {
-          "$ref": "#/$defs/CoreVersion"
-        },
-        "kind": {
-          "const": "IncidentReport"
-        },
-        "id": {
-          "$ref": "#/$defs/Id"
-        },
-        "date": {
-          "type": "string",
-          "format": "date"
-        },
-        "category": {
-          "type": "string",
-          "description": "Id from vocab/incidents.json."
-        },
-        "severity": {
-          "$ref": "common.schema.json#/$defs/Severity"
-        },
-        "outcome": {
-          "enum": [
-            "near_miss",
-            "minor_injury",
-            "injury",
-            "property_damage",
-            "illness_suspected",
-            "none"
-          ]
-        },
-        "op": {
-          "$ref": "common.schema.json#/$defs/VocabId"
-        },
-        "deviceModel": {
-          "type": "string"
-        },
-        "recipe": {
-          "$ref": "common.schema.json#/$defs/GlobalRef"
-        },
-        "safetyLimitsFired": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "description": {
-          "$ref": "common.schema.json#/$defs/UntrustedText"
-        },
-        "contributingFactors": {
-          "type": "array",
-          "items": {
-            "enum": [
-              "sensor_missing",
-              "sensor_fault",
-              "envelope_unclear",
-              "recipe_error",
-              "agent_instruction",
-              "human_override",
-              "network",
-              "power",
-              "other"
-            ]
-          }
-        }
+      "withdrawable": {
+       "const": true
       }
+     }
     },
-    "ConformanceVector": {
-      "type": "object",
-      "required": [
-        "id",
-        "kind",
-        "description",
-        "input",
-        "expected"
-      ],
-      "unevaluatedProperties": false,
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "kind": {
-          "enum": [
-            "hash",
-            "signature",
-            "disclosure",
-            "envelope",
-            "units",
-            "execution_transition",
-            "mission_transition",
-            "ledger"
-          ]
-        },
-        "description": {
-          "type": "string"
-        },
-        "input": {},
-        "expected": {}
+    "privacy": {
+     "type": "object",
+     "required": [
+      "personalData"
+     ],
+     "unevaluatedProperties": false,
+     "properties": {
+      "personalData": {
+       "const": "none"
+      },
+      "timePrecision": {
+       "enum": [
+        "minute",
+        "hour",
+        "day"
+       ],
+       "description": "Times may be coarsened before sharing; day is the default for open datasets."
       }
+     }
+    },
+    "signature": {
+     "$ref": "common.schema.json#/$defs/Signature"
     }
+   }
+  },
+  "LimitAction": {
+   "enum": [
+    "refuse_start",
+    "cut_heat",
+    "stop_motion",
+    "stop_all",
+    "ask_human",
+    "alert"
+   ]
+  },
+  "SafetyLimit": {
+   "type": "object",
+   "required": [
+    "id",
+    "kind",
+    "action",
+    "source"
+   ],
+   "unevaluatedProperties": false,
+   "properties": {
+    "id": {
+     "type": "string",
+     "pattern": "^[a-z0-9._-]+$"
+    },
+    "kind": {
+     "enum": [
+      "max_temp",
+      "min_core_temp",
+      "time_temp",
+      "allergen_block",
+      "unattended",
+      "pressure",
+      "smoke_or_fire",
+      "stop",
+      "untrusted_input"
+     ]
+    },
+    "appliesTo": {
+     "type": "object",
+     "unevaluatedProperties": false,
+     "properties": {
+      "medium": {
+       "type": "string"
+      },
+      "ops": {
+       "type": "array",
+       "items": {
+        "$ref": "common.schema.json#/$defs/VocabId"
+       }
+      },
+      "foodClass": {
+       "type": "string"
+      }
+     }
+    },
+    "min": {
+     "type": "number"
+    },
+    "max": {
+     "type": "number"
+    },
+    "unit": {
+     "enum": [
+      "degC",
+      "kPa",
+      "s",
+      "min",
+      "h"
+     ]
+    },
+    "holdFor": {
+     "$ref": "common.schema.json#/$defs/Duration"
+    },
+    "action": {
+     "$ref": "#/$defs/LimitAction"
+    },
+    "message": {
+     "type": "string",
+     "maxLength": 200
+    },
+    "source": {
+     "type": "string",
+     "maxLength": 200
+    }
+   }
+  },
+  "SafetyLimits": {
+   "type": "object",
+   "required": [
+    "core",
+    "kind",
+    "id",
+    "version",
+    "limits",
+    "disclaimer"
+   ],
+   "unevaluatedProperties": false,
+   "patternProperties": {
+    "^x-": {}
+   },
+   "description": "Limits an executor enforces on the device itself. No recipe, agent, remote message, extension or operating mode can raise or disable them; only the device maker (and, more strictly, local law) can change them. A stricter limit always wins over a looser one.",
+   "properties": {
+    "core": {
+     "$ref": "#/$defs/CoreVersion"
+    },
+    "kind": {
+     "const": "SafetyLimits"
+    },
+    "id": {
+     "type": "string"
+    },
+    "version": {
+     "$ref": "common.schema.json#/$defs/SpecVersion"
+    },
+    "status": {
+     "enum": [
+      "draft",
+      "reviewed",
+      "adopted"
+     ]
+    },
+    "reviewedBy": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "limits": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "$ref": "#/$defs/SafetyLimit"
+     }
+    },
+    "disclaimer": {
+     "type": "string"
+    }
+   }
+  },
+  "Recall": {
+   "type": "object",
+   "required": [
+    "core",
+    "kind",
+    "id",
+    "issuedAt",
+    "issuer",
+    "targets",
+    "severity",
+    "reason",
+    "action",
+    "signature"
+   ],
+   "unevaluatedProperties": false,
+   "patternProperties": {
+    "^x-": {}
+   },
+   "description": "Withdraws a recipe revision, an extension or a rule pack. Catalogs publish recalls in a feed (GET /v1/recalls); executors check the feed when online and refuse recalled revisions within the window the action names.",
+   "properties": {
+    "core": {
+     "$ref": "#/$defs/CoreVersion"
+    },
+    "kind": {
+     "const": "Recall"
+    },
+    "id": {
+     "$ref": "#/$defs/Id"
+    },
+    "issuedAt": {
+     "$ref": "common.schema.json#/$defs/DateTime"
+    },
+    "issuer": {
+     "type": "string",
+     "description": "Catalog or authority issuing the recall; its key must be trusted by the executor."
+    },
+    "targets": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "required": [
+       "ref"
+      ],
+      "unevaluatedProperties": false,
+      "properties": {
+       "ref": {
+        "$ref": "common.schema.json#/$defs/GlobalRef"
+       },
+       "hash": {
+        "$ref": "common.schema.json#/$defs/Hash"
+       },
+       "allRevisions": {
+        "type": "boolean"
+       }
+      }
+     }
+    },
+    "severity": {
+     "$ref": "common.schema.json#/$defs/Severity"
+    },
+    "reason": {
+     "enum": [
+      "food_safety",
+      "allergen",
+      "device_safety",
+      "security",
+      "legal",
+      "quality"
+     ]
+    },
+    "action": {
+     "enum": [
+      "block",
+      "block_and_stop_running",
+      "warn"
+     ]
+    },
+    "replacement": {
+     "$ref": "common.schema.json#/$defs/GlobalRef"
+    },
+    "detail": {
+     "type": "string",
+     "maxLength": 1000
+    },
+    "signature": {
+     "$ref": "common.schema.json#/$defs/Signature"
+    }
+   }
+  },
+  "IncidentReport": {
+   "type": "object",
+   "required": [
+    "core",
+    "kind",
+    "id",
+    "date",
+    "category",
+    "severity",
+    "description"
+   ],
+   "unevaluatedProperties": false,
+   "patternProperties": {
+    "^x-": {}
+   },
+   "description": "Anonymous near-miss or incident report, modelled on aviation's confidential reporting. No names, addresses, account ids or exact times; dates only.",
+   "properties": {
+    "core": {
+     "$ref": "#/$defs/CoreVersion"
+    },
+    "kind": {
+     "const": "IncidentReport"
+    },
+    "id": {
+     "$ref": "#/$defs/Id"
+    },
+    "date": {
+     "type": "string",
+     "format": "date"
+    },
+    "category": {
+     "type": "string",
+     "description": "Id from vocab/incidents.json."
+    },
+    "severity": {
+     "$ref": "common.schema.json#/$defs/Severity"
+    },
+    "outcome": {
+     "enum": [
+      "near_miss",
+      "minor_injury",
+      "injury",
+      "property_damage",
+      "illness_suspected",
+      "none"
+     ]
+    },
+    "op": {
+     "$ref": "common.schema.json#/$defs/VocabId"
+    },
+    "deviceModel": {
+     "type": "string"
+    },
+    "recipe": {
+     "$ref": "common.schema.json#/$defs/GlobalRef"
+    },
+    "safetyLimitsFired": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "description": {
+     "$ref": "common.schema.json#/$defs/UntrustedText"
+    },
+    "contributingFactors": {
+     "type": "array",
+     "items": {
+      "enum": [
+       "sensor_missing",
+       "sensor_fault",
+       "envelope_unclear",
+       "recipe_error",
+       "agent_instruction",
+       "human_override",
+       "network",
+       "power",
+       "other"
+      ]
+     }
+    }
+   }
+  },
+  "ConformanceVector": {
+   "type": "object",
+   "required": [
+    "id",
+    "kind",
+    "description",
+    "input",
+    "expected"
+   ],
+   "unevaluatedProperties": false,
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "kind": {
+     "enum": [
+      "hash",
+      "signature",
+      "disclosure",
+      "envelope",
+      "units",
+      "execution_transition",
+      "mission_transition",
+      "ledger",
+      "dryrun"
+     ]
+    },
+    "description": {
+     "type": "string"
+    },
+    "input": {},
+    "expected": {}
+   }
   }
+ }
 }

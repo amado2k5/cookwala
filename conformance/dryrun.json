@@ -1,0 +1,330 @@
+[
+ {
+  "id": "dryrun-deep-fry-in-envelope-accepted",
+  "kind": "dryrun",
+  "description": "Oil target 175 °C inside the deep-fry envelope with an oil sensor and a person present: accepted.",
+  "input": {
+   "recipe": {
+    "process": {
+     "nodes": [
+      {
+       "id": "n1",
+       "op": "cw.op.deep_fry",
+       "params": {
+        "oilTempC": 175
+       }
+      }
+     ]
+    }
+   },
+   "capabilities": {
+    "capabilities": {
+     "ops": [
+      {
+       "op": "cw.op.deep_fry"
+      },
+      {
+       "op": "cw.op.saute"
+      }
+     ],
+     "sensors": [
+      {
+       "sensor": "cw.sense.oil_temp"
+      },
+      {
+       "sensor": "cw.sense.pan_surface_temp"
+      }
+     ]
+    }
+   },
+   "humanPresent": true,
+   "allowModel": true
+  },
+  "expected": {
+   "state": "accepted",
+   "reason": null,
+   "by": [
+    "device"
+   ]
+  }
+ },
+ {
+  "id": "dryrun-target-outside-envelope-refused",
+  "kind": "dryrun",
+  "description": "Oil target 260 °C is outside the 160–190 °C envelope: refused before any ladder is climbed, whoever is present.",
+  "input": {
+   "recipe": {
+    "process": {
+     "nodes": [
+      {
+       "id": "n1",
+       "op": "cw.op.deep_fry",
+       "params": {
+        "oilTempC": 260
+       }
+      }
+     ]
+    }
+   },
+   "capabilities": {
+    "capabilities": {
+     "ops": [
+      {
+       "op": "cw.op.deep_fry"
+      },
+      {
+       "op": "cw.op.saute"
+      }
+     ],
+     "sensors": [
+      {
+       "sensor": "cw.sense.oil_temp"
+      },
+      {
+       "sensor": "cw.sense.pan_surface_temp"
+      }
+     ]
+    }
+   },
+   "humanPresent": true,
+   "allowModel": true
+  },
+  "expected": {
+   "state": "refused",
+   "reason": "envelope_out_of_range",
+   "by": []
+  }
+ },
+ {
+  "id": "dryrun-non-numeric-temperature-refused",
+  "kind": "dryrun",
+  "description": "A temperature given as a string is not a number: refused, never coerced.",
+  "input": {
+   "recipe": {
+    "process": {
+     "nodes": [
+      {
+       "id": "n1",
+       "op": "cw.op.deep_fry",
+       "params": {
+        "oilTempC": "185"
+       }
+      }
+     ]
+    }
+   },
+   "capabilities": {
+    "capabilities": {
+     "ops": [
+      {
+       "op": "cw.op.deep_fry"
+      },
+      {
+       "op": "cw.op.saute"
+      }
+     ],
+     "sensors": [
+      {
+       "sensor": "cw.sense.oil_temp"
+      },
+      {
+       "sensor": "cw.sense.pan_surface_temp"
+      }
+     ]
+    }
+   },
+   "humanPresent": true,
+   "allowModel": true
+  },
+  "expected": {
+   "state": "refused",
+   "reason": "envelope_out_of_range",
+   "by": []
+  }
+ },
+ {
+  "id": "dryrun-stricter-local-limit-refused",
+  "kind": "dryrun",
+  "description": "A target inside the envelope but above a stricter local SafetyLimits pack: the stricter limit wins.",
+  "input": {
+   "recipe": {
+    "process": {
+     "nodes": [
+      {
+       "id": "n1",
+       "op": "cw.op.deep_fry",
+       "params": {
+        "oilTempC": 175
+       }
+      }
+     ]
+    }
+   },
+   "capabilities": {
+    "capabilities": {
+     "ops": [
+      {
+       "op": "cw.op.deep_fry"
+      },
+      {
+       "op": "cw.op.saute"
+      }
+     ],
+     "sensors": [
+      {
+       "sensor": "cw.sense.oil_temp"
+      },
+      {
+       "sensor": "cw.sense.pan_surface_temp"
+      }
+     ]
+    }
+   },
+   "humanPresent": true,
+   "allowModel": true,
+   "limits": {
+    "limits": [
+     {
+      "id": "oil.max_temp.site",
+      "kind": "max_temp",
+      "unit": "degC",
+      "max": 170,
+      "appliesTo": {
+       "ops": [
+        "cw.op.deep_fry"
+       ]
+      }
+     }
+    ]
+   }
+  },
+  "expected": {
+   "state": "refused",
+   "reason": "safety_limit",
+   "by": []
+  }
+ },
+ {
+  "id": "dryrun-heat-level-cannot-hold-envelope-refused",
+  "kind": "dryrun",
+  "description": "Heat level max (pan 240–280 °C) cannot hold the sauté envelope 150–210 °C: refused.",
+  "input": {
+   "recipe": {
+    "process": {
+     "nodes": [
+      {
+       "id": "n1",
+       "op": "cw.op.saute",
+       "params": {
+        "heat": "max"
+       }
+      }
+     ]
+    }
+   },
+   "capabilities": {
+    "capabilities": {
+     "ops": [
+      {
+       "op": "cw.op.deep_fry"
+      },
+      {
+       "op": "cw.op.saute"
+      }
+     ],
+     "sensors": [
+      {
+       "sensor": "cw.sense.oil_temp"
+      },
+      {
+       "sensor": "cw.sense.pan_surface_temp"
+      }
+     ]
+    }
+   },
+   "humanPresent": true,
+   "allowModel": true
+  },
+  "expected": {
+   "state": "refused",
+   "reason": "envelope_out_of_range",
+   "by": []
+  }
+ },
+ {
+  "id": "dryrun-legacy-step-claimed-by-device-nobody-present",
+  "kind": "dryrun",
+  "description": "A device that declares cw.op.legacy_step is ignored (executable: false); with nobody present the step is refused.",
+  "input": {
+   "recipe": {
+    "process": {
+     "nodes": [
+      {
+       "id": "n1",
+       "op": "cw.op.legacy_step",
+       "params": {
+        "sourceStep": 1
+       }
+      }
+     ]
+    }
+   },
+   "capabilities": {
+    "capabilities": {
+     "ops": [
+      {
+       "op": "cw.op.legacy_step"
+      }
+     ],
+     "sensors": []
+    }
+   },
+   "humanPresent": false,
+   "allowModel": true
+  },
+  "expected": {
+   "state": "refused",
+   "reason": "missing_capability",
+   "by": []
+  }
+ },
+ {
+  "id": "dryrun-legacy-step-assigned-to-person",
+  "kind": "dryrun",
+  "description": "The same step with a person present is assigned to the person, never to the device (RFC-0009).",
+  "input": {
+   "recipe": {
+    "process": {
+     "nodes": [
+      {
+       "id": "n1",
+       "op": "cw.op.legacy_step",
+       "params": {
+        "sourceStep": 1
+       }
+      }
+     ]
+    }
+   },
+   "capabilities": {
+    "capabilities": {
+     "ops": [
+      {
+       "op": "cw.op.legacy_step"
+      }
+     ],
+     "sensors": []
+    }
+   },
+   "humanPresent": true,
+   "allowModel": true
+  },
+  "expected": {
+   "state": "accepted",
+   "reason": null,
+   "by": [
+    "human"
+   ]
+  }
+ }
+]

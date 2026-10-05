@@ -43,6 +43,24 @@ presence from its own sensors.
 Limits: one device, one process, in-memory state, no TLS, no pairing. It is a test bed, not a
 product; see `docs/CERTIFICATION.md` for what a real executor must also prove.
 
+## Authentication, CORS and the network
+
+- `--token TOKEN` (or `COOKWALA_HUB_TOKEN`): every request must carry `Authorization: Bearer TOKEN`
+  or gets `401` with a problem document. Without it the hub is an **open test bed** and prints
+  `auth=NONE` at start-up. `POST /v1/executions/{id}/stop` never requires the token or an
+  `Idempotency-Key` header (Core 6.2: a stop is never refused once the caller can reach the executor).
+- `--cors ORIGIN`: send CORS headers for that one browser origin. Default: no CORS headers at all.
+- `--bind 0.0.0.0` to listen on the network; the default is `127.0.0.1`.
+- Status documents validate against `ExecutionStatus`: `request` is the request id, the running
+  step is under `step`, and the hub's own plan and simulated medium reading travel as `x-hub-plan`
+  and `x-hub-mediumTempC`. `ETag` is a quoted entity-tag; `If-Match` accepts it quoted or bare.
+- `POST /v1/incidents` validates the body against `IncidentReport` and answers `400` otherwise.
+- Before accepting, the hub runs the same dry run as the CLI **with its SafetyLimits**: a target
+  outside the operation envelope, a non-numeric temperature, a heat level that cannot hold the
+  envelope, or a value above a stricter local limit is refused (`envelope_out_of_range`,
+  `safety_limit`). Allergen blocks match the recipe's declared allergens in every scheme and on
+  every ingredient.
+
 ## Reference tools over HTTP (`/v1/tools/*`)
 
 Not part of the Core API. The hub exposes the reference library so a client in any language gets

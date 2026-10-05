@@ -19,7 +19,10 @@ info:
     identifier: Apache-2.0
 servers:
   - url: https://hub.local/cookwala
-    description: A kitchen hub or device on the local network
+    description: |
+      A kitchen hub or device on the local network. The reference hub (hub/cookwala_hub.py) enforces the
+      bearer token only when started with --token; without it, it is an open test bed on 127.0.0.1 and says so
+      at start-up. POST …/stop never requires the token or an Idempotency-Key (Core 6.2).
 security:
   - bearer: []
 paths:

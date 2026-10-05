@@ -58,6 +58,9 @@ def run(v):
         if 'sensors' in i:
             return {'choice': ref.ladder_choice(i['op'], i['sensors'], i['allowModel'], i['humanPresent'])}
         return ref.check_envelope(i['op'], i['readings'], i['target'], i['altitudeM'])
+    if k == 'dryrun':
+        r = ref.dry_run(i['recipe'], i['capabilities'], i.get('humanPresent', False), i.get('allowModel', True), i.get('limits'))
+        return {'state': r['state'], 'reason': (r.get('refusal') or {}).get('reason'), 'by': [p['by'] for p in r.get('plan', [])]}
     if k == 'execution_transition':
         return {'allowed': ref.execution_transition_allowed(i['from'], i['to'])}
     if k == 'mission_transition':

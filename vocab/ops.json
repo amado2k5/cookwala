@@ -3059,7 +3059,7 @@
     "en": "Unclassified step (V0 import)",
     "ar": "خطوة غير مصنفة (استيراد V0)"
    },
-   "definition": "A step imported from a human recipe that has not been classified into an executable operation. Carries the original sentence and an optional opHint. No device declares this capability, so a dry run assigns it to a person or refuses; it never executes on a machine (RFC-0009).",
+   "definition": "A step imported from a human recipe that has not been classified into an executable operation. Carries the original sentence and an optional opHint. executable is false: a device that declares it is ignored, so a dry run assigns it to a person or refuses; it never executes on a machine (RFC-0009).",
    "classes": [
     "cw.opfamily.aux",
     "cw.opfamily.legacy"
@@ -3086,7 +3086,8 @@
     },
     "unevaluatedProperties": false
    },
-   "sensors": []
+   "sensors": [],
+   "executable": false
   }
  ]
 }

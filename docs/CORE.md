@@ -203,7 +203,7 @@ and it has real users.
 | Tool | What it does |
 |---|---|
 | `tools/validate_specs.py` | Checks schemas, examples, recipe semantics (envelopes, op parameters, no template placeholders), strictness, and that API references resolve |
-| `tools/run_conformance.py` | Runs `conformance/*.json` and `conformance/profiles/*.json`, and writes a ConformanceReport with `--report`: hashing (including the RFC 8785 example), signatures (including an RFC 8032 key), revocation, disclosure, event chains and checkpoints, units, envelopes, sensor ladders, state machines |
+| `tools/run_conformance.py` | Runs `conformance/*.json` and `conformance/profiles/*.json`, and writes a ConformanceReport with `--report`: hashing (including the RFC 8785 example), signatures (including an RFC 8032 key), revocation, disclosure, event chains and checkpoints, units, envelopes, sensor ladders, executor dry runs (targets outside an envelope, non-numeric numbers, stricter local limits, heat levels, the non-executable legacy step), state machines |
 | `tools/cookwala_ref.py` | Reference library and CLI: `hash`, `verify`, `chain` |
 | `tools/make_conformance.py` | Regenerates the vectors (review the diff) |
 | `tools/bundle_schemas.py` | Offline schema bundle |
@@ -223,7 +223,7 @@ and it has real users.
 | Agents | Mandate inside Missions only | `AgentMandate` in common; required for agent requests |
 | Safety | Declared in recipes | Also enforced locally through SafetyLimits; recalls; incident reports |
 | Data | No dataset model | Consented, personal-data-free ExecutionLog |
-| Conformance | Schema validation only | 106 vectors (44 Core, 62 profile) plus a reference implementation |
+| Conformance | Schema validation only | 113 vectors (51 Core, 62 profile) plus a reference implementation |
 
 To migrate a 0.1 document: convert °F to °C; replace relative tolerances on temperatures with
 `toleranceAbs`; turn money amounts into decimal strings; remove or rename unknown fields to

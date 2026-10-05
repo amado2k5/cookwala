@@ -14,7 +14,7 @@
   {"op": "getExecution", "args": {"id": "ex-042-resume"}, "save": "status", "note": {"en": "Read the status and keep its seq."}, "expect": {"state": "needs_human", "seq": 6}},
   {"op": "resumeExecution", "args": {"id": "ex-042-resume", "seq": {"$var": "status", "path": "seq"}}, "save": "resumed", "note": {"en": "Resume with the seq just read. The hub accepts and the run continues: the person is heating the pan."}, "expect": {"state": "running", "seq": 7}},
   {"op": "wait", "note": {"en": "One simulated minute of heating passes."}, "seconds": 2},
-  {"op": "getExecution", "args": {"id": "ex-042-resume"}, "save": "next", "note": {"en": "The next step, sautéing the onion, is again one a person performs on this device, so the run waits once more with a higher seq."}, "expect": {"state": "needs_human", "seq": 8, "humanNeeded": "a person performs cw.op.saute"}}
+  {"op": "getExecution", "args": {"id": "ex-042-resume"}, "save": "next", "note": {"en": "The next step, sautéing the onion, is again one a person performs on this device, so the run waits once more with a higher seq."}, "expect": {"state": "needs_human", "seq": 8, "humanNeeded.why": "a person performs cw.op.saute"}}
  ],
  "cli": [
   "cookwala hub --recipes examples --speed 200",

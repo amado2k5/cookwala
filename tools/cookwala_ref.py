@@ -299,18 +299,76 @@ def ladder_choice(op_id, available_sensors, allow_model=True, human_present=Fals
 # ---------------------------------------------------------------- dry run
 
 
-def dry_run(recipe, capabilities, human_present=False, allow_model=True):
+def _heat_bands():
+    return {e['id'].split('.')[-1]: (e['surfaceTempC']['min'], e['surfaceTempC']['max']) for e in json.loads((ROOT / 'vocab' / 'units.json').read_text())['entries'] if 'surfaceTempC' in e}
+
+
+def _finite(x):
+    return isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x)
+
+
+def check_node_params(op_id, node, limits=None, vocab=None):
+    """Executor-side check of a step's numbers against the operation envelope and the local SafetyLimits.
+
+    Returns None when the step may be planned, else (reason, detail) with reason
+    envelope_out_of_range or safety_limit. Checks params.tempC, params.oilTempC, params.pressureKPa,
+    a temperature target, and a hob heat level against the envelope; then every temperature against
+    the stricter of the applicable max_temp limits. A non-numeric or non-finite number is refused.
+    """
+    vocab = vocab or _vocab('ops')
+    env = vocab.get(op_id, {}).get('envelope') or {}
+    params = node.get('params') or {}
+    temps = []
+    for key in ('tempC', 'oilTempC'):
+        if key in params: temps.append((key, params[key]))
+    tgt = params.get('target') or node.get('target')
+    if isinstance(tgt, dict) and 'value' in tgt and tgt.get('unit', 'degC') in ('degC', 'C'):
+        temps.append(('target', tgt['value']))
+    for key, t in temps:
+        if not _finite(t): return 'envelope_out_of_range', f'{key} is not a finite number'
+    band = env.get('tempC')
+    if band:
+        for key, t in temps:
+            if t < band['min'] or t > band['max']:
+                return 'envelope_out_of_range', f'{key} {t:g} °C is outside the {op_id} envelope {band["min"]}–{band["max"]} °C'
+        heat = params.get('heat')
+        if env.get('medium') == 'pan_surface' and isinstance(heat, str):
+            hb = _heat_bands().get(heat)
+            if hb and (hb[1] < band['min'] or hb[0] > band['max']):
+                return 'envelope_out_of_range', f'heat level {heat} (pan {hb[0]}–{hb[1]} °C) cannot hold the {op_id} envelope {band["min"]}–{band["max"]} °C'
+    pk = params.get('pressureKPa')
+    if pk is not None:
+        if not _finite(pk): return 'envelope_out_of_range', 'pressureKPa is not a finite number'
+        pb = env.get('pressureKPa')
+        if pb and (pk < pb['min'] or pk > pb['max']):
+            return 'envelope_out_of_range', f'pressure {pk:g} kPa is outside the {op_id} envelope {pb["min"]}–{pb["max"]} kPa'
+    for lim in (limits or {}).get('limits', []):
+        applies = lim.get('appliesTo', {})
+        if applies.get('ops') and op_id not in applies['ops']: continue
+        if applies.get('medium') and applies['medium'] != env.get('medium'): continue
+        if not applies.get('ops') and not applies.get('medium'): continue
+        if lim.get('kind') == 'max_temp' and lim.get('unit') == 'degC':
+            for key, t in temps:
+                if t > lim['max']: return 'safety_limit', f'{key} {t:g} °C exceeds local limit {lim["id"]} ({lim["max"]} °C)'
+        if lim.get('kind') == 'pressure' and pk is not None and pk > lim.get('max', float('inf')):
+            return 'safety_limit', f'pressure {pk:g} kPa exceeds local limit {lim["id"]} ({lim["max"]} kPa)'
+    return None
+
+
+def dry_run(recipe, capabilities, human_present=False, allow_model=True, limits=None):
     """Decide, before cooking, whether a device can run every step of a recipe.
 
     Returns an ExecutionStatus-like dict: state accepted (with the sensor-ladder rung chosen per
-    step) or refused (with the first blocking reason). Nothing is executed.
+    step) or refused (with the first blocking reason). Nothing is executed. Steps whose numbers
+    fall outside the operation envelope or the local SafetyLimits are refused before any ladder is
+    climbed; operations marked executable:false in the vocabulary never run on a device.
     """
     caps = capabilities.get('capabilities', {})
-    ops = {o['op'] for o in caps.get('ops', [])}
+    vocab = _vocab('ops')
+    ops = {o['op'] for o in caps.get('ops', []) if vocab.get(o['op'], {}).get('executable', True) is not False}
     sensors = {s['sensor'] for s in caps.get('sensors', [])}
     for s in caps.get('sensors', []):
         sensors.update(s.get('visionCues', []))
-    vocab = _vocab('ops')
     plan = []
     for node in recipe.get('process', {}).get('nodes', []):
         op = node['op']
@@ -319,6 +377,9 @@ def dry_run(recipe, capabilities, human_present=False, allow_model=True):
             if human_present and ('human' in assign or 'any' in assign):
                 plan.append({'node': node['id'], 'op': op, 'by': 'human', 'verifiedBy': 'human'}); continue
             return {'state': 'refused', 'refusal': {'reason': 'missing_capability', 'node': node['id'], 'detail': f'device cannot perform {op} and no person is present to do it'}, 'plan': plan}
+        bad = check_node_params(op, node, limits, vocab)
+        if bad:
+            return {'state': 'refused', 'refusal': {'reason': bad[0], 'node': node['id'], 'detail': bad[1]}, 'plan': plan}
         env = vocab.get(op, {}).get('envelope', {})
         if env and not env.get('unattended', True) and not human_present:
             return {'state': 'refused', 'refusal': {'reason': 'needs_human_present', 'node': node['id'], 'detail': f'{op} may not run unattended'}, 'plan': plan}

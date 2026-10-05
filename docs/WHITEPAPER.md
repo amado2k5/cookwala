@@ -152,7 +152,7 @@ Dignity rules govern every page about people served.
 
 ## 9. Conformance
 
-Conformance is running code: 106 public vectors (hashing including the RFC 8785 example,
+Conformance is running code: 113 public vectors (hashing including the RFC 8785 example,
 signatures including an RFC 8032 key, revocation, disclosure, event chains, units,
 envelopes, ladders, state machines, disclosure policy, registry rules, SMS grammar, signal
 policy, relay verification). A claim is a signed `ConformanceReport` naming the vectors run,

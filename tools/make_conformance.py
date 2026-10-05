@@ -140,3 +140,25 @@ write('transitions', [
     {'id': f'mission-{a}-{b}-{r}', 'kind': 'mission_transition', 'description': f'Mission {a} -> {b} by {r}', 'input': {'from': a, 'to': b, 'role': r}, 'expected': {'allowed': ref.mission_transition_allowed(a, b, r)}}
     for a, b, r in [('ready', 'committed', 'holder'), ('ready', 'committed', 'executor'), ('closed', 'executing', 'holder'), ('executing', 'degraded', 'executor'), ('draft', 'executing', 'holder')]
 ])
+
+
+# ---- dry run: refusal before heat at the executor (CORE.md section 3 and 6.1)
+FRYER = {'capabilities': {'ops': [{'op': 'cw.op.deep_fry'}, {'op': 'cw.op.saute'}], 'sensors': [{'sensor': 'cw.sense.oil_temp'}, {'sensor': 'cw.sense.pan_surface_temp'}]}}
+def rec(op, params): return {'process': {'nodes': [{'id': 'n1', 'op': op, 'params': params}]}}
+STRICT = {'limits': [{'id': 'oil.max_temp.site', 'kind': 'max_temp', 'unit': 'degC', 'max': 170, 'appliesTo': {'ops': ['cw.op.deep_fry']}}]}
+vecs = []
+for vid, desc, recipe, caps, human, limits in [
+    ('dryrun-deep-fry-in-envelope-accepted', 'Oil target 175 °C inside the deep-fry envelope with an oil sensor and a person present: accepted.', rec('cw.op.deep_fry', {'oilTempC': 175}), FRYER, True, None),
+    ('dryrun-target-outside-envelope-refused', 'Oil target 260 °C is outside the 160–190 °C envelope: refused before any ladder is climbed, whoever is present.', rec('cw.op.deep_fry', {'oilTempC': 260}), FRYER, True, None),
+    ('dryrun-non-numeric-temperature-refused', 'A temperature given as a string is not a number: refused, never coerced.', rec('cw.op.deep_fry', {'oilTempC': '185'}), FRYER, True, None),
+    ('dryrun-stricter-local-limit-refused', 'A target inside the envelope but above a stricter local SafetyLimits pack: the stricter limit wins.', rec('cw.op.deep_fry', {'oilTempC': 175}), FRYER, True, STRICT),
+    ('dryrun-heat-level-cannot-hold-envelope-refused', 'Heat level max (pan 240–280 °C) cannot hold the sauté envelope 150–210 °C: refused.', rec('cw.op.saute', {'heat': 'max'}), FRYER, True, None),
+    ('dryrun-legacy-step-claimed-by-device-nobody-present', 'A device that declares cw.op.legacy_step is ignored (executable: false); with nobody present the step is refused.', rec('cw.op.legacy_step', {'sourceStep': 1}), {'capabilities': {'ops': [{'op': 'cw.op.legacy_step'}], 'sensors': []}}, False, None),
+    ('dryrun-legacy-step-assigned-to-person', 'The same step with a person present is assigned to the person, never to the device (RFC-0009).', rec('cw.op.legacy_step', {'sourceStep': 1}), {'capabilities': {'ops': [{'op': 'cw.op.legacy_step'}], 'sensors': []}}, True, None),
+]:
+    r = ref.dry_run(recipe, caps, human, True, limits)
+    exp = {'state': r['state'], 'reason': (r.get('refusal') or {}).get('reason'), 'by': [p['by'] for p in r.get('plan', [])]}
+    vecs.append({'id': vid, 'kind': 'dryrun', 'description': desc, 'input': {'recipe': recipe, 'capabilities': caps, 'humanPresent': human, 'allowModel': True, **({'limits': limits} if limits else {})}, 'expected': exp})
+assert [v['expected']['state'] for v in vecs] == ['accepted', 'refused', 'refused', 'refused', 'refused', 'refused', 'accepted'], [v['expected'] for v in vecs]
+assert vecs[-1]['expected']['by'] == ['human'] and vecs[3]['expected']['reason'] == 'safety_limit'
+write('dryrun', vecs)

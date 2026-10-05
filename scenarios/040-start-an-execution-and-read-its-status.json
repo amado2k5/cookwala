@@ -10,10 +10,10 @@
  "requires": ["hub", "repo"],
  "steps": [
   {"op": "capabilities", "save": "hub", "note": {"en": "Read the capability document of the device behind the hub: one counter arm that cuts, cracks and transfers, with a vision sensor and no heat source."}, "expect": {"actor.model": "CounterArm 2", "actor.kind": "robot", "capabilities.ops.length": 3}},
-  {"op": "startExecution", "args": {"request": {"$file": "examples/core/execute-request.json"}, "idempotencyKey": "ex-2026-10-04-001-a", "humanPresent": true}, "save": "started", "note": {"en": "Start the example request for shakshuka. The hub dry-runs the recipe first and answers with an ExecutionStatus at seq 0 that carries the plan."}, "expect": {"state": "accepted", "seq": 0, "id": "ex-2026-10-04-001", "plan.length": 13}},
+  {"op": "startExecution", "args": {"request": {"$file": "examples/core/execute-request.json"}, "idempotencyKey": "ex-2026-10-04-001-a", "humanPresent": true}, "save": "started", "note": {"en": "Start the example request for shakshuka. The hub dry-runs the recipe first and answers with an ExecutionStatus at seq 0 that carries the plan."}, "expect": {"state": "accepted", "seq": 0, "id": "ex-2026-10-04-001", "x-hub-plan.length": 13}},
   {"op": "wait", "note": {"en": "The hub used by the runner simulates time at 200x. The arm dices the onion, pepper and tomato, then reaches the first step a person must perform."}, "seconds": 4},
-  {"op": "getExecution", "args": {"id": "ex-2026-10-04-001"}, "save": "status", "note": {"en": "Read the status: seq has advanced (the ETag header carries the same number) and the device waits for a person to heat the pan."}, "expect": {"state": "needs_human", "seq": 6, "humanNeeded": "a person performs cw.op.heat", "progress": 1.0}},
-  {"op": "assert", "note": {"en": "The status repeats the recipe reference and hash of the request, so a reader can tell which revision is cooking."}, "expect": {"status.recipe": "cw:cookwala.ai:example-shakshuka", "status.recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841"}}
+  {"op": "getExecution", "args": {"id": "ex-2026-10-04-001"}, "save": "status", "note": {"en": "Read the status: seq has advanced (the ETag header carries the same number) and the device waits for a person to heat the pan."}, "expect": {"state": "needs_human", "seq": 6, "humanNeeded.why": "a person performs cw.op.heat", "step.progress": 1.0}},
+  {"op": "assert", "note": {"en": "The status names the request it answers; the recipe reference and hash are in that request and in the execution log."}, "expect": {"status.request": "ex-2026-10-04-001", "status.kind": "ExecutionStatus"}}
  ],
  "cli": [
   "cookwala hub --recipes examples --speed 200",

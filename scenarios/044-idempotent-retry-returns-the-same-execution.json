@@ -13,7 +13,7 @@
   {"op": "wait", "note": {"en": "The run advances to the first step that needs a person."}, "seconds": 4},
   {"op": "startExecution", "args": {"request": {"core": "0.2.0", "kind": "ExecuteRequest", "id": "ex-044-idem", "recipe": "cw:cookwala.ai:example-shakshuka", "recipeHash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841", "servings": 4, "requestedBy": "agent:planner-1", "idempotencyKey": "ex-044-idem-a"}, "idempotencyKey": "ex-044-idem-key", "humanPresent": true}, "save": "retry", "note": {"en": "Send the identical request with the identical key, as a client would after a lost answer. The hub returns the same execution at its current state, not a new one."}, "expect": {"id": "ex-044-idem", "state": "needs_human", "seq": 6}},
   {"op": "getExecution", "args": {"id": "ex-044-idem"}, "save": "status", "note": {"en": "Reading the status confirms there is one execution and it is the one both answers described."}, "expect": {"seq": 6, "state": "needs_human"}},
-  {"op": "assert", "note": {"en": "The retry carried the plan of the original start."}, "expect": {"retry.plan.length": 13}}
+  {"op": "assert", "note": {"en": "The retry carried the plan of the original start."}, "expect": {"retry.x-hub-plan.length": 13}}
  ],
  "cli": [
   "cookwala hub --recipes examples --speed 200",
