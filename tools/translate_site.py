@@ -133,7 +133,7 @@ def translate_json_value(model, host, lang, obj):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--langs', default=','.join(l for l in LANG_NAMES if l != 'ar')); ap.add_argument('--what', default='strings,for,pages,whitepaper')
+    ap.add_argument('--langs', default=','.join(l for l in LANG_NAMES if l != 'ar')); ap.add_argument('--what', default='strings,for,pages,whitepaper,scenarios')
     ap.add_argument('--model', default='gemma4:26b'); ap.add_argument('--host', default='http://localhost:11434'); ap.add_argument('--force', action='store_true'); ap.add_argument('--all', action='store_true')
     a = ap.parse_args()
     langs = [l for l in a.langs.split(',') if l in LANG_NAMES and l != 'ar']
@@ -156,6 +156,17 @@ def main():
                 dst = d / p.name
                 if dst.exists() and not a.force: continue
                 dst.write_text(translate_fragment(a.model, a.host, lang, p.read_text()) + '\n'); print(f'{lang} {p.name} done', flush=True)
+        if 'scenarios' in what:
+            sd = ROOT / 'scenarios' / 'i18n'; sd.mkdir(exist_ok=True); sf = sd / f'{lang}.json'
+            done = json.loads(sf.read_text()) if sf.exists() else {}
+            for p in sorted((ROOT / 'scenarios').glob('[0-9][0-9][0-9]-*.json')):
+                s = json.loads(p.read_text(encoding='utf-8'))
+                if s['id'] in done and not a.force: continue
+                blocks = [s['title']['en'], s['goal']['en'], (s.get('outcome') or {}).get('en', '')] + [st['note']['en'] for st in s['steps']]
+                tr = translate_blocks(a.model, a.host, lang, blocks)
+                done[s['id']] = {'title': tr[0], 'goal': tr[1], 'outcome': tr[2], 'notes': tr[3:]}
+                sf.write_text(json.dumps(done, ensure_ascii=False, indent=1) + '\n')
+            print(f'{lang} scenarios done', flush=True)
         if 'whitepaper' in what:
             from translate_docs import translate_doc
             r = translate_doc(a.host, a.model, lang, ROOT / 'docs' / 'WHITEPAPER.md', ROOT / 'docs' / 'i18n' / lang / 'WHITEPAPER.md', a.force); print(f'{lang} whitepaper {r}', flush=True)

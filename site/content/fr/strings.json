@@ -183,7 +183,7 @@
  "translated_notice": "Cette page a été traduite par une machine et n'a pas encore été révisée par une personne. L'anglais est la référence ; les corrections sont les bienvenues sur GitHub.",
  "recipes": {
   "title": "Recettes",
-  "lead": "{{stat:publishedRecipes}} recettes dans l'index : {{stat:recipesV1}} écrites pour le standard à V1 (structurées, non simulées ou vérifiées sur le terrain) et {{stat:recipesV0}} importées de fifi.cooking à V0 (décrites, non vérifiées par machine). Recherchez par nom dans n'importe laquelle des 25 langues.",
+  "lead": "{{stat:publishedRecipes}} recettes dans l'index : {{stat:recipesV1}} écrites pour le standard à V1 (structurées, non simulées ou vérifiées sur le terrain) et {{stat:recipesV0}} importées de fifi.cooking à V0 (décrites, non vérifiées par machine). Recherchez par nom en anglais, en arabe ou dans la langue de cette page ; chaque recette porte son nom en 25 langues.",
   "search": "Rechercher des recettes",
   "placeholder": "koshari, كشري, lentille",
   "collection": "Collection",

@@ -26,8 +26,22 @@ GOALS = {'hunger': 'goal_hunger', 'health': 'goal_health', 'robots': 'goal_robot
 def sha(b): return 'sha256:' + hashlib.sha256(b).hexdigest()
 
 
+SCEN_I18N = {}
+for _p in (ROOT / 'scenarios' / 'i18n').glob('*.json') if (ROOT / 'scenarios' / 'i18n').exists() else []:
+    try: SCEN_I18N[_p.stem] = json.loads(_p.read_text(encoding='utf-8'))
+    except ValueError: pass
+
+
 def L(m, lang):
     return (m.get(lang) or m.get('en') or '') if isinstance(m, dict) else (m or '')
+
+
+def LS(s, key, lang, step=None):
+    """A scenario string in a language: the sidecar scenarios/i18n/<lang>.json first, then the file's own LangMap."""
+    tr = SCEN_I18N.get(lang, {}).get(s['id'], {})
+    if step is None and tr.get(key): return tr[key]
+    if step is not None and tr.get('notes') and len(tr['notes']) > step and tr['notes'][step]: return tr['notes'][step]
+    return L(s['steps'][step]['note'], lang) if step is not None else L(s.get(key) or {}, lang)
 
 
 class RecipeBuilder:
@@ -156,7 +170,7 @@ class ScenarioBuilder:
         items = []
         for s in self.scen:
             goals = ', '.join(html.escape(S.get(GOALS[g], g)) for g in s['northStar'])
-            items.append(f'<li data-aud="{s["audience"]}" data-goal="{" ".join(s["northStar"])}" data-level="{s.get("level", "beginner")}"><a href="{self.b.path_for(lang, f"/scenarios/{s[chr(105)+chr(100)]}/")}">{s["id"]} · {html.escape(L(s["title"], lang))}</a><div class="meta">{html.escape(s["audience"].replace("_", " "))} · {goals} · {html.escape(s.get("level", "beginner"))}</div></li>')
+            items.append(f'<li data-aud="{s["audience"]}" data-goal="{" ".join(s["northStar"])}" data-level="{s.get("level", "beginner")}"><a href="{self.b.path_for(lang, f"/scenarios/{s[chr(105)+chr(100)]}/")}">{s["id"]} · {html.escape(LS(s, "title", lang))}</a><div class="meta">{html.escape(s["audience"].replace("_", " "))} · {goals} · {html.escape(s.get("level", "beginner"))}</div></li>')
         return ''.join(items)
 
     def build_samples(self):
@@ -173,7 +187,7 @@ class ScenarioBuilder:
         d = self.outdir / f"{s['id']}-{s['slug']}"
         py = (d / 'python.py').read_text(encoding='utf-8') if (d / 'python.py').exists() else ''
         result = json.loads((d / 'result.json').read_text(encoding='utf-8')) if (d / 'result.json').exists() else None
-        steps = ''.join(f'<li><p>{html.escape(L(st["note"], lang))}' + (f' <code>{st["op"]}</code>' if st['op'] not in ('wait', 'assert') else '') + '</p></li>' for st in s['steps'])
+        steps = ''.join(f'<li><p>{html.escape(LS(s, "note", lang, i))}' + (f' <code>{st["op"]}</code>' if st['op'] not in ('wait', 'assert') else '') + '</p></li>' for i, st in enumerate(s['steps']))
         cli = html.escape('\n'.join(s['cli']))
         tabs = ''.join(f'<button type="button" role="tab" aria-selected="{"true" if dd == "python" else "false"}" data-lang="{dd}" data-ext="{ext}">{html.escape(label)}</button>' for dd, label, ext, st in SDK)
         out_html = ''
@@ -190,10 +204,10 @@ class ScenarioBuilder:
         prev_ = self.scen[idx - 1] if idx > 0 else None; next_ = self.scen[idx + 1] if idx + 1 < len(self.scen) else None
         pager = (f'<a href="{self.b.path_for(lang, f"/scenarios/{prev_[chr(105)+chr(100)]}/")}">{html.escape(S["prev"])}: {prev_["id"]}</a> ' if prev_ else '') + (f'<a href="{self.b.path_for(lang, f"/scenarios/{next_[chr(105)+chr(100)]}/")}">{html.escape(S["next"])}: {next_["id"]}</a>' if next_ else '')
         body = (f'<section class="hero wrap" data-scenario="{s["id"]}"><p class="crumb"><a href="{self.b.path_for(lang, "/")}">Cookwala</a> / <a href="{self.b.path_for(lang, "/scenarios/")}">{html.escape(S["title"])}</a> / {s["id"]}</p>'
-                f'<h1>{html.escape(L(s["title"], lang))}</h1><p class="lead">{html.escape(L(s["goal"], lang))}</p>'
+                f'<h1>{html.escape(LS(s, "title", lang))}</h1><p class="lead">{html.escape(LS(s, "goal", lang))}</p>'
                 f'<p class="meta">{html.escape(S["audience"])}: {html.escape(s["audience"].replace("_", " "))} · {html.escape(S["goal"])}: {goals} · {html.escape(S["level"])}: {html.escape(s.get("level", "beginner"))}</p>'
                 + (f'<p class="note">{html.escape(S["read_first"])}: {docs}</p>' if docs else '') + '</section>'
-                f'<section class="wrap two"><div><h2>{html.escape(S["steps"])}</h2><ol class="steps">{steps}</ol>' + (f'<h2>{html.escape(S["outcome"])}</h2><p>{html.escape(L(s["outcome"], lang))}</p>' if s.get('outcome') else '') + '</div>'
+                f'<section class="wrap two"><div><h2>{html.escape(S["steps"])}</h2><ol class="steps">{steps}</ol>' + (f'<h2>{html.escape(S["outcome"])}</h2><p>{html.escape(LS(s, "outcome", lang))}</p>' if s.get('outcome') else '') + '</div>'
                 f'<div><h2>{html.escape(S["cli"])}</h2><pre class="code"><code>{cli}</code></pre>{out_html}</div></section>'
                 f'<section class="band"><div class="wrap"><h2>{html.escape(S["code"])}</h2><div class="tabs" role="tablist">{tabs}</div><p class="note" id="runLine">{html.escape(S["run"])}: <code>python scenarios/out/{s["id"]}-{s["slug"]}/python.py</code></p>'
                 f'<div class="sample"><pre class="code"><code id="sampleCode">{html.escape(py)}</code></pre></div><p class="note"><a href="https://github.com/amado2k5/cookwala/blob/main/scenarios/{s["id"]}-{s["slug"]}.json" rel="noopener">scenarios/{s["id"]}-{s["slug"]}.json</a></p></div></section>'
@@ -204,5 +218,5 @@ class ScenarioBuilder:
         for lang in self.b.LANGS_ALL:
             S = self.b.strings[lang]['scenarios']
             for s in self.scen:
-                meta = {'title': f'{s["id"]} · {L(s["title"], lang)} · {S["title"]}', 'description': L(s['goal'], lang)[:160], 'path': f'/scenarios/{s["id"]}/', 'scripts': ['scenario.js']}
+                meta = {'title': f'{s["id"]} · {LS(s, "title", lang)} · {S["title"]}', 'description': LS(s, 'goal', lang)[:160], 'path': f'/scenarios/{s["id"]}/', 'scripts': ['scenario.js']}
                 self.b.write(lang, f'/scenarios/{s["id"]}/', self.b.page(lang, meta, self.page_html(lang, s), current='/scenarios/'))

@@ -6,6 +6,18 @@ end conditions, hazards, CCPs, allergens and dietary claims. Each one then climb
 verification levels (V0 → V1 → V2) and is published on the Cookwala index. New
 fifi.cooking recipes (including World Cuisines) flow in automatically.
 
+## 0. Status (2026-10-04)
+
+Done, deterministically, by `tools/export_fifi.py`: E0 extract with the per-collection rights switch
+(`tools/export_fifi.collections.json`), E1-lite (one vocabulary entry per distinct English ingredient
+name, labels in 25 languages; no clustering or FoodOn/USDA links yet), E2 quantities (99.3 % parsed;
+the rest keep the original text as `display` with a flag), E6 carry-over, E7 text (en and ar in the
+document; 23 languages as sidecars). All 1,881 documents are published at **V0** under RFC-0009:
+every step is an unclassified `cw.op.legacy_step`, so no device executes them. Not done: E3 to E5
+(equipment beyond the cooking-method default, process graphs, hazards and critical control points),
+E8 to E11 at V1 and above, and the sync workflow. The licences of four collections await the
+founder's confirmation and are shown as "credited; licence under review".
+
 ## 1. Starting point (measured 2026-10-03)
 
 | Collection | Ids | Recipes | Source |
