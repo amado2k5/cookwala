@@ -1,0 +1,247 @@
+{
+ "brand": "Cookwala",
+ "tagline": "O padrão aberto para cozinhar com segurança: pessoas, cozinhas e robôs.",
+ "skip": "Pular para o conteúdo",
+ "menu": "Menu",
+ "theme": "Alternar modo claro ou escuro",
+ "switch": "Português",
+ "more_label": "Mais",
+ "font_link": "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap",
+ "nav": [
+  [
+   "Por que",
+   "/why/"
+  ],
+  [
+   "Como ajuda",
+   "/goals/"
+  ],
+  [
+   "Impacto",
+   "/impact/"
+  ],
+  [
+   "Desenvolvedores",
+   "/developers/"
+  ],
+  [
+   "Playground",
+   "/playground/"
+  ],
+  [
+   "Humanitário",
+   "/humanitarian/"
+  ],
+  [
+   "Docs",
+   "/docs/"
+  ]
+ ],
+ "more": [
+  [
+   "Para cada stakeholder",
+   "/for/"
+  ],
+  [
+   "Receitas",
+   "/recipes/"
+  ],
+  [
+   "SDK e cenários",
+   "/scenarios/"
+  ],
+  [
+   "Registry e directory",
+   "/registry/"
+  ],
+  [
+   "Agricultores",
+   "/farmers/"
+  ],
+  [
+   "Educação",
+   "/education/"
+  ],
+  [
+   "Política",
+   "/policy/"
+  ],
+  [
+   "Investidores e parceiros",
+   "/investors/"
+  ],
+  [
+   "Whitepaper",
+   "/whitepaper/"
+  ],
+  [
+   "Apresentação",
+   "/deck/"
+  ],
+  [
+   "Ideias e ensaios",
+   "/ideas/"
+  ],
+  [
+   "Confiança",
+   "/trust/"
+  ],
+  [
+   "Roteiro",
+   "/roadmap/"
+  ],
+  [
+   "Contribuir",
+   "/contribute/"
+  ],
+  [
+   "Simuladores",
+   "/sim/"
+  ]
+ ],
+ "footer": [
+  [
+   "Confiança",
+   "/trust/"
+  ],
+  [
+   "Segurança",
+   "/docs/SECURITY/"
+  ],
+  [
+   "Governança",
+   "/docs/GOVERNANCE/"
+  ],
+  [
+   "Críticas",
+   "/docs/CRITIQUES/"
+  ],
+  [
+   "Roteiro",
+   "/roadmap/"
+  ],
+  [
+   "Contato",
+   "/contribute/#contact"
+  ],
+  [
+   "security.txt",
+   "/.well-known/security.txt"
+  ],
+  [
+   "GitHub",
+   "https://github.com/amado2k5/cookwala"
+  ]
+ ],
+ "footer_origin": "Cookwala começou a partir do fifi.cooking, uma coleção familiar de receitas caseiras egípcias. Os dados do Cookwala são fornecidos sem garantia. Fabricantes e operadores de dispositivos permanecem responsáveis pelo hardware seguro e pela lei local. Nada neste site nomeia um parceiro, usuário ou piloto que não exista.",
+ "footer_licences": "Código Apache-2.0 · especificação CC BY 4.0 · vocabulários CC0 · compromisso de não reivindicação de patente · sem rastreamento, sem cookies.",
+ "status": {
+  "core": "Core 0.2 · normativo, sob revisão",
+  "draft": "Perfil de rascunho",
+  "exp": "Experimental",
+  "planned": "Planejado",
+  "model": "Modelo ilustrativo, não uma previsão",
+  "funded": "Ainda não financiado"
+ },
+ "for": {
+  "message": "Por que isso é importante para você",
+  "options": "Caminhos de entrada, do leve ao profundo",
+  "first": "Primeiro sucesso, em menos de 15 minutos",
+  "flow": "O caminho depois disso",
+  "work": "Como isso faz seu trabalho avançar",
+  "society": "Como isso faz a sociedade avançar",
+  "links": "Ir",
+  "others": "Outros caminhos"
+ },
+ "docgroups": {
+  "start": "Começar",
+  "core": "Padrão principal",
+  "profiles": "Perfis",
+  "humanitarian": "Humanitário e saúde",
+  "education": "Educação e política",
+  "simulators": "Simuladores",
+  "rfcs": "RFCs",
+  "about": "Sobre e pesquisa"
+ },
+ "docs_title": "Documentação",
+ "docs_lead": "Tudo, renderizado como páginas que funcionam sem JavaScript. Cada documento carrega seu status. Os documentos estão em inglês; as páginas do site existem em árabe.",
+ "prev": "Anterior",
+ "next": "Próximo",
+ "onpage": "Nesta página",
+ "filter": "Filtrar páginas",
+ "copy": "Copiar página",
+ "edit": "Editar no GitHub",
+ "markdown": "Markdown",
+ "pdf": "Baixar PDF",
+ "print": "Imprimir",
+ "whitepaper_title": "whitepaper da Cookwala",
+ "whitepaper_lead": "Um padrão aberto para cozinhar com segurança: problema, princípios, arquitetura, modelo de operação, confiança, conformance, governança, impacto com métodos, roadmap com status, riscos.",
+ "ideas": "Ideias e ensaios",
+ "more_essays": "Mais ensaios",
+ "respond": "Responda com um pull request",
+ "nav_label": "Principal",
+ "discovery_title": "Descoberta Cookwala",
+ "llms_title": "Documentação para leitores de IA",
+ "section_link": "Link para esta seção",
+ "language": "Idioma",
+ "translated_notice": "Esta página foi traduzida por máquina e ainda não foi revisada por uma pessoa. O inglês é a referência; correções são bem-vindas no GitHub.",
+ "recipes": {
+  "title": "Receitas",
+  "lead": "{{stat:publishedRecipes}} receitas no índice: {{stat:recipesV1}} escritas para o padrão em V1 (estruturadas, não simuladas ou verificadas em campo) e {{stat:recipesV0}} importadas de fifi.cooking em V0 (descritas, não verificadas por máquina). Pesquise por nome em qualquer um dos 25 idiomas.",
+  "search": "Pesquisar receitas",
+  "placeholder": "koshari, كشري, lentil",
+  "collection": "Coleção",
+  "course": "Prato",
+  "level": "Nível",
+  "all": "Todos",
+  "results": "{n} receitas",
+  "none": "Nenhuma receita corresponde.",
+  "v0": "V0: descrito, não verificado por máquina",
+  "v1": "V1: estruturado, não simulado ou verificado em campo",
+  "servings": "porções",
+  "minutes": "min",
+  "ingredients": "Ingredientes",
+  "steps": "Passos",
+  "original_steps": "Passos originais",
+  "source": "Fonte",
+  "original_page": "Página original em fifi.cooking",
+  "licence": "Licença",
+  "licence_review": "creditado; licença sob revisão",
+  "text_language": "Idioma do texto",
+  "nutrition": "Nutrição por porção (estimativa modelada, não medida)",
+  "allergens": "Alérgenos (inferidos a partir dos nomes dos ingredientes)",
+  "dry_run": "Dry run desta receita",
+  "v0_note": "Este é um documento V0: os ingredientes e passos originais do fifi.cooking, com quantidades extraídas do texto sempre que possível. Nenhum passo foi classificado, medido ou verificado, portanto um dispositivo atribui cada passo a uma pessoa e recusa-se a cozinhá-lo sozinho (RFC-0009). Torna-se V1 quando um gráfico de processo revisado substitui os passos.",
+  "load_more": "Mostrar mais",
+  "machine_text": "Este texto provém da tradução da receita no fifi.cooking e foi produzido por máquina.",
+  "data": "Documento (JSON)",
+  "sidecar": "Text sidecar"
+ },
+ "scenarios": {
+  "title": "SDK e cenários",
+  "lead": "Um cliente, as mesmas {{stat:sdkOperations}} operações, em {{stat:sdkLanguages}} idiomas, contra qualquer hub Cookwala. {{stat:scenarios}} cenários mostram o que fazer, passo a passo, com a linha de comando, o código em cada idioma e a saída gravada; cada um é executado contra o hub de referência antes de ser publicado.",
+  "audience": "Público",
+  "goal": "Objetivo",
+  "level": "Nível",
+  "all": "Todos",
+  "goal_hunger": "Ajude a acabar com a fome",
+  "goal_health": "Torne as pessoas mais saudáveis",
+  "goal_robots": "Robôs para pessoas",
+  "steps": "Passos",
+  "cli": "Linha de comando",
+  "code": "Código",
+  "run": "Executar",
+  "output": "Saída gravada",
+  "outcome": "Resultado",
+  "read_first": "Leia primeiro",
+  "none": "Nenhum cenário corresponde.",
+  "languages": "Idiomas",
+  "install": "Instalar",
+  "sdk_note": "Cada cliente é um cliente HTTP leve: a biblioteca de referência é executada no hub, portanto, um cliente em qualquer linguagem obtém exatamente o comportamento que os vetores de conformance testam. Os pacotes ainda não foram publicados em registries; instale a partir do repositório.",
+  "tested": "executar nesta máquina",
+  "untested": "ainda não compilado aqui",
+  "prev": "Anterior",
+  "next": "Próximo",
+  "status": "Status"
+ }
+}

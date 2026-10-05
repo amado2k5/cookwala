@@ -1,0 +1,89 @@
+<!--meta {"title": "Humanitär: Lebensmittel sicher retten mit Telefonen und Tabellenkalkulationen", "description": "Das Cookwala Humanitarian Profile bewegt Überschusslebensmittel von einem Bauernhof oder Geschäft auf einen Teller mittels SMS und CSV, protokolliert Kühlkettenprüfungen, zählt Mahlzeiten und enthält keine personenbezogenen Daten. Probieren Sie den SMS-Walkthrough aus; lesen Sie das Pilotprotokoll.", "path": "/humanitarian/", "status": "draft", "scripts": ["sms.js"]} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Humanitär</p>
+  {{chip}}
+  <h1>Vom Überschuss auf den Teller, sicher, mit den Telefonen, die Sie bereits haben</h1>
+  <p class="lead">Das Humanitarian Profile ist ein kleiner, strenger Datenstandard für Food Banks, Gemeinschaftsküchen, Schulmahlzeiten- und Hilfsprogramme. OFFER, CLAIM, Übergabe mit Temperaturprüfung, servieren, zählen. Es funktioniert über SMS und Tabellenkalkulation, ohne personenbezogene Daten, ohne Roboter und ohne Internet erforderlich. Roboter und Apps können dieselben Dokumente später nutzen.</p>
+  <div class="cta"><a class="btn primary" href="#sms">Try the SMS walkthrough</a><a class="btn" href="/docs/HUMANITARIAN-PROFILE/">Read the profile</a><a class="btn" href="/docs/PILOT-PROTOCOL/">How a pilot is judged</a></div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Der Weg, von Anfang bis Ende</h2>
+    <ol class="steps">
+      <li><p><b>Offer.</b> A store, farm, caterer or kitchen sends what it has: kilograms, storage, temperature, date mark, allergens. <code>OFFER 36KG YOGURT C 4C UB0511</code> or <code>FARM 120KG TOMATO A BB0411</code>.</p></li>
+      <li><p><b>Claim.</b> A food bank, kitchen or program claims all or part, within a priority tier the program publishes. <code>CLAIM A7K ALL</code>.</p></li>
+      <li><p><b>Handover with a cold-chain check.</b> At every change of custody a trained person records the temperature and the kilograms accepted or rejected with a reason. A temperature-controlled line without a reading is not recorded; hot food below 60 °C is refused. <code>HAND A7K 36 T4.6</code>, or <code>HAND A7K 30 REJ 6 PACK T4.6</code> to reject part of it.</p></li>
+      <li><p><b>Kitchen.</b> A community, school, disaster or robot kitchen cooks; a production run can record cooking, hot-holding and cooling temperatures (experimental fleet profile).</p></li>
+      <li><p><b>Distribution.</b> Meals and people served at a site on a day, as counts only; any count under ten is "fewer than ten". <code>DIST 410 MEALS 410 PEOPLE 96KG</code>; per-meal nutrients with <code>MENU</code>.</p></li>
+      <li><p><b>Impact.</b> A summary computed from the documents: kilograms rescued, meals, cost per meal, time to claim, safety findings and incidents, each with its method and the number of documents behind it. The nutrition pass rate is <span class="kind assumed">self-reported</span> unless nutrients come from linked recipes and portion masses.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="sms" class="wrap" aria-labelledby="sms-h">
+  <div class="sec-head"><h2 id="sms-h">Der SMS-Walkthrough</h2><p>Geben Sie die Nachrichten ein, die ein Spender und eine food bank senden würden, oder drücken Sie die Schaltflächen. Das Gateway in Ihrem Browser wandelt diese in die Dokumente des Profils um, führt die Kühlkettenprüfungen durch (fehlender Messwert, gekühlt über 5 °C, heiß unter 60 °C, ein Artikel der Klasse gekühlt als Umgebungstemperatur deklariert) und berechnet die Zusammenfassung. Es wird nichts irgendwohin gesendet.</p></div>
+  <div class="demo">
+    <div class="sms">
+      <div>
+        <div class="phone" id="smsPhone" aria-live="polite"></div>
+        <form id="smsForm"><input id="smsInput" type="text" placeholder="OFFER 36KG YOGURT C 4C UB0511" aria-label="SMS message" autocomplete="off"><button type="submit" class="btn primary">Senden</button></form>
+        <p class="cta"><button type="button" class="btn" data-sms="OFFER 36KG YOGURT C 4C UB0511">Offer yogurt</button><button type="button" class="btn" data-sms="FARM 120KG TOMATO A HV0411">Farm offers tomatoes</button><button type="button" class="btn" data-sms="OFFER 18KG COOKED RICE H T52C">Hot rice at 52 °C</button><button type="button" class="btn" data-sms="CLAIM OF-001 ALL">Claim</button><button type="button" class="btn" data-sms="HAND OF-001 36 T4.6">Hand over at 4.6 °C</button><button type="button" class="btn" data-sms="HAND OF-002 30 REJ 6 PACK">Hand over 30 kg, reject 6</button><button type="button" class="btn" data-sms="OFFER 12KG YOGURT A">Yogurt offered ambient</button><button type="button" class="btn" data-sms="HAND OF-003 0 REJ 18 TEMP T52">Reject the rice</button><button type="button" class="btn" data-sms="DIST 410 MEALS 410 PEOPLE 96KG">Distribution</button><button type="button" class="btn" data-sms="MENU DI-007 KCAL650 SODIUM540 FV95">Menu</button><button type="button" class="btn" data-sms="HELP">Help</button></p>
+      </div>
+      <div class="docs-out"><p class="note">Dokumente (die neuesten zuerst) und die Zusammenfassung der Auswirkungen:</p><div id="smsDocs"></div><pre class="code" id="smsSummary"></pre></div>
+    </div>
+    <p class="note">Die Grammatik ist in <code>tools/cookwala_ref.py</code> implementiert und wurde durch 24 conformance-Vektoren getestet. Schlüsselwörter sind Englisch; arabisch-indische und westliche Ziffern werden beide akzeptiert. Das echte Gateway ordnet eine registrierte Telefonnummer einer Organisation zu, niemals einer Person. Offer-IDs in diesem Walkthrough sind OF-001, OF-002…</p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Vier Einstellungen, vier Arbeitsabläufe</h2>
+    <div class="cards">
+      <a class="card" href="https://github.com/amado2k5/cookwala/tree/main/examples/humanitarian/flows/food-bank-cairo" rel="noopener"><h3>Eine Food Bank in Kairo</h3><p>Telefone und Tabellenkalkulationen (Level H0). Tomaten, Joghurt und Brot eines Supermarkts; 6 kg wegen beschädigter Verpackung abgelehnt; 380 warme Mahlzeiten in einer Gemeinschaftsküche.</p><span class="go">Documents and summary →</span></a>
+      <a class="card" href="https://github.com/amado2k5/cookwala/tree/main/examples/humanitarian/flows/school-meals" rel="noopener"><h3>Ein Schulmahlzeit-Programm</h3><p>Ganze Nüsse bei der Übergabe abgelehnt, weil das Programm Kindern unter fünf Jahren dient; ein Mittagessen mit 640 mg Natrium, das durch das Schul-Rule-Pack markiert wurde.</p><span class="go">Documents and summary →</span></a>
+      <a class="card" href="https://github.com/amado2k5/cookwala/tree/main/examples/fleet/production-run-disaster.json" rel="noopener"><h3>Eine Katastrophenküche</h3><p>Gekochter Reis bei 49 °C im <a href="https://github.com/amado2k5/cookwala/tree/main/examples/humanitarian/flows/disaster-kitchen" rel="noopener">Flow</a> abgelehnt; 650 warme Mahlzeiten mit Warmhalte- und Kühlprotokollen in einem Produktionslauf; eine Warmhalteeinheit unter 60 °C erkannt und die Charge wieder aufgewärmt.</p><span class="go">Documents and summary →</span></a>
+      <a class="card" href="https://github.com/amado2k5/cookwala/tree/main/examples/humanitarian/flows/robot-kitchen" rel="noopener"><h3>Eine Roboterküche</h3><p>Tomaten einer landwirtschaftlichen Genossenschaft per SMS; Geräte-Schritte als Core-Ausführungen verknüpft mit dem Produktionslauf; 900 Pakete gezählt, niemand benannt.</p><span class="go">Documents and summary →</span></a>
+    </div>
+    <p class="note">Alle vier sind illustrative Dokumente, die zur Übung des Schemas geschrieben wurden; keine echte Organisation oder Veranstaltung wird beschrieben.</p>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div>
+    <h2>Keine personenbezogenen Daten, durch Design</h2>
+    <ul class="ticks"><li>Jede Partei ist eine Organisation: eine did:web-Domain, eine GS1-Standortnummer oder eine Registry-ID. Personen erscheinen nur als Rollen („geschultes Personal“).</li><li>Zahlen, niemals Datensätze: Personen nach Gruppen serviert, jede Gruppe unter zehn als „weniger als zehn“ gemeldet.</li><li>Standorte sind Betriebsstätten oder Verwaltungsbereiche, niemals ein Haushalt.</li><li>Notizen sind 280 Zeichen lang und werden vor dem Speichern auf Telefonnummern und IDs gescannt.</li><li>Aufbewahrung erklärt und durchgesetzt; optionales Hash-only-Audit-Log; In-Country-Hosting, wo erforderlich.</li></ul>
+    <p>Menschen sind Partner in dieser Arbeit, beschrieben durch Rolle und Situation. Keine Gesichter, keine Bilder von Armut, keine Retter-Sprache auf dieser Website oder in Programmmaterialien, die wir produzieren.</p>
+  </div>
+  <div>
+    <h2>Lebensmittelsicherheit und Ernährungsregeln, überprüfbar</h2>
+    <p>Vier Entwürfe von rule packs abgeleitet aus öffentlichen WHO-, Codex- und Sphere-Leitlinien: Kühlkette, die Zwei-Stunden-Regel für gekochte Lebensmittel außerhalb der Temperaturkontrolle, Datumsmarkierungen, Allergene (Abkühlphasen und Wiedererwärmung werden im Produktionslauf einer Küche aufgezeichnet, nicht in diesen Packs); Natrium, freier Zucker, Fette, Obst und Gemüse; Fürsorgeregeln für Kinder unter fünf Jahren, Schwangerschaft, ältere Erwachsene und immungeschwächte Personen; Schulmahlzeiten-Muster; Natriumreduzierung.</p>
+    <p>Jede Packung gibt an, wer sie nach Beruf geprüft hat. Noch keine wurde geprüft; das ist das Erste, was wir von Ernährungsberatern und Lebensmittelsicherheitsbeauftragten verlangen. <a href="/docs/REVIEW-TEMPLATE/">Die Zwei-Stunden-Prüfvorlage</a> · <a href="/docs/CLAIMS-POLICY/">Was wir niemals behaupten</a></p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Einen Pilotversuch ehrlich durchführen</h2>
+    <div class="three">
+      <div><h3>Vorher</h3><p>Hypothesen und Schwellenwerte vorregistriert; eine vierwöchige Baseline der aktuellen Praxis; eine Überprüfung der Datenverantwortung gemäß den Leitlinien von ICRC und OCHA; Ethikgenehmigung, wo erforderlich; Rule Packs angepasst durch den Lebensmittelsicherheitsverantwortlichen des Programms.</p></div>
+      <div><h3>Währenddessen</h3><p>Zwölf Wochen, mindestens zwei Standorte und fünf Geber, nach Möglichkeit ein Vergleichsstandort; Erfassung der Zeit pro 100 kg gemessen; Abbruchkriterien: jeder zurechenbare Sicherheitsvorfall, die doppelte Erfassungszeit oder die Anfrage des Partners.</p></div>
+      <div><h3>Danach</h3><p>Die aus den Dokumenten berechnete Zusammenfassung, ein unabhängiger Auswerter, der die Rohdatensätze liest, und die Veröffentlichung dessen, was das Ergebnis zeigt, mit einem Abschnitt „Was ist schiefgelaufen“. Der Partner wird nur mit seiner schriftlichen Vereinbarung genannt.</p></div>
+    </div>
+    <p class="note"><a href="/docs/PILOT-PROTOCOL/">Das vollständige Protokoll</a> · <a href="/docs/CONCEPT-NOTE/">Das Konzeptpapier für ein Erstgespräch</a>. Kein Pilotlauf wurde durchgeführt und keiner ist finanziert; ein Programm, das sprechen möchte, ist ab dem Erstgespräch ein Partner.</p>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div class="know"><h3>Was wir noch nicht wissen</h3><ul><li>Ob ein Programm mit dem Profil mehr rettet als mit seiner aktuellen Methode.</li><li>Wie viel Aufzeichnungszeit die SMS-Grammatik einem Freiwilligen in der Praxis kostet.</li><li>Ob die Rule Packs irgendwo mit dem nationalen Recht vereinbar sind; die Anpassung ist Aufgabe des Programms.</li></ul></div>
+  <div class="know"><h3>Was ist schiefgelaufen</h3><ul><li>Noch nichts aufgezeichnet: Es hat noch keine Bereitstellung stattgefunden.</li></ul></div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Interoperabilität</h2>
+    <p>CSV-Vorlagen enthalten HXL-Hashtags; Artikel enthalten GS1 GTINs und Standorte enthalten GLNs oder OCHA P-Codes; Verteilungen werden auf DHIS2-Aggregate abgebildet; Begünstigtensysteme werden nie berührt (nur Aggregate werden übertragen). Die Organisationen hinter diesen Standards sind keine Partner; ihre Formate werden verwendet, damit die bestehenden Tools der Programme unsere lesen können. <a href="/docs/HUMANITARIAN-PROFILE/">Abschnitt 9 des Profils</a>.</p>
+    <div class="cta"><a class="btn primary" href="/docs/CONCEPT-NOTE/">Talk to us about a pilot</a><a class="btn" href="/for/humanitarian/">Your page: options, first success, flow</a><a class="btn" href="/farmers/">Farmers and surplus</a></div>
+  </div>
+</section>
+

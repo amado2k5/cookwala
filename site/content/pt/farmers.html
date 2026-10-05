@@ -1,0 +1,33 @@
+<!--meta {"title": "Agricultores e abastecimento: liste um excesso por SMS, sinais justos mais tarde", "description": "Uma fazenda com surplus lista por SMS e alcança uma cozinha no mesmo dia. Mais tarde, sinais agregados e atrasados de procura e oferta que tratam cada produtor da mesma forma, após revisão da lei da concorrência.", "path": "/farmers/", "status": "exp"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Agricultores e abastecimento</p>
+  <h1>Um excesso deve tornar-se refeições, não desperdício</h1>
+  <p class="lead">Duas coisas que um agricultor ou uma cooperativa podem obter de um padrão alimentar: uma forma de listar o surplus antes que apodreça que alcança uma cozinha no mesmo dia, e um sinal justo do que será necessário onde. O primeiro é especificado, testado e executável por qualquer programa que o adote; nenhum programa o fez ainda. O segundo é desenhado, experimental e aguarda uma revisão da lei da concorrência.</p>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>Now: surplus por SMS</h2>
+      <p>Uma fazenda é um doador no Perfil Humanitário, uma organização como qualquer outra, nunca uma pessoa. Uma mensagem para o gateway de um programa:</p>
+      <pre class="code"><code>FARM 120KG TOMATO A HV0411</code></pre>
+      <div class="output">OFFER OF-002 open for 14 h · origin: farm · harvested 4 November</div>
+      <p>Um food bank ou cozinha reivindica; a entrega registra a temperatura e os quilogramas aceitos; a distribuição conta as refeições; o resumo mostra os quilogramas resgatados com o método. <a href="/humanitarian/#sms">Experimente no walkthrough</a>.</p><h3>O que isso significa para você</h3><ul><li>Sua cooperativa registra um número de telefone com o programa; os documentos nomeiam a cooperativa, nunca uma pessoa ou um lote.</li><li>A cozinha que reivindica sua oferta organiza e paga pela coleta; o acordo do programa diz isso antes da primeira oferta.</li><li>Você recebe uma resposta com os quilogramas aceitos e, se algum foi recusado, o porquê. Você pode <code>CANCEL</code> antes da coleta.</li><li>Você não precisa de um smartphone ou dados; um telefone básico com palavras-chave em inglês e um conjunto de dígitos funciona.</li></ul>
+      <p class="note">Onde um programa executa o perfil, isso funciona com um telefone básico hoje. Nenhum programa o executa ainda; a gramática, o parser e os vetores de conformance existem, e a <a href="/docs/CONCEPT-NOTE/">concept note</a> é como um programa começa.</p>
+    </div>
+    <div>
+      <h2>Next: sinais de oferta e demanda justos</h2>
+      <p>Se o cozimento estiver planejado, as quantidades cultivadas e movimentadas podem corresponder ao que é necessário. Os simuladores do país e do mundo mostram o tamanho do efeito sob suas suposições <span class="kind modelled">modelled</span>. O menor passo honesto do padrão são dois documentos experimentais:</p>
+      <ul><li><b>DemandSignal:</b> na região R, na semana W, cozinhas e programas planejados para usar entre L e H kg do ingrediente <em>class</em> C (legume, vegetal de folha, aves), nunca um produto ou marca.</li><li><b>SupplySignal:</b> na região R, na semana W, a classe C está em excesso, oferta normal ou escassa, com uma janela de colheita.</li></ul>
+      <p><b>Regras, verificadas por código:</b> pelo menos 20 fontes contribuintes; publicado pelo menos 7 dias após o fim da semana; sem preços; sem região mais detalhada que uma província sem 100 fontes; aberto a todos, idêntico para cada leitor, gratuito. Um pequeno produtor vê exatamente o que um grande comprador vê. <a href="/docs/SUPPLY-SIGNALS/">Sinais de oferta</a> · <a href="/docs/RFC-0007/">RFC-0007</a></p>
+      <p class="note"><span class="status">gated</span> Compartilhar previsões entre concorrentes é o que as autoridades de concorrência alertam. Estas regras são projetadas para manter o sinal útil para o plantio e inútil para a precificação; o conselho define os limites finais. Nada é publicado até lá.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>O que fica fora do padrão</h2>
+  <p>Preços. Contratos. Quem recebe comida quando não há o suficiente (essa é uma decisão responsável de um programa). Uma cadeia de suprimentos perfeitamente enxuta: o design do sinal diz que as reservas fazem parte do plano, porque um sistema alimentar ajustado exatamente à demanda está a um choque de uma prateleira vazia.</p>
+  <div class="cta"><a class="btn primary" href="/for/food/">Your page: farmers, cooks, chefs</a><a class="btn" href="/humanitarian/">Humanitarian</a><a class="btn" href="/sim/country/">The country simulator</a></div>
+</section>
+

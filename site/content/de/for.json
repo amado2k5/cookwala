@@ -1,0 +1,622 @@
+{
+ "developers": {
+  "short": "Builder",
+  "title": "Für Entwickler, Roboter- und Gerätehersteller sowie KI-Agenten-Entwickler",
+  "lead": "Roboter und Geräte lernen sich zu bewegen. Niemand hatte in einer Form, die eine Maschine überprüfen kann, aufgeschrieben, was „simmer“ bedeutet, wann Hähnchen sicher ist oder wann ein Schritt verweigert werden muss. Cookwala ist diese Schicht, und sie wird mit einer Conformance-Suite geliefert, die Sie bereits heute ausführen können.",
+  "message": "<p>Cookwala bietet Ihnen eine Aufgabendefinition und einen Erfolgstest für das Kochen, der offen, lizenzfrei, modellneutral und geräteneutral ist: Rezepte, die eine Maschine planen kann, Endbedingungen, die sie messen kann, und Sicherheitsgrenzwerte, die sie selbst erzwingt. Es sitzt über der Bewegung: Ihr Roboter lernt die Manipulation auf seine eigene Weise; Cookwala sagt ihm, was es zubereiten soll, wann es fertig ist und was niemals passieren darf, und erhält als Rückmeldung ein Log.</p><p>Für Agenten-Entwickler: ein Mandate-Modell, eine Regel für nicht vertrauenswürdigen Text und ein Zehn-Fall-Benchmark, das prüft, ob Ihr Agent Anweisungen befolgt, die in Rezepten und Auflistungen platziert wurden, plus ein MCP-Server, der jedem Agenten sicheren, schreibgeschützten Zugriff auf Rezepte und dry runs gewährt.</p>",
+  "options": [
+   [
+    "Leicht.",
+    "Führen Sie den Browser dry run aus; lesen Sie Core 0.2 an einem Abend."
+   ],
+   [
+    "Mittel.",
+    "Installieren Sie das Python-Paket, führen Sie einen dry run der Fähigkeiten Ihres Geräts gegen die Rezepte durch, führen Sie die {{stat:conformanceVectors}} Conformance-Vektoren aus, starten Sie den Referenz-Hub, fügen Sie den MCP-Server Ihrem Agenten hinzu."
+   ],
+   [
+    "Tief.",
+    "Implementieren Sie die Core API auf einem Gerät oder Hub, veröffentlichen Sie einen Conformance-Bericht, listen Sie Ihr Gerät auf, schreiben Sie einen ROS 2 Bridge-Node, fügen Sie dem Agent-Safety-Benchmark Angriffsfälle hinzu, schlagen Sie ein RFC vor."
+   ]
+  ],
+  "first": "<p>Unter 15 Minuten, keine Hardware:</p><pre class=\"code\"><code>git clone https://github.com/amado2k5/cookwala &amp;&amp; cd cookwala &amp;&amp; pip install -e sdk/python\ncookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/robot-arm.json\ncookwala conformance --report report.json</code></pre><div class=\"output\">refused: cw.op.boil, missing_capability (no person present) · then {{stat:conformanceVectors}}/{{stat:conformanceVectors}} passed, report.json written</div>",
+  "flow": [
+   "Dry run gegen die Beispielrezepte",
+   "Implementieren Sie die Core API gegen den Referenz-Hub",
+   "Bestätigen Sie die Conformance und veröffentlichen Sie den signierten Bericht",
+   "Listen Sie das Gerät im Directory auf",
+   "Zustimmungsbasierte Execution Logs werden zu LeRobot-Datensätzen und OpenTelemetry-Traces"
+  ],
+  "work": [
+   "Eine gemeinsame Task-Definition und ein öffentlicher Benchmark zum Messen",
+   "Rezepte in jeder Küche, ohne sie schreiben zu müssen",
+   "Eine Sicherheitsgeschichte, die Regulierungsbehörden lesen können; ein Konformitätsbericht als Verkaufsdokument",
+   "First-Mover-Status in einem Standard, der von seinen Implementierern gesteuert wird"
+  ],
+  "society": [
+   "Weniger Küchenbrände und lebensmittelbedingte Krankheiten durch Maschinen, die eine Verweigerung vor der Erhitzung (refusal before heat) wählen, statt zu raten",
+   "Maschinen, die die Küchen der Welt erben, anstatt nur weniger",
+   "Agenten, die für Menschen nur unter einem Mandat handeln"
+  ],
+  "links": [
+   [
+    "Entwicklerportal",
+    "/developers/"
+   ],
+   [
+    "Kern 0.2",
+    "/docs/CORE/"
+   ],
+   [
+    "Roboter, ROS 2, Datensätze",
+    "/docs/ROBOTICS/"
+   ],
+   [
+    "Agenten-Sicherheits-Benchmark",
+    "/docs/AGENT-SAFETY/"
+   ]
+  ]
+ },
+ "companies": {
+  "short": "Unternehmen",
+  "title": "Für Unternehmen: Startups, Großunternehmen, Lebensmittelhändler, Restaurants, Versicherer, Zertifizierer",
+  "lead": "Jedes Unternehmen, das mit Lebensmitteln in Berührung kommt, wird in den nächsten Jahren auf Kochmaschinen und KI-Agenten treffen. Cookwala bietet Ihnen eine einzige Schnittstelle für alle diese Systeme, mit auf dem Gerät erzwungenen Sicherheitsgrenzwerten und Protokollen, die Sie prüfen können.",
+  "message": "<p>Für Lebensmittelhändler und Lieferdienste: erhalten Sie Lieferfenster und Allergenanforderungen, niemals den Zeitplan einer Familie. Für Restaurants und Gastronomie: ein Küchen- und Produktionslauf-Protokoll, das Geräteausführungen mit servierten Mahlzeiten und Lebensmittelsicherheits-Kontrollpunkten verknüpft. Für Versicherer und Zertifizierer: ein Format für Konformitätsberichte und ein anonymer Incident-Feed, der für Sie entwickelt wurde. Für Startups: eine neutrale Ebene anstelle von einem Dutzend Anbieterintegrationen und ein Marktprofil (experimentell) für Angebote und Kostenvoranschläge.</p>",
+  "options": [
+   [
+    "Leicht.",
+    "Lesen Sie die Seite für Investoren und Partner sowie die Vertrauensseite; ordnen Sie Ihre Produkte den Inhaltsstoffklassen und Operationen zu."
+   ],
+   [
+    "Mittel.",
+    "Veröffentlichen Sie einen Offer-Feed (Marktprofil, experimentell) oder ein Surplus-Angebot an ein lokales Programm; führen Sie den Agent-Safety-Benchmark auf dem Agenten aus, den Sie bereitstellen möchten."
+   ],
+   [
+    "Tief.",
+    "Implementieren Sie die Core API in einem Produkt; sponsern Sie eine Conformance-Verifizierung; treten Sie dem Lenkungsausschuss bei, wenn er sich bildet; wählen Sie den Certification-Pfad."
+   ]
+  ],
+  "first": "<p>Konvertieren Sie eine Produktlinie in ein Markt-Offer mit GTINs und Allergen-Nachweisen, validieren Sie es und sehen Sie, welche Beispielrezepte es liefern kann:</p><pre class=\"code\"><code>cookwala validate   # schemas, examples, vocabularies, APIs</code></pre><div class=\"output\">examples/market/offer-feed.json: ok</div >",
+  "flow": [
+   "Offer-Feed oder Surplus-Angebot",
+   "Abgeleitete Constraints aus Haushalten, niemals deren Fakten",
+   "Bestellungen über Ihren eigenen Checkout; Cookwala speichert niemals Zahlungsdaten",
+   "Erfüllungsereignisse",
+   "Reputation aus Ausführungsberichten, mit Einwilligung"
+  ],
+  "work": [
+   "Zugriff auf eine neutrale Ebene anstelle vieler Anbieterintegrationen",
+   "Nachfragesignale, die Verschwendung reduzieren (later, nach wettbewerbsrechtlicher Prüfung)",
+   "Später: certification, die Versicherer kalkulieren können",
+   "Ein öffentliches Register der Sicherheit"
+  ],
+  "society": [
+   "Weniger Lebensmittelverlust zwischen Laden und Teller",
+   "Surplus, das Küchen erreicht, bevor es verrottet",
+   "Maschinen in Haushalten, die nicht zu unsicheren Handlungen überredet werden können"
+  ],
+  "links": [
+   [
+    "Investoren und Partner",
+    "/investors/"
+   ],
+   [
+    "Vertrauen",
+    "/trust/"
+   ],
+   [
+    "Küchen und Produktionsläufe",
+    "/docs/KITCHENS-AND-FLEETS/"
+   ],
+   [
+    "Ökosystem und Markt (experimentell)",
+    "/docs/ECOSYSTEM/"
+   ]
+  ]
+ },
+ "providers": {
+  "short": "Anbieter",
+  "title": "Für Anbieter: Lebensmittelhändler, Farmen, Lieferdienste, Energieversorger, KI-Anbieter, Rezeptverleger",
+  "lead": "Anbieter werden als Peers und nicht als Mandanten in Cookwala eingebunden. Ein Lebensmittelhändler erhält eine Constraint, niemals die Fakten eines Haushalts. Ein KI-Anbieter erhält einen Benchmark und einen MCP-Server. Ein Rezeptverleger behält seinen Namen auf jedem Rezept und veröffentlicht einen signierten Katalog aus einem statischen Ordner.",
+  "message": "<p>Der Standard definiert einen Platz für jeden von euch und verlangt nichts im Gegenzug: Ein Katalog ist ein Ordner mit einer Discovery-Datei; ein Offer-Feed ordnet Produkte Ingredient-Klassen zu; ein Signal (experimentell) wird aggregiert und verzögert, sodass es für die Planung nützlich und für die Preisgestaltung nutzlos ist; ein KI-Modell wird durch einen öffentlichen Benchmark gemessen, bevor ihm in einer Küche vertraut wird. Reputation entsteht durch Ergebnisse mit Einwilligung, nicht durch Gebühren.</p>",
+  "options": [
+   [
+    "Veröffentlichen Sie einen Katalog von Rezepten.",
+    "Ein statischer Ordner mit /.well-known/cookwala.json und signierten Dokumenten."
+   ],
+   [
+    "Einen Offer-Feed veröffentlichen.",
+    "Marktprofil, experimentell; Ihr Checkout bleibt Ihr eigener."
+   ],
+   [
+    "Den Agent-Safety-Benchmark ausführen.",
+    "Zehn Fälle; Ergebnisse mit der Model-ID, dem Datum und dem Config-Hash veröffentlichen."
+   ],
+   [
+    "Einen Registry-Node ausführen.",
+    "Jeder darf; cookwala.ai ist einer von vielen."
+   ],
+   [
+    "Überschuss per SMS anbieten.",
+    "FARM 120KG TOMATO A BB0411 an ein Programm, das das Profil ausführt."
+   ]
+  ],
+  "first": "<p>Rezept-Publisher: scaffold, edit, validate, hash.</p><pre class=\"code\"><code>cookwala init my-dish &amp;&amp; cookwala validate &amp;&amp; cookwala hash my-dish.cookwala.json</code></pre><p>KI-Anbieter: Fügen Sie den MCP-Server Ihrem Client hinzu und führen Sie die zehn Agent-Safety-Cases mit promptfoo aus.</p>",
+  "flow": [
+   "Katalog oder Feed unter Ihrem nachgewiesenen Namespace",
+   "Registry-Eintrag mit einer exakten Version und einem Hash",
+   "Recall-Feed, falls etwas schiefgeht",
+   "Reputation aus Ergebnissen"
+  ],
+  "work": [
+   "Erreichen Sie jedes Gerät und jeden Agenten durch ein einziges Format",
+   "Gutschrift und Provenienz durch Signatur",
+   "Ein Sicherheits-Benchmark, der bei ehrlicher Bestehung ein Marketing-Asset ist"
+  ],
+  "society": [
+   "Rezepte bleiben zugeordnet",
+   "Agenten, die für Menschen handeln, werden gemessen, bevor ihnen vertraut wird"
+  ],
+  "links": [
+   [
+    "Registry und Directory",
+    "/registry/"
+   ],
+   [
+    "Federation: betreiben Sie Ihren eigenen Node",
+    "/docs/FEDERATION/"
+   ],
+   [
+    "MCP-Server",
+    "/docs/MCP/"
+   ],
+   [
+    "Landwirte und Versorgung",
+    "/farmers/"
+   ]
+  ]
+ },
+ "food": {
+  "short": "Lebensmittel",
+  "title": "Für Landwirte, Köche, Chefköche, Hausköche und Kochschulen",
+  "lead": "Ein für Cookwala geschriebenes Rezept hält Ihren Namen und Ihre Küche auf jedem Gerät, das es zubereitet, lebendig, wobei die Schritte, die eine Maschine niemals überspringen darf, festgehalten sind. Ein Bauernhof mit einem Überschuss könnte dies per SMS an jedes Programm melden, das das Profil ausführt; bisher tut dies noch keines.",
+  "message": "<p>Das Rezeptformat trägt in sich, was ein Gericht ist: seine wesentlichen Teile, seine flexiblen Teile, was niemals hinzugefügt wird, die Sprache des Kochs und den Namen des Kochs. Ein Planer, der für ein Budget einspringt, kann die flexiblen Teile ändern; wenn er einen wesentlichen Teil ändert, bereitet er nicht mehr Ihr Gericht zu und muss dies angeben. Maschinen, die nach zugestimmten Aufnahmen kochen, nennen den Haushalt, der sie unterrichtet hat. Kochschulen können Lebensmittelsicherheit mit einem Format lehren, das sich selbst überprüft.</p>",
+  "options": [
+   [
+    "Landwirte.",
+    "FARM 120KG TOMATO A BB0411 an das Gateway eines Programms, wo eines läuft; später, Angebot- und Nachfragesignale lesen, die jeden Erzeuger gleich behandeln."
+   ],
+   [
+    "Köche und Chefköche.",
+    "Verwandeln Sie ein Rezept, das Sie auswendig kennen, in ein Cookwala-Rezept; überprüfen Sie die Schrittsätze in Ihrer Sprache; nehmen Sie später mit Credit einwilligungsbasierte Sitzungen auf."
+   ],
+   [
+    "Schulen.",
+    "Nutzen Sie die neun Beispielrezepte als Lehrfälle; fügen Sie Ihre eigenen hinzu; nutzen Sie das Lesson Kit."
+   ]
+  ],
+  "first": "<p>Köche, keine Werkzeuge erforderlich: Schreiben Sie Ihr Rezept mit einem einfachen Satz pro Hitzeschritt, der besagt, wie Sie wissen, dass es fertig ist und was niemals passieren darf; ein Mitwirkender konvertiert es und behält Ihren Namen darauf. Wenn Sie die Befehlszeile bevorzugen:</p><pre class=\"code\"><code>cookwala init my-dish\n# edit my-dish.cookwala.json: every heat step gets an until condition and a hazard\ncookwala validate</code></pre><p>Landwirte: Senden Sie ein SMS-Angebot an ein Programm, das das Profil ausführt. Noch läuft keines; der Parser und die Vektoren existieren, und der Walkthrough zeigt, was passiert.</p>",
+  "flow": [
+   "Rezept → Validierung → Katalog",
+   "Dry run auf Geräten",
+   "Execution logs zeigen, wie es auf echten Maschinen performt",
+   "Revisionen mit Belegen; das Rezept steigt von V1 auf V3"
+  ],
+  "work": [
+   "Attribution, die mitreist",
+   "Ein Rezept, das von Maschinen in anderen Ländern gekocht werden kann",
+   "Für Landwirte, wo ein Programm das Profil ausführt: ein Überschuss, der in Mahlzeiten statt in Abfall verwandelt wurde"
+  ],
+  "society": [
+   "Kulinarisches Erbe als Arbeitswissen bewahrt, nicht als Video",
+   "Weniger Abfall am Hof"
+  ],
+  "links": [
+   [
+    "Rezeptformat",
+    "/docs/RECIPE-FORMAT/"
+   ],
+   [
+    "Landwirte und Versorgung",
+    "/farmers/"
+   ],
+   [
+    "Wer erbt ein Rezept?",
+    "/ideas/inheriting-culinary-culture/"
+   ],
+   [
+    "Lernset",
+    "/docs/LESSON-KIT/"
+   ]
+  ]
+ },
+ "humanitarian": {
+  "short": "Humanitär",
+  "title": "Für NGOs, food banks, Gemeinschaftsküchen, Schulmahlzeiten- und Hilfsprogramme, Spender",
+  "lead": "Das Humanitäre Profil bewegt surplus Lebensmittel mit Telefonen und Tabellenkalkulationen auf Teller, protokolliert Kühlkettenprüfungen, zählt Mahlzeiten und führt keine personenbezogenen Daten. Es arbeitet ohne Roboter, Apps oder Internet und liefert Ihnen Zahlen, die Sie verteidigen können.",
+  "message": "<p>Offer, claim, Übergabe mit Temperaturprüfung, distribution, Impact: vier Dokumente und eine daraus berechnete Zusammenfassung, mit einer Methode unter jeder Zahl: gerettete Kilogramm, servierte Mahlzeiten, Ernährungs-Passrate, Kosten pro Mahlzeit, Zeit bis zum claim, Sicherheitsbefunde und Vorfälle. Rule packs, abgeleitet von öffentlichen WHO-, Codex- und Sphere-Leitlinien, prüfen jede Übergabe und jedes Menü, und Ihre Leitung für Lebensmittelsicherheit passt sie an das nationale Recht an. Menschen sind Partner, beschrieben nach ihrer Rolle; niemand wird namentlich genannt, profiliert oder abgebildet.</p>",
+  "options": [
+   [
+    "Leicht.",
+    "Lesen Sie das Profil und das Pilotprotokoll; versuchen Sie den SMS-Walkthrough."
+   ],
+   [
+    "Mittel.",
+    "Führen Sie die CSV-Vorlagen auf einer Seite für vier Wochen aus (Level H0) und berechnen Sie eine Zusammenfassung der Auswirkungen."
+   ],
+   [
+    "Tiefgehend.",
+    "Ein 12-wöchiger präregistrierter Pilotversuch mit einer Baseline und einem unabhängigen Evaluator; passen Sie die rule packs mit Ihrem Leiter für Lebensmittelsicherheit an; betreiben Sie Ihren eigenen registry Node."
+   ]
+  ],
+  "first": "<p>Füllen Sie die drei CSV-Vorlagen für einen Tag aus und berechnen Sie dann die Zusammenfassung:</p><pre class=\"code\"><code>cookwala humanitarian --summary your-folder --org did:web:your-org.example --from 2026-11-01 --to 2026-11-30</code></pre><div class=\"output\">ImpactSummary: kgRescued 128 (measured, sum of Handover.lines.kgAccepted, n=2) · mealsServed 380 (measured) · timeToClaimMinutesMedian 22 (measured) …</div}",
+  "flow": [
+   "Angebot → Beanspruchung → Übergabe mit Temperaturprüfung → Verteilung",
+   "Zusammenfassung der Auswirkungen berechnet, niemals getippt",
+   "Baseline, Pilot, unabhängige Evaluierung",
+   "Veröffentlichte Ergebnisse, was auch immer sie zeigen"
+  ],
+  "work": [
+   "Vergleichbare Zahlen über Standorte hinweg; Belege für Geldgeber",
+   "Sicherheitsbefunde vor, nicht nach einem Problem",
+   "Ein Format, das die Systeme der Spender lesen können: dokumentierte Mapping-Tabellen für HXL, GS1 und DHIS2 (Exporter sind Integrationsarbeit)"
+  ],
+  "society": [
+   "Mehr Lebensmittel erreichen Menschen sicher, wobei ihre Würde gewahrt bleibt",
+   "Keine Namen, keine Gesichter, kein Profiling"
+  ],
+  "links": [
+   [
+    "Humanitär",
+    "/humanitarian/"
+   ],
+   [
+    "Das Profil",
+    "/docs/HUMANITARIAN-PROFILE/"
+   ],
+   [
+    "Pilotprotokoll",
+    "/docs/PILOT-PROTOCOL/"
+   ],
+   [
+    "Konzeptnotiz",
+    "/docs/CONCEPT-NOTE/"
+   ]
+  ]
+ },
+ "health": {
+  "short": "Gesundheit",
+  "title": "Für Ernährungsberater, Lebensmittelsicherheitsbeauftragte, Gesundheitsbehörden und Pflegeheime",
+  "lead": "Ernährungs- und Lebensmittelsicherheitsregeln als maschinenprüfbare Packs, abgeleitet aus öffentlichen Leitlinien, angewendet auf Menüs und Übergaben, wobei Ihre Überprüfung nach Berufsgruppe und Ergebnis aufgezeichnet wird. Nichts ist medizinische Beratung; nichts wird über das hinaus behauptet, was die Packs besagen.",
+  "message": "<p>Es existieren vier Entwurf-Packs: Basisregeln für Natrium, freien Zucker, Fette, Obst und Gemüse sowie die Kühlkette; Pflege-Regeln für Kinder unter fünf Jahren, Schwangerschaft, ältere Erwachsene und immungeschwächte Personen; Schulmahlzeiten-Muster; Natriumreduktion. Ein Pack wechselt erst nach einer fachlichen Überprüfung mit einem genehmigten Ergebnis vom Entwurf zum überprüften Status. In Roboter-Küchen werden dieselben Grenzwerte (Warmhalten, zweistufige Kühlung, Aufwärmen) durch das Gerät erzwungen und aufgezeichnet. Die persönliche Ernährung verbleibt auf dem Gerät des Haushalts; vom Kliniker gesetzte Ziele gehören dem Kliniker.</p>",
+  "options": [
+   [
+    "Überprüfen Sie ein Pack mit der Vorlage.",
+    "Etwa zwei Stunden; Ihre Berufsgruppe und das Ergebnis werden aufgezeichnet, Ihr Name nicht."
+   ],
+   [
+    "Passen Sie ein Regelwerk an nationale Regeln an.",
+    "Zuständigkeit festlegen, nationale Quelle angeben, Überprüfung protokollieren."
+   ],
+   [
+    "Schlagen Sie Fürsorgeregeln für die Menschen vor, denen Sie dienen.",
+    "Ein RFC mit einem Schema ist ein klinisches Argument, das ausgeführt wird."
+   ],
+   [
+    "Later: Aggregierte Ergebnisse aus Programmen lesen.",
+    "Ernährungs-Passraten und Erkenntnisse, keine personenbezogenen Daten."
+   ]
+  ],
+  "first": "<p>Öffnen Sie <code>profiles/humanitarian/care-vulnerable-groups.rulepack.json</code> und die Review-Vorlage; markieren Sie drei Regeln als genehmigt, geändert oder abgelehnt; speichern Sie die Review als ein Issue mit dem Label <code>health-review</code>. Die Maintainer fügen es dem <code>reviews</code> des Packs hinzu.</p>",
+  "flow": [
+   "Entwurfspack → Ihre Review → Status überprüft",
+   "Programme übernehmen es; Ergebnisse erscheinen in jeder Distribution",
+   "Ergebnisse werden zusammen mit den Methoden veröffentlicht"
+  ],
+  "work": [
+   "Ihre Anleitung läuft in jeder Küche, die es übernimmt, einschließlich Roboterküchen, wobei Ihr Beruf aktenkundig hinterlegt ist",
+   "Eine publikationsfähige Review",
+   "Ein Datensatz von Erkenntnissen (aggregiert, keine personenbezogenen Daten) für die Forschung"
+  ],
+  "society": [
+   "Weniger Natrium, Zucker und gesättigte Fettsäuren in Massenverpflegungsmahlzeiten",
+   "Sichereres Warmhalten und Kühlen",
+   "Für Kinder und ältere Menschen in die Maschine eingeschriebene Fürsorge"
+  ],
+  "links": [
+   [
+    "Überprüfungsvorlage",
+    "/docs/REVIEW-TEMPLATE/"
+   ],
+   [
+    "Richtlinie für gesundheitsbezogene Angaben",
+    "/docs/CLAIMS-POLICY/"
+   ],
+   [
+    "Humanitärer Profil",
+    "/docs/HUMANITARIAN-PROFILE/"
+   ],
+   [
+    "Würde in automatisierter Pflege",
+    "/ideas/dignity-in-automated-care/"
+   ]
+  ]
+ },
+ "education": {
+  "short": "Bildung",
+  "title": "Für Schullehrer, Pädagogen, Professoren, Forscher und Studierende",
+  "lead": "Kochen ist der vertrauteste Prozess der Welt, und Cookwala macht ihn zu einem Lehrmittel: Temperaturen, Einheiten, gerechte Aufteilung, Sicherheit, Maschinen, die Regeln befolgen. Für Forscher ist es ein Benchmark, ein Datensatzformat und eine Liste offener Probleme.",
+  "message": "<p>Lehrer erhalten fünf Lektionen, die Live-Demos und Beispielrezepte nutzen und nichts von den Schülern verlangen. Professoren und Studierende erhalten operation envelopes als Simulations-Testbedingungen, {{stat:conformanceVectors}} conformance-Vektoren, neun Rezepte mit Endbedingungen in zwei Sprachen, vier Simulatoren mit jeder aufgelisteten assumption, ein execution-log-Format mit Exportern für LeRobot und OpenTelemetry, ein facet registry für Privacy Engineering und eine Liste von offen stehenden Problemen im Umfang einer Abschlussarbeit, die niemandem gehören.</p>",
+  "options": [
+   [
+    "Lehrer.",
+    "Lektion-Kit ausführen: Was ist ein simmer, Einheiten und Skalierung, wann ist es fertig und sicher, was eine Maschine niemals tun darf, gerechte Aufteilung."
+   ],
+   [
+    "Professoren und Studenten.",
+    "Wählen Sie ein offenes Problem; nutzen Sie die Simulatoren und Vektoren; schlagen Sie einen Datensatz oder einen Benchmark vor."
+   ],
+   [
+    "Forscher.",
+    "Veröffentlichen Sie Datensätze von einvernehmlichen Ausführungen; kritisieren Sie die Annahmen der Simulatoren; schlagen Sie Vektoren und RFCs vor."
+   ]
+  ],
+  "first": "<p>Lehrer: führen Sie den Browser dry run im Unterricht mit Koshari mit dem Gerät ohne Thermometer durch und fragen Sie, warum es die Verweigerung vor Hitze (refusal before heat) erfolgte. Studenten: ändern Sie eine Annahme im Stadt-Simulator und erklären Sie das Ergebnis in einem Absatz.</p>",
+  "flow": [
+   "Lektion → Projekt → Datensatz → Paper → RFC"
+  ],
+  "work": [
+   "Kostenloses, offenes, zitierfähiges Material",
+   "Ein Benchmark, der niemandem gehört",
+   "Miturheberschaft am Standard durch RFCs; Anerkennung auf Datensätzen und Vektoren"
+  ],
+  "society": [
+   "Eine Generation, die weiß, was eine sichere Küche ist, und ein Sicherheitsdatenblatt lesen kann"
+  ],
+  "links": [
+   [
+    "Bildung",
+    "/education/"
+   ],
+   [
+    "Lernkit",
+    "/docs/LESSON-KIT/"
+   ],
+   [
+    "Forschungsthemen",
+    "/docs/RESEARCH-TOPICS/"
+   ],
+   [
+    "Simulatoren",
+    "/playground/#sim-h"
+   ]
+  ]
+ },
+ "government": {
+  "short": "Regierung",
+  "title": "Für Regierungen, Ministerien, Regulierungsbehörden, Gesetzgeber und Normungsgremien",
+  "lead": "Kochmaschinen erscheinen unter Regulierungen, die separat für Geräte und Software geschrieben wurden. Cookwala gibt Regulierungsbehörden etwas Konkretes, auf das sie verweisen können, und Lebensmittelspendenprogrammen einen Datenstandard ohne personenbezogene Daten. Es ist lizenzfrei und strebt eine neutrale Governance an.",
+  "message": "<p>Auf dem Gerät erzwungene Sicherheitsgrenzwerte, refusal before heat, ein lokaler Stopp mit spezifizierten Latenzen, signierte Aufzeichnungen, anonyme Meldung von Vorfällen, eine conformance Suite, die jeder ausführen kann, und ein Berichtsformat hinter jedem claim. Für die Lebensmittelrettung: nur Organisationen, Aggregate mit Small-Cell-Unterdrückung, ein Kühlketten-Nachweis bei jeder Übergabe, Regeln abgeleitet aus öffentlichen Leitlinien, wartend auf professionelle Prüfung (bisher keine geprüft) und ersetzbar durch nationale Codes. Modellklauseln, die dem entsprechen, was der Standard tut. Keine Regierung oder Behörde unterstützt dies; das steht im Briefing.</p>",
+  "options": [
+   [
+    "Lesen Sie das zweiseitige Briefing.",
+    "Prüfen Sie dann drei Dinge im Repository: das safety limits pack, den conformance runner, die humanitären Datenschutzregeln."
+   ],
+   [
+    "Please provide the blocks you would like me to translate.",
+    "Lebensmittenspendendaten, Sicherheit von Kochmaschinen, von Robotern gehaltene Haushaltsdaten, Beschaffung."
+   ],
+   [
+    "Bitten Sie Ihr Standardisierungsgremium, Core 0.2 zu überprüfen.",
+    "Ergänzend zu den Hardware-Sicherheitsstandards, die ein Gerät bereits erfüllen muss (ISO 13482, IEC 60335), welche durch diesen Standard nicht ersetzt werden."
+   ],
+   [
+    "Führen Sie einen nationalen Registry-Knoten und einen Recall-Feed aus.",
+    "Recalls erreichen Küchen ohne einen externen Server."
+   ],
+   [
+    "Finanzieren Sie ein Pilotprojekt mit Ihrem Schulessen-Programm.",
+    "Vorab registriert, mit einem unabhängigen Evaluator; Ergebnisse werden unabhängig vom Ausgang veröffentlicht."
+   ]
+  ],
+  "first": "<p>Lesen Sie das <a href=\"/docs/POLICY-BRIEF/\">Briefing</a> (zwei Seiten), öffnen Sie dann <code>profiles/core/safety-limits.default.json</code> und <code>conformance/</code> auf GitHub und führen Sie aus:</p><pre class=\"code\"><code>python tools/run_conformance.py --report report.json</code></pre><div class=\"output\">conformance: {{stat:conformanceVectors}}/{{stat:conformanceVectors}} passed · report.json</div",
+  "flow": [
+   "Briefing → Überprüfung durch eine nationale Normungsorganisation → Referenz in Leitlinien → Pilotprojekt → Zertifizierungssystem"
+  ],
+  "work": [
+   "Eine fertige, überprüfbare technische Basis",
+   "Nachweise aus Pilotprojekten",
+   "Ein Kanal zur Industrie durch einen neutralen Standard",
+   "Interoperabilität mit den humanitären Datenstandards, die Sie bereits nutzen"
+  ],
+  "society": [
+   "Sicherere Maschinen in Haushalten",
+   "Lebensrettung, die die Menschen schützt, denen sie dient",
+   "Weniger Abfall in Städten"
+  ],
+  "links": [
+   [
+    "Politik",
+    "/policy/"
+   ],
+   [
+    "Policy brief",
+    "/docs/POLICY-BRIEF/"
+   ],
+   [
+    "Modellsprache",
+    "/docs/MODEL-LANGUAGE/"
+   ],
+   [
+    "Governance",
+    "/docs/GOVERNANCE/"
+   ]
+  ]
+ },
+ "capital": {
+  "short": "Kapital",
+  "title": "Für Investoren, Unternehmer, Philanthropien und Entwicklungsbanken",
+  "lead": "Der Standard ist kostenlos; die damit verbundenen Dienstleistungen sind ein Geschäft; die humanitäre Ebene ist ein öffentliches Gut, das Entwicklungsförderer mit vorregistrierter Evaluierung unterstützen können. Auf dieser Website werden nirgendwos finanzielle Versprechen gemacht.",
+  "message": "<p>Zwei Einheiten: eine Stiftung, die die Spezifikation, den Namen und die Marke hält, auf ewig lizenzgebührenfrei; und ein Unternehmen, das Testlabor-Dienstleistungen, Hub-Software, eingewilligte Datensätze, Registry-Betrieb und Pilotprojekte verkauft; Zertifikate stammen von unabhängigen Dritten. Kostenlos für den Einsatz in der Nothilfe unter den aktuellen Lizenzen; die Satzung der Stiftung wird dies binden. Die Finanzierung ist an Meilensteine im Aktionsplan gebunden, mit schriftlich fixierten Abbruchregeln. Nutzer, Partner, Pilotprojekte und Umsatz heute: null; die Website sagt dies auf jeder Seite, die etwas anderes implizieren könnte.</p>",
+  "options": [
+   [
+    "Lesen.",
+    "Die Gelegenheit, das Geschäftsmodell, die Roadmap mit Status, Risiken und Governance auf der Investorenseite; die Problem-, Architektur- und Risikoabschnitte des Whitepapers; das 30-Punkte-Besorgungsregister des Aktionsplans."
+   ],
+   [
+    "Finanzieren Sie eine Überprüfung.",
+    "Envelopes, Rule Packs oder eine Datenschutzbewertung; das Ergebnis wird veröffentlicht."
+   ],
+   [
+    "Finanzieren Sie ein Pilotprojekt.",
+    "Unter dem vorregistrierten Protokoll mit einem unabhängigen Evaluator."
+   ],
+   [
+    "Unterstützen Sie das Unternehmen.",
+    "Getrennt vom Gemeinwohl; die Preisgestaltung ist die Entscheidung des Gründers."
+   ],
+   [
+    "Governance beitreten.",
+    "Als Beobachter eines Geldgebers, wenn das Komitee gebildet wird."
+   ]
+  ],
+  "first": "<p>Lesen Sie die Abschnitte 1, 5 und 14 des Whitepapers (Problem, Architektur, Risiken) und das Concern Register. Jedes offene Risiko ist aufgeführt; nichts wird versteckt, nur weil es unvorteilhaft ist.</p>",
+  "flow": [
+   "Nachweise (Reviews, Piloten, Conformance, Adopter) → Gates → Finanzierung gekoppelt an Gates → Grundlage für den Standard, Unternehmen für Dienstleistungen"
+  ],
+  "work": [
+   "Frühe Position in einem offenen Standard mit ehrlichen Zahlen",
+   "Ein investierbares Dienstleistungsunternehmen, getrennt vom Gemeinwohl"
+  ],
+  "society": [
+   "Kapital fließt dorthin, was gemessen wird, nicht dorthin, was behauptet wird"
+  ],
+  "links": [
+   [
+    "Investoren und Partner",
+    "/investors/"
+   ],
+   [
+    "Whitepaper",
+    "/whitepaper/"
+   ],
+   [
+    "Aktionsplan",
+    "/docs/ACTION-PLAN/"
+   ],
+   [
+    "Roadmap",
+    "/roadmap/"
+   ]
+  ]
+ },
+ "thought": {
+  "short": "Please provide the blocks you would like me to translate.",
+  "title": "Für Philosophen, Ethiker, Historiker und Futuristen",
+  "lead": "Wenn eine Maschine das Rezept einer Großmutter kocht, wem gehört das Wissen? Was bedeutet Würde in der automatisierten Pflege? Was darf ein Haushaltsroboter wissen, und wer sonst noch darf es wissen? Cookwala hat in Code Entscheidungen über diese Fragen getroffen; die Essays sagen, welche es waren, und laden zu Meinungsverschiedenheiten ein.",
+  "message": "<p>Die Positionen sind laufende Regeln, keine Meinungen: ein facet registry, das besagt, welche 45 Fakten über ein Zuhause es niemals verlassen; eine nie delegierbare Klasse von Operationen; die Identität des Gerichts, die ein Planer respektieren muss; die Zustimmung zu jedem execution log; ein Sitz für Arbeitnehmer oder Verbraucher in der Governance, wobei ein Sitz für die bedienten Menschen noch ein offener Vorschlag ist. Jede Position wird in einem Essay verteidigt und ist offen für ein RFC, was ein philosophisches Argument mit einem Schema ist.</p>",
+  "options": [
+   [
+    "Lies die Essays.",
+    "Wer erbt ein Rezept; Würde in der automatisierten Pflege; was ein Haushaltsroboter wissen darf; Verweigerung als Tugend; wie Bienen."
+   ],
+   [
+    "Please provide the blocks you would like me to translate.",
+    "Ein Pull-Request für den Essays-Ordner; Uneinigkeit ist der Sinn der Sache."
+   ],
+   [
+    "Schlage eine Regel vor.",
+    "Ein RFC, der einen Standard ändert: die Privacy-Klasse einer Facette, die niemals delegierbare Liste, die Identitätsregeln."
+   ],
+   [
+    "Auf die Ethikprüfung warten.",
+    "Vom Haushaltkontextprofil, wenn es einberufen wird."
+   ]
+  ],
+  "first": "<p>Lesen Sie <a href=\"/ideas/what-a-household-robot-may-know/\">den Essay über Haushaltsdaten</a> und die Reise-Regeln des Facet Registry (<code>vocab/facets.json</code>); finden Sie eine Facet, deren Standardwert Sie ändern würden, und begründen Sie dies in einem Issue.</p>",
+  "flow": [
+   "Essay → öffentlicher Kommentar → RFC → geänderter Standardwert"
+  ],
+  "work": [
+   "Ein Live-Fall, in dem ethische Positionen zu laufenden Regeln werden, mit einem öffentlichen Protokoll der Argumentation"
+  ],
+  "society": [
+   "Entscheidungen über intime Daten und kulturelles Erbe, die offen getroffen werden, bevor die Maschinen in Millionen von Haushalten eintreffen"
+  ],
+  "links": [
+   [
+    "Ideen und Essays",
+    "/ideas/"
+   ],
+   [
+    "Household Context Profile",
+    "/docs/HOUSEHOLD-CONTEXT/"
+   ],
+   [
+    "RFCs",
+    "/docs/RFCS/"
+   ],
+   [
+    "Governance",
+    "/docs/GOVERNANCE/"
+   ]
+  ]
+ },
+ "everyone": {
+  "short": "Alle",
+  "title": "Für alle, denen Lebensmittel, Abfall, Arbeitsplätze, das Klima und die Zukunft am Herzen liegen",
+  "lead": "Cookwala ist eine Möglichkeit, ein Rezept so zu schreiben, dass jeder oder alles sicher danach kochen kann, und ein Weg, damit Lebensmittel, die weggeworfen würden, jemanden erreichen, der sie braucht. Es ist kostenlos, es gehört keinem Unternehmen und es sagt, was es nicht weiß.",
+  "message": "<p>Eine Maschine, die einem Cookwala-Rezept folgt, weigert sich zu raten: kein Ölthermometer, kein Frittieren. Ihr Rezept behält Ihren Namen, wo immer es gekocht wird. Die Fakten Ihres Haushalts bleiben in Ihrem Haus. Eine food bank könnte mit den Telefonen, die sie bereits hat, mehr retten; das ist es, was der Pilotversuch testen soll. Und das Ganze wird öffentlich verwaltet, wobei seine Kritiker direkt daneben veröffentlicht werden.</p>",
+  "options": [
+   [
+    "Probieren Sie den dry run aus.",
+    "Ändern Sie das Gerät und beobachten Sie, wie ein Schritt abgelehnt wird; lesen Sie warum."
+   ],
+   [
+    "Spiele einen Simulator.",
+    "Das Abendessen einer Familie, zwei Städte, ein Land, die Welt, mit dem Protokoll an und aus."
+   ],
+   [
+    "Lies die Rezepte.",
+    "Neun ägyptische Gerichte, geschrieben, sodass eine Maschine sie prüfen kann, auf Englisch und Arabisch."
+   ],
+   [
+    "Schreibe ein Rezept, das du liebst.",
+    "Dein Name bleibt darauf stehen."
+   ],
+   [
+    "Sagen Sie einer food bank oder einer Schule Bescheid.",
+    "Die Concept Note ist für dieses Gespräch geschrieben."
+   ]
+  ],
+  "first": "<p>Öffnen Sie den <a href=\"/playground/\">playground</a>, wählen Sie koshari und das Gerät ohne Thermometer aus und lesen Sie, warum die knusprigen Zwiebeln abgelehnt werden.</p>",
+  "flow": [
+   "Neugier → ein Rezept → ein Gespräch mit einer Küche, die es gebrauchen könnte"
+  ],
+  "work": [
+   "Sicherere Maschinen in Ihrem Zuhause",
+   "Ihre eigenen Rezepte bewahrt",
+   "Eine Möglichkeit zu helfen, ohne Geld zu geben"
+  ],
+  "society": [
+   "Weniger Abfall, sicherere Lebensmittel, Maschinen, die Menschen dienen, die nicht für sich selbst kochen können, zurückgewonnene menschliche Zeit"
+  ],
+  "links": [
+   [
+    "Spielplatz",
+    "/playground/"
+   ],
+   [
+    "Warum Cookwala",
+    "/why/"
+   ],
+   [
+    "Auswirkung",
+    "/impact/"
+   ],
+   [
+    "Beitragen",
+    "/contribute/"
+   ]
+  ]
+ }
+}

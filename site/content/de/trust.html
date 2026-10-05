@@ -1,0 +1,66 @@
+<!--meta {"title": "Vertrauen: Sicherheit, Privatsphäre, Schutz, Governance, Kritiken, Status", "description": "Wie Cookwala Küchen sicher hält und Daten zu Hause schützt: Sicherheit wird auf dem Gerät erzwungen, refusal before heat, signierte Aufzeichnungen, Agenten unter Mandat, keine personenbezogenen Daten in der humanitären Ebene, veröffentlichte Kritiken, offene Governance und der ehrliche Status von allem.", "path": "/trust/"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Vertrauen</p>
+  <h1>Vertrauen ist eine Zahl mit einer Einheit, eine Aufzeichnung, die man prüfen kann, und eine Liste dessen, was wir falsch gemacht haben</h1>
+  <p class="lead">Diese Seite führt das Sicherheitsmodell, die Datenschutzregeln, die Sicherheitsrichtlinie, die Governance, die Kritiken und den Status jedes Teils von Cookwala zusammen. Nichts hier verspricht null Schaden; ein Standard, der dies täte, würde lügen.</p>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Das Sicherheitsblatt</h2>
+    <div class="two">
+      <dl class="sheet">
+        <dt>Sicherheitsgrenzwerte</dt><dd>auf dem Gerät erzwungen; strengere Regeln gewinnen immer; kein Rezept, Agent, Nachricht, Erweiterung oder Betriebsmodus kann eine Grenze erhöhen; ein Hersteller ändert einen Standardwert nur durch einen dokumentierten Sicherheitsnachweis und ein unterzeichnetes Firmware-Release</dd>
+        <dt>Lokaler Stopp</dt><dd>Bewegung stoppt innerhalb von 0,5 s, Hitze wird innerhalb von 1 s unterbrochen, mit oder ohne Netzwerk; wird niemals zur Autorisierung verweigert</dd>
+        <dt>Verweigerung</dt><dd>vor Hitze, mit dem Schritt und dem Grund; Frittieren hat eine Stufe: ein Ölthermometer</dd>
+        <dt>Unbeaufsichtigte Operationen</dt><dd>Schneiden, Sautieren, Anbraten, Frittieren, Reduzieren erfolgt niemals ohne eine anwesende oder innerhalb einer Minute erreichbare Person</dd>
+        <dt>Minimale Kerntemperaturen (Standardwerte)</dt><dd>Geflügel 74 °C · Hackfleisch 71 °C · Aufwärmen 74 °C (USDA FSIS; UK FSA 75 °C) · Warmhalten bei oder über 60 °C · zweistufige Kühlung</dd>
+        <dt>Allergen-Blöcke</dt><dd>Ablehnen; kein Ersatz um einen Block herum</dd>
+        <dt>Text</dt><dd>Daten, niemals Anweisungen; Versuche werden als Vorfälle protokolliert</dd>
+        <dt>Agenten</dt><dd>nur unter einem unterzeichneten Mandat handeln; irreversible Aktionen und Sicherheitsüberschreibungen benötigen immer eine Bestätigung; die zweite wird niemals erteilt</dd>
+        <dt>Rückrufe</dt><dd>signierter Feed; Ausführende verweigern zurückgerufene Revisionen; block_and_stop_running stoppt laufende Ausführungen sicher</dd>
+        <dt>Vorfälle</dt><dd>anonym, nur Datum, modelliert nach der vertraulichen Berichterstattung der Luftfahrt</dd>
+      </dl>
+      <div><p>Das Standard-Limits-Pack ist ein <b>Entwurf für Planungs- und Conformance-Tests</b>; Gerätehersteller ersetzen oder verschärfen es aus ihrem eigenen Safety Case heraus, und keine Behörde hat es überprüft. <a href="/v1/profiles/core/safety-limits.default.json">safety-limits.default.json</a> · <a href="/docs/CORE/">Core Abschnitt 6</a></p><p class="note">Was der Standard nicht verhindern kann: Hardwarefehler, ein Hersteller, der über das, was er erzwingt, lügt, eine Person, die ein Limit an einem Gerät überschreibt, das dies zulässt. Conformance und Certification machen diese erkennbar, nicht unmöglich.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div>
+    <h2>Datenschutz</h2>
+    <ul class="ticks"><li>Execution Logs enthalten keine personenbezogenen Daten und verlassen das Gerät nur mit einer Opt-in-Einwilligung, die widerrufbar ist; offene Datensätze vergröbern die Zeiten auf den Tag.</li><li>Das Humanitarian Profile enthält überhaupt keine personenbezogenen Daten: Organisationen, Aggregate, Standorte.</li><li>Das Household Context Profile bewahrt die Fakten eines Haushalts zu Hause: {{stat:facets}} Facet-Typen mit einer Privacy-Class und einer Travel-Rule; 45 dürfen in keiner Form verlassen werden; Anbieter erhalten derived Constraints; 13 Device-Self-State-Typen dürfen nur unter ausdrücklicher, widerruflicher Einwilligung reisen; kein Verhaltensscore von irgendjemandem; Einkommen wird niemals abgeleitet; alles innerhalb eines angegebenen Zeitfensters löschbar.</li><li>Keine Analysen, keine Cookies, kein Tracking auf dieser Website.</li></ul>
+    <p><a href="/docs/HOUSEHOLD-CONTEXT/">Household Context Profile</a> · <a href="/ideas/what-a-household-robot-may-know/">Der Essay</a> · <span class="status">next</span> eine Datenschutz-Folgenabschätzung mit einem Reviewer</p>
+  </div>
+  <div>
+    <h2>Sicherheit</h2>
+    <ul class="ticks"><li>Hashes über RFC 8785 canonical JSON; Ed25519-Signaturen (P-256 für Hardware-Keys); Key-Records mit Gültigkeit und Widerruf; selektive Offenlegung; Event-Logs mit einem Sequencer und bezeugten Checkpoints, sodass ein Umschreiben erkennbar ist; weitergeleitete Elemente werden gegen den Aussteller verifiziert, niemals gegen den Relay.</li><li>Melden Sie Schwachstellen privat; Sicherheitsprobleme sind Sicherheitsprobleme. Bestätigung innerhalb von 3 Werktagen; standardmäßige Offenlegung nach 90 Tagen.</li></ul>
+    <p><a href="/docs/SECURITY/">Sicherheitsrichtlinie</a> · <a href="/.well-known/security.txt">security.txt</a> · <a href="/v1/conformance/signature.json">Signaturvektoren</a></p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>Conformance und Zertifizierung</h2>
+      <p>{{stat:conformanceVectors}} öffentliche Vektoren. Ein Claim ist ein signierter Bericht: selbst deklariert → verifiziert durch einen Registry-Betreiber → zertifiziert durch einen unabhängigen Zertifizierer. Berichte, niemals Badges. Es wird kein Zertifizierer beauftragt. <a href="/docs/CERTIFICATION/">Der Pfad</a> · <a href="/docs/CERTIFICATION/#2-what-a-report-contains">der Referenzbericht</a></p>
+      <h2>Governance</h2>
+      <p>Heute ein Editor, öffentlich mit schriftlicher Begründung; RFCs mit 30-tägigen Kommentarsfristen und benannten Reviewern für die Sicherheit; ein Lenkungsausschuss mit veröffentlichten Zahlen und Sitzen für die betroffenen Personen; später eine neutrale Stiftung; eine Patent-Non-Assertion-Zusage; Contributor Covenant. <a href="/docs/GOVERNANCE/">Governance</a> · <a href="/docs/RFCS/">RFCs</a></p>
+    </div>
+    <div>
+      <h2>Von uns veröffentlichte Kritiken</h2>
+      <p>Wir haben Kritiken an unserer eigenen Idee aus sechs Perspektiven verfasst (ein Red Team, ein technischer Prüfer, ein anspruchsvoller Anwender, ein KI-Labor, eine Hilfsorganisation, eine Gesundheitsbehörde) und diese zusammen mit unseren Antworten und dem Status jedes Anliegens veröffentlicht. Sie sind selbst verfasst; keine externe Organisation hat Cookwala bisher geprüft, und keine wird als eine solche genannt. Wir haben dann den Einzeiler geändert, die Schemata streng gestaltet, das Ledger und die Baselines der Simulatoren neu gestaltet. <a href="/docs/CRITIQUES/">Kritiken</a> · <a href="/docs/ACTION-PLAN/">Concern register, 30 items</a> · <a href="/docs/BACKSTORY/">The gap list</a></p>
+      <h2>Status von allem</h2>
+      <div class="table-wrap"><table><thead><tr><th>Teil</th><th>Status</th></tr></thead><tbody>
+        <tr><td>Core 0.2</td><td><span class="status core">core</span> normativ, Entwurf in Prüfung</td></tr>
+        <tr><td>Humanitär 0.2, Household Context, Registry, Conformance-Berichte, Föderation</td><td><span class="status">draft</span> Profile</td></tr>
+        <tr><td>Küchen und runs, Versorgungs-Signale, Mission, Markt, Reasoning, Gesundheits-Personalisierung, Erweiterungen</td><td><span class="status">exp</span> experimentell</td></tr>
+        <tr><td>Rule packs</td><td><span class="status">draft</span> noch nicht professionell geprüft</td></tr>
+        <tr><td>Simulatoren</td><td><span class="status model">model</span> illustrativ, keine Prognosen</td></tr>
+        <tr><td>Piloten, Partner, Zertifizierer, Stiftung</td><td><span class="status">planned</span> keine vorhanden</td></tr>
+        <tr><td>Gehostete Dienste (Registry-Veröffentlichung, Statusseite)</td><td><span class="status">geplant</span> statische Dateien heute</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>
+

@@ -1,0 +1,33 @@
+<!--meta {"title": "Landwirte und Versorgung: Überschuss per SMS melden, faire Signale später", "description": "Ein Bauernhof mit surplus meldet diesen per SMS und erreicht noch am selben Tag eine Küche. Später, aggregierte und verzögerte Nachfrage- und Versorgungs-Signale, die nach einer wettbewerbsrechtlichen Prüfung jeden Produzenten gleich behandeln.", "path": "/farmers/", "status": "exp"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Landwirte und Versorgung</p>
+  <h1>Ein Überschuss sollte zu Mahlzeiten werden, nicht zu Abfall</h1>
+  <p class="lead">Zwei Dinge, die ein Landwirt oder eine Genossenschaft von einem Lebensmittelstandard erhalten kann: eine Möglichkeit, surplus zu melden, bevor er verrottet, und noch am selben Tag eine Küche erreicht, sowie ein faires Signal darüber, was wo benötigt wird. Ersteres ist spezifiziert, getestet und ausführbar durch jedes Programm, das ihn übernimmt; bisher hat dies noch kein Programm getan. Letzteres ist konzipiert, experimentell und wartet auf eine wettbewerbsrechtliche Prüfung.</p>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>now: surplus per SMS</h2>
+      <p>Ein Bauernhof ist ein Spender im Humanitarian Profile, eine Organisation wie jede andere, niemals eine Person. Eine Nachricht an das Gateway eines Programms:</p>
+      <pre class="code"><code>FARM 120KG TOMATO A HV0411</code></pre>
+      <div class="output">OFFER OF-002 open for 14 h · origin: farm · harvested 4 November</div>
+      <p>Eine food bank oder Küche beansprucht es; die Übergabe protokolliert die Temperatur und die akzeptierten Kilogramm; die Verteilung zählt die Mahlzeiten; die Zusammenfassung zeigt die mit der Methode geretteten Kilogramm. <a href="/humanitarian/#sms">Probieren Sie es im Walkthrough aus</a>.</p><h3>Was das für Sie bedeutet</h3><ul><li>Ihre Genossenschaft registriert eine Telefonnummer beim Programm; die Dokumente nennen die Genossenschaft, niemals eine Person oder ein Grundstück.</li><li>Die Küche, die Ihr Angebot beansprucht, organisiert und bezahlt die Abholung; die Vereinbarung des Programms besagt dies vor dem ersten Angebot.</li><li>Sie erhalten eine Antwort mit den akzeptierten Kilogramm und, falls welche abgelehnt wurden, warum. Sie können <code>CANCEL</code> vor der Abholung.</li><li>Sie benötigen kein Smartphone oder Daten; ein einfaches Telefon mit englischen Schlüsselwörtern und entweder einem Ziffernblock funktioniert.</li></ul>
+      <p class="note">Wo ein Programm das Profil ausführt, funktioniert dies heute mit einem einfachen Telefon. Noch führt kein Programm es aus; die Grammatik, der Parser und die Conformance-Vektoren existieren, und die <a href="/docs/CONCEPT-NOTE/">concept note</a> ist die Art und Weise, wie ein Programm startet.</p>
+    </div>
+    <div>
+      <h2>Next: faire Nachfrage- und Angebotsignale</h2>
+      <p>Wenn das Kochen geplant ist, können die angebauten und transportierten Mengen dem entsprechen, was benötigt wird. Die Länder- und Welt-Simulatoren zeigen die Größe des Effekts unter ihren <span class="kind modelled">modelled</span> Annahmen. Der kleinste ehrliche Schritt des Standards sind zwei experimentelle Dokumente:</p>
+      <ul><li><b>DemandSignal:</b> in Region R, in Woche W, Küchen und Programme planen, zwischen L und H kg der Zutat <em>class</em> C (Hülsenfrucht, Blattgemüse, Geflügel) zu verwenden, niemals ein Produkt oder eine Marke.</li><li><b>SupplySignal:</b> in Region R, in Woche W, Klasse C ist im Überfluss, normal oder knapp verfügbar, mit einem Erntefenster.</li></ul>
+      <p><b>Regeln, geprüft durch Code:</b> mindestens 20 beitragende Quellen; veröffentlicht mindestens 7 Tage nach Ende der Woche; keine Preise; keine Region feiner als eine Provinz ohne 100 Quellen; offen für alle, identisch für jeden Leser, kostenlos. Ein kleiner Produzent sieht genau das, was ein großer Käufer sieht. <a href="/docs/SUPPLY-SIGNALS/">Versorgungssignale</a> · <a href="/docs/RFC-0007/">RFC-0007</a></p>
+      <p class="note"><span class="status">gated</span> Das Teilen von Prognosen zwischen Wettbewerbern ist das, wovor Wettbewerbsbehörden warnen. Diese Regeln sind darauf ausgelegt, das Signal für die Aussaat nützlich und für die Preisgestaltung nutzlos zu halten; der Rat legt die endgültigen Schwellenwerte fest. Bis dahin wird nichts veröffentlicht.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Was außerhalb des Standards bleibt</h2>
+  <p>Preise. Verträge. Wer bekommt Lebensmittel, wenn es nicht genug gibt (das ist eine rechenschaftspflichtige Entscheidung eines Programms). Eine perfekt schlanke Lieferkette: Das Signaldesign besagt, dass Reserven Teil des Plans sind, denn ein Ernährungssystem, das exakt auf die Nachfrage abgestimmt ist, ist nur einen Schock von einem leeren Regal entfernt.</p>
+  <div class="cta"><a class="btn primary" href="/for/food/">Your page: farmers, cooks, chefs</a><a class="btn" href="/humanitarian/">Humanitarian</a><a class="btn" href="/sim/country/">The country simulator</a></div>
+</section>
+

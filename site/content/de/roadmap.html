@@ -1,0 +1,62 @@
+<!--meta {"title": "Roadmap: now, next, later, mit einem Status für jeden Punkt", "description": "Was existiert, was geplant ist, was noch nicht finanziert ist und die Gates, die jeder Punkt passieren muss. Nichts geht ohne die genannte Evidence zu done.", "path": "/roadmap/"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Roadmap</p>
+  <h1>Now, next, later</h1>
+  <p class="lead">Jeder Punkt trägt einen Status: done, in progress, planned, not yet funded. Gates stammen aus dem Aktionsplan. Nichts geht ohne die genannte Evidence von planned zu done. Gepflegt in <a href="/docs/ROADMAP/">docs/ROADMAP.md</a>.</p>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Now (dieses Release)</h2>
+    <div class="table-wrap"><table><thead><tr><th>Element</th><th>Status</th></tr></thead><tbody>
+      <tr><td>Core 0.2: envelopes, sensor ladders, refusal, local safety limits, signed records, agent rules</td><td><span class="status core">done</span> Entwurf, in Prüfung</td></tr>
+      <tr><td>{{stat:conformanceVectors}} conformance Vektoren (Core und Profile); conformance Bericht Format</td><td><span class="status core">done</span></td></tr>
+      <tr><td>Referenzbibliothek, Python-Paket und CLI, TypeScript-Typen, MCP-Server, Referenz-Hub, ROS 2-Schnittstellenpaket</td><td><span class="status core">done</span> editierbare und Quellinstallationen; Paket-Registries next</td></tr>
+      <tr><td>Neun Beispielrezepte auf Englisch und Arabisch</td><td><span class="status core">done</span> V1: strukturiert, nicht feldverifiziert</td></tr>
+      <tr><td>{{stat:recipesV0}} fifi.cooking Rezepte importiert, Text in 25 Sprachen</td><td><span class="status core">done</span> V0: beschrieben, nicht maschinell verifiziert (RFC-0009); vier Kollektionen warten auf die Bestätigung der Gründerlizenz</td></tr>
+      <tr><td>SDK-Clients in {{stat:sdkLanguages}} Sprachen; {{stat:scenarios}} ausgeführte Szenarien</td><td><span class="status core">done</span> Go, Rust, Kotlin, C# und PHP noch nicht auf CI kompiliert</td></tr>
+      <tr><td>Die Website und Dokumentation in 25 Sprachen</td><td><span class="status draft">draft</span> Englisch und Arabisch von Hand; der Rest maschinell übersetzt und etikettiert; Dokumente werden noch übersetzt</td></tr>
+      <tr><td>Humanitarian Profile 0.2: surplus to plate, SMS-Grammatik und Parser, vier bearbeitete Flows, Impact-Zusammenfassungen, Pilotprotokoll, Concept Note</td><td><span class="status">done</span> draft</td></tr>
+      <tr><td>Rule packs (basic, care for vulnerable groups, school meals, sodium reduction) mit einer Review-Vorlage</td><td><span class="status">done</span> Entwürfe warten auf professionelle Prüfung</td></tr>
+      <tr><td>Household Context Profil mit einem 139-Typen facet registry und Offenlegungsvektoren</td><td><span class="status">done</span> Entwurf</td></tr>
+      <tr><td>Registry und directory API; ehrliche registry.json und directory.json</td><td><span class="status">done</span> statisch</td></tr>
+      <tr><td>Küchen und Produktionsläufe; Versorgungssignale</td><td><span class="status exp">done</span> experimentell</td></tr>
+      <tr><td>Föderationsregeln und Relay-Vektoren</td><td><span class="status">done</span> Entwurf</td></tr>
+      <tr><td>Vier Simulatoren mit dem Protokoll an und aus</td><td><span class="status model">done</span> illustrativ</td></tr>
+      <tr><td>Website auf Englisch und Arabisch, Whitepaper, Deck</td><td><span class="status">in Arbeit</span></td></tr>
+    </tbody></table></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Next (innerhalb von etwa einem Jahr, sofern die Ressourcen es zulassen)</h2>
+  <div class="table-wrap"><table><thead><tr><th>Element</th><th>Status</th><th>Gate</th></tr></thead><tbody>
+    <tr><td>Lebensmittelwissenschaftliche Überprüfung der operation envelopes</td><td>geplant</td><td>Prüfer stimmt zu</td></tr>
+    <tr><td>Bewertungen durch Ernährungsberater und Lebensmittelsicherheitsbeauftragte der vier rule packs</td><td>geplant</td><td>Bewertungen abgelegt; packs werden auf reviewed gesetzt</td></tr>
+    <tr><td>Datenschutz-Folgenabschätzung des Haushaltsprofils</td><td>geplant</td><td>Prüfer stimmt zu</td></tr>
+    <tr><td>Ein Food-Bank-Pilotprojekt (12 Wochen, vorregistriert, unabhängiger Evaluator)</td><td>noch nicht finanziert</td><td>Partner und Finanzierung</td></tr>
+    <tr><td>Agenten-Sicherheits-Benchmark-Ergebnisse für mehrere Modellfamilien</td><td>geplant</td><td>Runs veröffentlicht mit Methode</td></tr>
+    <tr><td>pip install cookwala wheel und @cookwala/sdk auf npm</td><td>geplant</td><td>Packaging, das Vokabulare und Schemata bündelt</td></tr>
+    <tr><td>Registry-Service (validieren, veröffentlichen, Tombstones)</td><td>geplant</td><td>ein Worker- und Namespace-Nachweis</td></tr>
+    <tr><td>Erster Gerätehersteller, der die Core API gegen den Referenz-Hub implementiert</td><td>geplant</td><td>ein Hersteller stimmt zu; Bericht veröffentlicht</td></tr>
+    <tr><td>Konvertierung der ersten fifi.cooking Collections</td><td>geplant</td><td>Gründer entscheidet über Rechte pro Collection</td></tr>
+    <tr><td>Core 0.3 aus Geräte-Feedback</td><td>geplant</td><td>Feedback von zwei Implementierern</td></tr>
+    <tr><td>Lenkungsausschuss</td><td>geplant</td><td>drei unabhängige Anwender oder zwei Implementierungen</td></tr>
+  </tbody></table></div>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>Later</h2>
+      <ul><li>Ein echtes Gerät, das ein Cookwala-Rezept kocht, ungeschnitten, auf Video: noch nicht finanziert; benötigt einen Gerätepartner</li><li>Zertifizierungssystem mit einem unabhängigen Zertifizierer: kein Zertifizierer beauftragt</li><li>Neutrale Grundlage für die Spezifikation, Marke und das Kennzeichen</li><li>Mitwirkernetzwerk: eingewilligte Aufnahmen echter Rezepte mit Namensnennung</li><li>Nachfrage- und Angebotsignale, veröffentlicht durch Programme und Genossenschaften, nach wettbewerbsrechtlicher Prüfung</li><li>„Kochen in der Simulation“-Benchmark</li><li>Anerkennung als Digital Public Good für das Humanitarian Profile, nach Pilot-Evidenz</li><li>Regionenübergreifende Hilfsströme und Effekte des sauberen Kochens im Welt-Simulator</li></ul>
+    </div>
+    <div>
+      <h2>Was wir nicht tun werden</h2>
+      <p>Persönliche Daten sammeln; Zahlen ohne eine Methode veröffentlichen; einen Partner nennen, bevor er zugestimmt hat; eine Zertifizierung beanspruchen, die nicht existiert; Haushaltsdaten in ein Ledger eintragen; einen zentralen Orchestrator aufbauen, von dem Küchen abhängig sind; behaupten, den Hunger zu beenden.</p>
+      <h2>Kill- und Pivot-Regeln</h2>
+      <p>Wenn zwei externe Prüfungsrunden keinen Gerätehersteller oder Pilotpartner hervorbringen, verengt Cookwala den Fokus auf das Humanitarian Profile und das Rezeptformat. Wenn ein Pilot weniger als 5 % Gewinn zeigt, werden die Ergebnisse veröffentlicht und das Profil vor jeder Skalierung neu gestaltet.</p>
+    </div>
+  </div>
+</section>
+

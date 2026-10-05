@@ -1,0 +1,46 @@
+<!--meta {"title": "Registry und Verzeichnis", "description": "Durchsuchen Sie Rezepte, Geräte, Rule Packs, Erweiterungen und Benchmarks unter nachgewiesenen Namen mit exakten Versionen und Hashes; ein Verzeichnis von Organisationen, die um eine Listung gebeten haben. Ehrlich darüber, was existiert: Fast alles steht noch bevor.", "path": "/registry/", "status": "draft", "scripts": ["registry.js"]} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Registry und Verzeichnis</p>
+  {{chip}}
+  <h1>Finden und veröffentlichen Sie unter Namen, die beweisen, wer veröffentlicht hat</h1>
+  <p class="lead">Ein Registry hält Pointer, keinen Inhalt: was existiert, wer es veröffentlicht hat, welche exakte Version und dessen Hash. Namen werden durch DNS oder ein Code-Host-Konto nachgewiesen; Versionen sind exakt; zurückgezogene Einträge bleiben als Tombstones bestehen. Jeder darf ein Registry betreiben. Dieses hier listet nur auf, was heute im Repository existiert, und sagt dies auch so.</p>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Durchsuchen</h2>
+    <form class="controls" id="regForm"><label>Kind <select id="regKind"><option value="">All</option><option value="recipe_collection">Recipe collections</option><option value="catalog">Catalogs</option><option value="device">Devices</option><option value="rule_pack">Rule packs</option><option value="safety_limits">Safety limits</option><option value="extension">Extensions</option><option value="benchmark">Benchmarks</option><option value="knowledge">Knowledge packs</option><option value="policy_pack">Policy packs</option></select></label><label>Suche <input id="regQ" type="text" placeholder="Name oder Tag" aria-label="Suche"></label></form>
+    <div class="table-wrap"><table id="regTable"><thead><tr><th>Name</th><th>Art</th><th>Version</th><th>Status</th><th>Verifiziert</th><th>Beschreibung</th></tr></thead><tbody><tr><td colspan="6">Laden von /v1/registry.json…</td></tr></tbody></table></div>
+    <p class="note" id="regNote">Quelle: <a href="/v1/registry.json">/v1/registry.json</a>. Nichts hier ist ein Produkt eines Drittanbieters. Wenn ein Gerätehersteller, ein Rezeptverleger oder ein Programm veröffentlicht, erscheint es hier unter seinem eigenen nachgewiesenen Namespace.</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Rezepte im Referenzkatalog</h2>
+  <div class="cards" id="recipeCards"><p class="note">Rezepte werden geladen…</p></div>
+  <p class="note">Der vollständige Index mit {{stat:recipesV0}} von fifi.cooking auf V0 importierten Rezepten befindet sich unter <a href="/recipes/">/recipes/</a>. Neun Beispielrezepte auf Verifizierungsstufe V1 (strukturiert; nicht simuliert oder feldverifiziert), auf Englisch und Arabisch. Sie üben Kochen, Köcheln, Toasten, Frittieren mit einem Ölsensor, Backen mit Kerntemperatur-Kontrollpunkten, Warmhalten, Kühlen, Chillen und Schritte ohne Hitze. <a href="/docs/RECIPE-FORMAT/">Das Rezeptformat</a>.</p>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>Verzeichnis von Organisationen</h2>
+      <p>Organisationen, die um eine Listung gebeten haben: Gerätehersteller, Kataloge, Registries, Food Banks, Gemeinschaftsküchen, Schul- und Hilfsprogramme, Farmen und Genossenschaften, Lebensmittelhändler, Restaurants, Rezeptverleger, Zertifizierer, Forschungslabore, Gesundheitsbehörden, Regierungen, Versicherer, Übersetzer-Communities. Eine Listung stellt keine Befürwortung, Zertifizierung oder Partnerschaft dar. Eine Conformance-Angabe verweist auf einen veröffentlichten Bericht, niemals auf ein Abzeichen.</p>
+      <div class="table-wrap"><table id="dirTable"><thead><tr><th>Organisation</th><th>Rollen</th><th>Land</th><th>Verifiziert</th><th>Conformance</th></tr></thead><tbody><tr><td colspan="5">Laden von /v1/directory.json…</td></tr></tbody></table></div>
+      <p class="note">Ein Eintrag: der Betreiber dieser Seite. Niemand sonst hat bisher gefragt, und es ist niemand aufgeführt, der nicht gefragt hat.</p>
+    </div>
+    <div>
+      <h2>Veröffentlichen</h2>
+      <ol class="steps">
+        <li><p>Validate locally with the same checks the registry runs.</p><pre class="code"><code>cookwala validate
+cookwala hash my-collection/recipe.cookwala.json</code></pre></li>
+        <li><p>Prove your namespace once: a DNS TXT record <code>cookwala-verify=&lt;token&gt;</code> on your domain, a <code>/.well-known/cookwala-verify</code> file, or a GitHub or GitLab OIDC token from a CI job in your account.</p></li>
+        <li><p>Publish the entry.</p><pre class="code"><code>curl -X POST https://cookwala.ai/v1/registry/publish \
+  -H "Authorization: Bearer $COOKWALA_PUBLISH_TOKEN" -H "Content-Type: application/json" -d @entry.json</code></pre><p class="note"><span class="status">next</span> The publish and validate endpoints are specified (<a href="/v1/api/registry.openapi.yaml">registry.openapi.yaml</a>) and come with the registry service. Today entries are added by pull request to <code>site/v1/registry.json</code>.</p></li>
+      </ol>
+      <h3>Regeln</h3><ul><li>Namen: <code>&lt;reverse-dns-namespace&gt;/&lt;name&gt;</code>, Kleinschreibung, 3 bis 200 Zeichen.</li><li>Versionen exakt (<code>1.4.2</code>); Bereiche und <code>latest</code> abgelehnt.</li><li>Jede Version zeichnet das sha256 ihres Artefakts auf; Rezepte tragen zudem ihren eigenen Dokumenten-Hash.</li><li>Lebenszyklus: active → deprecated → recalled (auch im recall feed) → deleted (tombstone). Namen werden niemals wiederverwendet.</li></ul>
+      <p><a href="/docs/REGISTRY/">Das Registry-Profil</a> · <a href="/docs/RFC-0002/">RFC-0002</a> · <a href="/docs/FEDERATION/">Betreiben Sie Ihre eigene Registry</a></p>
+    </div>
+  </div>
+</section>
+
