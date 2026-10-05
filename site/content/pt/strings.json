@@ -310,5 +310,21 @@
   "more": "Leia mais",
   "d3_accept2": "cozinhar dentro do envelope",
   "d2_source": "derivados de orientações públicas da OMS, do Codex e da Sphere; nenhum os revisou"
+ },
+ "kind_measured": "medido",
+ "kind_planned": "planejado",
+ "stats_meta": "Contado na construção a partir do commit {commit} em {date}. Core {core}.",
+ "home": {
+  "d4_step": "Um passo da receita",
+  "d4_step2": "fritar a aletria em óleo abundante",
+  "d4_band": "Sua faixa segura",
+  "d4_band2": "óleo a 160–190 °C, nunca sem supervisão",
+  "d4_check": "A verificação do sensor",
+  "d4_check2": "este aparelho tem um termômetro de óleo?",
+  "d4_yes": "Sim: aceito",
+  "d4_yes2": "cozinhar dentro da faixa e registrar cada leitura",
+  "d4_no": "Não: recusado",
+  "d4_no2": "sem termômetro não há fritura; nada aquece",
+  "d4_caption": "Um passo de um dry run: o passo, sua faixa segura do vocabulário de operações, o sensor que o aparelho deve ter e as duas respostas possíveis. A mesma verificação roda para cada passo antes que algo aqueça."
  }
 }

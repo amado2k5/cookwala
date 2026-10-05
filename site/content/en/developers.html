@@ -41,6 +41,16 @@ curl -s localhost:7878/v1/safety-limits | head</code></pre><p class="note">Then 
   <div class="wrap two">
     <div>
       <h2>The Core API</h2>
+      <p>What an operation envelope looks like in the vocabulary that every dry run reads:</p>
+      <pre class="code" aria-label="Example operation envelope"><code>"cw.op.deep_fry": {
+  "envelope": {
+    "medium": "oil",
+    "tempC": { "min": 160, "max": 190 },
+    "unattended": false,
+    "sensorLadder": ["cw.sense.oil_temp"],
+    "note": "No oil-temperature sensor, no deep frying."
+  }
+}</code></pre>
       <p>One API every executor implements: <code>POST /v1/executions</code>, status, stop, resume, log, safety limits, capabilities; catalogs add recalls and incidents. Idempotency keys on every POST, <code>If-Match</code> on changes, refusal as a normal answer, stop never refused for authorization.</p>
       <p><a href="/v1/api/core.openapi.yaml">core.openapi.yaml</a> · <a href="/v1/api/registry.openapi.yaml">registry.openapi.yaml</a> · <a href="/v1/api/humanitarian.openapi.yaml">humanitarian.openapi.yaml</a> · <a href="/v1/api/household.openapi.yaml">household.openapi.yaml (local)</a> · <a href="/v1/schemas/bundle.json">all schemas in one bundle</a></p>
       <h3>Versioning</h3><p>Semver per spec; minor versions additive; majors announced 12 months ahead; the index serves each major for 3 years. Core is 0.2.x; profiles version independently and declare the Core version they need. <a href="/docs/GOVERNANCE/">Governance</a></p>

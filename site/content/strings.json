@@ -325,6 +325,22 @@
    "lp_core": "One standard: Core 0.2 and its profiles, open and royalty-free",
    "d3_accept2": "cook inside the envelope",
    "d2_source": "derived from public WHO, Codex and Sphere guidance; none has reviewed these packs"
+  },
+  "kind_measured": "measured",
+  "kind_planned": "planned",
+  "stats_meta": "Counted at build from commit {commit} on {date}. Core {core}.",
+  "home": {
+   "d4_step": "A recipe step",
+   "d4_step2": "deep fry the vermicelli",
+   "d4_band": "Its safe band",
+   "d4_band2": "oil at 160 to 190 °C, never unattended",
+   "d4_check": "The sensor check",
+   "d4_check2": "does this device have an oil thermometer?",
+   "d4_yes": "Yes: accept",
+   "d4_yes2": "cook inside the band and log every reading",
+   "d4_no": "No: refuse",
+   "d4_no2": "no thermometer, no deep frying; nothing heats up",
+   "d4_caption": "One step of a dry run: the step, its safe band from the operation vocabulary, the sensor the device must have, and the two possible answers. The same check runs for every step before anything heats up."
   }
  },
  "ar": {
@@ -653,6 +669,22 @@
    "lp_core": "معيار واحد: النواة 0.2 وملفاتها، مفتوح وبلا رسوم",
    "d3_accept2": "الطهي داخل المظروف",
    "d2_source": "مستمدّة من إرشادات عامة لمنظمة الصحة العالمية وكودكس وسفير؛ لم تراجعها أي منها"
+  },
+  "kind_measured": "مُحصى",
+  "kind_planned": "مخطَّط",
+  "stats_meta": "أُحصيت عند البناء من الإيداع {commit} بتاريخ {date}. النواة {core}.",
+  "home": {
+   "d4_step": "خطوة في الوصفة",
+   "d4_step2": "قلي الشعيرية قليًا عميقًا",
+   "d4_band": "نطاقها الآمن",
+   "d4_band2": "زيت بين 160 و190 °م، لا تُترك دون رقابة",
+   "d4_check": "فحص المستشعر",
+   "d4_check2": "هل لهذا الجهاز مقياس لحرارة الزيت؟",
+   "d4_yes": "نعم: يُقبل",
+   "d4_yes2": "يطهو داخل النطاق ويسجّل كل قراءة",
+   "d4_no": "لا: يُرفض",
+   "d4_no2": "لا مقياس حرارة، لا قلي عميق؛ لا شيء يسخن",
+   "d4_caption": "خطوة واحدة من التشغيل الجاف: الخطوة، نطاقها الآمن من مفردات العمليات، المستشعر الذي يجب أن يملكه الجهاز، والإجابتان الممكنتان. يُجرى الفحص نفسه لكل خطوة قبل أن يسخن أي شيء."
   }
  }
 }

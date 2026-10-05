@@ -99,16 +99,7 @@
       <p>Cada receita e registro pode ser hasheado e assinado, chaves podem ser revogadas, e logs de eventos carregam checkpoints testemunhados. Os testes que provam isso são públicos: {{stat:conformanceVectors}} vetores.</p>
       <p><a href="/docs/CORE/">Leia o Core 0.2</a> · <a href="/trust/">Confiança</a> · <a href="/docs/CRITIQUES/">Críticas que publicamos</a></p>
     </div>
-    <pre class="code" aria-label="Example operation envelope"><code>"cw.op.deep_fry": {
-  "envelope": {
-    "medium": "oil",
-    "tempC": { "min": 160, "max": 190 },
-    "unattended": false,
-    "sensorLadder": ["cw.sense.oil_temp"],
-    "note": "No oil-temperature sensor,
-             no deep frying."
-  }
-}</code></pre>
+    <figure class="diagram">{{diagram:dryrun}}<figcaption class="note">{{s:home.d4_caption}}</figcaption></figure>
   </div>
 </section>
 

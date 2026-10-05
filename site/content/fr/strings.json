@@ -310,5 +310,21 @@
   "more": "Lire la suite",
   "d3_accept2": "cuisiner dans l'enveloppe",
   "d2_source": "dérivés des recommandations publiques de l'OMS, du Codex et de Sphere ; aucun ne les a relus"
+ },
+ "kind_measured": "mesuré",
+ "kind_planned": "prévu",
+ "stats_meta": "Compté à la construction depuis le commit {commit} le {date}. Core {core}.",
+ "home": {
+  "d4_step": "Une étape de recette",
+  "d4_step2": "frire les vermicelles en bain d'huile",
+  "d4_band": "Sa bande sûre",
+  "d4_band2": "huile entre 160 et 190 °C, jamais sans surveillance",
+  "d4_check": "Le contrôle du capteur",
+  "d4_check2": "cet appareil a-t-il un thermomètre à huile ?",
+  "d4_yes": "Oui : accepté",
+  "d4_yes2": "cuire dans la bande et consigner chaque mesure",
+  "d4_no": "Non : refusé",
+  "d4_no2": "pas de thermomètre, pas de friture ; rien ne chauffe",
+  "d4_caption": "Une étape d'un dry run : l'étape, sa bande sûre tirée du vocabulaire des opérations, le capteur que l'appareil doit avoir, et les deux réponses possibles. Le même contrôle s'exécute pour chaque étape avant que quoi que ce soit ne chauffe."
  }
 }

@@ -100,16 +100,7 @@
       <p>Every recipe and record can be hashed and signed, keys can be revoked, and event logs carry witnessed checkpoints. The tests that prove it are public: {{stat:conformanceVectors}} vectors.</p>
       <p><a href="/docs/CORE/">Read Core 0.2</a> · <a href="/trust/">Trust</a> · <a href="/docs/CRITIQUES/">Critiques we published</a></p>
     </div>
-    <pre class="code" aria-label="Example operation envelope"><code>"cw.op.deep_fry": {
-  "envelope": {
-    "medium": "oil",
-    "tempC": { "min": 160, "max": 190 },
-    "unattended": false,
-    "sensorLadder": ["cw.sense.oil_temp"],
-    "note": "No oil-temperature sensor,
-             no deep frying."
-  }
-}</code></pre>
+    <figure class="diagram">{{diagram:dryrun}}<figcaption class="note">{{s:home.d4_caption}}</figcaption></figure>
   </div>
 </section>
 

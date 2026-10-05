@@ -99,16 +99,7 @@
       <p>Chaque recette et enregistrement peut être haché et signé, les clés peuvent être révoquées, et les journaux d'événements portent des points de contrôle attestés. Les tests qui le prouvent sont publics : {{stat:conformanceVectors}} vecteurs.</p>
       <p><a href="/docs/CORE/">Lire Core 0.2</a> · <a href="/trust/">Confiance</a> · <a href="/docs/CRITIQUES/">Critiques que nous avons publiées</a></p>
     </div>
-    <pre class="code" aria-label="Example operation envelope"><code>"cw.op.deep_fry": {
-  "envelope": {
-    "medium": "oil",
-    "tempC": { "min": 160, "max": 190 },
-    "unattended": false,
-    "sensorLadder": ["cw.sense.oil_temp"],
-    "note": "No oil-temperature sensor,
-             no deep frying."
-  }
-}</code></pre>
+    <figure class="diagram">{{diagram:dryrun}}<figcaption class="note">{{s:home.d4_caption}}</figcaption></figure>
   </div>
 </section>
 

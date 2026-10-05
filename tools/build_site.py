@@ -258,6 +258,22 @@ class Builder:
         more = ''.join(f'<a href="{self.path_for(lang, p)}">{html.escape(label)}</a>' for label, p in S['more'])
         return items, more
 
+    def stats_html(self, lang, body):
+        """Server-rendered proof strip: the same tiles the JavaScript used to draw, present without scripts and for crawlers."""
+        S = self.strings[lang]; figs = self.stats.get('figures', {})
+        keys = ['opsWithEnvelopes', 'conformanceVectors', 'safetyLimits', 'agentSafetyTests', 'humanitarianRules', 'schemas', 'publishedRecipes', 'facets', 'recipesInConversion']
+        tiles = []
+        for k in keys:
+            f = figs.get(k)
+            if not f: continue
+            planned = f.get('kind') == 'planned'
+            kind = S.get('kind_planned', 'planned') if planned else S.get('kind_measured', 'measured')
+            label = f.get('labelAr') if lang == 'ar' and f.get('labelAr') else f.get('label', '')
+            tiles.append(f'<div class="stat{" planned" if planned else ""}"><span class="kind {"assumed" if planned else "measured"}">{html.escape(kind)}</span><span class="v">{f["value"]:,}</span><span class="l">{html.escape(label)}</span></div>')
+        meta = S.get('stats_meta', 'Counted at build from commit {commit} on {date}. Core {core}.').format(commit=self.stats.get('commit', '')[:12], date=self.stats.get('generatedAt', '')[:10], core=self.stats.get('core', ''))
+        body = body.replace('<div class="stats" id="stats" aria-live="polite"></div>', f'<div class="stats" id="stats">{"".join(tiles)}</div>')
+        return body.replace('<p class="note" id="statsMeta"></p>', f'<p class="note" id="statsMeta">{html.escape(meta)}</p>')
+
     def stat(self, key):
         f = self.stats.get('figures', {}).get(key)
         return f'{f["value"]:,}' if f else '…'
@@ -274,6 +290,7 @@ class Builder:
         status = meta.get('status')
         chip = f'<p class="chip"><span class="dot {status}" aria-hidden="true"></span>{html.escape(S["status"].get(status, status))}</p>' if status else ''
         body = body.replace('{{chip}}', chip)
+        if '<div class="stats" id="stats"' in body: body = self.stats_html(lang, body)
         body = re.sub(r'\{\{diagram:(\w+)\}\}', lambda m: read(f'site/templates/diagrams/{m.group(1)}.svg'), body)
         if '{{sdk_cards}}' in body: body = body.replace('{{sdk_cards}}', self.sb.sdk_cards(lang))
         if '{{scenario_list}}' in body: body = body.replace('{{scenario_list}}', self.sb.list_html(lang))

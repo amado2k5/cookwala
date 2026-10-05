@@ -310,5 +310,21 @@
   "more": "Leer más",
   "d3_accept2": "cocinar dentro de la envolvente",
   "d2_source": "derivados de orientaciones públicas de la OMS, el Codex y Sphere; ninguno los ha revisado"
+ },
+ "kind_measured": "medido",
+ "kind_planned": "previsto",
+ "stats_meta": "Contado al construir desde el commit {commit} el {date}. Core {core}.",
+ "home": {
+  "d4_step": "Un paso de la receta",
+  "d4_step2": "freír los fideos en abundante aceite",
+  "d4_band": "Su banda segura",
+  "d4_band2": "aceite a 160–190 °C, nunca sin vigilancia",
+  "d4_check": "La comprobación del sensor",
+  "d4_check2": "¿tiene este aparato un termómetro de aceite?",
+  "d4_yes": "Sí: aceptado",
+  "d4_yes2": "cocinar dentro de la banda y registrar cada lectura",
+  "d4_no": "No: rechazado",
+  "d4_no2": "sin termómetro no hay fritura; nada se calienta",
+  "d4_caption": "Un paso de un dry run: el paso, su banda segura tomada del vocabulario de operaciones, el sensor que el aparato debe tener y las dos respuestas posibles. La misma comprobación se ejecuta para cada paso antes de que nada se caliente."
  }
 }

@@ -310,5 +310,21 @@
   "more": "Mehr lesen",
   "d3_accept2": "innerhalb der Hülle kochen",
   "d2_source": "abgeleitet aus öffentlichen Leitlinien von WHO, Codex und Sphere; keine hat diese Pakete geprüft"
+ },
+ "kind_measured": "gemessen",
+ "kind_planned": "geplant",
+ "stats_meta": "Beim Bau gezählt aus Commit {commit} am {date}. Core {core}.",
+ "home": {
+  "d4_step": "Ein Rezeptschritt",
+  "d4_step2": "die Nudeln frittieren",
+  "d4_band": "Sein sicheres Band",
+  "d4_band2": "Öl bei 160 bis 190 °C, nie unbeaufsichtigt",
+  "d4_check": "Die Sensorprüfung",
+  "d4_check2": "hat dieses Gerät ein Ölthermometer?",
+  "d4_yes": "Ja: angenommen",
+  "d4_yes2": "im Band kochen und jede Messung protokollieren",
+  "d4_no": "Nein: abgelehnt",
+  "d4_no2": "kein Thermometer, kein Frittieren; nichts heizt auf",
+  "d4_caption": "Ein Schritt eines Probelaufs: der Schritt, sein sicheres Band aus dem Operationsvokabular, der Sensor, den das Gerät haben muss, und die zwei möglichen Antworten. Dieselbe Prüfung läuft für jeden Schritt, bevor etwas aufheizt."
  }
 }

@@ -77,18 +77,6 @@
     body.textContent = ''; group(T.ops, ALL_OPS, 'cw.op.', 'ops'); group(T.sensors, SENSORS, 'cw.sense.', 'sensors'); group(T.cues, CUES, 'cw.sense.', 'cues');
     body.addEventListener('change', function (e) { var c = e.target; if (!c.dataset.key) return; var arr = custom[c.dataset.key]; var i = arr.indexOf(c.value); if (c.checked && i === -1) arr.push(c.value); if (!c.checked && i !== -1) arr.splice(i, 1); $('#dDevice').value = 'custom'; render(); });
   }
-  function stats() {
-    fetch('/v1/stats.json').then(function (r) { return r.ok ? r.json() : Promise.reject(); }).then(function (s) {
-      var box = $('#stats'); if (!box) return; box.textContent = '';
-      ['opsWithEnvelopes', 'conformanceVectors', 'safetyLimits', 'agentSafetyTests', 'humanitarianRules', 'schemas', 'publishedRecipes', 'facets', 'recipesInConversion'].forEach(function (k) {
-        var f = s.figures[k]; if (!f) return; var d = document.createElement('div'); d.className = 'stat' + (f.kind === 'planned' ? ' planned' : '');
-        var kk = document.createElement('span'); kk.className = 'kind ' + (f.kind === 'planned' ? 'assumed' : 'measured'); kk.textContent = AR ? (f.kind === 'planned' ? 'مخطَّط' : 'مُحصى') : f.kind;
-        var vv = document.createElement('span'); vv.className = 'v'; vv.textContent = f.value.toLocaleString(AR ? 'ar-EG' : 'en-US');
-        var ll = document.createElement('span'); ll.className = 'l'; ll.textContent = AR && f.labelAr ? f.labelAr : f.label; d.append(kk, vv, ll); box.append(d);
-      });
-      var m = $('#statsMeta'); if (m) m.textContent = (AR ? 'أُنشئت ' : 'Generated ') + s.generatedAt.slice(0, 10) + (AR ? ' من الإيداع ' : ' from commit ') + s.commit + '. Core ' + s.core + '.';
-    }).catch(function () { var m = $('#statsMeta'); if (m) m.textContent = AR ? 'الأرقام الحية غير متاحة الآن؛ انظر المستودع.' : 'Live figures are unavailable right now; see the repository.'; });
-  }
 
   var params = new URLSearchParams(location.search);
   var selR = $('#dRecipe'); RECIPES.forEach(function (r) { var o = document.createElement('option'); o.value = r[0]; o.textContent = r[1]; selR.append(o); });
@@ -107,5 +95,5 @@
   $('#copyShare').addEventListener('click', function () { navigator.clipboard.writeText($('#shareUrl').value).then(function () { $('#copyShare').textContent = T.copied; setTimeout(function () { $('#copyShare').textContent = T.copy; }, 1500); }); });
   fetch('/v1/vocab/ops.json').then(function (r) { return r.json(); }).then(function (v) { ops = Object.fromEntries(v.entries.map(function (e) { return [e.id, e]; })); return loadRecipe(selR.value); })
     .catch(function () { $('#verdict').textContent = T.fail; });
-  stats();
+  // the proof strip is rendered at build time (tools/build_site.py stats_html)
 })();
