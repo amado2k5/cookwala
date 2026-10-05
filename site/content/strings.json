@@ -341,7 +341,37 @@
    "d4_no": "No: refuse",
    "d4_no2": "no thermometer, no deep frying; nothing heats up",
    "d4_caption": "One step of a dry run: the step, its safe band from the operation vocabulary, the sensor the device must have, and the two possible answers. The same check runs for every step before anything heats up."
-  }
+  },
+  "gloss": [
+   [
+    "dry[ -]run",
+    "a check of every step of a recipe against what a device can do and sense, before anything heats up"
+   ],
+   [
+    "envelopes?",
+    "the physical band an operation must stay in, for example simmering is water at 85 to 96 °C"
+   ],
+   [
+    "sensor ladder",
+    "the ways a device may verify a step, best first: a sensor, then a logged estimate, then time, then a person watching"
+   ],
+   [
+    "rule packs?",
+    "a reviewable list of food-safety and nutrition rules a program chooses to apply, derived from published guidance"
+   ],
+   [
+    "conformance vectors?",
+    "a public test with an input and the expected output that an implementation must reproduce"
+   ],
+   [
+    "mandates?",
+    "a signed permission from a person that says what an AI agent may do for them, with limits and an expiry"
+   ],
+   [
+    "checkpoints?",
+    "a signed summary of an event log that witnesses counter-sign, so a later rewrite can be detected"
+   ]
+  ]
  },
  "ar": {
   "brand": "كوكوالا",
@@ -685,6 +715,32 @@
    "d4_no": "لا: يُرفض",
    "d4_no2": "لا مقياس حرارة، لا قلي عميق؛ لا شيء يسخن",
    "d4_caption": "خطوة واحدة من التشغيل الجاف: الخطوة، نطاقها الآمن من مفردات العمليات، المستشعر الذي يجب أن يملكه الجهاز، والإجابتان الممكنتان. يُجرى الفحص نفسه لكل خطوة قبل أن يسخن أي شيء."
-  }
+  },
+  "gloss": [
+   [
+    "التشغيل الجاف",
+    "فحص كل خطوة في الوصفة مقابل ما يستطيع الجهاز فعله واستشعاره، قبل أن يسخن أي شيء"
+   ],
+   [
+    "الغلاف",
+    "النطاق الفيزيائي الذي يجب أن تبقى العملية داخله، مثل الغلي الهادئ: ماء بين 85 و96 °م"
+   ],
+   [
+    "سلّم المستشعرات",
+    "طرق تحقق الجهاز من خطوة، الأفضل أولًا: مستشعر، ثم تقدير مسجَّل، ثم الوقت، ثم شخص يراقب"
+   ],
+   [
+    "حزم(?:ة)? (?:ال)?قواعد",
+    "قائمة قابلة للمراجعة من قواعد سلامة الغذاء والتغذية يختار البرنامج تطبيقها، مستمدّة من إرشادات منشورة"
+   ],
+   [
+    "تفويض",
+    "إذن موقَّع من شخص يحدّد ما يجوز لوكيل ذكاء اصطناعي فعله نيابة عنه، بحدود وتاريخ انتهاء"
+   ],
+   [
+    "نقاط تفتيش",
+    "ملخّص موقَّع لسجل الأحداث يوقّعه شهود أيضًا، فيُكشف أي تعديل لاحق"
+   ]
+  ]
  }
 }

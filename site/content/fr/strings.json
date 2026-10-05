@@ -326,5 +326,31 @@
   "d4_no": "Non : refusé",
   "d4_no2": "pas de thermomètre, pas de friture ; rien ne chauffe",
   "d4_caption": "Une étape d'un dry run : l'étape, sa bande sûre tirée du vocabulaire des opérations, le capteur que l'appareil doit avoir, et les deux réponses possibles. Le même contrôle s'exécute pour chaque étape avant que quoi que ce soit ne chauffe."
- }
+ },
+ "gloss": [
+  [
+   "dry[ -]run",
+   "une vérification de chaque étape d'une recette contre ce qu'un appareil sait faire et mesurer, avant que quoi que ce soit ne chauffe"
+  ],
+  [
+   "enveloppes?",
+   "la bande physique dans laquelle une opération doit rester, par exemple mijoter : de l'eau entre 85 et 96 °C"
+  ],
+  [
+   "échelle de capteurs",
+   "les moyens qu'a un appareil de vérifier une étape, du meilleur au moindre : un capteur, puis une estimation consignée, puis le temps, puis une personne qui surveille"
+  ],
+  [
+   "rule packs?",
+   "une liste révisable de règles de sécurité alimentaire et de nutrition qu'un programme choisit d'appliquer, dérivée de recommandations publiées"
+  ],
+  [
+   "mandats?",
+   "une permission signée par une personne qui dit ce qu'un agent IA peut faire pour elle, avec des limites et une date d'expiration"
+  ],
+  [
+   "points? de contrôle",
+   "un résumé signé d'un journal d'événements, contresigné par des témoins, pour qu'une réécriture ultérieure soit détectable"
+  ]
+ ]
 }

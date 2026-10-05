@@ -326,5 +326,31 @@
   "d4_no": "Nein: abgelehnt",
   "d4_no2": "kein Thermometer, kein Frittieren; nichts heizt auf",
   "d4_caption": "Ein Schritt eines Probelaufs: der Schritt, sein sicheres Band aus dem Operationsvokabular, der Sensor, den das Gerät haben muss, und die zwei möglichen Antworten. Dieselbe Prüfung läuft für jeden Schritt, bevor etwas aufheizt."
- }
+ },
+ "gloss": [
+  [
+   "dry[ -]run",
+   "eine Prüfung jedes Rezeptschritts gegen das, was ein Gerät kann und messen kann, bevor etwas aufheizt"
+  ],
+  [
+   "envelopes?",
+   "das physikalische Band, in dem eine Operation bleiben muss, zum Beispiel Köcheln: Wasser bei 85 bis 96 °C"
+  ],
+  [
+   "Sensorleiter",
+   "die Wege, auf denen ein Gerät einen Schritt prüfen darf, der beste zuerst: ein Sensor, dann eine protokollierte Schätzung, dann Zeit, dann eine Person, die zusieht"
+  ],
+  [
+   "rule packs?",
+   "eine prüfbare Liste von Lebensmittelsicherheits- und Ernährungsregeln, die ein Programm anwendet, abgeleitet aus veröffentlichten Leitlinien"
+  ],
+  [
+   "Mandate?s?",
+   "eine signierte Erlaubnis einer Person, die sagt, was ein KI-Agent für sie tun darf, mit Grenzen und Ablaufdatum"
+  ],
+  [
+   "checkpoints?",
+   "eine signierte Zusammenfassung eines Ereignisprotokolls, von Zeugen gegengezeichnet, damit ein späteres Umschreiben erkennbar ist"
+  ]
+ ]
 }

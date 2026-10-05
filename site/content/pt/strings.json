@@ -326,5 +326,31 @@
   "d4_no": "Não: recusado",
   "d4_no2": "sem termômetro não há fritura; nada aquece",
   "d4_caption": "Um passo de um dry run: o passo, sua faixa segura do vocabulário de operações, o sensor que o aparelho deve ter e as duas respostas possíveis. A mesma verificação roda para cada passo antes que algo aqueça."
- }
+ },
+ "gloss": [
+  [
+   "dry[ -]run",
+   "uma verificação de cada passo de uma receita contra o que um aparelho sabe fazer e medir, antes que algo aqueça"
+  ],
+  [
+   "envelopes?",
+   "a faixa física em que uma operação deve permanecer, por exemplo ferver em fogo brando: água a 85–96 °C"
+  ],
+  [
+   "escada de sensores",
+   "as formas pelas quais um aparelho pode verificar um passo, da melhor à pior: um sensor, depois uma estimativa registrada, depois o tempo, depois uma pessoa observando"
+  ],
+  [
+   "rule packs?",
+   "uma lista revisável de regras de segurança alimentar e nutrição que um programa escolhe aplicar, derivada de orientações publicadas"
+  ],
+  [
+   "mandatos?",
+   "uma permissão assinada por uma pessoa que diz o que um agente de IA pode fazer por ela, com limites e validade"
+  ],
+  [
+   "checkpoints?",
+   "um resumo assinado de um registro de eventos, contra-assinado por testemunhas, para que uma reescrita posterior seja detectável"
+  ]
+ ]
 }

@@ -56,6 +56,7 @@ FONTS = {
     'zh': 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
     'ko': 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
 }
+GLOSSED_PAGES = {'/', '/why/', '/goals/', '/trust/', '/humanitarian/'}
 SCRIPT_OF = {'ar': 'arabic', 'ur': 'arabic', 'fa': 'arabic', 'ps': 'arabic', 'he': 'hebrew', 'ru': 'cyrillic', 'el': 'greek', 'hi': 'devanagari', 'te': 'telugu', 'ja': 'ja', 'zh': 'zh', 'ko': 'ko'}
 AUTONYM = {'en': 'English', 'ar': 'العربية', 'fr': 'Français', 'es': 'Español', 'ja': '日本語', 'hi': 'हिन्दी', 'pt': 'Português', 'ru': 'Русский', 'zh': '简体中文', 'de': 'Deutsch', 'it': 'Italiano', 'el': 'Ελληνικά', 'ur': 'اردو', 'fa': 'فارسی', 'tr': 'Türkçe', 'ku': 'Kurdî', 'id': 'Bahasa Indonesia', 'sw': 'Kiswahili', 'ko': '한국어', 'nl': 'Nederlands', 'ps': 'پښتو', 'he': 'עברית', 'pl': 'Polski', 'sv': 'Svenska', 'te': 'తెలుగు'}
 
@@ -258,6 +259,30 @@ class Builder:
         more = ''.join(f'<a href="{self.path_for(lang, p)}">{html.escape(label)}</a>' for label, p in S['more'])
         return items, more
 
+    def gloss(self, lang, body):
+        """Plain-English gloss on the first mention of a term, outside links, headings, code and diagrams (keyboard and screen-reader reachable)."""
+        terms = self.strings[lang].get('gloss') or []
+        if not terms: return body
+        skip = {'a', 'h1', 'h2', 'h3', 'h4', 'code', 'pre', 'button', 'svg', 'dfn', 'script', 'style', 'figcaption', 'title'}
+        parts = re.split(r'(<[^>]+>)', body); depth = 0; done = set(); n = 0
+        for i, part in enumerate(parts):
+            if part.startswith('<'):
+                m = re.match(r'</?([a-zA-Z0-9]+)', part)
+                if m and m.group(1).lower() in skip:
+                    if part.startswith('</'): depth = max(0, depth - 1)
+                    elif not part.endswith('/>'): depth += 1
+                continue
+            if depth or not part.strip(): continue
+            for k, (pat, txt) in enumerate(terms):
+                if k in done: continue
+                rx = re.compile(rf'(?<![\w\u0600-\u06FF-])({pat})(?![\w\u0600-\u06FF-])', re.I)
+                mm = rx.search(part)
+                if not mm: continue
+                n += 1; done.add(k); gid = f'gl-{n}'
+                part = part[:mm.start()] + f'<dfn class="gloss" tabindex="0" data-gloss="{html.escape(txt, quote=True)}" aria-describedby="{gid}">{mm.group(1)}</dfn><span class="sr-only" id="{gid}">: {html.escape(txt)}</span>' + part[mm.end():]
+            parts[i] = part
+        return ''.join(parts)
+
     def stats_html(self, lang, body):
         """Server-rendered proof strip: the same tiles the JavaScript used to draw, present without scripts and for crawlers."""
         S = self.strings[lang]; figs = self.stats.get('figures', {})
@@ -301,6 +326,7 @@ class Builder:
                 if cur is None: return m.group(1)
             return html.escape(str(cur)) if not isinstance(cur, str) or '<' not in cur else cur
         body = re.sub(r'\{\{s:([\w.]+)\}\}', s_lookup, body)
+        if path in GLOSSED_PAGES: body = self.gloss(lang, body)
         body = re.sub(r'\{\{stat:(\w+)\}\}', lambda m: self.stat(m.group(1)), body)
         body = body.replace('{{lang_prefix}}', '' if lang == 'en' else f'/{lang}')
         layout = self.deck_layout if meta.get('layout') == 'deck' else self.layout
