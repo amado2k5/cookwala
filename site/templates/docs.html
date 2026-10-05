@@ -6,6 +6,7 @@
   <title>{{title}}</title>
   <meta name="description" content="{{description}}">
   <link rel="canonical" href="{{canonical}}">
+  {{alternates}}
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +24,7 @@
     <nav id="menu" aria-label="{{nav_label}}">
       {{nav}}
       <details class="more"><summary>{{more_label}}</summary><div class="more-list">{{more}}</div></details>
-      <a class="lang" href="/ar/docs/" hreflang="ar" lang="ar">العربية</a>
+      {{lang_menu}}
       <button class="theme-btn" type="button" aria-label="{{theme}}" title="{{theme}}"><span aria-hidden="true">◐</span></button>
     </nav>
   </div>
@@ -38,6 +39,7 @@
       <span class="crumb">{{crumb}}{{status}}</span>
       <span class="doc-actions"><button type="button" id="copyPage" data-raw="{{raw}}">{{copy}}</button><a href="{{edit}}" rel="noopener">{{edit_label}}</a><a href="{{raw}}">{{md_label}}</a></span>
     </div>
+    {{notice}}
     <article class="prose">{{content}}</article>
     <nav class="pager" aria-label="Previous and next">{{pager}}</nav>
   </main>

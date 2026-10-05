@@ -1,0 +1,41 @@
+<!--meta {"title": "Éducation : kit de leçons, sujets de recherche, problèmes ouverts", "description": "Cinq leçons sur le mijotage, les unités, la cuisson, ce qu'une machine ne doit jamais faire, et le partage équitable ; jeux de données, benchmarks et problèmes ouverts de taille de thèse pour les chercheurs. Tout est gratuit, sans compte, sans données personnelles.", "path": "/education/"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Éducation</p>
+  <h1>La cuisine est le processus le plus familier au monde. Enseignez avec elle.</h1>
+  <p class="lead">Pour les enseignants : cinq leçons allant de « qu'est-ce qu'un mijotage » à « ce qu'une machine ne devrait jamais faire », en utilisant les démonstrations en direct et les recettes d'exemple. Pour les professeurs, chercheurs et étudiants : des jeux de données, des benchmarks et des problèmes ouverts que personne ne possède. Tout est gratuit et ne collecte rien.</p>
+  <div class="cta"><a class="btn primary" href="/docs/LESSON-KIT/">The lesson kit</a><a class="btn" href="/docs/RESEARCH-TOPICS/">Research topics</a></div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Cinq leçons, de 11 à 16 ans</h2>
+    <div class="cards">
+      <div class="card"><h3>1. Que signifie « simmer » ?</h3><p>Science, 45 minutes. Deux cuisiniers disent « simmer » ; veulent-ils dire la même chose ? Les bandes dans le vocabulaire de l'operation envelope ; l'ébullition change avec l'altitude.</p></div>
+      <div class="card"><h3>2. Unités et mise à l'échelle</h3><p>Mathématiques, 45 minutes. Une recette pour 4 cuisinée pour 6 : qu'est-ce qui s'échelle de manière linéaire, qu'est-ce qui ne l'est pas, et pourquoi une tasse de farine nécessite une densité.</p></div>
+      <div class="card"><h3>3. Quand est-ce prêt, et quand est-ce sûr ?</h3><p>Science et santé, 60 minutes. 74 °C pour le poulet, 71 °C pour le bœuf haché, 75 °C pour réchauffer ; un appareil sans thermomètre doit effectuer un refusal before heat ou demander.</p></div>
+      <div class="card"><h3>4. Que ne doit jamais faire une machine ?</h3><p>Éthique et technologie, 60 minutes. Une recette trouvée en ligne dit au robot de régler l'huile à 240 °C « pour un croustillant supplémentaire ». Le texte est une donnée. Qui est responsable lorsqu'une machine brûle le dîner ?</p></div>
+      <div class="card"><h3>5. Partage équitable</h3><p>Citoyenneté, 60 minutes. 36 kg de yaourt expirent demain : qui les reçoit, à quelle vitesse, et pourquoi le nom de personne n'est pas enregistré. L'effet coup de fouet dans le simulateur de ville.</p></div>
+    </div>
+    <p class="note">Leçons en anglais (les recettes contiennent du texte d'étapes en arabe ; un kit en arabe est prévu ensuite) ; adaptable sous CC BY 4.0 ; aucune donnée étudiante. Les leçons améliorées sont fusionnées avec crédit.</p>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div>
+    <h2>Pour les chercheurs : ce qui existe</h2>
+    <ul class="ticks"><li>Enveloppes d'opération pour {{stat:ops}} opérations comme conditions de test pour la simulation thermique et physique</li><li>Vecteurs de conformité {{stat:conformanceVectors}} pour des implémentations indépendantes et une analyse formelle</li><li>Neuf recettes avec conditions de fin, dangers et points de contrôle, en anglais et en arabe</li><li>Quatre simulateurs déterministes avec chaque hypothèse listée</li><li>Un format de journal d'exécution avec consentement et exportateurs vers LeRobotDataset v3 et OpenTelemetry</li><li>Un registre de facettes pour le contexte domestique avec des classes de confidentialité et des règles de voyage</li><li>Un benchmark de sécurité des agents ; des rule packs issus de recommandations nutritionnelles publiques</li></ul>
+  </div>
+  <div>
+    <h2>Problèmes ouverts, de l'ampleur d'une thèse</h2>
+    <ol><li>Les bandes de l'envelope sont-elles adaptées aux vraies poêles, casseroles et fours ? Mesurer et corriger.</li><li>Un modèle vision-langage peut-il détecter « translucide », « doré », « la sauce nappe une cuillère » ? Construire le jeu de données étiqueté.</li><li>À quelle fréquence une sensor ladder refuse-t-elle ce qu'un humain accepterait, par classe de dispositif ?</li><li>Remplacer les paramètres comportementaux assumed dans le simulateur de ville par des paramètres measured ; publier les bandes d'incertitude.</li><li>Un épicier peut-il déduire un calendrier à partir d'une séquence de créneaux de livraison ? Concevez les règles de bruit.</li><li>Quels seuils rendent les signaux de demande hebdomadaire au niveau de la classe inutiles pour la coordination des prix et utiles pour les semis ?</li><li>Les phrases par étapes en arabe et en anglais mènent-elles au même comportement de robot ?</li><li>Formalisez l'identité du plat en cas de substitution.</li><li>Attaques multi-tours et basées sur l'image contre les agents de cuisine.</li><li>L'analyse statistique pour le pilote humanitaire.</li></ol>
+    <p><a href="/docs/RESEARCH-TOPICS/">Liste complète, avec comment publier et obtenir du crédit</a></p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div><h2>Benchmarks que nous aimerions voir</h2><p>Cuisson en simulation (un modèle thermique d'une poêle, d'une casserole et d'un four évalué par rapport aux envelopes, dans Isaac Lab, Gazebo ou MuJoCo) ; sécurité de l'agent de cuisine à travers les familles de modèles ; conversion de texte en recette Cookwala évaluée par le taux de réussite du validateur et l'examen humain.</p></div>
+    <div><h2>Crédit et citation</h2><p>Les jeux de données d'exécutions consenties comportent une fiche de données et créditent les cuisiniers contributeurs. Les vecteurs et les benchmarks sont crédités dans le journal des modifications. Les articles citent le hash du commit. Les modifications du standard passent par des RFC, où une implémentation de référence compte. <a href="/for/education/">Votre page : options, premier succès, flux</a></p></div>
+  </div>
+</section>
+

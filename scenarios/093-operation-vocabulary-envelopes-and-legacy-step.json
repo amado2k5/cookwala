@@ -2,21 +2,76 @@
  "id": "093",
  "slug": "operation-vocabulary-envelopes-and-legacy-step",
  "audience": "developer",
- "northStar": ["robots"],
+ "northStar": [
+  "robots"
+ ],
  "level": "beginner",
- "title": {"en": "Fifty-seven operations, thirty-two with envelopes, one legacy placeholder"},
- "goal": {"en": "Read the operation vocabulary from the hub: 57 entries, 32 of which carry a thermal envelope with a sensor ladder; the last is cw.op.legacy_step, the placeholder for unclassified V0 imports (RFC-0009)."},
- "docs": ["/docs/CORE/", "/vocab/"],
- "requires": ["hub", "repo"],
+ "title": {
+  "en": "Fifty-seven operations, thirty-two with envelopes, one legacy placeholder"
+ },
+ "goal": {
+  "en": "Read the operation vocabulary from the hub: 57 entries, 32 of which carry a thermal envelope with a sensor ladder; the last is cw.op.legacy_step, the placeholder for unclassified V0 imports (RFC-0009)."
+ },
+ "docs": [
+  "/docs/CORE/",
+  "/docs/CORE/"
+ ],
+ "requires": [
+  "hub",
+  "repo"
+ ],
  "steps": [
-  {"op": "getOps", "save": "ops", "note": {"en": "Fetch vocab/ops.json through the hub."}, "expect": {"name": "ops", "version": "0.2.0", "entries.length": 57, "entries[56].id": "cw.op.legacy_step"}},
-  {"op": "assert", "note": {"en": "Deep frying's envelope: oil between 160 and 190 degrees C, one rung on the ladder (an oil thermometer), never unattended."}, "expect": {"ops.entries[30].id": "cw.op.deep_fry", "ops.entries[30].envelope.tempC": {"min": 160, "max": 190}, "ops.entries[30].envelope.sensorLadder": ["cw.sense.oil_temp"], "ops.entries[30].envelope.unattended": false}},
-  {"op": "assert", "note": {"en": "Dispensing has no envelope: envelopes belong to operations that heat, cool or hold."}, "expect": {"ops.entries[0].id": "cw.op.dispense", "ops.entries[0].envelope": null}}
+  {
+   "op": "getOps",
+   "save": "ops",
+   "note": {
+    "en": "Fetch vocab/ops.json through the hub."
+   },
+   "expect": {
+    "name": "ops",
+    "version": "0.2.0",
+    "entries.length": 57,
+    "entries[56].id": "cw.op.legacy_step"
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "Deep frying's envelope: oil between 160 and 190 degrees C, one rung on the ladder (an oil thermometer), never unattended."
+   },
+   "expect": {
+    "ops.entries[30].id": "cw.op.deep_fry",
+    "ops.entries[30].envelope.tempC": {
+     "min": 160,
+     "max": 190
+    },
+    "ops.entries[30].envelope.sensorLadder": [
+     "cw.sense.oil_temp"
+    ],
+    "ops.entries[30].envelope.unattended": false
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "Dispensing has no envelope: envelopes belong to operations that heat, cool or hold."
+   },
+   "expect": {
+    "ops.entries[0].id": "cw.op.dispense",
+    "ops.entries[0].envelope": null
+   }
+  }
  ],
  "cli": [
   "curl -s ${COOKWALA_HUB:-http://localhost:7878}/v1/tools/vocab/ops | jq '.entries | length'",
   "curl -s ${COOKWALA_HUB:-http://localhost:7878}/v1/tools/vocab/ops | jq '[.entries[] | select(.envelope)] | length'"
  ],
- "outcome": {"en": "You know where envelopes live and which operation an importer uses when it cannot classify a step. Next: 094 and 095 validate the supply and fleet documents."},
- "tags": ["vocabulary", "envelope", "legacy"]
+ "outcome": {
+  "en": "You know where envelopes live and which operation an importer uses when it cannot classify a step. Next: 094 and 095 validate the supply and fleet documents."
+ },
+ "tags": [
+  "vocabulary",
+  "envelope",
+  "legacy"
+ ]
 }

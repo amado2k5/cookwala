@@ -25,6 +25,7 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import md  # noqa: E402
+import build_recipes_scenarios as brs  # noqa: E402
 _md_render = md.render
 
 
@@ -39,7 +40,30 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
 BASE_URL = 'https://cookwala.ai'
 REPO = 'https://github.com/amado2k5/cookwala/blob/main/'
-LANGS = ['en', 'ar']
+LANGS = ['en', 'ar']  # extended at start-up with every site/content/<lang>/strings.json
+RTL = {'ar', 'ur', 'fa', 'he', 'ps'}
+FONTS = {
+    'latin': 'https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
+    'arabic': 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
+    'cyrillic': 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
+    'greek': 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
+    'hebrew': 'https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
+    'devanagari': 'https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
+    'telugu': 'https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
+    'ja': 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
+    'zh': 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
+    'ko': 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap',
+}
+SCRIPT_OF = {'ar': 'arabic', 'ur': 'arabic', 'fa': 'arabic', 'ps': 'arabic', 'he': 'hebrew', 'ru': 'cyrillic', 'el': 'greek', 'hi': 'devanagari', 'te': 'telugu', 'ja': 'ja', 'zh': 'zh', 'ko': 'ko'}
+AUTONYM = {'en': 'English', 'ar': 'العربية', 'fr': 'Français', 'es': 'Español', 'ja': '日本語', 'hi': 'हिन्दी', 'pt': 'Português', 'ru': 'Русский', 'zh': '简体中文', 'de': 'Deutsch', 'it': 'Italiano', 'el': 'Ελληνικά', 'ur': 'اردو', 'fa': 'فارسی', 'tr': 'Türkçe', 'ku': 'Kurdî', 'id': 'Bahasa Indonesia', 'sw': 'Kiswahili', 'ko': '한국어', 'nl': 'Nederlands', 'ps': 'پښتو', 'he': 'עברית', 'pl': 'Polski', 'sv': 'Svenska', 'te': 'తెలుగు'}
+
+
+def deep_merge(base, over):
+    out = json.loads(json.dumps(base))
+    for k, v in (over or {}).items():
+        if isinstance(v, dict) and isinstance(out.get(k), dict): out[k] = deep_merge(out[k], v)
+        elif v not in (None, ''): out[k] = v
+    return out
 
 # ---- documentation set: id -> (source path, group key, title en, title ar, status)
 DOCS = [
@@ -157,6 +181,24 @@ class Builder:
     def __init__(self, out):
         self.out = pathlib.Path(out)
         self.strings = json.loads(read('site/content/strings.json'))
+        self.machine = set()
+        for d in sorted((SITE / 'content').iterdir()):
+            if d.is_dir() and d.name not in ('en', 'ar') and (d / 'strings.json').exists():
+                try: over = json.loads((d / 'strings.json').read_text(encoding='utf-8'))
+                except ValueError: continue
+                self.strings[d.name] = deep_merge(self.strings['en'], over)
+                if d.name not in LANGS: LANGS.append(d.name)
+                if (d / '.machine-translated').exists(): self.machine.add(d.name)
+        for lang in LANGS:
+            self.strings[lang]['font_link'] = FONTS.get(SCRIPT_OF.get(lang, 'latin'), FONTS['latin'])
+            self.strings[lang]['switch'] = AUTONYM.get(lang, lang)
+        self.scenarios = [json.loads(p.read_text(encoding='utf-8')) for p in sorted((ROOT / 'scenarios').glob('[0-9][0-9][0-9]-*.json'))]
+        self.now = dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds').replace('+00:00', 'Z')
+        self.ing_labels = {e['id']: e['label'] for e in json.loads(read('vocab/ingredients.json'))['entries']} if (ROOT / 'vocab' / 'ingredients.json').exists() else {}
+        self.LANGS_ALL = LANGS
+        self.wp_langs = {l for l in LANGS if l == 'en' or (ROOT / f'docs/WHITEPAPER.{l}.md').exists() or (ROOT / f'docs/i18n/{l}/WHITEPAPER.md').exists()}
+        self.sb = brs.ScenarioBuilder(self)
+        self.recipe_index = json.loads(read('recipes/INDEX.json'))['items'] if (ROOT / 'recipes' / 'INDEX.json').exists() else []
         self.layout = read('site/templates/layout.html')
         self.doc_layout = read('site/templates/docs.html')
         self.deck_layout = read('site/templates/deck.html')
@@ -169,8 +211,35 @@ class Builder:
 
     def path_for(self, lang, path):
         if lang == 'en' or path.startswith(self.EN_ONLY): return path
-        if path.startswith('/ideas/') and path != '/ideas/': return '/ar/ideas/'   # essays are English; the Arabic index explains
-        return '/ar' + path
+        if path == '/whitepaper/' and lang not in self.wp_langs: return path
+        if path.startswith('/ideas/') and path != '/ideas/': return f'/{lang}/ideas/'   # essays are English; the language index explains
+        if path.startswith(f'/{lang}/'): return path
+        return f'/{lang}' + path
+
+    def prefix_links(self, lang, body):
+        """Content fragments for the machine-translated languages carry English hrefs; prefix them."""
+        if lang in ('en', 'ar'): return body
+        def rw(m):
+            href = m.group(1)
+            if href.startswith(('http', 'mailto:', '#', '//')) or href.startswith(self.EN_ONLY) or href.startswith(f'/{lang}/') or not href.startswith('/'): return m.group(0)
+            if href.startswith('/ideas/') and href != '/ideas/': return m.group(0)  # essays are English
+            if href == '/whitepaper/' and lang not in self.wp_langs: return m.group(0)
+            return f'href="/{lang}{href}"'
+        return re.sub(r'href="([^"]*)"', rw, body)
+
+    def lang_menu(self, lang, path, langs=None, path_fn=None):
+        pf = path_fn or self.path_for
+        items = ''.join(f'<a href="{pf(l, path)}" hreflang="{l}" lang="{l}"{" aria-current=true" if l == lang else ""}>{html.escape(AUTONYM.get(l, l))}</a>' for l in (langs or LANGS))
+        return f'<details class="more lang-menu"><summary aria-label="{html.escape(self.strings[lang].get("language", "Language"))}">{html.escape(AUTONYM.get(lang, lang))}</summary><div class="more-list">{items}</div></details>'
+
+    def alternates(self, path, langs=None, path_fn=None):
+        pf = path_fn or self.path_for
+        langs = langs or LANGS
+        return ''.join(f'<link rel="alternate" hreflang="{l}" href="{BASE_URL}{pf(l, path)}">' for l in langs) + (f'<link rel="alternate" hreflang="x-default" href="{BASE_URL}{path}">' if 'en' in langs else '')
+
+    def notice(self, lang):
+        if lang not in self.machine: return ''
+        return f'<p class="mt-notice" role="note">{html.escape(self.strings[lang].get("translated_notice", ""))} <a href="{REPO}site/content/{lang}/">GitHub</a></p>'
 
     def write(self, lang, path, html_text):
         rel = self.path_for(lang, path).lstrip('/')
@@ -194,16 +263,26 @@ class Builder:
         path = meta.get('path', '/')
         other = 'ar' if lang == 'en' else 'en'
         nav, more = self.nav_html(lang, current or path)
+        body = self.prefix_links(lang, body)
+        body = self.notice(lang) + body
         scripts = ''.join(f'<script src="/assets/{s}" defer></script>' for s in meta.get('scripts', []))
         status = meta.get('status')
         chip = f'<p class="chip"><span class="dot {status}" aria-hidden="true"></span>{html.escape(S["status"].get(status, status))}</p>' if status else ''
         body = body.replace('{{chip}}', chip)
+        if '{{sdk_cards}}' in body: body = body.replace('{{sdk_cards}}', self.sb.sdk_cards(lang))
+        if '{{scenario_list}}' in body: body = body.replace('{{scenario_list}}', self.sb.list_html(lang))
+        def s_lookup(m):
+            cur = S
+            for part in m.group(1).split('.'):
+                cur = cur.get(part) if isinstance(cur, dict) else None
+                if cur is None: return m.group(1)
+            return html.escape(str(cur)) if not isinstance(cur, str) or '<' not in cur else cur
+        body = re.sub(r'\{\{s:([\w.]+)\}\}', s_lookup, body)
         body = re.sub(r'\{\{stat:(\w+)\}\}', lambda m: self.stat(m.group(1)), body)
-        body = re.sub(r'\{\{s:(\w+)\}\}', lambda m: html.escape(S.get(m.group(1), m.group(1))), body)
-        body = body.replace('{{lang_prefix}}', '' if lang == 'en' else '/ar')
+        body = body.replace('{{lang_prefix}}', '' if lang == 'en' else f'/{lang}')
         layout = self.deck_layout if meta.get('layout') == 'deck' else self.layout
         return fill(layout, {
-            'lang': lang, 'dir': 'rtl' if lang == 'ar' else 'ltr', 'title': html.escape(meta.get('title', 'Cookwala')), 'description': html.escape(re.sub(r'\{\{stat:(\w+)\}\}', lambda m: self.stat(m.group(1)), meta.get('description', S['tagline']))),
+            'lang': lang, 'dir': 'rtl' if lang in RTL else 'ltr', 'lang_menu': self.lang_menu(lang, path, meta.get('langs'), meta.get('path_fn')), 'alternates': self.alternates(path, meta.get('langs'), meta.get('path_fn')), 'title': html.escape(re.sub(r'\{\{stat:(\w+)\}\}', lambda m: self.stat(m.group(1)), meta.get('title', 'Cookwala'))), 'description': html.escape(re.sub(r'\{\{stat:(\w+)\}\}', lambda m: self.stat(m.group(1)), meta.get('description', S['tagline']))),
             'canonical': BASE_URL + self.path_for(lang, path), 'alt_lang': other, 'alt_url': BASE_URL + self.path_for(other, path), 'alt_label': S['switch'],
             'alt_href': self.path_for(other, path), 'nav': nav, 'more': more, 'more_label': S['more_label'], 'content': body, 'scripts': scripts, 'brand': S['brand'],
             'tagline': S['tagline'], 'footer_origin': S['footer_origin'], 'footer_licences': S['footer_licences'], 'footer_links': ''.join(f'<a href="{self.path_for(lang, p) if p.startswith("/") and not p.startswith("/.well") else p}">{html.escape(l)}</a>' for l, p in S['footer']),
@@ -214,7 +293,8 @@ class Builder:
     def build_pages(self):
         for lang in LANGS:
             folder = SITE / 'content' / lang
-            for p in sorted(folder.glob('*.html')):
+            for p_en in sorted((SITE / 'content' / 'en').glob('*.html')):
+                p = folder / p_en.name if (folder / p_en.name).exists() else p_en
                 meta, body = parse_fragment(p.read_text(encoding='utf-8'))
                 if 'path' not in meta:
                     meta['path'] = '/' if p.stem == 'index' else '/' + p.stem.replace('--', '/') + '/'
@@ -225,8 +305,14 @@ class Builder:
         tpl = read('site/templates/for.html')
         for lang in LANGS:
             S = self.strings[lang]
+            over = {}
+            fp = SITE / 'content' / lang / 'for.json'
+            if lang not in ('en', 'ar') and fp.exists():
+                try: over = json.loads(fp.read_text(encoding='utf-8'))
+                except ValueError: over = {}
+            blocks = {g['slug']: (g.get(lang) or deep_merge(g['en'], over.get(g['slug'], {}))) for g in data['groups']}
             for g in data['groups']:
-                d = g[lang]
+                d = blocks[g['slug']]
                 path = f"/for/{g['slug']}/"
                 lis = lambda xs, cls='': ''.join(f'<li>{x}</li>' for x in xs)
                 body = fill(tpl, {
@@ -237,7 +323,7 @@ class Builder:
                     'work': lis(d['work']), 'society': lis(d['society']),
                     'links': ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{(self.path_for(lang, l[1]) if l[1].startswith("/") and not l[1].startswith("/docs") and not l[1].startswith("/sim") and not l[1].startswith("/v1") else l[1])}">{html.escape(l[0])}</a>' for i, l in enumerate(d['links'])),
                     'h_message': S['for']['message'], 'h_options': S['for']['options'], 'h_flow': S['for']['flow'], 'h_work': S['for']['work'], 'h_society': S['for']['society'], 'h_links': S['for']['links'],
-                    'others': ''.join(f'<a href="{self.path_for(lang, "/for/" + o["slug"] + "/")}">{html.escape(o[lang]["short"])}</a>' for o in data['groups'] if o['slug'] != g['slug']), 'h_others': S['for']['others'],
+                    'others': ''.join(f'<a href="{self.path_for(lang, "/for/" + o["slug"] + "/")}">{html.escape(blocks[o["slug"]]["short"])}</a>' for o in data['groups'] if o['slug'] != g['slug']), 'h_others': S['for']['others'],
                     'chip': '',
                 })
                 meta = {'title': f"{d['title']} · Cookwala", 'description': re.sub(r'<[^>]+>', '', d['lead'])[:160], 'path': path}
@@ -292,7 +378,7 @@ class Builder:
                 'crumb': f'{html.escape(S["docgroups"][group])} / {html.escape(title)}', 'content': body, 'onpage': onpage, 'pager': pager,
                 'edit': REPO + src, 'raw': f'/docs/md/{doc_id}.md', 'brand': S['brand'], 'skip': S['skip'], 'font_link': S['font_link'], 'year': self.year, 'home': '/', 'nav_label': S['nav_label'],
                 'status': self.status_tag(status), 'onpage_label': S['onpage'], 'filter_label': S['filter'], 'copy': S['copy'], 'edit_label': S['edit'], 'md_label': S['markdown'], 'menu': S['menu'], 'theme': S['theme'],
-                'nav': self.nav_html('en', '/docs/')[0], 'more': self.nav_html('en', '/docs/')[1], 'more_label': S['more_label'], 'ar_note': '',
+                'nav': self.nav_html('en', '/docs/')[0], 'more': self.nav_html('en', '/docs/')[1], 'more_label': S['more_label'], 'notice': '', 'alternates': self.alternates(f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, (doc_id, src, title, title_ar, status))]), 'lang_menu': self.lang_menu('en', f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, (doc_id, src, title, title_ar, status))]),
             })
             (self.out / 'docs' / doc_id).mkdir(parents=True, exist_ok=True)
             (self.out / 'docs' / doc_id / 'index.html').write_text(page_html, encoding='utf-8')
@@ -305,14 +391,50 @@ class Builder:
         redirect = '<script>(function(){var p=new URLSearchParams(location.search).get("p");if(p){location.replace("/docs/"+p.toUpperCase()+"/"+location.hash);}})();</script>'
         meta = {'title': 'Cookwala Docs', 'description': S['docs_lead'], 'path': '/docs/'}
         self.write('en', '/docs/', self.page('en', meta, landing).replace('</head>', redirect + '</head>'))
-        # Arabic docs shell: landing only, documents in English
-        Sar = self.strings['ar']
-        cards_ar = ''.join(f'<section><h2>{html.escape(Sar["docgroups"][g])}</h2><ul class="doclist">' + ''.join(f'<li><a href="/docs/{i[0]}/" hreflang="en">{html.escape(i[3])}</a>{self.status_tag(i[4])}</li>' for i in items) + '</ul></section>' for g, items in DOCS)
-        landing_ar = f'<div class="wrap docs-landing"><h1>{Sar["docs_title"]}</h1><p class="sub">{Sar["docs_lead"]}</p>{cards_ar}</div>'
-        ar_page = self.page('ar', {'title': Sar['docs_title'], 'description': Sar['docs_lead'], 'path': '/docs/'}, landing_ar).replace('<link rel="canonical" href="https://cookwala.ai/docs/">', '<link rel="canonical" href="https://cookwala.ai/ar/docs/">')
-        (self.out / 'ar' / 'docs').mkdir(parents=True, exist_ok=True)
-        (self.out / 'ar' / 'docs' / 'index.html').write_text(ar_page, encoding='utf-8')
-        self.urls.append(('ar', '/ar/docs/'))
+        # every other language: a landing in that language; documents translated by machine where docs/i18n/<lang>/<DOC>.md exists, else the English page
+        for lang in LANGS:
+            if lang == 'en': continue
+            Sl = self.strings[lang]
+            def tr_path(item):
+                src = item[1]
+                if src.startswith('docs/') and src.count('/') == 1:
+                    f = ROOT / 'docs' / 'i18n' / lang / (src.split('/')[-1])
+                    return f if f.exists() else None
+                return None
+            cards_l = ''.join(f'<section><h2>{html.escape(Sl["docgroups"].get(g, g))}</h2><ul class="doclist">' + ''.join(
+                (f'<li><a href="/{lang}/docs/{i[0]}/">{html.escape(i[3] if lang == "ar" else i[2])}</a>{self.status_tag(i[4])}</li>' if tr_path(i) else f'<li><a href="/docs/{i[0]}/" hreflang="en">{html.escape(i[3] if lang == "ar" else i[2])}</a>{self.status_tag(i[4])} <span class="st">en</span></li>')
+                for i in items) + '</ul></section>' for g, items in DOCS)
+            landing_l = f'<div class="wrap docs-landing"><h1>{Sl["docs_title"]}</h1><p class="sub">{Sl["docs_lead"]}</p>{cards_l}</div>'
+            page_l = self.page(lang, {'title': Sl['docs_title'], 'description': Sl['docs_lead'], 'path': '/docs/'}, landing_l).replace('<link rel="canonical" href="https://cookwala.ai/docs/">', f'<link rel="canonical" href="https://cookwala.ai/{lang}/docs/">')
+            (self.out / lang / 'docs').mkdir(parents=True, exist_ok=True)
+            (self.out / lang / 'docs' / 'index.html').write_text(page_l, encoding='utf-8')
+            self.urls.append((lang, f'/{lang}/docs/'))
+            for idx, item in enumerate(flat):
+                f = tr_path(item)
+                if not f: continue
+                doc_id, src, title, title_ar, status = item
+                text = f.read_text(encoding='utf-8'); toc = []
+                body = md.render(text, self.doc_link_rewriter(src), collect=toc, lang=lang)
+                body = re.sub(r'href="/docs/([A-Z0-9-]+)/', lambda m: f'href="/{lang}/docs/{m.group(1)}/' if tr_path(DOC_INDEX[m.group(1)]) else m.group(0), body) if True else body
+                onpage = ''.join(f'<li class="l{lvl}"><a href="#{hid}">{html.escape(tt)}</a></li>' for lvl, hid, tt in toc if lvl == 2)
+                group = next(g for g in DOCS if any(i[0] == doc_id for i in g[1]))[0]
+                page_html = fill(self.doc_layout, {
+                    'lang': lang, 'dir': 'rtl' if lang in RTL else 'ltr', 'title': html.escape(title) + ' · Cookwala Docs', 'description': html.escape(self.first_para(text)),
+                    'canonical': f'{BASE_URL}/{lang}/docs/{doc_id}/', 'alternates': self.alternates(f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, item)]), 'lang_menu': self.lang_menu(lang, f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, item)]),
+                    'sidebar': re.sub(r'href="/docs/([A-Z0-9-]+)/"', lambda m: f'href="/{lang}/docs/{m.group(1)}/"' if self.doc_translated(lang, DOC_INDEX[m.group(1)]) else m.group(0), sidebar).replace(f'data-id="{doc_id}"', f'data-id="{doc_id}" aria-current="page"'),
+                    'crumb': f'{html.escape(Sl["docgroups"].get(group, group))} / {html.escape(title_ar if lang == "ar" else title)}', 'content': body, 'onpage': onpage, 'pager': f'<a href="/docs/{doc_id}/" hreflang="en">English</a>',
+                    'edit': REPO + f'docs/i18n/{lang}/{f.name}', 'raw': f'/docs/md/{doc_id}.md', 'brand': Sl['brand'], 'skip': Sl['skip'], 'font_link': Sl['font_link'], 'year': self.year, 'home': f'/{lang}/', 'nav_label': Sl['nav_label'],
+                    'status': self.status_tag(status), 'onpage_label': Sl['onpage'], 'filter_label': Sl['filter'], 'copy': Sl['copy'], 'edit_label': Sl['edit'], 'md_label': Sl['markdown'], 'menu': Sl['menu'], 'theme': Sl['theme'],
+                    'nav': self.nav_html(lang, '/docs/')[0], 'more': self.nav_html(lang, '/docs/')[1], 'more_label': Sl['more_label'],
+                    'notice': f'<p class="mt-notice" role="note">{html.escape(Sl.get("translated_notice", ""))} <a href="/docs/{doc_id}/" hreflang="en">English</a></p>',
+                })
+                (self.out / lang / 'docs' / doc_id).mkdir(parents=True, exist_ok=True)
+                (self.out / lang / 'docs' / doc_id / 'index.html').write_text(page_html, encoding='utf-8')
+                self.urls.append((lang, f'/{lang}/docs/{doc_id}/'))
+
+    def doc_translated(self, lang, item):
+        src = item[1]
+        return src.startswith('docs/') and src.count('/') == 1 and (ROOT / 'docs' / 'i18n' / lang / src.split('/')[-1]).exists()
 
     def status_tag(self, status):
         if not status: return ''
@@ -329,16 +451,19 @@ class Builder:
 
     # ---- whitepaper and essays
     def build_whitepaper(self):
-        for lang, src in (('en', 'docs/WHITEPAPER.md'), ('ar', 'docs/WHITEPAPER.ar.md')):
-            if not (ROOT / src).exists(): continue
+        srcs = {}
+        for lang in LANGS:
+            src = 'docs/WHITEPAPER.md' if lang == 'en' else (f'docs/WHITEPAPER.{lang}.md' if (ROOT / f'docs/WHITEPAPER.{lang}.md').exists() else f'docs/i18n/{lang}/WHITEPAPER.md')
+            if (ROOT / src).exists(): srcs[lang] = src
+        for lang, src in srcs.items():
             S = self.strings[lang]
             text = read(src); toc = []
-            body = md.render(text, self.doc_link_rewriter(src), collect=toc)
+            body = md.render(text, self.doc_link_rewriter(src), collect=toc, lang=lang)
             onpage = ''.join(f'<li><a href="#{hid}">{html.escape(t)}</a></li>' for lvl, hid, t in toc if lvl == 2)
             frag = (f'<div class="wrap paper"><aside class="paper-side"><p class="op-h">{S["onpage"]}</p><ul>{onpage}</ul>'
-                    f'<p class="paper-actions"><a class="btn" href="/whitepaper/cookwala-whitepaper{"-ar" if lang == "ar" else ""}.pdf">{S["pdf"]}</a><a class="btn" href="{"/docs/md/WHITEPAPER-MD.md" if lang == "en" else REPO + "docs/WHITEPAPER.ar.md"}">{S["markdown"]}</a><button type="button" class="btn" onclick="window.print()">{S["print"]}</button></p></aside>'
+                    f'<p class="paper-actions"><a class="btn" href="/whitepaper/cookwala-whitepaper{"-ar" if lang == "ar" else ""}.pdf">{S["pdf"]}</a><a class="btn" href="{"/docs/md/WHITEPAPER-MD.md" if lang == "en" else REPO + src}">{S["markdown"]}</a><button type="button" class="btn" onclick="window.print()">{S["print"]}</button></p></aside>'
                     f'<article class="prose paper-body">{body}</article></div>')
-            meta = {'title': S['whitepaper_title'], 'description': S['whitepaper_lead'], 'path': '/whitepaper/', 'bodyClass': 'paper-page'}
+            meta = {'title': S['whitepaper_title'], 'description': S['whitepaper_lead'], 'path': '/whitepaper/', 'bodyClass': 'paper-page', 'langs': list(srcs)}
             self.write(lang, '/whitepaper/', self.page(lang, meta, frag))
 
     def build_essays(self):
@@ -370,13 +495,22 @@ class Builder:
 
     def build_sitemap(self):
         urls = sorted(set(self.urls))
-        items = ''.join(f'<url><loc>{html.escape(BASE_URL + p)}</loc></url>' for _l, p in urls)
-        (self.out / 'sitemap.xml').write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.w3.org/1999/xhtml">{items}</urlset>'.replace('xmlns="http://www.w3.org/1999/xhtml"', 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'), encoding='utf-8')
+        chunks = [urls[i:i + 40000] for i in range(0, len(urls), 40000)] or [[]]
+        names = []
+        for n, chunk in enumerate(chunks):
+            items = ''.join(f'<url><loc>{html.escape(BASE_URL + p)}</loc></url>' for _l, p in chunk)
+            name = 'sitemap.xml' if len(chunks) == 1 else f'sitemap-{n}.xml'; names.append(name)
+            (self.out / name).write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{items}</urlset>', encoding='utf-8')
+        if len(chunks) > 1:
+            (self.out / 'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join(f'<sitemap><loc>{BASE_URL}/{n}</loc></sitemap>' for n in names) + '</sitemapindex>', encoding='utf-8')
         (self.out / 'robots.txt').write_text(f'User-agent: *\nAllow: /\nSitemap: {BASE_URL}/sitemap.xml\n', encoding='utf-8')
 
     def run(self):
-        self.build_pages(); self.build_for_pages(); self.build_docs(); self.build_whitepaper(); self.build_essays(); self.build_llms(); self.build_sitemap()
-        print(f'pages: {len(self.urls)} ({sum(1 for l, _ in self.urls if l == "ar")} Arabic)')
+        self.build_pages(); self.build_for_pages(); self.build_docs(); self.build_whitepaper(); self.build_essays()
+        rb = brs.RecipeBuilder(self); counts = rb.build_data(); rb.build_pages()
+        self.sb.build_samples(); self.sb.build_pages()
+        self.build_llms(); self.build_sitemap()
+        print(f'pages: {len(self.urls)} in {len(LANGS)} languages ({len(self.machine)} machine-translated); recipes {counts["recipes"]} (V0 {counts["byLevel"]["V0"]}, V1 {counts["byLevel"]["V1"]}); scenarios {len(self.scenarios)}')
 
 
 if __name__ == '__main__':

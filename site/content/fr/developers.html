@@ -1,0 +1,77 @@
+<!--meta {"title": "Développeurs : démarrage rapide, SDK, API, conformance", "description": "D'un dry run dans votre navigateur à un rapport de conformance : le package Python et la CLI, les types TypeScript, le serveur MCP, le hub de référence, les interfaces ROS 2, l'API Core et {{stat:conformanceVectors}} vecteurs de test publics.", "path": "/developers/", "status": "core"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Développeurs</p>
+  {{chip}}
+  <h1>D'un dry run à un rapport de conformance</h1>
+  <p class="lead">Un premier chemin recommandé, puis les SDK, l'API, les liaisons et les évaluations. Tout ce qui suit fonctionne aujourd'hui ; ce qui n'existe pas encore est indiqué.</p>
+  <div class="cta"><a class="btn primary" href="#quickstart">Quickstart</a><a class="btn" href="/docs/CORE/">Core 0.2 reference</a><a class="btn" href="/v1/api/core.openapi.yaml">Core API (OpenAPI)</a></div>
+</section>
+
+<section class="band" id="quickstart">
+  <div class="wrap">
+    <h2>Démarrage rapide : cinq minutes, sans matériel</h2>
+    <ol class="steps">
+      <li><p><b>Get the tools.</b></p><pre class="code"><code>git clone https://github.com/amado2k5/cookwala &amp;&amp; cd cookwala
+pip install -e sdk/python            # standard library only; add [full] for schema validation and signatures</code></pre></li>
+      <li><p><b>Hash a recipe.</b> An executor cooks exactly this revision and refuses on mismatch.</p><pre class="code"><code>cookwala hash examples/koshari.cookwala.json</code></pre><div class="output">sha256:f7fc3745af514…</div></li>
+      <li><p><b>Can this device cook it?</b> Nothing is executed; the answer comes before heat.</p><pre class="code"><code>cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/robot-arm.json</code></pre><div class="output">{"state": "refused", "refusal": {"reason": "missing_capability", "node": "n1", "detail": "device cannot perform cw.op.boil and no person is present to do it"}}</div><pre class="code"><code>cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/robot-arm.json --human-present</code></pre><div class="output">{"state": "accepted", "plan": [{"node": "n1", "op": "cw.op.boil", "by": "human", "verifiedBy": "human"}, …]}</div></li>
+      <li><p><b>Check a temperature trace against a safe band.</b> 99 °C is a boil, not a simmer.</p><pre class="code"><code>python -c "import cookwala as cw; print(cw.check_envelope('cw.op.simmer', [{'t':0,'tempC':60},{'t':60,'tempC':94},{'t':90,'tempC':99}]))"</code></pre><div class="output">{'envelopeOk': False, 'targetOk': None, 'reason': 'left_envelope'}</div></li>
+      <li><p><b>Run the conformance vectors and write a report.</b> The report is the artifact behind any claim.</p><pre class="code"><code>cookwala conformance --report report.json</code></pre><div class="output">conformance: {{stat:conformanceVectors}}/{{stat:conformanceVectors}} passed (7 core suites, 5 profile suites)
+report -&gt; report.json</div></li>
+      <li><p><b>Run the reference hub and cook against the Core API.</b></p><pre class="code"><code>cookwala hub --port 7878
+curl -s localhost:7878/v1/safety-limits | head</code></pre><p class="note">Then <code>POST /v1/executions</code> as in the <a href="/docs/HUB/">hub README</a>: refused without a person present, accepted with one, <code>stop</code> always works, the log carries no personal data.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>SDKs et outils</h2>
+  <p>Un client hub avec les mêmes {{stat:sdkOperations}} opérations en {{stat:sdkLanguages}} langues (Python, TypeScript, JavaScript, Go, Rust, Java, Kotlin, C#, Swift, C++, Ruby, PHP, curl), et {{stat:scenarios}} scénarios avec du code pour chacun : <a href="/scenarios/">SDK et scénarios</a>.</p>
+  <div class="cards">
+    <a class="card" href="/docs/PYTHON/"><h3>Package Python et CLI</h3><p><code>pip install -e sdk/python</code>. hash, verify, dryrun, envelope, convert, sms, constraints, validate, conformance, humanitarian, export, init, hub, mcp. Bibliothèque standard uniquement.</p><span class="go">now · editable install; PyPI wheel next →</span></a>
+    <a class="card" href="/docs/TYPESCRIPT/"><h3>Types TypeScript</h3><p>Types pour tous les {{stat:schemas}} schémas, générés et vérifiés par type ; le dry run du navigateur en tant que module. Un namespace par schéma.</p><span class="go">now · source package; npm next →</span></a>
+    <a class="card" href="/docs/MCP/"><h3>Serveur MCP</h3><p>Huit outils pour tout client MCP : search, get, dry_run, explain_step, check_envelope, check_mandate, parse_sms, list_operations. Ne cuisine jamais.</p><span class="go">now →</span></a>
+    <a class="card" href="/docs/HUB/"><h3>Hub de référence</h3><p>L'API Core avec un appareil simulé : dry run avant la chaleur, machine à états sur une horloge, enveloppes respectées, l'arrêt fonctionne toujours. Dockerfile inclus.</p><span class="go">now →</span></a>
+    <a class="card" href="/docs/ROS2/"><h3>Interfaces ROS 2</h3><p><code>cookwala_msgs</code>: Actions ExecuteRecipe et ExecuteNode ; cancel est un arrêt de sécurité ; aucun champ goal ne peut dépasser une limite.</p><span class="go">now · bridge node is a good first contribution →</span></a>
+    <a class="card" href="/docs/ROBOTICS/"><h3>Les exportateurs LeRobot et OpenTelemetry</h3><p>Les execution logs deviennent des tâches LeRobotDataset v3 et des traces OTLP, uniquement avec le consentement du ménage.</p><span class="go">now →</span></a>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>L'API Core</h2>
+      <p>Une API que chaque exécuteur implémente : <code>POST /v1/executions</code>, status, stop, resume, log, safety limits, capabilities ; les catalogues ajoutent les recalls et les incidents. Clés d'idempotence sur chaque POST, <code>If-Match</code> sur les changements, le refus comme réponse normale, le stop jamais refusé pour autorisation.</p>
+      <p><a href="/v1/api/core.openapi.yaml">core.openapi.yaml</a> · <a href="/v1/api/registry.openapi.yaml">registry.openapi.yaml</a> · <a href="/v1/api/humanitarian.openapi.yaml">humanitarian.openapi.yaml</a> · <a href="/v1/api/household.openapi.yaml">household.openapi.yaml (local)</a> · <a href="/v1/schemas/bundle.json">tous les schémas dans un seul bundle</a></p>
+      <h3>Versionnage</h3><p>Semver selon la spécification ; les versions mineures sont additives ; les versions majeures sont annoncées 12 mois à l'avance ; l'index dessert chaque version majeure pendant 3 ans. Le Core est en 0.2.x ; les profils sont versionnés indépendamment et déclarent la version du Core dont ils ont besoin. <a href="/docs/GOVERNANCE/">Governance</a></p>
+    </div>
+    <div>
+      <h2>Conformance</h2>
+      <p>{{stat:conformanceVectors}} vecteurs publics : hachage (incluant l'exemple RFC 8785), signatures (incluant une clé RFC 8032), révocation, divulgation sélective, chaînes d'événements et points de contrôle témoins, unités, enveloppes et sensor ladders, machines à états, politique de divulgation, règles du registry, grammaire SMS, politique de signal, vérification de relais.</p>
+      <p>Une réclamation est un <code>ConformanceReport</code> signé : auto-déclaré → vérifié par un opérateur de registry → certifié par un certificateur indépendant (aucun engagé pour l'instant). Des rapports, jamais des badges. <a href="/docs/CERTIFICATION/">Le chemin</a> · <a href="/v1/conformance/hash.json">vecteurs</a></p>
+      <h3>Evals pour les agents</h3><p>Dix cas promptfoo vérifient qu'un agent suit les règles du Core : texte non fiable, mandates et caps, blocs d'allergènes, limites de sécurité, unattended operations, recalls, over-refusal. Ajoutez des fournisseurs pour comparer les modèles ; publiez avec l'id du modèle, la date et le hash de la config. <a href="/docs/AGENT-SAFETY/">Benchmark</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Concepts, dans un seul tableau</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Terme</th><th>Ce que c'est</th><th>Ce que ce n'est pas</th></tr></thead>
+    <tbody>
+      <tr><td>Operation envelope</td><td>La signification physique d'une opération : milieu, plage de température, attention, sans surveillance autorisée, sensor ladder, dangers</td><td>Un paramètre de recette ; les recettes le restreignent, ne l'élargissent jamais</td></tr>
+      <tr><td>Sensor ladder</td><td>Façons de vérifier une étape, par ordre de préférence : un capteur, une estimation enregistrée, le temps, une personne. Si aucun échelon n'est atteignable, refuser</td><td>Un repli vers la supposition</td></tr>
+      <tr><td>Limite de sécurité</td><td>Appliquée sur l'appareil ; la plus stricte l'emporte toujours ; aucun message ne peut l'augmenter</td><td>Un champ dans une recette ou une requête</td></tr>
+      <tr><td>Mandat de l'agent</td><td>Portées, limites, fournisseurs autorisés, expiration, liste de confirmation préalable, signé par le mandant</td><td>Une invite</td></tr>
+      <tr><td>Contrainte dérivée</td><td>Le seul objet domestique qu'un fournisseur reçoit (« livrer de 17:00 à 18:00, étiqueter pour cacahuètes »)</td><td>Un fait domestique</td></tr>
+      <tr><td>Rapport de conformité</td><td>Un enregistrement signé indiquant quels vecteurs ont été exécutés, avec quel outil, quand, et sur quoi</td><td>Un badge</td></tr>
+    </tbody></table></div>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div><h2>Problèmes courants</h2><ul><li><b>Tout est refusé avec needs_human_present :</b> la découpe, le sauté et la friture ne peuvent pas être exécutés sans surveillance ; passer <code>--human-present</code>.</li><li><b>Refusé avec missing_sensor_no_fallback sur la friture :</b> la friture possède un échelon, un thermomètre à huile ; c'est le fonctionnement standard.</li><li><b>Le hash ne correspond pas :</b> les hashes excluent uniquement <code>hash</code> et <code>signature</code> ; tout autre changement est une nouvelle révision.</li><li><b class="validation-error">La validation indique qu'une température est hors de l'enveloppe :</b> la cible de la recette doit se situer à l'intérieur de la bande de l'opération ; modifiez l'opération ou la cible.</li><li><b class="python-error">Python ne peut pas importer cookwala :</b> installez à partir d'un checkout ou définissez <code>COOKWALA_ROOT</code>.</li></ul></div>
+    <div><h2>Contribuer</h2><p>Implémenter l'API Core sur un appareil ou un hub et publier un rapport ; écrire un nœud de pont ROS 2 ; ajouter des cas d'attaque au benchmark de l'agent ; ajouter des vecteurs ; proposer un RFC. <a href="/contribute/">Comment</a> · <a href="/docs/RFCS/">RFCs</a> · <a href="https://github.com/amado2k5/cookwala" rel="noopener">GitHub</a></p><p class="note">Les documents sont également disponibles sur <a href="/llms.txt">/llms.txt</a> et au format Markdown par page, pour les lecteurs IA.</p></div>
+  </div>
+</section>
+

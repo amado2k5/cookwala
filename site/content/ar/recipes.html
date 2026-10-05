@@ -1,0 +1,34 @@
+<!--meta {"title": "الوصفات: الفهرس بـ25 لغة", "description": "كل وصفة في فهرس كوكوالا: {{stat:recipesV1}} كُتبت للمعيار عند المستوى V1 و{{stat:recipesV0}} مستوردة من fifi.cooking عند المستوى V0، بالمقادير والخطوات والأسماء بـ25 لغة، كل منها وثيقة يمكن بصمها وتجربتها جافًا والاستشهاد بها.", "path": "/recipes/", "status": "draft", "scripts": ["recipes.js"]} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/ar/">كوكوالا</a> / {{s:recipes.title}}</p>
+  {{chip}}
+  <h1>{{s:recipes.title}}</h1>
+  <p class="lead">{{s:recipes.lead}}</p>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <form class="controls" id="recipeSearch" role="search">
+      <label>{{s:recipes.search}} <input id="rq" type="search" placeholder="{{s:recipes.placeholder}}" autocomplete="off"></label>
+      <label>{{s:recipes.level}} <select id="rlevel"><option value="">{{s:recipes.all}}</option><option value="V1">V1</option><option value="V0">V0</option></select></label>
+      <label>{{s:recipes.course}} <select id="rcourse"><option value="">{{s:recipes.all}}</option></select></label>
+      <label>{{s:recipes.collection}} <select id="rcoll"><option value="">{{s:recipes.all}}</option></select></label>
+    </form>
+    <p class="note" id="rcount" aria-live="polite"></p>
+    <div class="cards" id="rcards"></div>
+    <p class="cta"><button type="button" class="btn" id="rmore" hidden>{{s:recipes.load_more}}</button></p>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div>
+    <h2>V0 وV1</h2>
+    <p>{{s:recipes.v0_note}}</p>
+    <p>الوصفات التسع المكتوبة للمعيار عند المستوى V1: عمليات مصنفة بمعاملات، وشروط إنهاء، ومهل، ومخاطر، ونقاط تحكم حرجة، متحقق منها بالمخطط ودلاليًا؛ ولا تزال غير محاكاة ولا متحقق منها ميدانيًا. وتقول كل وثيقة أيهما هي.</p>
+  </div>
+  <div>
+    <h2>من أين تأتي الوصفات</h2>
+    <p>الوصفات المستوردة هي مجموعة fifi.cooking: أرشيف عائلة الدكتورة فاطمة القاوقجي وأربع مجموعات أخرى (شيف تيتا، و<em>أصول الطهي</em>، و<em>Egyptian Cooking</em> لسامية عبد النور، وقناة فاطمة أبو حاتي)، كل منها منسوبة في الوثيقة. أرشيف العائلة منشور برخصة CC BY 4.0؛ والمجموعات الأخرى منشورة بوصفها حقائق منسوبة إلى مصدرها والرخصة قيد مراجعة المؤسس، وتقول ذلك. لا يُدّعى عن أي وصفة ما لا تحمله الوثيقة.</p>
+    <p>كل وصفة وثيقة JSON في <code>/v1/recipes/&lt;id&gt;.cookwala.json</code>، مع ملفات نص جانبية لكل لغة في <code>/v1/recipes/&lt;id&gt;/text/&lt;lang&gt;.json</code>، وفهرس مقسم صفحات في <code>/v1/index/&lt;lang&gt;/&lt;page&gt;.json</code>، وبيان جاهز للتوقيع في <code>/v1/manifest.json</code>. أداة التصدير وتقريرها في المستودع (<code>tools/export_fifi.py</code> و<code>recipes/REPORT.md</code>).</p>
+  </div>
+</section>

@@ -40,6 +40,14 @@
     "/for/"
    ],
    [
+    "Recipes",
+    "/recipes/"
+   ],
+   [
+    "SDK and scenarios",
+    "/scenarios/"
+   ],
+   [
     "Registry and directory",
     "/registry/"
    ],
@@ -171,7 +179,68 @@
   "nav_label": "Main",
   "discovery_title": "Cookwala discovery",
   "llms_title": "Docs for AI readers",
-  "section_link": "Link to this section"
+  "section_link": "Link to this section",
+  "language": "Language",
+  "translated_notice": "This page was translated by machine and has not been reviewed by a person yet. English is the reference; corrections are welcome on GitHub.",
+  "recipes": {
+   "title": "Recipes",
+   "lead": "{{stat:publishedRecipes}} recipes in the index: {{stat:recipesV1}} written for the standard at V1 (structured, not simulated or field-verified) and {{stat:recipesV0}} imported from fifi.cooking at V0 (described, not machine-verified). Search by name in any of 25 languages.",
+   "search": "Search recipes",
+   "placeholder": "e.g. koshari, كشري, lentil",
+   "collection": "Collection",
+   "course": "Course",
+   "level": "Level",
+   "all": "All",
+   "results": "{n} recipes",
+   "none": "No recipe matches.",
+   "v0": "V0: described, not machine-verified",
+   "v1": "V1: structured, not simulated or field-verified",
+   "servings": "servings",
+   "minutes": "min",
+   "ingredients": "Ingredients",
+   "steps": "Steps",
+   "original_steps": "Original steps",
+   "source": "Source",
+   "original_page": "Original page on fifi.cooking",
+   "licence": "Licence",
+   "licence_review": "credited; licence under review",
+   "text_language": "Text language",
+   "nutrition": "Nutrition per serving (modelled estimate, not measured)",
+   "allergens": "Allergens (inferred from ingredient names)",
+   "dry_run": "Dry run this recipe",
+   "v0_note": "This is a V0 document: the original ingredients and steps from fifi.cooking, with quantities parsed from the text where possible. No step has been classified, measured or verified, so a device assigns every step to a person and refuses to cook it alone (RFC-0009). It becomes V1 when a reviewed process graph replaces the steps.",
+   "load_more": "Show more",
+   "machine_text": "This text comes from the fifi.cooking translation of the recipe and was produced by machine.",
+   "data": "Document (JSON)",
+   "sidecar": "Text sidecar"
+  },
+  "scenarios": {
+   "title": "SDK and scenarios",
+   "lead": "One client, the same {{stat:sdkOperations}} operations, in {{stat:sdkLanguages}} languages, against any Cookwala hub. {{stat:scenarios}} scenarios show what to do, step by step, with the command line, the code in every language and the recorded output; every one is executed against the reference hub before it is published.",
+   "audience": "Audience",
+   "goal": "Goal",
+   "level": "Level",
+   "all": "All",
+   "goal_hunger": "Help end hunger",
+   "goal_health": "Make people healthier",
+   "goal_robots": "Robots for people",
+   "steps": "Steps",
+   "cli": "Command line",
+   "code": "Code",
+   "run": "Run",
+   "output": "Recorded output",
+   "outcome": "Outcome",
+   "read_first": "Read first",
+   "none": "No scenario matches.",
+   "languages": "Languages",
+   "install": "Install",
+   "sdk_note": "Every client is a thin HTTP client: the reference library runs on the hub, so a client in any language gets exactly the behaviour the conformance vectors test. Packages are not yet published to registries; install from the repository.",
+   "tested": "run on this machine",
+   "untested": "not compiled here yet",
+   "prev": "Previous",
+   "next": "Next",
+   "status": "Status"
+  }
  },
  "ar": {
   "brand": "كوكوالا",
@@ -212,6 +281,14 @@
    [
     "لكل صاحب مصلحة",
     "/for/"
+   ],
+   [
+    "الوصفات",
+    "/recipes/"
+   ],
+   [
+    "حزمة التطوير والسيناريوهات",
+    "/scenarios/"
    ],
    [
     "السجل والدليل",
@@ -345,6 +422,67 @@
   "nav_label": "القائمة الرئيسية",
   "discovery_title": "اكتشاف كوكوالا",
   "llms_title": "وثائق لقرّاء الذكاء الاصطناعي",
-  "section_link": "رابط إلى هذا القسم"
+  "section_link": "رابط إلى هذا القسم",
+  "language": "اللغة",
+  "translated_notice": "تُرجمت هذه الصفحة آليًا ولم يراجعها إنسان بعد. النص الإنجليزي هو المرجع؛ والتصحيحات مرحّب بها على GitHub.",
+  "recipes": {
+   "title": "الوصفات",
+   "lead": "{{stat:publishedRecipes}} وصفة في الفهرس: {{stat:recipesV1}} كُتبت للمعيار عند المستوى V1 (مهيكلة، غير محاكاة ولا متحقق منها ميدانيًا) و{{stat:recipesV0}} مستوردة من fifi.cooking عند المستوى V0 (موصوفة، غير متحقق منها آليًا). ابحث بالاسم بأي من 25 لغة.",
+   "search": "ابحث في الوصفات",
+   "placeholder": "مثل: كشري، koshari، عدس",
+   "collection": "المجموعة",
+   "course": "نوع الطبق",
+   "level": "المستوى",
+   "all": "الكل",
+   "results": "{n} وصفة",
+   "none": "لا توجد وصفة مطابقة.",
+   "v0": "V0: موصوفة، غير متحقق منها آليًا",
+   "v1": "V1: مهيكلة، غير محاكاة ولا متحقق منها ميدانيًا",
+   "servings": "حصص",
+   "minutes": "دقيقة",
+   "ingredients": "المقادير",
+   "steps": "الخطوات",
+   "original_steps": "الخطوات الأصلية",
+   "source": "المصدر",
+   "original_page": "الصفحة الأصلية على fifi.cooking",
+   "licence": "الرخصة",
+   "licence_review": "منسوبة إلى مصدرها؛ الرخصة قيد المراجعة",
+   "text_language": "لغة النص",
+   "nutrition": "القيم الغذائية للحصة (تقدير منمذج، غير مقاس)",
+   "allergens": "مسببات الحساسية (مستنتجة من أسماء المقادير)",
+   "dry_run": "تجربة جافة لهذه الوصفة",
+   "v0_note": "هذه وثيقة V0: المقادير والخطوات الأصلية من fifi.cooking، مع كميات مستخرجة من النص حيث أمكن. لم تُصنَّف أي خطوة أو تُقَس أو يُتحقق منها، لذلك يسند الجهاز كل خطوة إلى شخص ويرفض طهيها وحده (RFC-0009). وتصبح V1 حين يحل رسم عمليات مراجَع محل الخطوات.",
+   "load_more": "أظهر المزيد",
+   "machine_text": "هذا النص من ترجمة fifi.cooking للوصفة وقد أُنتج آليًا.",
+   "data": "الوثيقة (JSON)",
+   "sidecar": "ملف النص الجانبي"
+  },
+  "scenarios": {
+   "title": "حزمة التطوير والسيناريوهات",
+   "lead": "عميل واحد، والعمليات الـ{{stat:sdkOperations}} نفسها، بـ{{stat:sdkLanguages}} لغة برمجة، مع أي محور كوكوالا. {{stat:scenarios}} سيناريو يبيّن ما تفعله خطوة بخطوة، مع سطر الأوامر والكود بكل لغة والمخرجات المسجلة؛ ويُنفَّذ كل سيناريو على المحور المرجعي قبل نشره.",
+   "audience": "الفئة",
+   "goal": "الهدف",
+   "level": "المستوى",
+   "all": "الكل",
+   "goal_hunger": "المساعدة في إنهاء الجوع",
+   "goal_health": "صحة أفضل للناس",
+   "goal_robots": "روبوتات في خدمة الناس",
+   "steps": "الخطوات",
+   "cli": "سطر الأوامر",
+   "code": "الكود",
+   "run": "التشغيل",
+   "output": "المخرجات المسجلة",
+   "outcome": "النتيجة",
+   "read_first": "اقرأ أولًا",
+   "none": "لا يوجد سيناريو مطابق.",
+   "languages": "اللغات",
+   "install": "التثبيت",
+   "sdk_note": "كل عميل هو عميل HTTP رقيق: المكتبة المرجعية تعمل على المحور، فيحصل العميل بأي لغة على السلوك نفسه الذي تختبره متجهات المطابقة. الحزم غير منشورة بعد في المستودعات؛ ثبّتها من المستودع.",
+   "tested": "شُغّل على هذا الجهاز",
+   "untested": "لم يُترجم هنا بعد",
+   "prev": "السابق",
+   "next": "التالي",
+   "status": "الحالة"
+  }
  }
 }

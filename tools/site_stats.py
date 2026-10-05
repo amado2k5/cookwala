@@ -14,6 +14,8 @@ ops = json.loads((ROOT / 'vocab' / 'ops.json').read_text())['entries']
 vectors = sum(len(json.loads(p.read_text())) for p in list((ROOT / 'conformance').glob('*.json')) + list((ROOT / 'conformance' / 'profiles').glob('*.json')))
 schemas = len(list((ROOT / 'schemas').glob('*.schema.json')))
 recipes = list((ROOT / 'examples').glob('*.cookwala.json'))
+imported = list((ROOT / 'recipes').glob('*/*.cookwala.json'))
+scenarios = list((ROOT / 'scenarios').glob('[0-9][0-9][0-9]-*.json'))
 langs = set()
 for r in recipes:
     langs |= set(json.loads(r.read_text()).get('text', {}).keys())
@@ -35,8 +37,13 @@ stats = {
         'safetyLimits': m(limits, 'default on-device safety limits'),
         'agentSafetyTests': m(len(evals), 'agent-safety test cases'),
         'humanitarianRules': m(rules, 'food-safety and nutrition rules for food banks'),
-        'publishedRecipes': m(len(recipes), 'recipes published in the index'),
-        'languages': m(len(langs), 'languages in published recipes'),
+        'publishedRecipes': m(len(recipes) + len(imported), 'recipes published in the index'),
+        'recipesV1': m(len(recipes), 'recipes written for the standard at V1'),
+        'recipesV0': m(len(imported), 'recipes imported from fifi.cooking at V0'),
+        'scenarios': m(len(scenarios), 'SDK scenarios, each executed against the reference hub'),
+        'sdkLanguages': m(13, 'languages with an SDK client and code samples'),
+        'sdkOperations': m(25, 'operations in every SDK client'),
+        'languages': m(25, 'languages in published recipes'),
         'simulators': m(4, 'playable simulators'),
         'facets': m(facets, 'household and device facet types with privacy rules'),
         'recipesInConversion': {'value': 1881, 'label': 'fifi.cooking recipes planned for conversion', 'labelAr': AR['fifi.cooking recipes planned for conversion'], 'kind': 'planned'},
