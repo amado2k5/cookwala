@@ -36,6 +36,7 @@ and AI change: a better planner produces a better R4 from the same recipe.
 | `failureModes` (incident, detect, prevent, playbook) | Early detection of known problems and the exact playbook to recover |
 | `affordances`, `space` | Matching steps to robots that can grip, lift and reach; keeping hot zones away from children |
 | `safety` (hazards, CCPs, supervision, abort) | The safety kernel: invariants that every plan must preserve |
+| `safety.dietary[].certifications`, `ingredients[].certifications` | Pointers to detached, signed `Certification` documents (halal, kosher, vegetarian, organic…) by any number of authorities, re-issued over time; a reader fetches and verifies them against the authority's key and this revision's hash (RFC-0010) |
 | `service` (temps, vessel, accompaniments, tableware, eating style, portioning, packable) | Serving: what goes on the table, to the room, in the lunchbox; reminders and hold limits; cultural eating style |
 | `storage` | Leftovers, cook-ahead and lunchbox Missions |
 | `acceptance` | The recipe's *tests*: the Mission is done when these hold |

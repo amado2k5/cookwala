@@ -1,0 +1,30 @@
+{
+ "cookwala": "0.2.0",
+ "kind": "Certification",
+ "id": "cert-halal-kofta-oven-2026-01",
+ "scheme": "halal",
+ "standard": "cw.ruleset.halal.v1",
+ "subject": {
+  "kind": "recipe",
+  "ref": "cw:cookwala.ai:example-kofta-oven",
+  "revision": 1,
+  "hash": "sha256:932c364ad759aa2d27905c30c198be08ea9a7ac80ac3b60068895818cbdb4720"
+ },
+ "authority": {
+  "id": "did:web:halal-authority.example",
+  "name": "Example Halal Certification Authority (fictional)"
+ },
+ "status": "valid",
+ "issuedAt": "2026-01-15T10:00:00Z",
+ "validFrom": "2026-01-15T00:00:00Z",
+ "validUntil": "2027-01-15T00:00:00Z",
+ "certificateId": "HA-2026-00071",
+ "conditions": "Halal only when the beef carries a current halal certification of its own lot.",
+ "hash": "sha256:1e194acc259c82310201e0d359af30e0dfffb3b1829076186b2aed43d27220e5",
+ "signature": {
+  "alg": "EdDSA",
+  "kid": "did:web:halal-authority.example#k1",
+  "sig": "v6JZJrGDUxWqe56FVLY6k6qKIrPnOZUr6WPuyPo24Jaoy7lmItrS7o6oRhYHDmRj7e3MQ7349OQ03dCUb2g7AQ",
+  "signedAt": "2026-01-15T10:00:00Z"
+ }
+}

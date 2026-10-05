@@ -1,0 +1,30 @@
+{
+ "cookwala": "0.2.0",
+ "kind": "Certification",
+ "id": "cert-vegetarian-shakshuka-2026-06",
+ "scheme": "vegetarian",
+ "standard": "Plant-Based Society vegetarian standard v3 (fictional)",
+ "subject": {
+  "kind": "recipe",
+  "ref": "cw:cookwala.ai:example-shakshuka",
+  "revision": 2,
+  "hash": "sha256:2ea6fab93cc673fc6784f9bc9fe401d2387bb7779dc537df97286b73807c8841"
+ },
+ "authority": {
+  "id": "did:web:plant-based-society.example",
+  "name": "Example Plant-Based Society (fictional)"
+ },
+ "status": "valid",
+ "issuedAt": "2026-06-01T08:00:00Z",
+ "validFrom": "2026-06-01T00:00:00Z",
+ "validUntil": "2028-06-01T00:00:00Z",
+ "certificateId": "PBS-7781",
+ "scope": "As written; the optional feta is dairy, so the dish is vegetarian, not vegan.",
+ "hash": "sha256:327be054834d6a97741ca89fdfc4e422906fef80416a643b38236b0407544f72",
+ "signature": {
+  "alg": "EdDSA",
+  "kid": "did:web:plant-based-society.example#k1",
+  "sig": "pQ4dPthN44NEJNdQ9m58WzHRoBTAMoVIanXYmNTeaTsBMIQzETd38TV0v-kkjLVWA6HCbV5GiJhAdpbfbBXDDw",
+  "signedAt": "2026-06-01T08:00:00Z"
+ }
+}

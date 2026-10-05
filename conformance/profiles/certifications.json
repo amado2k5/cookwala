@@ -1,0 +1,697 @@
+[
+ {
+  "id": "cert-valid",
+  "kind": "certification",
+  "profile": "certifications",
+  "rfc": "0010",
+  "description": "A current certification by a known authority verifies.",
+  "input": {
+   "certification": {
+    "cookwala": "0.2.0",
+    "kind": "Certification",
+    "id": "cert-a-2026-01",
+    "scheme": "halal",
+    "standard": "cw.ruleset.halal.v1",
+    "subject": {
+     "kind": "recipe",
+     "ref": "cw:cookwala.ai:example-test",
+     "revision": 1,
+     "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "authority": {
+     "id": "did:web:halal-authority.example"
+    },
+    "status": "valid",
+    "issuedAt": "2026-01-15T10:00:00Z",
+    "validFrom": "2026-01-15T10:00:00Z",
+    "validUntil": "2027-01-15T00:00:00Z",
+    "hash": "sha256:bfef0857c650351e30807583a970ec7a85698626a400882d603a2c7929e1d4cc",
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:halal-authority.example#k1",
+     "sig": "thiJh5ph9RiO-eBMhB5DT-grqOyI0zfAYu1k04eO_9Ht8V9bmKcky9LchNPr70g2-XrpnbaA8RevsrGPisHXAQ",
+     "signedAt": "2026-01-15T10:00:00Z"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:halal-authority.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "did:web:halal-authority.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:plant-based-society.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "did:web:plant-based-society.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    }
+   ],
+   "now": "2026-10-05T00:00:00Z",
+   "subjectHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "expected": {
+   "ok": true,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "cert-expired",
+  "kind": "certification",
+  "profile": "certifications",
+  "rfc": "0010",
+  "description": "Past validUntil: expired, whatever the signature says.",
+  "input": {
+   "certification": {
+    "cookwala": "0.2.0",
+    "kind": "Certification",
+    "id": "cert-a-2025",
+    "scheme": "halal",
+    "standard": "cw.ruleset.halal.v1",
+    "subject": {
+     "kind": "recipe",
+     "ref": "cw:cookwala.ai:example-test",
+     "revision": 1,
+     "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "authority": {
+     "id": "did:web:halal-authority.example"
+    },
+    "status": "valid",
+    "issuedAt": "2025-02-01T00:00:00Z",
+    "validFrom": "2025-02-01T00:00:00Z",
+    "validUntil": "2025-08-01T00:00:00Z",
+    "hash": "sha256:efa82f6650fffbe170b33b4c355763a2858788198d4d3df9b8a9b542341354a9",
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:halal-authority.example#k1",
+     "sig": "aDOJKLHlV1KBHs_eBWwbvUPAuUJ85awUz4AmCdiKSPaSuO2PIhWQk4YKCuZfF8-fCP7WTrOazJf7Yg2VwGKSAQ",
+     "signedAt": "2025-02-01T00:00:00Z"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:halal-authority.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "did:web:halal-authority.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:plant-based-society.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "did:web:plant-based-society.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    }
+   ],
+   "now": "2026-10-05T00:00:00Z"
+  },
+  "expected": {
+   "ok": false,
+   "reason": "expired"
+  }
+ },
+ {
+  "id": "cert-revoked",
+  "kind": "certification",
+  "profile": "certifications",
+  "rfc": "0010",
+  "description": "Status revoked after revokedAt: not valid.",
+  "input": {
+   "certification": {
+    "cookwala": "0.2.0",
+    "kind": "Certification",
+    "id": "cert-a-revoked",
+    "scheme": "halal",
+    "standard": "cw.ruleset.halal.v1",
+    "subject": {
+     "kind": "recipe",
+     "ref": "cw:cookwala.ai:example-test",
+     "revision": 1,
+     "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "authority": {
+     "id": "did:web:halal-authority.example"
+    },
+    "status": "revoked",
+    "issuedAt": "2026-02-01T00:00:00Z",
+    "validFrom": "2026-02-01T00:00:00Z",
+    "validUntil": "2027-02-01T00:00:00Z",
+    "revokedAt": "2026-08-01T00:00:00Z",
+    "revocationReason": "supplier lost its own certificate",
+    "hash": "sha256:f4c5e7680a5557171816a6cf8a49de0658eb70f1365c17c48ff89252f7a7b519",
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:halal-authority.example#k1",
+     "sig": "p0MeWXcD8f-264F4PSoeHB57TBKAsHSCRBB7dTnAqxQi3VKt8rTSsrMBk68pJenj5xMyIRuOzpioRLEQhOMLAQ",
+     "signedAt": "2026-02-01T00:00:00Z"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:halal-authority.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "did:web:halal-authority.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:plant-based-society.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "did:web:plant-based-society.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    }
+   ],
+   "now": "2026-10-05T00:00:00Z"
+  },
+  "expected": {
+   "ok": false,
+   "reason": "revoked"
+  }
+ },
+ {
+  "id": "cert-wrong-subject",
+  "kind": "certification",
+  "profile": "certifications",
+  "rfc": "0010",
+  "description": "The verifier holds a different recipe revision: subject_mismatch. A new revision needs a new certification.",
+  "input": {
+   "certification": {
+    "cookwala": "0.2.0",
+    "kind": "Certification",
+    "id": "cert-a-2026-01",
+    "scheme": "halal",
+    "standard": "cw.ruleset.halal.v1",
+    "subject": {
+     "kind": "recipe",
+     "ref": "cw:cookwala.ai:example-test",
+     "revision": 1,
+     "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "authority": {
+     "id": "did:web:halal-authority.example"
+    },
+    "status": "valid",
+    "issuedAt": "2026-01-15T10:00:00Z",
+    "validFrom": "2026-01-15T10:00:00Z",
+    "validUntil": "2027-01-15T00:00:00Z",
+    "hash": "sha256:bfef0857c650351e30807583a970ec7a85698626a400882d603a2c7929e1d4cc",
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:halal-authority.example#k1",
+     "sig": "thiJh5ph9RiO-eBMhB5DT-grqOyI0zfAYu1k04eO_9Ht8V9bmKcky9LchNPr70g2-XrpnbaA8RevsrGPisHXAQ",
+     "signedAt": "2026-01-15T10:00:00Z"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:halal-authority.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "did:web:halal-authority.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:plant-based-society.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "did:web:plant-based-society.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    }
+   ],
+   "now": "2026-10-05T00:00:00Z",
+   "subjectHash": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "expected": {
+   "ok": false,
+   "reason": "subject_mismatch"
+  }
+ },
+ {
+  "id": "cert-forged-signature",
+  "kind": "certification",
+  "profile": "certifications",
+  "rfc": "0010",
+  "description": "Signed with another key under the authority's kid: bad_signature.",
+  "input": {
+   "certification": {
+    "cookwala": "0.2.0",
+    "kind": "Certification",
+    "id": "cert-a-2026-01",
+    "scheme": "halal",
+    "standard": "cw.ruleset.halal.v1",
+    "subject": {
+     "kind": "recipe",
+     "ref": "cw:cookwala.ai:example-test",
+     "revision": 1,
+     "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "authority": {
+     "id": "did:web:halal-authority.example"
+    },
+    "status": "valid",
+    "issuedAt": "2026-01-15T10:00:00Z",
+    "validFrom": "2026-01-15T10:00:00Z",
+    "validUntil": "2027-01-15T00:00:00Z",
+    "hash": "sha256:bfef0857c650351e30807583a970ec7a85698626a400882d603a2c7929e1d4cc",
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:halal-authority.example#k1",
+     "sig": "R2wNBKdz7FeT-UMSW77PXmGhbVfEFDheKvZKD3i7cvEeAOb0BDSfeQg-OlZECWEsQ_DoZ19AnZTWj5C_anofBA",
+     "signedAt": "2026-01-15T10:00:00Z"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:halal-authority.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "did:web:halal-authority.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:plant-based-society.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "did:web:plant-based-society.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    }
+   ],
+   "now": "2026-10-05T00:00:00Z"
+  },
+  "expected": {
+   "ok": false,
+   "reason": "bad_signature"
+  }
+ },
+ {
+  "id": "cert-unsigned",
+  "kind": "certification",
+  "profile": "certifications",
+  "rfc": "0010",
+  "description": "A certification without a signature is a claim, not a certification.",
+  "input": {
+   "certification": {
+    "cookwala": "0.2.0",
+    "kind": "Certification",
+    "id": "cert-a-2026-01",
+    "scheme": "halal",
+    "standard": "cw.ruleset.halal.v1",
+    "subject": {
+     "kind": "recipe",
+     "ref": "cw:cookwala.ai:example-test",
+     "revision": 1,
+     "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "authority": {
+     "id": "did:web:halal-authority.example"
+    },
+    "status": "valid",
+    "issuedAt": "2026-01-15T10:00:00Z",
+    "validFrom": "2026-01-15T10:00:00Z",
+    "validUntil": "2027-01-15T00:00:00Z",
+    "hash": "sha256:bfef0857c650351e30807583a970ec7a85698626a400882d603a2c7929e1d4cc"
+   },
+   "keys": [
+    {
+     "kid": "did:web:halal-authority.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "did:web:halal-authority.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:plant-based-society.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "did:web:plant-based-society.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    }
+   ],
+   "now": "2026-10-05T00:00:00Z"
+  },
+  "expected": {
+   "ok": false,
+   "reason": "unsigned"
+  }
+ },
+ {
+  "id": "cert-unknown-authority-key",
+  "kind": "certification",
+  "profile": "certifications",
+  "rfc": "0010",
+  "description": "The authority's KeyRecord is not known: unknown_key; fetch it from authority.id first.",
+  "input": {
+   "certification": {
+    "cookwala": "0.2.0",
+    "kind": "Certification",
+    "id": "cert-b-2026-06",
+    "scheme": "halal",
+    "standard": "cw.ruleset.halal.v1",
+    "subject": {
+     "kind": "recipe",
+     "ref": "cw:cookwala.ai:example-test",
+     "revision": 1,
+     "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "authority": {
+     "id": "did:web:plant-based-society.example"
+    },
+    "status": "valid",
+    "issuedAt": "2026-06-01T08:00:00Z",
+    "validFrom": "2026-06-01T08:00:00Z",
+    "validUntil": "2028-06-01T00:00:00Z",
+    "hash": "sha256:cf0df442e22f4ba08893ebbdf919e9b1d1de2afdc9710a02eaa2c5145e1c1d72",
+    "signature": {
+     "alg": "EdDSA",
+     "kid": "did:web:plant-based-society.example#k1",
+     "sig": "whHP259WCn8bZJpI6n3K9OAZvQK1cdw_woN5jH13Gqf-mb27Hgbw6kNH-IF_egDFtMuslAtW8cYJzfGPFTAlDg",
+     "signedAt": "2026-06-01T08:00:00Z"
+    }
+   },
+   "keys": [
+    {
+     "kid": "did:web:halal-authority.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "did:web:halal-authority.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    }
+   ],
+   "now": "2026-10-05T00:00:00Z"
+  },
+  "expected": {
+   "ok": false,
+   "reason": "unknown_key"
+  }
+ },
+ {
+  "id": "certset-recertification-newest-wins",
+  "kind": "certification_set",
+  "profile": "certifications",
+  "rfc": "0010",
+  "description": "The same authority re-certified in October; the January document is superseded.",
+  "input": {
+   "certifications": [
+    {
+     "cookwala": "0.2.0",
+     "kind": "Certification",
+     "id": "cert-a-2026-01",
+     "scheme": "halal",
+     "standard": "cw.ruleset.halal.v1",
+     "subject": {
+      "kind": "recipe",
+      "ref": "cw:cookwala.ai:example-test",
+      "revision": 1,
+      "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+     },
+     "authority": {
+      "id": "did:web:halal-authority.example"
+     },
+     "status": "valid",
+     "issuedAt": "2026-01-15T10:00:00Z",
+     "validFrom": "2026-01-15T10:00:00Z",
+     "validUntil": "2027-01-15T00:00:00Z",
+     "hash": "sha256:bfef0857c650351e30807583a970ec7a85698626a400882d603a2c7929e1d4cc",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:halal-authority.example#k1",
+      "sig": "thiJh5ph9RiO-eBMhB5DT-grqOyI0zfAYu1k04eO_9Ht8V9bmKcky9LchNPr70g2-XrpnbaA8RevsrGPisHXAQ",
+      "signedAt": "2026-01-15T10:00:00Z"
+     }
+    },
+    {
+     "cookwala": "0.2.0",
+     "kind": "Certification",
+     "id": "cert-a-2026-10",
+     "scheme": "halal",
+     "standard": "cw.ruleset.halal.v1",
+     "subject": {
+      "kind": "recipe",
+      "ref": "cw:cookwala.ai:example-test",
+      "revision": 1,
+      "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+     },
+     "authority": {
+      "id": "did:web:halal-authority.example"
+     },
+     "status": "valid",
+     "issuedAt": "2026-10-01T10:00:00Z",
+     "validFrom": "2026-10-01T10:00:00Z",
+     "validUntil": "2027-10-01T00:00:00Z",
+     "supersedes": "cert-a-2026-01",
+     "hash": "sha256:267b4a8aacb5bbb152d279703dfafe2b540842a35c63b1bfb23d2b648b53a3ad",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:halal-authority.example#k1",
+      "sig": "136fsi3vi8jhXJVMA4zx3ChFhp9lRgZno_PIhd9HqWhzEbulkzUB_RHQTUdUyxh441j946pfdgYP-z5lR-VyDA",
+      "signedAt": "2026-10-01T10:00:00Z"
+     }
+    }
+   ],
+   "keys": [
+    {
+     "kid": "did:web:halal-authority.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "did:web:halal-authority.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:plant-based-society.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "did:web:plant-based-society.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    }
+   ],
+   "now": "2026-10-05T00:00:00Z",
+   "subjectHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "expected": {
+   "current": [
+    "cert-a-2026-10"
+   ],
+   "rejected": {
+    "cert-a-2026-01": "superseded"
+   }
+  }
+ },
+ {
+  "id": "certset-two-authorities-coexist",
+  "kind": "certification_set",
+  "profile": "certifications",
+  "rfc": "0010",
+  "description": "Two authorities certify the same recipe: both count; a reader may require a specific one.",
+  "input": {
+   "certifications": [
+    {
+     "cookwala": "0.2.0",
+     "kind": "Certification",
+     "id": "cert-a-2026-10",
+     "scheme": "halal",
+     "standard": "cw.ruleset.halal.v1",
+     "subject": {
+      "kind": "recipe",
+      "ref": "cw:cookwala.ai:example-test",
+      "revision": 1,
+      "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+     },
+     "authority": {
+      "id": "did:web:halal-authority.example"
+     },
+     "status": "valid",
+     "issuedAt": "2026-10-01T10:00:00Z",
+     "validFrom": "2026-10-01T10:00:00Z",
+     "validUntil": "2027-10-01T00:00:00Z",
+     "supersedes": "cert-a-2026-01",
+     "hash": "sha256:267b4a8aacb5bbb152d279703dfafe2b540842a35c63b1bfb23d2b648b53a3ad",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:halal-authority.example#k1",
+      "sig": "136fsi3vi8jhXJVMA4zx3ChFhp9lRgZno_PIhd9HqWhzEbulkzUB_RHQTUdUyxh441j946pfdgYP-z5lR-VyDA",
+      "signedAt": "2026-10-01T10:00:00Z"
+     }
+    },
+    {
+     "cookwala": "0.2.0",
+     "kind": "Certification",
+     "id": "cert-b-2026-06",
+     "scheme": "halal",
+     "standard": "cw.ruleset.halal.v1",
+     "subject": {
+      "kind": "recipe",
+      "ref": "cw:cookwala.ai:example-test",
+      "revision": 1,
+      "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+     },
+     "authority": {
+      "id": "did:web:plant-based-society.example"
+     },
+     "status": "valid",
+     "issuedAt": "2026-06-01T08:00:00Z",
+     "validFrom": "2026-06-01T08:00:00Z",
+     "validUntil": "2028-06-01T00:00:00Z",
+     "hash": "sha256:cf0df442e22f4ba08893ebbdf919e9b1d1de2afdc9710a02eaa2c5145e1c1d72",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:plant-based-society.example#k1",
+      "sig": "whHP259WCn8bZJpI6n3K9OAZvQK1cdw_woN5jH13Gqf-mb27Hgbw6kNH-IF_egDFtMuslAtW8cYJzfGPFTAlDg",
+      "signedAt": "2026-06-01T08:00:00Z"
+     }
+    }
+   ],
+   "keys": [
+    {
+     "kid": "did:web:halal-authority.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "did:web:halal-authority.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:plant-based-society.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "did:web:plant-based-society.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    }
+   ],
+   "now": "2026-10-05T00:00:00Z",
+   "subjectHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "expected": {
+   "current": [
+    "cert-a-2026-10",
+    "cert-b-2026-06"
+   ],
+   "rejected": {}
+  }
+ },
+ {
+  "id": "certset-expired-and-revoked-dropped",
+  "kind": "certification_set",
+  "profile": "certifications",
+  "rfc": "0010",
+  "description": "Expired and revoked documents are rejected with their reason; the current one stays.",
+  "input": {
+   "certifications": [
+    {
+     "cookwala": "0.2.0",
+     "kind": "Certification",
+     "id": "cert-a-2025",
+     "scheme": "halal",
+     "standard": "cw.ruleset.halal.v1",
+     "subject": {
+      "kind": "recipe",
+      "ref": "cw:cookwala.ai:example-test",
+      "revision": 1,
+      "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+     },
+     "authority": {
+      "id": "did:web:halal-authority.example"
+     },
+     "status": "valid",
+     "issuedAt": "2025-02-01T00:00:00Z",
+     "validFrom": "2025-02-01T00:00:00Z",
+     "validUntil": "2025-08-01T00:00:00Z",
+     "hash": "sha256:efa82f6650fffbe170b33b4c355763a2858788198d4d3df9b8a9b542341354a9",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:halal-authority.example#k1",
+      "sig": "aDOJKLHlV1KBHs_eBWwbvUPAuUJ85awUz4AmCdiKSPaSuO2PIhWQk4YKCuZfF8-fCP7WTrOazJf7Yg2VwGKSAQ",
+      "signedAt": "2025-02-01T00:00:00Z"
+     }
+    },
+    {
+     "cookwala": "0.2.0",
+     "kind": "Certification",
+     "id": "cert-a-revoked",
+     "scheme": "halal",
+     "standard": "cw.ruleset.halal.v1",
+     "subject": {
+      "kind": "recipe",
+      "ref": "cw:cookwala.ai:example-test",
+      "revision": 1,
+      "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+     },
+     "authority": {
+      "id": "did:web:halal-authority.example"
+     },
+     "status": "revoked",
+     "issuedAt": "2026-02-01T00:00:00Z",
+     "validFrom": "2026-02-01T00:00:00Z",
+     "validUntil": "2027-02-01T00:00:00Z",
+     "revokedAt": "2026-08-01T00:00:00Z",
+     "revocationReason": "supplier lost its own certificate",
+     "hash": "sha256:f4c5e7680a5557171816a6cf8a49de0658eb70f1365c17c48ff89252f7a7b519",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:halal-authority.example#k1",
+      "sig": "p0MeWXcD8f-264F4PSoeHB57TBKAsHSCRBB7dTnAqxQi3VKt8rTSsrMBk68pJenj5xMyIRuOzpioRLEQhOMLAQ",
+      "signedAt": "2026-02-01T00:00:00Z"
+     }
+    },
+    {
+     "cookwala": "0.2.0",
+     "kind": "Certification",
+     "id": "cert-a-2026-10",
+     "scheme": "halal",
+     "standard": "cw.ruleset.halal.v1",
+     "subject": {
+      "kind": "recipe",
+      "ref": "cw:cookwala.ai:example-test",
+      "revision": 1,
+      "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+     },
+     "authority": {
+      "id": "did:web:halal-authority.example"
+     },
+     "status": "valid",
+     "issuedAt": "2026-10-01T10:00:00Z",
+     "validFrom": "2026-10-01T10:00:00Z",
+     "validUntil": "2027-10-01T00:00:00Z",
+     "supersedes": "cert-a-2026-01",
+     "hash": "sha256:267b4a8aacb5bbb152d279703dfafe2b540842a35c63b1bfb23d2b648b53a3ad",
+     "signature": {
+      "alg": "EdDSA",
+      "kid": "did:web:halal-authority.example#k1",
+      "sig": "136fsi3vi8jhXJVMA4zx3ChFhp9lRgZno_PIhd9HqWhzEbulkzUB_RHQTUdUyxh441j946pfdgYP-z5lR-VyDA",
+      "signedAt": "2026-10-01T10:00:00Z"
+     }
+    }
+   ],
+   "keys": [
+    {
+     "kid": "did:web:halal-authority.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+     "actor": "did:web:halal-authority.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    },
+    {
+     "kid": "did:web:plant-based-society.example#k1",
+     "alg": "EdDSA",
+     "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+     "actor": "did:web:plant-based-society.example",
+     "validFrom": "2025-01-01T00:00:00Z"
+    }
+   ],
+   "now": "2026-10-05T00:00:00Z",
+   "subjectHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "expected": {
+   "current": [
+    "cert-a-2026-10"
+   ],
+   "rejected": {
+    "cert-a-2025": "expired",
+    "cert-a-revoked": "revoked"
+   }
+  }
+ }
+]

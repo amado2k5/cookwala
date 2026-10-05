@@ -248,6 +248,13 @@
      "items": {
       "$ref": "#/$defs/FoodClass"
      }
+    },
+    "certifications": {
+     "type": "array",
+     "items": {
+      "$ref": "common.schema.json#/$defs/CertificationRef"
+     },
+     "description": "Certifications of the item or lot (halal, kosher, organic...), by hash; verified against the authority's key, never trusted from the message (RFC-0010)."
     }
    },
    "$ref": "#/$defs/Extensions"

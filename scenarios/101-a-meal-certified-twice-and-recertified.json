@@ -1,0 +1,114 @@
+{
+ "id": "101",
+ "slug": "a-meal-certified-twice-and-recertified",
+ "audience": "certifier",
+ "northStar": [
+  "health"
+ ],
+ "level": "intermediate",
+ "title": {
+  "en": "A halal authority certifies a meal, re-certifies it later, and a second authority certifies it too"
+ },
+ "goal": {
+  "en": "Certifications are detached, signed documents that point at a recipe revision by hash (RFC-0010). Validate one, hash it, verify its signature against the authority's published key, and read the field that makes it a re-certification."
+ },
+ "docs": [
+  "/docs/RECIPE-FORMAT/",
+  "/docs/CORE/"
+ ],
+ "requires": [
+  "hub",
+  "repo"
+ ],
+ "steps": [
+  {
+   "op": "validate",
+   "args": {
+    "kind": "common",
+    "doc": {
+     "$file": "examples/certifications/halal-kofta-oven-2026-10.json"
+    }
+   },
+   "save": "v",
+   "note": {
+    "en": "The October document from the (fictional) halal authority validates against common.schema.json#/$defs/Certification."
+   },
+   "expect": {
+    "ok": true
+   }
+  },
+  {
+   "op": "hash",
+   "args": {
+    "doc": {
+     "$file": "examples/certifications/halal-kofta-oven-2026-10.json"
+    }
+   },
+   "save": "h",
+   "note": {
+    "en": "Its hash is what a recipe, an offer item or a registry entry points at; the document itself names the kofta revision it certifies by hash."
+   }
+  },
+  {
+   "op": "verify",
+   "args": {
+    "doc": {
+     "$file": "examples/certifications/halal-kofta-oven-2026-10.json"
+    },
+    "keys": {
+     "$file": "conformance/keys/certification-test-keys.json"
+    }
+   },
+   "save": "sig",
+   "note": {
+    "en": "Verify the authority's signature against its KeyRecord (here the public RFC 8032 test key, so this is an exercise, not a claim)."
+   },
+   "expect": {
+    "ok": true,
+    "reason": "ok"
+   }
+  },
+  {
+   "op": "verify",
+   "args": {
+    "doc": {
+     "$file": "examples/certifications/vegetarian-shakshuka-2026-06.json"
+    },
+    "keys": {
+     "$file": "conformance/keys/certification-test-keys.json"
+    }
+   },
+   "save": "sig2",
+   "note": {
+    "en": "A different authority, a different scheme, a different recipe: the same check."
+   },
+   "expect": {
+    "ok": true
+   }
+  },
+  {
+   "op": "assert",
+   "note": {
+    "en": "The October document supersedes the January one from the same authority: the newest verifying document of an authority is the current one; several authorities may certify the same meal and each counts."
+   },
+   "expect": {
+    "v.ok": true
+   }
+  }
+ ],
+ "cli": [
+  "cookwala validate --kind common examples/certifications/halal-kofta-oven-2026-10.json",
+  "cookwala hash examples/certifications/halal-kofta-oven-2026-10.json",
+  "cookwala verify examples/certifications/halal-kofta-oven-2026-10.json --keys conformance/keys/certification-test-keys.json",
+  "jq .supersedes examples/certifications/halal-kofta-oven-2026-10.json"
+ ],
+ "outcome": {
+  "en": "You can tell a certification from a claim: it is signed by a named authority, points at an exact revision, has a window and a status, and can be superseded. Next: the profile vectors in conformance/profiles/certifications.json cover expiry, revocation, forged signatures and re-certification."
+ },
+ "tags": [
+  "certification",
+  "halal",
+  "vegetarian",
+  "signature"
+ ]
+}

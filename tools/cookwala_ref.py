@@ -390,6 +390,48 @@ def dry_run(recipe, capabilities, human_present=False, allow_model=True, limits=
     return {'state': 'accepted', 'plan': plan}
 
 
+# ---------------------------------------------------------------- certifications (RFC-0010)
+
+
+def verify_certification(cert, keys, now=None, subject_hash=None):
+    """Verify one Certification: signature against the authority's KeyRecords, subject hash, status and window.
+
+    Returns (ok, reason). Reasons: unsigned, unknown_key, bad_signature, key_revoked, ... (from verify),
+    subject_mismatch, revoked, suspended, not_yet_valid, expired, ok.
+    """
+    if cert.get('kind') != 'Certification': return False, 'not_a_certification'
+    ok, why = verify(cert, keys)
+    if not ok: return False, why
+    if subject_hash and cert.get('subject', {}).get('hash') != subject_hash: return False, 'subject_mismatch'
+    t = _time(now) if isinstance(now, str) else (now or dt.datetime.now(dt.timezone.utc))
+    st = cert.get('status')
+    if st == 'revoked' and (not cert.get('revokedAt') or t >= _time(cert['revokedAt'])): return False, 'revoked'
+    if st == 'suspended': return False, 'suspended'
+    if cert.get('validFrom') and t < _time(cert['validFrom']): return False, 'not_yet_valid'
+    if cert.get('validUntil') and t > _time(cert['validUntil']): return False, 'expired'
+    return True, 'ok'
+
+
+def current_certifications(certs, keys, now=None, subject_hash=None):
+    """Which certifications currently hold for a subject.
+
+    Several authorities may certify the same subject and scheme: each counts. Within one authority and
+    scheme the newest verifying document wins and earlier ones are superseded (re-certification).
+    Returns {'current': [ids], 'rejected': {id: reason}}.
+    """
+    verdicts = {c['id']: verify_certification(c, keys, now, subject_hash) for c in certs}
+    groups = {}
+    for c in certs:
+        if verdicts[c['id']][0]: groups.setdefault((c.get('authority', {}).get('id'), c.get('scheme')), []).append(c)
+    current, rejected = [], {cid: why for cid, (ok, why) in verdicts.items() if not ok}
+    for members in groups.values():
+        members.sort(key=lambda c: c.get('issuedAt', ''))
+        newest = members[-1]
+        current.append(newest['id'])
+        for older in members[:-1]: rejected[older['id']] = 'superseded'
+    return {'current': sorted(current), 'rejected': rejected}
+
+
 # ---------------------------------------------------------------- profiles (RFC-0001, 0002, 0003, 0007)
 
 import re as _re

@@ -80,6 +80,10 @@ def run(v):
         ok, why = ref.version_exact(i['version']); return {'exact': ok, 'reason': why}
     if k == 'sms_parse':
         return ref.parse_sms(i['text'])
+    if k == 'certification':
+        ok, why = ref.verify_certification(i['certification'], i['keys'], i.get('now'), i.get('subjectHash')); return {'ok': ok, 'reason': why}
+    if k == 'certification_set':
+        return ref.current_certifications(i['certifications'], i['keys'], i.get('now'), i.get('subjectHash'))
     if k == 'signal_policy':
         ok, reasons = ref.check_signal(i['signal']); return {'ok': ok, 'reasons': reasons}
     raise ValueError(f'unknown kind {k}')

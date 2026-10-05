@@ -230,6 +230,7 @@ organization, never to a person in the documents.
 |---|---|
 | HXL | CSV templates; `Distribution` → `#reached+…`, `#adm1+name`, `#value+meals` |
 | GS1 | `Item.gtin` (products); `Site.gln` and `OrgId` `gln:` (locations) |
+| Certifications (RFC-0010) | `Item.certifications[]` points at signed `Certification` documents (halal, kosher, organic…) by hash; a program verifies them against the authority's key, never from the message text |
 | OCHA common operational datasets | `Site.pcode` |
 | DHIS2 | Aggregate data values per site and period from `Distribution` (meals, people by group, kg, incidents) |
 | WFP SCOPE and other beneficiary systems | **Aggregates only.** No beneficiary records cross into or out of this profile |

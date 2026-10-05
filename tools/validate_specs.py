@@ -55,7 +55,7 @@ for folder in ('examples/humanitarian', 'profiles/humanitarian'):
     for path in sorted((ROOT / folder).rglob('*.json')):
         doc = json.loads(path.read_text())
         check(doc, BASE + f"humanitarian.schema.json#/$defs/{doc['kind']}", f'{folder}/{path.name}')
-for folder, schema_name in (('examples/household', 'household'), ('profiles/household', 'household'), ('examples/registry', 'catalog'), ('examples/fleet', 'fleet'), ('examples/supply', 'supply'), ('examples/conformance', 'conformance')):
+for folder, schema_name in (('examples/household', 'household'), ('profiles/household', 'household'), ('examples/registry', 'catalog'), ('examples/fleet', 'fleet'), ('examples/supply', 'supply'), ('examples/conformance', 'conformance'), ('examples/certifications', 'common')):
     for path in sorted((ROOT / folder).glob('*.json')) if (ROOT / folder).exists() else []:
         doc = json.loads(path.read_text())
         check(doc, BASE + f"{schema_name}.schema.json#/$defs/{doc['kind']}", f'{folder}/{path.name}')

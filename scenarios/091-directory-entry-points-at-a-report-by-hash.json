@@ -10,8 +10,8 @@
  "requires": ["hub", "repo"],
  "steps": [
   {"op": "validate", "args": {"kind": "catalog", "doc": {"$file": "examples/registry/directory-entry.json"}}, "save": "entry", "note": {"en": "Validate the DirectoryEntry (catalog schema). The reference hub's validate checks the document against the schema file's root; this schema keeps its kinds under $defs, so today this call reports ok for any document, and `cookwala validate` (the CLI line) is the real check."}, "expect": {"ok": true}},
-  {"op": "hash", "args": {"doc": {"$file": "examples/conformance/report-reference.json"}}, "save": "report", "note": {"en": "Hash the reference ConformanceReport. The directory entry's conformance list holds this same value, so a reader can fetch the report and check it was not altered."}, "expect": {"hash": "sha256:70ebc528718ca09e152637885512f5cb3667bc3113338db653226eb10552337f"}},
-  {"op": "hash", "args": {"doc": {"$file": "examples/registry/directory-entry.json"}}, "save": "entryHash", "note": {"en": "Hash the entry itself; a registry publishes this so mirrors can be checked byte for byte."}, "expect": {"hash": "sha256:4549df2c929c73dbbc973843ebe7ff98d0e479ea42f0e77b3031279c574ea35d"}}
+  {"op": "hash", "args": {"doc": {"$file": "examples/conformance/report-reference.json"}}, "save": "report", "note": {"en": "Hash the reference ConformanceReport. The directory entry's conformance list holds this same value, so a reader can fetch the report and check it was not altered."}, "expect": {"hash": "sha256:733f88ab6955c9cc437074c4a6b1acba46566fdaafd115752aaaf2e9e4115f84"}},
+  {"op": "hash", "args": {"doc": {"$file": "examples/registry/directory-entry.json"}}, "save": "entryHash", "note": {"en": "Hash the entry itself; a registry publishes this so mirrors can be checked byte for byte."}, "expect": {"hash": "sha256:23f52f52a6e6d5a93ad3201e4fece5f3510b65afc440f0e7fb52ac704871e27e"}}
  ],
  "cli": [
   "cookwala hash examples/conformance/report-reference.json",

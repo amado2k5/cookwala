@@ -1,0 +1,40 @@
+{
+ "cookwala": "0.2.0",
+ "kind": "Certification",
+ "id": "cert-halal-beef-lot-2026-09",
+ "scheme": "halal",
+ "standard": "OIC/SMIIC 1:2019",
+ "subject": {
+  "kind": "lot",
+  "ref": "cw.ing.beef_ground",
+  "gtin": "6221234567891",
+  "lot": "L2026-09-14-A",
+  "name": {
+   "en": "Ground beef, 1 kg packs",
+   "ar": "لحم بقري مفروم، عبوات 1 كجم"
+  }
+ },
+ "authority": {
+  "id": "did:web:halal-authority.example",
+  "name": "Example Halal Certification Authority (fictional)"
+ },
+ "status": "valid",
+ "issuedAt": "2026-09-15T09:00:00Z",
+ "validFrom": "2026-09-15T00:00:00Z",
+ "validUntil": "2027-03-15T00:00:00Z",
+ "certificateId": "HA-2026-00912",
+ "scope": "Slaughter, processing and packing of the named lot.",
+ "evidence": [
+  {
+   "kind": "certificate_url",
+   "url": "https://halal-authority.example/certificates/HA-2026-00912"
+  }
+ ],
+ "hash": "sha256:615e83fc2fc8c427aafddffda82f51946d4562e9e3dbdbe065c9d776a2b5126d",
+ "signature": {
+  "alg": "EdDSA",
+  "kid": "did:web:halal-authority.example#k1",
+  "sig": "TobX9r0bYvbDqUoFIx9WJ3XuV-0UdzxKfSRJ35_WgG0n_rPabxy3W2RvRJKxzNvleA6Dsr2dVHOAalrQg_TRCA",
+  "signedAt": "2026-09-15T09:00:00Z"
+ }
+}

@@ -1,0 +1,18 @@
+[
+ {
+  "kid": "did:web:halal-authority.example#k1",
+  "alg": "EdDSA",
+  "publicKey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+  "actor": "did:web:halal-authority.example",
+  "validFrom": "2025-01-01T00:00:00Z",
+  "x-note": "RFC 8032 test key 1; the fictional authority in examples/certifications. Never a real key."
+ },
+ {
+  "kid": "did:web:plant-based-society.example#k1",
+  "alg": "EdDSA",
+  "publicKey": "PUAXw-hDiVqStwqnTRt-vJyYLM8uxJaMwM1V8Sr0Zgw",
+  "actor": "did:web:plant-based-society.example",
+  "validFrom": "2025-01-01T00:00:00Z",
+  "x-note": "RFC 8032 test key 2; the fictional society in examples/certifications. Never a real key."
+ }
+]

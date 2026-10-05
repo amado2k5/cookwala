@@ -192,6 +192,7 @@ bundle so that devices validate offline. Implementations MUST NOT fetch schemas 
 | Sessions and multi-device hub (`session.schema.json`, `hub.openapi.yaml`) | experimental | |
 | Market and ecosystem | experimental | Needs a competition-law review before production use |
 | Relief planning (`relief.schema.json`) | experimental | Operational flow moved to the Humanitarian Profile |
+| Certifications of ingredients, lots, recipes and kitchens (RFC-0010) | experimental | Detached, signed attestations by any number of authorities; re-certification by supersession; `conformance/profiles/certifications.json` |
 | Reasoning and advice, health, flows, extensions | experimental | |
 | GraphQL and AsyncAPI surfaces | experimental | The OpenAPI Core API is the reference surface |
 
@@ -223,7 +224,7 @@ and it has real users.
 | Agents | Mandate inside Missions only | `AgentMandate` in common; required for agent requests |
 | Safety | Declared in recipes | Also enforced locally through SafetyLimits; recalls; incident reports |
 | Data | No dataset model | Consented, personal-data-free ExecutionLog |
-| Conformance | Schema validation only | 113 vectors (51 Core, 62 profile) plus a reference implementation |
+| Conformance | Schema validation only | 123 vectors (51 Core, 72 profile) plus a reference implementation |
 
 To migrate a 0.1 document: convert °F to °C; replace relative tolerances on temperatures with
 `toleranceAbs`; turn money amounts into decimal strings; remove or rename unknown fields to

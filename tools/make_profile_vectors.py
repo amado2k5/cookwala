@@ -86,3 +86,44 @@ write('federation', [
     vec('relay-key-proves-nothing', 'signature', 'federation', '0006', 'The same recall re-signed by the mirror with its own key is not the issuer\'s recall: unknown_key when only the issuer is trusted.', {'document': forged, 'keys': [issuer]}, {'ok': False, 'reason': 'unknown_key'}),
     vec('relay-cannot-alter', 'signature', 'federation', '0006', 'A mirror that edits the recall (changing block to warn) breaks the issuer signature.', {'document': {**signed, 'action': 'warn'}, 'keys': [issuer, relay]}, {'ok': False, 'reason': 'bad_signature'}),
 ])
+
+
+# ---- RFC-0010 certifications: detached, signed, re-certifiable attestations
+import copy
+CA_SEED, CB_SEED = ISSUER_SEED, RELAY_SEED
+CA = {'kid': 'did:web:halal-authority.example#k1', 'alg': 'EdDSA', 'publicKey': ref.public_key_from_seed(CA_SEED), 'actor': 'did:web:halal-authority.example', 'validFrom': '2025-01-01T00:00:00Z'}
+CB = {'kid': 'did:web:plant-based-society.example#k1', 'alg': 'EdDSA', 'publicKey': ref.public_key_from_seed(CB_SEED), 'actor': 'did:web:plant-based-society.example', 'validFrom': '2025-01-01T00:00:00Z'}
+CKEYS = [CA, CB]
+RECIPE_HASH = 'sha256:' + '11' * 32
+def mkcert(cid, auth, seed, issued, until, scheme='halal', status='valid', supersedes=None, subject_hash=RECIPE_HASH, **extra):
+    d = {'cookwala': '0.2.0', 'kind': 'Certification', 'id': cid, 'scheme': scheme, 'standard': 'cw.ruleset.halal.v1' if scheme == 'halal' else 'test standard',
+         'subject': {'kind': 'recipe', 'ref': 'cw:cookwala.ai:example-test', 'revision': 1, 'hash': subject_hash}, 'authority': {'id': auth['actor']},
+         'status': status, 'issuedAt': issued, 'validFrom': issued, 'validUntil': until, **({'supersedes': supersedes} if supersedes else {}), **extra}
+    d['hash'] = ref.doc_hash(d); d['signature'] = ref.sign(d, seed, auth['kid'], issued); return d
+NOW = '2026-10-05T00:00:00Z'
+c1 = mkcert('cert-a-2026-01', CA, CA_SEED, '2026-01-15T10:00:00Z', '2027-01-15T00:00:00Z')
+c2 = mkcert('cert-a-2026-10', CA, CA_SEED, '2026-10-01T10:00:00Z', '2027-10-01T00:00:00Z', supersedes='cert-a-2026-01')
+cb = mkcert('cert-b-2026-06', CB, CB_SEED, '2026-06-01T08:00:00Z', '2028-06-01T00:00:00Z')
+expired = mkcert('cert-a-2025', CA, CA_SEED, '2025-02-01T00:00:00Z', '2025-08-01T00:00:00Z')
+revoked = mkcert('cert-a-revoked', CA, CA_SEED, '2026-02-01T00:00:00Z', '2027-02-01T00:00:00Z', status='revoked', revokedAt='2026-08-01T00:00:00Z', revocationReason='supplier lost its own certificate')
+forged = copy.deepcopy(c1); forged['signature'] = ref.sign(c1, CB_SEED, CA['kid'], '2026-01-15T10:00:00Z')  # B's key under A's kid
+unsigned = {k: v for k, v in c1.items() if k != 'signature'}
+cases = [
+ ('cert-valid', 'A current certification by a known authority verifies.', {'certification': c1, 'keys': CKEYS, 'now': NOW, 'subjectHash': RECIPE_HASH}),
+ ('cert-expired', 'Past validUntil: expired, whatever the signature says.', {'certification': expired, 'keys': CKEYS, 'now': NOW}),
+ ('cert-revoked', 'Status revoked after revokedAt: not valid.', {'certification': revoked, 'keys': CKEYS, 'now': NOW}),
+ ('cert-wrong-subject', 'The verifier holds a different recipe revision: subject_mismatch. A new revision needs a new certification.', {'certification': c1, 'keys': CKEYS, 'now': NOW, 'subjectHash': 'sha256:' + '22' * 32}),
+ ('cert-forged-signature', 'Signed with another key under the authority\'s kid: bad_signature.', {'certification': forged, 'keys': CKEYS, 'now': NOW}),
+ ('cert-unsigned', 'A certification without a signature is a claim, not a certification.', {'certification': unsigned, 'keys': CKEYS, 'now': NOW}),
+ ('cert-unknown-authority-key', 'The authority\'s KeyRecord is not known: unknown_key; fetch it from authority.id first.', {'certification': cb, 'keys': [CA], 'now': NOW}),
+]
+cv = [vec(vid, 'certification', 'certifications', '0010', d, inp, dict(zip(('ok', 'reason'), ref.verify_certification(inp['certification'], inp['keys'], inp.get('now'), inp.get('subjectHash'))))) for vid, d, inp in cases]
+sets = [
+ ('certset-recertification-newest-wins', 'The same authority re-certified in October; the January document is superseded.', {'certifications': [c1, c2], 'keys': CKEYS, 'now': NOW, 'subjectHash': RECIPE_HASH}),
+ ('certset-two-authorities-coexist', 'Two authorities certify the same recipe: both count; a reader may require a specific one.', {'certifications': [c2, cb], 'keys': CKEYS, 'now': NOW, 'subjectHash': RECIPE_HASH}),
+ ('certset-expired-and-revoked-dropped', 'Expired and revoked documents are rejected with their reason; the current one stays.', {'certifications': [expired, revoked, c2], 'keys': CKEYS, 'now': NOW, 'subjectHash': RECIPE_HASH}),
+]
+cv += [vec(vid, 'certification_set', 'certifications', '0010', d, inp, ref.current_certifications(inp['certifications'], inp['keys'], inp['now'], inp['subjectHash'])) for vid, d, inp in sets]
+assert [v['expected'].get('reason') for v in cv[:7]] == ['ok', 'expired', 'revoked', 'subject_mismatch', 'bad_signature', 'unsigned', 'unknown_key'], [v['expected'] for v in cv[:7]]
+assert cv[7]['expected']['current'] == ['cert-a-2026-10'] and cv[8]['expected']['current'] == ['cert-a-2026-10', 'cert-b-2026-06']
+write('certifications', cv)

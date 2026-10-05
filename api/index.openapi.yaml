@@ -532,6 +532,67 @@ paths:
             application/schema+json:
               schema:
                 type: object
+  /v1/certifications:
+    get:
+      tags:
+      - certifications
+      operationId: listCertifications
+      summary: Certifications held by this catalog for a subject (RFC-0010; profile, not Core)
+      description: |
+        Detached, signed Certification documents (halal, kosher, vegetarian, organic, ...) issued by
+        certifying authorities for recipes, ingredients, lots, products or kitchens. The catalog relays
+        them; a reader verifies each against the authority's own KeyRecord, the subject hash it holds,
+        the validity window and the status, and treats an authority's newest document as the current one.
+      parameters:
+      - name: subjectHash
+        in: query
+        schema:
+          type: string
+        description: Hash of the recipe revision or document the reader holds.
+      - name: subject
+        in: query
+        schema:
+          type: string
+        description: GlobalRef, VocabId, GTIN or lot the reader is asking about.
+      - name: scheme
+        in: query
+        schema:
+          type: string
+      - name: authority
+        in: query
+        schema:
+          type: string
+        description: authority.id (did:web or URL).
+      responses:
+        '200':
+          description: Zero or more Certification documents, each verifiable on its own
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Certification
+  /v1/certifications/{id}.json:
+    get:
+      tags:
+      - certifications
+      operationId: getCertification
+      summary: One Certification document by id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The document
+          content:
+            application/json:
+              schema:
+                $ref: https://cookwala.ai/v1/schemas/common.schema.json#/$defs/Certification
+        '404':
+          $ref: '#/components/responses/NotFound'
   /v1/reports:
     post:
       tags:
