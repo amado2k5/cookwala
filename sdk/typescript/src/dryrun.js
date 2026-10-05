@@ -36,11 +36,22 @@
     }
     return null;
   }
-  function dryRun(recipe, device, opsVocab, humanPresent, allowModel, limits, heatBands) {
+  // RFC-0011: only healthy sensors with unexpired calibration may satisfy a rung (mirror of trusted_sensors)
+  function trustedSensors(device, now) {
+    const t = now ? new Date(now) : new Date();
+    const sensors = new Set();
+    ((device.capabilities || {}).sensors || []).forEach((s) => {
+      if ((s.state || 'ok') !== 'ok') return;
+      const vu = s.calibration && s.calibration.validUntil;
+      if (vu && t > new Date(vu)) return;
+      sensors.add(s.sensor); (s.visionCues || []).forEach((c) => sensors.add(c));
+    });
+    return sensors;
+  }
+  function dryRun(recipe, device, opsVocab, humanPresent, allowModel, limits, heatBands, now) {
     const caps = device.capabilities || {};
     const ops = new Set((caps.ops || []).map((o) => o.op).filter((id) => (opsVocab[id] || {}).executable !== false));
-    const sensors = new Set();
-    (caps.sensors || []).forEach((s) => { sensors.add(s.sensor); (s.visionCues || []).forEach((c) => sensors.add(c)); });
+    const sensors = trustedSensors(device, now);
     const plan = [];
     for (const node of (recipe.process && recipe.process.nodes) || []) {
       const env = (opsVocab[node.op] || {}).envelope;
@@ -63,5 +74,5 @@
     return { state: 'accepted', plan };
   }
   function opLabel(id) { return id.split('.').pop().replace(/_/g, ' '); }
-  global.CookwalaDryRun = { dryRun, ladderChoice, checkNodeParams, opLabel };
+  global.CookwalaDryRun = { dryRun, ladderChoice, checkNodeParams, trustedSensors, opLabel };
 })(window);

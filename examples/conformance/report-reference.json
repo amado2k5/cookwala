@@ -71,6 +71,11 @@
    "passed": 19
   },
   {
+   "suite": "profiles/sensor_trust",
+   "total": 8,
+   "passed": 8
+  },
+  {
    "suite": "profiles/signal",
    "total": 8,
    "passed": 8
@@ -81,20 +86,20 @@
    "passed": 24
   }
  ],
- "vectorsHash": "sha256:76fde5e4bb8c4c3989a9a691abe5d00f637c65548485d69373f3a6c0dcdf50fd",
+ "vectorsHash": "sha256:7fb0504ad992cdc6960674f0842613be9ddc534d11f49bd5b7394a0a0189ac2f",
  "tool": {
   "name": "run_conformance.py",
   "version": "0.2.0",
-  "commit": "343b4f99ef47fc00cfbd93395f8202796d76bb6a"
+  "commit": "a34e9d8177895b3cc79253df31f930d77d3a4381"
  },
  "date": "2026-10-05",
  "status": "self_declared",
  "notes": "Example report signed with the public RFC 8032 test key so that it validates; not a claim by anyone.",
- "hash": "sha256:733f88ab6955c9cc437074c4a6b1acba46566fdaafd115752aaaf2e9e4115f84",
+ "hash": "sha256:aeafe995daa4bd012c2e6e88abdbbaa99d0c3df7ef4c3f5f4ab6db1bcfd2968b",
  "signature": {
   "alg": "EdDSA",
   "kid": "did:web:example.test#report-test-key",
-  "sig": "7GwrY6AZ4ocuwjKFK_uMyqQauPPBiSGoQIZxJHnHJzC-ucp2i_nCHnFjvX8anXQHFcpd83ISOfxwEkml5BjKCA",
-  "signedAt": "2026-10-05T08:58:07Z"
+  "sig": "ZpIxvwgffrxz1TRPH3zUUNbLBqoFKIouzwwtbi2WbfUVMQqptRlVF3eRR0MJ4QHfOX8q5iX5fbaWq77elPOxDA",
+  "signedAt": "2026-10-05T09:17:54Z"
  }
 }

@@ -117,7 +117,15 @@
     "sensor": "cw.sense.liquid_temp"
    },
    {
-    "sensor": "cw.sense.oil_temp"
+    "sensor": "cw.sense.oil_temp",
+    "accuracy": 1.0,
+    "state": "ok",
+    "calibration": {
+     "lastAt": "2026-09-01T00:00:00Z",
+     "validUntil": "2027-09-01T00:00:00Z",
+     "by": "maker",
+     "method": "reference thermometer at 150 and 190 °C"
+    }
    },
    {
     "sensor": "cw.sense.core_temp"

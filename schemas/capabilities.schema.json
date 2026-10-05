@@ -196,7 +196,8 @@
         "$ref": "common.schema.json#/$defs/VocabId"
        },
        "accuracy": {
-        "type": "number"
+        "type": "number",
+        "description": "Stated accuracy in the sensor's unit (for temperatures: ± °C). Used by plausibility checks between sensors on the same medium (RFC-0011)."
        },
        "unit": {
         "$ref": "common.schema.json#/$defs/Unit"
@@ -208,6 +209,46 @@
         "type": "array",
         "items": {
          "type": "string"
+        }
+       },
+       "state": {
+        "enum": [
+         "ok",
+         "degraded",
+         "fault",
+         "unknown"
+        ],
+        "description": "Self-reported health. Only ok (or absent) counts as a sensor rung; degraded, fault and unknown fall to the next rung of the ladder (RFC-0011)."
+       },
+       "calibration": {
+        "type": "object",
+        "unevaluatedProperties": false,
+        "patternProperties": {
+         "^x-": {}
+        },
+        "description": "Last calibration of this sensor. A sensor whose validUntil has passed does not count as a sensor rung (RFC-0011).",
+        "properties": {
+         "lastAt": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+         },
+         "validUntil": {
+          "$ref": "common.schema.json#/$defs/DateTime"
+         },
+         "by": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Who calibrated: the maker, a service, a lab."
+         },
+         "method": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "For example ice point and boiling point, reference thermometer, factory."
+         },
+         "certificate": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Reference or URL of the calibration certificate."
+         }
         }
        }
       },

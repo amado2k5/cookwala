@@ -12,7 +12,7 @@
  "url": "https://cookwala.ai",
  "contact": "https://github.com/amado2k5/cookwala/issues",
  "conformance": [
-  "sha256:733f88ab6955c9cc437074c4a6b1acba46566fdaafd115752aaaf2e9e4115f84"
+  "sha256:aeafe995daa4bd012c2e6e88abdbbaa99d0c3df7ef4c3f5f4ab6db1bcfd2968b"
  ],
  "verification": {
   "method": "dns_txt",

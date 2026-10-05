@@ -127,3 +127,30 @@ cv += [vec(vid, 'certification_set', 'certifications', '0010', d, inp, ref.curre
 assert [v['expected'].get('reason') for v in cv[:7]] == ['ok', 'expired', 'revoked', 'subject_mismatch', 'bad_signature', 'unsigned', 'unknown_key'], [v['expected'] for v in cv[:7]]
 assert cv[7]['expected']['current'] == ['cert-a-2026-10'] and cv[8]['expected']['current'] == ['cert-a-2026-10', 'cert-b-2026-06']
 write('certifications', cv)
+
+
+# ---- RFC-0011 sensor trust: health, calibration and plausibility decide which sensors count
+def caps(*sensors): return {'capabilities': {'ops': [{'op': 'cw.op.deep_fry'}, {'op': 'cw.op.simmer'}], 'sensors': list(sensors)}}
+NOW11 = '2026-10-05T00:00:00Z'
+oil_ok = {'sensor': 'cw.sense.oil_temp', 'accuracy': 1.0, 'state': 'ok', 'calibration': {'lastAt': '2026-09-01T00:00:00Z', 'validUntil': '2027-09-01T00:00:00Z', 'by': 'maker'}}
+oil_expired = {'sensor': 'cw.sense.oil_temp', 'accuracy': 1.0, 'calibration': {'lastAt': '2025-01-01T00:00:00Z', 'validUntil': '2026-01-01T00:00:00Z', 'by': 'maker'}}
+oil_fault = {'sensor': 'cw.sense.oil_temp', 'state': 'fault'}
+liq_degraded = {'sensor': 'cw.sense.liquid_temp', 'state': 'degraded'}
+liq_plain = {'sensor': 'cw.sense.liquid_temp'}
+st_cases = [
+ ('trust-calibrated-oil-sensor-counts', 'A healthy oil sensor with a current calibration satisfies the deep-fry rung.', {'capabilities': caps(oil_ok), 'op': 'cw.op.deep_fry', 'humanPresent': True, 'allowModel': True, 'now': NOW11}),
+ ('trust-expired-calibration-no-deep-fry', 'The same sensor with an expired calibration does not count; deep frying has no other rung, so the step is refused (null).', {'capabilities': caps(oil_expired), 'op': 'cw.op.deep_fry', 'humanPresent': True, 'allowModel': True, 'now': NOW11}),
+ ('trust-fault-no-deep-fry', 'A sensor in fault state does not count.', {'capabilities': caps(oil_fault), 'op': 'cw.op.deep_fry', 'humanPresent': True, 'allowModel': True, 'now': NOW11}),
+ ('trust-degraded-falls-to-model', 'A degraded liquid sensor is skipped; simmer falls to the logged estimate when estimates are allowed.', {'capabilities': caps(liq_degraded), 'op': 'cw.op.simmer', 'humanPresent': False, 'allowModel': True, 'now': NOW11}),
+ ('trust-undeclared-state-is-trusted', 'A 0.2 sensor record without state or calibration is trusted as declared.', {'capabilities': caps(liq_plain), 'op': 'cw.op.simmer', 'humanPresent': False, 'allowModel': True, 'now': NOW11}),
+]
+sv = [vec(vid, 'sensor_trust', 'sensor_trust', '0011', d, inp, {'choice': ref.ladder_choice(inp['op'], ref.trusted_sensors(inp['capabilities'], inp['now']), inp['allowModel'], inp['humanPresent'])}) for vid, d, inp in st_cases]
+pl_cases = [
+ ('plausible-two-sensors-agree', 'Two oil sensors within their stated accuracies agree.', {'readings': [{'sensor': 'cw.sense.oil_temp', 'tempC': 175.0}, {'sensor': 'x-acme.oil_temp_2', 'tempC': 176.5}], 'sensors': [{'sensor': 'cw.sense.oil_temp', 'accuracy': 1.0}, {'sensor': 'x-acme.oil_temp_2', 'accuracy': 1.0}]}),
+ ('implausible-two-sensors-disagree', 'Readings 12 °C apart with ±1 °C sensors: implausible; both are demoted for this step and cw.incident.sensor_implausible is logged.', {'readings': [{'sensor': 'cw.sense.oil_temp', 'tempC': 175.0}, {'sensor': 'x-acme.oil_temp_2', 'tempC': 187.0}], 'sensors': [{'sensor': 'cw.sense.oil_temp', 'accuracy': 1.0}, {'sensor': 'x-acme.oil_temp_2', 'accuracy': 1.0}]}),
+ ('plausibility-non-numeric-reading', 'A reading that is not a number is never plausible.', {'readings': [{'sensor': 'cw.sense.oil_temp', 'tempC': '175'}, {'sensor': 'x-acme.oil_temp_2', 'tempC': 176.0}], 'sensors': [{'sensor': 'cw.sense.oil_temp'}, {'sensor': 'x-acme.oil_temp_2'}]}),
+]
+sv += [vec(vid, 'plausibility', 'sensor_trust', '0011', d, inp, dict(zip(('ok', 'reason'), ref.check_plausibility(inp['readings'], inp['sensors'])[:2]))) for vid, d, inp in pl_cases]
+assert [v['expected'] for v in sv[:5]] == [{'choice': 'cw.sense.oil_temp'}, {'choice': None}, {'choice': None}, {'choice': 'model'}, {'choice': 'cw.sense.liquid_temp'}], [v['expected'] for v in sv[:5]]
+assert [v['expected']['reason'] for v in sv[5:]] == ['ok', 'implausible', 'non_numeric_reading']
+write('sensor_trust', sv)

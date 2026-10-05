@@ -46,7 +46,7 @@ profile. Live at [cookwala.ai](https://cookwala.ai). Nothing is deployed in the 
 ```bash
 python -m venv .venv && .venv/bin/pip install jsonschema pyyaml graphql-core cryptography
 .venv/bin/python tools/validate_specs.py      # schemas, examples, vocabularies, facet registry, APIs
-.venv/bin/python tools/run_conformance.py     # 123 vectors (Core and profiles); --report writes a ConformanceReport
+.venv/bin/python tools/run_conformance.py     # 131 vectors (Core and profiles); --report writes a ConformanceReport
 .venv/bin/pip install -e sdk/python           # the `cookwala` command used in the table above
 node sim/run.mjs                              # the four simulators
 bash tools/build_site.sh _site                # the website

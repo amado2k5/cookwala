@@ -286,6 +286,42 @@ def check_envelope(op_id, readings, target=None, altitude_m=0):
     return {'envelopeOk': env_ok, 'targetOk': tgt_ok, 'reason': reason}
 
 
+def trusted_sensors(capabilities, now=None):
+    """Sensor ids (and the vision cues of trusted cameras) that may satisfy a ladder rung (RFC-0011).
+
+    Excluded: state degraded, fault or unknown; calibration whose validUntil has passed.
+    A sensor record without state or calibration is trusted as declared (0.2 behaviour).
+    """
+    t = _time(now) if isinstance(now, str) else (now or dt.datetime.now(dt.timezone.utc))
+    out = set()
+    for s in capabilities.get('capabilities', {}).get('sensors', []):
+        if s.get('state', 'ok') != 'ok': continue
+        vu = (s.get('calibration') or {}).get('validUntil')
+        if vu and t > _time(vu): continue
+        out.add(s['sensor']); out.update(s.get('visionCues', []))
+    return out
+
+
+def check_plausibility(readings, sensors, tolerance_c=1.0):
+    """Cross-check readings of one medium from several sensors (RFC-0011).
+
+    readings: [{'sensor': id, 'tempC': value}]; sensors: the capabilities sensor records (accuracy in °C,
+    default 2.0 when not stated). Two readings that differ by more than the sum of their accuracies
+    plus tolerance_c are implausible: both sensors are demoted for this step and an incident is logged.
+    Returns (ok, reason, detail).
+    """
+    acc = {s['sensor']: float(s.get('accuracy', 2.0)) for s in sensors}
+    rs = [r for r in readings if _finite(r.get('tempC'))]
+    if len(rs) != len(readings): return False, 'non_numeric_reading', 'a reading is not a finite number'
+    for i in range(len(rs)):
+        for j in range(i + 1, len(rs)):
+            a, b = rs[i], rs[j]
+            allowed = acc.get(a['sensor'], 2.0) + acc.get(b['sensor'], 2.0) + tolerance_c
+            if abs(a['tempC'] - b['tempC']) > allowed:
+                return False, 'implausible', f"{a['sensor']} {a['tempC']:g} °C and {b['sensor']} {b['tempC']:g} °C differ by more than {allowed:g} °C"
+    return True, 'ok', ''
+
+
 def ladder_choice(op_id, available_sensors, allow_model=True, human_present=False):
     """First rung of the op's sensor ladder this executor can satisfy, or None (the step must be refused)."""
     env = _vocab('ops')[op_id].get('envelope', {})
@@ -355,7 +391,7 @@ def check_node_params(op_id, node, limits=None, vocab=None):
     return None
 
 
-def dry_run(recipe, capabilities, human_present=False, allow_model=True, limits=None):
+def dry_run(recipe, capabilities, human_present=False, allow_model=True, limits=None, now=None):
     """Decide, before cooking, whether a device can run every step of a recipe.
 
     Returns an ExecutionStatus-like dict: state accepted (with the sensor-ladder rung chosen per
@@ -366,9 +402,7 @@ def dry_run(recipe, capabilities, human_present=False, allow_model=True, limits=
     caps = capabilities.get('capabilities', {})
     vocab = _vocab('ops')
     ops = {o['op'] for o in caps.get('ops', []) if vocab.get(o['op'], {}).get('executable', True) is not False}
-    sensors = {s['sensor'] for s in caps.get('sensors', [])}
-    for s in caps.get('sensors', []):
-        sensors.update(s.get('visionCues', []))
+    sensors = trusted_sensors(capabilities, now)  # RFC-0011: health and calibration decide which sensors may satisfy a rung
     plan = []
     for node in recipe.get('process', {}).get('nodes', []):
         op = node['op']

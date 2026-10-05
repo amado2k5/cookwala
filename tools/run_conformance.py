@@ -80,6 +80,10 @@ def run(v):
         ok, why = ref.version_exact(i['version']); return {'exact': ok, 'reason': why}
     if k == 'sms_parse':
         return ref.parse_sms(i['text'])
+    if k == 'sensor_trust':
+        return {'choice': ref.ladder_choice(i['op'], ref.trusted_sensors(i['capabilities'], i.get('now')), i.get('allowModel', True), i.get('humanPresent', False))}
+    if k == 'plausibility':
+        ok, why, _ = ref.check_plausibility(i['readings'], i['sensors']); return {'ok': ok, 'reason': why}
     if k == 'certification':
         ok, why = ref.verify_certification(i['certification'], i['keys'], i.get('now'), i.get('subjectHash')); return {'ok': ok, 'reason': why}
     if k == 'certification_set':

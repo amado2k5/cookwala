@@ -15,6 +15,7 @@ name a qualified reviewer before they are accepted.
 | [0007](0007-farm-surplus-and-supply-signals.md) | Farm surplus and supply signals | proposed, experimental, needs competition-law review | |
 | [0008](0008-conformance-reports-and-certification.md) | Conformance reports and the certification path | proposed | |
 | [0009](0009-v0-import-profile.md) | V0 import profile and the unclassified step (fifi.cooking import) | draft | |
+| [0011](0011-sensor-trust.md) | Sensor trust: health, calibration records and plausibility checks decide which sensors count as a rung | draft, needs a metrology or appliance-safety reviewer | |
 | [0010](0010-certifications.md) | Certifications of ingredients, lots, recipes, meals and kitchens (halal, kosher, vegetarian, organic, …): detached, signed, re-certifiable | draft, needs review by certification bodies | |
 
 Statuses: `proposed` → `comment` → `accepted` or `rejected` → `implemented`. An RFC is a

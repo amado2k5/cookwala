@@ -285,6 +285,20 @@
     "en": "Instruction in untrusted text"
    },
    "definition": "Text in a recipe, note or message tried to instruct an agent or device; it was ignored."
+  },
+  {
+   "id": "cw.incident.sensor_implausible",
+   "label": {
+    "en": "sensor readings implausible",
+    "ar": "قراءات مستشعر غير معقولة"
+   }
+  },
+  {
+   "id": "cw.incident.sensor_uncalibrated",
+   "label": {
+    "en": "sensor calibration expired or missing",
+    "ar": "معايرة المستشعر منتهية أو مفقودة"
+   }
   }
  ]
 }

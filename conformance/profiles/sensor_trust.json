@@ -1,0 +1,279 @@
+[
+ {
+  "id": "trust-calibrated-oil-sensor-counts",
+  "kind": "sensor_trust",
+  "profile": "sensor_trust",
+  "rfc": "0011",
+  "description": "A healthy oil sensor with a current calibration satisfies the deep-fry rung.",
+  "input": {
+   "capabilities": {
+    "capabilities": {
+     "ops": [
+      {
+       "op": "cw.op.deep_fry"
+      },
+      {
+       "op": "cw.op.simmer"
+      }
+     ],
+     "sensors": [
+      {
+       "sensor": "cw.sense.oil_temp",
+       "accuracy": 1.0,
+       "state": "ok",
+       "calibration": {
+        "lastAt": "2026-09-01T00:00:00Z",
+        "validUntil": "2027-09-01T00:00:00Z",
+        "by": "maker"
+       }
+      }
+     ]
+    }
+   },
+   "op": "cw.op.deep_fry",
+   "humanPresent": true,
+   "allowModel": true,
+   "now": "2026-10-05T00:00:00Z"
+  },
+  "expected": {
+   "choice": "cw.sense.oil_temp"
+  }
+ },
+ {
+  "id": "trust-expired-calibration-no-deep-fry",
+  "kind": "sensor_trust",
+  "profile": "sensor_trust",
+  "rfc": "0011",
+  "description": "The same sensor with an expired calibration does not count; deep frying has no other rung, so the step is refused (null).",
+  "input": {
+   "capabilities": {
+    "capabilities": {
+     "ops": [
+      {
+       "op": "cw.op.deep_fry"
+      },
+      {
+       "op": "cw.op.simmer"
+      }
+     ],
+     "sensors": [
+      {
+       "sensor": "cw.sense.oil_temp",
+       "accuracy": 1.0,
+       "calibration": {
+        "lastAt": "2025-01-01T00:00:00Z",
+        "validUntil": "2026-01-01T00:00:00Z",
+        "by": "maker"
+       }
+      }
+     ]
+    }
+   },
+   "op": "cw.op.deep_fry",
+   "humanPresent": true,
+   "allowModel": true,
+   "now": "2026-10-05T00:00:00Z"
+  },
+  "expected": {
+   "choice": null
+  }
+ },
+ {
+  "id": "trust-fault-no-deep-fry",
+  "kind": "sensor_trust",
+  "profile": "sensor_trust",
+  "rfc": "0011",
+  "description": "A sensor in fault state does not count.",
+  "input": {
+   "capabilities": {
+    "capabilities": {
+     "ops": [
+      {
+       "op": "cw.op.deep_fry"
+      },
+      {
+       "op": "cw.op.simmer"
+      }
+     ],
+     "sensors": [
+      {
+       "sensor": "cw.sense.oil_temp",
+       "state": "fault"
+      }
+     ]
+    }
+   },
+   "op": "cw.op.deep_fry",
+   "humanPresent": true,
+   "allowModel": true,
+   "now": "2026-10-05T00:00:00Z"
+  },
+  "expected": {
+   "choice": null
+  }
+ },
+ {
+  "id": "trust-degraded-falls-to-model",
+  "kind": "sensor_trust",
+  "profile": "sensor_trust",
+  "rfc": "0011",
+  "description": "A degraded liquid sensor is skipped; simmer falls to the logged estimate when estimates are allowed.",
+  "input": {
+   "capabilities": {
+    "capabilities": {
+     "ops": [
+      {
+       "op": "cw.op.deep_fry"
+      },
+      {
+       "op": "cw.op.simmer"
+      }
+     ],
+     "sensors": [
+      {
+       "sensor": "cw.sense.liquid_temp",
+       "state": "degraded"
+      }
+     ]
+    }
+   },
+   "op": "cw.op.simmer",
+   "humanPresent": false,
+   "allowModel": true,
+   "now": "2026-10-05T00:00:00Z"
+  },
+  "expected": {
+   "choice": "model"
+  }
+ },
+ {
+  "id": "trust-undeclared-state-is-trusted",
+  "kind": "sensor_trust",
+  "profile": "sensor_trust",
+  "rfc": "0011",
+  "description": "A 0.2 sensor record without state or calibration is trusted as declared.",
+  "input": {
+   "capabilities": {
+    "capabilities": {
+     "ops": [
+      {
+       "op": "cw.op.deep_fry"
+      },
+      {
+       "op": "cw.op.simmer"
+      }
+     ],
+     "sensors": [
+      {
+       "sensor": "cw.sense.liquid_temp"
+      }
+     ]
+    }
+   },
+   "op": "cw.op.simmer",
+   "humanPresent": false,
+   "allowModel": true,
+   "now": "2026-10-05T00:00:00Z"
+  },
+  "expected": {
+   "choice": "cw.sense.liquid_temp"
+  }
+ },
+ {
+  "id": "plausible-two-sensors-agree",
+  "kind": "plausibility",
+  "profile": "sensor_trust",
+  "rfc": "0011",
+  "description": "Two oil sensors within their stated accuracies agree.",
+  "input": {
+   "readings": [
+    {
+     "sensor": "cw.sense.oil_temp",
+     "tempC": 175.0
+    },
+    {
+     "sensor": "x-acme.oil_temp_2",
+     "tempC": 176.5
+    }
+   ],
+   "sensors": [
+    {
+     "sensor": "cw.sense.oil_temp",
+     "accuracy": 1.0
+    },
+    {
+     "sensor": "x-acme.oil_temp_2",
+     "accuracy": 1.0
+    }
+   ]
+  },
+  "expected": {
+   "ok": true,
+   "reason": "ok"
+  }
+ },
+ {
+  "id": "implausible-two-sensors-disagree",
+  "kind": "plausibility",
+  "profile": "sensor_trust",
+  "rfc": "0011",
+  "description": "Readings 12 °C apart with ±1 °C sensors: implausible; both are demoted for this step and cw.incident.sensor_implausible is logged.",
+  "input": {
+   "readings": [
+    {
+     "sensor": "cw.sense.oil_temp",
+     "tempC": 175.0
+    },
+    {
+     "sensor": "x-acme.oil_temp_2",
+     "tempC": 187.0
+    }
+   ],
+   "sensors": [
+    {
+     "sensor": "cw.sense.oil_temp",
+     "accuracy": 1.0
+    },
+    {
+     "sensor": "x-acme.oil_temp_2",
+     "accuracy": 1.0
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "implausible"
+  }
+ },
+ {
+  "id": "plausibility-non-numeric-reading",
+  "kind": "plausibility",
+  "profile": "sensor_trust",
+  "rfc": "0011",
+  "description": "A reading that is not a number is never plausible.",
+  "input": {
+   "readings": [
+    {
+     "sensor": "cw.sense.oil_temp",
+     "tempC": "175"
+    },
+    {
+     "sensor": "x-acme.oil_temp_2",
+     "tempC": 176.0
+    }
+   ],
+   "sensors": [
+    {
+     "sensor": "cw.sense.oil_temp"
+    },
+    {
+     "sensor": "x-acme.oil_temp_2"
+    }
+   ]
+  },
+  "expected": {
+   "ok": false,
+   "reason": "non_numeric_reading"
+  }
+ }
+]
