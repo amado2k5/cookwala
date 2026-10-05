@@ -25,6 +25,16 @@ _ITAL = re.compile(r'(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])')
 _AUTO = re.compile(r'(?<![("\'>])(https?://[^\s<)]+[^\s<).,;:])')
 
 
+RTL = False  # set by the site builder for right-to-left languages
+TABLE_LABEL = 'Table, scrolls sideways'
+_UNIT_RUN = re.compile(r'(?<![\w/.-])(\d[\d.,]*(?:\s?[–−-]\s?\d[\d.,]*)?\s?(?:°C|°F|kPa|mm|cm|km|kg|mg|ml|ms|min|m|g|l|s|h|%)(?![\w]))')
+
+
+def isolate_units(s):
+    """Wrap a number with its unit so it reads left to right inside right-to-left text."""
+    return _UNIT_RUN.sub(lambda m: f'<bdi dir="ltr">{m.group(1)}</bdi>', s) if RTL else s
+
+
 def inline(text, link_rewriter=None):
     out = []
     pos = 0
@@ -37,6 +47,7 @@ def inline(text, link_rewriter=None):
         if kind == 'c':
             out.append(f'<code>{html.escape(seg)}</code>'); continue
         s = html.escape(seg, quote=False)
+        s = isolate_units(s)
         s = _IMG.sub(lambda m: f'<img src="{m.group(2)}" alt="{m.group(1)}" loading="lazy">', s)
         def link(m):
             href = m.group(2)
@@ -106,7 +117,7 @@ def render(md, link_rewriter=None, heading_offset=0, collect=None):
                 return ' style="text-align:right"' if a.endswith(':') and not a.startswith(':') else (' style="text-align:center"' if a.startswith(':') and a.endswith(':') else '')
             th = ''.join(f'<th{al(j)}>{inline(c, link_rewriter)}</th>' for j, c in enumerate(header))
             trs = ''.join('<tr>' + ''.join(f'<td{al(j)}>{inline(c, link_rewriter)}</td>' for j, c in enumerate(r)) + '</tr>' for r in rows)
-            out.append(f'<div class="table-wrap"><table><thead><tr>{th}</tr></thead><tbody>{trs}</tbody></table></div>'); continue
+            out.append(f'<div class="table-wrap" tabindex="0" role="region" aria-label="{html.escape(TABLE_LABEL)}"><table><thead><tr>{th}</tr></thead><tbody>{trs}</tbody></table></div>'); continue
         if re.match(r'^\s*([-*+]|\d+[.)])\s+', line):
             flush(); out.append(_list(lines, i, link_rewriter, heading_offset)[0]); i = _list(lines, i, link_rewriter, heading_offset)[1]; continue
         para.append(line); i += 1

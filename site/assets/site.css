@@ -1,7 +1,7 @@
 /* Cookwala site v2. One stylesheet for pages, docs, whitepaper and essays. Logical properties so Arabic (dir=rtl) needs no mirror. See site/DESIGN.md. */
 :root {
   --paper: #f6f7f8; --surface: #ffffff; --ink: #121417; --ink-2: #4a5059; --line: #dfe2e6; --band: #eef0f3;
-  --ember: #d9481c; --ember-ink: #ffffff; --ember-soft: #fbe6de;
+  --ember: #c43f16; --ember-ink: #ffffff; --ember-soft: #fbe6de; --tag-ink: #ffffff;
   --ok: #1f7a4d; --warn: #9a5b00; --bad: #b42318;
   --sans: "Geist", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -9,10 +9,10 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) { --paper: #0f1113; --surface: #16191c; --ink: #eceef0; --ink-2: #a6adb6; --line: #2a2f35; --band: #14171a;
-    --ember: #ff7a45; --ember-ink: #1a0b05; --ember-soft: #2c1810; --ok: #4cc38a; --warn: #e2a64d; --bad: #f2867d; color-scheme: dark; }
+    --ember: #ff7a45; --ember-ink: #1a0b05; --ember-soft: #2c1810; --ok: #4cc38a; --warn: #e2a64d; --bad: #f2867d; --tag-ink: #0f1113; color-scheme: dark; }
 }
 :root[data-theme="dark"] { --paper: #0f1113; --surface: #16191c; --ink: #eceef0; --ink-2: #a6adb6; --line: #2a2f35; --band: #14171a;
-  --ember: #ff7a45; --ember-ink: #1a0b05; --ember-soft: #2c1810; --ok: #4cc38a; --warn: #e2a64d; --bad: #f2867d; color-scheme: dark; }
+  --ember: #ff7a45; --ember-ink: #1a0b05; --ember-soft: #2c1810; --ok: #4cc38a; --warn: #e2a64d; --bad: #f2867d; --tag-ink: #0f1113; color-scheme: dark; }
 :root[data-theme="light"] { color-scheme: light; }
 [dir="rtl"] { --sans: "IBM Plex Sans Arabic", "Geist", ui-sans-serif, system-ui, sans-serif; }
 
@@ -143,7 +143,7 @@ pre.code { position: relative; }
 .controls .check input { accent-color: var(--ember); width: 16px; height: 16px; }
 .verdict { border-radius: 10px; padding: 12px 14px; font-weight: 500; border: 1px solid var(--line); background: var(--paper); }
 .verdict.ok { border-color: var(--ok); } .verdict.bad { border-color: var(--bad); }
-.verdict .tag { font: 600 12px/1 var(--mono); padding: 4px 8px; border-radius: 6px; margin-inline-end: 8px; color: #fff; vertical-align: 2px; }
+.verdict .tag { font: 600 12px/1 var(--mono); padding: 4px 8px; border-radius: 6px; margin-inline-end: 8px; color: var(--tag-ink); vertical-align: 2px; }
 .verdict.ok .tag { background: var(--ok); } .verdict.bad .tag { background: var(--bad); }
 table.steps-t td.op, table.steps-t td.band { font-family: var(--mono); font-size: 13px; white-space: nowrap; direction: ltr; }
 table.steps-t tr.refused td { background: color-mix(in srgb, var(--bad) 10%, transparent); } table.steps-t tr.pending td { color: var(--ink-2); opacity: .55; }

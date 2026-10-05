@@ -53,7 +53,7 @@ checked at or above WCAG AA (4.5:1 for text, 3:1 for large text and UI).
 | `--ink` | #121417 | #eceef0 | text |
 | `--ink-2` | #4a5059 | #a6adb6 | secondary text (7.1:1 light, 8.9:1 dark on paper) |
 | `--line` | #dfe2e6 | #2a2f35 | borders |
-| `--ember` | #d9481c | #ff7a45 | the one accent: links, primary buttons, temperature data |
+| `--ember` | #c43f16 (AA on white and on paper; was #d9481c, 4.29) | #ff7a45 | the one accent: links, primary buttons, temperature data |
 | `--ember-ink` | #ffffff | #1a0b05 | text on ember |
 | `--ember-soft` | #fbe6de | #2c1810 | accent backgrounds |
 | `--ok` | #1f7a4d | #4cc38a | accepted, measured |

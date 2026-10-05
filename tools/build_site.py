@@ -31,6 +31,8 @@ _md_render = md.render
 
 def _render_md(text, *a, lang='en', **kw):
     md.ANCHOR_LABEL = 'رابط إلى هذا القسم' if lang == 'ar' else 'Link to this section'
+    md.TABLE_LABEL = 'جدول، يُمرَّر جانبيًا' if lang == 'ar' else 'Table, scrolls sideways'
+    md.RTL = lang in RTL
     return _md_render(text, *a, **kw)
 
 
@@ -266,6 +268,7 @@ class Builder:
         other = 'ar' if lang == 'en' else 'en'
         nav, more = self.nav_html(lang, current or path)
         body = self.prefix_links(lang, body)
+        body = body.replace('<div class="table-wrap">', f'<div class="table-wrap" tabindex="0" role="region" aria-label="{"جدول، يُمرَّر جانبيًا" if lang == "ar" else "Table, scrolls sideways"}">')
         body = self.notice(lang) + body
         scripts = ''.join(f'<script src="/assets/{s}" defer></script>' for s in meta.get('scripts', []))
         status = meta.get('status')
