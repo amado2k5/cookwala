@@ -220,7 +220,8 @@
   "machine_text": "Ce texte provient de la traduction de la recette par fifi.cooking et a été produit par une machine.",
   "data": "Document (JSON)",
   "sidecar": "Text sidecar",
-  "about": "Cette page est une recette de l'index ouvert de Cookwala. Cookwala est la norme ouverte pour cuisiner en sécurité : un format de recette que les personnes, les appareils et les robots peuvent vérifier avant de cuisiner. <a href=\"{why}\">Pourquoi Cookwala</a> · <a href=\"{recipes}\">Toutes les recettes</a> · <a href=\"{playground}\">Essayer le dry run</a>"
+  "about": "Cette page est une recette de l'index ouvert de Cookwala. Cookwala est la norme ouverte pour cuisiner en sécurité : un format de recette que les personnes, les appareils et les robots peuvent vérifier avant de cuisiner. <a href=\"{why}\">Pourquoi Cookwala</a> · <a href=\"{recipes}\">Toutes les recettes</a> · <a href=\"{playground}\">Essayer le dry run</a>",
+  "steps_withheld": "Les étapes ne sont pas publiées ici : les droits de cette collection ne sont pas encore confirmés par écrit, seuls les faits structurés apparaissent (RFC-0009). Lisez les étapes sur la page d'origine."
  },
  "scenarios": {
   "title": "SDK et scénarios",

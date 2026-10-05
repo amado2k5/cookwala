@@ -310,6 +310,11 @@ def convert(d, vocab, stats):
     for k in ('nutrition', 'cost'):
         if k in doc and not doc[k].get('perServing', doc[k].get('buckets')): doc.pop(k)
     if not doc['text']['en']['steps']: doc['text']['en'].pop('steps'); doc['text']['en'].pop('legacySteps')
+    facts_only = coll.get('text', 'full') == 'facts'
+    if facts_only:  # rights not confirmed: structured facts only, no step text, no notes (docs/EXPORT-FIFI.md section 2)
+        for lang_ in list(doc['text']):
+            for k in ('steps', 'legacySteps', 'intro'): doc['text'][lang_].pop(k, None)
+        doc['x-cookwala-text'] = 'facts'
     doc['hash'] = ref.doc_hash(doc)
     # sidecars
     side = {}
@@ -317,13 +322,13 @@ def convert(d, vocab, stats):
         if l == 'en': continue
         t = tr[l]
         stp = {f'n{i}': (t.get('instructions') or {}).get(str(st.get('stepNumber')), '') for i, st in enumerate(steps, 1)}
-        side[l] = {'title': t.get('title') or names.get('en', rid), 'culturalNotes': t.get('culturalNotes') or '',
-                   'steps': {k: v for k, v in stp.items() if v}, 'legacySteps': [v for v in stp.values() if v],
+        side[l] = {'title': t.get('title') or names.get('en', rid), 'culturalNotes': '' if facts_only else (t.get('culturalNotes') or ''),
+                   'steps': {} if facts_only else {k: v for k, v in stp.items() if v}, 'legacySteps': [] if facts_only else [v for v in stp.values() if v],
                    'x-ingredients': {ing['ref']: ((t.get('ingredients') or {}).get(ing['legacyId']) or {}) for ing in ingredients},
                    'x-category': t.get('category') or '', 'x-cookingMethod': t.get('cookingMethod') or ''}
     index = {'id': rid, 'revision': 1, 'hash': doc['hash'], 'title': names.get('en', rid), 'cuisine': ['EG'], 'course': doc['dish']['course'], 'tags': doc['dish']['tags'], 'level': 'V0',
              'servings': doc['yield']['servings'], 'allergens': eu, 'supervision': 'presence_required', 'thumb': f'{FIFI}/recipe-images/thumbs/{rid}.jpg',
-             'x-titles': names, 'x-collection': coll['id'], 'x-license': coll['license'], 'x-steps': len(nodes), 'x-ingredients': len(ingredients)}
+             'x-titles': names, 'x-collection': coll['id'], 'x-license': coll['license'], 'x-steps': len(nodes), 'x-ingredients': len(ingredients), **({'x-text': 'facts'} if facts_only else {})}
     if est.get('kcal'): index['kcal'] = est['kcal']
     if doc['process'].get('totalTime'): index['totalTimeS'] = (prep_min + cook_min) * 60
     return doc, side, index
@@ -363,7 +368,7 @@ def main():
     (out / 'INDEX.json').write_text(json.dumps({'generatedAt': dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds'), 'count': len(index), 'items': index}, ensure_ascii=False, separators=(',', ':')) + '\n')
     total_q = sum(stats['qty'].values()) or 1
     report = ['# fifi.cooking export report', '', f'Generated {dt.date.today().isoformat()} by `tools/export_fifi.py` (deterministic stages only; every document is V0, RFC-0009).', '',
-              '| Collection | Documents | Licence (founder to confirm) |', '|---|---|---|'] + [f"| {c['id']} | {stats['coll'][c['id']]} | `{c['license']}` |" for c in COLLECTIONS] + ['',
+              '| Collection | Documents | Licence | Text |', '|---|---|---|---|'] + [f"| {c['id']} | {stats['coll'][c['id']]} | `{c['license']}` | {c.get('text', 'full')} |" for c in COLLECTIONS] + ['',
               f"Ingredients: {total_q} lines; parsed from English amounts {stats['qty']['en']} ({stats['qty']['en'] / total_q:.1%}), from Arabic {stats['qty']['ar']} ({stats['qty']['ar'] / total_q:.1%}), fallback to 1 piece with the original text kept {stats['qty']['fallback']} ({stats['qty']['fallback'] / total_q:.1%}).", '',
               f"Vocabulary: {len(entries)} ingredient entries with labels in {len(stats['langs']) + 2} languages.", '',
               'Step operation hints (for the V1 conversion; never used for control):', ''] + [f'- {k}: {v}' for k, v in stats['hints'].most_common()] + ['',

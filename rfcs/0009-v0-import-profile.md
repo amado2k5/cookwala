@@ -27,7 +27,7 @@ would look executable to a planner while carrying no end condition.
    published as sidecars at `/v1/recipes/{id}/text/{lang}.json` (listed in `textSidecars`), so
    devices download small documents.
 4. **Rights per collection.** Each document names its collection and source. Collections whose
-   licence is not yet confirmed carry `license: "LicenseRef-source-credited"` instead of
+   licence is not yet confirmed carry `license: "LicenseRef-source-credited (defined in `LICENSES/LicenseRef-source-credited.md`: structured facts only, no step text, until rights are confirmed)"` instead of
    `CC-BY-4.0` and are shown on the site as "credited; licence under review". The export tool
    has a per-collection switch; the founder confirms each collection.
 5. **Labels.** The site shows every V0 recipe as "V0: described, not machine-verified" and the

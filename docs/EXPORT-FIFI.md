@@ -6,7 +6,9 @@ end conditions, hazards, CCPs, allergens and dietary claims. Each one then climb
 verification levels (V0 → V1 → V2) and is published on the Cookwala index. New
 fifi.cooking recipes (including World Cuisines) flow in automatically.
 
-## 0. Status (2026-10-04)
+## 0. Status (2026-10-05)
+
+**Decision 2026-10-05:** the four collections whose rights are not confirmed in writing (chefteta, osool, abdennour, abuhaty) are exported with `text: facts`: structured facts only, no step text, no notes, licence `LicenseRef-source-credited` as defined in `LICENSES/LicenseRef-source-credited.md`. The family archive keeps full text under CC BY 4.0. A collection moves to full text when its rights holder confirms in writing.
 
 Done, deterministically, by `tools/export_fifi.py`: E0 extract with the per-collection rights switch
 (`tools/export_fifi.collections.json`), E1-lite (one vocabulary entry per distinct English ingredient

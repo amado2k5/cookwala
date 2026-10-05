@@ -1,10 +1,72 @@
 {
- "note": "Per-collection rights switch for the fifi.cooking import (docs/EXPORT-FIFI.md section 2, RFC-0009). The founder confirms each licence; until then, collections whose content derives from a book or a channel are exported as credited (LicenseRef-source-credited), never as CC-BY-4.0. Set export to false to exclude a collection entirely.",
+ "note": "Per-collection rights switch for the fifi.cooking import (docs/EXPORT-FIFI.md section 2, RFC-0009). text: full publishes the family's steps and notes; text: facts publishes only structured facts (names, ingredient lines and quantities, times, nutrition and cost estimates, allergens, source link) and withholds the step text until rights are confirmed in writing. Set export to false to exclude a collection entirely. Decision 2026-10-05: every collection whose content derives from a book or a channel is facts-only.",
  "collections": [
-  {"id": "archive", "prefixes": ["meat-", "des-", "veg-", "pasta-", "bake-", "sea-", "salad-", "stuff-", "savory-", "quick-", "bev-", "soup-", "leg-"], "export": true, "license": "CC-BY-4.0", "sourceName": "Dr. Fatma Alkawokgy family archive, fifi.cooking", "citation": "Family recipe archive of Dr. Fatma Alkawokgy (1943-2026), chapters 1 to 6, published at fifi.cooking"},
-  {"id": "chefteta", "prefixes": ["add-"], "export": true, "license": "LicenseRef-source-credited", "sourceName": "Chef Teta", "citation": "Additional recipes (chapter 7), rewritten from chefteta.com and credited; licence to be confirmed by the founder"},
-  {"id": "osool", "prefixes": ["osool-"], "export": true, "license": "LicenseRef-source-credited", "sourceName": "Osool El Tahy (Nazira Nicola and Bahia Othman)", "citation": "From the cookbook Osool El Tahy El Nazari wal Amali; structured facts and the family's rewritten steps; book rights not cleared"},
-  {"id": "abdennour", "prefixes": ["ec-"], "export": true, "license": "LicenseRef-source-credited", "sourceName": "Egyptian Cooking and Other Middle Eastern Recipes (Samia Abdennour, AUC Press)", "citation": "From the book Egyptian Cooking and Other Middle Eastern Recipes; structured facts and rewritten steps; book rights not cleared"},
-  {"id": "abuhaty", "prefixes": ["fah-"], "export": true, "license": "LicenseRef-source-credited", "sourceName": "Fatma Abu Haty YouTube channel", "citation": "Rewritten from the Fatma Abu Haty channel and credited; creator permission to be confirmed"}
+  {
+   "id": "archive",
+   "prefixes": [
+    "meat-",
+    "des-",
+    "veg-",
+    "pasta-",
+    "bake-",
+    "sea-",
+    "salad-",
+    "stuff-",
+    "savory-",
+    "quick-",
+    "bev-",
+    "soup-",
+    "leg-"
+   ],
+   "export": true,
+   "license": "CC-BY-4.0",
+   "sourceName": "Dr. Fatma Alkawokgy family archive, fifi.cooking",
+   "citation": "Family recipe archive of Dr. Fatma Alkawokgy (1943-2026), chapters 1 to 6, published at fifi.cooking",
+   "text": "full"
+  },
+  {
+   "id": "chefteta",
+   "prefixes": [
+    "add-"
+   ],
+   "export": true,
+   "license": "LicenseRef-source-credited",
+   "sourceName": "Chef Teta",
+   "citation": "Additional recipes (chapter 7), rewritten from chefteta.com and credited; licence to be confirmed by the founder",
+   "text": "facts"
+  },
+  {
+   "id": "osool",
+   "prefixes": [
+    "osool-"
+   ],
+   "export": true,
+   "license": "LicenseRef-source-credited",
+   "sourceName": "Osool El Tahy (Nazira Nicola and Bahia Othman)",
+   "citation": "From the cookbook Osool El Tahy El Nazari wal Amali; structured facts and the family's rewritten steps; book rights not cleared",
+   "text": "facts"
+  },
+  {
+   "id": "abdennour",
+   "prefixes": [
+    "ec-"
+   ],
+   "export": true,
+   "license": "LicenseRef-source-credited",
+   "sourceName": "Egyptian Cooking and Other Middle Eastern Recipes (Samia Abdennour, AUC Press)",
+   "citation": "From the book Egyptian Cooking and Other Middle Eastern Recipes; structured facts and rewritten steps; book rights not cleared",
+   "text": "facts"
+  },
+  {
+   "id": "abuhaty",
+   "prefixes": [
+    "fah-"
+   ],
+   "export": true,
+   "license": "LicenseRef-source-credited",
+   "sourceName": "Fatma Abu Haty YouTube channel",
+   "citation": "Rewritten from the Fatma Abu Haty channel and credited; creator permission to be confirmed",
+   "text": "facts"
+  }
  ]
 }

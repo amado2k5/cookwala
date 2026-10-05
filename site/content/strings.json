@@ -221,7 +221,8 @@
    "machine_text": "This text comes from the fifi.cooking translation of the recipe and was produced by machine.",
    "data": "Document (JSON)",
    "sidecar": "Text sidecar",
-   "about": "This page is one recipe in Cookwala's open index. Cookwala is the open standard for cooking safely: a recipe format that people, appliances and robots can check before cooking. <a href=\"{why}\">Why Cookwala</a> · <a href=\"{recipes}\">All recipes</a> · <a href=\"{playground}\">Try the dry run</a>"
+   "about": "This page is one recipe in Cookwala's open index. Cookwala is the open standard for cooking safely: a recipe format that people, appliances and robots can check before cooking. <a href=\"{why}\">Why Cookwala</a> · <a href=\"{recipes}\">All recipes</a> · <a href=\"{playground}\">Try the dry run</a>",
+   "steps_withheld": "The steps are not published here: this collection's rights are not yet confirmed in writing, so only structured facts appear (RFC-0009). Read the steps on the original page."
   },
   "scenarios": {
    "title": "SDK and scenarios",
@@ -660,7 +661,8 @@
    "machine_text": "هذا النص من ترجمة fifi.cooking للوصفة وقد أُنتج آليًا.",
    "data": "الوثيقة (JSON)",
    "sidecar": "ملف النص الجانبي",
-   "about": "هذه الصفحة وصفة واحدة في فهرس كوكوالا المفتوح. كوكوالا هو المعيار المفتوح للطهي الآمن: صيغة وصفات يمكن للناس والأجهزة والروبوتات التحقق منها قبل الطهي. <a href=\"{why}\">لماذا كوكوالا</a> · <a href=\"{recipes}\">كل الوصفات</a> · <a href=\"{playground}\">جرّب التشغيل الجاف</a>"
+   "about": "هذه الصفحة وصفة واحدة في فهرس كوكوالا المفتوح. كوكوالا هو المعيار المفتوح للطهي الآمن: صيغة وصفات يمكن للناس والأجهزة والروبوتات التحقق منها قبل الطهي. <a href=\"{why}\">لماذا كوكوالا</a> · <a href=\"{recipes}\">كل الوصفات</a> · <a href=\"{playground}\">جرّب التشغيل الجاف</a>",
+   "steps_withheld": "الخطوات غير منشورة هنا: حقوق هذه المجموعة لم تُؤكَّد كتابيًا بعد، فلا تظهر إلا الحقائق المهيكلة (RFC-0009). اقرأ الخطوات في الصفحة الأصلية."
   },
   "scenarios": {
    "title": "حزمة التطوير والسيناريوهات",

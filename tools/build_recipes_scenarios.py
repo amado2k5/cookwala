@@ -104,6 +104,8 @@ class RecipeBuilder:
                        f"<li><span>{html.escape(self.ing_name(d, i, lang))}</span><span class=\"qty\">{html.escape(((i.get('display') or {}).get(lang) or (i.get('display') or {}).get('en') or ''))}</span></li>" for i in d['ingredients'])
         steps = text.get('legacySteps') or [text.get('steps', {}).get(n['id'], '') for n in d['process']['nodes']]
         steps_html = ''.join(f'<li>{html.escape(s)}</li>' for s in steps if s)
+        if not steps_html and d.get('x-cookwala-text') == 'facts':
+            steps_html = ''  # rendered as a note below instead of an empty list
         nut = d.get('nutrition', {}).get('perServing')
         nut_html = f"<p class=\"note\">{html.escape(S['nutrition'])}: " + ', '.join(f'{k} {v}' for k, v in nut.items()) + '</p>' if nut else ''
         al = d['safety']['allergens'].get('eu14', [])
@@ -123,7 +125,7 @@ class RecipeBuilder:
                 + (f'<p class="lead">{html.escape(intro)}</p>' if intro else '') + f'<p class="cta">{links}</p></section>'
                 f'<section class="wrap"><p class="note about">{S["about"].format(why=self.b.path_for(lang, "/why/"), recipes=self.b.path_for(lang, "/recipes/"), playground=self.b.path_for(lang, "/playground/"))}</p></section>'
                 f'<section class="wrap two"><div><h2>{html.escape(S["ingredients"])}</h2><ul class="ingredients">{ings}</ul>{al_html}{nut_html}</div>'
-                f'<div><h2>{html.escape(S["original_steps"] if level == "V0" else S["steps"])}</h2><ol class="steps">{steps_html}</ol></div></section>'
+                f'<div><h2>{html.escape(S["original_steps"] if level == "V0" else S["steps"])}</h2>' + (f'<ol class="steps">{steps_html}</ol>' if steps_html else f'<p class="note">{html.escape(S.get("steps_withheld", ""))}' + (f' <a href="{html.escape(legacy["pageUrl"])}" rel="noopener">{html.escape(S["original_page"])}</a>' if legacy.get('pageUrl') else '') + '</p>') + '</div></section>'
                 f'<section class="band"><div class="wrap"><p class="note">{html.escape(note)}</p><p class="note">{html.escape(S["source"])}: {html.escape(src.get("name", ""))}. {html.escape(src.get("citation", ""))}</p></div></section>')
         return body, title
 

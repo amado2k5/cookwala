@@ -75,7 +75,7 @@ pick up or argue with: [BACKLOG.md](BACKLOG.md).
 - Schemas, tools, SDKs, reference implementations: [Apache-2.0](LICENSE)
 - Specification text and docs: [CC BY 4.0](LICENSE-CC-BY-4.0)
 - Vocabularies, bindings, policy packs: [CC0 1.0](LICENSE-CC0)
-- Recipe data: CC BY 4.0 where marked in each document's `license` field
+- Recipe data: CC BY 4.0 where marked in each document's `license` field; collections whose rights are not yet confirmed carry `LicenseRef-source-credited` and publish structured facts only ([LICENSES/LicenseRef-source-credited.md](LICENSES/LicenseRef-source-credited.md))
 - Patent pledge: [PATENTS.md](PATENTS.md)
 
 Cookwala is started and operated by [fifi.cooking](https://fifi.cooking). Cookwala data is
