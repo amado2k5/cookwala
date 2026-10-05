@@ -20,7 +20,7 @@ from . import __version__
 from .data import load_bundle
 from .scenarios import demo
 from .orchestrators import Job
-from .service import handle, run_jobs, serve
+from .service import FAULT_KINDS, handle, run_jobs, serve
 
 
 def _opt(a, name, default=None):
@@ -79,7 +79,9 @@ def main(argv=None):
     if cmd == 'run':
         pos = _positional(a, {'--fault', '--format', '--out', '--block'})
         if not pos: print(__doc__); return 2
-        faults = dict(f.split('=', 1) for f in _many(a, '--fault'))
+        faults = dict(f.split('=', 1) for f in _many(a, '--fault') if '=' in f)
+        if len(faults) != len(_many(a, '--fault')) or any(v not in FAULT_KINDS for v in faults.values()):
+            print('usage error: --fault takes recipe-id#node=sensor_fault|timeout|overheat'); return 2
         jobs = [Job(f'{i + 1}-{d}', order={'dish': d, 'allergenBlocks': _many(a, '--block')}, human_present='--human-present' in a) for i, d in enumerate(pos)]
         rep = run_jobs(jobs, faults)
         _emit(rep.render(fmt), _opt(a, '--out'))

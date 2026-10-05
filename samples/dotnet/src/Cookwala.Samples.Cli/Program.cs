@@ -11,7 +11,7 @@ using Cookwala.Samples;
 
 namespace Cookwala.Samples.Cli
 {
-    /// <summary>The <c>cookwala-samples</c> command line. Exit codes: 0 ok, 1 something was refused or failed, 2 usage.</summary>
+    /// <summary>The <c>cookwala-samples</c> command line. Exit codes: 0 ok; 1 a gate refused, a plan failed, or a run did not complete; 2 usage.</summary>
     public static class Program
     {
         private const string Usage = @"`cookwala-samples` command line.
@@ -153,7 +153,7 @@ Exit codes: 0 ok; 1 a gate refused, a plan failed, or a run did not complete; 2 
                     foreach (var f in Many(a, "--fault"))
                     {
                         var eq = f.IndexOf('=');
-                        if (eq < 0) { Console.Error.WriteLine($"--fault needs recipe-id#node=kind, got {f}"); return 2; }
+                        if (eq < 0 || !Service.FaultKinds.Contains(f.Substring(eq + 1))) { Console.Error.WriteLine($"--fault takes recipe-id#node=sensor_fault|timeout|overheat, got {f}"); return 2; }
                         faults[f.Substring(0, eq)] = f.Substring(eq + 1);
                     }
                     var blocks = Many(a, "--block");

@@ -41,5 +41,9 @@ class CliTest {
         assertEquals(1, run("run", "koshari", "--human-present", "--fault", "example-koshari#n14=overheat", "--format", "json"));
         assertEquals(2, run("run", "koshari", "--fault", "n1=explode"));
         assertEquals(2, run("run", "koshari", "--fault", "noequals"));
+        for (String f : new String[] {"csv", "markdown", "junit"}) {  // a run that did not complete exits 1 in every format
+            assertEquals(1, run("run", "koshari", "--human-present", "--fault", "example-koshari#n14=overheat", "--format", f), f);
+        }
+        assertEquals(2, run("run"));
     }
 }

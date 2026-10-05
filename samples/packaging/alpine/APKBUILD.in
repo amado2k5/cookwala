@@ -1,4 +1,5 @@
 # Alpine: abuild -r   (apk add cookwala-samples)
+# Maintainer: Cookwala maintainers <noreply@cookwala.ai>
 pkgname=cookwala-samples
 pkgver={{VERSION}}
 pkgrel=0

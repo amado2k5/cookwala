@@ -63,6 +63,15 @@ function svcPlanner(human) {
 }
 
 /** Resolves to {status, contentType, body}. */
+/** Run jobs on the simulated kitchen with a planner and a person who says yes. Resolves to a Reporter. */
+export async function runJobs(jobs, faults = {}) {
+  const human = new ScriptedHuman({ present: true });
+  const orch = new Orchestrator(kitchen(faults), { planner: svcPlanner(human), human, recalls: [] });
+  const records = [];
+  for (const j of jobs) records.push(await orch.run(j));
+  return new Reporter(records, 'Cookwala samples run');
+}
+
 export async function handle(method, path, query = null, body = null) {
   const q = query || {};
   const fmt = String(q.format || 'json').toLowerCase();
@@ -113,11 +122,7 @@ export async function handle(method, path, query = null, body = null) {
         return problemResponse(400, 'invalid-request', `faults maps "recipe-id#node" to one of ${pyRepr(sorted(FAULT_KINDS))}`);
       }
       if (jobs === null) return report(await demo(), fmt);
-      const human = new ScriptedHuman({ present: true });
-      const orch = new Orchestrator(kitchen(faults), { planner: svcPlanner(human), human, recalls: [] });
-      const records = [];
-      for (const j of jobs) records.push(await orch.run(j));
-      return report(new Reporter(records, 'Cookwala samples run'), fmt);
+      return report(await runJobs(jobs, faults), fmt);
     }
     return problemResponse(404, 'not-found');
   } catch (e) {

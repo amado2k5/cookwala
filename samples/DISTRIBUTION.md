@@ -65,17 +65,50 @@ script); then point remote or virtual repositories at them as usual.
 
 ## Verified in this repository (2026-10-05)
 
+### Installed the way a user installs, from local stand-ins for each registry
+
+`packaging/install-test.sh` repeats all of this, and CI runs it on every change (`install` job). No registry is
+contacted: npm gets a Verdaccio registry, pip a PEP 503 index, Maven and Gradle a file repository, NuGet a folder feed,
+apt a repository made with `apt-ftparchive`, Homebrew a local tap and a local copy of the release asset.
+
+| Channel | What ran | Where |
+|---|---|---|
+| npm | `npx @cookwala/samples demo`; `npm i -g @cookwala/samples`; `import { demo } from '@cookwala/samples'` in a new project | empty npm home and cache |
+| PyPI | `pip install cookwala-samples` from the wheel and from the sdist; `pipx install`; `uvx cookwala-samples` | new virtual environments |
+| single file | `python3 cookwala-samples-0.1.0.pyz demo` | any Python 3.9+ |
+| Maven | a new project depending on `ai.cookwala:cookwala-samples:0.1.0`, compiled and run; `java -jar` on the artifact | empty local repository |
+| Gradle | a new project with `implementation("ai.cookwala:cookwala-samples:0.1.0")`, `gradle run` | empty Gradle home |
+| NuGet | `dotnet add package Cookwala.Samples` in a new console app, `dotnet run`; `dotnet tool install -g Cookwala.Samples.Tool`, then `cookwala-samples` | empty NuGet cache and tool home |
+| apt | `apt-get install cookwala-samples` from an apt repository (pulls in python3), run, `apt-get remove` leaves nothing | Debian 12 container |
+| RPM | `rpmbuild -bb` on the rendered spec (its `%check` runs the pyz), `dnf install`, run, `dnf remove` | Fedora 41 container |
+| pacman | `makepkg` (checks the sha256 and runs `check()`), `pacman -U`, run, `pacman -R` | Arch Linux container |
+| apk | `abuild -r` (sha256, `check()`, signed), `apk add`, run, `apk del` | Alpine 3.20 container |
+| Homebrew | `brew install` from a tap (installs python@3.12), run, `brew test` passes | Homebrew's Linux container |
+| conda | `conda build` on the rendered recipe from the sdist (its tests run), `conda create`, run | Miniforge container |
+| Chocolatey | `choco pack` makes the `.nupkg`; the install and uninstall scripts run under PowerShell, download the asset, check its sha256, create and remove the command; Chocolatey's three helper functions are stood in | PowerShell on Linux; a real `choco install` needs Windows |
+| Scoop | the manifest parses; `pre_install` writes the launcher; running it needs Windows | PowerShell on Linux |
+| OCI image | runs the demo; serves HTTP as an arbitrary uid on a read-only root filesystem | Docker |
+| AWS Lambda | the handler answers inside AWS's own `public.ecr.aws/lambda/python:3.12` image (runtime interface emulator) | Docker |
+| Azure Functions | `func start` with Azure Functions Core Tools 4 serves `/api/health`, `/api/v1/samples/plan` and the demo | local Functions host |
+| Google Cloud functions | `functions-framework --target samples` serves every endpoint | local Functions Framework |
+
+The first manual pass found two real bugs, now fixed and covered by tests: the JavaScript and Java `run` commands exited
+0 when a job did not complete (Python and C# exited 1), and an unknown `--fault` kind was ignored instead of being a
+usage error. The four CLIs now give the same exit codes and the same reports.
+
+### Tests and builds
+
 | What | How |
 |---|---|
-| Python tests, including equality with the reference dry run for every example recipe and device, JSON Schema validation of every request, status, log and incident, and the demo against the reference hub over HTTP | `python -m unittest discover -s samples/python/tests` |
-| JavaScript: 40 tests (Node 22); Markdown and CSV demo reports byte-identical to Python; `npm pack` contains no tests | `npm test` in `samples/js` |
-| Java: 48 tests under both Maven and Gradle; demo identical to Python; sources and javadoc jars for Maven Central | `mvn -B package`, `gradle build` in `samples/java` |
-| .NET: 54 tests; demo identical to Python; both NuGet packages pack, and the dotnet tool installs from a local feed and runs | `dotnet test`, `dotnet pack` in `samples/dotnet` |
-| every port's demo against the reference hub over HTTP | each port's test suite |
-| pyz, wheel and sdist build; `twine check` passes; the wheel installs and runs | `packaging/build.py` |
-| the `.deb` installs with `dpkg -i`, runs, and removes cleanly | Ubuntu 24.04 |
-| the image builds without network, runs the demo, and serves HTTP as an arbitrary uid on a read-only root filesystem | Docker 29 |
+| Python: 30 tests, including equality with the reference dry run for every example recipe and device, JSON Schema validation of every request, status, log and incident, and the demo against the reference hub over HTTP | `python -m unittest discover -s samples/python/tests` |
+| JavaScript: 42 tests (Node 18 and 22); Markdown and CSV demo reports byte-identical to Python | `npm test` in `samples/js` |
+| Java: tests under both Maven and Gradle (Java 17 and 21); demo identical to Python; sources and javadoc jars for Maven Central | `mvn -B package`, `gradle build` in `samples/java` |
+| .NET: 55 tests; demo identical to Python | `dotnet test` in `samples/dotnet` |
+| pyz, wheel and sdist build; `twine check` passes | `packaging/build.py` |
 | the Helm chart lints and renders a Deployment, Service, Ingress and Route | Helm 3.16 |
-| the AWS Lambda (HTTP API v2 and REST v1 events), Azure Functions (v2 model) and Google Cloud functions handlers answer locally | the platform libraries' local test harnesses |
-| the rendered Homebrew formula parses (`ruby -c`), the PKGBUILD's `check` and `package` run, the APKBUILD parses, the Scoop JSON and the nuspec parse | locally |
-| not run here: `brew install`, `choco`, `scoop`, `rpmbuild`, `makepkg`, `abuild`, `snapcraft`, `conda build`, or a real cloud deployment | needs those platforms or accounts |
+
+### Not run here
+
+`snapcraft` (needs snapd), a real `choco install` and `scoop install` (need Windows), `helm install` into a live
+cluster (Kubernetes would not start inside this sandbox; CI runners can), the OpenShift template (needs a cluster), and
+any deployment to a real cloud account or registry.

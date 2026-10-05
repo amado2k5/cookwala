@@ -14,7 +14,7 @@ import java.util.Set;
 
 /**
  * The {@code cookwala-samples} command line ({@code java -jar cookwala-samples-0.1.0.jar ...}).
- * Exit codes: 0 ok, 1 something was refused or failed, 2 usage.
+ * Exit codes: 0 ok; 1 a gate refused, a plan failed, or a run did not complete; 2 usage.
  */
 public final class Cli {
     private Cli() {}
@@ -32,7 +32,7 @@ public final class Cli {
             "",
             "Offline by default: four simulated devices and four example recipes from the Cookwala repository.",
             "`demo --hub URL` runs the fault-free jobs against a real hub (python hub/cookwala_hub.py).",
-            "Exit codes: 0 ok, 1 something was refused or failed, 2 usage.",
+            "Exit codes: 0 ok; 1 a gate refused, a plan failed, or a run did not complete; 2 usage.",
             "");
 
     /** A command-line mistake: exit code 2. */
@@ -152,22 +152,19 @@ public final class Cli {
                     for (Object f : many(a, "--fault")) {
                         String s = (String) f;
                         int eq = s.indexOf('=');
-                        if (eq < 0) throw new UsageError("--fault takes recipe-id#node=kind");
+                        if (eq < 0 || !Simulator.FAULT_KINDS.contains(s.substring(eq + 1))) throw new UsageError("--fault takes recipe-id#node=sensor_fault|timeout|overheat");
                         faults.put(s.substring(0, eq), s.substring(eq + 1));
                     }
-                    List<Object> jobs = new ArrayList<>();
+                    if (pos.isEmpty()) { out.print(USAGE); return 2; }
+                    Map<String, String> fs = new LinkedHashMap<>();
+                    faults.forEach((k, v) -> fs.put(k, (String) v));
+                    List<Job> jobs = new ArrayList<>();
                     for (int i = 0; i < pos.size(); i++) {
-                        jobs.add(Py.map("id", (i + 1) + "-" + pos.get(i), "order", Py.map("dish", pos.get(i), "allergenBlocks", many(a, "--block")),
-                                "humanPresent", a.contains("--human-present")));
+                        jobs.add(Job.ofOrder((i + 1) + "-" + pos.get(i), Py.map("dish", pos.get(i), "allergenBlocks", many(a, "--block")), a.contains("--human-present")));
                     }
-                    Service.Response r = Service.handle("POST", "/v1/samples/run", Map.of("format", fmt), Py.map("jobs", jobs, "faults", faults));
-                    emit(out, r.body, opt(a, "--out", null));
-                    if (r.status != 200) return 2;
-                    if (fmt.equals("json")) {
-                        Map<String, Object> outcomes = Py.obj(Py.obj(Py.asMap(Json.parse(r.body)), "summary"), "outcomes");
-                        return Set.of("completed").containsAll(outcomes.keySet()) ? 0 : 1;
-                    }
-                    return 0;
+                    Reporter rep = Service.runJobs(jobs, fs);
+                    emit(out, rep.render(fmt), opt(a, "--out", null));
+                    return Set.of("completed").containsAll(Py.asMap(rep.summary().get("outcomes")).keySet()) ? 0 : 1;
                 }
                 default:
                     out.print(USAGE);

@@ -242,6 +242,21 @@ class Reporting(unittest.TestCase):
         self.assertEqual(Reporter().summary()['runs'], 0)
 
 
+class Cli(unittest.TestCase):
+    def test_exit_codes(self):
+        from cookwala_samples.cli import main
+        import contextlib
+        import io
+        def run(*a):
+            with contextlib.redirect_stdout(io.StringIO()): return main(list(a))
+        for fmt in ('csv', 'markdown', 'json', 'junit'):  # a run that did not complete exits 1 in every format
+            self.assertEqual(run('run', 'koshari', '--human-present', '--fault', 'example-koshari#n14=overheat', '--format', fmt), 1, fmt)
+        self.assertEqual(run('run', 'lentil', '--human-present', '--format', 'csv'), 0)
+        self.assertEqual(run('run'), 2)
+        self.assertEqual(run('run', 'koshari', '--fault', 'n1=explode'), 2)
+        self.assertEqual(run('run', 'koshari', '--fault', 'noequals'), 2)
+
+
 class Service(unittest.TestCase):
     def test_endpoints(self):
         self.assertEqual(handle('GET', '/health')[0], 200)
