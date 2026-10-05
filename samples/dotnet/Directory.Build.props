@@ -5,7 +5,7 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <Authors>Cookwala maintainers</Authors>
     <Company>Cookwala</Company>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>

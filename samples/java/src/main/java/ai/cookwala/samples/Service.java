@@ -36,7 +36,7 @@ import java.util.concurrent.Executors;
 public final class Service {
     private Service() {}
 
-    public static final String VERSION = "0.2.0";
+    public static final String VERSION = "0.3.0";
     public static final int MAX_BODY = 256 * 1024;
     public static final int MAX_JOBS = 20;
     static final Map<String, String> TYPES = new TreeMap<>(Map.of("json", "application/json", "markdown", "text/markdown; charset=utf-8",

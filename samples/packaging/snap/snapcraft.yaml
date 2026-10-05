@@ -1,6 +1,6 @@
 # snapcraft --destructive-mode (from samples/packaging/snap) ; snapcraft upload --release=edge cookwala-samples_*.snap
 name: cookwala-samples
-version: '0.2.0'
+version: '0.3.0'
 summary: Cookwala sample clients, agents, orchestrators, gates, recovery, reporting
 description: |
   Runnable samples for the Cookwala Core 0.2 API, the open standard for cooking safely.

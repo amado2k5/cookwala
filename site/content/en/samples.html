@@ -5,7 +5,7 @@
   <h1>Sample code for every role, in four languages</h1>
   <p class="lead">Clients, agents, orchestrators, gates, recovery and reporting for the Core 0.2 API, in Python, JavaScript, Java and C#. They run offline on simulated devices, or against any Cookwala hub. Every port tests itself against the reference implementation.</p>
   <div class="cta"><a class="btn primary" href="#try">Run the demo</a><a class="btn" href="#get">Get the packages</a><a class="btn" href="/docs/SAMPLES/">Samples README</a><a class="btn" href="https://github.com/amado2k5/cookwala/tree/main/samples" rel="noopener">Source on GitHub</a></div>
-  <p class="note">Samples, not certified software. The executor is always the authority: the gates check early so a client can explain a refusal, and the device checks everything again. <b>Nothing is published to a registry yet:</b> every package below is built and tested by CI and goes out when a release is tagged (<a href="/docs/DISTRIBUTION/">status per channel</a>).</p>
+  <p class="note">Samples, not certified software. The executor is always the authority: the gates check early so a client can explain a refusal, and the device checks everything again. <b>Published on PyPI, npm and NuGet,</b> with the single file and the <code>.deb</code> on GitHub Releases; each tile below says whether its channel is live yet (<a href="/docs/DISTRIBUTION/">status per channel</a>).</p>
 </section>
 
 <section class="band" id="try">
@@ -14,6 +14,9 @@
     <ol class="steps">
       <li><p><b>Run six orders on a simulated four-device kitchen.</b> Standard library Python, nothing to install.</p><pre class="code"><code>git clone https://github.com/amado2k5/cookwala &amp;&amp; cd cookwala/samples/python
 python -m cookwala_samples demo</code></pre><div class="output">6 runs: 3 completed, 1 failed, 1 refused, 1 stopped. Served 3, discarded 2, incidents reported 2, people asked 3 times.</div></li>
+      <li><p><b>Or install it from a registry.</b> The same command in every language; <code>help</code> explains each command, with examples.</p><pre class="code"><code>pip install cookwala-samples        # or: npm i -g @cookwala/samples · dotnet tool install -g Cookwala.Samples.Tool
+cookwala-samples demo
+cookwala-samples help run</code></pre></li>
       <li><p><b>Ask the gates about one recipe on one device.</b></p><pre class="code"><code>python -m cookwala_samples gates koshari --device demo-hob-robot-basic --human-present</code></pre><div class="output">"refusal": {"reason": "missing_sensor_no_fallback", "detail": "no way to verify cw.op.deep_fry on this device", "gate": "capability", "node": "n14"}</div></li>
       <li><p><b>Break something on purpose and watch the recovery.</b></p><pre class="code"><code>python -m cookwala_samples run koshari --human-present --fault 'example-koshari#n14=overheat' --format csv</code></pre><div class="output">1-koshari,example-koshari,demo-hob-robot,stopped,,discard_and_report,discard,0,cw.incident.overheat</div></li>
       <li><p><b>Point it at a real hub.</b> The same code, over HTTP.</p><pre class="code"><code>cookwala hub --port 7878 &amp;

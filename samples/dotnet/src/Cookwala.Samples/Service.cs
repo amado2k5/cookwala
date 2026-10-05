@@ -14,7 +14,7 @@ namespace Cookwala.Samples
     /// <summary>Package version and the Core version it speaks.</summary>
     public static class Samples
     {
-        public const string Version = "0.2.0";
+        public const string Version = "0.3.0";
     }
 
     /// <summary>

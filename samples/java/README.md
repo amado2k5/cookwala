@@ -18,7 +18,7 @@ Maven:
 <dependency>
   <groupId>ai.cookwala</groupId>
   <artifactId>cookwala-samples</artifactId>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
@@ -26,7 +26,7 @@ Gradle (Kotlin DSL):
 
 ```kotlin
 dependencies {
-    implementation("ai.cookwala:cookwala-samples:0.2.0")
+    implementation("ai.cookwala:cookwala-samples:0.3.0")
 }
 ```
 
@@ -37,15 +37,15 @@ copied into this directory.
 ## Command line
 
 ```sh
-java -jar target/cookwala-samples-0.2.0.jar demo                      # Markdown report of the six-job demo
-java -jar target/cookwala-samples-0.2.0.jar demo --format junit --out demo.xml
-java -jar target/cookwala-samples-0.2.0.jar demo --hub http://127.0.0.1:7878 --token T   # fault-free jobs against a hub
-java -jar target/cookwala-samples-0.2.0.jar gates shakshuka --block eggs --human-present
-java -jar target/cookwala-samples-0.2.0.jar plan koshari --servings 4 --human-present
-java -jar target/cookwala-samples-0.2.0.jar run lentil koshari --human-present --fault example-koshari#n14=overheat --format json
-java -jar target/cookwala-samples-0.2.0.jar serve --port 8080         # GET /health, /v1/samples, /v1/samples/demo?format=...
-java -jar target/cookwala-samples-0.2.0.jar list
-java -jar target/cookwala-samples-0.2.0.jar version
+java -jar target/cookwala-samples-0.3.0.jar demo                      # Markdown report of the six-job demo
+java -jar target/cookwala-samples-0.3.0.jar demo --format junit --out demo.xml
+java -jar target/cookwala-samples-0.3.0.jar demo --hub http://127.0.0.1:7878 --token T   # fault-free jobs against a hub
+java -jar target/cookwala-samples-0.3.0.jar gates shakshuka --block eggs --human-present
+java -jar target/cookwala-samples-0.3.0.jar plan koshari --servings 4 --human-present
+java -jar target/cookwala-samples-0.3.0.jar run lentil koshari --human-present --fault example-koshari#n14=overheat --format json
+java -jar target/cookwala-samples-0.3.0.jar serve --port 8080         # GET /health, /v1/samples, /v1/samples/demo?format=...
+java -jar target/cookwala-samples-0.3.0.jar list
+java -jar target/cookwala-samples-0.3.0.jar version
 ```
 
 The demo formats are `markdown`, `json`, `junit` and `csv`. Exit codes: 0 ok, 1 something was refused or failed, 2 usage.

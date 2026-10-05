@@ -256,6 +256,23 @@ class Cli(unittest.TestCase):
         self.assertEqual(run('run', 'koshari', '--fault', 'n1=explode'), 2)
         self.assertEqual(run('run', 'koshari', '--fault', 'noequals'), 2)
 
+    def test_help(self):
+        from cookwala_samples.cli import HELP, OVERVIEW, main
+        import contextlib
+        import io
+        def run(*a):
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf): code = main(list(a))
+            return code, buf.getvalue()
+        self.assertEqual(run('help'), (0, OVERVIEW + '\n'))
+        for cmd in HELP:  # every command is listed in the overview and has its own help, two ways
+            self.assertIn(f'\n  {cmd} ', OVERVIEW)
+            self.assertEqual(run('help', cmd), (0, HELP[cmd] + '\n'))
+            self.assertEqual(run(cmd, '--help'), (0, HELP[cmd] + '\n'))
+        self.assertEqual(run('help', 'nope')[0], 2)
+        self.assertEqual(run('nope')[0], 2)
+        self.assertEqual(run()[0], 2)
+
 
 class Service(unittest.TestCase):
     def test_endpoints(self):

@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "ai.cookwala"
-version = "0.2.0"
+version = "0.3.0"
 description = "Cookwala sample clients, agents, orchestrators, gates, recovery and reporting for the Core 0.2 API; runs offline on simulated devices or against any Cookwala hub. Samples, not certified software."
 
 repositories {

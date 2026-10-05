@@ -4,7 +4,7 @@
      ai/cookwala/samples/bundle.json at build time; it is never copied into this directory.
 
        mvn -B package                         build, test, jar + sources + javadoc
-       java -jar target/cookwala-samples-0.2.0.jar demo
+       java -jar target/cookwala-samples-0.3.0.jar demo
        mvn -B deploy -Partifactory -Dartifactory.url=https://artifactory.example/libs-release-local
        mvn -B deploy -Pcentral,sign           Maven Central (Sonatype Central Portal), signed -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -14,7 +14,7 @@
 
   <groupId>ai.cookwala</groupId>
   <artifactId>cookwala-samples</artifactId>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
   <packaging>jar</packaging>
 
   <name>Cookwala samples</name>

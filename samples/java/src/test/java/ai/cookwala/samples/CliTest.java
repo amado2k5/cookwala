@@ -19,12 +19,27 @@ class CliTest {
     }
 
     @Test
+    void help() {
+        assertEquals(0, run("help"));
+        String overview = last[0];
+        for (String cmd : Cli.HELP.keySet()) {  // every command is listed in the overview and has its own help, two ways
+            assertTrue(overview.contains("\n  " + cmd + " "), cmd);
+            assertEquals(0, run("help", cmd));
+            assertTrue(last[0].startsWith("cookwala-samples " + cmd), cmd);
+            String h = last[0];
+            assertEquals(0, run(cmd, "--help"));
+            assertEquals(h, last[0], cmd);
+        }
+        assertEquals(2, run("help", "nope"));
+    }
+
+    @Test
     void exitCodes() {
         assertEquals(2, run());
         assertEquals(0, run("--help"));
         assertEquals(2, run("bogus"));
         assertEquals(0, run("version"));
-        assertTrue(last[0].startsWith("cookwala-samples 0.2.0 (Core 0.2.0)"));
+        assertTrue(last[0].startsWith("cookwala-samples 0.3.0 (Core 0.2.0)"));
         assertEquals(0, run("list"));
         assertTrue(last[0].contains("recipes: koshari, lentil-soup, salata-baladi, shakshuka"));
         assertEquals(0, run("demo", "--format", "csv"));

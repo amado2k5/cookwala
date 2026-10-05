@@ -165,27 +165,29 @@ DOCS = [
 DOC_INDEX = {d[0]: d for g in DOCS for d in g[1]}
 DOC_BY_PATH = {d[1].split('/')[-1].upper().replace('.MD', ''): d[0] for g in DOCS for d in g[1]}
 DOC_BY_PATH.update({'BRIEF': 'POLICY-BRIEF', 'README': None})
-# Samples distribution channels: (icon ids, name, install or deploy command, status, source path in the repository)
+# Samples distribution channels: (icon ids, name, install or deploy command, status, source path in the repository).
+# 'live' means a release is on that registry now; move a tile to 'live' only after installing from it.
+SAMPLES_VERSION = (ROOT / 'samples' / 'VERSION').read_text(encoding='utf-8').strip()
 DIST = [
     ('lang', [
-        (['pypi'], 'PyPI', 'pip install cookwala-samples', 'ready', 'samples/python/pyproject.toml'),
-        (['npm'], 'npm', 'npx @cookwala/samples demo', 'ready', 'samples/js/package.json'),
-        (['maven', 'java'], 'Maven Central', 'ai.cookwala:cookwala-samples:0.1.0', 'ready', 'samples/java/pom.xml'),
-        (['gradle'], 'Gradle', 'implementation("ai.cookwala:cookwala-samples:0.1.0")', 'ready', 'samples/java/build.gradle.kts'),
-        (['nuget'], 'NuGet', 'dotnet add package Cookwala.Samples', 'ready', 'samples/dotnet'),
-        (['dotnet'], '.NET tool', 'dotnet tool install -g Cookwala.Samples.Tool', 'ready', 'samples/dotnet'),
+        (['pypi'], 'PyPI', 'pip install cookwala-samples', 'live', 'samples/python/pyproject.toml'),
+        (['npm'], 'npm', 'npx @cookwala/samples demo', 'live', 'samples/js/package.json'),
+        (['maven', 'java'], 'Maven Central', f'ai.cookwala:cookwala-samples:{SAMPLES_VERSION}', 'ready', 'samples/java/pom.xml'),
+        (['gradle'], 'Gradle', f'implementation("ai.cookwala:cookwala-samples:{SAMPLES_VERSION}")', 'ready', 'samples/java/build.gradle.kts'),
+        (['nuget'], 'NuGet', 'dotnet add package Cookwala.Samples', 'live', 'samples/dotnet'),
+        (['dotnet'], '.NET tool', 'dotnet tool install -g Cookwala.Samples.Tool', 'live', 'samples/dotnet'),
     ]),
     ('os', [
         (['homebrew'], 'Homebrew', 'brew install amado2k5/cookwala/cookwala-samples', 'ready', 'samples/packaging/homebrew/cookwala-samples.rb.in'),
         (['chocolatey'], 'Chocolatey', 'choco install cookwala-samples', 'ready', 'samples/packaging/chocolatey'),
         (['scoop'], 'Scoop', 'scoop install cookwala-samples', 'manual', 'samples/packaging/scoop/cookwala-samples.json.in'),
-        (['debian', 'ubuntu'], 'apt (Debian, Ubuntu)', 'sudo apt install ./cookwala-samples_0.1.0_all.deb', 'ready', 'samples/packaging/build.py'),
+        (['debian', 'ubuntu'], 'apt (Debian, Ubuntu)', f'sudo apt install ./cookwala-samples_{SAMPLES_VERSION}_all.deb', 'live', 'samples/packaging/build.py'),
         (['fedora', 'redhat'], 'RPM (dnf, yum, zypper)', 'sudo dnf install cookwala-samples', 'manual', 'samples/packaging/rpm/cookwala-samples.spec.in'),
         (['arch'], 'pacman (Arch, AUR)', 'yay -S cookwala-samples', 'manual', 'samples/packaging/arch/PKGBUILD.in'),
         (['alpine'], 'apk (Alpine)', 'apk add cookwala-samples', 'manual', 'samples/packaging/alpine/APKBUILD.in'),
         (['conda'], 'conda-forge', 'conda install -c conda-forge cookwala-samples', 'manual', 'samples/packaging/conda/meta.yaml.in'),
         (['snap'], 'Snap', 'sudo snap install cookwala-samples --edge', 'manual', 'samples/packaging/snap/snapcraft.yaml'),
-        (['zipapp', 'python'], 'Single file (any OS)', 'python3 cookwala-samples-0.1.0.pyz demo', 'ready', 'samples/packaging/build.py'),
+        (['zipapp', 'python'], 'Single file (any OS)', f'python3 cookwala-samples-{SAMPLES_VERSION}.pyz demo', 'live', 'samples/packaging/build.py'),
     ]),
     ('containers', [
         (['docker'], 'OCI image', 'docker run -p 8080:8080 ghcr.io/amado2k5/cookwala-samples', 'ready', 'samples/packaging/docker/Containerfile'),
@@ -200,16 +202,16 @@ DIST = [
     ]),
     ('enterprise', [
         (['jfrog'], 'JFrog Artifactory', 'samples/packaging/artifactory/publish.sh', 'ready', 'samples/packaging/artifactory/publish.sh'),
-        (['github'], 'GitHub Releases', 'git tag samples-v0.1.0 && git push --tags', 'ready', '.github/workflows/samples.yml'),
+        (['github'], 'GitHub Releases', 'github.com/amado2k5/cookwala/releases', 'live', '.github/workflows/samples.yml'),
         (['githubactions'], 'CI for every port', 'Python, Node, Java, .NET, packages', 'repo', '.github/workflows/samples.yml'),
     ]),
 ]
 DIST_LABELS = {
     'en': {'lang': 'Language registries', 'os': 'Operating-system package managers', 'containers': 'Containers and Kubernetes', 'cloud': 'Serverless functions',
-           'enterprise': 'Enterprise and release', 'ready': 'Built and tested · not yet published', 'manual': 'Manifest ready · submitted by hand',
+           'enterprise': 'Enterprise and release', 'live': 'Published · install now', 'ready': 'Built and tested · not yet published', 'manual': 'Manifest ready · submitted by hand',
            'deploy': 'Deploy to your own account', 'repo': 'In the repository, runs today', 'source': 'Manifest'},
     'ar': {'lang': 'سجلات لغات البرمجة', 'os': 'مديرو حزم أنظمة التشغيل', 'containers': 'الحاويات وKubernetes', 'cloud': 'الدوال السحابية',
-           'enterprise': 'المؤسسات والإصدار', 'ready': 'مبنية ومختبرة · لم تُنشر بعد', 'manual': 'الملف جاهز · يُقدَّم يدويًا',
+           'enterprise': 'المؤسسات والإصدار', 'live': 'منشورة · ثبّتها الآن', 'ready': 'مبنية ومختبرة · لم تُنشر بعد', 'manual': 'الملف جاهز · يُقدَّم يدويًا',
            'deploy': 'انشرها في حسابك', 'repo': 'في المستودع، تعمل اليوم', 'source': 'الملف'},
 }
 ESSAYS = [('inheriting-culinary-culture', 'Who inherits a recipe?'), ('dignity-in-automated-care', 'Dignity in automated care'), ('what-a-household-robot-may-know', 'What a household robot may know'), ('refusal-as-a-virtue', 'Refusal as a virtue'), ('like-bees', 'Like bees')]

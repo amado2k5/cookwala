@@ -20,3 +20,17 @@ test('run exits 0 when every job completes, 2 without a dish', () => {
   assert.equal(run('run', 'koshari', '--fault', 'n1=explode').status, 2);
   assert.equal(run('run', 'koshari', '--fault', 'noequals').status, 2);
 });
+
+test('help lists every command and explains each one', () => {
+  const overview = run('help');
+  assert.equal(overview.status, 0);
+  for (const cmd of ['demo', 'run', 'plan', 'gates', 'list', 'serve', 'version', 'help']) {
+    assert.match(overview.stdout, new RegExp(`\\n  ${cmd} `));
+    const h = run('help', cmd);
+    assert.equal(h.status, 0, cmd);
+    assert.ok(h.stdout.startsWith(`cookwala-samples ${cmd}`), cmd);
+    assert.equal(run(cmd, '--help').stdout, h.stdout, cmd);
+  }
+  assert.equal(run('help', 'nope').status, 2);
+  assert.equal(run('nope').status, 2);
+});
