@@ -11,13 +11,13 @@ can explain a refusal, and the executor checks everything again (Core section 6)
 ```bash
 pip install cookwala-samples   && cookwala-samples demo          # Python (also brew, choco, scoop, apt, rpm, pacman, apk, conda, snap)
 npx @cookwala/samples demo                                        # JavaScript
-java -jar cookwala-samples-0.1.0.jar demo                         # Java (Maven Central / Gradle)
+java -jar cookwala-samples-0.2.0.jar demo                         # Java (Maven Central / Gradle)
 dotnet tool install -g Cookwala.Samples.Tool && cookwala-samples demo   # .NET
 docker run --rm -p 8080:8080 ghcr.io/amado2k5/cookwala-samples    # HTTP service (OpenShift, Knative, Kubernetes)
 ```
 
 **Nothing is published to a registry yet.** Every package is built and tested by CI
-(`.github/workflows/samples.yml`); the commands above work once a `samples-v0.1.0` tag is pushed
+(`.github/workflows/samples.yml`); the commands above work once a `samples-v0.2.0` tag is pushed
 and the registry credentials are set. Status per channel and how to publish:
 [DISTRIBUTION.md](DISTRIBUTION.md). From a checkout, nothing to install:
 `python -m cookwala_samples demo` inside `samples/python`.

@@ -2,7 +2,7 @@
 #   oc new-project cookwala-samples
 #   oc process -f samples/cloud/openshift/template.yaml -p NAME=cookwala-samples | oc apply -f -
 #   oc start-build cookwala-samples --follow
-# Or skip the build and run a published image: oc new-app ghcr.io/amado2k5/cookwala-samples:0.1.0 && oc expose service/cookwala-samples
+# Or skip the build and run a published image: oc new-app ghcr.io/amado2k5/cookwala-samples:0.2.0 && oc expose service/cookwala-samples
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:

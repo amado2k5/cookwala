@@ -22,13 +22,13 @@ pass `--base-url` to point them at another host, such as an Artifactory generic 
 |---|---|---|---|---|
 | **PyPI (pip, pipx, uv)** | `pip install cookwala-samples` | `python/pyproject.toml` | CI on tag | PyPI trusted publisher for this workflow |
 | **npm** | `npm i -g @cookwala/samples` · `npx @cookwala/samples demo` | `js/package.json` | CI on tag | `NPM_TOKEN`, the `@cookwala` npm scope |
-| **Maven Central (Maven, Gradle, sbt, Leiningen)** | `ai.cookwala:cookwala-samples:0.1.0` | `java/pom.xml`, `java/build.gradle.kts` | CI on tag | `MAVEN_CENTRAL_USERNAME/PASSWORD`, `MAVEN_GPG_PRIVATE_KEY/PASSPHRASE`, the `ai.cookwala` namespace |
+| **Maven Central (Maven, Gradle, sbt, Leiningen)** | `ai.cookwala:cookwala-samples:0.2.0` | `java/pom.xml`, `java/build.gradle.kts` | CI on tag | `MAVEN_CENTRAL_USERNAME/PASSWORD`, `MAVEN_GPG_PRIVATE_KEY/PASSPHRASE`, the `ai.cookwala` namespace |
 | **GitHub Packages (Maven)** | as above, with the GitHub Packages repository | `java/build.gradle.kts` | CI on tag | nothing extra (`GITHUB_TOKEN`) |
 | **NuGet** | `dotnet add package Cookwala.Samples` · `dotnet tool install -g Cookwala.Samples.Tool` | `dotnet/Directory.Build.props`, `dotnet/src/*/*.csproj` | CI on tag | a nuget.org trusted-publishing policy (owner amado2k5, repo cookwala, workflow `samples.yml`, environment `release`, pattern `Cookwala.*`); the package owner name is read from the `NUGET_USER` repository variable (default `amado2026`); or a `NUGET_API_KEY` secret |
 | **Homebrew (macOS, Linux)** | `brew install amado2k5/cookwala/cookwala-samples` | `packaging/homebrew/cookwala-samples.rb.in` | CI on tag, to the tap repository | a tap repo `amado2k5/homebrew-cookwala`, `HOMEBREW_TAP_TOKEN` |
 | **Chocolatey (Windows)** | `choco install cookwala-samples` | `packaging/chocolatey/` | CI on tag (Windows runner) | `CHOCO_API_KEY`; community moderation before it is public |
 | **Scoop (Windows)** | `scoop bucket add cookwala https://github.com/amado2k5/scoop-cookwala` · `scoop install cookwala-samples` | `packaging/scoop/cookwala-samples.json.in` | by hand: copy the rendered manifest into a bucket repo | a bucket repository |
-| **apt (Debian, Ubuntu)** | `sudo apt install ./cookwala-samples_0.1.0_all.deb`, or from an apt repository | built by `packaging/build.py` | GitHub release asset; Artifactory Debian repo | an apt repository (Artifactory, Cloudsmith, a PPA) for `apt install cookwala-samples` |
+| **apt (Debian, Ubuntu)** | `sudo apt install ./cookwala-samples_0.2.0_all.deb`, or from an apt repository | built by `packaging/build.py` | GitHub release asset; Artifactory Debian repo | an apt repository (Artifactory, Cloudsmith, a PPA) for `apt install cookwala-samples` |
 | **RPM (dnf, yum, zypper)** | `sudo dnf install cookwala-samples` | `packaging/rpm/cookwala-samples.spec.in` | by hand: `rpmbuild -ba`, Fedora COPR or openSUSE OBS | a COPR or OBS project |
 | **pacman (Arch, AUR)** | `yay -S cookwala-samples` | `packaging/arch/PKGBUILD.in` | by hand: push the rendered PKGBUILD to the AUR | an AUR account |
 | **apk (Alpine)** | `apk add cookwala-samples` | `packaging/alpine/APKBUILD.in` | by hand: aports merge request | an aports maintainer |
@@ -60,7 +60,7 @@ script); then point remote or virtual repositories at them as usual.
 
 1. Bump `samples/VERSION` and every manifest (`python samples/packaging/build.py --check-versions` lists them); add a line to the Python, npm, Maven and NuGet changelogs if you keep them.
 2. Regenerate the bundle if the vocabularies, limits or example recipes changed: `python samples/tools/build_bundle.py`.
-3. Merge, then tag: `git tag samples-v0.1.0 && git push origin samples-v0.1.0`.
+3. Merge, then tag: `git tag samples-v0.2.0 && git push origin samples-v0.2.0`.
 4. CI tests every port, builds every package, creates the GitHub release, and publishes to each registry whose secret is set. The other channels take the rendered manifests from the release's `samples-packages` artifact.
 
 ## Verified in this repository (2026-10-05)
@@ -75,9 +75,9 @@ apt a repository made with `apt-ftparchive`, Homebrew a local tap and a local co
 |---|---|---|
 | npm | `npx @cookwala/samples demo`; `npm i -g @cookwala/samples`; `import { demo } from '@cookwala/samples'` in a new project | empty npm home and cache |
 | PyPI | `pip install cookwala-samples` from the wheel and from the sdist; `pipx install`; `uvx cookwala-samples` | new virtual environments |
-| single file | `python3 cookwala-samples-0.1.0.pyz demo` | any Python 3.9+ |
-| Maven | a new project depending on `ai.cookwala:cookwala-samples:0.1.0`, compiled and run; `java -jar` on the artifact | empty local repository |
-| Gradle | a new project with `implementation("ai.cookwala:cookwala-samples:0.1.0")`, `gradle run` | empty Gradle home |
+| single file | `python3 cookwala-samples-0.2.0.pyz demo` | any Python 3.9+ |
+| Maven | a new project depending on `ai.cookwala:cookwala-samples:0.2.0`, compiled and run; `java -jar` on the artifact | empty local repository |
+| Gradle | a new project with `implementation("ai.cookwala:cookwala-samples:0.2.0")`, `gradle run` | empty Gradle home |
 | NuGet | `dotnet add package Cookwala.Samples` in a new console app, `dotnet run`; `dotnet tool install -g Cookwala.Samples.Tool`, then `cookwala-samples` | empty NuGet cache and tool home |
 | apt | `apt-get install cookwala-samples` from an apt repository (pulls in python3), run, `apt-get remove` leaves nothing | Debian 12 container |
 | RPM | `rpmbuild -bb` on the rendered spec (its `%check` runs the pyz), `dnf install`, run, `dnf remove` | Fedora 41 container |

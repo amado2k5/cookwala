@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The {@code cookwala-samples} command line ({@code java -jar cookwala-samples-0.1.0.jar ...}).
+ * The {@code cookwala-samples} command line ({@code java -jar cookwala-samples-0.2.0.jar ...}).
  * Exit codes: 0 ok; 1 a gate refused, a plan failed, or a run did not complete; 2 usage.
  */
 public final class Cli {

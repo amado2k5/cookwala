@@ -10,7 +10,7 @@ against a real hub (`python hub/cookwala_hub.py`, or any executor that serves th
 These are samples, not certified software. The executor is always the authority: the gates in
 this package check early so a client can explain a refusal, and the executor checks again.
 """
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 from .errors import CookwalaProblem  # noqa: E402
 from .jcs import canonical, doc_hash  # noqa: E402

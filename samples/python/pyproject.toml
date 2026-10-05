@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cookwala-samples"
-version = "0.1.0"
+version = "0.2.0"
 description = "Cookwala sample clients, agents, orchestrators, gates, recovery and reporting for the Core 0.2 API; runs offline on simulated devices or against any Cookwala hub."
 readme = "README.md"
 license = "Apache-2.0"

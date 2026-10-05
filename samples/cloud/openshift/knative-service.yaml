@@ -12,7 +12,7 @@ spec:
         autoscaling.knative.dev/max-scale: "5"
     spec:
       containers:
-        - image: ghcr.io/amado2k5/cookwala-samples:0.1.0
+        - image: ghcr.io/amado2k5/cookwala-samples:0.2.0
           args: [serve]
           env: [{name: BIND, value: 0.0.0.0}]
           ports: [{containerPort: 8080}]

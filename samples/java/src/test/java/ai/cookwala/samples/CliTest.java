@@ -24,7 +24,7 @@ class CliTest {
         assertEquals(0, run("--help"));
         assertEquals(2, run("bogus"));
         assertEquals(0, run("version"));
-        assertTrue(last[0].startsWith("cookwala-samples 0.1.0 (Core 0.2.0)"));
+        assertTrue(last[0].startsWith("cookwala-samples 0.2.0 (Core 0.2.0)"));
         assertEquals(0, run("list"));
         assertTrue(last[0].contains("recipes: koshari, lentil-soup, salata-baladi, shakshuka"));
         assertEquals(0, run("demo", "--format", "csv"));
