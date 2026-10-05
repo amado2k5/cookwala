@@ -162,10 +162,11 @@ jobs:
             samples/build/*.whl
             samples/build/*.tar.gz
             samples/build/SHA256SUMS
-      - name: PyPI (trusted publishing; configure the publisher on pypi.org first)
+      - name: Python distributions only (the upload rejects the pyz, deb and manifests beside them)
+        run: mkdir -p samples/dist && cp samples/build/cookwala_samples-*.whl samples/build/cookwala_samples-*.tar.gz samples/dist/
+      - name: PyPI (trusted publishing; publisher on pypi.org for samples.yml, environment release)
         uses: pypa/gh-action-pypi-publish@release/v1
-        with: {packages-dir: samples/build/, skip-existing: true}
-        continue-on-error: true
+        with: {packages-dir: samples/dist/, skip-existing: true}
       - uses: actions/setup-node@v4
         with: {node-version: '22', registry-url: 'https://registry.npmjs.org'}
       - name: npm

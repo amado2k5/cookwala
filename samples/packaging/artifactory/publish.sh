@@ -36,9 +36,11 @@ for t in "${targets[@]}"; do
       reg="$AF/api/npm/${NPM_REPO:-cookwala-npm-local}/"
       (cd "$SAMPLES/js" && npm publish --registry "$reg" --//"${reg#https://}":_authToken="$ARTIFACTORY_TOKEN") ;;
     maven)
-      (cd "$SAMPLES/java" && mvn -B -Partifactory deploy -DskipTests \
-        -Dartifactory.url="$AF/${MAVEN_REPO:-cookwala-maven-local}" \
-        -s <(printf '<settings><servers><server><id>artifactory</id><username>%s</username><password>%s</password></server></servers></settings>' "$ARTIFACTORY_USER" "$ARTIFACTORY_TOKEN")) ;;
+      # Maven needs a real settings file (it cannot read a process substitution); private to this user, removed afterwards.
+      settings=$(mktemp); chmod 600 "$settings"
+      printf '<settings><servers><server><id>artifactory</id><username>%s</username><password>%s</password></server></servers></settings>' "$ARTIFACTORY_USER" "$ARTIFACTORY_TOKEN" > "$settings"
+      (cd "$SAMPLES/java" && mvn -B -Partifactory deploy -DskipTests -Dartifactory.url="$AF/${MAVEN_REPO:-cookwala-maven-local}" -s "$settings"); rc=$?
+      rm -f "$settings"; [ $rc -eq 0 ] || exit $rc ;;
     gradle)
       (cd "$SAMPLES/java" && ARTIFACTORY_URL="$AF/${MAVEN_REPO:-cookwala-maven-local}" gradle --no-daemon publish) ;;
     nuget)
