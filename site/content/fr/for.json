@@ -618,5 +618,67 @@
     "/contribute/"
    ]
   ]
+ },
+ "device-makers": {
+  "short": "Fabricants d'appareils",
+  "title": "Pour les fabricants d'appareils : fours, plaques, multicuiseurs, robots de cuisine et humanoïdes",
+  "lead": "Un appareil qui implémente Cookwala lit une recette signée, vérifie chaque étape contre ce qu'il sait faire et mesurer, refuse ce qu'il ne peut pas vérifier avant que quoi que ce soit ne chauffe, et garde ses propres limites de sécurité quoi qu'en disent la recette, l'agent ou le réseau. Cinq points d'accès, un document de capacités, des tests publics.",
+  "message": "<p>Vous possédez déjà la partie difficile : le mouvement, le contrôle de la chaleur, les capteurs. Cookwala vous donne la couche tâche au-dessus, ouverte et sans redevance : un format de recette qu'une machine peut planifier, des enveloppes d'opération avec des bandes physiques, une échelle de capteurs par étape, des limites de sécurité locales que rien ne peut relever, et un refus qui est une réponse normale, pas une erreur. Vos clients obtiennent toutes les cuisines sans que vous écriviez une recette ; votre régulateur obtient une histoire de sécurité lisible ; vos commerciaux obtiennent un rapport de conformité signé plutôt qu'une affirmation.</p><p>Ce qui existe aujourd'hui : l'API Core 0.2, un exécuteur de référence à faire tourner à côté du vôtre, 51 vecteurs de conformité Core dont les dry runs d'exécuteur, un format de rapport signé et un vérificateur. Ce qui n'existe pas : un certificateur, un test matériel, une deuxième implémentation. Vous seriez le premier, et la norme changerait là où vous montrez qu'elle a tort.</p>",
+  "options": [
+   [
+    "Léger.",
+    "Écrivez un document de capacités pour un produit et faites un dry run des neuf recettes d'exemple dessus, dans le navigateur ou en ligne de commande ; lisez les sections 3 et 6 de Core 0.2 en une soirée."
+   ],
+   [
+    "Moyen.",
+    "Implémentez les cinq points d'accès Core sur un hub à côté de votre firmware, lancez les suites exécuteur, démarrez le hub de référence avec un jeton et comparez les réponses sur le réseau."
+   ],
+   [
+    "Profond.",
+    "Appliquez le paquet de limites de sécurité sur l'appareil, mesurez l'arrêt local, publiez un rapport de conformité signé, ouvrez une pull request qui l'inscrit au registre, et dites-nous quoi changer dans Core 0.3."
+   ]
+  ],
+  "first": "<p>Moins de 15 minutes, sans matériel : lancez les suites exécuteur, puis faites un dry run d'une recette contre votre propre document de capacités.</p><pre class=\"code\"><code>git clone https://github.com/amado2k5/cookwala &amp;&amp; cd cookwala &amp;&amp; pip install -e sdk/python\npython tools/run_conformance.py envelope   # 14 vectors: bands, altitude, sensor ladders\npython tools/run_conformance.py dryrun     # 7 vectors: refusal before heat\ncp examples/capabilities/robot-arm.json my-device.json   # edit ops, sensors, safety\ncookwala dryrun examples/koshari.cookwala.json --device my-device.json --human-present</code></pre><div class=\"output\">conformance: 14/14 passed · conformance: 7/7 passed · accepted or refused with the step and the reason</div>",
+  "flow": [
+   "Écrire le document de capacités : opérations, capteurs avec leur précision, sécurité (certifications, détection de présence, arrêt)",
+   "Faire un dry run des recettes d'exemple ; chaque refus nomme l'étape et la raison",
+   "Implémenter POST /v1/executions, GET status, stop, resume et le journal, plus GET /v1/capabilities et /v1/safety-limits",
+   "Lancer les suites exécuteur (envelope, dryrun, transitions) et les vérifications réseau du README du hub",
+   "Publier un rapport de conformité signé ; en attendant un service de registre, une pull request l'ajoute au fichier du registre",
+   "Rien n'est encore certifié : aucun certificateur n'existe, et le rapport dit ce qu'il prouve et ce qu'il ne prouve pas"
+  ],
+  "work": [
+   "Une définition de tâche et un test de réussite que vous n'avez pas eu à écrire",
+   "Des recettes de toutes les cuisines, au nom de leur cuisinier, sans équipe recettes",
+   "Une histoire de sécurité qu'un régulateur et un assureur peuvent lire ; un rapport de conformité comme document commercial",
+   "Une voix dans Core 0.3 : le retour du premier implémenteur fixe la version suivante"
+  ],
+  "society": [
+   "Des machines qui refusent plutôt que deviner : moins d'incendies de cuisine et de maladies d'origine alimentaire",
+   "Des appareils qui héritent des cuisines du monde plutôt que de quelques-unes",
+   "Un registre public de ce qu'un appareil applique, vérifiable par chacun"
+  ],
+  "links": [
+   [
+    "Hub de référence et vérifications réseau",
+    "/docs/HUB/"
+   ],
+   [
+    "Core 0.2",
+    "/docs/CORE/"
+   ],
+   [
+    "Conformité et chemin vers la certification",
+    "/docs/CERTIFICATION/"
+   ],
+   [
+    "Robots, ROS 2 et jeux de données",
+    "/docs/ROBOTICS/"
+   ],
+   [
+    "Schéma des capacités",
+    "/v1/schemas/capabilities.schema.json"
+   ]
+  ]
  }
 }

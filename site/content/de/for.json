@@ -618,5 +618,67 @@
     "/contribute/"
    ]
   ]
+ },
+ "device-makers": {
+  "short": "Gerätehersteller",
+  "title": "Für Gerätehersteller: Öfen, Kochfelder, Multikocher, Küchenroboter und Humanoide",
+  "lead": "Ein Gerät, das Cookwala umsetzt, liest ein signiertes Rezept, prüft jeden Schritt gegen das, was es kann und messen kann, lehnt ab, was es nicht prüfen kann, bevor etwas aufheizt, und behält seine eigenen Sicherheitsgrenzen, was auch immer Rezept, Agent oder Netz sagen. Fünf Endpunkte, ein Fähigkeitsdokument, öffentliche Tests.",
+  "message": "<p>Den schweren Teil besitzen Sie schon: Bewegung, Wärmeregelung, Sensorik. Cookwala gibt Ihnen die Aufgabenebene darüber, offen und lizenzgebührenfrei: ein Rezeptformat, das eine Maschine planen kann, Operationshüllen mit physikalischen Bändern, eine Sensorleiter pro Schritt, lokale Sicherheitsgrenzen, die nichts anheben kann, und eine Ablehnung, die eine normale Antwort ist, kein Fehler. Ihre Kunden bekommen jede Küche, ohne dass Sie ein Rezept schreiben; Ihre Aufsicht bekommt eine lesbare Sicherheitsgeschichte; Ihr Vertrieb bekommt einen signierten Konformitätsbericht statt einer Behauptung.</p><p>Was heute existiert: die Core-0.2-API, ein Referenz-Executor neben Ihrem, 51 Core-Konformitätsvektoren einschließlich Executor-Probeläufen, ein signiertes Berichtsformat und ein Prüfer. Was nicht existiert: ein Zertifizierer, ein Hardwaretest, eine zweite Implementierung. Sie wären der erste, und der Standard würde sich dort ändern, wo Sie zeigen, dass er falsch liegt.</p>",
+  "options": [
+   [
+    "Leicht.",
+    "Schreiben Sie ein Fähigkeitsdokument für ein Produkt und lassen Sie die neun Beispielrezepte im Browser oder in der Kommandozeile dagegen laufen; lesen Sie Core 0.2 Abschnitt 3 und 6 an einem Abend."
+   ],
+   [
+    "Mittel.",
+    "Setzen Sie die fünf Core-Endpunkte auf einem Hub neben Ihrer Firmware um, lassen Sie die Executor-Suiten laufen, starten Sie den Referenz-Hub mit Token und vergleichen Sie die Antworten auf der Leitung."
+   ],
+   [
+    "Tief.",
+    "Setzen Sie das Sicherheitsgrenzen-Paket auf dem Gerät durch, messen Sie den lokalen Stopp, veröffentlichen Sie einen signierten Konformitätsbericht, öffnen Sie einen Pull Request, der ihn im Register führt, und sagen Sie uns, was sich in Core 0.3 ändern soll."
+   ]
+  ],
+  "first": "<p>Unter 15 Minuten, ohne Hardware: Executor-Suiten laufen lassen, dann ein Rezept gegen Ihr eigenes Fähigkeitsdokument probelaufen lassen.</p><pre class=\"code\"><code>git clone https://github.com/amado2k5/cookwala &amp;&amp; cd cookwala &amp;&amp; pip install -e sdk/python\npython tools/run_conformance.py envelope   # 14 vectors: bands, altitude, sensor ladders\npython tools/run_conformance.py dryrun     # 7 vectors: refusal before heat\ncp examples/capabilities/robot-arm.json my-device.json   # edit ops, sensors, safety\ncookwala dryrun examples/koshari.cookwala.json --device my-device.json --human-present</code></pre><div class=\"output\">conformance: 14/14 passed · conformance: 7/7 passed · accepted or refused with the step and the reason</div>",
+  "flow": [
+   "Das Fähigkeitsdokument schreiben: Operationen, Sensoren mit Genauigkeit, Sicherheit (Zertifizierungen, Anwesenheitserkennung, Stopp)",
+   "Die Beispielrezepte probelaufen lassen; jede Ablehnung nennt Schritt und Grund",
+   "POST /v1/executions, GET status, stop, resume und das Protokoll umsetzen, dazu GET /v1/capabilities und /v1/safety-limits",
+   "Die Executor-Suiten (envelope, dryrun, transitions) und die Leitungsprüfungen aus dem Hub-README laufen lassen",
+   "Einen signierten Konformitätsbericht veröffentlichen; bis ein Registerdienst existiert, fügt ihn ein Pull Request in die Registerdatei ein",
+   "Nichts ist bisher zertifiziert: es gibt keinen Zertifizierer, und der Bericht sagt, was er beweist und was nicht"
+  ],
+  "work": [
+   "Eine Aufgabendefinition und ein Erfolgstest, die Sie nicht schreiben mussten",
+   "Rezepte aus jeder Küche, mit dem Namen des Kochs, ohne Rezeptteam",
+   "Eine Sicherheitsgeschichte, die Aufsicht und Versicherer lesen können; ein Konformitätsbericht als Verkaufsdokument",
+   "Ein Wort bei Core 0.3: das Feedback des ersten Implementierers bestimmt die nächste Version"
+  ],
+  "society": [
+   "Maschinen, die ablehnen statt zu raten: weniger Küchenbrände und Lebensmittelerkrankungen",
+   "Geräte, die die Küchen der Welt erben statt weniger",
+   "Ein öffentlicher Nachweis dessen, was ein Gerät durchsetzt, von jedem prüfbar"
+  ],
+  "links": [
+   [
+    "Referenz-Hub und Leitungsprüfungen",
+    "/docs/HUB/"
+   ],
+   [
+    "Core 0.2",
+    "/docs/CORE/"
+   ],
+   [
+    "Konformität und der Weg zur Zertifizierung",
+    "/docs/CERTIFICATION/"
+   ],
+   [
+    "Roboter, ROS 2 und Datensätze",
+    "/docs/ROBOTICS/"
+   ],
+   [
+    "Fähigkeitsschema",
+    "/v1/schemas/capabilities.schema.json"
+   ]
+  ]
  }
 }

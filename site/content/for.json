@@ -3,276 +3,1401 @@
   {
    "slug": "developers",
    "en": {
-    "short": "Builders", "title": "For developers, robot and appliance makers, and AI-agent builders",
+    "short": "Builders",
+    "title": "For developers, robot and appliance makers, and AI-agent builders",
     "lead": "Robots and appliances are learning to move. Nobody had written down, in a form a machine can check, what \"simmer\" means, when chicken is safe, or when a step must be refused. Cookwala is that layer, and it comes with a conformance suite you can run today.",
     "message": "<p>Cookwala gives you a task definition and a success test for cooking that is open, royalty-free, model-neutral and device-neutral: recipes a machine can plan, end conditions it can measure, and safety limits it enforces on itself. It sits above motion: your robot learns manipulation its own way; Cookwala tells it what to make, when it is done and what must never happen, and gets back a log.</p><p>For agent builders: a mandate model, an untrusted-text rule and a ten-case benchmark that checks whether your agent obeys instructions planted in recipes and listings, plus an MCP server that gives any agent safe, read-only access to recipes and dry runs.</p>",
-    "options": [["Light.", "Run the browser dry run; read Core 0.2 in an evening."], ["Medium.", "Install the Python package, dry-run your device's capabilities against the recipes, run the {{stat:conformanceVectors}} conformance vectors, start the reference hub, add the MCP server to your agent."], ["Deep.", "Implement the Core API on a device or hub, publish a conformance report, list your device, write a ROS 2 bridge node, add attack cases to the agent-safety benchmark, propose an RFC."]],
+    "options": [
+     [
+      "Light.",
+      "Run the browser dry run; read Core 0.2 in an evening."
+     ],
+     [
+      "Medium.",
+      "Install the Python package, dry-run your device's capabilities against the recipes, run the {{stat:conformanceVectors}} conformance vectors, start the reference hub, add the MCP server to your agent."
+     ],
+     [
+      "Deep.",
+      "Implement the Core API on a device or hub, publish a conformance report, list your device, write a ROS 2 bridge node, add attack cases to the agent-safety benchmark, propose an RFC."
+     ]
+    ],
     "first": "<p>Under 15 minutes, no hardware:</p><pre class=\"code\"><code>git clone https://github.com/amado2k5/cookwala &amp;&amp; cd cookwala &amp;&amp; pip install -e sdk/python\ncookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/robot-arm.json\ncookwala conformance --report report.json</code></pre><div class=\"output\">refused: cw.op.boil, missing_capability (no person present) · then {{stat:conformanceVectors}}/{{stat:conformanceVectors}} passed, report.json written</div>",
-    "flow": ["Dry run against the example recipes", "Implement the Core API against the reference hub", "Pass conformance and publish the signed report", "List the device in the directory", "Consented execution logs become LeRobot datasets and OpenTelemetry traces"],
-    "work": ["A shared task definition and public benchmark to measure against", "Recipes in every cuisine without writing them", "A safety story regulators can read; a conformance report as a sales document", "First-mover standing in a standard governed by its implementers"],
-    "society": ["Fewer kitchen fires and foodborne illnesses from machines that refuse rather than guess", "Machines that inherit the world's cuisines instead of a few", "Agents that act for people only under a mandate"],
-    "links": [["Developers portal", "/developers/"], ["Core 0.2", "/docs/CORE/"], ["Robots, ROS 2, datasets", "/docs/ROBOTICS/"], ["Agent-safety benchmark", "/docs/AGENT-SAFETY/"]]
+    "flow": [
+     "Dry run against the example recipes",
+     "Implement the Core API against the reference hub",
+     "Pass conformance and publish the signed report",
+     "List the device in the directory",
+     "Consented execution logs become LeRobot datasets and OpenTelemetry traces"
+    ],
+    "work": [
+     "A shared task definition and public benchmark to measure against",
+     "Recipes in every cuisine without writing them",
+     "A safety story regulators can read; a conformance report as a sales document",
+     "First-mover standing in a standard governed by its implementers"
+    ],
+    "society": [
+     "Fewer kitchen fires and foodborne illnesses from machines that refuse rather than guess",
+     "Machines that inherit the world's cuisines instead of a few",
+     "Agents that act for people only under a mandate"
+    ],
+    "links": [
+     [
+      "Developers portal",
+      "/developers/"
+     ],
+     [
+      "Core 0.2",
+      "/docs/CORE/"
+     ],
+     [
+      "Robots, ROS 2, datasets",
+      "/docs/ROBOTICS/"
+     ],
+     [
+      "Agent-safety benchmark",
+      "/docs/AGENT-SAFETY/"
+     ]
+    ]
    },
    "ar": {
-    "short": "البنّاؤون", "title": "للمطوّرين وصانعي الروبوتات والأجهزة وبناة وكلاء الذكاء الاصطناعي",
+    "short": "البنّاؤون",
+    "title": "للمطوّرين وصانعي الروبوتات والأجهزة وبناة وكلاء الذكاء الاصطناعي",
     "lead": "تتعلم الروبوتات والأجهزة الحركة. لكن أحدًا لم يكتب، بصيغة تستطيع الآلة التحقق منها، ما معنى «نار هادئة»، أو متى يكون الدجاج آمنًا، أو متى يجب رفض خطوة. كوكوالا هو تلك الطبقة، ومعه مجموعة اختبارات مطابقة تستطيع تشغيلها اليوم.",
     "message": "<p>يمنحك كوكوالا تعريفًا للمهمة واختبارًا للنجاح في الطهي، مفتوحًا وبلا رسوم ومحايدًا تجاه النماذج والأجهزة: وصفات تستطيع الآلة التخطيط لها، وشروط إنهاء تستطيع قياسها، وحدود سلامة تفرضها على نفسها. وهو فوق مستوى الحركة: يتعلم روبوتك المناولة بطريقته؛ ويخبره كوكوالا بما يطبخ ومتى ينضج وما الذي لا يجوز أن يحدث، ويستعيد سجلًا.</p><p>لبناة الوكلاء: نموذج تفويض، وقاعدة «النص بيانات لا تعليمات»، ومعيار من عشر حالات يفحص هل يطيع وكيلك تعليمات مزروعة في الوصفات والقوائم، وخادم MCP يمنح أي وكيل وصولًا آمنًا للقراءة فقط إلى الوصفات والتجارب الجافة.</p>",
-    "options": [["خفيف.", "شغّل التجربة الجافة في المتصفح؛ اقرأ النواة 0.2 في أمسية."], ["متوسط.", "ثبّت حزمة بايثون، وجرّب قدرات جهازك على الوصفات، وشغّل {{stat:conformanceVectors}} متّجه مطابقة، وشغّل المحور المرجعي، وأضف خادم MCP إلى وكيلك."], ["عميق.", "نفّذ واجهة النواة على جهاز أو موزّع، وانشر تقرير مطابقة، وأدرج جهازك، واكتب عقدة جسر ROS 2، وأضف حالات هجوم إلى معيار سلامة الوكلاء، واقترح RFC."]],
+    "options": [
+     [
+      "خفيف.",
+      "شغّل التجربة الجافة في المتصفح؛ اقرأ النواة 0.2 في أمسية."
+     ],
+     [
+      "متوسط.",
+      "ثبّت حزمة بايثون، وجرّب قدرات جهازك على الوصفات، وشغّل {{stat:conformanceVectors}} متّجه مطابقة، وشغّل المحور المرجعي، وأضف خادم MCP إلى وكيلك."
+     ],
+     [
+      "عميق.",
+      "نفّذ واجهة النواة على جهاز أو موزّع، وانشر تقرير مطابقة، وأدرج جهازك، واكتب عقدة جسر ROS 2، وأضف حالات هجوم إلى معيار سلامة الوكلاء، واقترح RFC."
+     ]
+    ],
     "first": "<p>أقل من 15 دقيقة، بلا عتاد:</p><pre class=\"code\"><code>git clone https://github.com/amado2k5/cookwala &amp;&amp; cd cookwala &amp;&amp; pip install -e sdk/python\ncookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/robot-arm.json\ncookwala conformance --report report.json</code></pre><div class=\"output\">refused: cw.op.boil, missing_capability · ثم {{stat:conformanceVectors}}/{{stat:conformanceVectors}} passed وكُتب report.json</div>",
-    "flow": ["تجربة جافة على الوصفات النموذجية", "تنفيذ واجهة النواة مقابل المحور المرجعي", "اجتياز المطابقة ونشر التقرير الموقّع", "إدراج الجهاز في الدليل", "سجلات التنفيذ بموافقة الأسرة تصبح مجموعات بيانات LeRobot وآثار OpenTelemetry"],
-    "work": ["تعريف مهمة مشترك ومعيار عام تقيس به", "وصفات من كل المطابخ بلا كتابتها", "قصة سلامة يقرؤها المنظّمون؛ تقرير مطابقة كوثيقة بيع", "مكانة الريادة في معيار يحكمه منفّذوه"],
-    "society": ["حرائق مطابخ وأمراض منقولة بالغذاء أقل بفضل آلات ترفض بدل أن تخمّن", "آلات ترث مطابخ العالم كلها لا بضعة منها", "وكلاء يتصرفون للناس تحت تفويض فقط"],
-    "links": [["بوابة المطوّرين", "/developers/"], ["النواة 0.2", "/docs/CORE/"], ["الروبوتات وROS 2 والبيانات", "/docs/ROBOTICS/"], ["معيار سلامة الوكلاء", "/docs/AGENT-SAFETY/"]]
+    "flow": [
+     "تجربة جافة على الوصفات النموذجية",
+     "تنفيذ واجهة النواة مقابل المحور المرجعي",
+     "اجتياز المطابقة ونشر التقرير الموقّع",
+     "إدراج الجهاز في الدليل",
+     "سجلات التنفيذ بموافقة الأسرة تصبح مجموعات بيانات LeRobot وآثار OpenTelemetry"
+    ],
+    "work": [
+     "تعريف مهمة مشترك ومعيار عام تقيس به",
+     "وصفات من كل المطابخ بلا كتابتها",
+     "قصة سلامة يقرؤها المنظّمون؛ تقرير مطابقة كوثيقة بيع",
+     "مكانة الريادة في معيار يحكمه منفّذوه"
+    ],
+    "society": [
+     "حرائق مطابخ وأمراض منقولة بالغذاء أقل بفضل آلات ترفض بدل أن تخمّن",
+     "آلات ترث مطابخ العالم كلها لا بضعة منها",
+     "وكلاء يتصرفون للناس تحت تفويض فقط"
+    ],
+    "links": [
+     [
+      "بوابة المطوّرين",
+      "/developers/"
+     ],
+     [
+      "النواة 0.2",
+      "/docs/CORE/"
+     ],
+     [
+      "الروبوتات وROS 2 والبيانات",
+      "/docs/ROBOTICS/"
+     ],
+     [
+      "معيار سلامة الوكلاء",
+      "/docs/AGENT-SAFETY/"
+     ]
+    ]
+   }
+  },
+  {
+   "slug": "device-makers",
+   "en": {
+    "short": "Device makers",
+    "title": "For device makers: ovens, hobs, multicookers, kitchen robots and humanoids",
+    "lead": "A device that implements Cookwala reads a signed recipe, checks every step against what it can do and sense, refuses what it cannot verify before anything heats up, and keeps its own safety limits whatever the recipe, the agent or the network says. Five endpoints, one capabilities document, public tests.",
+    "message": "<p>You already own the hard part: motion, heat control, sensing. Cookwala gives you the task layer above it, open and royalty-free: a recipe format a machine can plan, operation envelopes with physical bands, a sensor ladder per step, local safety limits that nothing can raise, and a refusal that is a normal answer, not an error. Your customers get every cuisine without you writing a recipe; your regulator gets a safety story they can read; your sales team gets a signed conformance report instead of a claim.</p><p>What exists today: the Core 0.2 API, a reference executor you can run beside yours, 51 Core conformance vectors including executor dry runs, a signed report format and a verifier. What does not: a certifier, a hardware test, a second implementation. You would be the first, and the standard would change where you show it is wrong.</p>",
+    "options": [
+     [
+      "Light.",
+      "Write a capabilities document for one product and dry-run the nine example recipes against it in the browser or the CLI; read Core 0.2 section 3 and 6 in an evening."
+     ],
+     [
+      "Medium.",
+      "Implement the five Core endpoints on a hub beside your firmware, run the executor suites, start the reference hub with a token and compare answers on the wire."
+     ],
+     [
+      "Deep.",
+      "Enforce the safety-limits pack on the device, measure the local stop, publish a signed conformance report, open a pull request that lists it in the registry, and tell us what to change in Core 0.3."
+     ]
+    ],
+    "first": "<p>Under 15 minutes, no hardware: run the executor suites, then start the reference executor with authentication on and dry-run a recipe against your own capabilities document.</p><pre class=\"code\"><code>git clone https://github.com/amado2k5/cookwala &amp;&amp; cd cookwala &amp;&amp; pip install -e sdk/python\npython tools/run_conformance.py envelope   # 14 vectors: bands, altitude, sensor ladders\npython tools/run_conformance.py dryrun     # 7 vectors: refusal before heat\ncp examples/capabilities/robot-arm.json my-device.json   # edit ops, sensors, safety\ncookwala dryrun examples/koshari.cookwala.json --device my-device.json --human-present</code></pre><div class=\"output\">conformance: 14/14 passed · conformance: 7/7 passed · accepted or refused with the step and the reason</div>",
+    "flow": [
+     "Write the capabilities document: operations, sensors with accuracy, safety (certifications, presence detection, stop)",
+     "Dry-run the example recipes; every refusal names the step and the reason",
+     "Implement POST /v1/executions, GET status, stop, resume and the log, plus GET /v1/capabilities and /v1/safety-limits",
+     "Run the executor suites (envelope, dryrun, transitions) and the wire checks in the hub README",
+     "Publish a signed conformance report; until a registry service exists, a pull request adds it to the registry file",
+     "Nothing is certified yet: no certifier exists, and the report says what it proves and what it does not"
+    ],
+    "work": [
+     "A task definition and a success test you did not have to write",
+     "Recipes in every cuisine, with the cook's name on them, without a recipe team",
+     "A safety story a regulator and an insurer can read; a conformance report as a sales document",
+     "A say in Core 0.3: the first implementer's feedback sets the next version"
+    ],
+    "society": [
+     "Machines that refuse rather than guess: fewer kitchen fires and foodborne illnesses",
+     "Appliances that inherit the world's cuisines instead of a few",
+     "A public record of what a device enforces, checkable by anyone"
+    ],
+    "links": [
+     [
+      "Reference hub and wire checks",
+      "/docs/HUB/"
+     ],
+     [
+      "Core 0.2",
+      "/docs/CORE/"
+     ],
+     [
+      "Conformance and the path to certification",
+      "/docs/CERTIFICATION/"
+     ],
+     [
+      "Robots, ROS 2 and datasets",
+      "/docs/ROBOTICS/"
+     ],
+     [
+      "Capabilities schema",
+      "/v1/schemas/capabilities.schema.json"
+     ]
+    ]
+   },
+   "ar": {
+    "short": "صانعو الأجهزة",
+    "title": "لصانعي الأجهزة: الأفران والمواقد والطباخات متعددة الوظائف وروبوتات المطبخ والروبوتات البشرية",
+    "lead": "الجهاز الذي يطبّق كوكوالا يقرأ وصفة موقَّعة، ويفحص كل خطوة مقابل ما يستطيع فعله واستشعاره، ويرفض ما لا يستطيع التحقق منه قبل أن يسخن أي شيء، ويحافظ على حدود سلامته مهما قالت الوصفة أو الوكيل أو الشبكة. خمس نقاط نهاية، وثيقة قدرات واحدة، واختبارات عامة.",
+    "message": "<p>أنت تملك الجزء الصعب أصلًا: الحركة والتحكم بالحرارة والاستشعار. يمنحك كوكوالا طبقة المهمة فوق ذلك، مفتوحة وبلا رسوم: صيغة وصفات يمكن لآلة أن تخطط لها، أغلفة عمليات بنطاقات فيزيائية، سلّم مستشعرات لكل خطوة، حدود سلامة محلية لا يرفعها شيء، ورفض هو إجابة عادية لا خطأ. يحصل عملاؤك على كل المطابخ دون أن تكتب وصفة؛ ويحصل المنظّم على قصة سلامة يمكنه قراءتها؛ ويحصل فريق المبيعات على تقرير مطابقة موقَّع بدل ادعاء.</p><p>ما هو موجود اليوم: واجهة Core 0.2، منفّذ مرجعي يمكنك تشغيله بجانب جهازك، 51 متّجه مطابقة أساسيًا تشمل التشغيل الجاف للمنفّذ، صيغة تقرير موقَّع وأداة تحقق. وما ليس موجودًا: جهة اعتماد، اختبار عتاد، تطبيق ثانٍ. ستكون الأول، وسيتغيّر المعيار حيث تُثبت أنه مخطئ.</p>",
+    "options": [
+     [
+      "خفيف.",
+      "اكتب وثيقة قدرات لمنتج واحد وجرّب الوصفات التسع النموذجية عليها في المتصفح أو سطر الأوامر؛ اقرأ القسمين 3 و6 من Core 0.2 في أمسية."
+     ],
+     [
+      "متوسط.",
+      "طبّق نقاط النهاية الخمس على موزّع بجانب البرنامج الثابت، وشغّل مجموعات المنفّذ، وابدأ الموزّع المرجعي برمز دخول وقارن الإجابات على الشبكة."
+     ],
+     [
+      "عميق.",
+      "طبّق حزمة حدود السلامة على الجهاز، وقِس الإيقاف المحلي، وانشر تقرير مطابقة موقَّعًا، وافتح طلب دمج يدرجه في السجل، وأخبرنا بما يجب تغييره في Core 0.3."
+     ]
+    ],
+    "first": "<p>أقل من 15 دقيقة، بلا عتاد: شغّل مجموعات المنفّذ، ثم ابدأ المنفّذ المرجعي مع تفعيل المصادقة وجرّب وصفة جافًا على وثيقة قدراتك.</p><pre class=\"code\"><code>git clone https://github.com/amado2k5/cookwala &amp;&amp; cd cookwala &amp;&amp; pip install -e sdk/python\npython tools/run_conformance.py envelope\npython tools/run_conformance.py dryrun\ncp examples/capabilities/robot-arm.json my-device.json\ncookwala dryrun examples/koshari.cookwala.json --device my-device.json --human-present</code></pre><div class=\"output\">conformance: 14/14 passed · conformance: 7/7 passed · مقبول أو مرفوض مع الخطوة والسبب</div>",
+    "flow": [
+     "اكتب وثيقة القدرات: العمليات، المستشعرات بدقّتها، السلامة (الشهادات، كشف الحضور، الإيقاف)",
+     "جرّب الوصفات النموذجية جافًا؛ كل رفض يسمّي الخطوة والسبب",
+     "طبّق POST /v1/executions وقراءة الحالة والإيقاف والاستئناف والسجل، مع GET /v1/capabilities و/v1/safety-limits",
+     "شغّل مجموعات المنفّذ (envelope وdryrun وtransitions) وفحوص الشبكة في دليل الموزّع",
+     "انشر تقرير مطابقة موقَّعًا؛ وحتى توجد خدمة سجل، يضيفه طلب دمج إلى ملف السجل",
+     "لا شيء معتمد بعد: لا توجد جهة اعتماد، والتقرير يقول ما يثبته وما لا يثبته"
+    ],
+    "work": [
+     "تعريف مهمة واختبار نجاح لم تضطر لكتابتهما",
+     "وصفات من كل المطابخ باسم طاهيها، بلا فريق وصفات",
+     "قصة سلامة يقرؤها المنظّم وشركة التأمين؛ تقرير مطابقة كوثيقة مبيعات",
+     "كلمة في Core 0.3: ملاحظات أول مطبّق ترسم النسخة التالية"
+    ],
+    "society": [
+     "آلات ترفض بدل أن تخمّن: حرائق مطابخ وأمراض منقولة بالغذاء أقل",
+     "أجهزة ترث مطابخ العالم بدل بضعة منها",
+     "سجل عام لما يفرضه الجهاز يمكن لأي أحد التحقق منه"
+    ],
+    "links": [
+     [
+      "الموزّع المرجعي وفحوص الشبكة",
+      "/docs/HUB/"
+     ],
+     [
+      "Core 0.2",
+      "/docs/CORE/"
+     ],
+     [
+      "المطابقة والطريق إلى الاعتماد",
+      "/docs/CERTIFICATION/"
+     ],
+     [
+      "الروبوتات وROS 2 ومجموعات البيانات",
+      "/docs/ROBOTICS/"
+     ],
+     [
+      "مخطط القدرات",
+      "/v1/schemas/capabilities.schema.json"
+     ]
+    ]
    }
   },
   {
    "slug": "companies",
    "en": {
-    "short": "Companies", "title": "For companies: startups, enterprises, grocers, restaurants, insurers, certifiers",
+    "short": "Companies",
+    "title": "For companies: startups, enterprises, grocers, restaurants, insurers, certifiers",
     "lead": "Every company that touches food will meet cooking machines and AI agents in the next few years. Cookwala gives you one interface for all of them, with safety limits enforced on the device and records you can audit.",
     "message": "<p>For grocers and delivery: receive delivery windows and allergen requirements, never a family's schedule. For restaurants and food service: a kitchen and production-run record that links device executions to meals served and food-safety control points. For insurers and certifiers: a conformance report format and an anonymous incident feed designed for you. For startups: a neutral layer instead of a dozen vendor integrations, and a market profile (experimental) for offers and quotes.</p>",
-    "options": [["Light.", "Read the investors and partners page and the trust page; map your products to the ingredient classes and operations."], ["Medium.", "Publish an offer feed (market profile, experimental) or a surplus offer to a local program; run the agent-safety benchmark on the agent you plan to deploy."], ["Deep.", "Implement the Core API in a product; sponsor a conformance verification; join the steering committee when it forms; adopt the certification path."]],
+    "options": [
+     [
+      "Light.",
+      "Read the investors and partners page and the trust page; map your products to the ingredient classes and operations."
+     ],
+     [
+      "Medium.",
+      "Publish an offer feed (market profile, experimental) or a surplus offer to a local program; run the agent-safety benchmark on the agent you plan to deploy."
+     ],
+     [
+      "Deep.",
+      "Implement the Core API in a product; sponsor a conformance verification; join the steering committee when it forms; adopt the certification path."
+     ]
+    ],
     "first": "<p>Convert one product line to a market Offer with GTINs and allergen credentials, validate it, and see which example recipes it can supply:</p><pre class=\"code\"><code>cookwala validate   # schemas, examples, vocabularies, APIs</code></pre><div class=\"output\">examples/market/offer-feed.json: ok</div>",
-    "flow": ["Offer feed or surplus offer", "Derived constraints from households, never their facts", "Orders through your own checkout; Cookwala never carries payment data", "Fulfilment events", "Reputation from execution reports, with consent"],
-    "work": ["Access to a neutral layer instead of many vendor integrations", "Demand signals that reduce waste (later, after competition-law review)", "Later: certification that insurers can price", "A public record of safety"],
-    "society": ["Less food lost between store and plate", "Surplus reaching kitchens before it rots", "Machines in homes that cannot be talked into unsafe actions"],
-    "links": [["Investors and partners", "/investors/"], ["Trust", "/trust/"], ["Kitchens and production runs", "/docs/KITCHENS-AND-FLEETS/"], ["Ecosystem and market (experimental)", "/docs/ECOSYSTEM/"]]
+    "flow": [
+     "Offer feed or surplus offer",
+     "Derived constraints from households, never their facts",
+     "Orders through your own checkout; Cookwala never carries payment data",
+     "Fulfilment events",
+     "Reputation from execution reports, with consent"
+    ],
+    "work": [
+     "Access to a neutral layer instead of many vendor integrations",
+     "Demand signals that reduce waste (later, after competition-law review)",
+     "Later: certification that insurers can price",
+     "A public record of safety"
+    ],
+    "society": [
+     "Less food lost between store and plate",
+     "Surplus reaching kitchens before it rots",
+     "Machines in homes that cannot be talked into unsafe actions"
+    ],
+    "links": [
+     [
+      "Investors and partners",
+      "/investors/"
+     ],
+     [
+      "Trust",
+      "/trust/"
+     ],
+     [
+      "Kitchens and production runs",
+      "/docs/KITCHENS-AND-FLEETS/"
+     ],
+     [
+      "Ecosystem and market (experimental)",
+      "/docs/ECOSYSTEM/"
+     ]
+    ]
    },
    "ar": {
-    "short": "الشركات", "title": "للشركات: الناشئة والكبرى والبقالات والمطاعم وشركات التأمين وجهات الاعتماد",
+    "short": "الشركات",
+    "title": "للشركات: الناشئة والكبرى والبقالات والمطاعم وشركات التأمين وجهات الاعتماد",
     "lead": "كل شركة تلمس الطعام ستقابل آلات الطهي ووكلاء الذكاء الاصطناعي خلال السنوات القليلة المقبلة. يمنحك كوكوالا واجهة واحدة لها جميعًا، تفرض حدود السلامة على الجهاز وتحتفظ بسجلات يمكن تدقيقها.",
     "message": "<p>للبقالات والتوصيل: تتلقى نوافذ تسليم ومتطلبات مسببات الحساسية، لا جدول الأسرة أبدًا. للمطاعم وخدمات الطعام: سجل مطبخ ودورة إنتاج يربط تنفيذ الأجهزة بالوجبات المقدمة ونقاط التحكم في سلامة الغذاء. لشركات التأمين وجهات الاعتماد: صيغة تقرير مطابقة وتغذية حوادث مجهولة الهوية مصممتان لكم. للشركات الناشئة: طبقة محايدة بدل عشرات التكاملات، وملف سوق (تجريبي) للعروض وطلبات الأسعار.</p>",
-    "options": [["خفيف.", "اقرأ صفحة المستثمرين والشركاء وصفحة الثقة؛ واربط منتجاتك بفئات المكونات والعمليات."], ["متوسط.", "انشر تغذية عروض (ملف السوق، تجريبي) أو عرض فائض لبرنامج محلي؛ وشغّل معيار سلامة الوكلاء على الوكيل الذي تنوي نشره."], ["عميق.", "نفّذ واجهة النواة في منتج؛ وارعَ تحققًا من المطابقة؛ وانضم إلى اللجنة التوجيهية عند تشكيلها؛ وتبنَّ مسار الاعتماد."]],
+    "options": [
+     [
+      "خفيف.",
+      "اقرأ صفحة المستثمرين والشركاء وصفحة الثقة؛ واربط منتجاتك بفئات المكونات والعمليات."
+     ],
+     [
+      "متوسط.",
+      "انشر تغذية عروض (ملف السوق، تجريبي) أو عرض فائض لبرنامج محلي؛ وشغّل معيار سلامة الوكلاء على الوكيل الذي تنوي نشره."
+     ],
+     [
+      "عميق.",
+      "نفّذ واجهة النواة في منتج؛ وارعَ تحققًا من المطابقة؛ وانضم إلى اللجنة التوجيهية عند تشكيلها؛ وتبنَّ مسار الاعتماد."
+     ]
+    ],
     "first": "<p>حوّل خط منتج واحدًا إلى عرض سوق مع أرقام GTIN وشهادات مسببات الحساسية، وتحقق منه، وانظر أي الوصفات النموذجية يستطيع تزويدها:</p><pre class=\"code\"><code>cookwala validate</code></pre><div class=\"output\">examples/market/offer-feed.json: ok</div>",
-    "flow": ["تغذية عروض أو عرض فائض", "قيود مشتقة من الأسر، لا حقائقها", "الطلبات عبر دفعك أنت؛ كوكوالا لا يحمل بيانات دفع", "أحداث التنفيذ", "السمعة من تقارير التنفيذ بموافقة"],
-    "work": ["طبقة محايدة بدل تكاملات كثيرة", "إشارات طلب تقلل الهدر (لاحقًا، بعد مراجعة قانون المنافسة)", "لاحقًا: اعتماد يمكن لشركات التأمين تسعيره", "سجل عام للسلامة"],
-    "society": ["طعام أقل يُفقد بين المتجر والطبق", "فائض يصل إلى المطابخ قبل أن يفسد", "آلات في البيوت لا يمكن إقناعها بأفعال غير آمنة"],
-    "links": [["المستثمرون والشركاء", "/investors/"], ["الثقة", "/trust/"], ["المطابخ ودورات الإنتاج", "/docs/KITCHENS-AND-FLEETS/"], ["المنظومة والسوق (تجريبي)", "/docs/ECOSYSTEM/"]]
+    "flow": [
+     "تغذية عروض أو عرض فائض",
+     "قيود مشتقة من الأسر، لا حقائقها",
+     "الطلبات عبر دفعك أنت؛ كوكوالا لا يحمل بيانات دفع",
+     "أحداث التنفيذ",
+     "السمعة من تقارير التنفيذ بموافقة"
+    ],
+    "work": [
+     "طبقة محايدة بدل تكاملات كثيرة",
+     "إشارات طلب تقلل الهدر (لاحقًا، بعد مراجعة قانون المنافسة)",
+     "لاحقًا: اعتماد يمكن لشركات التأمين تسعيره",
+     "سجل عام للسلامة"
+    ],
+    "society": [
+     "طعام أقل يُفقد بين المتجر والطبق",
+     "فائض يصل إلى المطابخ قبل أن يفسد",
+     "آلات في البيوت لا يمكن إقناعها بأفعال غير آمنة"
+    ],
+    "links": [
+     [
+      "المستثمرون والشركاء",
+      "/investors/"
+     ],
+     [
+      "الثقة",
+      "/trust/"
+     ],
+     [
+      "المطابخ ودورات الإنتاج",
+      "/docs/KITCHENS-AND-FLEETS/"
+     ],
+     [
+      "المنظومة والسوق (تجريبي)",
+      "/docs/ECOSYSTEM/"
+     ]
+    ]
    }
   },
   {
    "slug": "providers",
    "en": {
-    "short": "Providers", "title": "For providers: grocers, farms, delivery, energy, AI vendors, recipe publishers",
+    "short": "Providers",
+    "title": "For providers: grocers, farms, delivery, energy, AI vendors, recipe publishers",
     "lead": "Providers plug into Cookwala as peers, not tenants. A grocer gets a constraint, never a household's facts. An AI vendor gets a benchmark and an MCP server. A recipe publisher keeps its name on every recipe and publishes a signed catalog from a static folder.",
     "message": "<p>The standard defines a place for each of you and asks for nothing in return: a catalog is a folder with a discovery file; an offer feed maps products to ingredient classes; a signal (experimental) is aggregated and delayed so it is useful for planning and useless for pricing; an AI model is measured by a public benchmark before it is trusted in a kitchen. Reputation comes from outcomes with consent, not from fees.</p>",
-    "options": [["Publish a catalog of recipes.", "A static folder with /.well-known/cookwala.json and signed documents."], ["Publish an offer feed.", "Market profile, experimental; your checkout stays yours."], ["Run the agent-safety benchmark.", "Ten cases; publish results with the model id, date and config hash."], ["Run a registry node.", "Anyone may; cookwala.ai is one of many."], ["Offer surplus by SMS.", "FARM 120KG TOMATO A BB0411 to a program that runs the profile."]],
+    "options": [
+     [
+      "Publish a catalog of recipes.",
+      "A static folder with /.well-known/cookwala.json and signed documents."
+     ],
+     [
+      "Publish an offer feed.",
+      "Market profile, experimental; your checkout stays yours."
+     ],
+     [
+      "Run the agent-safety benchmark.",
+      "Ten cases; publish results with the model id, date and config hash."
+     ],
+     [
+      "Run a registry node.",
+      "Anyone may; cookwala.ai is one of many."
+     ],
+     [
+      "Offer surplus by SMS.",
+      "FARM 120KG TOMATO A BB0411 to a program that runs the profile."
+     ]
+    ],
     "first": "<p>Recipe publisher: scaffold, edit, validate, hash.</p><pre class=\"code\"><code>cookwala init my-dish &amp;&amp; cookwala validate &amp;&amp; cookwala hash my-dish.cookwala.json</code></pre><p>AI vendor: add the MCP server to your client and run the ten agent-safety cases with promptfoo.</p>",
-    "flow": ["Catalog or feed under your proven namespace", "Registry entry with an exact version and a hash", "Recall feed if something goes wrong", "Reputation from outcomes"],
-    "work": ["Reach every device and agent through one format", "Credit and provenance by signature", "A safety benchmark that is a marketing asset when passed honestly"],
-    "society": ["Recipes stay attributed", "Agents that act for people are measured before they are trusted"],
-    "links": [["Registry and directory", "/registry/"], ["Federation: run your own node", "/docs/FEDERATION/"], ["MCP server", "/docs/MCP/"], ["Farmers and supply", "/farmers/"]]
+    "flow": [
+     "Catalog or feed under your proven namespace",
+     "Registry entry with an exact version and a hash",
+     "Recall feed if something goes wrong",
+     "Reputation from outcomes"
+    ],
+    "work": [
+     "Reach every device and agent through one format",
+     "Credit and provenance by signature",
+     "A safety benchmark that is a marketing asset when passed honestly"
+    ],
+    "society": [
+     "Recipes stay attributed",
+     "Agents that act for people are measured before they are trusted"
+    ],
+    "links": [
+     [
+      "Registry and directory",
+      "/registry/"
+     ],
+     [
+      "Federation: run your own node",
+      "/docs/FEDERATION/"
+     ],
+     [
+      "MCP server",
+      "/docs/MCP/"
+     ],
+     [
+      "Farmers and supply",
+      "/farmers/"
+     ]
+    ]
    },
    "ar": {
-    "short": "المزوّدون", "title": "للمزوّدين: البقالات والمزارع والتوصيل والطاقة ومزوّدي النماذج وناشري الوصفات",
+    "short": "المزوّدون",
+    "title": "للمزوّدين: البقالات والمزارع والتوصيل والطاقة ومزوّدي النماذج وناشري الوصفات",
     "lead": "ينضم المزوّدون إلى كوكوالا شركاءَ نظراء لا تابعين. تحصل البقالة على قيد، لا على حقائق الأسرة. يحصل مزوّد الذكاء الاصطناعي على معيار وخادم MCP. يحتفظ ناشر الوصفات باسمه على كل وصفة وينشر كتالوجًا موقّعًا من مجلد ثابت.",
     "message": "<p>يحدد المعيار مكانًا لكل منكم ولا يطلب شيئًا في المقابل: الكتالوج مجلد بملف اكتشاف؛ وتغذية العروض تربط المنتجات بفئات المكونات؛ والإشارة (تجريبية) مجمّعة ومؤجلة فتفيد التخطيط ولا تفيد التسعير؛ ونموذج الذكاء الاصطناعي يُقاس بمعيار عام قبل أن يُوثق به في مطبخ. السمعة تأتي من النتائج بموافقة، لا من الرسوم.</p>",
-    "options": [["انشر كتالوج وصفات.", "مجلد ثابت فيه /.well-known/cookwala.json ووثائق موقّعة."], ["انشر تغذية عروض.", "ملف السوق، تجريبي؛ يبقى الدفع عندك."], ["شغّل معيار سلامة الوكلاء.", "عشر حالات؛ انشر النتائج مع معرّف النموذج والتاريخ وبصمة الإعداد."], ["شغّل عقدة سجل.", "يستطيع أي أحد؛ cookwala.ai واحدة من كثير."], ["اعرض فائضًا بالرسائل.", "FARM 120KG TOMATO A BB0411 إلى برنامج يشغّل الملف."]],
+    "options": [
+     [
+      "انشر كتالوج وصفات.",
+      "مجلد ثابت فيه /.well-known/cookwala.json ووثائق موقّعة."
+     ],
+     [
+      "انشر تغذية عروض.",
+      "ملف السوق، تجريبي؛ يبقى الدفع عندك."
+     ],
+     [
+      "شغّل معيار سلامة الوكلاء.",
+      "عشر حالات؛ انشر النتائج مع معرّف النموذج والتاريخ وبصمة الإعداد."
+     ],
+     [
+      "شغّل عقدة سجل.",
+      "يستطيع أي أحد؛ cookwala.ai واحدة من كثير."
+     ],
+     [
+      "اعرض فائضًا بالرسائل.",
+      "FARM 120KG TOMATO A BB0411 إلى برنامج يشغّل الملف."
+     ]
+    ],
     "first": "<p>ناشر وصفات: أنشئ، وحرّر، وتحقق، واحسب البصمة.</p><pre class=\"code\"><code>cookwala init my-dish &amp;&amp; cookwala validate &amp;&amp; cookwala hash my-dish.cookwala.json</code></pre><p>مزوّد ذكاء اصطناعي: أضف خادم MCP إلى عميلك وشغّل حالات السلامة العشر بـ promptfoo.</p>",
-    "flow": ["كتالوج أو تغذية تحت فضاء أسمائك المُثبت", "مدخل سجل بنسخة دقيقة وبصمة", "تغذية سحب إذا حدث خطأ", "سمعة من النتائج"],
-    "work": ["الوصول إلى كل جهاز ووكيل بصيغة واحدة", "نسب الفضل والمصدر بالتوقيع", "معيار سلامة يصبح أصلًا تسويقيًا عند اجتيازه بصدق"],
-    "society": ["تبقى الوصفات منسوبة لأصحابها", "يُقاس الوكلاء الذين يتصرفون للناس قبل الوثوق بهم"],
-    "links": [["السجل والدليل", "/registry/"], ["الاتحاد: شغّل عقدتك", "/docs/FEDERATION/"], ["خادم MCP", "/docs/MCP/"], ["المزارعون والإمداد", "/farmers/"]]
+    "flow": [
+     "كتالوج أو تغذية تحت فضاء أسمائك المُثبت",
+     "مدخل سجل بنسخة دقيقة وبصمة",
+     "تغذية سحب إذا حدث خطأ",
+     "سمعة من النتائج"
+    ],
+    "work": [
+     "الوصول إلى كل جهاز ووكيل بصيغة واحدة",
+     "نسب الفضل والمصدر بالتوقيع",
+     "معيار سلامة يصبح أصلًا تسويقيًا عند اجتيازه بصدق"
+    ],
+    "society": [
+     "تبقى الوصفات منسوبة لأصحابها",
+     "يُقاس الوكلاء الذين يتصرفون للناس قبل الوثوق بهم"
+    ],
+    "links": [
+     [
+      "السجل والدليل",
+      "/registry/"
+     ],
+     [
+      "الاتحاد: شغّل عقدتك",
+      "/docs/FEDERATION/"
+     ],
+     [
+      "خادم MCP",
+      "/docs/MCP/"
+     ],
+     [
+      "المزارعون والإمداد",
+      "/farmers/"
+     ]
+    ]
    }
   },
   {
    "slug": "food",
    "en": {
-    "short": "Food", "title": "For farmers, cooks, chefs, home cooks and culinary schools",
+    "short": "Food",
+    "title": "For farmers, cooks, chefs, home cooks and culinary schools",
     "lead": "A recipe written for Cookwala keeps your name and your cuisine alive on every device that cooks it, with the steps a machine must never skip written down. A farm with a glut could list it by SMS to any program that runs the profile; none does yet.",
     "message": "<p>The recipe format carries what a dish is: its essential parts, its flexible parts, what is never added, the cook's language and the cook's name. A planner substituting for a budget may change the flexible parts; if it changes an essential one, it is no longer making your dish and must say so. Machines that cook from consented recordings credit the household that taught them. Culinary schools can teach food safety with a format that checks itself.</p>",
-    "options": [["Farmers.", "FARM 120KG TOMATO A BB0411 to a program's gateway where one runs; later, read supply and demand signals that treat every producer the same."], ["Cooks and chefs.", "Turn one recipe you know by heart into a Cookwala recipe; review the step sentences in your language; later, record consented sessions with credit."], ["Schools.", "Use the nine example recipes as teaching cases; add your own; use the lesson kit."]],
+    "options": [
+     [
+      "Farmers.",
+      "FARM 120KG TOMATO A BB0411 to a program's gateway where one runs; later, read supply and demand signals that treat every producer the same."
+     ],
+     [
+      "Cooks and chefs.",
+      "Turn one recipe you know by heart into a Cookwala recipe; review the step sentences in your language; later, record consented sessions with credit."
+     ],
+     [
+      "Schools.",
+      "Use the nine example recipes as teaching cases; add your own; use the lesson kit."
+     ]
+    ],
     "first": "<p>Cooks, no tools needed: write your recipe with one plain sentence per heat step saying how you know it is done and what must never happen; a contributor converts it and keeps your name on it. If you like the command line:</p><pre class=\"code\"><code>cookwala init my-dish\n# edit my-dish.cookwala.json: every heat step gets an until condition and a hazard\ncookwala validate</code></pre><p>Farmers: send one SMS offer to a program that runs the profile. None runs yet; the parser and the vectors exist, and the walkthrough shows what happens.</p>",
-    "flow": ["Recipe → validation → catalog", "Dry run on devices", "Execution logs show how it performs on real machines", "Revisions with evidence; the recipe climbs from V1 to V3"],
-    "work": ["Attribution that travels", "A recipe that can be cooked by machines in other countries", "For farmers, where a program runs the profile: a glut turned into meals instead of waste"],
-    "society": ["Culinary heritage preserved as working knowledge, not video", "Less farm-gate waste"],
-    "links": [["Recipe format", "/docs/RECIPE-FORMAT/"], ["Farmers and supply", "/farmers/"], ["Who inherits a recipe?", "/ideas/inheriting-culinary-culture/"], ["Lesson kit", "/docs/LESSON-KIT/"]]
+    "flow": [
+     "Recipe → validation → catalog",
+     "Dry run on devices",
+     "Execution logs show how it performs on real machines",
+     "Revisions with evidence; the recipe climbs from V1 to V3"
+    ],
+    "work": [
+     "Attribution that travels",
+     "A recipe that can be cooked by machines in other countries",
+     "For farmers, where a program runs the profile: a glut turned into meals instead of waste"
+    ],
+    "society": [
+     "Culinary heritage preserved as working knowledge, not video",
+     "Less farm-gate waste"
+    ],
+    "links": [
+     [
+      "Recipe format",
+      "/docs/RECIPE-FORMAT/"
+     ],
+     [
+      "Farmers and supply",
+      "/farmers/"
+     ],
+     [
+      "Who inherits a recipe?",
+      "/ideas/inheriting-culinary-culture/"
+     ],
+     [
+      "Lesson kit",
+      "/docs/LESSON-KIT/"
+     ]
+    ]
    },
    "ar": {
-    "short": "الطعام", "title": "للمزارعين والطباخين والشيفات وطهاة البيوت ومدارس الطهي",
+    "short": "الطعام",
+    "title": "للمزارعين والطباخين والشيفات وطهاة البيوت ومدارس الطهي",
     "lead": "الوصفة المكتوبة لكوكوالا تبقي اسمك ومطبخك حيّين على كل جهاز يطبخها، مع كتابة الخطوات التي لا يجوز للآلة تخطيها. والمزرعة التي عندها فائض يمكنها عرضه برسالة نصية لأي برنامج يشغّل الملف؛ ولا يشغّله أحد بعد.",
     "message": "<p>تحمل صيغة الوصفة ما هو الطبق: أجزاؤه الجوهرية وأجزاؤه المرنة وما لا يُضاف أبدًا ولغة الطباخ واسمه. المخطِّط الذي يستبدل لضيق الميزانية يغيّر الأجزاء المرنة؛ وإن غيّر جزءًا جوهريًا فلم يعد يصنع طبقك وعليه أن يقول ذلك. والآلات التي تتعلم من تسجيلات بموافقة تنسب الفضل للأسرة التي علّمتها. ومدارس الطهي تستطيع تدريس سلامة الغذاء بصيغة تتحقق من نفسها.</p>",
-    "options": [["المزارعون.", "FARM 120KG TOMATO A BB0411 إلى بوابة برنامج يشغّل الملف؛ ولاحقًا قراءة إشارات العرض والطلب التي تعامل كل منتج بالتساوي."], ["الطباخون والشيفات.", "حوّل وصفة واحدة تحفظها إلى وصفة كوكوالا؛ راجع جمل الخطوات بلغتك؛ ولاحقًا سجّل جلسات بموافقة ونسب فضل."], ["المدارس.", "استخدموا الوصفات النموذجية التسع بوصفها حالات تعليمية؛ أضف وصفاتك؛ استخدم حقيبة الدروس."]],
+    "options": [
+     [
+      "المزارعون.",
+      "FARM 120KG TOMATO A BB0411 إلى بوابة برنامج يشغّل الملف؛ ولاحقًا قراءة إشارات العرض والطلب التي تعامل كل منتج بالتساوي."
+     ],
+     [
+      "الطباخون والشيفات.",
+      "حوّل وصفة واحدة تحفظها إلى وصفة كوكوالا؛ راجع جمل الخطوات بلغتك؛ ولاحقًا سجّل جلسات بموافقة ونسب فضل."
+     ],
+     [
+      "المدارس.",
+      "استخدموا الوصفات النموذجية التسع بوصفها حالات تعليمية؛ أضف وصفاتك؛ استخدم حقيبة الدروس."
+     ]
+    ],
     "first": "<p>الطباخون، بلا أدوات: اكتب وصفتك بجملة واحدة بسيطة لكل خطوة تسخين تقول كيف تعرف أنها نضجت وما الذي لا يجوز أن يحدث؛ يحوّلها مساهم ويُبقي اسمك عليها. وإن أحببت سطر الأوامر:</p><pre class=\"code\"><code>cookwala init my-dish\ncookwala validate</code></pre><p>المزارعون: أرسل عرضًا واحدًا بالرسائل إلى برنامج يشغّل الملف. لا يشغّله أحد بعد؛ المحلل والمتجهات موجودة، والعرض التفاعلي يبيّن ما يحدث.</p>",
-    "flow": ["وصفة → تحقق → كتالوج", "تجربة جافة على الأجهزة", "سجلات التنفيذ تبيّن أداءها على آلات حقيقية", "مراجعات بالأدلة؛ ترتقي الوصفة من V1 إلى V3"],
-    "work": ["نسب فضل يسافر مع الوصفة", "وصفة تطبخها آلات في بلاد أخرى", "للمزارعين، حيث يشغّل برنامج الملف: فائض يصبح وجبات لا هدرًا"],
-    "society": ["تراث الطهي محفوظ معرفةً عاملة لا فيديو", "هدر أقل عند بوابة المزرعة"],
-    "links": [["صيغة الوصفة", "/docs/RECIPE-FORMAT/"], ["المزارعون والإمداد", "/farmers/"], ["من يرث الوصفة؟", "/ideas/inheriting-culinary-culture/"], ["حقيبة الدروس", "/docs/LESSON-KIT/"]]
+    "flow": [
+     "وصفة → تحقق → كتالوج",
+     "تجربة جافة على الأجهزة",
+     "سجلات التنفيذ تبيّن أداءها على آلات حقيقية",
+     "مراجعات بالأدلة؛ ترتقي الوصفة من V1 إلى V3"
+    ],
+    "work": [
+     "نسب فضل يسافر مع الوصفة",
+     "وصفة تطبخها آلات في بلاد أخرى",
+     "للمزارعين، حيث يشغّل برنامج الملف: فائض يصبح وجبات لا هدرًا"
+    ],
+    "society": [
+     "تراث الطهي محفوظ معرفةً عاملة لا فيديو",
+     "هدر أقل عند بوابة المزرعة"
+    ],
+    "links": [
+     [
+      "صيغة الوصفة",
+      "/docs/RECIPE-FORMAT/"
+     ],
+     [
+      "المزارعون والإمداد",
+      "/farmers/"
+     ],
+     [
+      "من يرث الوصفة؟",
+      "/ideas/inheriting-culinary-culture/"
+     ],
+     [
+      "حقيبة الدروس",
+      "/docs/LESSON-KIT/"
+     ]
+    ]
    }
   },
   {
    "slug": "humanitarian",
    "en": {
-    "short": "Humanitarian", "title": "For NGOs, food banks, community kitchens, school-meal and relief programs, donors",
+    "short": "Humanitarian",
+    "title": "For NGOs, food banks, community kitchens, school-meal and relief programs, donors",
     "lead": "The Humanitarian Profile moves surplus food to plates with phones and spreadsheets, records cold-chain checks, counts meals, and carries no personal data. It works without robots, apps or internet, and gives you numbers you can defend.",
     "message": "<p>Offer, claim, handover with a temperature check, distribution, impact: four documents and a summary computed from them, with a method under every number: kilograms rescued, meals served, nutrition pass rate, cost per meal, time to claim, safety findings and incidents. Rule packs derived from public WHO, Codex and Sphere guidance check every handover and menu, and your food-safety lead adapts them to national law. People are partners, described by role; nobody is named, profiled or pictured.</p>",
-    "options": [["Light.", "Read the profile and the pilot protocol; try the SMS walkthrough."], ["Medium.", "Run the CSV templates in one site for four weeks (level H0) and compute an impact summary."], ["Deep.", "A 12-week pre-registered pilot with a baseline and an independent evaluator; adapt the rule packs with your food-safety lead; run your own registry node."]],
+    "options": [
+     [
+      "Light.",
+      "Read the profile and the pilot protocol; try the SMS walkthrough."
+     ],
+     [
+      "Medium.",
+      "Run the CSV templates in one site for four weeks (level H0) and compute an impact summary."
+     ],
+     [
+      "Deep.",
+      "A 12-week pre-registered pilot with a baseline and an independent evaluator; adapt the rule packs with your food-safety lead; run your own registry node."
+     ]
+    ],
     "first": "<p>The four CSV templates (offers, handovers, distributions, time log) are the paper trail; the summary tool reads the JSON documents. Run it on the example food-bank month, then point it at your own folder:</p><pre class=\"code\"><code>cookwala humanitarian --summary examples/humanitarian/flows/food-bank-cairo --org did:web:your-org.example --from 2026-11-01 --to 2026-11-30</code></pre><div class=\"output\">ImpactSummary: kgRescued 128 (measured, sum of Handover.lines.kgAccepted, n=2) · mealsServed 380 (measured) · timeToClaimMinutesMedian 22 (measured) …</div>",
-    "flow": ["Offer → claim → handover with a temperature check → distribution", "Impact summary computed, never typed", "Baseline, pilot, independent evaluation", "Published results, whatever they show"],
-    "work": ["Comparable numbers across sites; evidence for funders", "Safety findings before, not after, a problem", "A format donors' systems can read: documented mapping tables for HXL, GS1 and DHIS2 (exporters are integration work)"],
-    "society": ["More food reaching people safely, with their dignity intact", "No names, no faces, no profiling"],
-    "links": [["Humanitarian", "/humanitarian/"], ["The profile", "/docs/HUMANITARIAN-PROFILE/"], ["Pilot protocol", "/docs/PILOT-PROTOCOL/"], ["Concept note", "/docs/CONCEPT-NOTE/"]]
+    "flow": [
+     "Offer → claim → handover with a temperature check → distribution",
+     "Impact summary computed, never typed",
+     "Baseline, pilot, independent evaluation",
+     "Published results, whatever they show"
+    ],
+    "work": [
+     "Comparable numbers across sites; evidence for funders",
+     "Safety findings before, not after, a problem",
+     "A format donors' systems can read: documented mapping tables for HXL, GS1 and DHIS2 (exporters are integration work)"
+    ],
+    "society": [
+     "More food reaching people safely, with their dignity intact",
+     "No names, no faces, no profiling"
+    ],
+    "links": [
+     [
+      "Humanitarian",
+      "/humanitarian/"
+     ],
+     [
+      "The profile",
+      "/docs/HUMANITARIAN-PROFILE/"
+     ],
+     [
+      "Pilot protocol",
+      "/docs/PILOT-PROTOCOL/"
+     ],
+     [
+      "Concept note",
+      "/docs/CONCEPT-NOTE/"
+     ]
+    ]
    },
    "ar": {
-    "short": "العمل الإنساني", "title": "للمنظمات غير الحكومية وبنوك الطعام والمطابخ المجتمعية وبرامج التغذية المدرسية والإغاثة والمانحين",
+    "short": "العمل الإنساني",
+    "title": "للمنظمات غير الحكومية وبنوك الطعام والمطابخ المجتمعية وبرامج التغذية المدرسية والإغاثة والمانحين",
     "lead": "ينقل الملف الإنساني الطعام الفائض إلى الأطباق بالهواتف وجداول البيانات، ويسجل فحوص سلسلة التبريد، ويعدّ الوجبات، ولا يحمل أي بيانات شخصية. يعمل بلا روبوتات أو تطبيقات أو إنترنت، ويمنحك أرقامًا تستطيع الدفاع عنها.",
     "message": "<p>عرض، وحجز، وتسليم مع فحص حرارة، وتوزيع، وأثر: أربع وثائق وملخص يُحسب منها، مع منهج تحت كل رقم: الكيلوغرامات المنقذة، والوجبات المقدمة، ونسبة اجتياز التغذية، وتكلفة الوجبة، ووقت الحجز، وملاحظات السلامة وحوادثها. حزم قواعد مشتقة من إرشادات منظمة الصحة العالمية ودستور الأغذية (كودكس) ومعايير «سفير» (Sphere) العامة تفحص كل تسليم وقائمة طعام، ويكيّفها مسؤول سلامة الغذاء عندك مع القانون الوطني. الناس شركاء، يوصفون بأدوارهم؛ لا أحد يُسمّى أو يُصنّف أو يُصوَّر.</p>",
-    "options": [["خفيف.", "اقرأ الملف وبروتوكول التجربة؛ جرّب العرض التفاعلي للرسائل."], ["متوسط.", "شغّل قوالب CSV في موقع واحد أربعة أسابيع (المستوى H0) واحسب ملخص الأثر."], ["عميق.", "تجربة من 12 أسبوعًا مسجلة مسبقًا بخط أساس ومقيّم مستقل؛ كيّف حزم القواعد مع مسؤول سلامة الغذاء؛ شغّل عقدة سجل خاصة بك."]],
+    "options": [
+     [
+      "خفيف.",
+      "اقرأ الملف وبروتوكول التجربة؛ جرّب العرض التفاعلي للرسائل."
+     ],
+     [
+      "متوسط.",
+      "شغّل قوالب CSV في موقع واحد أربعة أسابيع (المستوى H0) واحسب ملخص الأثر."
+     ],
+     [
+      "عميق.",
+      "تجربة من 12 أسبوعًا مسجلة مسبقًا بخط أساس ومقيّم مستقل؛ كيّف حزم القواعد مع مسؤول سلامة الغذاء؛ شغّل عقدة سجل خاصة بك."
+     ]
+    ],
     "first": "<p>قوالب CSV الأربعة (العروض، التسليم، التوزيع، سجل الوقت) هي السجل الورقي؛ أما أداة الملخص فتقرأ وثائق JSON. شغّلها على شهر بنك الطعام النموذجي ثم وجّهها إلى مجلدك:</p><pre class=\"code\"><code>cookwala humanitarian --summary examples/humanitarian/flows/food-bank-cairo --org did:web:your-org.example --from 2026-11-01 --to 2026-11-30</code></pre><div class=\"output\">ImpactSummary: kgRescued 128 (measured) · mealsServed 380 (measured) · timeToClaimMinutesMedian 22 (measured) …</div>",
-    "flow": ["عرض ← حجز ← تسليم مع فحص حرارة ← توزيع", "ملخص أثر يُحسب ولا يُكتب يدويًا", "خط أساس، تجربة، تقييم مستقل", "نشر النتائج مهما كانت"],
-    "work": ["أرقام قابلة للمقارنة بين المواقع؛ أدلة للمموّلين", "ملاحظات سلامة قبل المشكلة لا بعدها", "صيغة تقرؤها أنظمة المانحين: جداول ربط موثقة لـHXL وGS1 وDHIS2 (المصدّرات عمل تكامل)"],
-    "society": ["مزيد من الطعام يصل إلى الناس بأمان وكرامتهم محفوظة", "لا أسماء ولا وجوه ولا تصنيف"],
-    "links": [["العمل الإنساني", "/humanitarian/"], ["الملف", "/docs/HUMANITARIAN-PROFILE/"], ["بروتوكول التجربة", "/docs/PILOT-PROTOCOL/"], ["مذكرة المفهوم", "/docs/CONCEPT-NOTE/"]]
+    "flow": [
+     "عرض ← حجز ← تسليم مع فحص حرارة ← توزيع",
+     "ملخص أثر يُحسب ولا يُكتب يدويًا",
+     "خط أساس، تجربة، تقييم مستقل",
+     "نشر النتائج مهما كانت"
+    ],
+    "work": [
+     "أرقام قابلة للمقارنة بين المواقع؛ أدلة للمموّلين",
+     "ملاحظات سلامة قبل المشكلة لا بعدها",
+     "صيغة تقرؤها أنظمة المانحين: جداول ربط موثقة لـHXL وGS1 وDHIS2 (المصدّرات عمل تكامل)"
+    ],
+    "society": [
+     "مزيد من الطعام يصل إلى الناس بأمان وكرامتهم محفوظة",
+     "لا أسماء ولا وجوه ولا تصنيف"
+    ],
+    "links": [
+     [
+      "العمل الإنساني",
+      "/humanitarian/"
+     ],
+     [
+      "الملف",
+      "/docs/HUMANITARIAN-PROFILE/"
+     ],
+     [
+      "بروتوكول التجربة",
+      "/docs/PILOT-PROTOCOL/"
+     ],
+     [
+      "مذكرة المفهوم",
+      "/docs/CONCEPT-NOTE/"
+     ]
+    ]
    }
   },
   {
    "slug": "health",
    "en": {
-    "short": "Health", "title": "For dietitians, food-safety officers, public-health agencies and care homes",
+    "short": "Health",
+    "title": "For dietitians, food-safety officers, public-health agencies and care homes",
     "lead": "Nutrition and food-safety rules as machine-checkable packs, derived from public guidance, applied to menus and handovers, with your review recorded by profession and outcome. Nothing is medical advice; nothing is claimed beyond what the packs say.",
     "message": "<p>Four draft packs exist: basic rules for sodium, free sugars, fats, fruit and vegetables and the cold chain; care rules for children under five, pregnancy, older adults and immunocompromised people; school-meal patterns; sodium reduction. A pack moves from draft to reviewed only after a professional review with an approved outcome. On robot kitchens the same limits (hot-holding, two-stage cooling, reheating) are enforced by the device and recorded. Personal nutrition stays on the household's device; clinician-set targets belong to the clinician.</p>",
-    "options": [["Review a pack with the template.", "About two hours; your profession and outcome are recorded, your name is not."], ["Adapt a pack to national rules.", "Set jurisdiction, cite the national source, record the review."], ["Propose care rules for the people you serve.", "An RFC with a schema is a clinical argument that runs."], ["Later: read aggregate outcomes from programs.", "Nutrition pass rates and findings, no personal data."]],
+    "options": [
+     [
+      "Review a pack with the template.",
+      "About two hours; your profession and outcome are recorded, your name is not."
+     ],
+     [
+      "Adapt a pack to national rules.",
+      "Set jurisdiction, cite the national source, record the review."
+     ],
+     [
+      "Propose care rules for the people you serve.",
+      "An RFC with a schema is a clinical argument that runs."
+     ],
+     [
+      "Later: read aggregate outcomes from programs.",
+      "Nutrition pass rates and findings, no personal data."
+     ]
+    ],
     "first": "<p>Open <code>profiles/humanitarian/care-vulnerable-groups.rulepack.json</code> and the review template; mark three rules approved, changed or rejected; file the review as an issue labelled <code>health-review</code>. The maintainers add it to the pack's <code>reviews</code>.</p>",
-    "flow": ["Draft pack → your review → status reviewed", "Programs adopt it; findings appear in every distribution", "Outcomes published with methods"],
-    "work": ["Your guidance runs in every kitchen that adopts it, including robot kitchens, with your profession on the record", "A publishable review", "A dataset of findings (aggregate, no personal data) for research"],
-    "society": ["Less sodium, sugar and saturated fat in mass-fed meals", "Safer hot-holding and cooling", "Care for children and older people written into the machine"],
-    "links": [["Review template", "/docs/REVIEW-TEMPLATE/"], ["Health claims policy", "/docs/CLAIMS-POLICY/"], ["Humanitarian Profile", "/docs/HUMANITARIAN-PROFILE/"], ["Dignity in automated care", "/ideas/dignity-in-automated-care/"]]
+    "flow": [
+     "Draft pack → your review → status reviewed",
+     "Programs adopt it; findings appear in every distribution",
+     "Outcomes published with methods"
+    ],
+    "work": [
+     "Your guidance runs in every kitchen that adopts it, including robot kitchens, with your profession on the record",
+     "A publishable review",
+     "A dataset of findings (aggregate, no personal data) for research"
+    ],
+    "society": [
+     "Less sodium, sugar and saturated fat in mass-fed meals",
+     "Safer hot-holding and cooling",
+     "Care for children and older people written into the machine"
+    ],
+    "links": [
+     [
+      "Review template",
+      "/docs/REVIEW-TEMPLATE/"
+     ],
+     [
+      "Health claims policy",
+      "/docs/CLAIMS-POLICY/"
+     ],
+     [
+      "Humanitarian Profile",
+      "/docs/HUMANITARIAN-PROFILE/"
+     ],
+     [
+      "Dignity in automated care",
+      "/ideas/dignity-in-automated-care/"
+     ]
+    ]
    },
    "ar": {
-    "short": "الصحة", "title": "لأخصائيي التغذية ومسؤولي سلامة الغذاء وجهات الصحة العامة ودور الرعاية",
+    "short": "الصحة",
+    "title": "لأخصائيي التغذية ومسؤولي سلامة الغذاء وجهات الصحة العامة ودور الرعاية",
     "lead": "تصبح قواعد التغذية وسلامة الغذاء حزمًا تتحقق منها الآلة، مشتقة من الإرشادات العامة، تُطبَّق على قوائم الطعام والتسليمات، مع تسجيل مراجعتك بالمهنة والنتيجة. لا شيء هنا نصيحة طبية؛ ولا يُدّعى شيء يتجاوز ما تقوله الحزم.",
     "message": "<p>توجد أربع حزم مسوّدة: قواعد أساسية للصوديوم والسكريات الحرة والدهون والخضار والفواكه وسلسلة التبريد؛ وقواعد رعاية للأطفال دون الخامسة والحوامل وكبار السن وضعيفي المناعة؛ وأنماط الوجبات المدرسية؛ وخفض الصوديوم. لا تنتقل الحزمة من مسوّدة إلى مُراجَعة إلا بعد مراجعة مهنية بنتيجة موافقة. وفي مطابخ الروبوتات تفرض الأجهزة الحدود نفسها (الحفظ الساخن، التبريد على مرحلتين، إعادة التسخين) وتسجلها. التغذية الشخصية تبقى على جهاز الأسرة؛ وأهداف الطبيب للطبيب.</p>",
-    "options": [["راجع حزمة بالنموذج.", "نحو ساعتين؛ تُسجَّل مهنتك ونتيجتك لا اسمك."], ["كيّف حزمة مع القواعد الوطنية.", "حدد الولاية، واستشهد بالمصدر الوطني، وسجّل المراجعة."], ["اقترح قواعد رعاية لمن تخدمهم.", "المقترح المصحوب بمخطط حجةٌ سريرية قابلة للتشغيل."], ["لاحقًا: اقرأ النتائج المجمّعة من البرامج.", "نسب اجتياز التغذية والملاحظات، بلا بيانات شخصية."]],
+    "options": [
+     [
+      "راجع حزمة بالنموذج.",
+      "نحو ساعتين؛ تُسجَّل مهنتك ونتيجتك لا اسمك."
+     ],
+     [
+      "كيّف حزمة مع القواعد الوطنية.",
+      "حدد الولاية، واستشهد بالمصدر الوطني، وسجّل المراجعة."
+     ],
+     [
+      "اقترح قواعد رعاية لمن تخدمهم.",
+      "المقترح المصحوب بمخطط حجةٌ سريرية قابلة للتشغيل."
+     ],
+     [
+      "لاحقًا: اقرأ النتائج المجمّعة من البرامج.",
+      "نسب اجتياز التغذية والملاحظات، بلا بيانات شخصية."
+     ]
+    ],
     "first": "<p>افتح <code>profiles/humanitarian/care-vulnerable-groups.rulepack.json</code> ونموذج المراجعة؛ ضع علامة موافقة أو تعديل أو رفض على ثلاث قواعد؛ وقدّم المراجعة في قضية بوسم <code>health-review</code>. يضيفها المشرفون إلى <code>reviews</code> في الحزمة.</p>",
-    "flow": ["حزمة مسوّدة ← مراجعتك ← حالة مُراجَعة", "تتبناها البرامج؛ تظهر الملاحظات في كل توزيع", "تُنشر النتائج مع المنهج"],
-    "work": ["إرشاداتك تعمل في كل مطبخ يتبناها، ومنها مطابخ الروبوتات، ومهنتك في السجل", "مراجعة قابلة للنشر", "مجموعة بيانات ملاحظات (مجمّعة، بلا بيانات شخصية) للبحث"],
-    "society": ["صوديوم وسكر ودهون مشبعة أقل في وجبات التغذية الجماعية", "حفظ ساخن وتبريد أكثر أمانًا", "رعاية الأطفال وكبار السن مكتوبة داخل الآلة"],
-    "links": [["نموذج المراجعة", "/docs/REVIEW-TEMPLATE/"], ["سياسة الادعاءات الصحية", "/docs/CLAIMS-POLICY/"], ["الملف الإنساني", "/docs/HUMANITARIAN-PROFILE/"], ["الكرامة في الرعاية الآلية", "/ideas/dignity-in-automated-care/"]]
+    "flow": [
+     "حزمة مسوّدة ← مراجعتك ← حالة مُراجَعة",
+     "تتبناها البرامج؛ تظهر الملاحظات في كل توزيع",
+     "تُنشر النتائج مع المنهج"
+    ],
+    "work": [
+     "إرشاداتك تعمل في كل مطبخ يتبناها، ومنها مطابخ الروبوتات، ومهنتك في السجل",
+     "مراجعة قابلة للنشر",
+     "مجموعة بيانات ملاحظات (مجمّعة، بلا بيانات شخصية) للبحث"
+    ],
+    "society": [
+     "صوديوم وسكر ودهون مشبعة أقل في وجبات التغذية الجماعية",
+     "حفظ ساخن وتبريد أكثر أمانًا",
+     "رعاية الأطفال وكبار السن مكتوبة داخل الآلة"
+    ],
+    "links": [
+     [
+      "نموذج المراجعة",
+      "/docs/REVIEW-TEMPLATE/"
+     ],
+     [
+      "سياسة الادعاءات الصحية",
+      "/docs/CLAIMS-POLICY/"
+     ],
+     [
+      "الملف الإنساني",
+      "/docs/HUMANITARIAN-PROFILE/"
+     ],
+     [
+      "الكرامة في الرعاية الآلية",
+      "/ideas/dignity-in-automated-care/"
+     ]
+    ]
    }
   },
   {
    "slug": "education",
    "en": {
-    "short": "Education", "title": "For school teachers, educators, professors, researchers and students",
+    "short": "Education",
+    "title": "For school teachers, educators, professors, researchers and students",
     "lead": "Cooking is the most familiar process in the world, and Cookwala turns it into a teaching object: temperatures, units, fair sharing, safety, machines that follow rules. For researchers it is a benchmark, a dataset format and an open-problems list.",
     "message": "<p>Teachers get five lessons that use the live demos and the example recipes and collect nothing from students. Professors and students get operation envelopes as simulation test conditions, {{stat:conformanceVectors}} conformance vectors, nine recipes with end conditions in two languages, four simulators with every assumption listed, an execution-log format with exporters to LeRobot and OpenTelemetry, a facet registry for privacy engineering, and a list of thesis-sized open problems that nobody owns.</p>",
-    "options": [["Teachers.", "Run the lesson kit: what is a simmer, units and scaling, when is it done and safe, what a machine must never do, fair sharing."], ["Professors and students.", "Pick an open problem; use the simulators and vectors; propose a dataset or a benchmark."], ["Researchers.", "Publish datasets of consented executions; critique the simulators' assumptions; propose vectors and RFCs."]],
+    "options": [
+     [
+      "Teachers.",
+      "Run the lesson kit: what is a simmer, units and scaling, when is it done and safe, what a machine must never do, fair sharing."
+     ],
+     [
+      "Professors and students.",
+      "Pick an open problem; use the simulators and vectors; propose a dataset or a benchmark."
+     ],
+     [
+      "Researchers.",
+      "Publish datasets of consented executions; critique the simulators' assumptions; propose vectors and RFCs."
+     ]
+    ],
     "first": "<p>Teachers: run the browser dry run in class on koshari with the device without thermometers and ask why it refused. Students: change one assumption in the city simulator and explain the result in a paragraph.</p>",
-    "flow": ["Lesson → project → dataset → paper → RFC"],
-    "work": ["Free, open, citable material", "A benchmark nobody owns", "Co-authorship on the standard through RFCs; credit on datasets and vectors"],
-    "society": ["A generation that knows what a safe kitchen is and can read a safety sheet"],
-    "links": [["Education", "/education/"], ["Lesson kit", "/docs/LESSON-KIT/"], ["Research topics", "/docs/RESEARCH-TOPICS/"], ["Simulators", "/playground/#sim-h"]]
+    "flow": [
+     "Lesson → project → dataset → paper → RFC"
+    ],
+    "work": [
+     "Free, open, citable material",
+     "A benchmark nobody owns",
+     "Co-authorship on the standard through RFCs; credit on datasets and vectors"
+    ],
+    "society": [
+     "A generation that knows what a safe kitchen is and can read a safety sheet"
+    ],
+    "links": [
+     [
+      "Education",
+      "/education/"
+     ],
+     [
+      "Lesson kit",
+      "/docs/LESSON-KIT/"
+     ],
+     [
+      "Research topics",
+      "/docs/RESEARCH-TOPICS/"
+     ],
+     [
+      "Simulators",
+      "/playground/#sim-h"
+     ]
+    ]
    },
    "ar": {
-    "short": "التعليم", "title": "للمعلمين والتربويين والأساتذة والباحثين والطلاب",
+    "short": "التعليم",
+    "title": "للمعلمين والتربويين والأساتذة والباحثين والطلاب",
     "lead": "الطهي أكثر العمليات ألفة في العالم، ويحوّله كوكوالا إلى مادة تعليمية: درجات الحرارة، والوحدات، والمشاركة العادلة، والسلامة، والآلات التي تتبع القواعد. وللباحثين هو معيار وصيغة بيانات وقائمة مسائل مفتوحة.",
     "message": "<p>يحصل المعلمون على خمسة دروس تستخدم العروض الحية والوصفات النموذجية ولا تجمع شيئًا من الطلاب. ويحصل الأساتذة والطلاب على مظاريف العمليات شروطَ اختبار للمحاكاة، و{{stat:conformanceVectors}} متّجه مطابقة، وتسع وصفات بشروط إنهاء بلغتين، وأربعة محاكيات بكل افتراضاتها، وصيغة سجل تنفيذ بمصدّرين إلى LeRobot وOpenTelemetry، وسجل معلومات منزلية لهندسة الخصوصية، وقائمة مسائل مفتوحة بحجم رسالة لا يملكها أحد.</p>",
-    "options": [["المعلمون.", "شغّلوا حقيبة الدروس: ما النار الهادئة، الوحدات والقياس، متى ينضج ويكون آمنًا، ما الذي لا يجوز للآلة فعله، المشاركة العادلة."], ["الأساتذة والطلاب.", "اختاروا مسألة مفتوحة؛ استخدموا المحاكيات والمتجهات؛ اقترحوا مجموعة بيانات أو معيارًا."], ["الباحثون.", "انشروا مجموعات بيانات تنفيذ بموافقة؛ انتقدوا افتراضات المحاكيات؛ اقترحوا متجهات ومقترحات."]],
+    "options": [
+     [
+      "المعلمون.",
+      "شغّلوا حقيبة الدروس: ما النار الهادئة، الوحدات والقياس، متى ينضج ويكون آمنًا، ما الذي لا يجوز للآلة فعله، المشاركة العادلة."
+     ],
+     [
+      "الأساتذة والطلاب.",
+      "اختاروا مسألة مفتوحة؛ استخدموا المحاكيات والمتجهات؛ اقترحوا مجموعة بيانات أو معيارًا."
+     ],
+     [
+      "الباحثون.",
+      "انشروا مجموعات بيانات تنفيذ بموافقة؛ انتقدوا افتراضات المحاكيات؛ اقترحوا متجهات ومقترحات."
+     ]
+    ],
     "first": "<p>المعلمون: شغّلوا التجربة الجافة في الصف على الكشري بالجهاز بلا ترمومترات واسألوا لماذا رفض. الطلاب: غيّروا افتراضًا واحدًا في محاكي المدينة واشرحوا النتيجة في فقرة.</p>",
-    "flow": ["درس ← مشروع ← مجموعة بيانات ← ورقة ← مقترح"],
-    "work": ["مادة مجانية ومفتوحة وقابلة للاستشهاد", "معيار لا يملكه أحد", "مشاركة في تأليف المعيار عبر المقترحات؛ نسب فضل في البيانات والمتجهات"],
-    "society": ["جيل يعرف ما المطبخ الآمن ويقرأ ورقة سلامة"],
-    "links": [["التعليم", "/education/"], ["حقيبة الدروس", "/docs/LESSON-KIT/"], ["موضوعات البحث", "/docs/RESEARCH-TOPICS/"], ["المحاكيات", "/playground/#sim-h"]]
+    "flow": [
+     "درس ← مشروع ← مجموعة بيانات ← ورقة ← مقترح"
+    ],
+    "work": [
+     "مادة مجانية ومفتوحة وقابلة للاستشهاد",
+     "معيار لا يملكه أحد",
+     "مشاركة في تأليف المعيار عبر المقترحات؛ نسب فضل في البيانات والمتجهات"
+    ],
+    "society": [
+     "جيل يعرف ما المطبخ الآمن ويقرأ ورقة سلامة"
+    ],
+    "links": [
+     [
+      "التعليم",
+      "/education/"
+     ],
+     [
+      "حقيبة الدروس",
+      "/docs/LESSON-KIT/"
+     ],
+     [
+      "موضوعات البحث",
+      "/docs/RESEARCH-TOPICS/"
+     ],
+     [
+      "المحاكيات",
+      "/playground/#sim-h"
+     ]
+    ]
    }
   },
   {
    "slug": "government",
    "en": {
-    "short": "Government", "title": "For governments, ministries, regulators, legislators and standards bodies",
+    "short": "Government",
+    "title": "For governments, ministries, regulators, legislators and standards bodies",
     "lead": "Cooking machines are arriving under regulations written for appliances and software separately. Cookwala gives regulators something concrete to point to, and food-donation programs a data standard with no personal data. It is royalty-free and headed for neutral governance.",
     "message": "<p>Safety limits enforced on the device, refusal before heat, a local stop with specified latencies, signed records, anonymous incident reporting, a conformance suite anyone can run and a report format behind any claim. For food rescue: organizations only, aggregates with small-cell suppression, a cold-chain record at every handover, rules derived from public guidance, awaiting professional review (none reviewed yet) and replaceable by national codes. Model clauses that match what the standard does. No government or agency endorses this; the brief says so.</p>",
-    "options": [["Read the two-page brief.", "Then check three things in the repository: the safety limits pack, the conformance runner, the humanitarian data-protection rules."], ["Use the model language.", "Food-donation data, cooking-machine safety, household data held by robots, procurement."], ["Ask your standards body to review Core 0.2.", "Complementary to the hardware safety standards a device must already meet (ISO 13482, IEC 60335), which this standard does not replace."], ["Run a national registry node and recall feed.", "Recalls reach kitchens without a foreign server."], ["Fund a pilot with your school-meal program.", "Pre-registered, with an independent evaluator; results published whatever they show."]],
+    "options": [
+     [
+      "Read the two-page brief.",
+      "Then check three things in the repository: the safety limits pack, the conformance runner, the humanitarian data-protection rules."
+     ],
+     [
+      "Use the model language.",
+      "Food-donation data, cooking-machine safety, household data held by robots, procurement."
+     ],
+     [
+      "Ask your standards body to review Core 0.2.",
+      "Complementary to the hardware safety standards a device must already meet (ISO 13482, IEC 60335), which this standard does not replace."
+     ],
+     [
+      "Run a national registry node and recall feed.",
+      "Recalls reach kitchens without a foreign server."
+     ],
+     [
+      "Fund a pilot with your school-meal program.",
+      "Pre-registered, with an independent evaluator; results published whatever they show."
+     ]
+    ],
     "first": "<p>Read the <a href=\"/docs/POLICY-BRIEF/\">brief</a> (two pages), then open <code>profiles/core/safety-limits.default.json</code> and <code>conformance/</code> on GitHub and run:</p><pre class=\"code\"><code>python tools/run_conformance.py --report report.json</code></pre><div class=\"output\">conformance: {{stat:conformanceVectors}}/{{stat:conformanceVectors}} passed · report.json</div>",
-    "flow": ["Brief → review by a national standards body → reference in guidance → pilot → certification scheme"],
-    "work": ["A ready-made, reviewable technical basis", "Evidence from pilots", "A channel to industry through a neutral standard", "Interoperability with the humanitarian data standards you already use"],
-    "society": ["Safer machines in homes", "Food rescue that protects the people it serves", "Less waste in cities"],
-    "links": [["Policy", "/policy/"], ["Policy brief", "/docs/POLICY-BRIEF/"], ["Model language", "/docs/MODEL-LANGUAGE/"], ["Governance", "/docs/GOVERNANCE/"]]
+    "flow": [
+     "Brief → review by a national standards body → reference in guidance → pilot → certification scheme"
+    ],
+    "work": [
+     "A ready-made, reviewable technical basis",
+     "Evidence from pilots",
+     "A channel to industry through a neutral standard",
+     "Interoperability with the humanitarian data standards you already use"
+    ],
+    "society": [
+     "Safer machines in homes",
+     "Food rescue that protects the people it serves",
+     "Less waste in cities"
+    ],
+    "links": [
+     [
+      "Policy",
+      "/policy/"
+     ],
+     [
+      "Policy brief",
+      "/docs/POLICY-BRIEF/"
+     ],
+     [
+      "Model language",
+      "/docs/MODEL-LANGUAGE/"
+     ],
+     [
+      "Governance",
+      "/docs/GOVERNANCE/"
+     ]
+    ]
    },
    "ar": {
-    "short": "الحكومات", "title": "للحكومات والوزارات والجهات التنظيمية والمشرّعين وهيئات المعايير",
+    "short": "الحكومات",
+    "title": "للحكومات والوزارات والجهات التنظيمية والمشرّعين وهيئات المعايير",
     "lead": "تصل آلات الطهي في ظل لوائح كُتبت للأجهزة وللبرمجيات كلٌّ على حدة. يمنح كوكوالا المنظّمين شيئًا ملموسًا يشيرون إليه، ويمنح برامج التبرع بالطعام معيار بيانات بلا بيانات شخصية. وهو بلا رسوم ومتجه إلى حوكمة محايدة.",
     "message": "<p>حدود سلامة مفروضة على الجهاز، ورفض قبل التسخين، وإيقاف محلي بزمن استجابة محدد، وسجلات موقّعة، وإبلاغ مجهول عن الحوادث، ومجموعة مطابقة يستطيع أي أحد تشغيلها، وصيغة تقرير وراء أي ادعاء. ولإنقاذ الطعام: منظمات فقط، ومجاميع مع إخفاء الأعداد الصغيرة، وسجل سلسلة تبريد عند كل تسليم، وقواعد مشتقة من إرشادات عامة تنتظر مراجعة مهنية (لم تُراجَع بعد) وتحل محلها القوانين الوطنية. ونصوص نموذجية تطابق ما يفعله المعيار. لا تؤيده أي حكومة أو جهة؛ والموجز يقول ذلك.</p>",
-    "options": [["اقرأ الموجز من صفحتين.", "ثم تحقق من ثلاثة أشياء في المستودع: حزمة حدود السلامة، ومشغّل المطابقة، وقواعد حماية البيانات الإنسانية."], ["استخدم النصوص النموذجية.", "بيانات التبرع بالطعام، سلامة آلات الطهي، بيانات المنزل لدى الروبوتات، المشتريات."], ["اطلب من هيئة المعايير الوطنية مراجعة النواة 0.2.", "مكمّل لمعايير سلامة العتاد التي يجب أن يستوفيها الجهاز أصلًا (ISO 13482 وIEC 60335)، ولا يحل محلها."], ["شغّل عقدة سجل وطنية وتغذية سحب.", "تصل عمليات السحب إلى المطابخ بلا خادم أجنبي."], ["موّل تجربة مع برنامج التغذية المدرسية.", "مسجلة مسبقًا بمقيّم مستقل؛ تُنشر النتائج مهما كانت."]],
+    "options": [
+     [
+      "اقرأ الموجز من صفحتين.",
+      "ثم تحقق من ثلاثة أشياء في المستودع: حزمة حدود السلامة، ومشغّل المطابقة، وقواعد حماية البيانات الإنسانية."
+     ],
+     [
+      "استخدم النصوص النموذجية.",
+      "بيانات التبرع بالطعام، سلامة آلات الطهي، بيانات المنزل لدى الروبوتات، المشتريات."
+     ],
+     [
+      "اطلب من هيئة المعايير الوطنية مراجعة النواة 0.2.",
+      "مكمّل لمعايير سلامة العتاد التي يجب أن يستوفيها الجهاز أصلًا (ISO 13482 وIEC 60335)، ولا يحل محلها."
+     ],
+     [
+      "شغّل عقدة سجل وطنية وتغذية سحب.",
+      "تصل عمليات السحب إلى المطابخ بلا خادم أجنبي."
+     ],
+     [
+      "موّل تجربة مع برنامج التغذية المدرسية.",
+      "مسجلة مسبقًا بمقيّم مستقل؛ تُنشر النتائج مهما كانت."
+     ]
+    ],
     "first": "<p>اقرأ <a href=\"/docs/POLICY-BRIEF/\">الموجز</a> (صفحتان)، ثم افتح <code>profiles/core/safety-limits.default.json</code> و<code>conformance/</code> على GitHub وشغّل:</p><pre class=\"code\"><code>python tools/run_conformance.py --report report.json</code></pre><div class=\"output\">conformance: {{stat:conformanceVectors}}/{{stat:conformanceVectors}} passed · report.json</div>",
-    "flow": ["موجز ← مراجعة هيئة معايير وطنية ← إشارة في الإرشادات ← تجربة ← مخطط اعتماد"],
-    "work": ["أساس تقني جاهز وقابل للمراجعة", "أدلة من التجارب", "قناة إلى الصناعة عبر معيار محايد", "قابلية التشغيل مع معايير البيانات الإنسانية التي تستخدمونها"],
-    "society": ["آلات أكثر أمانًا في البيوت", "إنقاذ طعام يحمي من يخدمهم", "هدر أقل في المدن"],
-    "links": [["السياسات", "/policy/"], ["الموجز السياسي", "/docs/POLICY-BRIEF/"], ["النصوص النموذجية", "/docs/MODEL-LANGUAGE/"], ["الحوكمة", "/docs/GOVERNANCE/"]]
+    "flow": [
+     "موجز ← مراجعة هيئة معايير وطنية ← إشارة في الإرشادات ← تجربة ← مخطط اعتماد"
+    ],
+    "work": [
+     "أساس تقني جاهز وقابل للمراجعة",
+     "أدلة من التجارب",
+     "قناة إلى الصناعة عبر معيار محايد",
+     "قابلية التشغيل مع معايير البيانات الإنسانية التي تستخدمونها"
+    ],
+    "society": [
+     "آلات أكثر أمانًا في البيوت",
+     "إنقاذ طعام يحمي من يخدمهم",
+     "هدر أقل في المدن"
+    ],
+    "links": [
+     [
+      "السياسات",
+      "/policy/"
+     ],
+     [
+      "الموجز السياسي",
+      "/docs/POLICY-BRIEF/"
+     ],
+     [
+      "النصوص النموذجية",
+      "/docs/MODEL-LANGUAGE/"
+     ],
+     [
+      "الحوكمة",
+      "/docs/GOVERNANCE/"
+     ]
+    ]
    }
   },
   {
    "slug": "capital",
    "en": {
-    "short": "Capital", "title": "For investors, entrepreneurs, philanthropies and development banks",
+    "short": "Capital",
+    "title": "For investors, entrepreneurs, philanthropies and development banks",
     "lead": "The standard is free; the services around it are a business; the humanitarian layer is a public good that development funders can back with pre-registered evaluation. No financial promises are made anywhere on this site.",
     "message": "<p>Two entities: a foundation that holds the specification, the name and the mark, royalty-free forever; and a company that sells test-lab services, hub software, consented datasets, registry operations and pilots; certificates come from independent third parties. Free for relief use under the current licences; the foundation charter will bind this. Funding is tied to gates in the action plan, with kill rules written down. Users, partners, pilots and revenue today: zero; the site says so on every page that could imply otherwise.</p>",
-    "options": [["Read.", "The opportunity, business model, roadmap with status, risks and governance on the investors page; the whitepaper's problem, architecture and risk sections; the action plan's 30-item concern register."], ["Fund a review.", "Envelopes, rule packs or a data-protection assessment; the result is published."], ["Fund a pilot.", "Under the pre-registered protocol with an independent evaluator."], ["Back the company.", "Separated from the public good; pricing is the founder's decision."], ["Join governance.", "As a funder observer when the committee forms."]],
+    "options": [
+     [
+      "Read.",
+      "The opportunity, business model, roadmap with status, risks and governance on the investors page; the whitepaper's problem, architecture and risk sections; the action plan's 30-item concern register."
+     ],
+     [
+      "Fund a review.",
+      "Envelopes, rule packs or a data-protection assessment; the result is published."
+     ],
+     [
+      "Fund a pilot.",
+      "Under the pre-registered protocol with an independent evaluator."
+     ],
+     [
+      "Back the company.",
+      "Separated from the public good; pricing is the founder's decision."
+     ],
+     [
+      "Join governance.",
+      "As a funder observer when the committee forms."
+     ]
+    ],
     "first": "<p>Read the whitepaper's sections 1, 5 and 14 (problem, architecture, risks) and the concern register. Every open risk is listed; nothing is hidden because it is unflattering.</p>",
-    "flow": ["Evidence (reviews, pilots, conformance, adopters) → gates → funding tied to gates → foundation for the standard, company for services"],
-    "work": ["Early position in an open standard with honest numbers", "An investable services company separated from the public good"],
-    "society": ["Capital goes to what is measured, not what is claimed"],
-    "links": [["Investors and partners", "/investors/"], ["Whitepaper", "/whitepaper/"], ["Action plan", "/docs/ACTION-PLAN/"], ["Roadmap", "/roadmap/"]]
+    "flow": [
+     "Evidence (reviews, pilots, conformance, adopters) → gates → funding tied to gates → foundation for the standard, company for services"
+    ],
+    "work": [
+     "Early position in an open standard with honest numbers",
+     "An investable services company separated from the public good"
+    ],
+    "society": [
+     "Capital goes to what is measured, not what is claimed"
+    ],
+    "links": [
+     [
+      "Investors and partners",
+      "/investors/"
+     ],
+     [
+      "Whitepaper",
+      "/whitepaper/"
+     ],
+     [
+      "Action plan",
+      "/docs/ACTION-PLAN/"
+     ],
+     [
+      "Roadmap",
+      "/roadmap/"
+     ]
+    ]
    },
    "ar": {
-    "short": "رأس المال", "title": "للمستثمرين ورواد الأعمال والمؤسسات الخيرية وبنوك التنمية",
+    "short": "رأس المال",
+    "title": "للمستثمرين ورواد الأعمال والمؤسسات الخيرية وبنوك التنمية",
     "lead": "المعيار مجاني؛ والخدمات حوله عمل تجاري؛ والطبقة الإنسانية منفعة عامة يستطيع مموّلو التنمية دعمها بتقييم مسجل مسبقًا. لا وعود مالية في أي مكان من هذا الموقع.",
     "message": "<p>كيانان: مؤسسة تحمل المواصفة والاسم والعلامة، بلا رسوم إلى الأبد؛ وشركة تبيع خدمات مختبر الاختبار وبرمجيات المحور ومجموعات البيانات بموافقة وتشغيل السجل والتجارب؛ وتصدر الشهادات جهات ثالثة مستقلة. مجاني للإغاثة بموجب التراخيص الحالية؛ وميثاق المؤسسة هو ما سيلزم بذلك. التمويل مرتبط ببوابات في خطة العمل، وقواعد الإيقاف مكتوبة. المستخدمون والشركاء والتجارب والإيرادات اليوم: صفر؛ ويقول الموقع ذلك في كل صفحة قد توحي بغير ذلك.</p>",
-    "options": [["اقرأ.", "الفرصة ونموذج العمل وخارطة الطريق بحالاتها والمخاطر والحوكمة في صفحة المستثمرين؛ وأقسام المشكلة والبنية والمخاطر في الورقة البيضاء؛ وسجل المخاوف ذا الثلاثين بندًا في خطة العمل."], ["موّل مراجعة.", "المظاريف أو حزم القواعد أو تقييم حماية البيانات؛ وتُنشر النتيجة."], ["موّل تجربة.", "تحت البروتوكول المسجل مسبقًا بمقيّم مستقل."], ["ادعم الشركة.", "منفصلة عن المنفعة العامة؛ التسعير قرار المؤسس."], ["انضم إلى الحوكمة.", "مراقبًا مموّلًا عند تشكيل اللجنة."]],
+    "options": [
+     [
+      "اقرأ.",
+      "الفرصة ونموذج العمل وخارطة الطريق بحالاتها والمخاطر والحوكمة في صفحة المستثمرين؛ وأقسام المشكلة والبنية والمخاطر في الورقة البيضاء؛ وسجل المخاوف ذا الثلاثين بندًا في خطة العمل."
+     ],
+     [
+      "موّل مراجعة.",
+      "المظاريف أو حزم القواعد أو تقييم حماية البيانات؛ وتُنشر النتيجة."
+     ],
+     [
+      "موّل تجربة.",
+      "تحت البروتوكول المسجل مسبقًا بمقيّم مستقل."
+     ],
+     [
+      "ادعم الشركة.",
+      "منفصلة عن المنفعة العامة؛ التسعير قرار المؤسس."
+     ],
+     [
+      "انضم إلى الحوكمة.",
+      "مراقبًا مموّلًا عند تشكيل اللجنة."
+     ]
+    ],
     "first": "<p>اقرأ الأقسام 1 و5 و14 من الورقة البيضاء (المشكلة، البنية، المخاطر) وسجل المخاوف. كل خطر مفتوح مذكور؛ لا يُخفى شيء لأنه غير مُرضٍ.</p>",
-    "flow": ["أدلة (مراجعات، تجارب، مطابقة، متبنّون) ← بوابات ← تمويل مرتبط بالبوابات ← مؤسسة للمعيار وشركة للخدمات"],
-    "work": ["موقع مبكر في معيار مفتوح، بأرقام صادقة", "شركة خدمات قابلة للاستثمار منفصلة عن المنفعة العامة"],
-    "society": ["يذهب رأس المال إلى ما يُقاس لا إلى ما يُدّعى"],
-    "links": [["المستثمرون والشركاء", "/investors/"], ["الورقة البيضاء", "/whitepaper/"], ["خطة العمل", "/docs/ACTION-PLAN/"], ["خارطة الطريق", "/roadmap/"]]
+    "flow": [
+     "أدلة (مراجعات، تجارب، مطابقة، متبنّون) ← بوابات ← تمويل مرتبط بالبوابات ← مؤسسة للمعيار وشركة للخدمات"
+    ],
+    "work": [
+     "موقع مبكر في معيار مفتوح، بأرقام صادقة",
+     "شركة خدمات قابلة للاستثمار منفصلة عن المنفعة العامة"
+    ],
+    "society": [
+     "يذهب رأس المال إلى ما يُقاس لا إلى ما يُدّعى"
+    ],
+    "links": [
+     [
+      "المستثمرون والشركاء",
+      "/investors/"
+     ],
+     [
+      "الورقة البيضاء",
+      "/whitepaper/"
+     ],
+     [
+      "خطة العمل",
+      "/docs/ACTION-PLAN/"
+     ],
+     [
+      "خارطة الطريق",
+      "/roadmap/"
+     ]
+    ]
    }
   },
   {
    "slug": "thought",
    "en": {
-    "short": "Thought", "title": "For philosophers, ethicists, historians and futurists",
+    "short": "Thought",
+    "title": "For philosophers, ethicists, historians and futurists",
     "lead": "When a machine cooks a grandmother's recipe, who owns the knowledge? What does dignity mean in automated care? What may a household's robot know, and who else may know it? Cookwala has made choices about these questions in code; the essays say what they were and invite disagreement.",
     "message": "<p>The positions are running rules, not opinions: a facet registry that says which 45 facts about a home never leave it; a never-delegable class of operations; dish identity a planner must respect; consent on every execution log; a labour or consumer seat in governance, with a seat for the people served still an open proposal. Each is defended in an essay and open to an RFC, which is a philosophical argument with a schema.</p>",
-    "options": [["Read the essays.", "Who inherits a recipe; dignity in automated care; what a household robot may know; refusal as a virtue; like bees."], ["Write a response.", "A pull request to the essays folder; disagreement is the point."], ["Propose a rule.", "An RFC that changes a default: the privacy class of a facet, the never-delegable list, the identity rules."], ["Sit on the ethics review.", "Of the household context profile, when it is convened."]],
+    "options": [
+     [
+      "Read the essays.",
+      "Who inherits a recipe; dignity in automated care; what a household robot may know; refusal as a virtue; like bees."
+     ],
+     [
+      "Write a response.",
+      "A pull request to the essays folder; disagreement is the point."
+     ],
+     [
+      "Propose a rule.",
+      "An RFC that changes a default: the privacy class of a facet, the never-delegable list, the identity rules."
+     ],
+     [
+      "Sit on the ethics review.",
+      "Of the household context profile, when it is convened."
+     ]
+    ],
     "first": "<p>Read <a href=\"/ideas/what-a-household-robot-may-know/\">the essay on household data</a> and the facet registry's travel rules (<code>vocab/facets.json</code>); find one facet whose default you would change, and say why in an issue.</p>",
-    "flow": ["Essay → public comment → RFC → changed default"],
-    "work": ["A live case where ethical positions become running rules, with a public record of the argument"],
-    "society": ["Decisions about intimate data and cultural inheritance made in the open before the machines arrive in millions of homes"],
-    "links": [["Ideas and essays", "/ideas/"], ["Household Context Profile", "/docs/HOUSEHOLD-CONTEXT/"], ["RFCs", "/docs/RFCS/"], ["Governance", "/docs/GOVERNANCE/"]]
+    "flow": [
+     "Essay → public comment → RFC → changed default"
+    ],
+    "work": [
+     "A live case where ethical positions become running rules, with a public record of the argument"
+    ],
+    "society": [
+     "Decisions about intimate data and cultural inheritance made in the open before the machines arrive in millions of homes"
+    ],
+    "links": [
+     [
+      "Ideas and essays",
+      "/ideas/"
+     ],
+     [
+      "Household Context Profile",
+      "/docs/HOUSEHOLD-CONTEXT/"
+     ],
+     [
+      "RFCs",
+      "/docs/RFCS/"
+     ],
+     [
+      "Governance",
+      "/docs/GOVERNANCE/"
+     ]
+    ]
    },
    "ar": {
-    "short": "الفكر", "title": "للفلاسفة والأخلاقيين والمؤرخين والمستقبليين",
+    "short": "الفكر",
+    "title": "للفلاسفة والأخلاقيين والمؤرخين والمستقبليين",
     "lead": "حين تطبخ آلة وصفة الجدة، لمن تكون المعرفة؟ ما معنى الكرامة في الرعاية الآلية؟ ما الذي يجوز لروبوت المنزل أن يعرفه، ومن سواه يجوز أن يعرفها؟ اتخذ كوكوالا خيارات في هذه الأسئلة داخل الكود؛ وتقول المقالات ما هي وتدعو إلى الاختلاف.",
     "message": "<p>المواقف قواعد تعمل لا آراء: سجل معلومات يقول أي 45 حقيقة عن البيت لا تغادره أبدًا؛ وفئة عمليات لا تُفوَّض أبدًا؛ وهوية طبق يجب على المخطِّط احترامها؛ وموافقة على كل سجل تنفيذ؛ ومقعد للعمال أو المستهلكين في الحوكمة، ومقعد لمن يخدمهم النظام ما زال مقترحًا مفتوحًا. لكل منها دفاع في مقال، وكلها مفتوحة لمقترح، والمقترح حجة فلسفية بمخطط.</p>",
-    "options": [["اقرأ المقالات.", "من يرث الوصفة؛ الكرامة في الرعاية الآلية؛ ما يجوز لروبوت المنزل أن يعرفه؛ الرفض فضيلة؛ مثل النحل."], ["اكتب ردًا.", "طلب دمج إلى مجلد المقالات؛ الاختلاف هو المقصود."], ["اقترح قاعدة.", "مقترح يغيّر افتراضًا: فئة خصوصية معلومة، قائمة ما لا يُفوَّض، قواعد الهوية."], ["شارك في المراجعة الأخلاقية.", "لملف سياق المنزل عند انعقادها."]],
+    "options": [
+     [
+      "اقرأ المقالات.",
+      "من يرث الوصفة؛ الكرامة في الرعاية الآلية؛ ما يجوز لروبوت المنزل أن يعرفه؛ الرفض فضيلة؛ مثل النحل."
+     ],
+     [
+      "اكتب ردًا.",
+      "طلب دمج إلى مجلد المقالات؛ الاختلاف هو المقصود."
+     ],
+     [
+      "اقترح قاعدة.",
+      "مقترح يغيّر افتراضًا: فئة خصوصية معلومة، قائمة ما لا يُفوَّض، قواعد الهوية."
+     ],
+     [
+      "شارك في المراجعة الأخلاقية.",
+      "لملف سياق المنزل عند انعقادها."
+     ]
+    ],
     "first": "<p>اقرأ <a href=\"/ideas/what-a-household-robot-may-know/\">مقال بيانات المنزل</a> وقواعد السفر في سجل المعلومات (<code>vocab/facets.json</code>)؛ وجد معلومة واحدة تغيّر افتراضها، وقل لماذا في قضية.</p>",
-    "flow": ["مقال ← تعليق عام ← مقترح ← تغيير افتراض"],
-    "work": ["حالة حية تصبح فيها المواقف الأخلاقية قواعد تعمل، بسجل عام للحجة"],
-    "society": ["قرارات عن البيانات الحميمة والإرث الثقافي تُتخذ علنًا قبل أن تصل الآلات إلى ملايين البيوت"],
-    "links": [["أفكار ومقالات", "/ideas/"], ["ملف سياق المنزل", "/docs/HOUSEHOLD-CONTEXT/"], ["المقترحات", "/docs/RFCS/"], ["الحوكمة", "/docs/GOVERNANCE/"]]
+    "flow": [
+     "مقال ← تعليق عام ← مقترح ← تغيير افتراض"
+    ],
+    "work": [
+     "حالة حية تصبح فيها المواقف الأخلاقية قواعد تعمل، بسجل عام للحجة"
+    ],
+    "society": [
+     "قرارات عن البيانات الحميمة والإرث الثقافي تُتخذ علنًا قبل أن تصل الآلات إلى ملايين البيوت"
+    ],
+    "links": [
+     [
+      "أفكار ومقالات",
+      "/ideas/"
+     ],
+     [
+      "ملف سياق المنزل",
+      "/docs/HOUSEHOLD-CONTEXT/"
+     ],
+     [
+      "المقترحات",
+      "/docs/RFCS/"
+     ],
+     [
+      "الحوكمة",
+      "/docs/GOVERNANCE/"
+     ]
+    ]
    }
   },
   {
    "slug": "everyone",
    "en": {
-    "short": "Everyone", "title": "For everyone who cares about food, waste, jobs, the climate and the future",
+    "short": "Everyone",
+    "title": "For everyone who cares about food, waste, jobs, the climate and the future",
     "lead": "Cookwala is a way to write a recipe so that anyone, or anything, can cook it safely, and a way for food that would be thrown away to reach someone who needs it. It is free, it belongs to no company, and it says what it does not know.",
     "message": "<p>A machine that follows a Cookwala recipe refuses to guess: no oil thermometer, no deep frying. Your recipe keeps your name wherever it is cooked. Your household's facts stay in your house. A food bank could rescue more with the phones it already has; that is what the pilot is designed to test. And the whole thing is governed in public, with its critics published next to it.</p>",
-    "options": [["Try the dry run.", "Change the device and watch a step be refused; read why."], ["Play a simulator.", "A family's dinner, two cities, a country, the world, with the protocol on and off."], ["Read the recipes.", "Nine Egyptian dishes written so a machine can check them, in English and Arabic."], ["Write one recipe you love.", "Your name stays on it."], ["Tell a food bank or a school.", "The concept note is written for that conversation."]],
+    "options": [
+     [
+      "Try the dry run.",
+      "Change the device and watch a step be refused; read why."
+     ],
+     [
+      "Play a simulator.",
+      "A family's dinner, two cities, a country, the world, with the protocol on and off."
+     ],
+     [
+      "Read the recipes.",
+      "Nine Egyptian dishes written so a machine can check them, in English and Arabic."
+     ],
+     [
+      "Write one recipe you love.",
+      "Your name stays on it."
+     ],
+     [
+      "Tell a food bank or a school.",
+      "The concept note is written for that conversation."
+     ]
+    ],
     "first": "<p>Open the <a href=\"/playground/\">playground</a>, pick koshari and the device without thermometers, and read why the crisp onions are refused.</p>",
-    "flow": ["Curiosity → one recipe → one conversation with a kitchen that could use it"],
-    "work": ["Safer machines in your home", "Your own recipes preserved", "A way to help without giving money"],
-    "society": ["Less waste, safer food, machines that serve people who cannot cook for themselves, human time returned"],
-    "links": [["Playground", "/playground/"], ["Why Cookwala", "/why/"], ["Impact", "/impact/"], ["Contribute", "/contribute/"]]
+    "flow": [
+     "Curiosity → one recipe → one conversation with a kitchen that could use it"
+    ],
+    "work": [
+     "Safer machines in your home",
+     "Your own recipes preserved",
+     "A way to help without giving money"
+    ],
+    "society": [
+     "Less waste, safer food, machines that serve people who cannot cook for themselves, human time returned"
+    ],
+    "links": [
+     [
+      "Playground",
+      "/playground/"
+     ],
+     [
+      "Why Cookwala",
+      "/why/"
+     ],
+     [
+      "Impact",
+      "/impact/"
+     ],
+     [
+      "Contribute",
+      "/contribute/"
+     ]
+    ]
    },
    "ar": {
-    "short": "الجميع", "title": "لكل من يهتم بالطعام والهدر والعمل والمناخ والمستقبل",
+    "short": "الجميع",
+    "title": "لكل من يهتم بالطعام والهدر والعمل والمناخ والمستقبل",
     "lead": "كوكوالا طريقة لكتابة وصفة يستطيع أي أحد، أو أي شيء، طهيها بأمان، وطريقة ليصل الطعام الذي كان سيُرمى إلى من يحتاجه. مجاني، ولا تملكه أي شركة، ويقول ما لا يعرفه.",
     "message": "<p>الآلة التي تتبع وصفة كوكوالا ترفض التخمين: بلا ترمومتر زيت لا قلي غزير. تبقى وصفتك باسمك أينما طُبخت. وتبقى حقائق بيتك في بيتك. وقد يستطيع بنك الطعام إنقاذ المزيد بالهواتف التي عنده؛ وهذا ما صُممت التجربة لاختباره. والأمر كله يُحكم علنًا، ونُقّاده منشورون إلى جانبه.</p>",
-    "options": [["جرّب التجربة الجافة.", "غيّر الجهاز وشاهد خطوة تُرفض؛ واقرأ السبب."], ["شغّل محاكيًا.", "عشاء أسرة، مدينتان، دولة، العالم، بالبروتوكول وبدونه."], ["اقرأ الوصفات.", "تسعة أطباق مصرية مكتوبة لتتحقق منها الآلة، بالعربية والإنجليزية."], ["اكتب وصفة تحبها.", "يبقى اسمك عليها."], ["أخبر بنك طعام أو مدرسة.", "مذكرة المفهوم مكتوبة لتلك المحادثة."]],
+    "options": [
+     [
+      "جرّب التجربة الجافة.",
+      "غيّر الجهاز وشاهد خطوة تُرفض؛ واقرأ السبب."
+     ],
+     [
+      "شغّل محاكيًا.",
+      "عشاء أسرة، مدينتان، دولة، العالم، بالبروتوكول وبدونه."
+     ],
+     [
+      "اقرأ الوصفات.",
+      "تسعة أطباق مصرية مكتوبة لتتحقق منها الآلة، بالعربية والإنجليزية."
+     ],
+     [
+      "اكتب وصفة تحبها.",
+      "يبقى اسمك عليها."
+     ],
+     [
+      "أخبر بنك طعام أو مدرسة.",
+      "مذكرة المفهوم مكتوبة لتلك المحادثة."
+     ]
+    ],
     "first": "<p>افتح <a href=\"/ar/playground/\">ساحة التجربة</a>، واختر الكشري والجهاز بلا ترمومترات، واقرأ لماذا رُفض البصل المقرمش.</p>",
-    "flow": ["فضول ← وصفة واحدة ← محادثة واحدة مع مطبخ يستفيد"],
-    "work": ["آلات أكثر أمانًا في بيتك", "وصفاتك محفوظة", "طريقة للمساعدة بلا مال"],
-    "society": ["هدر أقل، وطعام أكثر أمانًا، وآلات تخدم من لا يستطيعون الطهي لأنفسهم، ووقت يعود إلى الناس"],
-    "links": [["ساحة التجربة", "/playground/"], ["لماذا كوكوالا", "/why/"], ["الأثر", "/impact/"], ["ساهم", "/contribute/"]]
+    "flow": [
+     "فضول ← وصفة واحدة ← محادثة واحدة مع مطبخ يستفيد"
+    ],
+    "work": [
+     "آلات أكثر أمانًا في بيتك",
+     "وصفاتك محفوظة",
+     "طريقة للمساعدة بلا مال"
+    ],
+    "society": [
+     "هدر أقل، وطعام أكثر أمانًا، وآلات تخدم من لا يستطيعون الطهي لأنفسهم، ووقت يعود إلى الناس"
+    ],
+    "links": [
+     [
+      "ساحة التجربة",
+      "/playground/"
+     ],
+     [
+      "لماذا كوكوالا",
+      "/why/"
+     ],
+     [
+      "الأثر",
+      "/impact/"
+     ],
+     [
+      "ساهم",
+      "/contribute/"
+     ]
+    ]
    }
   }
  ]
