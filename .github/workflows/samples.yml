@@ -97,7 +97,7 @@ jobs:
         run: |
           docker build -f samples/packaging/docker/Containerfile -t cookwala-samples:ci samples
           docker run --rm cookwala-samples:ci demo --format csv
-          docker run -d --name s -p 8080:8080 --read-only --user 12345 cookwala-samples:ci
+          docker run -d --name samples-smoke -p 8080:8080 --read-only --user 12345 cookwala-samples:ci
           sleep 2 && curl -fsS localhost:8080/health && curl -fsS 'localhost:8080/v1/samples/demo?format=markdown'
       - uses: azure/setup-helm@v4
       - run: helm lint samples/packaging/helm/cookwala-samples
