@@ -1,6 +1,8 @@
 # Cookwala: Plan
 
-**Cookwala: the world's first and largest robot cooking recipes index and CLI.**
+**Cookwala: the open standard for cooking safely: people, kitchens and robots.** (The first
+one-liner, "the world's first and largest robot cooking recipes index and CLI", was retired; see
+`IMPACT.md` and `STRATEGY.md`.)
 An open, royalty-free standard and a free public index that lets any robot, appliance or AI
 agent find a recipe, check that it is safe and allowed where it runs, and cook it end to end,
 alone or together with other machines and people.
