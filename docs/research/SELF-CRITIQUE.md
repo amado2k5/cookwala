@@ -131,3 +131,16 @@ header cells; they have one now.
 - Verify a recipe in a kitchen, a rule pack with a dietitian, or an envelope on a real hob.
 - Decide the founder's questions: the one-liner, the origin story, pricing, the raise, partner
   names, the seat for people served, public anchoring of the transparency log.
+
+## Addendum, 2026-10-05: a first-time visitor
+
+The founder asked whether a visitor who wants to know how this helps end hunger, helps people
+or helps robots can find that quickly, and whether there are enough visuals. Finding: the
+information existed (home, why, impact, essays) but no page answered the question by name, and
+the site had one icon and one diagram. Fixed: a "How it helps" page (`/goals/`) second in the
+navigation and linked from the home page, one section per goal with the measured problem,
+now, next, later and never, and three inline SVG diagrams whose labels are site strings (so they
+translate and switch theme): surplus to plate by SMS with the temperature refusal, what the
+device checks and what the rule packs flag, and the dry run with the sensor ladder. Still open:
+the same diagrams in the deck and the whitepaper, and diagrams for the household-context travel
+rules and the three loops.

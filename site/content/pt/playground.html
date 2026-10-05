@@ -1,0 +1,63 @@
+<!--meta {"title": "Playground: dry run, envelope explorer, simuladores", "description": "Execute o dry run em nove receitas e em qualquer dispositivo que você construir, arraste um traçado de temperatura através da banda segura de uma operação e reproduza quatro simuladores do protocolo ligado e desligado. Tudo funciona no seu navegador.", "path": "/playground/", "scripts": ["dryrun.js", "demo.js", "envelope.js"]} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Playground</p>
+  <h1>Experimente no seu navegador</h1>
+  <p class="lead">Três coisas para testar: o dry run (este dispositivo pode cozinhar esta receita?), o envelope explorer (quando um simmer deixa de ser um simmer?) e quatro simuladores que mostram o protocolo ligado e desligado. Nada aqui é um dispositivo real; tudo funciona na sua máquina.</p>
+</section>
+
+<section id="demo" class="band" aria-labelledby="demo-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="demo-h">Dry run: este dispositivo pode cozinhar esta receita?</h2><p>Nove receitas, cinco predefinições de dispositivo ou crie o seu próprio dispositivo a partir de operações, sensores e pistas de visão. O resultado é um link que pode partilhar.</p></div>
+    <div class="demo">
+      <form class="controls" id="demoForm" aria-label="Dry-run settings">
+        <label>Receita <select id="dRecipe"></select></label>
+        <label>Dispositivo <select id="dDevice"></select></label>
+        <label class="check"><input type="checkbox" id="dHuman" checked> Uma pessoa está na cozinha</label>
+        <label class="check"><input type="checkbox" id="dModel" checked> Estimativas registadas permitidas onde um sensor está em falta</label>
+      </form>
+      <details id="builder" open><summary>Crie o seu próprio dispositivo</summary><div class="builder" id="builderBody"></div></details>
+      <div class="verdict" id="verdict" role="status" aria-live="polite">Loading the recipe and the operation vocabulary…</div>
+      <div class="table-wrap"><table class="steps-t" id="steps"><thead><tr><th>Etapa</th><th>Operação</th><th>Faixa de segurança</th><th>Quem</th><th>Verificado por</th></tr></thead><tbody></tbody></table></div>
+      <div class="share"><span>Share this result</span><input id="shareUrl" type="text" readonly aria-label="Shareable link"><button type="button" class="btn" id="copyShare">Copiar</button></div>
+      <p class="note">Experimente koshari no dispositivo sem termômetros: as cebolas crocantes precisam de fritura profunda, e a fritura profunda tem um degrau, um termômetro de óleo. Experimente salata baladi no braço do balcão: sem calor, então o braço faz o corte com sua câmera.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="env-h">
+  <div class="sec-head"><h2 id="env-h">Explorador de envelope: quando um simmer deixa de ser um simmer?</h2><p>Escolha uma operação e arraste os pontos de um traçado de temperatura. O verificador é a mesma função que os vetores de conformance testam: o aquecimento é permitido, então o médio deve permanecer dentro da faixa; um alvo de receita, uma vez alcançado, deve ser mantido. As faixas de água mudam com a altitude.</p></div>
+  <div class="demo envelope-demo">
+    <form class="controls" id="envForm" aria-label="Envelope settings">
+      <label>Operação <select id="envOp"></select></label>
+      <label>Altitude <input id="envAlt" type="number" value="0" min="0" max="5000" step="100"> m</label>
+      <label class="check"><input type="checkbox" id="envTarget"> Alvo da receita <input id="envTargetV" type="number" value="94" step="1" aria-label="Target °C"> ± <input id="envTol" type="number" value="3" step="1" min="0" aria-label="Tolerance °C"> °C</label>
+    </form>
+    <div class="envelope">
+      <svg id="envSvg" viewBox="0 0 640 320" role="img" aria-labelledby="envTitle envDesc"><title id="envTitle">Temperature trace against the operation's safe band</title><desc id="envDesc">Drag the circles to change the trace. The shaded band is the envelope.</desc></svg>
+      <div>
+        <div class="verdict" id="envVerdict" role="status" aria-live="polite"></div>
+        <dl class="sheet" id="envSheet"></dl>
+        <p class="note" id="envNote"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" aria-labelledby="sim-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="sim-h">Simuladores, explicados para não especialistas</h2><p>Quatro modelos determinísticos, cada um jogável com o protocolo ligado ou desligado, cada um rotulado como <span class="kind modelled">modelo ilustrativo</span>. Eles não preveem o futuro; eles mostram o que decorre das premissas escritas em cada página, e cada premissa pode ser alterada.</p></div>
+    <div class="cards">
+      <a class="card" href="/sim/"><h3>Uma casa</h3><p>Uma família pede o jantar a um robô. Observe o pedido percorrer provedores, aprovações, interrupções e um encerramento; desligue o protocolo e veja a mesma noite com o robô sozinho.</p><span class="go">Play →</span></a>
+      <a class="card" href="/sim/city/"><h3>Duas cidades, um mês</h3><p>Fazendas, um hub de atacado, lojas, 1.500 casas por cidade, caminhões, lixo e energia. Robôs sozinhos empurram o desperdício para montante; com planos compartilhados, as perdas antes das casas diminuem.</p><span class="go">Play →</span></a>
+      <a class="card" href="/sim/country/"><h3>Um país, um ano</h3><p>Seis províncias adotando em diferentes velocidades, estações, um programa de alívio. O resgate cobre cerca de 5 % da necessidade no rollout misto: real, e não o suficiente.</p><span class="go">Play →</span></a>
+      <a class="card" href="/sim/world/"><h3>O mundo, cinco anos</h3><p>Dez regiões, três cenários de robôs, protocolo ligado ou desligado. A fome está onde os robôs não estão; o protocolo ajuda países sem robôs.</p><span class="go">Play →</span></a>
+    </div>
+    <p class="note">Como lê-los: um resultado é uma diferença entre duas execuções do mesmo modelo, não uma medição do mundo. As páginas da cidade e do país listam a calibração contra os números do PNUMA e da FAO e cada suposição comportamental. <a href="/docs/SIM-FINDINGS/">O que os simuladores encontraram</a>, incluindo o que eles erraram.</p>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div><h2>Resgate de alimentos por SMS</h2><p>O passo a passo do Perfil Humanitário: digite as mensagens que um food bank enviaria e observe os documentos, as descobertas das regras e o resumo do impacto aparecerem.</p><a class="btn primary" href="/humanitarian/#sms">Open the walkthrough</a></div>
+  <div><h2>Na linha de comando</h2><p>Tudo nesta página é uma função na biblioteca de referência. <a href="/developers/">O quickstart</a> executa as mesmas verificações em um terminal; <a href="/docs/MCP/">o servidor MCP</a> as fornece a um agente de IA.</p></div>
+</section>
+

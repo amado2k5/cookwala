@@ -2,6 +2,16 @@
 
 Newest first. Each entry: date, phase, what was done, what is next, blockers.
 
+## 2026-10-05 · Goals page, translation scope
+
+- Founder: stop machine translation after the language in progress (Portuguese) and spend
+  the time on the rest of the list. Site editions: English, Arabic (by hand), French, Spanish,
+  German, Portuguese (machine, labelled); the other 19 fall back to English pages with their
+  own navigation strings where they exist. Documentation: 16 to 18 documents per language in
+  24 languages; the rest not translated.
+- `/goals/` ("How it helps"): three goals with diagrams, now/next/later/never, in the
+  navigation and on the home page; see SELF-CRITIQUE addendum.
+
 ## 2026-10-04 (evening) · Q1 to Q3: fifi.cooking import, SDK in 13 languages with 100 scenarios, the site in 25 languages
 
 - Founder changed the shipping rule to direct, incremental pushes to main (every ~20 minutes);

@@ -29,7 +29,7 @@ work for people, and this paper says exactly how far it goes toward each.
    420,000 deaths a year (measured by WHO, 2015 estimates). Cooking machines add new ways to be
    wrong: hot oil estimated by a clock, a recipe that says 240 °C, an agent that obeys text it
    read.
-3. **Food is thrown away while people go hungry.** About 13 % of food is lost between harvest
+3. **Food is thrown away while people go hungry.** About 14 % of food is lost between harvest
    and retail (FAO, 2019); about 1.05 billion tonnes were wasted at retail, food service and
    homes in 2022 (UNEP, 2024); about 733 million people faced hunger in 2023 (SOFI, 2024). Food
    banks rescue what they can with phone calls and spreadsheets that differ by site.

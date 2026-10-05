@@ -148,6 +148,21 @@ def main():
             s = translate_json_value(a.model, a.host, lang, json.loads(json.dumps(en_strings)))
             s['switch'] = AUTONYM[lang]
             (d / 'strings.json').write_text(json.dumps(s, ensure_ascii=False, indent=1) + '\n'); print(f'{lang} strings done', flush=True)
+        elif 'strings' in what:
+            # fill only the keys English has gained since this file was written
+            existing = json.loads((d / 'strings.json').read_text())
+            missing = {}
+            for k, v in en_strings.items():
+                if k not in existing: missing[k] = v
+                elif isinstance(v, dict) and isinstance(existing.get(k), dict):
+                    sub = {kk: vv for kk, vv in v.items() if kk not in existing[k]}
+                    if sub: missing[k] = sub
+            if missing:
+                tr = translate_json_value(a.model, a.host, lang, json.loads(json.dumps(missing)))
+                for k, v in tr.items():
+                    if isinstance(v, dict) and isinstance(existing.get(k), dict): existing[k].update(v)
+                    else: existing[k] = v
+                (d / 'strings.json').write_text(json.dumps(existing, ensure_ascii=False, indent=1) + '\n'); print(f'{lang} strings: {len(missing)} new keys filled', flush=True)
         if 'for' in what and (a.force or not (d / 'for.json').exists()):
             out = {g['slug']: translate_json_value(a.model, a.host, lang, json.loads(json.dumps(g['en']))) for g in for_groups}
             (d / 'for.json').write_text(json.dumps(out, ensure_ascii=False, indent=1) + '\n'); print(f'{lang} for.json done', flush=True)

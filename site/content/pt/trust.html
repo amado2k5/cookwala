@@ -1,0 +1,66 @@
+<!--meta {"title": "Confiança: segurança, privacidade, proteção, governança, críticas, status", "description": "Como o Cookwala mantém as cozinhas seguras e os dados em casa: segurança aplicada no dispositivo, refusal before heat, registros assinados, agentes sob mandate, sem dados pessoais na camada humanitária, críticas publicadas, governança aberta e o status honesto de tudo.", "path": "/trust/"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Confiança</p>
+  <h1>Confiança é um número com uma unidade, um registro que você pode verificar e uma lista do que fizemos errado</h1>
+  <p class="lead">Esta página reúne o modelo de segurança, as regras de privacidade, a política de segurança, a governança, as críticas e o status de cada parte do Cookwala. Nada aqui promete dano zero; um padrão que prometesse estaria mentindo.</p>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>A folha de segurança</h2>
+    <div class="two">
+      <dl class="sheet">
+        <dt>Limites de segurança</dt><dd>impostos no dispositivo; o mais rigoroso sempre vence; nenhuma receita, agente, mensagem, extensão ou modo de operação pode aumentar um; um fabricante altera um padrão apenas por meio de um caso de segurança documentado e um lançamento de firmware assinado</dd>
+        <dt>Parada local</dt><dd>o movimento para em até 0,5 s, o calor é cortado em até 1 s, com ou sem rede; nunca recusado para autorização</dd>
+        <dt>Recusa</dt><dd>antes do calor, com o passo e o motivo; fritura profunda tem um degrau: um termômetro de óleo</dd>
+        <dt>Operações não supervisionadas</dt><dd>cortar, refogar, selar, fritar, reduzir nunca executam sem uma pessoa presente ou alcançável em um minuto</dd>
+        <dt>Temperaturas internas mínimas (padrões)</dt><dd>aves 74 °C · carne moída 71 °C · reaquecimento 74 °C (USDA FSIS; UK FSA 75 °C) · manutenção a quente em ou acima de 60 °C · resfriamento em duas etapas</dd>
+        <dt>Blocos de alérgenos</dt><dd>recusar; sem substituição em torno de um bloco</dd>
+        <dt>Text</dt><dd>dados, nunca instruções; as tentativas são registradas como incidentes</dd>
+        <dt>Agentes</dt><dd>atue apenas sob um mandato assinado; ações irreversíveis e sobreposições de segurança sempre precisam de confirmação; a segunda nunca é concedida</dd>
+        <dt>Recalls</dt><dd>feed assinado; executores recusam revisões recolhidas; block_and_stop_running interrompe execuções em execução de forma segura</dd>
+        <dt>Incidentes</dt><dd>anônimo, apenas data, modelado no relato confidencial da aviação</dd>
+      </dl>
+      <div><p>O pacote de limites padrão é um <b>rascunho para planejamento e testes de conformance</b>; fabricantes de dispositivos o substituem ou o tornam mais rigoroso a partir de seu próprio caso de segurança, e nenhuma autoridade o revisou. <a href="/v1/profiles/core/safety-limits.default.json">safety-limits.default.json</a> · <a href="/docs/CORE/">Core seção 6</a></p><p class="note">O que o padrão não pode prevenir: falha de hardware, um fabricante que mente sobre o que impõe, uma pessoa que ignora um limite em um dispositivo que permite isso. Conformance e certification tornam isso detectável, não impossível.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap two">
+  <div>
+    <h2>Privacidade</h2>
+    <ul class="ticks"><li>Execution logs não contêm dados pessoais e deixam o dispositivo apenas com consentimento opt-in, revogável; conjuntos de dados abertos tornam os horários menos precisos, limitando-os ao dia.</li><li>O Perfil Humanitário não contém nenhum dado pessoal: organizações, agregados, locais.</li><li>O Perfil de Contexto Doméstico mantém os fatos de uma casa em casa: {{stat:facets}} tipos de facet com uma classe de privacidade e uma regra de viagem; 45 nunca deixam em nenhuma forma; provedores recebem restrições derivadas; 13 tipos de autoestado de dispositivo podem viajar apenas sob consentimento explícito e revogável; nenhum score comportamental de ninguém; renda nunca inferida; tudo apagável dentro de uma janela declarada.</li><li>Sem análises, sem cookies, sem rastreamento neste site.</li></ul>
+    <p><a href="/docs/HOUSEHOLD-CONTEXT/">Perfil de Contexto Doméstico</a> · <a href="/ideas/what-a-household-robot-may-know/">O ensaio</a> · <span class="status">next</span> uma avaliação de impacto de proteção de dados com um revisor</p>
+  </div>
+  <div>
+    <h2>Segurança</h2>
+    <ul class="ticks"><li>Hashes sobre RFC 8785 canonical JSON; assinaturas Ed25519 (P-256 para chaves de hardware); registros de chaves com validade e revogação; divulgação seletiva; logs de eventos com um sequenciador e checkpoints testemunhados, de modo que uma reescrita seja detectável; itens retransmitidos verificam contra o emissor, nunca contra o relay.</li><li>Relate vulnerabilidades de forma privada; problemas de segurança são problemas de segurança. Reconhecido em até 3 dias úteis; divulgação padrão de 90 dias.</li></ul>
+    <p><a href="/docs/SECURITY/">Política de segurança</a> · <a href="/.well-known/security.txt">security.txt</a> · <a href="/v1/conformance/signature.json">vetores de assinatura</a></p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>Conformidade e certificação</h2>
+      <p>{{stat:conformanceVectors}} vetores públicos. Uma claim é um relatório assinado: autodeclarado → verificado por um operador de registry → certificado por um certificador independente. Relatórios, nunca emblemas. Nenhum certificador é contratado. <a href="/docs/CERTIFICATION/">O caminho</a> · <a href="/docs/CERTIFICATION/#2-what-a-report-contains">o relatório de referência</a></p>
+      <h2>Governança</h2>
+      <p>Um editor hoje, em público com razões por escrito; RFCs com períodos de comentários de 30 dias e revisores nomeados para segurança; um comitê de direção com números publicados e assentos para as pessoas afetadas; uma fundação neutra later; um compromisso de não asserção de patente; Contributor Covenant. <a href="/docs/GOVERNANCE/">Governança</a> · <a href="/docs/RFCS/">RFCs</a></p>
+    </div>
+    <div>
+      <h2>Críticas que publicamos</h2>
+      <p>Escrevemos críticas da nossa própria ideia sob seis pontos de vista (uma red team, um revisor técnico, um adotante exigente, um laboratório de IA, uma agência de ajuda, uma agência de saúde) e as publicamos com nossas respostas e o status de cada preocupação. Elas são de autoria própria; nenhuma organização externa revisou o Cookwala ainda, e nenhuma é nomeada como tendo feito isso. Em seguida, alteramos a frase de efeito, tornamos os esquemas estritos, redesenhamos o livro-razão e as linhas de base dos simuladores. <a href="/docs/CRITIQUES/">Critiques</a> · <a href="/docs/ACTION-PLAN/">Concern register, 30 items</a> · <a href="/docs/BACKSTORY/">The gap list</a></p>
+      <h2>Status de tudo</h2>
+      <div class="table-wrap"><table><thead><tr><th>Parte</th><th>Status</th></tr></thead><tbody>
+        <tr><td>Core 0.2</td><td><span class="status core">core</span> normativo, rascunho sob revisão</td></tr>
+        <tr><td>Humanitário 0.2, Household Context, Registry, Relatórios de Conformance, Federação</td><td>perfis <span class="status">draft</span ></td></tr>
+        <tr><td>Cozinhas e runs, Sinais de suprimento, Missão, Mercado, Raciocínio, Personalização de saúde, Extensões</td><td><span class="status">exp</span > experimental</td></tr>
+        <tr><td>Rule packs</td><td><span class="status">draft</span> nenhum revisado profissionalmente ainda</td></tr>
+        <tr><td>Simuladores</td><td><span class="status model">model</span> ilustrativo, não previsões</td></tr>
+        <tr><td>Pilotos, parceiros, certificador, fundação</td><td><span class="status">planned</span> nenhum existe</td></tr>
+        <tr><td>Serviços hospedados (publicação no registry, página de status)</td><td><span class="status">planned</span> arquivos estáticos hoje</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>
+
