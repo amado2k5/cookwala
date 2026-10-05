@@ -6,8 +6,8 @@ send a pull request. Items marked **decision** wait for the founder; items marke
 need a named professional before they can be accepted; everything else is open to anyone.
 
 How items got here: an internal review of the site and the standard run on 2026-10-04 from
-[`prompts/critique-prompt.md`](prompts/critique-prompt.md); feedback from four chat assistants
-asked to read the site ([`feedback/`](feedback/)); and the maintainer's own list. Nothing here
+[`prompts/critique-prompt.md`](prompts/critique-prompt.md); feedback from outside readers of the
+site; and the maintainer's own list. Nothing here
 is a promise or a date. "Done" items stay for a while so a reader can see what changed.
 
 Labels: `standard` (schemas, vocabularies, Core text), `reference` (reference library, hub,
