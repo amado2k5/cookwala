@@ -65,6 +65,11 @@ bash tools/build_site.sh _site                # the website
 }
 ```
 
+## Backlog
+
+Proposed changes, ideas from outside feedback and open questions, with an id per item for anyone to
+pick up or argue with: [BACKLOG.md](BACKLOG.md).
+
 ## Licenses
 
 - Schemas, tools, SDKs, reference implementations: [Apache-2.0](LICENSE)

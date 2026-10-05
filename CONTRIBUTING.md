@@ -24,6 +24,9 @@ Thank you. There are many ways to help, and most don't need code.
   (a namespace registry file comes with the registry service).
 - **Spec changes:** follow the RFC process in [GOVERNANCE.md](GOVERNANCE.md).
 
+Looking for something to do: [BACKLOG.md](BACKLOG.md) lists open items with an id, a label and
+whether a professional reviewer or a founder decision is needed first.
+
 ## How changes work
 
 1. Open an issue first for anything that changes Core (`docs/CORE.md`).
