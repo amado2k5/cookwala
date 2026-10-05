@@ -58,7 +58,7 @@ def run_scenario(s, client):
         args = {k: resolve(v, vars_) for k, v in (st.get('args') or {}).items()}
         try:
             if op == 'dryRun': out = client.dry_run(**{snake(k): v for k, v in args.items()})
-            else: out = getattr(client, snake(op))(**{snake(n): args[n] for n in SIGNATURES[op] if n in args})
+            else: out = getattr(client, snake(op))(**{('recipe_id' if op == 'getRecipe' else 'execution_id') if n == 'id' else snake(n): args[n] for n in SIGNATURES[op] if n in args})
         except CookwalaProblem as p:
             if op in ('startExecution', 'stopExecution', 'resumeExecution'): out = p.body
             else: failures.append(f'step {i} {op}: {p}'); log.append({'step': i, 'op': op, 'error': p.body}); continue

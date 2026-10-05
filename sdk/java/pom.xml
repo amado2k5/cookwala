@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Cookwala hub client for Java 11+. No runtime dependencies: java.net.http and a minimal JSON class.
+     Build:  mvn -q -f sdk/java/pom.xml package        (writes target/cookwala-sdk-0.2.0.jar)
+     Or without Maven:  javac -d build/java sdk/java/src/ai/cookwala/sdk/*.java
+     Not yet published to Maven Central; consume from this repository. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>ai.cookwala</groupId>
+  <artifactId>cookwala-sdk</artifactId>
+  <version>0.2.0</version>
+  <packaging>jar</packaging>
+
+  <name>Cookwala SDK</name>
+  <description>Client for a Cookwala hub: the Core 0.2 API and the reference tool endpoints (cooking safely: people, kitchens, robots).</description>
+  <url>https://cookwala.ai/</url>
+
+  <properties>
+    <maven.compiler.release>11</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <release>11</release>
+          <compilerArgs><arg>-Xlint:all</arg></compilerArgs>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.2</version>
+      </plugin>
+      <!-- The JSON tests are a plain main() under test/ (no framework); run them with:
+           javac -d build/java-test sdk/java/src/ai/cookwala/sdk/*.java sdk/java/test/ai/cookwala/sdk/JsonTest.java
+           java -cp build/java-test ai.cookwala.sdk.JsonTest -->
+    </plugins>
+  </build>
+</project>

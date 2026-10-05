@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Cookwala hub client for .NET 8+. No dependencies beyond the BCL: HttpClient and System.Text.Json.
+       dotnet build sdk/csharp          (library)
+       dotnet pack  sdk/csharp          (local .nupkg; not yet published to NuGet)
+       Scenario samples are .NET 10 file-based apps that reference this project: dotnet run scenarios/out/<id>-<slug>/csharp.cs -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>Cookwala.Sdk</RootNamespace>
+    <AssemblyName>Cookwala.Sdk</AssemblyName>
+    <PackageId>Cookwala.Sdk</PackageId>
+    <Version>0.2.0</Version>
+    <Authors>Cookwala contributors</Authors>
+    <Description>Client for a Cookwala hub: the Core 0.2 API and the reference tool endpoints (cooking safely: people, kitchens, robots).</Description>
+    <PackageProjectUrl>https://cookwala.ai/</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>
