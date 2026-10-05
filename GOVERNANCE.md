@@ -45,7 +45,10 @@ Decisions use lazy consensus. Where a vote is needed, the numbers are:
 ## Later: a neutral home
 
 The spec, the name and the certification mark move to a neutral foundation (for example the
-Joint Development Foundation or the Linux Foundation) with a patent non-assertion pledge.
+Joint Development Foundation or the Linux Foundation) with a patent non-assertion pledge. Since
+2026-10-05 the specifications are developed under the Community Specification License 1.0
+(`LICENSE-SPEC.md`, `SCOPE.md`, `NOTICES.md`), the JDF's own template, so that move needs no
+relicensing.
 The founder keeps no veto.
 
 ## How changes are made

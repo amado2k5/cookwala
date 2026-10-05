@@ -138,7 +138,7 @@
   ]
  ],
  "footer_origin": "Cookwala começou a partir do fifi.cooking, uma coleção familiar de receitas caseiras egípcias. Os dados do Cookwala são fornecidos sem garantia. Fabricantes e operadores de dispositivos permanecem responsáveis pelo hardware seguro e pela lei local. Nada neste site nomeia um parceiro, usuário ou piloto que não exista.",
- "footer_licences": "Código Apache-2.0 · especificação CC BY 4.0 · vocabulários CC0 · compromisso de não reivindicação de patente · sem rastreamento, sem cookies.",
+ "footer_licences": "Código Apache-2.0 · especificação CC BY 4.0 e Community Specification License 1.0 · vocabulários CC0 · compromisso de não reivindicação de patente · sem cookies.",
  "status": {
   "core": "Core 0.2 · normativo, sob revisão",
   "draft": "Perfil de rascunho",
@@ -413,7 +413,7 @@
  },
  "origin": {
   "h": "Começou com um livro de receitas da família",
-  "p": "O arquivo de cozinha caseira egípcia da minha família, as receitas da Dra. Fatma Alkawokgy (1943 a 2026), está publicado em fifi.cooking em 25 idiomas. Foram escritas para pessoas. \"Fritar até dourar.\" \"Cobrir com água.\" \"Deixar em fogo brando até ficar pronto.\" Quem cresceu naquela cozinha sabe exatamente o que essas linhas querem dizer. Uma máquina não sabe, nem um estranho. Quando tentei descrever um desses pratos para que um forno, um robô ou um banco de alimentos pudesse verificá-lo antes de cozinhar, descobri que ninguém havia escrito o que é \"fogo brando\", quando o frango é seguro ou quando um passo deve ser recusado. Cookwala é a minha tentativa de escrever isso, em aberto, para que os pratos sobrevivam às máquinas e as máquinas recusem em vez de adivinhar.",
+  "p": "As receitas da minha falecida mãe, a Dra. Fatma Alkawokgy (1943 a 2026), uma vida de cozinha caseira egípcia, está publicado em fifi.cooking em 25 idiomas. Foram escritas para pessoas. \"Fritar até dourar.\" \"Cobrir com água.\" \"Deixar em fogo brando até ficar pronto.\" Quem cresceu naquela cozinha sabe exatamente o que essas linhas querem dizer. Uma máquina não sabe, nem um estranho. Quando tentei descrever um desses pratos para que um forno, um robô ou um banco de alimentos pudesse verificá-lo antes de cozinhar, descobri que ninguém havia escrito o que é \"fogo brando\", quando o frango é seguro ou quando um passo deve ser recusado. Cookwala é a minha tentativa de escrever isso, em aberto, para que os pratos sobrevivam às máquinas e as máquinas recusem em vez de adivinhar.",
   "by": "o fundador"
  },
  "try_dryrun": "Experimentar o dry run",

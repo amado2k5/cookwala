@@ -138,7 +138,7 @@
   ]
  ],
  "footer_origin": "Cookwala est issu de fifi.cooking, une collection familiale de recettes maison égyptiennes. Les données de Cookwala sont fournies sans garantie. Les fabricants et opérateurs d'appareils restent responsables de la sécurité du matériel et du respect des lois locales. Rien sur ce site ne nomme un partenaire, un utilisateur ou un pilote qui n'existe pas.",
- "footer_licences": "Code Apache-2.0 · spécification CC BY 4.0 · vocabulaires CC0 · engagement de non-assertion de brevet · pas de suivi, pas de cookies.",
+ "footer_licences": "Code Apache-2.0 · spécification CC BY 4.0 et Community Specification License 1.0 · vocabulaires CC0 · engagement de non-assertion de brevet · pas de cookies.",
  "status": {
   "core": "Core 0.2 · normatif, en cours de révision",
   "draft": "Profil brouillon",
@@ -413,7 +413,7 @@
  },
  "origin": {
   "h": "Tout a commencé par un livre de cuisine familial",
-  "p": "L'archive de cuisine égyptienne de ma famille, les recettes de la Dre Fatma Alkawokgy (1943 à 2026), est publiée sur fifi.cooking en 25 langues. Elles ont été écrites pour des personnes. « Faire frire jusqu'à ce que ce soit doré. » « Couvrir d'eau. » « Laisser mijoter jusqu'à ce que ce soit prêt. » Quiconque a grandi dans cette cuisine sait exactement ce que ces lignes veulent dire. Une machine ne le sait pas, ni un étranger. Quand j'ai voulu décrire un de ces plats pour qu'un four, un robot ou une banque alimentaire puisse le vérifier avant de cuisiner, j'ai découvert que personne n'avait écrit ce qu'est « mijoter », quand le poulet est sûr, ni quand une étape doit être refusée. Cookwala est ma tentative de l'écrire, en public, pour que les plats survivent aux machines et que les machines refusent plutôt que deviner.",
+  "p": "Les recettes de ma mère, la Dre Fatma Alkawokgy (1943 à 2026), toute une vie de cuisine égyptienne, est publiée sur fifi.cooking en 25 langues. Elles ont été écrites pour des personnes. « Faire frire jusqu'à ce que ce soit doré. » « Couvrir d'eau. » « Laisser mijoter jusqu'à ce que ce soit prêt. » Quiconque a grandi dans cette cuisine sait exactement ce que ces lignes veulent dire. Une machine ne le sait pas, ni un étranger. Quand j'ai voulu décrire un de ces plats pour qu'un four, un robot ou une banque alimentaire puisse le vérifier avant de cuisiner, j'ai découvert que personne n'avait écrit ce qu'est « mijoter », quand le poulet est sûr, ni quand une étape doit être refusée. Cookwala est ma tentative de l'écrire, en public, pour que les plats survivent aux machines et que les machines refusent plutôt que deviner.",
   "by": "le fondateur"
  },
  "try_dryrun": "Essayer le dry run",

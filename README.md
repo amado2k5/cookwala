@@ -73,7 +73,7 @@ pick up or argue with: [BACKLOG.md](BACKLOG.md).
 ## Licenses
 
 - Schemas, tools, SDKs, reference implementations: [Apache-2.0](LICENSE)
-- Specification text and docs: [CC BY 4.0](LICENSE-CC-BY-4.0)
+- Specification text and docs: [CC BY 4.0](LICENSE-CC-BY-4.0) for reuse of the text; participation, contributions and patent terms under the [Community Specification License 1.0](LICENSE-SPEC.md) ([SCOPE.md](SCOPE.md), [NOTICES.md](NOTICES.md), [contributor agreement](CONTRIBUTOR-LICENSE-AGREEMENT.md))
 - Vocabularies, bindings, policy packs: [CC0 1.0](LICENSE-CC0)
 - Recipe data: CC BY 4.0 where marked in each document's `license` field; collections whose rights are not yet confirmed carry `LicenseRef-source-credited` and publish structured facts only ([LICENSES/LicenseRef-source-credited.md](LICENSES/LicenseRef-source-credited.md))
 - Patent pledge: [PATENTS.md](PATENTS.md)

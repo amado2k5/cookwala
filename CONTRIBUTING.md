@@ -35,6 +35,9 @@ whether a professional reviewer or a founder decision is needed first.
 3. If you change behaviour, change or add a conformance vector.
 4. Write plainly. Every public number says whether it is measured, modelled or assumed.
 
+Every commit carries a `Signed-off-by:` line (`git commit -s`): that is your acceptance of the
+[Contributor License Agreement](CONTRIBUTOR-LICENSE-AGREEMENT.md), which brings the
+[Community Specification License 1.0](LICENSE-SPEC.md) and its patent terms to your contribution.
 By contributing you agree your contribution is licensed under the repository licences
 (Apache-2.0 for code, CC BY 4.0 for the spec, CC0 for vocabularies) and covered by the
 [patent pledge](PATENTS.md).

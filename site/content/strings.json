@@ -139,7 +139,7 @@
    ]
   ],
   "footer_origin": "Cookwala started from fifi.cooking, a family collection of Egyptian home recipes. Cookwala data is provided without warranty. Device makers and operators remain responsible for safe hardware and local law. Nothing on this site names a partner, user or pilot that does not exist.",
-  "footer_licences": "Code Apache-2.0 · specification CC BY 4.0 · vocabularies CC0 · patent non-assertion pledge · no cookies.",
+  "footer_licences": "Code Apache-2.0 · specification CC BY 4.0 and Community Specification License 1.0 · vocabularies CC0 · patent non-assertion pledge · no cookies.",
   "status": {
    "core": "Core 0.2 · normative, under review",
    "draft": "Draft profile",
@@ -432,7 +432,7 @@
   },
   "origin": {
    "h": "It started with a family cookbook",
-   "p": "My family's archive of Egyptian home cooking, the recipes of Dr. Fatma Alkawokgy (1943 to 2026), is published at fifi.cooking in 25 languages. They were written for people. \"Fry until golden.\" \"Add water to cover.\" \"Let it simmer until it is ready.\" Anyone who grew up in that kitchen knows exactly what those lines mean. A machine does not, and neither does a stranger. When I tried to describe one of those dishes so that an oven, a robot or a food bank could check it before cooking, I found that nobody had written down what \"simmer\" is, when chicken is safe, or when a step must be refused. Cookwala is my attempt to write that down, in the open, so that the dishes outlive the machines and the machines refuse rather than guess.",
+   "p": "My late mother's recipes, Dr. Fatma Alkawokgy (1943 to 2026), a lifetime of Egyptian home cooking, is published at fifi.cooking in 25 languages. They were written for people. \"Fry until golden.\" \"Add water to cover.\" \"Let it simmer until it is ready.\" Anyone who grew up in that kitchen knows exactly what those lines mean. A machine does not, and neither does a stranger. When I tried to describe one of those dishes so that an oven, a robot or a food bank could check it before cooking, I found that nobody had written down what \"simmer\" is, when chicken is safe, or when a step must be refused. Cookwala is my attempt to write that down, in the open, so that the dishes outlive the machines and the machines refuse rather than guess.",
    "by": "the founder"
   },
   "try_dryrun": "Try the dry run",
@@ -579,7 +579,7 @@
    ]
   ],
   "footer_origin": "بدأ كوكوالا من fifi.cooking، مجموعة عائلية من وصفات البيت المصري. تُقدَّم بيانات كوكوالا بلا ضمان، ويبقى صانعو الأجهزة ومشغّلوها مسؤولين عن سلامة العتاد والقانون المحلي. لا يذكر هذا الموقع شريكًا أو مستخدمًا أو تجربة لا وجود لها.",
-  "footer_licences": "الكود Apache-2.0 · المواصفة CC BY 4.0 · المفردات CC0 · تعهّد بعدم المطالبة ببراءات · لا كوكيز.",
+  "footer_licences": "الكود Apache-2.0 · المواصفة CC BY 4.0 ورخصة المواصفات المجتمعية 1.0 · المفردات CC0 · تعهّد بعدم المطالبة ببراءات · لا كوكيز.",
   "status": {
    "core": "النواة 0.2 · معيارية، قيد المراجعة",
    "draft": "ملف مسوّدة",
@@ -868,7 +868,7 @@
   },
   "origin": {
    "h": "بدأت بكتاب طبخ عائلي",
-   "p": "أرشيف عائلتي للطبخ المنزلي المصري، وصفات الدكتورة فاطمة القواقجي (1943 إلى 2026)، منشور على fifi.cooking بخمس وعشرين لغة. كُتبت للناس. «اقلِ حتى يصفرّ.» «أضف ماءً حتى يغمر.» «دعه على نار هادئة حتى يستوي.» كل من نشأ في ذلك المطبخ يعرف تمامًا معنى هذه الجمل. أما الآلة فلا تعرف، ولا الغريب. وحين حاولت أن أصف طبقًا منها بحيث يستطيع فرن أو روبوت أو بنك طعام فحصه قبل الطهي، وجدت أن أحدًا لم يكتب ما هو «النار الهادئة»، ولا متى يكون الدجاج آمنًا، ولا متى يجب رفض خطوة. كوكوالا محاولتي لكتابة ذلك علنًا، لتبقى الأطباق بعد الآلات، ولترفض الآلات بدل أن تخمّن.",
+   "p": "وصفات أمي الراحلة، الدكتورة فاطمة القواقجي (1943 إلى 2026)، عمرٌ من الطبخ المنزلي المصري، منشور على fifi.cooking بخمس وعشرين لغة. كُتبت للناس. «اقلِ حتى يصفرّ.» «أضف ماءً حتى يغمر.» «دعه على نار هادئة حتى يستوي.» كل من نشأ في ذلك المطبخ يعرف تمامًا معنى هذه الجمل. أما الآلة فلا تعرف، ولا الغريب. وحين حاولت أن أصف طبقًا منها بحيث يستطيع فرن أو روبوت أو بنك طعام فحصه قبل الطهي، وجدت أن أحدًا لم يكتب ما هو «النار الهادئة»، ولا متى يكون الدجاج آمنًا، ولا متى يجب رفض خطوة. كوكوالا محاولتي لكتابة ذلك علنًا، لتبقى الأطباق بعد الآلات، ولترفض الآلات بدل أن تخمّن.",
    "by": "المؤسِّس"
   },
   "try_dryrun": "جرّب التشغيل الجاف",

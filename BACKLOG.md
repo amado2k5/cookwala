@@ -24,7 +24,7 @@ professional), `decision` (founder), `good first issue`.
 | D-04 | **Origin story in the founder's voice.** Done 2026-10-05 on the home and why pages in six languages; the founder may still edit the wording | done |
 | D-05 | **Four audience cards under the hero.** Done 2026-10-05: device makers, developers, food banks, funders and partners | done |
 | D-06 | **Host analytics.** Keep the host's cookie-less beacon and keep disclosing it, or switch it off | The trust page now says what it does; the choice is the founder's |
-| D-07 | **Community Specification License** for the specification repository | Gives the patent framework `PATENTS.md` lacks |
+| D-07 | **Community Specification License 1.0.** Adopted 2026-10-05: LICENSE-SPEC.md, SCOPE.md, NOTICES.md, contributor agreement with sign-off; the legal person behind fifi.cooking still to be stated after counsel review | done |
 | D-08 | **A contact address** for programs, funders and press | Every "path forward" line ends at GitHub Discussions today |
 | D-09 | **Transparency log or public-chain anchoring** for event-log checkpoints and certifications | RFC-0010 models chain anchors as optional evidence only |
 | D-10 | **Rename the `basic-nutrition-food-safety` rule pack** to a name that does not put WHO in a product name; a registry name change needs a tombstone and a new entry | The labelling fixes are done; the id remains |
@@ -67,7 +67,7 @@ professional), `decision` (founder), `good first issue`.
 |---|---|---|---|
 | G-01 | A hardware checklist schema with measured values (local stop latency, limits enforced without network) alongside the document vectors | standard | open |
 | G-02 | Registry: remove verification records that were not performed; label the registry "static, maintained by pull request" until a service exists; a device maker publishes a report by pull request today | governance, site | partly done on the device-makers page |
-| G-03 | Patent pledge: name the legal person, add a DCO line that carries the pledge, a clause binding transferees | governance, decision | open |
+| G-03 | Patent pledge: sign-off line and transferee binding now come from the Community Specification License (done 2026-10-05); naming the legal person waits for counsel | governance, decision | partly done |
 | G-04 | RFC process: write open and close dates into every RFC header; a real decision log (`docs/DECISIONS.md` is the Mission profile today); name an interim second approver | governance | open |
 | G-05 | Vocabulary and schema version table in one place; vocab versions documented in Core | standard | open, good first issue |
 | G-06 | External reviews sought: food scientist (envelopes), dietitian and food-safety officer (rule packs), metrologist (RFC-0011), halal and kosher certification bodies (RFC-0010), security audit (trust model), data-protection impact assessment (household profile), W3C and IETF (identity, JSON-LD, SCITT) | review | open; the review template is at `docs/health/REVIEW-TEMPLATE.md` |

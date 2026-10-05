@@ -138,7 +138,7 @@
   ]
  ],
  "footer_origin": "Cookwala comenzó desde fifi.cooking, una colección familiar de recetas caseras egipcias. Los datos de Cookwala se proporcionan sin garantía. Los fabricantes y operadores de dispositivos siguen siendo responsables del hardware seguro y de la ley local. Nada en este sitio nombra a un socio, usuario o piloto que no exista.",
- "footer_licences": "Código Apache-2.0 · especificación CC BY 4.0 · vocabularios CC0 · compromiso de no reivindicación de patentes · sin seguimiento, sin cookies.",
+ "footer_licences": "Código Apache-2.0 · especificación CC BY 4.0 y Community Specification License 1.0 · vocabularios CC0 · compromiso de no reivindicación de patentes · sin cookies.",
  "status": {
   "core": "Core 0.2 · normativo, bajo revisión",
   "draft": "Perfil de borrador",
@@ -413,7 +413,7 @@
  },
  "origin": {
   "h": "Empezó con un libro de cocina familiar",
-  "p": "El archivo de cocina casera egipcia de mi familia, las recetas de la Dra. Fatma Alkawokgy (1943 a 2026), está publicado en fifi.cooking en 25 idiomas. Se escribieron para personas. «Freír hasta que esté dorado.» «Cubrir con agua.» «Dejar a fuego lento hasta que esté listo.» Quien creció en esa cocina sabe exactamente qué significan esas líneas. Una máquina no, y un extraño tampoco. Cuando intenté describir uno de esos platos para que un horno, un robot o un banco de alimentos pudiera comprobarlo antes de cocinar, descubrí que nadie había escrito qué es «fuego lento», cuándo el pollo es seguro o cuándo hay que rechazar un paso. Cookwala es mi intento de escribirlo, en abierto, para que los platos sobrevivan a las máquinas y las máquinas rechacen en vez de adivinar.",
+  "p": "Las recetas de mi madre, la Dra. Fatma Alkawokgy (1943 a 2026), toda una vida de cocina casera egipcia, está publicado en fifi.cooking en 25 idiomas. Se escribieron para personas. «Freír hasta que esté dorado.» «Cubrir con agua.» «Dejar a fuego lento hasta que esté listo.» Quien creció en esa cocina sabe exactamente qué significan esas líneas. Una máquina no, y un extraño tampoco. Cuando intenté describir uno de esos platos para que un horno, un robot o un banco de alimentos pudiera comprobarlo antes de cocinar, descubrí que nadie había escrito qué es «fuego lento», cuándo el pollo es seguro o cuándo hay que rechazar un paso. Cookwala es mi intento de escribirlo, en abierto, para que los platos sobrevivan a las máquinas y las máquinas rechacen en vez de adivinar.",
   "by": "el fundador"
  },
  "try_dryrun": "Probar el dry run",
