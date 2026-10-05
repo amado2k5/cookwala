@@ -10,5 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/Cookwala.Samples/Cookwala.Samples.csproj" />
+    <ProjectReference Include="../../src/Cookwala.Samples.Cli/Cookwala.Samples.Cli.csproj" />
   </ItemGroup>
 </Project>

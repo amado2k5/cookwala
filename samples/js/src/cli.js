@@ -3,7 +3,8 @@ import { writeFileSync } from 'node:fs';
 import { version } from './version.js';
 import { loadBundle } from './data.js';
 import { demo } from './scenarios.js';
-import { handle, serve } from './service.js';
+import { handle, runJobs, serve } from './service.js';
+import { Job } from './orchestrator.js';
 import { pyDumps } from './util.js';
 
 export const USAGE = `\`cookwala-samples\` command line.
@@ -18,7 +19,7 @@ export const USAGE = `\`cookwala-samples\` command line.
 
 Offline by default: four simulated devices and four example recipes from the Cookwala repository.
 \`demo --hub URL\` runs the fault-free jobs against a real hub (python hub/cookwala_hub.py).
-Exit codes: 0 ok, 1 something was refused or failed, 2 usage.
+Exit codes: 0 ok; 1 a gate refused, a plan failed, or a run did not complete; 2 usage.
 `;
 
 const opt = (a, name, dflt = null) => (a.includes(name) ? a[a.indexOf(name) + 1] ?? dflt : dflt);
@@ -98,15 +99,14 @@ export async function main(argv = process.argv.slice(2)) {
     const faults = {};
     for (const f of many(a, '--fault')) {
       const i = f.indexOf('=');
-      if (i < 0) throw new Error(`--fault ${f}: expected recipe-id#node=kind`);
+      if (i < 0 || !['sensor_fault', 'timeout', 'overheat'].includes(f.slice(i + 1))) { console.log('usage error: --fault takes recipe-id#node=sensor_fault|timeout|overheat'); return 2; }
       faults[f.slice(0, i)] = f.slice(i + 1);
     }
-    const jobs = pos.map((d, i) => ({ id: `${i + 1}-${d}`, order: { dish: d, allergenBlocks: many(a, '--block') }, humanPresent: a.includes('--human-present') }));
-    const r = await handle('POST', '/v1/samples/run', { format: fmt }, { jobs, faults });
-    emit(r.body, opt(a, '--out'));
-    if (r.status !== 200) return 2;
-    if (fmt === 'json') return Object.keys(JSON.parse(r.body).summary.outcomes).every((k) => k === 'completed') ? 0 : 1;
-    return 0;
+    if (!pos.length) { console.log(USAGE); return 2; }
+    const jobs = pos.map((d, i) => new Job(`${i + 1}-${d}`, { order: { dish: d, allergenBlocks: many(a, '--block') }, humanPresent: a.includes('--human-present') }));
+    const rep = await runJobs(jobs, faults);
+    emit(rep.render(fmt), opt(a, '--out'));
+    return Object.keys(rep.summary().outcomes).every((k) => k === 'completed') ? 0 : 1;
   }
   console.log(USAGE);
   return 2;

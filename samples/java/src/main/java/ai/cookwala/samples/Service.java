@@ -42,6 +42,14 @@ public final class Service {
     static final Map<String, String> TYPES = new TreeMap<>(Map.of("json", "application/json", "markdown", "text/markdown; charset=utf-8",
             "md", "text/markdown; charset=utf-8", "junit", "application/xml", "csv", "text/csv; charset=utf-8"));
 
+    /** Run jobs on the simulated kitchen with a planner and a person who says yes. */
+    public static Reporter runJobs(List<Job> jobs, Map<String, String> faults) {
+        ScriptedHuman human = new ScriptedHuman(true);
+        PlannerAgent planner = new PlannerAgent("agent:planner-svc", Mandates.make("household:h-svc/person:p-1", "agent:planner-svc"), new BundleCatalog(), human);
+        Orchestrator orch = new Orchestrator(Scenarios.kitchen(faults), planner, human, new ArrayList<>());
+        return new Reporter(orch.runAll(jobs), "Cookwala samples run");
+    }
+
     /** An HTTP response: status, content type and body text. */
     public static final class Response {
         public final int status;
@@ -171,10 +179,7 @@ public final class Service {
                 }
                 if (bad) return problem(400, "invalid-request", "faults maps \"recipe-id#node\" to one of " + Py.pyRepr(new ArrayList<>(new TreeSet<>(Simulator.FAULT_KINDS))));
                 if (js == null) return report(Scenarios.demo(), fmt);
-                ScriptedHuman human = new ScriptedHuman(true);
-                PlannerAgent planner = new PlannerAgent("agent:planner-svc", Mandates.make("household:h-svc/person:p-1", "agent:planner-svc"), new BundleCatalog(), human);
-                Orchestrator orch = new Orchestrator(Scenarios.kitchen(faults), planner, human, new ArrayList<>());
-                return report(new Reporter(orch.runAll(js), "Cookwala samples run"), fmt);
+                return report(runJobs(js, faults), fmt);
             }
             return problem(404, "not-found", null);
         } catch (IllegalArgumentException | ClassCastException | NullPointerException | IndexOutOfBoundsException e) {

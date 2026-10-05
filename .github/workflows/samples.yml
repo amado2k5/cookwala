@@ -104,10 +104,32 @@ jobs:
       - uses: actions/upload-artifact@v4
         with: {name: samples-packages, path: samples/build/}
 
+  install:
+    name: Install like a user (local registries, clean containers)
+    runs-on: ubuntu-latest
+    needs: [packages, js, java, dotnet]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: {name: samples-packages, path: samples/build/}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21', cache: maven}
+      - uses: gradle/actions/setup-gradle@v4
+      - uses: actions/setup-dotnet@v4
+        with: {dotnet-version: '8.0.x'}
+      - name: npm, pip, uv, Maven, Gradle, NuGet, apt, dnf, pacman, apk, Homebrew, conda, Chocolatey and Scoop scripts
+        run: |
+          pip install uv
+          samples/packaging/install-test.sh
+
   publish:
     name: Publish (samples-v* tags only)
     if: startsWith(github.ref, 'refs/tags/samples-v')
-    needs: [python, js, java, dotnet, packages]
+    needs: [python, js, java, dotnet, packages, install]
     runs-on: ubuntu-latest
     environment: release
     permissions:
