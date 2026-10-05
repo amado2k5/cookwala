@@ -42,3 +42,11 @@ presence from its own sensors.
 
 Limits: one device, one process, in-memory state, no TLS, no pairing. It is a test bed, not a
 product; see `docs/CERTIFICATION.md` for what a real executor must also prove.
+
+## Reference tools over HTTP (`/v1/tools/*`)
+
+Not part of the Core API. The hub exposes the reference library so a client in any language gets
+exactly the behaviour the conformance vectors test: `POST /v1/tools/{hash|verify|dryrun|envelope|sms|constraints|convert|ladder|validate|humanitarian}`
+and `GET /v1/tools/{recipes|recipes/{id}|devices|vocab/ops|registry}`. The arguments and answers are
+listed in `scenarios/OPERATIONS.md`; every SDK client (`sdk/*`) wraps them. `validate` resolves a
+document's `kind` inside container schemas, as `tools/validate_specs.py` does.
