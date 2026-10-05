@@ -298,6 +298,7 @@ class Builder:
             for p_en in sorted((SITE / 'content' / 'en').glob('*.html')):
                 p = folder / p_en.name if (folder / p_en.name).exists() else p_en
                 meta, body = parse_fragment(p.read_text(encoding='utf-8'))
+                if p is p_en and lang != 'en': meta['title'] = f"{meta.get('title', 'Cookwala')} · {AUTONYM.get(lang, lang)}"  # English fallback until the translation lands
                 if 'path' not in meta:
                     meta['path'] = '/' if p.stem == 'index' else '/' + p.stem.replace('--', '/') + '/'
                 self.write(lang, meta['path'], self.page(lang, meta, body))
@@ -416,15 +417,16 @@ class Builder:
                 if not f: continue
                 doc_id, src, title, title_ar, status = item
                 text = f.read_text(encoding='utf-8'); toc = []
+                m_h1 = re.search(r'^# (.+)$', text, re.M); title_l = m_h1.group(1).strip() if m_h1 else (title_ar if lang == 'ar' else title)
                 body = md.render(text, self.doc_link_rewriter(src), collect=toc, lang=lang)
                 body = re.sub(r'href="/docs/([A-Z0-9-]+)/', lambda m: f'href="/{lang}/docs/{m.group(1)}/' if tr_path(DOC_INDEX[m.group(1)]) else m.group(0), body) if True else body
                 onpage = ''.join(f'<li class="l{lvl}"><a href="#{hid}">{html.escape(tt)}</a></li>' for lvl, hid, tt in toc if lvl == 2)
                 group = next(g for g in DOCS if any(i[0] == doc_id for i in g[1]))[0]
                 page_html = fill(self.doc_layout, {
-                    'lang': lang, 'dir': 'rtl' if lang in RTL else 'ltr', 'title': html.escape(title) + ' · Cookwala Docs', 'description': html.escape(self.first_para(text)),
+                    'lang': lang, 'dir': 'rtl' if lang in RTL else 'ltr', 'title': html.escape(title_l) + f' · Cookwala Docs ({AUTONYM.get(lang, lang)})', 'description': html.escape(self.first_para(text)),
                     'canonical': f'{BASE_URL}/{lang}/docs/{doc_id}/', 'alternates': self.alternates(f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, item)]), 'lang_menu': self.lang_menu(lang, f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, item)]),
                     'sidebar': re.sub(r'href="/docs/([A-Z0-9-]+)/"', lambda m: f'href="/{lang}/docs/{m.group(1)}/"' if self.doc_translated(lang, DOC_INDEX[m.group(1)]) else m.group(0), sidebar).replace(f'data-id="{doc_id}"', f'data-id="{doc_id}" aria-current="page"'),
-                    'crumb': f'{html.escape(Sl["docgroups"].get(group, group))} / {html.escape(title_ar if lang == "ar" else title)}', 'content': body, 'onpage': onpage, 'pager': f'<a href="/docs/{doc_id}/" hreflang="en">English</a>',
+                    'crumb': f'{html.escape(Sl["docgroups"].get(group, group))} / {html.escape(title_l)}', 'content': body, 'onpage': onpage, 'pager': f'<a href="/docs/{doc_id}/" hreflang="en">English</a>',
                     'edit': REPO + f'docs/i18n/{lang}/{f.name}', 'raw': f'/docs/md/{doc_id}.md', 'brand': Sl['brand'], 'skip': Sl['skip'], 'font_link': Sl['font_link'], 'year': self.year, 'home': f'/{lang}/', 'nav_label': Sl['nav_label'],
                     'status': self.status_tag(status), 'onpage_label': Sl['onpage'], 'filter_label': Sl['filter'], 'copy': Sl['copy'], 'edit_label': Sl['edit'], 'md_label': Sl['markdown'], 'menu': Sl['menu'], 'theme': Sl['theme'],
                     'nav': self.nav_html(lang, '/docs/')[0], 'more': self.nav_html(lang, '/docs/')[1], 'more_label': Sl['more_label'],

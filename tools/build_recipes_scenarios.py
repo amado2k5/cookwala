@@ -137,7 +137,7 @@ class RecipeBuilder:
             for rid, d in list(self.examples.items()) + list(self.docs.items()):
                 body, title = self.page_html(lang, d, rid in self.examples)
                 pf = (lambda r: (lambda l, path: f'/{l}/recipes/view/?id={r}' if l not in ('en', 'ar') else self.b.path_for(l, path)))(rid)
-                meta = {'title': f'{title} · {S["title"]}', 'description': (d['text'].get(lang) or d['text'].get('en') or {}).get('intro') or f'{title}: {S["v0"] if d["verification"]["level"] == "V0" else S["v1"]}', 'path': f'/recipes/{rid}/', 'path_fn': pf}
+                meta = {'title': f'{title} ({rid}) · {S["title"]}', 'description': (d['text'].get(lang) or d['text'].get('en') or {}).get('intro') or f'{title}: {S["v0"] if d["verification"]["level"] == "V0" else S["v1"]}', 'path': f'/recipes/{rid}/', 'path_fn': pf}
                 self.b.write(lang, f'/recipes/{rid}/', self.b.page(lang, meta, body, current='/recipes/'))
         for lang in self.langs:
             if lang in ('en', 'ar'): continue

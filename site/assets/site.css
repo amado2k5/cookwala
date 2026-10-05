@@ -227,7 +227,8 @@ table.steps-t tr.refused td { background: color-mix(in srgb, var(--bad) 10%, tra
 .mt-notice { margin: 0; padding: 8px 16px; font-size: 13px; color: var(--ink-2); background: var(--band); border-bottom: 1px solid var(--line); text-align: center; }
 .rcard { display: grid; gap: 4px; } .rcard .meta { font-size: 13px; color: var(--ink-2); } .rcard .lvl { font-family: var(--mono, monospace); font-size: 12px; }
 .recipe-head .meta { color: var(--ink-2); } .recipe-head .lic { font-size: 14px; }
-.ingredients li { display: flex; gap: 12px; justify-content: space-between; border-bottom: 1px solid var(--line); padding: 6px 0; } .ingredients .qty { color: var(--ink-2); white-space: nowrap; }
+.ingredients li { display: flex; gap: 12px; justify-content: space-between; border-bottom: 1px solid var(--line); padding: 6px 0; min-width: 0; } .ingredients li > span { min-width: 0; overflow-wrap: anywhere; } .ingredients .qty { color: var(--ink-2); text-align: end; flex: 0 1 45%; }
+.recipe-head .meta, .recipe-head .lead { overflow-wrap: anywhere; } .pager-inline a { margin-inline-end: 16px; }
 .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; } .tabs button { font: inherit; font-size: 14px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); cursor: pointer; } .tabs button[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .sample pre { max-height: 70vh; overflow: auto; }
 .scen-list li { margin-bottom: 10px; } .scen-list .meta { font-size: 13px; color: var(--ink-2); }
