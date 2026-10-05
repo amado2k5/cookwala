@@ -1,0 +1,8 @@
+**/__pycache__
+**/*.pyc
+build/
+js/node_modules/
+java/target/
+java/build/
+dotnet/**/bin/
+dotnet/**/obj/

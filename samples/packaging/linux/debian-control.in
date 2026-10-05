@@ -1,0 +1,13 @@
+Package: cookwala-samples
+Version: {{VERSION}}
+Section: devel
+Priority: optional
+Architecture: all
+Depends: python3 (>= 3.9)
+Installed-Size: {{SIZE_KB}}
+Maintainer: Cookwala maintainers <noreply@cookwala.ai>
+Homepage: https://cookwala.ai
+Description: Cookwala sample clients, agents, orchestrators, gates, recovery and reporting
+ Runnable samples for the Cookwala Core 0.2 API, the open standard for cooking
+ safely. Runs offline on simulated devices, or against any Cookwala hub.
+ Samples, not certified software; the executor is always the authority.

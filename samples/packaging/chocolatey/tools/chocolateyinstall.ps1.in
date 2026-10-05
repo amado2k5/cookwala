@@ -1,0 +1,11 @@
+$ErrorActionPreference = 'Stop'
+$toolsDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
+$pyz = Join-Path $toolsDir 'cookwala-samples.pyz'
+
+Get-ChocolateyWebFile -PackageName 'cookwala-samples' -FileFullPath $pyz `
+  -Url '{{BASE_URL}}/cookwala-samples-{{VERSION}}.pyz' `
+  -Checksum '{{SHA256:pyz}}' -ChecksumType 'sha256'
+
+Update-SessionEnvironment
+$python = (Get-Command python -ErrorAction Stop).Source
+Install-BinFile -Name 'cookwala-samples' -Path $python -Command "`"$pyz`""

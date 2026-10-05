@@ -29,6 +29,7 @@ professional), `decision` (founder), `good first issue`.
 | D-09 | **Transparency log or public-chain anchoring** for event-log checkpoints and certifications | RFC-0010 models chain anchors as optional evidence only |
 | D-10 | **Rename the `basic-nutrition-food-safety` rule pack** to a name that does not put WHO in a product name; a registry name change needs a tombstone and a new entry | The labelling fixes are done; the id remains |
 | D-11 | **Status badges in three states**: spec only, software ready, hardware pending, replacing normative/draft/experimental on the site | Says what runs, not how mature the document is |
+| D-12 | **Registry accounts for the samples.** Who owns the PyPI project `cookwala-samples`, the npm scope `@cookwala`, the Maven namespace `ai.cookwala`, the NuGet ids `Cookwala.*`, the Chocolatey package, the tap `amado2k5/homebrew-cookwala` and the Artifactory instance; then the repository secrets listed in `samples/DISTRIBUTION.md` | Every channel is built and tested; nothing is published until these exist |
 
 ## 2. The standard and the protocol
 
@@ -60,6 +61,7 @@ professional), `decision` (founder), `good first issue`.
 | P-24 | RFC-0011 follow-ups: signed calibration records, default accuracy per sensor class set by a metrologist, whether `degraded` may satisfy a rung with a widened tolerance | standard, review | needs a metrologist |
 | P-25 | A recipe revision model that separates the authored recipe, the execution, the observation, a machine recommendation and a human-approved revision (from outside feedback) | standard | idea |
 | P-26 | Calibration and provenance for the "Learn" loop: who owns execution data, how a machine-proposed change becomes a revision, versioning of changes | standard, governance | idea |
+| P-27 | Samples (`samples/`): clients, agents, orchestrators, gates, recovery and reporting in Python, JavaScript, Java and C#, tested against the reference dry run; packages for PyPI, npm, Maven Central, NuGet, Homebrew, Chocolatey, Scoop, apt, RPM, pacman, apk, conda, snap, OCI, Helm and Artifactory; functions for Azure, AWS, Google Cloud and OpenShift | reference | built and tested; publishing waits for D-12; Go and Rust sample ports open |
 
 ## 3. Conformance, certification and governance
 

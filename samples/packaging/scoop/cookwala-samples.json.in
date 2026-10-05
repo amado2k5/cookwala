@@ -1,0 +1,18 @@
+{
+    "version": "{{VERSION}}",
+    "description": "Cookwala sample clients, agents, orchestrators, gates, recovery and reporting (simulated devices, or any Cookwala hub).",
+    "homepage": "https://cookwala.ai",
+    "license": "Apache-2.0",
+    "depends": "python",
+    "url": "{{BASE_URL}}/cookwala-samples-{{VERSION}}.pyz#/cookwala-samples.pyz",
+    "hash": "{{SHA256:pyz}}",
+    "pre_install": "Set-Content \"$dir\\cookwala-samples.cmd\" '@python \"%~dp0cookwala-samples.pyz\" %*' -Encoding ASCII",
+    "bin": "cookwala-samples.cmd",
+    "checkver": {
+        "url": "https://api.github.com/repos/amado2k5/cookwala/releases",
+        "regex": "samples-v([\\d.]+)"
+    },
+    "autoupdate": {
+        "url": "https://github.com/amado2k5/cookwala/releases/download/samples-v$version/cookwala-samples-$version.pyz#/cookwala-samples.pyz"
+    }
+}
