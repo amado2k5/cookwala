@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance en het pad naar certification
 
 **Status:** draft, 2026-10-04 (RFC-0008). Er is nog geen certifier ingeschakeld; dit is het pad

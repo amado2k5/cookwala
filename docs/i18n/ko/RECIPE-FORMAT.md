@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Cookwala 레시피 형식: Missions와 함께 작동하는 레시피
 
 Cookwala의 레시피는 지침 목록이 아닙니다. 그것은 플래너가 특정 Mission(household, robots, appliances, energy, budget, health, timing)에 따라 **이동 가능한 요리 지식**을 실행 가능한 계획으로 *컴파일*한 것입니다. 그러면 로봇은 그 계획을 실행하며, 현실이 변할 때 contingency와 playbook을 통해 적응합니다.

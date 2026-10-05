@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/KITCHENS-AND-FLEETS.md -->
+
 # Cucine e cicli di produzione: ristoranti, comunità, scuole, emergenze e cucine robotiche
 
 > **Stato: profilo sperimentale** (RFC-0005). Schema: `schemas/fleet.schema.json`.

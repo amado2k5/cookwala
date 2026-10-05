@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala û stackê robotîkê
 
 Cookwala qismek ji robotî vedigire. Ew ew qatê lêzêdixe ku stack-ê robotîkê ji bo çêkirina xwarinê kêm dike: **çi bête çêkirin, kengî her gav pêkan dibe, û çi qet nabê e**, bi şêveyek ku her robot, amûr, simulator an pipeline-ê fêrîbûnê dikare bixwîne û kontrol bike.

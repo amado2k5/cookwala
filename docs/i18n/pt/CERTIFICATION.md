@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance e o caminho para a certification
 
 **Status:** rascunho, 2026-10-04 (RFC-0008). Nenhum certificador foi engajado ainda; este é o caminho

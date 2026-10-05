@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Profilo Umanitario Cookwala (bozza 0.2)
 
 **Status:** bozza per la revisione da parte di food bank, programmi di soccorso e professionisti della sicurezza alimentare e della nutrizione. Non è revisionata né approvata da WFP, WHO, FAO, Global FoodBanking Network o qualsiasi altra organizzazione qui menzionata.

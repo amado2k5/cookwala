@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/REGISTRY.md -->
+
 # Cookwala Registry: publikowanie i wyszukiwanie przepisów, urządzeń i pakietów
 
 > **Status: draft profile.** Modelled na oficjalnym MCP Registry, który wymienia serwery Model

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # クイックスタート
 
 5分間、ハードウェアなし。レシピを取得してハッシュ化し、デバイスがそれを調理できるかを確認し、温度トレースをoperationのsafe bandと照合し、調理ログをtraceとしてエクスポートします。以下のすべては今日動作します。

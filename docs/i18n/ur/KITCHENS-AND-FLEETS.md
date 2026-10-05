@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/KITCHENS-AND-FLEETS.md -->
+
 # کچن اور پروڈکشن رنز: ریسٹورنٹس، کمیونٹی، اسکول، ڈیزاسٹر اور روبوٹ کچنز
 
 > **حالت: experimental profile** (RFC-0005). Schema: `schemas/fleet.schema.json`.

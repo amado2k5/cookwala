@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Destpêkirina Bilez
 
 Pênç minut, ne donkerde (hardware). Tu ê wergerînî reseptekê, wê hash bikî, bipirsî ka amûrek dikare wê çêbikine, şopê germatiyê li gorî bendava ewle ya operasyonê bipirî, û loga çêkirinê wekî şop (trace) derxî. Hemûyên li jêr îro kar dikin.

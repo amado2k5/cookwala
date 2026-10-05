@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Quickstart
 
 पाँच मिनट, कोई हार्डवेयर नहीं। आप एक रेसिपी प्राप्त करेंगे, उसे hash करेंगे, पूछेंगे कि क्या कोई डिवाइस उसे पका सकता है, किसी operation के safe band के विरुद्ध temperature trace की जाँच करेंगे, और cooking log को एक trace के रूप में export करेंगे। नीचे दी गई हर चीज़ आज काम करती है।

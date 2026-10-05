@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HOUSEHOLD-CONTEXT.md -->
+
 # Household Context Profile: hela bilden stannar hemma
 
 > **Status: draft profile** (RFC-0001). Ingår inte i Cookwala Core. Schema:

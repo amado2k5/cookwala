@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala ve robotik yığını
 
 Cookwala bir robotun hiçbir parçasının yerini almaz. Robotik yığınının yemek pişirme için eksik olduğu katmanı ekler: herhangi bir robotun, cihazın, simülatörün veya öğrenme hattının okuyup kontrol edebileceği bir biçimde **ne yapılacağı, her adımın ne zaman tamamlandığı ve asla gerçekleşmemesi gereken şey**,

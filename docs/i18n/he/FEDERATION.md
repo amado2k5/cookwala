@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # פדרציה: כיצד Cookwala עובדת ללא מרכז
 
 **Status:** טיוטה, 2026-10-04 (RFC-0006). התמונה של המייסד הייתה כוורת: ללא פיקוד מרכזי, אך עם הרמוניה והתאוששות. דף זה אומר מה זה אומר בפועל.

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala 与机器人技术栈
 
 Cookwala 不会取代机器人的任何部分。它为机器人技术栈增加了烹饪所缺失的一层：**要做什么，每一步何时完成，以及绝不能发生什么**，其形式可以被任何机器人、家电、模拟器或学习流水线读取并检查。

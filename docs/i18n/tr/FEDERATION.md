@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # Federasyon: Cookwala merkez olmadan nasıl çalışır
 
 **Durum:** taslak, 2026-10-04 (RFC-0006). Kurucunun resmi bir arı kovanıydı: merkezi bir komuta yoktu, ancak uyum ve toparlanma vardı. Bu sayfa bunun pratikte ne anlama geldiğini söylüyor.

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Cookwala 인도주의 프로필 (draft 0.2)
 
 **Status:** food banks, relief programs 및 food-safety and nutrition 전문가들의 검토를 위한 draft입니다. WFP, WHO, FAO, Global FoodBanking Network 또는 여기에 언급된 기타 조직에 의해 검토되거나 승인되지 않았습니다.

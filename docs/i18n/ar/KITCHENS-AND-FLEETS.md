@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/KITCHENS-AND-FLEETS.md -->
+
 # المطابخ وجولات الإنتاج: المطاعم، والمجتمع، والمدرسة، ومطابخ الكوارث، والمطابخ الآلية
 
 > **الحالة: experimental profile** (RFC-0005). المخطط: `schemas/fleet.schema.json`.

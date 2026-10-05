@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STAKEHOLDERS.md -->
+
 # Wadau: ujumbe, chaguzi, mafanikio ya kwanza na mtiririko kwa kila mtu
 
 **Hali:** 2026-10-04. Kwa kila kikundi: kwa nini Cookwala ni muhimu kwao, njia za kushiriki kuanzia

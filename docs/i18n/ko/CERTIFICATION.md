@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance 및 certification으로 가는 경로
 
 **Status:** draft, 2026-10-04 (RFC-0008). 아직 어떤 certifier도 참여하지 않았습니다; 이것이 표준이 제공하는 경로입니다.

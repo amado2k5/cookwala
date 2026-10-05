@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CORE.md -->
+
 # Cookwala Core 0.2
 
 **Status:** draft, 2026-10-04. Dit is het normatieve deel van Cookwala. MUST, SHOULD en MAY volgen RFC 2119. Alles wat hier niet wordt vermeld is een optioneel **profile** (sectie 10).

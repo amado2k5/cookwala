@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # پروفایل بشردوستانه Cookwala (پیش‌نویس 0.2)
 
 **Status:** پیش‌نویس برای بررسی توسط food banks، برنامه‌های امدادی و متخصصان ایمنی غذا و تغذیه. توسط WFP، WHO، FAO، Global FoodBanking Network یا هر سازمان دیگری که در اینجا نام برده شده است، بررسی یا تأیید نشده است.

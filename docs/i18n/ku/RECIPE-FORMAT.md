@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Formata Resetpêya Cookwala: reseptên ku bi Missionan re dixebitin
 
 Reseptek di Cookwala de ne lîsteya rêberan. Ew **zanîna çêkirina xwarinê ya bêveguherî** ye

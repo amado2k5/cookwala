@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STAKEHOLDERS.md -->
+
 # Stakeholders: 一条消息，若干选项，一次初步成功以及面向所有人的流程
 
 **Status:** 2026-10-04. 对于每个群体：为什么 Cookwala 对他们很重要，从轻度到深度的参与方式，在 15 分钟内的首次成功，其后的路径，以及参与如何推进他们的工作和世界。此处未提及任何不存在的合作伙伴、用户或试点。凡是计划中的内容，均标注为 next 或 later。

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Cookwala بشري پروفایل (draft 0.2)
 
 **Status:** د food banks، د مرستو پروګرامونو او د خوراکي توکو د خوندیتوب او تغذیه متخصصینو لخوا د بیاکتنې لپاره مسودې په توګه. دا د WFP، WHO، FAO، د Global FoodBanking Network یا دلته ذکر شوي کوم بل سازمان لخوا بیاکتنه یا تایید نه دی.

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Muundo wa Mapishi ya Cookwala: mapishi yanayofanya kazi na Missions
 
 Mapishi katika Cookwala si orodha ya maelekezo. Ni **maarifa ya kupika yanayohamishika**

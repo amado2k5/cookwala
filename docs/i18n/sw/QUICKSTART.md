@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Anza Haraka
 
 Dakika tano, hakuna vifaa. Utachukua mapishi, utayafanyia hash, utauliza ikiwa kifaa kinaweza kuyapika, utakagua rekodi ya joto dhidi ya kiwango salama cha operation, na utatoa cooking log kama rekodi. Kila kitu hapo chini kinafanya kazi leo.

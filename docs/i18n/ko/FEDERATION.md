@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # 연합: Cookwala가 중심 없이 작동하는 방식
 
 **Status:** draft, 2026-10-04 (RFC-0006). 창립자의 사진은 벌집이었다: 중앙의 명령은 없지만, 조화와 회복이 있었다. 이 페이지는 그것이 실제로는 무엇을 의미하는지 말한다.

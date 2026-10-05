@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/REGISTRY.md -->
+
 # Cookwala Registry: het publiceren en vinden van recepten, apparaten en packs
 
 > **Status: draft profile.** Modelled op de officiële MCP Registry, die Model

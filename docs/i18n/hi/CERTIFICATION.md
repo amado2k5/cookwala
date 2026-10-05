@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance और certification का मार्ग
 
 **Status:** draft, 2026-10-04 (RFC-0008). अभी तक किसी certifier को नियुक्त नहीं किया गया है; यह वह पथ है जो मानक प्रदान करता है।

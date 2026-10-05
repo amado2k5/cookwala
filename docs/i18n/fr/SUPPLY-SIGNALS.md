@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/SUPPLY-SIGNALS.md -->
+
 # Surplus agricole et signaux d'approvisionnement
 
 > **Statut : experimental** (RFC-0007). Schéma : `schemas/supply.schema.json`. Exemples :

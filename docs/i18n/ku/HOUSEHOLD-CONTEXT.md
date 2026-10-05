@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HOUSEHOLD-CONTEXT.md -->
+
 # Profile-ê Contextê Malê: wêneyê tam li malê dimîne
 
 > **Rewşa: profîla taslak** (RFC-0001). Ne beşê Cookwala Core ye. Schema:

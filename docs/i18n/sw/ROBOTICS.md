@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala na robotics stack
 
 Cookwala haichukui sehemu yoyote ya roboti. Inaongeza tabaka ambayo robotics stack imekosa kwa ajili ya kupika: **nini cha kutengeneza, wakati kila hatua inapofanyika, na nini kisitokee kamwe**, katika mfumo ambao roboti yoyote, kifaa, simulator au learning pipeline inaweza kusoma na kukagua.

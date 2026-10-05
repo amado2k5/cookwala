@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROADMAP.md -->
+
 # Rêber: niha, pey, paş
 
 **Rewş:** 2026-10-04. Her tiştî rewşek heye: **done**, **in progress**, **planned**,

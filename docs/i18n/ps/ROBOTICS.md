@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala او د روبوټیکس سټیک (robotics stack)
 
 Cookwala د روبوټ هیڅ برخه نه بدلوي. دا هغه تሌ (layer) اضافه کوي چې د پخلي لپاره د روبوټیکس سټیک (robotics stack) ورته اړتیا لري: **څه جوړ کړي، کله چې هر ګام بشپړ شي، او څه باید هیڅکله ونه شي**، په داسې بڼه چې هر روبوټ، وسیله، سیمیلیټر یا زده کړې ته اړتیا لرونکی پائپلاین (learning pipeline) یې په لاس کې ونیسي او وګوري.

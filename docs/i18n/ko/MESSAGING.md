@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/MESSAGING.md -->
+
 # 메시징: Cookwala가 말하는 내용과 방식
 
 **Status:** 2026-10-04. 페이지들이 작성되기 전에 작성되었습니다. 모든 페이지는 이 문서를 따릅니다.

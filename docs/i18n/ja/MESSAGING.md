@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/MESSAGING.md -->
+
 # メッセージング: Cookwala が何を、どのように伝えるか
 
 **Status:** 2026-10-04. ページが作成される前に記述されました。すべてのページはこのドキュメントに従います。

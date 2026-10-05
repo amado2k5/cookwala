@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # 私たちが公開した批判事項
 
 私たちは Cookwala について難しい質問を投げかけ、その回答を書き留めました。各懸念事項には [action plan's concern register](ACTION-PLAN.md#2-concern-register) 内に id が割り当てられており、私たちの回答とその status が併記されています。外部からのレビューも歓迎しており、ここに記載されます。

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # وہ تنقیدات جو ہم نے شائع کیں
 
 ہم نے Cookwala کے بارے میں مشکل سوالات پوچھے اور ان کے جوابات لکھ لیے۔ ہر تشویش کا ایک id [action plan's concern register](ACTION-PLAN.md#2-concern-register) میں موجود ہے، ساتھ ہی ہمارا جواب اور اس کا status بھی درج ہے۔ باہر سے کیے گئے reviews کو خوش آمدید کہا جاتا ہے اور انہیں یہاں فہرست میں شامل کیا جائے گا۔

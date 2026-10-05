@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # Federasi: bagaimana Cookwala bekerja tanpa pusat
 
 **Status:** draft, 2026-10-04 (RFC-0006). Foto pendirinya adalah sebuah sarang lebah: tidak ada komando pusat, namun ada harmoni dan pemulihan. Halaman ini menjelaskan apa artinya hal tersebut dalam praktiknya.

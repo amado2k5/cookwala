@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROADMAP.md -->
+
 # Roadmap: now, next, later
 
 **Status:** 2026-10-04. Ogni elemento riporta uno stato: **done**, **in progress**, **planned**,

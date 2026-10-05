@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/MESSAGING.md -->
+
 # 消息传递：Cookwala 说什么，以及如何说
 
 **Status:** 2026-10-04. 在页面之前编写。每个页面都遵循此文档。

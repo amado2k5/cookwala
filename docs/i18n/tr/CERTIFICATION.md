@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance ve sertifikasyon yolu
 
 **Durum:** taslak, 2026-10-04 (RFC-0008). Henüz bir sertifikalandırıcı ile anlaşılmadı; bu, standardın sunduğu yoldur.

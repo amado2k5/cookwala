@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Cookwala 人道支援プロファイル (draft 0.2)
 
 **Status:** food bank、救援プログラム、および食品安全と栄養の専門家によるレビューのためのドラフトです。これは WFP、WHO、FAO、Global FoodBanking Network、またはここに記載されているその他の組織によってレビューまたは承認されたものではありません。

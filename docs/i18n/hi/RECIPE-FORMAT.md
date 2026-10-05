@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Cookwala रेसिपी फॉर्मेट: रेसिपी जो Missions के साथ काम करती हैं
 
 Cookwala में एक रेसिपी निर्देशों की सूची नहीं है। यह **पोर्टेबल कुकिंग नॉलेज** है

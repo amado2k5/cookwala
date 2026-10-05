@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala en de robotics stack
 
 Cookwala vervangt geen enkel onderdeel van een robot. Het voegt de laag toe die de robotics stack mist voor koken: **wat te maken, wanneer elke stap is voltooid, en wat nooit mag gebeuren**, in een vorm die elke robot, apparaat, simulator of learning pipeline kan lezen en controleren.

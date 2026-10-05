@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Cookwala 人道主义概况 (draft 0.2)
 
 **Status:** 供 food banks、救济项目以及食品安全与营养专业人员审阅的草案。它未经 WFP、WHO、FAO、Global FoodBanking Network 或此处提到的任何其他机构的审阅或认可。

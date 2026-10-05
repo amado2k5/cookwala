@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Cookwala د ترکیب فارمیټ: هغه ترکیبونه چې د Missions سره کار کوي
 
 په Cookwala کې یو ریسیپي د لارښوونو لیست نه دی. دا **منتقلید پخلي پوهه** ده

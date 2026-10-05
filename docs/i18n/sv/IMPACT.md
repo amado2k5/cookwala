@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/IMPACT.md -->
+
 # Påverkan: vad Cookwala kan förändra, med källor och etiketter
 
 **Status:** 2026-10-04. Varje nummer nedan är märkt **measured** (räknat eller rapporterat av den angivna källan), **modelled** (producerat av våra simulatorer under angivna antaganden) eller **assumed** (en planeringssiffra). Ingenting här är ett resultat av Cookwala i fält: ingen dry run har genomförts. Denna sida anger storleken på problemen och de mekanismer genom vilka Cookwala bidrar.

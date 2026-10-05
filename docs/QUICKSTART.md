@@ -80,3 +80,8 @@ recipe step for LeRobot-style datasets. Both refuse logs whose household didn't 
 | Building an AI agent | [Agent rules](CORE.md#6-safety-and-agent-rules-normative) and the [agent-safety benchmark](../evals/kitchen-agent-safety/README.md) |
 | Running a kitchen or food bank | [Humanitarian Profile](HUMANITARIAN-PROFILE.md) |
 | Writing recipes | [Recipe format](RECIPE-FORMAT.md) and [Contributing](../CONTRIBUTING.md) |
+
+## 7. More
+
+- The recipe index: 1,890 documents at https://cookwala.ai/recipes/ (9 written for the standard at V1; 1,881 imported from fifi.cooking at V0, with text in 25 languages).
+- The SDK in your language and 100 executed scenarios: https://cookwala.ai/scenarios/ (`scenarios/OPERATIONS.md` lists the 25 operations; `python tools/scenarios/run.py` executes every scenario against a hub).

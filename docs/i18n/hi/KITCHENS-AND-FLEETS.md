@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/KITCHENS-AND-FLEETS.md -->
+
 # रसोई और उत्पादन रन: रेस्तरां, समुदाय, स्कूल, आपदा और रोबोट रसोई
 
 > **Status: experimental profile** (RFC-0005). Schema: `schemas/fleet.schema.json`.

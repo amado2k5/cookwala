@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/REGISTRY.md -->
+
 # Cookwala Registry : publication et recherche de recettes, d'appareils et de packs
 
 > **Status: draft profile.** Modelled sur l'officiel MCP Registry, qui liste les serveurs Model

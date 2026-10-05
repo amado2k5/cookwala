@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROADMAP.md -->
+
 # روڈ میپ: now، next، later
 
 **Status:** 2026-10-04. ہر آئٹم ایک اسٹیٹس رکھتا ہے: **done**, **in progress**, **planned**,

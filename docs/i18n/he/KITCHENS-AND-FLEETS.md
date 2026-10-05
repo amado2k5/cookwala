@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/KITCHENS-AND-FLEETS.md -->
+
 # מטבחים וסבבי ייצור: מסעדות, קהילה, בית ספר, אסון ומטבחי רובוט
 
 > **סטטוס: פרופיל ניסיוני** (RFC-0005). סכימה: `schemas/fleet.schema.json`.

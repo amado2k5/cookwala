@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROADMAP.md -->
+
 # 로드맵: now, next, later
 
 **Status:** 2026-10-04. 모든 항목은 상태를 가집니다: **done**, **in progress**, **planned**,

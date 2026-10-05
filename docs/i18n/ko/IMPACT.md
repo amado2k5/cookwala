@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/IMPACT.md -->
+
 # 영향: Cookwala가 변화시킬 수 있는 것, 출처 및 라벨 포함
 
 **Status:** 2026-10-04. 아래의 모든 숫자는 **measured** (명시된 출처에 의해 계산되거나 보고됨), **modelled** (명시된 가정하에 당사의 시뮬레이터에 의해 생성됨) 또는 **assumed** (계획 수치)로 표시됩니다. 여기에 있는 그 어떤 것도 현장에서의 Cookwala 결과가 아닙니다: 어떠한 pilot도 실행되지 않았습니다. 이 페이지는 문제의 규모와 Cookwala가 기여하는 메커니즘을 명시합니다.

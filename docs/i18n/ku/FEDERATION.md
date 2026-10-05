@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # Federasyon: Cookwala bê navendî çawa kar dike
 
 **Status:** draft, 2026-10-04 (RFC-0006). Wêneyê damezirîner qîsê mêş bû: ne komanda navendî, lê dîsa jî hengaarmonî û veger. Ev rûpel dibêje ka ew di pratîkê de çi tê wateyê.

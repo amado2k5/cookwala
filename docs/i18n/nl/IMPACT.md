@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/IMPACT.md -->
+
 # Impact: wat Cookwala kan veranderen, met bronnen en labels
 
 **Status:** 2026-10-04. Elk getal hieronder is gelabeld als **measured** (geteld of gerapporteerd door

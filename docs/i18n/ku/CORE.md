@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CORE.md -->
+
 # Cookwala Core 0.2
 
 **Rewş:** taslak, 2026-10-04. Ev beşeya normatîf a Cookwala ye. MUST, SHOULD û MAY

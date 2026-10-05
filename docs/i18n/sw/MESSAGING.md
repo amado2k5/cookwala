@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/MESSAGING.md -->
+
 # Ujumbe: kile Cookwala kinachosema, na jinsi
 
 **Status:** 2026-10-04. Imeandikwa kabla ya kurasa. Kila ukurasa unafuata hati hii.

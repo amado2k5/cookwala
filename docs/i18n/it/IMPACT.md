@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/IMPACT.md -->
+
 # Impatto: cosa Cookwala può cambiare, con fonti ed etichette
 
 **Status:** 2026-10-04. Ogni numero qui sotto è etichettato come **measured** (conteggiato o riportato dalla

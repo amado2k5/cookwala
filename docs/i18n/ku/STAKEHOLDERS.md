@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STAKEHOLDERS.md -->
+
 # Stakeholders: peyamek, vebijark, serketinek yekem û流程 ji bo her kesî
 
 **Rewşa niha:** 2026-10-04. Ji bo her komê: çima Cookwala ji bo wan girîng e, rêyên beşdarbûnê ji

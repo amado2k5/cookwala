@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance και η διαδρομή προς την certification
 
 **Status:** draft, 2026-10-04 (RFC-0008). Δεν έχει εμπλακεί ακόμη κανένας πιστοποιητής (certifier)· αυτή είναι η διαδρομή που προσφέρει το πρότυπο.

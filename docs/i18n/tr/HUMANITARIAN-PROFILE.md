@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Cookwala İnsani Profili (taslak 0.2)
 
 **Durum:** food bank'ler, yardım programları ve gıda güvenliği ve beslenme uzmanları tarafından incelenmek üzere taslak halindedir. WFP, WHO, FAO, Global FoodBanking Network veya burada adı geçen başka herhangi bir kuruluş tarafından incelenmemiş veya onaylanmamıştır.

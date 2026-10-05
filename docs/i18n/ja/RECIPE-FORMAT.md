@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Cookwala レシピ形式: Missions と連携するレシピ
 
 Cookwalaにおけるレシピは、指示のリストではありません。それは、プランナーが特定のMission（household、robots、appliances、energy、budget、health、timing）に対して*コンパイル*し、実行可能なプランへと変換する**ポータブルな調理知識**です。その後、ロボットはそのプランを実行し、現実が変化した際には、contingenciesやplaybooksを通じて適応していきます。

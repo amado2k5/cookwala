@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # פורמט מתכון Cookwala: מתכונים שעובדים עם Missions
 
 מתכון ב-Cookwala אינו רשימת הוראות. זהו **ידע בישול נייד**

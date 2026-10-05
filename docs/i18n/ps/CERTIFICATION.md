@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # conformance او د certification لاره
 
 **Status:** draft, 2026-10-04 (RFC-0008). لا تر اوسه هیڅ certifier په کار کې نه دی اخیستی؛ دا هغه لاره ده

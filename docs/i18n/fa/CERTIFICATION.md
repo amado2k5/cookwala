@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance و مسیر رسیدن به certification
 
 **Status:** draft, 2026-10-04 (RFC-0008). هنوز هیچ گواهی‌دهنده‌ای (certifier) درگیر نشده است؛ این مسیری است که استاندارد ارائه می‌دهد.

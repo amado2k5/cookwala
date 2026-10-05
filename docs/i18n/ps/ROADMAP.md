@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROADMAP.md -->
+
 # نقشه: اوس، وروسته، بیا وروسته
 
 **Status:** 2026-10-04. هر 항목 یو حالت لري: **done**، **in progress**، **planned**،

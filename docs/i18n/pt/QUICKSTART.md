@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Quickstart
 
 Cinco minutos, sem hardware. Você irá buscar uma receita, fazer o hash dela, perguntar se um dispositivo pode cozinhá-la, verificar um traço de temperatura contra a faixa segura de uma operação e exportar um log de cozimento como um traço. Tudo abaixo funciona hoje.

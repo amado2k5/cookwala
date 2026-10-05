@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # هغه نیوکې چې موږ خپره کړې دي
 
 موږ د Cookwala په اړه سختې پوښتنې وکړې او ځوابونه یې ولیکل. هرې اندിښنې ته په [action plan's concern register](ACTION-PLAN.md#2-concern-register) کې یو id ورکړل شوی دی، چې د زموږ ځواب او د هغې status هم ورسره دی. له بهر څخه راغلي بیاکتنې ښه راغلاست لرून دي او دلته به لیست شوي شي.

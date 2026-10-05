@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STAKEHOLDERS.md -->
+
 # Stakeholders: een bericht, opties, een eerste succes en een flow voor iedereen
 
 **Status:** 2026-10-04. Voor elke groep: waarom Cookwala voor hen belangrijk is, manieren om betrokken te raken van

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Cookwala انسانی ہمدردی کا پروفائل (ڈرافٹ 0.2)
 
 **Status:** food banks، relief programs اور food-safety and nutrition professionals کے جائزے کے لیے ڈرافٹ ہے۔ اس کا WFP، WHO، FAO، Global FoodBanking Network یا یہاں نامزد کسی دوسری تنظیم کی طرف سے جائزہ نہیں لیا گیا اور نہ ہی اس کی توثیق کی گئی ہے۔

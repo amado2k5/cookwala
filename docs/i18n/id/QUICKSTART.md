@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Quickstart
 
 Lima menit, tanpa perangkat keras. Anda akan mengambil sebuah resep, melakukan hash, bertanya apakah sebuah perangkat dapat memasaknya, memeriksa jejak suhu terhadap pita aman suatu operasi, dan mengekspor log memasak sebagai jejak. Semua yang di bawah ini berfungsi hari ini.

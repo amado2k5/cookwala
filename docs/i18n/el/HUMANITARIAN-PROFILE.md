@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Cookwala Ανθρωπιστιακό Προφίλ (draft 0.2)
 
 **Status:** προσχέδιο για επανεξέταση από food banks, προγράμματα ανακούφισης και επαγγελματίες της ασφάλειας τροφίμων και της διατροφής. Δεν έχει ελεγχθεί ή επικυρωθεί από τον WFP, τον WHO, τον FAO, το Global FoodBanking Network ή οποιονδήποτε άλλο οργανισμό αναφέρεται εδώ.

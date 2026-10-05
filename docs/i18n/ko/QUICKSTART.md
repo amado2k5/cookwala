@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Quickstart
 
 5분, 하드웨어 없음. 당신은 레시피를 가져오고, 해시하고, 장치가 그것을 요리할 수 있는지 묻고, 작업의 안전 범위에 대해 온도 트레이스를 확인하며, 요리 로그를 트레이스로 내보냅니다. 아래의 모든 것은 오늘 작동합니다.

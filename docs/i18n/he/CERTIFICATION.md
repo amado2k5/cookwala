@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance והדרך ל-certification
 
 **Status:** טיוטה, 2026-10-04 (RFC-0008). עדיין לא נשכר מתקשר (certifier); זהו המסלול

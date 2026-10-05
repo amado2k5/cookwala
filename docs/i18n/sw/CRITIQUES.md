@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # Ukosoaji tuliochapisha
 
 Tuliuliza maswali magumu kuhusu Cookwala na kuandika majibu yake. Kila wasiwasi una id

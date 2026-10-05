@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Cookwala receptformat: recept som fungerar med Missions
 
 Ett recept i Cookwala är inte en lista med instruktioner. Det är **portabel matlagningskunskap**

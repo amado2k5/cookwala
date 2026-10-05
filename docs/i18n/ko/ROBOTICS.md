@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala와 로보틱스 스택
 
 Cookwala는 로봇의 어떤 부분도 대체하지 않습니다. Cookwala는 로보틱스 스택에 요리를 위해 누락된 계층을 추가합니다: **무엇을 만들지, 각 단계가 언제 완료되는지, 그리고 절대 일어나서는 안 되는 일이 무엇인지**를, 어떤 로봇, 가전제품, 시뮬레이터 또는 학습 파이프라인도 읽고 확인할 수 있는 형태로 제공합니다.

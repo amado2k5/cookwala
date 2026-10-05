@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/MESSAGING.md -->
+
 # మెసేజింగ్: Cookwala ఏమి చెబుతుంది, మరియు ఎలా
 
 **Status:** 2026-10-04. పేజీల కంటే ముందు వ్రాయబడింది. ప్రతి పేజీ ఈ పత్రాన్ని అనుసరిస్తుంది.

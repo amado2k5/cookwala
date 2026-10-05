@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala y el stack de robótica
 
 Cookwala no reemplaza ninguna parte de un robot. Añade la capa que le falta al stack de robótica para cocinar: **qué hacer, cuándo se completa cada paso y qué es lo que nunca debe suceder**, en una forma que cualquier robot, electrodoméstico, simulador o pipeline de aprendizaje pueda leer y verificar.

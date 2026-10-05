@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Quickstart
 
 Cinque minuti, nessun hardware. Recupererai una ricetta, la trasformerai in hash, chiederai se un dispositivo può cucinarla, controllerai una traccia di temperatura rispetto alla banda sicura di un'operazione ed esporterai un log di cottura come traccia. Tutto ciò che segue funziona oggi.

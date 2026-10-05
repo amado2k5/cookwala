@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Démarrage rapide
 
 Cinq minutes, sans matériel. Vous allez récupérer une recette, la hasher, demander si un appareil peut la cuisiner, vérifier une trace de température par rapport à la bande de sécurité d'une opération, et exporter un log de cuisson sous forme de trace. Tout ce qui suit fonctionne aujourd'hui.

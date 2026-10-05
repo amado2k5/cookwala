@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROADMAP.md -->
+
 # خارطة الطريق: now، next، later
 
 **الحالة:** 2026-10-04. كل عنصر يحمل حالة: **done**، **in progress**، **planned**،

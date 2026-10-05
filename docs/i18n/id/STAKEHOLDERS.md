@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STAKEHOLDERS.md -->
+
 # Pemangku kepentingan: sebuah pesan, opsi, keberhasilan pertama dan alur untuk semua orang
 
 **Status:** 2026-10-04. Untuk setiap grup: mengapa Cookwala penting bagi mereka, cara untuk terlibat dari

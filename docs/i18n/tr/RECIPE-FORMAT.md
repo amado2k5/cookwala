@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Cookwala Tarif Formatı: Missions ile çalışan tarifler
 
 Cookwala'daki bir tarif bir talimatlar listesi değildir. Bir planlayıcının belirli bir Misyon'a (household, robots, appliances, energy, budget, health, timing) karşı *derlediği* ve yürütülebilir bir plana dönüştürdüğü **taşınabilir pişirme bilgisidir**. Robot daha sonra, gerçeklik değiştiğinde beklenmedik durumlar ve playbook'lar aracılığıyla uyum sağlayarak o planı çalıştırır.

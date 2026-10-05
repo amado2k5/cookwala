@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROADMAP.md -->
+
 # نقشه راه: now، next، later
 
 **Status:** 2026-10-04. هر مورد دارای یک وضعیت است: **done**، **in progress**، **planned**،

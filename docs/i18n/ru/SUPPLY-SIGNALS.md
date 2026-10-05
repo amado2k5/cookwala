@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/SUPPLY-SIGNALS.md -->
+
 # Излишки фермерских хозяйств и сигналы предложения
 
 > **Статус: experimental** (RFC-0007). Схема: `schemas/supply.schema.json`. Примеры:

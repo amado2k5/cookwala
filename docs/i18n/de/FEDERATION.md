@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # Föderation: wie Cookwala ohne Zentrum funktioniert
 
 **Status:** Entwurf, 2026-10-04 (RFC-0006). Das Bild des Gründers war ein Bienenstock: kein zentrales

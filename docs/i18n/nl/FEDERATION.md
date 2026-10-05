@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # Federatie: hoe Cookwala werkt zonder centrum
 
 **Status:** concept, 2026-10-04 (RFC-0006). De foto van de oprichter was een bijenkorf: geen centraal

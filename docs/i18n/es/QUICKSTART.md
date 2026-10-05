@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Quickstart
 
 Cinco minutos, sin hardware. Obtendrás una receta, le aplicarás un hash, preguntarás si un dispositivo puede cocinarla, comprobarás un rastro de temperatura frente a la banda segura de una operación y exportarás un registro de cocción como un rastro. Todo lo siguiente funciona hoy.

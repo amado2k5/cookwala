@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # Yayınladığımız eleştiriler
 
 Cookwala hakkında zor sorular sorduk ve cevapları yazdık. Her endişenin [action plan's concern register](ACTION-PLAN.md#2-concern-register) içinde bir id'si, yanıtımız ve durumu bulunmaktadır. Dışarıdan gelen incelemeler memnuniyetle karşılanır ve burada listelenecektir.

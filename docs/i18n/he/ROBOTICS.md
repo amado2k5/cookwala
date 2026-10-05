@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala ומחסנית הרובוטיקה
 
 Cookwala אינו מחליף שום חלק ברובוט. הוא מוסיף את השכבה שחסרה ל-robotics stack לצורך בישול: **מה להכין, מתי כל שלב מסתיים, ומה לעולם לא חייב לקרות**, בצורה שכל רובוט, מכשיר, סימולטור או learning pipeline יכולים לקרוא ולבדוק.

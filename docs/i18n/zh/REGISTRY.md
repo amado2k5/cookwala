@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/REGISTRY.md -->
+
 # Cookwala Registry：发布与查找食谱、设备及 rule pack
 
 > **Status: draft profile.** 基于官方 MCP Registry 进行 modelled，该 registry 列出了 Model

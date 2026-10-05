@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance na njia ya certification
 
 **Status:** draft, 2026-10-04 (RFC-0008). Hakuna mhakiki aliyekuwa amehusishwa bado; huu ndio njia

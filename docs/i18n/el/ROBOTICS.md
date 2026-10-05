@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala και το robotics stack
 
 Η Cookwala δεν αντικαθιστά κανένα μέρος ενός ρομπότ. Προσθέτει το επίπεδο που λείπει από το robotics stack για το μαγείρεμα: **τι να φτιάξετε, πότε ολοκληρώνεται κάθε βήμα και τι δεν πρέπει ποτέ να συμβεί**, σε μια μορφή που οποιοδήποτε ρομπότ, συσκευή, simulator ή learning pipeline μπορεί να διαβάσει και να ελέγξει.

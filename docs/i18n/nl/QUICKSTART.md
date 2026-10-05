@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Quickstart
 
 Vijf minuten, geen hardware. Je haalt een recept op, hasht het, vraagt of een apparaat het kan koken, controleert een temperatuurtrace tegen de veilige band van een operatie, en exporteert een kooklog als een trace. Alles hieronder werkt vandaag.

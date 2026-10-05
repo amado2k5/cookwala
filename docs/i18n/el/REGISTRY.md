@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/REGISTRY.md -->
+
 # Cookwala Registry: δημοσίευση και εύρεση συνταγών, συσκευών και packs
 
 > **Status: draft profile.** Modelled στο επίσημο MCP Registry, το οποίο περιλαμβάνει Model

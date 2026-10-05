@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Snabbstart
 
 Fem minuter, ingen hårdvara. Du kommer att hämta ett recept, hasha det, fråga om en enhet kan tillaga det, kontrollera ett temperaturspår mot en operations säkra band, och exportera en cooklog som ett spår. Allt nedan fungerar idag.

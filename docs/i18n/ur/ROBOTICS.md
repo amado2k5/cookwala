@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala اور robotics stack
 
 Cookwala کسی روبوٹ کے کسی حصے کو تبدیل نہیں کرتا۔ یہ اس تہہ کو شامل کرتا ہے جو کھانا پکانے کے لیے robotics stack میں موجود نہیں ہے: **کیا بنانا ہے، جب ہر مرحلہ مکمل ہو جائے، اور کیا کبھی نہیں ہونا چاہیے**، ایک ایسی شکل میں جسے کوئی بھی روبوٹ، appliance، simulator یا learning pipeline پڑھ اور چیک کر سکے۔

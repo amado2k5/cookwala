@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/KITCHENS-AND-FLEETS.md -->
+
 # వంటశాలలు మరియు ఉత్పత్తి రన్‌లు: రెస్టారెంట్లు, కమ్యూనిటీ, స్కూల్, డిజాస్టర్ మరియు రోబోట్ కిచెన్‌లు
 
 > **Status: experimental profile** (RFC-0005). Schema: `schemas/fleet.schema.json`.

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CORE.md -->
+
 # Cookwala Core 0.2
 
 **Status:** draft, 2026-10-04. यह Cookwala का मानक भाग है। MUST, SHOULD और MAY RFC 2119 का पालन करते हैं। यहाँ सूचीबद्ध नहीं की गई हर चीज़ एक वैकल्पिक **profile** (section 10) है।

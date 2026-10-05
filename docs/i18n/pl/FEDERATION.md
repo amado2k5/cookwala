@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # Federacja: jak Cookwala działa bez centrum
 
 **Status:** draft, 2026-10-04 (RFC-0006). Zdjęcie założyciela przedstawiało ul: brak centralnego

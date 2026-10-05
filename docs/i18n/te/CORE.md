@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CORE.md -->
+
 # Cookwala Core 0.2
 
 **Status:** draft, 2026-10-04. ఇది Cookwala యొక్క normatve భాగం. MUST, SHOULD మరియు MAY RFC 2119 ని అనుసరిస్తాయి. ఇక్కడ జాబితా చేయబడని ప్రతిదీ ఒక ఐచ్ఛిక **profile** (section 10).

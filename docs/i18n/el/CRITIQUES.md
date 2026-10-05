@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # Κριτικές που δημοσιεύσαμε
 
 Ζητήσαμε δύσκολες ερωτήσεις σχετικά με το Cookwala και καταγράψαμε τις απαντήσεις. Κάθε ανησυχία έχει ένα id στο [action plan's concern register](ACTION-PLAN.md#2-concern-register), μαζί με την απάντησή μας και την κατάστασή της. Οι κριτικές από εξωτερικούς φορείς είναι ευπρόσδεκτες και θα καταχωρηθούν εδώ.

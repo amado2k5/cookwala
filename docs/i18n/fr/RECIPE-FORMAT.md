@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Format de recette Cookwala : recettes qui fonctionnent avec les Missions
 
 Une recette dans Cookwala n'est pas une liste d'instructions. C'est une **connaissance culinaire portable**

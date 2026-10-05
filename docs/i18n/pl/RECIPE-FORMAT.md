@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Format przepisu Cookwala: przepisy współpracujące z Misjami
 
 Przepis w Cookwala to nie lista instrukcji. To **przenośna wiedza kulinarna**, którą planista *kompiluje* w odniesieniu do konkretnej Misji (household, roboty, urządzenia, energia, budżet, zdrowie, czas) w wykonalny plan. Robot następnie uruchamia ten plan, adaptując się poprzez contingencies i playbooks, gdy rzeczywistość ulega zmianie.

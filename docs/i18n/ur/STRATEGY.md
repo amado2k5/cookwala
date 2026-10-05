@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STRATEGY.md -->
+
 # Cookwala حکمت عملی: پیغام، پروڈکٹ، ویب سائٹ، دستاویزات، ڈویلپر کا تجربہ
 
 **Status:** संशोधित 2026-10-04 (v2)۔ اس میں مشن، ویژن، کہانی، معیار، ویب سائٹ،

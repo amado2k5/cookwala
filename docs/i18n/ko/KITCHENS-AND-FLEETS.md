@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/KITCHENS-AND-FLEETS.md -->
+
 # 주방 및 생산 실행: 레스토랑, 커뮤니티, 학교, 재난 및 로봇 주방
 
 > **상태: experimental profile** (RFC-0005). Schema: `schemas/fleet.schema.json`.

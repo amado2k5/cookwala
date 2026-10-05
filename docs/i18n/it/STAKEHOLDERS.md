@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STAKEHOLDERS.md -->
+
 # Stakeholder: un messaggio, opzioni, un primo successo e un flusso per tutti
 
 **Status:** 2026-10-04. Per ogni gruppo: perché Cookwala è importante per loro, modi per impegnarsi da

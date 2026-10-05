@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance మరియు certification కి మార్గం
 
 **Status:** draft, 2026-10-04 (RFC-0008). ఇంకా ఏ certifier ని నియమించలేదు; ఇది standard అందిస్తున్న మార్గం.

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Γρήγορη έναρξη
 
 Πέντε λεπτά, χωρίς hardware. Θα φέρετε μια συνταγή, θα την κάνετε hash, θα ρωτήσετε αν ένα device μπορεί να την μαγειρέψει, θα ελέγξετε ένα temperature trace σε σχέση με το safe band μιας operation και θα εξάγετε ένα cooking log ως trace. Όλα παρακάτω λειτουργούν σήμερα.

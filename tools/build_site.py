@@ -74,6 +74,8 @@ DOCS = [
         ('HUMANITARIAN-PROFILE', 'docs/HUMANITARIAN-PROFILE.md', 'Humanitarian Profile 0.2', 'الملف الإنساني 0.2', 'draft'),
         ('HUB', 'hub/README.md', 'Reference hub', 'الموزّع المرجعي', ''),
         ('MCP', 'sdk/mcp/README.md', 'MCP server', 'خادم MCP', ''),
+        ('SDK', 'scenarios/OPERATIONS.md', 'SDK operations (all languages)', 'عمليات حزمة التطوير (كل اللغات)', ''),
+        ('SCENARIOS', 'scenarios/README.md', 'Scenarios: how they work', 'السيناريوهات: كيف تعمل', ''),
         ('PYTHON', 'sdk/python/README.md', 'Python package and CLI', 'حزمة بايثون وسطر الأوامر', ''),
         ('TYPESCRIPT', 'sdk/typescript/README.md', 'TypeScript types', 'أنواع TypeScript', ''),
         ('ROS2', 'bindings/ros2/README.md', 'ROS 2 interface package', 'حزمة واجهات ROS 2', ''),

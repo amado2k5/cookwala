@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Cookwala Recipe Format: وہ تراکیب جو Missions کے ساتھ کام کرتی ہیں
 
 Cookwala میں ایک ترکیب ہدایات کی فہرست نہیں ہے۔ یہ **portable cooking knowledge** ہے

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # فدراکشن: Cookwala پرته له مرکز څخه څنګه کار کوي
 
 **Status:** draft, 2026-10-04 (RFC-0006). بنسټ گزار ته یو شیدې خټه وه: هیڅ مرکزي

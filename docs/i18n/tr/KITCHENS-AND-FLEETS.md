@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/KITCHENS-AND-FLEETS.md -->
+
 # Mutfaklar ve üretim süreçleri: restoranlar, topluluk, okul, afet ve robot mutfakları
 
 > **Durum: experimental profile** (RFC-0005). Şema: `schemas/fleet.schema.json`.

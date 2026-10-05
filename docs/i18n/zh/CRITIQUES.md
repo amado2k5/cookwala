@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # 我们发布的 Critiques
 
 我们针对 Cookwala 提出了尖锐的问题并记录了答案。每个疑虑在 [action plan's concern register](ACTION-PLAN.md#2-concern-register) 中都有一个 id，并附带我们的回复及其状态。欢迎外部评审，并将在此列出。

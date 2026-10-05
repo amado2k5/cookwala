@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HOUSEHOLD-CONTEXT.md -->
+
 # Profil de Household Context : l'ensemble de l'image reste à la maison
 
 > **Statut : draft profile** (RFC-0001). Ne fait pas partie de Cookwala Core. Schéma :

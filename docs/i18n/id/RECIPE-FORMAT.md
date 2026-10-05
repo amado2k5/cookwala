@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Format Resep Cookwala: resep yang bekerja dengan Missions
 
 Sebuah resep di Cookwala bukanlah daftar instruksi. Itu adalah **pengetahuan memasak portabel**

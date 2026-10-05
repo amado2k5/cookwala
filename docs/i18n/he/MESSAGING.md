@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/MESSAGING.md -->
+
 # הודעות: מה Cookwala אומרת, ואיך
 
 **Status:** 2026-10-04. נכתב לפני הדפים. כל דף עוקב אחר מסמך זה.

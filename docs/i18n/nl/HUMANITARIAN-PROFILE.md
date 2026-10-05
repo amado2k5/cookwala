@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Cookwala Humanitair Profiel (concept 0.2)
 
 **Status:** concept voor beoordeling door food banks, noodprogramma's en professionals op het gebied van voedselveiligheid en voeding. Het is niet beoordeeld of ondersteund door WFP, WHO, FAO, het Global FoodBanking Network of enige andere hier genoemde organisatie.

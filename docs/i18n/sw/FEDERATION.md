@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # Shirikisho: jinsi Cookwala inavyofanya kazi bila kituo
 
 **Status:** draft, 2026-10-04 (RFC-0006). Picha ya mwanzilishi ilikuwa kama mzinga wa nyuki: hakuna amri kuu, lakini kuna uwiano na urejesho. Ukurasa huu unasema maana yake katika vitendo.

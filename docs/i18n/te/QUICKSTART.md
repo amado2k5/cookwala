@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Quickstart
 
 ఐదు నిమిషాలు, హార్డ్‌వేర్ లేదు. మీరు ఒక రెసిపీని తీసుకుంటారు, దానిని hash చేస్తారు, ఒక పరికరం దానిని వండగలదో లేదో అడుగుతారు, ఒక operation యొక్క safe band తో temperature trace ని తనిఖీ చేస్తారు, మరియు వంట log ని ఒక trace గా ఎగుమతి చేస్తారు. క్రింద ఉన్నవన్నీ ఈరోజు పనిచేస్తాయి.

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROADMAP.md -->
+
 # రోడ్‌మ్యాప్: now, next, later
 
 **Status:** 2026-10-04. ప్రతి అంశం ఒక స్థితిని కలిగి ఉంటుంది: **done**, **in progress**, **planned**,

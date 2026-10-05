@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # Fédération : comment Cookwala fonctionne sans centre
 
 **Status :** draft, 2026-10-04 (RFC-0006). La photo du fondateur était une ruche : pas de commandement central, pourtant une harmonie et un rétablissement. Cette page explique ce que cela signifie en pratique.

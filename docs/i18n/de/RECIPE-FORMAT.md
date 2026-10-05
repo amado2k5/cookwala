@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Cookwala Rezeptformat: Rezepte, die mit Missions funktionieren
 
 Ein Rezept in Cookwala ist keine Liste von Anweisungen. Es ist **portables Kochwissen**, das ein Planer *erstellt*, um es gegen eine spezifische Mission (Haushalt, Roboter, Geräte, Energie, Budget, Gesundheit, Timing) in einen ausführbaren Plan zu überführen. Der Roboter führt diesen Plan dann aus und passt ihn durch Contingencies und Playbooks an, wenn sich die Realität ändert.

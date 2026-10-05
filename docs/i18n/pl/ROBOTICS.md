@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala i stos robotyki
 
 Cookwala nie zastępuje żadnej części robota. Dodaje warstwę, której brakuje stosowi robotyki w kontekście gotowania: **co przygotować, kiedy każdy krok jest gotowy i co nigdy nie może się wydarzyć**, w formie, którą każdy robot, urządzenie, symulator lub potok uczenia może odczytać i sprawdzić.

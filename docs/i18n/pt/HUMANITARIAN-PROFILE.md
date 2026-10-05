@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Perfil Humanitário Cookwala (rascunho 0.2)
 
 **Status:** rascunho para revisão por food banks, programas de ajuda e profissionais de segurança alimentar e nutrição. Não é revisado ou endossado pelo WFP, WHO, FAO, o Global FoodBanking Network ou qualquer outra organização aqui mencionada.

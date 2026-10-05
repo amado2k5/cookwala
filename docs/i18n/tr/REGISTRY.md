@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/REGISTRY.md -->
+
 # Cookwala Registry: tarifleri, cihazları ve paketleri yayınlama ve bulma
 
 > **Durum: taslak profil.** Model Context Protocol sunucularını listeleyen resmi MCP Registry üzerinde modelledi: doğrulanmış ad alanları, sabitlenmiş sürümler, bütünlük özetleri, bir doğrulama uç noktası ve bir yaşam döngüsü durumu.

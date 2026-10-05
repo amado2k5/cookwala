@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # ملف Cookwala الإنساني (مسودة 0.2)
 
 **الحالة:** مسودة للمراجعة من قبل food banks، وبرامج الإغاثة، والمتخصصين في سلامة الغذاء والتغذية. لم تتم مراجعتها أو اعتمادها من قبل WFP، أو WHO، أو FAO، أو Global FoodBanking Network أو أي منظمة أخرى مذكورة هنا.

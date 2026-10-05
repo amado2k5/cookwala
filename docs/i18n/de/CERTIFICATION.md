@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance und der Weg zur certification
 
 **Status:** Entwurf, 2026-10-04 (RFC-0008). Es wurde noch kein Zertifizierer beauftragt; dies ist der Weg, den der Standard bietet.

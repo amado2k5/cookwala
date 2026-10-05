@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/IMPACT.md -->
+
 # Dampak: apa yang dapat diubah Cookwala, dengan sumber dan label
 
 **Status:** 2026-10-04. Setiap angka di bawah ini diberi label **measured** (dihitung atau dilaporkan oleh

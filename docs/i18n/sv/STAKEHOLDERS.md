@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STAKEHOLDERS.md -->
+
 # Intressenter: ett meddelande, alternativ, en första framgång och ett flöde för alla
 
 **Status:** 2026-10-04. För varje grupp: varför Cookwala betyder något för dem, sätt att engagera sig från

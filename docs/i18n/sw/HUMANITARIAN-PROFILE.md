@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Cookwala Humanitarian Profile (draft 0.2)
 
 **Status:** rasimu ya mapitio kwa food banks, programu za misaada na wataalamu wa usalama wa chakula na lishe. Haijapitiwa wala kuidhinishwa na WFP, WHO, FAO, Global FoodBanking Network au shirika lingine lolote lililotajwa hapa.

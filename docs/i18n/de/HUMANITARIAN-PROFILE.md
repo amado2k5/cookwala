@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Cookwala Humanitarian Profile (draft 0.2)
 
 **Status:** Entwurf zur Überprüfung durch food banks, Hilfsprogramme und Fachleute für Lebensmittelsicherheit und Ernährung. Er wurde nicht von WFP, WHO, FAO, dem Global FoodBanking Network oder einer anderen hier genannten Organisation geprüft oder unterstützt.

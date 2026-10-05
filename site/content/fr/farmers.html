@@ -1,0 +1,33 @@
+<!--meta {"title": "Agriculteurs et approvisionnement : signaler un excédent par SMS, signaux équitables plus tard", "description": "Une ferme avec un surplus le signale par SMS et atteint une cuisine le jour même. Plus tard, des signaux agrégés et différés de la demande et de l'offre qui traitent chaque producteur de la même manière, après examen par le droit de la concurrence.", "path": "/farmers/", "status": "exp"} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Agriculteurs et approvisionnement</p>
+  <h1>Un excédent devrait devenir des repas, pas des déchets</h1>
+  <p class="lead">Deux choses qu'un agriculteur ou une coopérative peut obtenir d'une norme alimentaire : un moyen de lister le surplus avant qu'il ne pourrisse et qui atteint une cuisine le jour même, et un signal équitable de ce qui sera nécessaire où. Le premier est spécifié, testé et exécutable par tout programme qui l'adopte ; aucun programme ne l'a encore fait. Le second est conçu, expérimental, et attend un examen par le droit de la concurrence.</p>
+</section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <h2>Now : surplus par SMS</h2>
+      <p>Une ferme est un donateur dans le Profil Humanitaire, une organisation comme une autre, jamais une personne. Un message vers la passerelle d'un programme :</p>
+      <pre class="code"><code>FARM 120KG TOMATO A HV0411</code></pre>
+      <div class="output">OFFER OF-002 open for 14 h · origin: farm · harvested 4 November</div>
+      <p>Une food bank ou une cuisine la réclame ; le transfert enregistre la température et les kilogrammes acceptés ; la distribution compte les repas ; le résumé montre les kilogrammes sauvés avec la méthode. <a href="/humanitarian/#sms">Essayez-le dans le parcours guidé</a>.</p><h3>Ce que cela signifie pour vous</h3><ul><li>Votre coopérative enregistre un numéro de téléphone auprès du programme ; les documents nomment la coopérative, jamais une personne ou une parcelle.</li><li>La cuisine qui réclame votre offre organise et paie la collecte ; l'accord du programme le stipule avant la première offre.</li><li>Vous recevez une réponse avec les kilogrammes acceptés et, si certains ont été refusés, pourquoi. Vous pouvez <code>CANCEL</code> avant la collecte.</li><li>Vous n'avez pas besoin d'un smartphone ou de données ; un téléphone basique avec des mots-clés en anglais et un jeu de chiffres fonctionne.</li></ul>
+      <p class="note">Lorsqu'un programme exécute le profil, cela fonctionne avec un téléphone basique aujourd'hui. Aucun programme ne l'exécute encore ; la grammaire, l'analyseur et les vecteurs de conformance existent, et la <a href="/docs/CONCEPT-NOTE/">note de concept</a> est la manière dont un programme démarre.</p>
+    </div>
+    <div>
+      <h2>Next : signaux équitables de l'offre et de la demande</h2>
+      <p>Si la cuisine est planifiée, les quantités cultivées et déplacées peuvent correspondre à ce qui est nécessaire. Les simulateurs nationaux et mondiaux montrent l'ampleur de l'effet selon leurs hypothèses <span class="kind modelled">modelled</span>. La plus petite étape honnête de la norme est constituée de deux documents expérimentaux :</p>
+      <ul><li><b>DemandSignal :</b> dans la région R, dans la semaine W, les cuisines et les programmes prévoient d'utiliser entre L et H kg d'ingrédient de <em>class</em> C (légumineuse, légume à feuilles, volaille), jamais un produit ou une marque.</li><li><b>SupplySignal :</b> dans la région R, dans la semaine W, la classe C est en situation d'excédent, d'approvisionnement normal ou de pénurie, avec une fenêtre de récolte.</li></ul>
+      <p><b>Règles, vérifiées par code :</b> au moins 20 sources contributrices ; publiées au moins 7 jours après la fin de la semaine ; aucun prix ; aucune région plus précise qu'une province sans 100 sources ; ouvert à tous, identique pour chaque lecteur, gratuit. Un petit producteur voit exactement ce qu'un grand acheteur voit. <a href="/docs/SUPPLY-SIGNALS/">Signaux d'approvisionnement</a> · <a href="/docs/RFC-0007/">RFC-0007</a></p>
+      <p class="note"><span class="status">gated</span> Le partage de prévisions entre concurrents est ce contre quoi les autorités de la concurrence mettent en garde. Ces règles sont conçues pour que le signal reste utile pour les semis et inutile pour la fixation des prix ; le conseil fixe les seuils finaux. Rien n'est publié avant cela.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Ce qui reste en dehors du standard</h2>
+  <p>Les prix. Les contrats. Qui reçoit de la nourriture lorsqu'il n'y en a pas assez (c'est une décision responsable d'un programme). Une chaîne d'approvisionnement parfaitement agile : la conception du signal indique que les réserves font partie du plan, car un système alimentaire réglé exactement sur la demande n'est qu'un choc d'une étagère vide.</p>
+  <div class="cta"><a class="btn primary" href="/for/food/">Your page: farmers, cooks, chefs</a><a class="btn" href="/humanitarian/">Humanitarian</a><a class="btn" href="/sim/country/">The country simulator</a></div>
+</section>
+

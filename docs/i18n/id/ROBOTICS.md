@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala dan tumpukan robotika
 
 Cookwala tidak menggantikan bagian apa pun dari robot. Ia menambahkan lapisan yang hilang dari tumpukan robotika untuk memasak: **apa yang harus dibuat, kapan setiap langkah selesai, dan apa yang tidak boleh terjadi**, dalam bentuk yang dapat dibaca dan diperiksa oleh robot, peralatan, simulator, atau alur pembelajaran apa pun.

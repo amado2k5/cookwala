@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Cookwala మానవతా ప్రొఫైల్ (draft 0.2)
 
 **Status:** food banks, relief programs మరియు food-safety and nutrition professionals ద్వారా సమీక్ష కోసం డ్రాఫ్ట్. ఇది WFP, WHO, FAO, Global FoodBanking Network లేదా ఇక్కడ పేర్కొనబడిన మరే ఇతర సంస్థ ద్వారా సమీక్షించబడలేదు లేదా ఆమోదించబడలేదు.

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # تنسيق وصفات Cookwala: وصفات تعمل مع Missions
 
 الوصفة في Cookwala ليست مجرد قائمة من التعليمات. إنها **معرفة طهي محمولة**

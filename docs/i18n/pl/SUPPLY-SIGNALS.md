@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/SUPPLY-SIGNALS.md -->
+
 # Nadwyżki rolne i sygnały podaży
 
 > **Status: experimental** (RFC-0007). Schemat: `schemas/supply.schema.json`. Przykłady:

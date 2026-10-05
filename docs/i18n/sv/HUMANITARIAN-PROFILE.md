@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Cookwala Humanitarian Profile (draft 0.2)
 
 **Status:** utkast för granskning av food banks, hjälpprogram samt experter inom livsmedelssäkerhet och nutrition. Det har inte granskats eller godkänts av WFP, WHO, FAO, the Global FoodBanking Network eller någon annan organisation som nämns här.

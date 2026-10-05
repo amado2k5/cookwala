@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # 우리가 게시한 Critiques
 
 우리는 Cookwala에 대해 어려운 질문들을 던졌고 그 답변을 기록했습니다. 각 우려 사항은 우리의 응답 및 상태와 함께 [action plan's concern register](ACTION-PLAN.md#2-concern-register)에 id와 함께 기재되어 있습니다. 외부 검토는 언제나 환영하며 여기에 목록으로 게시될 것입니다.

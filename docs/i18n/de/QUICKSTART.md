@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Quickstart
 
 Fünf Minuten, keine Hardware. Sie werden ein Rezept abrufen, es hashen, fragen, ob ein Gerät es kochen kann, eine Temperaturspur gegen das sichere Band einer Operation prüfen und ein Kochprotokoll als Spur exportieren. Alles unten funktioniert heute.

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Profile-ê mirovî yê Cookwala (taslak 0.2)
 
 **Rewşa:** nûska ji bo nirxandina food banks, bernameyên alîkariyê û pisporên ewlehiya xwarinê û bajûraniyê. Ji aliyê WFP, WHO, FAO, Global FoodBanking Network an jî kêgehên din ên li vir hatî navê nehat nirxandin an jî nehat piştgirîkirin.

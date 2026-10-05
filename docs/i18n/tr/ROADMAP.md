@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROADMAP.md -->
+
 # Yol Haritası: now, next, later
 
 **Durum:** 2026-10-04. Her öğe bir durum taşır: **done**, **in progress**, **planned**,

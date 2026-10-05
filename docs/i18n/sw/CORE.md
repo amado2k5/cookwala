@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CORE.md -->
+
 # Cookwala Core 0.2
 
 **Status:** draft, 2026-10-04. Hii ni sehemu ya kikanuni ya Cookwala. MUST, SHOULD na MAY zinafuata RFC 2119. Kila kitu ambacho hakijaorodheshwa hapa ni **profile** ya hiari (sehemu 10).

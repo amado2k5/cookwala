@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance 与 certification 之路
 
 **Status:** draft, 2026-10-04 (RFC-0008). 尚未聘请任何认证机构；这是该标准提供的路径。

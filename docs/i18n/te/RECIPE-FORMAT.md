@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Cookwala Recipe Format: Missions తో పనిచేసే recipes
 
 Cookwala లోని ఒక రెసిపీ అనేది సూచనల జాబితా కాదు. ఇది ఒక ప్లానర్ ఒక నిర్దిష్ట Mission (household, robots, appliances, energy, budget, health, timing) కి వ్యతిరేకంగా ఒక ఎగ్జిక్యూటబుల్ ప్లాన్‌గా *compile* చేసే **portable cooking knowledge**. వాస్తవికత మారినప్పుడు, అత్యవసర పరిస్థితులు మరియు playbooks ద్వారా అనుగుణ్యతను సాధిస్తూ, రోబోట్ ఆ ప్లాన్‌ను రన్ చేస్తుంది.

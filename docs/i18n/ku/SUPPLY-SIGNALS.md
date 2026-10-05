@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/SUPPLY-SIGNALS.md -->
+
 # Zêdebûna çandiniyê û signallên dabînkirinê
 
 > **Rewşa: experimental** (RFC-0007). Schema: `schemas/supply.schema.json`. Mînak:

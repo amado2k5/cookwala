@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/MESSAGING.md -->
+
 # Mesajlaşma: Cookwala ne söyler ve nasıl söyler
 
 **Durum:** 2026-10-04. Sayfalardan önce yazılmıştır. Her sayfa bu belgeyi takip eder.

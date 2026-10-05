@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/IMPACT.md -->
+
 # Bandor: çi Cookwala dikare biguherîne, bi çavkanî û etiketên re
 
 **Status:** 2026-10-04. Her hejmar li jêr bi **measured** (ji aliyê çavkaniya navberî hatî hesibandin an raporkirin), **modelled** (ji aliyê simulatorkên me ve di bin fermanên diyarkirî de hatî hilberandin) an jî **assumed** (fîgureke plankirinê) hat navkirin. Tiştek li vir encama Cookwala ya li qadê ye: tu pilot nehatiye kirin. Ev rûpel mezinahiya pirsgirêkan û mekanîzmayên ku Cookwala bi wan beşdar dibe diyar dike.

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STRATEGY.md -->
+
 # Cookwala 策略：消息、产品、网站、文档、开发者体验
 
 **Status:** 修订于 2026-10-04 (v2)。涵盖了使命、愿景、故事、标准、网站、

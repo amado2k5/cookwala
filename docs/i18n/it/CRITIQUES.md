@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # Critiche che abbiamo pubblicato
 
 Abbiamo posto domande difficili su Cookwala e abbiamo scritto le risposte. Ogni preoccupazione ha un id nel [concern register dell'action plan](ACTION-PLAN.md#2-concern-register), insieme alla nostra risposta e al suo status. Le revisioni esterne sono benvenute e saranno elencate qui.

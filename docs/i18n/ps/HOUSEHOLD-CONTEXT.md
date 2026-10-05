@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HOUSEHOLD-CONTEXT.md -->
+
 # د کورنۍ سیاق پروفایل: ټول تصویر په کور کې پاتې کیږي
 
 > **حالت: draft profile** (RFC-0001). د Cookwala Core برخه نه دی. Schema:

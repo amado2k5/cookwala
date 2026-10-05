@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance والمسار نحو certification
 
 **الحالة:** مسودة، 2026-10-04 (RFC-0008). لم يتم الاستعانة بأي جهة إصدار شهادات بعد؛ هذا هو المسار

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/MESSAGING.md -->
+
 # Peyam: çi Cookwala dibêje, û çawa
 
 **Rewş:** 2026-10-04. Berî rûpelan hatî nivîsandin. Her rûpel vê belgeyê dikeve pey.

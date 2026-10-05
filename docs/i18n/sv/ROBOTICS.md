@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala och robotikstacken
 
 Cookwala ersätter inte någon del av en robot. Den lägger till det lager som robotstacken saknar för matlagning: **vad som ska göras, när varje steg är klart, och vad som aldrig får hända**, i en form som vilken robot, apparat, simulator eller lärandepipeline som helst kan läsa och kontrollera.

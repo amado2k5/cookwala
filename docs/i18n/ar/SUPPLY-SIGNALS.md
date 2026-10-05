@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/SUPPLY-SIGNALS.md -->
+
 # فائض المزرعة وإشارات الإمداد
 
 > **الحالة: experimental** (RFC-0007). المخطط: `schemas/supply.schema.json`. الأمثلة:

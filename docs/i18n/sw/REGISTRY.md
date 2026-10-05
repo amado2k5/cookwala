@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/REGISTRY.md -->
+
 # Cookwala Registry: kuchapisha na kupata mapishi, vifaa na rule pack
 
 > **Hali: draft profile.** Imeundwa kulingana na MCP Registry rasmi, ambayo inaorodhesha seva za Model

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala e a pilha de robótica
 
 Cookwala não substitui nenhuma parte de um robô. Ele adiciona a camada que falta à pilha de robótica para cozinhar: **o que fazer, quando cada etapa é concluída e o que nunca deve acontecer**, em uma forma que qualquer robô, eletrodoméstico, simulador ou pipeline de aprendizado possa ler e verificar.

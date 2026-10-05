@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/IMPACT.md -->
+
 # 影响：Cookwala 可以改变什么，包含来源与标签
 
 **Status:** 2026-10-04. 以下每个数字均标记为 **measured**（由所述来源计数或报告）、**modelled**（在所述假设下由我们的模拟器生成）或 **assumed**（规划数值）。此处没有任何内容是 Cookwala 在现场的结果：尚未进行任何试点。本页面说明了问题的规模以及 Cookwala 做出贡献的机制。

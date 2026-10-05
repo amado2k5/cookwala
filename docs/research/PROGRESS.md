@@ -2,6 +2,34 @@
 
 Newest first. Each entry: date, phase, what was done, what is next, blockers.
 
+## 2026-10-04 (evening) · Q1 to Q3: fifi.cooking import, SDK in 13 languages with 100 scenarios, the site in 25 languages
+
+- Founder changed the shipping rule to direct, incremental pushes to main (every ~20 minutes);
+  PR #1 is closed as superseded. Every push deploys cookwala.ai.
+- Q1 Import: `tools/export_fifi.py` converts all 1,881 fifi.cooking recipes into V0 documents
+  (RFC-0009, `cw.op.legacy_step`): 99.3 % of quantities parsed, names in 25 languages, text
+  sidecars for 23 languages, a 3,953-entry ingredient vocabulary, `recipes/INDEX.json` and
+  `recipes/REPORT.md`. Licence per collection in `tools/export_fifi.collections.json`:
+  only the family archive is CC-BY-4.0; the four book- and channel-derived collections are
+  "credited, licence under review" until the founder confirms. The validator checks all of them.
+- Q2 SDK: the reference hub exposes the library over HTTP (`/v1/tools/*`); clients in Python,
+  TypeScript, JavaScript, Go, Rust, Java, Kotlin, C#, Swift, C++, Ruby, PHP and curl implement the
+  25 operations of `scenarios/OPERATIONS.md`; 100 scenarios as data, rendered to 13 code samples
+  each and executed against the hub (100/100 pass). Compiled and run here: Python, TypeScript,
+  JavaScript, curl, Java, Swift, C++, Ruby. Reviewed but not compiled here: Go, Rust, Kotlin,
+  C#, PHP (no toolchain on this machine; their READMEs say so).
+- Q3 Languages: the generator builds 25 languages (discovered from `site/content/<lang>/`),
+  RTL for five, fonts per script, a language menu and hreflang on every page, a visible
+  machine-translation notice. English and Arabic are human-written; the other 23 are being
+  produced by a local model (`tools/translate_site.py`, `tools/translate_docs.py` with
+  gemma4:26b) and committed as they land; the documentation set is 16 to 17 documents per
+  language so far. Recipe pages exist statically in English and Arabic; a viewer serves the
+  other languages from the sidecars.
+- Site: 4,283 pages, 51k files, zero missing links (175k checked); recipe browse with search
+  in any script; scenario pages with tabs per language and recorded output.
+- Open: founder confirmation of collection licences; first compile of the five untested
+  clients; translations still running; screenshots for the new pages.
+
 ## 2026-10-04 · P9 Self-critique: nine viewpoints, fixes applied
 
 - Reviews from investor, food-agency officer, farmer, home cook, robotics professor,

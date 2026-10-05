@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STAKEHOLDERS.md -->
+
 # أصحاب المصلحة: رسالة، خيارات، أول نجاح ومسار للجميع
 
 **الحالة:** 2026-10-04. لكل مجموعة: لماذا تهمهم Cookwala، طرق المشاركة من

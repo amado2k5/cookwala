@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STRATEGY.md -->
+
 # Cookwala रणनीति: संदेश, उत्पाद, वेबसाइट, दस्तावेज़, डेवलपर अनुभव
 
 **Status:** संशोधित 2026-10-04 (v2)। इसमें मिशन, विजन, कहानी, मानक, वेबसाइट,

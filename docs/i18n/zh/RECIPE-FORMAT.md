@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Cookwala 食谱格式：适用于 Missions 的食谱
 
 Cookwala 中的食谱不是一份指令列表。它是**可移植的烹饪知识**，规划器针对特定的 Mission（家庭、机器人、设备、能源、预算、健康、时机）将其*编译*成一个可执行计划。随后机器人运行该计划，并在现实发生变化时通过应急预案和剧本进行调整。

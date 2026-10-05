@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STAKEHOLDERS.md -->
+
 # Interesariusze: wiadomość, opcje, pierwszy sukces i przepływ dla każdego
 
 **Status:** 2026-10-04. Dla każdej grupy: dlaczego Cookwala jest dla nich ważna, sposoby zaangażowania od lekkich do głębokich, pierwszy sukces w mniej niż 15 minut, ścieżka po nim oraz to, jak zaangażowanie posuwa naprzód ich pracę i świat. Nic tutaj nie nazywa partnera, użytkownika ani pilotażu, który nie istnieje. Tam, gdzie coś jest planowane, widnieje status next lub later.

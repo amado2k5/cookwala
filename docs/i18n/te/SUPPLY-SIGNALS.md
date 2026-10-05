@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/SUPPLY-SIGNALS.md -->
+
 # ఫామ్ surplus మరియు సప్లై సిగ్నల్స్
 
 > **Status: experimental** (RFC-0007). Schema: `schemas/supply.schema.json`. Examples:

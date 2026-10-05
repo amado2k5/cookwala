@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # Naqeyên ku me weşandine
 
 Me pirsên dijwar li ser Cookwala پرسîn kirin û bersivên wan nivîsandin. Her fikarê di [registry ya concern a planê ya action](ACTION-PLAN.md#2-concern-register) de di nav `id` de heye, ligel bersiva me û rewşa wê. Nirxandinên ji derve bi xêr hatin û li vir dê werin lîstkirin.

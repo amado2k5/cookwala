@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/IMPACT.md -->
+
 # השפעה: מה Cookwala יכול לשנות, עם מקורות ותוויות
 
 **Status:** 2026-10-04. כל מספר להלן מוגדר כ-**measured** (נספר או דווח על ידי

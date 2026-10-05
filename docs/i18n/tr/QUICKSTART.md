@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Hızlı Başlangıç
 
 Beş dakika, donanım yok. Bir tarif getirecek, onu hash'leyecek, bir cihazın onu pişirip pişiremeyeceğini soracak, bir sıcaklık izini bir operasyonun güvenli bandına karşı kontrol edecek ve bir pişirme günlüğünü bir iz olarak dışa aktaracaksınız. Aşağıdaki her şey bugün çalışıyor.

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala et la pile robotique
 
 Cookwala ne remplace aucune partie d'un robot. Il ajoute la couche qui manque à la pile robotique pour la cuisine : **quoi préparer, quand chaque étape est terminée, et ce qui ne doit jamais arriver**, sous une forme que n'importe quel robot, appareil, simulateur ou pipeline d'apprentissage peut lire et vérifier.

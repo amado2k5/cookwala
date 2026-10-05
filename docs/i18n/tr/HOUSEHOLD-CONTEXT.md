@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HOUSEHOLD-CONTEXT.md -->
+
 # Household Context Profili: bütün resim evde kalır
 
 > **Durum: taslak profil** (RFC-0001). Cookwala Core'un bir parçası değildir. Şema:

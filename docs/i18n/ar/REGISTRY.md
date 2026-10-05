@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/REGISTRY.md -->
+
 # Cookwala Registry: نشر وإيجاد الوصفات والأجهزة وحزم الـ packs
 
 > **الحالة: draft profile.** تم نمذجته بناءً على MCP Registry الرسمي، والذي يسرد خوادم Model

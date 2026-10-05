@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Гуманитарный профиль Cookwala (черновик 0.2)
 
 **Status:** черновик для рассмотрения food banks, программами помощи и специалистами по пищевой безопасности и питанию. Он не рассмотрен и не одобрен WFP, WHO, FAO, Global FoodBanking Network или любой другой организацией, указанной здесь.

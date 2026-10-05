@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # Kritik yang kami publikasikan
 
 Kami mengajukan pertanyaan sulit tentang Cookwala dan menuliskan jawabannya. Setiap kekhawatiran memiliki id

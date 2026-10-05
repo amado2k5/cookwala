@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/KITCHENS-AND-FLEETS.md -->
+
 # Dapur dan putaran produksi: restoran, komunitas, sekolah, bencana, dan dapur robot
 
 > **Status: profil eksperimental** (RFC-0005). Skema: `schemas/fleet.schema.json`.

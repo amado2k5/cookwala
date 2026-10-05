@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STAKEHOLDERS.md -->
+
 # Paydaşlar: bir mesaj, seçenekler, bir ilk başarı ve herkes için bir akış
 
 **Durum:** 2026-10-04. Her grup için: Cookwala'nın onlar için neden önemli olduğu, hafiften derine doğru katılım yolları, 15 dakikadan kısa sürede ilk başarı, ondan sonraki yol ve katılımın onların çalışmalarını ve dünyayı nasıl ilerlettiği. Burada var olmayan hiçbir ortak, kullanıcı veya pilot çalışma ismi geçmemektedir. Bir şey planlandığında, next veya later ifadesi kullanılır.

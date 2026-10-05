@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CORE.md -->
+
 # Cookwala Core 0.2
 
 **Status:** draft, 2026-10-04. Detta är den normativa delen av Cookwala. MUST, SHOULD och MAY följer RFC 2119. Allt som inte listas här är en valfri **profile** (avsnitt 10).

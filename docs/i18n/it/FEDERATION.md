@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # Federazione: come Cookwala funziona senza un centro
 
 **Status:** draft, 2026-10-04 (RFC-0006). L'immagine del fondatore era un alveare: nessun comando centrale, eppure armonia e recupero. Questa pagina spiega cosa significhi ciò in pratica.

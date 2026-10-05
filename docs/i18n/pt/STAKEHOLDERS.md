@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STAKEHOLDERS.md -->
+
 # Stakeholders: uma mensagem, opções, um primeiro sucesso e um fluxo para todos
 
 **Status:** 2026-10-04. Para cada grupo: por que o Cookwala é importante para eles, formas de engajamento do leve ao profundo, um primeiro sucesso em menos de 15 minutos, o caminho após isso, e como o engajamento avança o trabalho deles e o mundo. Nada aqui nomeia um parceiro, um usuário ou um piloto que não exista. Onde algo está planejado, diz next ou later.

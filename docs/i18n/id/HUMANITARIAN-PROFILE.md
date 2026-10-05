@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Profil Kemanusiaan Cookwala (draft 0.2)
 
 **Status:** draf untuk ditinjau oleh food bank, program bantuan, dan profesional keamanan pangan dan nutrisi. Ini tidak ditinjau atau didukung oleh WFP, WHO, FAO, Global FoodBanking Network atau organisasi lain yang disebutkan di sini.

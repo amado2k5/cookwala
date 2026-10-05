@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/MESSAGING.md -->
+
 # پیغامرسوني: Cookwala څه وايي، او څنګه
 
 **Status:** 2026-10-04. د پاڼو څخه وړاندې لیکل شوي. هرې پاڼه دې سند تعقیبوي.

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/IMPACT.md -->
+
 # Athari: kile Cookwala kinachoweza kubadilisha, pamoja na vyanzo na lebo
 
 **Status:** 2026-10-04. Kila nambari hapa chini imewekwa lebo kama **measured** (iliyodhibitiwa au kuripotiwa na chanzo kilichotajwa), **modelled** (iliyozalishwa na wasimulizi wetu chini ya dhana zilizoelezwa) au

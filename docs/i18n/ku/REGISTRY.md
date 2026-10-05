@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/REGISTRY.md -->
+
 # Cookwala Registry: weşandina û dîtina rêçan, amûr û pakînan
 
 > **Rewşa: profîla taslak.** Modelî li ser Registry MCP ya fermî hat kirin, ku Model

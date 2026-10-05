@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/IMPACT.md -->
+
 # Wpływ: co Cookwala może zmienić, wraz ze źródłami i etykietami
 
 **Status:** 2026-10-04. Każda liczba poniżej jest oznaczona jako **measured** (policzona lub zaraportowana przez wymienione źródło), **modelled** (wygenerowana przez nasze symulatory przy określonych założeniach) lub **assumed** (wartość planistyczna). Nic tutaj nie jest wynikiem działania Cookwala w terenie: nie przeprowadzono żadnego pilotażu. Ta strona określa skalę problemów oraz mechanizmy, dzięki którym Cookwala przyczynia się do ich rozwiązania.

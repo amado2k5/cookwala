@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STAKEHOLDERS.md -->
+
 # Partes interesadas: un mensaje, opciones, un primer éxito y un flujo para todos
 
 **Status:** 2026-10-04. Para cada grupo: por qué Cookwala es importante para ellos, formas de participar desde lo ligero a lo profundo, un primer éxito en menos de 15 minutos, el camino después de ello, y cómo participar hace avanzar su trabajo y el mundo. Nada aquí nombra a un socio, un usuario o un piloto que no exista. Donde algo esté planeado, dice next o later.

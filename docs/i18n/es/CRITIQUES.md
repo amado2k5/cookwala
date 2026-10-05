@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # Críticas que publicamos
 
 Hicimos preguntas difíciles sobre Cookwala y escribimos las respuestas. Cada inquietud tiene un id

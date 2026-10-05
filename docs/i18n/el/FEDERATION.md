@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # Ομοσπονδία: πώς λειτουργεί η Cookwala χωρίς κέντρο
 
 **Status:** draft, 2026-10-04 (RFC-0006). Η φωτογραφία του ιδρυτή ήταν μια μελισσαρή: χωρίς κεντρική

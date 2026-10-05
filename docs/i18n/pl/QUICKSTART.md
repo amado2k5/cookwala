@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # Szybki start
 
 Pięć minut, bez sprzętu. Pobierzesz przepis, wygenerujesz jego hash, zapytasz, czy urządzenie może go przyrządzić, sprawdzisz ślad temperatury pod kątem bezpiecznego pasma operacji i wyeksportujesz log gotowania jako ślad. Wszystko poniżej działa dzisiaj.

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/SUPPLY-SIGNALS.md -->
+
 # עודפי חווה ואותות אספקה
 
 > **סטטוס: experimental** (RFC-0007). סכימה: `schemas/supply.schema.json`. דוגמאות:

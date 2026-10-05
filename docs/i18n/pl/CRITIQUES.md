@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # Krytyki, które opublikowaliśmy
 
 Zadaliśmy trudne pytania dotyczące Cookwala i spisaliśmy odpowiedzi. Każda obawa posiada id

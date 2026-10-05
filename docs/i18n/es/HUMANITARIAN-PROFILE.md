@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/HUMANITARIAN-PROFILE.md -->
+
 # Perfil Humanitario de Cookwala (borrador 0.2)
 
 **Status:** borrador para revisión por parte de food banks, programas de ayuda y profesionales de la seguridad alimentaria y la nutrición. No ha sido revisado ni respaldado por WFP, WHO, FAO, the Global FoodBanking Network ni ninguna otra organización mencionada aquí.

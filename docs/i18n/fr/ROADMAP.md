@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROADMAP.md -->
+
 # Feuille de route : now, next, later
 
 **Status :** 2026-10-04. Chaque élément porte un statut : **done**, **in progress**, **planned**,

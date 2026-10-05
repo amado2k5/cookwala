@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # 联邦：Cookwala 在没有中心的情况下如何运作
 
 **Status:** draft, 2026-10-04 (RFC-0006)。创始人的照片是一个蜂巢：没有中央指挥，却有着和谐与恢复。本页面说明了这在实践中的含义。

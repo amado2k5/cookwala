@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/QUICKSTART.md -->
+
 # 快速入门
 
 五分钟，无需硬件。你将获取一个食谱，对其进行哈希处理，询问设备是否可以烹饪它，根据操作的安全范围检查温度轨迹，并将烹饪日志作为轨迹导出。以下所有内容在今天均可运行。

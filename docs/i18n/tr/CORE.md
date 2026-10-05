@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CORE.md -->
+
 # Cookwala Core 0.2
 
 **Durum:** taslak, 2026-10-04. Bu, Cookwala'nın normatif kısmıdır. MUST, SHOULD ve MAY kavramları RFC 2119'u takip eder. Burada listelenmeyen her şey isteğe bağlı bir **profile** (bölüm 10) niteliğindedir.

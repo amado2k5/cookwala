@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STRATEGY.md -->
+
 # Estrategia de Cookwala: mensaje, producto, sitio web, docs, experiencia del desarrollador
 
 **Status:** revisado 2026-10-04 (v2). Cubre la misión, visión, historia, estándar, sitio web,

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/IMPACT.md -->
+
 # Etki: Cookwala neleri değiştirebilir, kaynaklar ve etiketlerle birlikte
 
 **Durum:** 2026-10-04. Aşağıdaki her sayı **measured** (adı geçen kaynak tarafından sayılmış veya raporlanmış), **modelled** (belirtilen varsayımlar altında simülatörlerimiz tarafından üretilmiş) veya **assumed** (bir planlama rakamı) olarak etiketlenmiştir. Buradaki hiçbir şey sahada Cookwala'nın bir sonucu değildir: hiçbir pilot çalışma yürütülmemiştir. Bu sayfa, sorunların boyutunu ve Cookwala'nın katkıda bulunduğu mekanizmaları belirtmektedir.

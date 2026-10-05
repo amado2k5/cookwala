@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # Critiques die we hebben gepubliceerd
 
 We stelden moeilijke vragen over Cookwala en schreven de antwoorden op. Elk bezwaar heeft een id

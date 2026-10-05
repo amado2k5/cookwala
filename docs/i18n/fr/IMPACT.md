@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/IMPACT.md -->
+
 # Impact : ce que Cookwala peut changer, avec sources et labels
 
 **Status :** 2026-10-04. Chaque nombre ci-dessous est étiqueté **measured** (compté ou rapporté par la source nommée), **modelled** (produit par nos simulateurs selon des hypothèses énoncées) ou **assumed** (un chiffre de planification). Rien ici n'est le résultat de Cookwala sur le terrain : aucun pilote n'a été exécuté. Cette page indique l'ampleur des problèmes et les mécanismes par lesquels Cookwala contribue.

@@ -70,7 +70,7 @@ def translate_doc(host, model, lang, src, dst, force=False):
         parts.append(text if kind == 'code' else translate_chunk(host, model, lang, text))
     head = f"<!-- machine-translated: {model} {dt.date.today().isoformat()}; English is the reference: {src.relative_to(ROOT)} -->\n"
     dst.parent.mkdir(parents=True, exist_ok=True)
-    dst.write_text(head + '\n'.join(parts) + '\n')
+    dst.write_text(head + '\n' + '\n'.join(parts) + '\n')
     return 'done'
 
 

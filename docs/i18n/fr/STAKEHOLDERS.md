@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/STAKEHOLDERS.md -->
+
 # Parties prenantes : un message, des options, un premier succès et un flux pour tout le monde
 
 **Status :** 2026-10-04. Pour chaque groupe : pourquoi Cookwala est important pour eux, les façons de s'engager de léger à profond, un premier succès en moins de 15 minutes, le chemin après cela, et comment l'engagement fait progresser leur travail et le monde. Rien ici ne nomme un partenaire, un utilisateur ou un pilote qui n'existe pas. Lorsqu'une chose est prévue, il est indiqué next ou later.

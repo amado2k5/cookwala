@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # Формат рецептов Cookwala: рецепты, которые работают с Missions
 
 Рецепт в Cookwala — это не список инструкций. Это **переносимые кулинарные знания**, которые планировщик *компилирует* с учетом конкретной Mission (household, robots, appliances, energy, budget, health, timing) в исполняемый план. Затем робот выполняет этот план, адаптируясь к непредвиденным обстоятельствам и используя playbooks, когда реальность меняется.

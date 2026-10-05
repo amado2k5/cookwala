@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CORE.md -->
+
 # Cookwala Core 0.2
 
 **الحالة:** مسودة، 2026-10-04. هذا هو الجزء المعياري لـ Cookwala. يجب أن تتبع كلمات MUST و SHOULD و MAY معايير RFC 2119. كل ما لم يُذكر هنا هو **profile** اختياري (القسم 10).

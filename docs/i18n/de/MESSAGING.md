@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/MESSAGING.md -->
+
 # Messaging: was Cookwala sagt und wie
 
 **Status:** 2026-10-04. Geschrieben vor den Seiten. Jede Seite folgt diesem Dokument.

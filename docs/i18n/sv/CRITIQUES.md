@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # Kritik som vi publicerat
 
 Vi ställde svåra frågor om Cookwala och skrev ner svaren. Varje oro har ett id

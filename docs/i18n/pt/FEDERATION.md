@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # Federação: como Cookwala funciona sem um centro
 
 **Status:** rascunho, 2026-10-04 (RFC-0006). A foto do fundador era uma colmeia: sem comando central, mas com harmonia e recuperação. Esta página diz o que isso significa na prática.

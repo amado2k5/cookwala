@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CERTIFICATION.md -->
+
 # Conformance û rêya ber bi certification ve
 
 **Status:** draft, 2026-10-04 (RFC-0008). Henê tu sertifikîkar neketiye destnîşandin; ev rêya standard pêşniyar dike.

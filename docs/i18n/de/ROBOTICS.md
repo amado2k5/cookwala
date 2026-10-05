@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/ROBOTICS.md -->
+
 # Cookwala und der Robotics-Stack
 
 Cookwala ersetzt keinen Teil eines Roboters. Es fügt die Ebene hinzu, die dem Robotics-Stack für das Kochen fehlt: **was zubereitet werden soll, wann jeder Schritt abgeschlossen ist und was niemals passieren darf**, in einer Form, die jeder Roboter, jedes Gerät, jeder Simulator oder jede Learning-Pipeline lesen und prüfen kann.

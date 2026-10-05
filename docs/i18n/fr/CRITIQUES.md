@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/CRITIQUES.md -->
+
 # Critiques que nous avons publiées
 
 Nous avons posé des questions difficiles sur Cookwala et avons consigné les réponses. Chaque préoccupation possède un id dans le [registre des préoccupations du plan d'action](ACTION-PLAN.md#2-concern-register), ainsi que notre réponse et son statut. Les avis extérieurs sont les bienvenus et seront répertoriés ici.

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/RECIPE-FORMAT.md -->
+
 # قالب دستور پخت Cookwala: دستورهایی که با Missionها کار می‌کنند
 
 یک دستور پخت در Cookwala فهرستی از دستورالعمل‌ها نیست. بلکه **دانش پخت‌وپز قابل حمل** است

@@ -1,4 +1,5 @@
 <!-- machine-translated: gemma4:26b 2026-10-04; English is the reference: docs/FEDERATION.md -->
+
 # 連合：中心を持たない Cookwala の仕組み
 
 **Status:** draft, 2026-10-04 (RFC-0006). 創業者の写真はミツバチの巣でした。中央の指令室はなく、それでいて調和と回復がありました。このページでは、それが実務において何を意味するかを述べています。
