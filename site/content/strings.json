@@ -55,6 +55,7 @@
     "SDK and scenarios",
     "/scenarios/"
    ], ["Samples and packages", "/samples/"],
+   ["MCP server and AI agents", "/mcp/"],
    [
     "Registry and directory",
     "/registry/"
@@ -495,6 +496,7 @@
     "حزمة التطوير والسيناريوهات",
     "/scenarios/"
    ], ["الأمثلة والحزم", "/samples/"],
+   ["خادم MCP ووكلاء الذكاء الاصطناعي", "/mcp/"],
    [
     "السجل والدليل",
     "/registry/"

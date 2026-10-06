@@ -1,0 +1,49 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "ai.cookwala/cookwala",
+  "title": "Cookwala",
+  "description": "Search Cookwala recipes, dry-run them on a device, check safe bands, mandates and SMS. Read-only.",
+  "version": "0.1.0",
+  "websiteUrl": "https://cookwala.ai/mcp/",
+  "repository": {
+    "url": "https://github.com/amado2k5/cookwala",
+    "source": "github",
+    "subfolder": "sdk/mcp-js"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@cookwala/mcp",
+      "version": "0.1.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "COOKWALA_BASE_URL",
+          "description": "Catalog origin or a local built-site directory",
+          "default": "https://cookwala.ai",
+          "isRequired": false
+        },
+        {
+          "name": "COOKWALA_CACHE_DIR",
+          "description": "Local cache directory",
+          "isRequired": false
+        },
+        {
+          "name": "COOKWALA_OFFLINE",
+          "description": "Set to 1 to serve only from the cache",
+          "isRequired": false
+        },
+        {
+          "name": "COOKWALA_LANG",
+          "description": "Default language for titles and text",
+          "default": "en",
+          "isRequired": false
+        }
+      ]
+    }
+  ]
+}

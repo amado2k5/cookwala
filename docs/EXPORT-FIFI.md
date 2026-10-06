@@ -132,3 +132,15 @@ to all-V1, plus ongoing V2 review.
 4. Build E4–E5 + E8 → V1 in batches of 100 (`archive` first: smallest and family-owned).
 5. Simulator + review → V2 for the top 200.
 6. Turn on sync; World Cuisines joins automatically.
+
+## 10. Live access from agents, and the `world` collection (2026-10-06)
+
+The MCP server (`@cookwala/mcp`, [MCP](MCP.md)) has two tools that read fifi.cooking's own `/data/` files, so an
+agent can find recipes added after the last export: `fifi_search` and `fifi_source`. They apply the same per-collection
+`text` policy as this exporter. On 2026-10-06 fifi.cooking listed 2,042 recipes and the catalog held 1,881: the 161
+missing ones are the World Cuisines recipes (`w-cn-*`, `w-fr-*`, `w-jp-*`, `w-ma-*`, `w-mx-*`, `w-vn-*`).
+
+**Decision needed before the next export run.** `tools/export_fifi.collections.json` has no `world` entry. The exporter
+files an unlisted id under `archive`, whose policy is `text: full` and licence CC-BY-4.0. Add a `world` entry with the
+rights you confirm (prefix `w-`, `sourceName`, `citation`, `license`, `text`) before running `export_fifi.py`. Until then
+the MCP tools treat `w-*` as facts-only, which is the safe default.

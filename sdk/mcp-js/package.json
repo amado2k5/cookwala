@@ -1,0 +1,18 @@
+{
+  "name": "@cookwala/mcp",
+  "version": "0.1.0",
+  "mcpName": "ai.cookwala/cookwala",
+  "description": "Cookwala MCP server: search and read recipes, dry-run them against a device, check safe bands, mandates and humanitarian SMS. Read-only; reads the static catalog on cookwala.ai; never starts cooking.",
+  "license": "Apache-2.0",
+  "homepage": "https://cookwala.ai/mcp/",
+  "repository": {"type": "git", "url": "https://github.com/amado2k5/cookwala", "directory": "sdk/mcp-js"},
+  "type": "module",
+  "main": "./src/server.js",
+  "bin": {"cookwala-mcp": "./bin/cookwala-mcp.js"},
+  "exports": {".": "./src/server.js", "./core": "./src/core/index.js"},
+  "files": ["bin", "src", "server.json", "README.md"],
+  "engines": {"node": ">=20"},
+  "scripts": {"test": "node --test test/core.test.js test/server.test.js"},
+  "dependencies": {"@modelcontextprotocol/sdk": "^1.20.0", "zod": "^3.25.0"},
+  "keywords": ["mcp", "model-context-protocol", "cooking", "recipes", "robots", "food-safety", "cookwala"]
+}

@@ -1,4 +1,8 @@
-# Cookwala MCP server
+# Cookwala MCP server (Python script)
+
+> For agents and apps, use the npm package instead: `npx -y @cookwala/mcp` ([docs/MCP.md](../../docs/MCP.md),
+> [docs/AI-AGENTS.md](../../docs/AI-AGENTS.md)). It needs no checkout and reads the published catalog. This script reads a
+> source checkout and stays for contributors.
 
 A Model Context Protocol server, over stdio, standard library only. It lets any MCP-capable
 agent search and read Cookwala recipes, dry-run a recipe against a device, explain a step's

@@ -1,0 +1,58 @@
+name: Publish MCP server
+
+# Tag mcp-vX.Y.Z (matching sdk/mcp-js/package.json) to publish @cookwala/mcp to npm and register it
+# in the MCP Registry as ai.cookwala/cookwala. One-time setup and the fallback name: sdk/mcp-js/RELEASING.md.
+on:
+  push:
+    tags: ['mcp-v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write   # npm provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sdk/mcp-js
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm test
+      - name: Versions agree
+        run: |
+          V=$(node -p "require('./package.json').version")
+          S=$(node -p "require('./server.json').version")
+          P=$(node -p "require('./server.json').packages[0].version")
+          test "$V" = "$S" && test "$V" = "$P" || { echo "package.json $V, server.json $S, package entry $P"; exit 1; }
+          if [ "${GITHUB_REF_TYPE}" = tag ]; then test "${GITHUB_REF_NAME}" = "mcp-v$V" || { echo "tag ${GITHUB_REF_NAME} is not mcp-v$V"; exit 1; }; fi
+          test "$(node -p "require('./package.json').mcpName")" = "$(node -p "require('./server.json').name")"
+      - name: The domain proof is live
+        run: |
+          curl -fsS https://cookwala.ai/.well-known/mcp-registry-auth | grep -q '^v=MCPv1; k=ed25519; p=' || { echo "https://cookwala.ai/.well-known/mcp-registry-auth is not live; see RELEASING.md"; exit 1; }
+      - name: Publish to npm
+        run: |
+          V=$(node -p "require('./package.json').version")
+          if npm view "@cookwala/mcp@$V" version >/dev/null 2>&1; then echo "@cookwala/mcp@$V is already on npm; skipping"; else npm publish --access public --provenance; fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Install mcp-publisher
+        run: |
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+      - name: Log in to the registry by domain proof
+        run: ./mcp-publisher login http --domain cookwala.ai --private-key "${{ secrets.MCP_PRIVATE_KEY }}"
+      - name: Publish to the MCP Registry
+        run: ./mcp-publisher publish
+      - name: The registry lists it
+        run: |
+          for i in 1 2 3 4 5; do
+            curl -fsS "https://registry.modelcontextprotocol.io/v0.1/servers?search=ai.cookwala/cookwala" | grep -q '"ai.cookwala/cookwala"' && exit 0
+            sleep 10
+          done
+          echo "ai.cookwala/cookwala not found in the registry"; exit 1

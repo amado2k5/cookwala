@@ -1,0 +1,116 @@
+<!--meta {"title": "MCP server and AI agents", "description": "Give any AI agent Cookwala recipes, device dry runs, safe bands and mandate checks through the Model Context Protocol. A local server that reads this site's static files: no server to host, nothing to pay for.", "path": "/mcp/", "status": "exp", "scripts": ["mcp-playground.js"]} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / MCP server and AI agents</p>
+  {{chip}}
+  <h1>Cookwala for AI agents, with no server to run</h1>
+  <p class="lead">An MCP server for Claude, Codex, Copilot, Cursor, Windsurf, Devin, Antigravity and any other agent. It searches and reads the recipes, dry-runs a recipe against a device, checks a temperature trace, an agent mandate or a food-rescue SMS, and it can look recipes up on fifi.cooking. It is read-only and it never starts cooking.</p>
+  <div class="cta"><a class="btn primary" href="#install">Install</a><a class="btn" href="/docs/AI-AGENTS/">Guide for AI agents</a><a class="btn" href="#try">Try it in your browser</a></div>
+</section>
+
+<section class="band" id="install">
+  <div class="wrap">
+    <h2>Install in one line</h2>
+    <ol class="steps">
+      <li><p><b>Claude Code</b></p><pre class="code"><code>claude mcp add cookwala -- npx -y @cookwala/mcp</code></pre></li>
+      <li><p><b>Codex</b></p><pre class="code"><code>codex mcp add cookwala -- npx -y @cookwala/mcp</code></pre></li>
+      <li><p><b>Claude Desktop, Cursor, Windsurf, Antigravity, Gemini CLI, Copilot CLI</b>: add this to the client's MCP configuration file.</p><pre class="code"><code>{
+  "mcpServers": {
+    "cookwala": { "command": "npx", "args": ["-y", "@cookwala/mcp"] }
+  }
+}</code></pre></li>
+      <li><p><b>VS Code (Copilot), the Copilot cloud agent and Devin</b> have their own file or settings page; the command is the same. <a href="/docs/AI-AGENTS/#connect-your-client">Every client, with the exact file.</a></p></li>
+    </ol>
+    <p class="note">Needs Node 20 or later. Registered in the official MCP Registry as <code>ai.cookwala/cookwala</code>. Experimental: version 0.1, the tool names may still change.</p>
+  </div>
+</section>
+
+<section class="wrap two" id="hosting">
+  <div>
+    <h2>Why there is nothing to host</h2>
+    <p>This site is a set of static files on GitHub Pages, and Pages cannot answer a remote MCP request. So the server does not live here. Your agent starts it on your own machine over stdio, and it reads the same public files you can open in a browser: the signed index, the recipes, the vocabularies and the device presets.</p>
+    <p>Every index file is checked against the hash in the manifest, and every recipe's hash is recomputed before anything is returned. A mismatch returns an error and no content. After the first run it works offline from its cache. It sends no telemetry and has no accounts.</p>
+  </div>
+  <div>
+<pre class="code" aria-label="How the pieces connect"><code>agent ──stdio──▶ npx @cookwala/mcp
+                   │  checks hashes, caches
+                   ▼ HTTPS GET
+cookwala.ai (GitHub Pages)
+  /v1/manifest.json   /v1/index/…
+  /v1/recipes/&lt;id&gt;    /v1/vocab/…
+  /v1/capabilities/…
+                   │ optional, facts only
+                   ▼
+fifi.cooking  /data/…</code></pre>
+  </div>
+</section>
+
+<section class="band" id="tools">
+  <div class="wrap">
+    <h2>Fourteen read-only tools</h2>
+    <p class="note">Every tool is marked read-only. Results are structured JSON. Recipe text comes back as data, never as instructions.</p>
+    <div class="cards">
+      <div class="card"><h3>Find and read</h3><p><code>search_recipes</code> (by words, cuisine, course, level, collection, allergen-free), <code>get_recipe</code> (summary, ingredients, process, text or full, hash verified), <code>list_collections</code>.</p></div>
+      <div class="card"><h3>Can this device cook it?</h3><p><code>dry_run</code> against a built-in preset or your own capabilities, <code>list_device_presets</code>, <code>explain_step</code>. Refused or accepted, with the reason, before anything heats.</p></div>
+      <div class="card"><h3>Safe bands</h3><p><code>check_envelope</code> checks a temperature trace against an operation's band, with altitude. <code>list_operations</code> shows each operation's envelope and sensor ladder.</p></div>
+      <div class="card"><h3>Agent safety</h3><p><code>check_mandate</code> says whether an action is inside a signed mandate. <code>verify_recipe</code> recomputes a recipe's hash. Neither can start or change anything.</p></div>
+      <div class="card"><h3>Food rescue</h3><p><code>parse_sms</code> turns a Humanitarian Profile message (OFFER, FARM, CLAIM, HAND, DIST, MENU) into a structured command, Arabic digits included.</p></div>
+      <div class="card"><h3>fifi.cooking</h3><p><code>fifi_search</code> and <code>fifi_source</code> find recipes the catalog does not have yet, under the same rights rules: steps only where they may be shown.</p></div>
+    </div>
+    <p>Also six resources (<code>cookwala://recipe/&lt;id&gt;</code>, schemas, any doc page, device presets, the operation list, <code>llms.txt</code>) and three prompts. <a href="/docs/MCP/">Full reference</a>.</p>
+  </div>
+</section>
+
+<section class="wrap two" id="fifi">
+  <div>
+    <h2>fifi.cooking and Cookwala's standard</h2>
+    <p>fifi.cooking is where the recipes are written. Cookwala is the standard form they are published in: one document per recipe, with a hash, a licence, a credit and a link back to the original page. Agents read that form through <code>get_recipe</code>.</p>
+  </div>
+  <div>
+    <p>Recipes added to fifi.cooking after the last export, today 161 world-cuisine recipes, are visible through <code>fifi_search</code>, with ingredients and times. Their steps are withheld until the collection's rights are confirmed, exactly as for the book and channel collections in the catalog. Bringing one into the standard is an export run by a maintainer, described in <a href="/docs/EXPORT-FIFI/">the export guide</a>.</p>
+  </div>
+</section>
+
+<section class="band" id="try">
+  <div class="wrap">
+    <h2>Try it in your browser</h2>
+    <p class="note">This page runs the same JavaScript core as the server, against the live files on this site. No request leaves for any other service. That is the proof that nothing runs on a server.</p>
+    <div class="mcp-pg" id="mcpPg" data-ready="0">
+      <form class="controls" id="mcpSearch" aria-label="search_recipes">
+        <label>search_recipes <input type="text" id="qS" value="lentil soup" aria-label="Query"></label>
+        <label class="check"><input type="checkbox" id="qNoMilk"> without milk</label>
+        <button class="btn primary" type="submit">Search</button>
+      </form>
+      <form class="controls" id="mcpDry" aria-label="dry_run">
+        <label>dry_run <select id="dRecipe" aria-label="Recipe"></select></label>
+        <label>on <select id="dDevice" aria-label="Device"></select></label>
+        <label class="check"><input type="checkbox" id="dHuman"> a person is present</label>
+        <button class="btn primary" type="submit">Dry run</button>
+      </form>
+      <form class="controls" id="mcpEnv" aria-label="check_envelope">
+        <label>check_envelope <select id="eOp" aria-label="Operation"></select></label>
+        <label>readings (°C, one per line) <input type="text" id="eRead" value="60, 94, 99" aria-label="Readings"></label>
+        <button class="btn primary" type="submit">Check</button>
+      </form>
+      <form class="controls" id="mcpSms" aria-label="parse_sms">
+        <label>parse_sms <input type="text" id="sText" value="OFFER 12KG cooked rice H T65C UB0710" aria-label="SMS text"></label>
+        <button class="btn primary" type="submit">Parse</button>
+      </form>
+      <form class="controls" id="mcpGet" aria-label="get_recipe">
+        <label>get_recipe <input type="text" id="gId" value="fah-320" aria-label="Recipe id"></label>
+        <button class="btn primary" type="submit">Fetch and verify hash</button>
+      </form>
+      <pre class="code" id="mcpOut" aria-live="polite" tabindex="0"><code>Loading the catalog…</code></pre>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>What it will not do</h2>
+  <ul>
+    <li>Start, stop or change anything in a kitchen. Starting is a hub call under a mandate, and the device enforces its own limits.</li>
+    <li>Treat recipe text as instructions. Titles, notes and steps are data, as Core rule 6.4 requires, and the server says so in its own instructions.</li>
+    <li>Call a V0 recipe verified. V0 means described, not machine-verified, and every result says so.</li>
+    <li>Contact anything except this site and, for the two fifi tools, fifi.cooking.</li>
+  </ul>
+  <div class="cta"><a class="btn primary" href="/docs/AI-AGENTS/">Guide for AI agents</a><a class="btn" href="/docs/MCP/">MCP reference</a><a class="btn" href="https://github.com/amado2k5/cookwala/tree/main/sdk/mcp-js">Source</a><a class="btn" href="/docs/AGENT-SAFETY/">Agent-safety benchmark</a></div>
+</section>

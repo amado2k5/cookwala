@@ -1,0 +1,38 @@
+name: MCP server tests
+
+on:
+  pull_request:
+    paths: ['sdk/mcp-js/**', 'conformance/**', 'vocab/**', 'examples/**', 'tools/build_mcp_assets.py', 'tools/export_fifi.collections.json', '.github/workflows/mcp.yml']
+  push:
+    branches: [main]
+    paths: ['sdk/mcp-js/**', 'conformance/**', 'tools/build_mcp_assets.py', '.github/workflows/mcp.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['20', '22']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: sdk/mcp-js/package-lock.json
+      - name: Install and test
+        working-directory: sdk/mcp-js
+        run: |
+          npm ci
+          npm test
+      - name: Registry manifest, package and static assets agree
+        run: python3 tools/build_mcp_assets.py "$RUNNER_TEMP/site"
+      - name: Package contents
+        working-directory: sdk/mcp-js
+        run: |
+          npm pack --dry-run --json > "$RUNNER_TEMP/pack.json"
+          node -e "const p=require(process.env.RUNNER_TEMP+'/pack.json')[0];console.log(p.files.length+' files, '+p.size+' bytes packed');if(p.size>300000)process.exit(1);if(!p.files.some(f=>f.path==='bin/cookwala-mcp.js'))process.exit(1)"

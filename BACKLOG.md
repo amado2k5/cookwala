@@ -30,6 +30,8 @@ professional), `decision` (founder), `good first issue`.
 | D-10 | **Rename the `basic-nutrition-food-safety` rule pack** to a name that does not put WHO in a product name; a registry name change needs a tombstone and a new entry | The labelling fixes are done; the id remains |
 | D-11 | **Status badges in three states**: spec only, software ready, hardware pending, replacing normative/draft/experimental on the site | Says what runs, not how mature the document is |
 | D-12 | **Registry accounts for the samples.** Who owns the PyPI project `cookwala-samples`, the npm scope `@cookwala`, the Maven namespace `ai.cookwala`, the NuGet ids `Cookwala.*`, the Chocolatey package, the tap `amado2k5/homebrew-cookwala` and the Artifactory instance; then the repository secrets listed in `samples/DISTRIBUTION.md` | Every channel is built and tested; nothing is published until these exist |
+| D-13 | **MCP release keys.** Generate the Ed25519 key for the `ai.cookwala` registry name, commit only the public line to `site/.well-known/mcp-registry-auth`, store the private key as the secret `MCP_PRIVATE_KEY`, and confirm `NPM_TOKEN` can publish `@cookwala/mcp` | The MCP server is built and tested but cannot be published or registered without them; steps in `sdk/mcp-js/RELEASING.md` |
+| D-14 | **A `world` entry in `tools/export_fifi.collections.json`.** 161 World Cuisines recipes (`w-*`) are on fifi.cooking but not in the catalog; the exporter would file them under `archive` with full text | Decide the rights and text policy first; the MCP fifi tools show them as facts only until then |
 
 ## 2. The standard and the protocol
 

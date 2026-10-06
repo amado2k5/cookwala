@@ -1,0 +1,116 @@
+<!--meta {"title": "خادم MCP ووكلاء الذكاء الاصطناعي", "description": "امنح أي وكيل ذكاء اصطناعي وصفات كوكوالا والتجارب الجافة على الأجهزة والنطاقات الآمنة وفحص التفويض عبر بروتوكول سياق النموذج. خادم محلي يقرأ الملفات الثابتة لهذا الموقع: لا خادم لاستضافته ولا مقابل.", "path": "/mcp/", "status": "exp", "scripts": ["mcp-playground.js"]} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">كوكوالا</a> / خادم MCP ووكلاء الذكاء الاصطناعي</p>
+  {{chip}}
+  <h1>كوكوالا لوكلاء الذكاء الاصطناعي، دون خادم تشغّله</h1>
+  <p class="lead">خادم MCP لـ Claude وCodex وCopilot وCursor وWindsurf وDevin وAntigravity وأي وكيل آخر. يبحث في الوصفات ويقرؤها، ويجري تجربة جافة لوصفة على جهاز، ويفحص سجل حرارة أو تفويض وكيل أو رسالة إنقاذ غذاء، ويبحث عن الوصفات في fifi.cooking. للقراءة فقط، ولا يبدأ الطهي أبدًا.</p>
+  <div class="cta"><a class="btn primary" href="#install">التثبيت</a><a class="btn" href="/docs/AI-AGENTS/">دليل وكلاء الذكاء الاصطناعي</a><a class="btn" href="#try">جرّبه في متصفحك</a></div>
+</section>
+
+<section class="band" id="install">
+  <div class="wrap">
+    <h2>التثبيت بسطر واحد</h2>
+    <ol class="steps">
+      <li><p><b>Claude Code</b></p><pre class="code" dir="ltr"><code>claude mcp add cookwala -- npx -y @cookwala/mcp</code></pre></li>
+      <li><p><b>Codex</b></p><pre class="code" dir="ltr"><code>codex mcp add cookwala -- npx -y @cookwala/mcp</code></pre></li>
+      <li><p><b>Claude Desktop وCursor وWindsurf وAntigravity وGemini CLI وCopilot CLI</b>: أضف هذا إلى ملف إعداد MCP في العميل.</p><pre class="code" dir="ltr"><code>{
+  "mcpServers": {
+    "cookwala": { "command": "npx", "args": ["-y", "@cookwala/mcp"] }
+  }
+}</code></pre></li>
+      <li><p><b>VS Code (Copilot) ووكيل Copilot السحابي وDevin</b> لكلٍّ منها ملف أو صفحة إعدادات؛ الأمر نفسه. <a href="/docs/AI-AGENTS/#connect-your-client">كل العملاء مع الملف الدقيق.</a></p></li>
+    </ol>
+    <p class="note">يحتاج Node 20 أو أحدث. مسجَّل في سجل MCP الرسمي باسم <code>ai.cookwala/cookwala</code>. تجريبي: الإصدار 0.1 وقد تتغير أسماء الأدوات.</p>
+  </div>
+</section>
+
+<section class="wrap two" id="hosting">
+  <div>
+    <h2>لماذا لا شيء للاستضافة</h2>
+    <p>هذا الموقع ملفات ثابتة على GitHub Pages، وهي لا تستطيع الرد على طلب MCP بعيد. لذلك لا يعيش الخادم هنا. يشغّله وكيلك على جهازك عبر stdio، ويقرأ الملفات العامة نفسها التي تفتحها في المتصفح: الفهرس والوصفات والمفردات وأجهزة الأمثلة.</p>
+    <p>كل ملف فهرس يُفحص مقابل البصمة في البيان، وتُعاد حوسبة بصمة كل وصفة قبل إرجاع أي شيء. عند عدم التطابق يُرجَع خطأ دون محتوى. بعد التشغيل الأول يعمل دون اتصال من ذاكرته المؤقتة. لا يرسل أي قياسات ولا حسابات فيه.</p>
+  </div>
+  <div>
+<pre class="code" dir="ltr" aria-label="كيف تتصل الأجزاء"><code>agent ──stdio──▶ npx @cookwala/mcp
+                   │  checks hashes, caches
+                   ▼ HTTPS GET
+cookwala.ai (GitHub Pages)
+  /v1/manifest.json   /v1/index/…
+  /v1/recipes/&lt;id&gt;    /v1/vocab/…
+  /v1/capabilities/…
+                   │ optional, facts only
+                   ▼
+fifi.cooking  /data/…</code></pre>
+  </div>
+</section>
+
+<section class="band" id="tools">
+  <div class="wrap">
+    <h2>أربع عشرة أداة للقراءة فقط</h2>
+    <p class="note">كل أداة موسومة للقراءة فقط. النتائج JSON منظَّم. نص الوصفة يعود بياناتٍ لا تعليمات.</p>
+    <div class="cards">
+      <div class="card"><h3>البحث والقراءة</h3><p><code>search_recipes</code> (بالكلمات أو المطبخ أو الطبق أو المستوى أو المجموعة أو خلوّ من مسبب حساسية)، و<code>get_recipe</code> (ملخص أو مكونات أو عملية أو نص أو كامل، مع التحقق من البصمة)، و<code>list_collections</code>.</p></div>
+      <div class="card"><h3>هل يطبخها هذا الجهاز؟</h3><p><code>dry_run</code> على جهاز جاهز أو على قدراتك، و<code>list_device_presets</code>، و<code>explain_step</code>. مقبولة أو مرفوضة مع السبب قبل أن يسخن أي شيء.</p></div>
+      <div class="card"><h3>النطاقات الآمنة</h3><p><code>check_envelope</code> يفحص سجل حرارة مقابل نطاق العملية مع الارتفاع. و<code>list_operations</code> يعرض مظروف كل عملية وسلّم حساساتها.</p></div>
+      <div class="card"><h3>سلامة الوكيل</h3><p><code>check_mandate</code> يقول إن كان الإجراء داخل تفويض موقَّع. و<code>verify_recipe</code> يعيد حوسبة بصمة الوصفة. لا يستطيع أي منهما بدء شيء أو تغييره.</p></div>
+      <div class="card"><h3>إنقاذ الغذاء</h3><p><code>parse_sms</code> يحوّل رسالة الملف الإنساني (OFFER وFARM وCLAIM وHAND وDIST وMENU) إلى أمر منظَّم، مع الأرقام العربية.</p></div>
+      <div class="card"><h3>fifi.cooking</h3><p><code>fifi_search</code> و<code>fifi_source</code> تجدان وصفات لم تدخل الفهرس بعد، بقواعد الحقوق نفسها: الخطوات حيث يجوز عرضها فقط.</p></div>
+    </div>
+    <p>وستة موارد (<code>cookwala://recipe/&lt;id&gt;</code> والمخططات وأي صفحة توثيق وأجهزة الأمثلة وقائمة العمليات و<code>llms.txt</code>) وثلاثة قوالب طلب. <a href="/docs/MCP/">المرجع الكامل</a>.</p>
+  </div>
+</section>
+
+<section class="wrap two" id="fifi">
+  <div>
+    <h2>fifi.cooking ومعيار كوكوالا</h2>
+    <p>fifi.cooking هو المكان الذي تُكتب فيه الوصفات. وكوكوالا هو الصيغة المعيارية التي تُنشر بها: وثيقة لكل وصفة، ببصمة وترخيص ونسب ورابط إلى الصفحة الأصلية. يقرأ الوكلاء هذه الصيغة عبر <code>get_recipe</code>.</p>
+  </div>
+  <div>
+    <p>الوصفات التي أُضيفت إلى fifi.cooking بعد آخر تصدير، وهي اليوم 161 وصفة من مطابخ العالم، تظهر عبر <code>fifi_search</code> مع المكونات والأوقات. وتُحجب خطواتها حتى تُؤكَّد حقوق المجموعة، تمامًا كمجموعات الكتب والقنوات في الفهرس. وإدخال واحدة منها في المعيار تصدير يجريه أحد القائمين على المشروع، موصوف في <a href="/docs/EXPORT-FIFI/">دليل التصدير</a>.</p>
+  </div>
+</section>
+
+<section class="band" id="try">
+  <div class="wrap">
+    <h2>جرّبه في متصفحك</h2>
+    <p class="note">تشغّل هذه الصفحة نواة JavaScript نفسها التي يشغّلها الخادم، على الملفات الحية لهذا الموقع. لا يخرج أي طلب إلى خدمة أخرى. هذا دليل أن لا شيء يعمل على خادم.</p>
+    <div class="mcp-pg" id="mcpPg" data-ready="0" dir="ltr">
+      <form class="controls" id="mcpSearch" aria-label="search_recipes">
+        <label>search_recipes <input type="text" id="qS" value="lentil soup" aria-label="Query"></label>
+        <label class="check"><input type="checkbox" id="qNoMilk"> without milk</label>
+        <button class="btn primary" type="submit">Search</button>
+      </form>
+      <form class="controls" id="mcpDry" aria-label="dry_run">
+        <label>dry_run <select id="dRecipe" aria-label="Recipe"></select></label>
+        <label>on <select id="dDevice" aria-label="Device"></select></label>
+        <label class="check"><input type="checkbox" id="dHuman"> a person is present</label>
+        <button class="btn primary" type="submit">Dry run</button>
+      </form>
+      <form class="controls" id="mcpEnv" aria-label="check_envelope">
+        <label>check_envelope <select id="eOp" aria-label="Operation"></select></label>
+        <label>readings (°C) <input type="text" id="eRead" value="60, 94, 99" aria-label="Readings"></label>
+        <button class="btn primary" type="submit">Check</button>
+      </form>
+      <form class="controls" id="mcpSms" aria-label="parse_sms">
+        <label>parse_sms <input type="text" id="sText" value="OFFER 12KG cooked rice H T65C UB0710" aria-label="SMS text"></label>
+        <button class="btn primary" type="submit">Parse</button>
+      </form>
+      <form class="controls" id="mcpGet" aria-label="get_recipe">
+        <label>get_recipe <input type="text" id="gId" value="fah-320" aria-label="Recipe id"></label>
+        <button class="btn primary" type="submit">Fetch and verify hash</button>
+      </form>
+      <pre class="code" id="mcpOut" aria-live="polite" tabindex="0"><code>Loading the catalog…</code></pre>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>ما لن يفعله</h2>
+  <ul>
+    <li>بدء أو إيقاف أو تغيير أي شيء في مطبخ. البدء استدعاء إلى موزّع بتفويض، والجهاز يفرض حدوده بنفسه.</li>
+    <li>معاملة نص الوصفة كتعليمات. العناوين والملاحظات والخطوات بيانات، كما تنص قاعدة النواة 6.4، والخادم يقول ذلك في تعليماته.</li>
+    <li>وصف وصفة V0 بأنها محقَّقة. V0 تعني موصوفة لا محقَّقة آليًا، وكل نتيجة تقول ذلك.</li>
+    <li>الاتصال بأي جهة غير هذا الموقع، وبـ fifi.cooking للأداتين الخاصتين به فقط.</li>
+  </ul>
+  <div class="cta"><a class="btn primary" href="/docs/AI-AGENTS/">دليل وكلاء الذكاء الاصطناعي</a><a class="btn" href="/docs/MCP/">مرجع MCP</a><a class="btn" href="https://github.com/amado2k5/cookwala/tree/main/sdk/mcp-js">المصدر</a><a class="btn" href="/docs/AGENT-SAFETY/">معيار سلامة الوكلاء</a></div>
+</section>
