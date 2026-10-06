@@ -169,9 +169,12 @@ jobs:
         with: {packages-dir: samples/dist/, skip-existing: true}
       - uses: actions/setup-node@v4
         with: {node-version: '22', registry-url: 'https://registry.npmjs.org'}
+      # Re-runs: npm, Maven Central and the tap refuse or reject a version they already have, so those steps skip it.
       - name: npm
         if: env.NPM_TOKEN != ''
-        run: npm publish --provenance --access public
+        run: |
+          if npm view "@cookwala/samples@$(cat ../VERSION)" version >/dev/null 2>&1; then echo "@cookwala/samples $(cat ../VERSION) is already on npm; skipped"; exit 0; fi
+          npm publish --provenance --access public
         working-directory: samples/js
         env: {NODE_AUTH_TOKEN: '${{ secrets.NPM_TOKEN }}'}
       - uses: actions/setup-dotnet@v4
@@ -202,7 +205,14 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Maven Central
         if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_GPG_PRIVATE_KEY != ''
-        run: mvn -B -Pcentral,sign deploy -DskipTests
+        run: |
+          v=$(cat ../VERSION)
+          # The Portal knows at once; repo1.maven.org only after its sync, so ask the Portal.
+          auth=$(printf '%s:%s' "$MAVEN_CENTRAL_USERNAME" "$MAVEN_CENTRAL_PASSWORD" | base64 -w0)
+          if curl -sf -H "Authorization: Bearer $auth" "https://central.sonatype.com/api/v1/publisher/published?namespace=ai.cookwala&name=cookwala-samples&version=$v" | grep -Eq '"published" *: *true'; then
+            echo "ai.cookwala:cookwala-samples:$v is already on Maven Central; skipped"; exit 0
+          fi
+          mvn -B -Pcentral,sign deploy -DskipTests
         working-directory: samples/java
       - name: GitHub Packages (Maven)
         run: gradle --no-daemon publishAllPublicationsToGitHubPackagesRepository
@@ -225,7 +235,9 @@ jobs:
         run: |
           git clone "https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/amado2k5/homebrew-cookwala.git" tap
           mkdir -p tap/Formula && cp samples/build/manifests/homebrew/cookwala-samples.rb tap/Formula/
-          cd tap && git add Formula && git -c user.name=cookwala-release -c user.email=noreply@cookwala.ai commit -m "cookwala-samples $(cat ../samples/VERSION)" && git push
+          cd tap && git add Formula
+          if git diff --cached --quiet; then echo "the tap already has this formula; nothing to push"; exit 0; fi
+          git -c user.name=cookwala-release -c user.email=noreply@cookwala.ai commit -m "cookwala-samples $(cat ../samples/VERSION)" && git push
 
   chocolatey:
     name: Chocolatey (samples-v* tags only)
