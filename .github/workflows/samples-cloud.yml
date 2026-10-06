@@ -31,6 +31,7 @@ jobs:
       - name: Build the image the chart and the Knative service run
         run: docker build -f samples/packaging/docker/Containerfile -t cookwala-samples:ci samples
       - uses: helm/kind-action@06c1ae10762d3b9c1644e7fe69596ae519e015a2  # v1.15.0
+        with: {cluster_name: kind}
       - name: Load the image into the cluster
         run: kind load docker-image cookwala-samples:ci
       - name: helm lint and install the chart
@@ -112,7 +113,7 @@ jobs:
       - name: Function runtimes are currently supported
         run: |
           grep -q "Python|3.11" samples/cloud/azure-functions/main.bicep   # Azure Functions: supported until Oct 2027
-          grep -q '~4' samples/cloud/azure-functions/host.json              # FUNCTIONS_EXTENSION_VERSION ~4: current
+          grep -q "'~4'" samples/cloud/azure-functions/main.bicep           # FUNCTIONS_EXTENSION_VERSION ~4: current
           grep -q 'python3.12' samples/cloud/aws-lambda/template.yaml       # Lambda python3.12: supported until Oct 2028
           grep -q 'python312' samples/cloud/gcp-functions/main.py           # Cloud Run functions python312: GA
           echo 'all function runtimes are in their supported windows'
