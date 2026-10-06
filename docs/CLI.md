@@ -16,6 +16,9 @@ Global flags: `--index <url>` (default `https://cookwala.ai`), `--hub <url>`
 cookwala search "couscous" --cuisine MA --exclude-allergens nuts --min-level V1
 cookwala get fah-234                       # pretty view in --lang
 cookwala get fah-234 --json > fah-234.cookwala.json
+# The Python CLI (sdk/python) implements search, get and the cooklang/schema-org exports offline against the
+# repository catalog: --cuisine, --course, --tag, --free-of nuts, --level V1, --limit, --json. Cooklang export
+# omits hazards, CCPs and end conditions (Cooklang cannot carry them); never drive a device from it.
 cookwala vocab ops                         # list operations
 cookwala vocab show cw.op.simmer           # definition, params schema, sensors
 cookwala policies list --jurisdiction SA
@@ -43,6 +46,8 @@ cookwala convert --from fifi /path/to/fifirecipes/public/data/recipes/fah-234.js
 cookwala convert --from schema-org https://example.com/recipe.html   # V0 import
 cookwala convert --to schema-org fah-234.cookwala.json               # back to schema.org JSON-LD
 cookwala convert --to cooklang fah-234.cookwala.json
+cookwala export cooklang fah-234 -o fah-234.cook     # same, by recipe id; --lang ar picks the text language
+cookwala export schema-org fah-234                   # JSON-LD to stdout
 cookwala sign my-dish.cookwala.json --key ~/.cookwala/keys/ed25519   # for index operators
 ```
 
