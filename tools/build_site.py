@@ -92,6 +92,7 @@ DOCS = [
     ('core', [
         ('CORE', 'docs/CORE.md', 'Core 0.2 (normative)', 'النواة 0.2 (معيارية)', 'core'),
         ('RECIPE-FORMAT', 'docs/RECIPE-FORMAT.md', 'Recipe format', 'صيغة الوصفة', ''),
+        ('CONTRIBUTE-RECIPES', 'docs/CONTRIBUTE-RECIPES.md', 'Add a recipe (anyone can)', 'أضف وصفة (يمكن لأي شخص)', 'draft'),
         ('REGISTRY', 'docs/REGISTRY.md', 'Registry and directory', 'السجل والدليل', 'draft'),
         ('CERTIFICATION', 'docs/CERTIFICATION.md', 'Conformance and certification', 'المطابقة والاعتماد', 'draft'),
         ('FEDERATION', 'docs/FEDERATION.md', 'Federation', 'الاتحاد اللامركزي', 'draft'),
@@ -141,6 +142,7 @@ DOCS = [
         ('RFC-0006', 'rfcs/0006-federation.md', 'RFC-0006 Federation', 'المقترح 0006 الاتحاد', 'draft'),
         ('RFC-0007', 'rfcs/0007-farm-surplus-and-supply-signals.md', 'RFC-0007 Supply signals', 'المقترح 0007 إشارات الإمداد', 'draft'),
         ('RFC-0008', 'rfcs/0008-conformance-reports-and-certification.md', 'RFC-0008 Conformance reports', 'المقترح 0008 تقارير المطابقة', 'draft'),
+        ('RFC-0013', 'rfcs/0013-community-recipe-submissions.md', 'RFC-0013 Community recipe submissions', 'المقترح 0013 مساهمات الوصفات من المجتمع', 'draft'),
     ]),
     ('about', [
         ('STRATEGY', 'docs/STRATEGY.md', 'Strategy', 'الاستراتيجية', ''),
