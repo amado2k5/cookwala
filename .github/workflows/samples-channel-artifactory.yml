@@ -31,9 +31,26 @@ jobs:
           # Since 7.84 Artifactory refuses the bundled Derby DB unless it is explicitly allowed;
           # give the container a writable var dir carrying that system.yaml. The repositories REST
           # API is Pro-only, so the local repos come in through a bootstrap config descriptor —
-          # the supported OSS path.
+          # the supported OSS path. The optional microservices (metadata/event/integration/
+          # observability/scheduler) are off: none participates in upload/serve and on a shared
+          # runner they starve the core of CPU for 20+ minutes.
           mkdir -p /tmp/afvar/etc/artifactory
-          printf 'shared:\n  database:\n    type: derby\n    allowNonPostgresql: true\n' > /tmp/afvar/etc/system.yaml
+          cat > /tmp/afvar/etc/system.yaml <<'YAML'
+          shared:
+            database:
+              type: derby
+              allowNonPostgresql: true
+          metadata:
+            enabled: false
+          event:
+            enabled: false
+          integration:
+            enabled: false
+          observability:
+            enabled: false
+          scheduler:
+            enabled: false
+          YAML
           cat > /tmp/afvar/etc/artifactory/artifactory.config.bootstrap.xml <<'XML'
           <config version="2">
             <localRepositories>
@@ -47,11 +64,13 @@ jobs:
           sudo chmod -R 777 /tmp/afvar
           docker run -d --name af -p 8081:8081 -p 8082:8082 -v /tmp/afvar:/var/opt/jfrog/artifactory \
             releases-docker.jfrog.io/jfrog/artifactory-oss:latest
-          # Router ping/version answer long before the artifactory core registers; only the
-          # readiness endpoint goes 200 once every service is up. First boot takes ~15 min.
+          # Router ping/version answer long before the artifactory core is up, and the readiness
+          # endpoint needs every enabled service. Hit the core directly on 8081: it only serves
+          # ping once the webapp is deployed. Then fail loudly with logs if it never comes.
           for i in $(seq 1 240); do
-            curl -fsS http://localhost:8082/artifactory/api/v1/system/readiness | grep -q '"ready".*true' && break || sleep 5
+            curl -fsS http://localhost:8081/artifactory/api/system/ping | grep -q OK && break || sleep 5
           done
+          curl -fsS http://localhost:8081/artifactory/api/system/ping | grep -q OK || { docker logs --tail 80 af; exit 1; }
       - name: The bootstrap descriptor created the local repositories
         run: |
           # The repositories REST API is Pro-gated entirely, so prove the generic repo exists the
