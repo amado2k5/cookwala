@@ -1,0 +1,30 @@
+name: Scoop channel install test
+
+# Keeps the Scoop tile on the samples page true: installs cookwala-samples the way a user does —
+# scoop + bucket + manifest — on a clean windows-latest runner, then runs the demo.
+on:
+  pull_request:
+    paths: ['samples/packaging/scoop/**', '.github/workflows/samples-channel-scoop.yml']
+  schedule:
+    - cron: '30 7 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  install:
+    runs-on: windows-latest
+    steps:
+      - name: Install scoop, the bucket, and the app
+        shell: powershell
+        run: |
+          Invoke-RestMethod get.scoop.sh | Invoke-Expression
+          scoop bucket add cookwala https://github.com/amado2k5/scoop-cookwala
+          scoop install cookwala-samples
+      - name: The demo reports the same results as a clean install
+        shell: powershell
+        run: |
+          cookwala-samples demo | Out-File demo.md
+          Get-Content demo.md
+          if (-not (Select-String -Path demo.md -Pattern '3 completed')) { throw 'demo report differs' }
