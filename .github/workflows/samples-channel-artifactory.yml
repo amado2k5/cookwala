@@ -62,11 +62,15 @@ jobs:
           </config>
           XML
           sudo chmod -R 777 /tmp/afvar
-          docker run -d --name af -p 8081:8081 -p 8082:8082 -v /tmp/afvar:/var/opt/jfrog/artifactory \
-            releases-docker.jfrog.io/jfrog/artifactory-oss:latest
-          # Router ping/version answer long before the artifactory core is up, and the readiness
-          # endpoint needs every enabled service. Hit the core directly on 8081: it only serves
-          # ping once the webapp is deployed. Then fail loudly with logs if it never comes.
+          # Pinned to the 7.49 line: latest boots the full 8.x-era service stack which needs
+          # 25+ min on a shared runner; 7.49 comes up in a few minutes. Every request goes to
+          # port 8081 — the artifactory webapp directly. Port 8082 is the router, and it 503s
+          # all traffic until every statically-required service (jfmd/jffe/jfob…) is healthy,
+          # which is exactly what never finishes on a 2-core runner.
+          docker run -d --name af -p 8081:8081 -v /tmp/afvar:/var/opt/jfrog/artifactory \
+            releases-docker.jfrog.io/jfrog/artifactory-oss:7.49.8
+          # api/system/ping answers only once the webapp is deployed and initialized; during
+          # first boot it throws. Fail loudly with container logs if the wait ever exhausts.
           for i in $(seq 1 240); do
             curl -fsS http://localhost:8081/artifactory/api/system/ping | grep -q OK && break || sleep 5
           done
@@ -78,24 +82,24 @@ jobs:
           echo probe > /tmp/probe.txt
           for i in $(seq 1 30); do
             curl -fsS -u admin:password -T /tmp/probe.txt \
-              http://localhost:8082/artifactory/cookwala-generic-local/probe.txt && break
+              http://localhost:8081/artifactory/cookwala-generic-local/probe.txt && break
             sleep 10
           done
-          curl -fsS -u admin:password http://localhost:8082/artifactory/cookwala-generic-local/probe.txt | grep -q probe
+          curl -fsS -u admin:password http://localhost:8081/artifactory/cookwala-generic-local/probe.txt | grep -q probe
           echo 'bootstrap descriptor imported: generic repo accepts and serves artifacts'
       - name: Run the real publish script
         env:
-          ARTIFACTORY_URL: http://localhost:8082/artifactory
+          ARTIFACTORY_URL: http://localhost:8081/artifactory
           ARTIFACTORY_USER: admin
           ARTIFACTORY_TOKEN: password
         run: samples/packaging/artifactory/publish.sh pypi npm maven generic
       - name: Install back what was published and run the demo
         run: |
-          pip install --index-url http://admin:password@localhost:8082/artifactory/api/pypi/cookwala-pypi-local/simple cookwala-samples
+          pip install --index-url http://admin:password@localhost:8081/artifactory/api/pypi/cookwala-pypi-local/simple cookwala-samples
           cookwala-samples demo | grep -q '3 completed'
           mvn -B -q dependency:get -Dartifact=ai.cookwala:cookwala-samples:$(cat samples/VERSION) \
-            -DremoteRepositories=af::default::http://admin:password@localhost:8082/artifactory/cookwala-maven-local
-          curl -fsS -u admin:password http://localhost:8082/artifactory/cookwala-generic-local/cookwala-samples/$(cat samples/VERSION)/SHA256SUMS | head -3
+            -DremoteRepositories=af::default::http://admin:password@localhost:8081/artifactory/cookwala-maven-local
+          curl -fsS -u admin:password http://localhost:8081/artifactory/cookwala-generic-local/cookwala-samples/$(cat samples/VERSION)/SHA256SUMS | head -3
           echo 'pypi, maven and generic round-trips verified'
       - name: Teardown
         if: always()
