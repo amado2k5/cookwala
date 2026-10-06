@@ -62,13 +62,12 @@ jobs:
           kubectl wait --for=condition=Available deployment -n kourier-system 3scale-kourier-gateway --timeout=300s
           kubectl patch svc kourier -n kourier-system --type merge --subresource status \
             -p '{"status":{"loadBalancer":{"ingress":[{"ip":"127.0.0.1"}]}}}'
-      # The manifest is already portable Knative Serving; the only adaptations for kind are the
-      # locally built image and IfNotPresent so the node keeps what `kind load` gave it.
-      - name: Apply the Knative service (adapted for kind)
+      # The manifest is applied verbatim: it already points at the public ghcr.io image, which is
+      # what a user deploys. (A kind-local tag cannot work anyway — the revision controller
+      # resolves image tags to digests against a real registry.)
+      - name: Apply the Knative service
         run: |
-          sed 's|image: ghcr.io/amado2k5/cookwala-samples:[0-9.]*|image: cookwala-samples:ci\n          imagePullPolicy: IfNotPresent|' \
-            samples/cloud/openshift/knative-service.yaml > /tmp/ksvc.yaml
-          kubectl apply -f /tmp/ksvc.yaml
+          kubectl apply -f samples/cloud/openshift/knative-service.yaml
           kubectl wait --for=condition=Ready ksvc/cookwala-samples --timeout=300s
       - name: Call the Knative service through Kourier
         run: |
