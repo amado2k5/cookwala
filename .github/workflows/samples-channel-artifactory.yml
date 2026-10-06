@@ -28,9 +28,15 @@ jobs:
           python samples/packaging/build.py
       - name: Start a throwaway Artifactory OSS
         run: |
-          docker run -d --name af -p 8081:8081 -p 8082:8082 releases-docker.jfrog.io/jfrog/artifactory-oss:latest
+          # Since 7.84 Artifactory refuses the bundled Derby DB unless it is explicitly allowed;
+          # give the container a writable var dir carrying that system.yaml.
+          mkdir -p /tmp/afvar/etc
+          printf 'shared:\n  database:\n    type: derby\n    allowNonPostgresql: true\n' > /tmp/afvar/etc/system.yaml
+          sudo chmod -R 777 /tmp/afvar
+          docker run -d --name af -p 8081:8081 -p 8082:8082 -v /tmp/afvar:/opt/jfrog/artifactory/var \
+            releases-docker.jfrog.io/jfrog/artifactory-oss:latest
           # The router answers ping early; wait until the API itself serves version with auth.
-          for i in $(seq 1 90); do
+          for i in $(seq 1 150); do
             curl -fsS -u admin:password http://localhost:8082/artifactory/api/system/version && break || sleep 5
           done
       - name: Create local repositories (admin:password is the OSS default)
