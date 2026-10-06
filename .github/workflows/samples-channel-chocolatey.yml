@@ -18,10 +18,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
-      - name: Build the distributables and render the nuspec + scripts
+      - name: Build the distributables; render the manifest against a local asset server
         run: |
           pip install build
-          python samples/packaging/build.py
+          python samples/packaging/build.py --base-url http://localhost:8899
+          # A locally built pyz is not the release pyz, so the rendered checksum only matches the
+          # file this job serves. install-test.sh does the same; the feed package embeds the
+          # release hash from the tag-time build.
+          Start-Process python -ArgumentList '-m','http.server','8899','--directory','samples/build' -WindowStyle Hidden
+          Start-Sleep 2
+          Invoke-WebRequest http://localhost:8899/cookwala-samples-$(Get-Content samples/VERSION).pyz -OutFile $env:TEMP\t.pyz
       - name: choco pack
         working-directory: samples/build/manifests/chocolatey
         run: choco pack cookwala-samples.nuspec
