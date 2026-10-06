@@ -71,7 +71,9 @@ jobs:
           kubectl wait --for=condition=Ready ksvc/cookwala-samples --timeout=300s
       - name: Call the Knative service through Kourier
         run: |
-          kubectl port-forward -n kourier-system svc/kourier 8080:80 & PF=$!
+          # The route is ClusterLocal (this Knative only advertises svc.cluster.local), so it is
+          # served by kourier-internal, not the external kourier service.
+          kubectl port-forward -n kourier-system svc/kourier-internal 8080:80 & PF=$!
           sleep 3
           H="Host: $(kubectl get ksvc cookwala-samples -o jsonpath='{.status.url}' | sed 's|.*://||')"
           echo "routing with $H"
