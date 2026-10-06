@@ -135,6 +135,73 @@ paths:
                 $ref: https://cookwala.ai/v1/schemas/recipe.schema.json
         '404':
           $ref: '#/components/responses/NotFound'
+  /v1/recipes/submissions:
+    post:
+      tags:
+      - recipes
+      operationId: submitRecipe
+      summary: Propose a recipe (RFC-0013; also possible by GitHub pull request or issue, docs/CONTRIBUTE-RECIPES.md)
+      description: >-
+        Runs the same checks as `tools/validate_specs.py` and `tools/check_community_namespaces.py`
+        and opens a pull request under `recipes/community/<prefix>/` on the submitter's behalf.
+        Entry level is always V0 (RFC-0009): nothing submitted here is machine-verified. A
+        recipe credited to someone other than the submitter is accepted facts-only
+        (`LicenseRef-source-credited`) until rights are confirmed, the same rule every other
+        collection follows.
+      security:
+      - submitterToken: []
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://cookwala.ai/v1/schemas/recipe.schema.json
+      responses:
+        '202':
+          description: Queued; a pull request is opened once the checks pass
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmissionAccepted'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          description: The authenticated account does not own the id prefix used
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '422':
+          description: Schema, semantic or namespace check failed; body lists every issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/recipes/submissions/{id}:
+    get:
+      tags:
+      - recipes
+      operationId: getRecipeSubmission
+      summary: Status of a recipe submission
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmissionAccepted'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /v1/index/{lang}/{page}.json:
     get:
       tags:
@@ -1018,7 +1085,45 @@ components:
       schema:
         type: string
         default: en
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 128
   schemas:
+    ValidationResult:
+      type: object
+      required: [valid, issues]
+      properties:
+        valid:
+          type: boolean
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+              message:
+                type: string
+    SubmissionAccepted:
+      type: object
+      required: [submissionId, status]
+      properties:
+        submissionId:
+          type: string
+        status:
+          enum: [queued, checking, pull_request_open, merged, rejected]
+        pullRequestUrl:
+          type: string
+        issues:
+          type: array
+          items:
+            type: string
+          description: Populated when status is rejected or checking found problems.
     Problem:
       type: object
       description: RFC 9457 problem details
@@ -1075,3 +1180,12 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    submitterToken:
+      type: http
+      scheme: bearer
+      description: >-
+        A GitHub OAuth token (proves the submitter's login, so submissions are checked against
+        the prefixes that login owns in recipes/community/NAMESPACES.json) or a publish token
+        bound to a namespace verified by DNS TXT or /.well-known/cookwala-verify (RFC-0002's
+        proof methods, reused here rather than inventing a second one).

@@ -1,0 +1,196 @@
+{
+ "$schema": "https://cookwala.ai/v1/schemas/recipe.schema.json",
+ "cookwala": "0.2.0",
+ "id": "demo-mint-lemonade",
+ "revision": 1,
+ "updated": "2026-10-06",
+ "verification": {
+  "level": "V0",
+  "notes": "Pipeline demo only (RFC-0013, docs/CONTRIBUTE-RECIPES.md): shows what a community submission looks like on entry. Every step is an unclassified legacy step; no device executes this document. Original recipe, written for this demo."
+ },
+ "dish": {
+  "names": {
+   "en": "Mint Lemonade",
+   "ar": "ليموناضة بالنعناع"
+  },
+  "cuisine": [
+   "EG"
+  ],
+  "course": "drink",
+  "tags": [
+   "Beverages",
+   "demo"
+  ]
+ },
+ "yield": {
+  "servings": 4
+ },
+ "ingredients": [
+  {
+   "ref": "lemon",
+   "ingredientId": "cw.ing.lemon",
+   "qty": {
+    "value": 4,
+    "unit": "pcs"
+   },
+   "display": {
+    "en": "4 lemons, juiced",
+    "ar": "4 ليمونات معصورة"
+   }
+  },
+  {
+   "ref": "sugar",
+   "ingredientId": "cw.ing.sugar_white",
+   "qty": {
+    "value": 100,
+    "unit": "g"
+   },
+   "display": {
+    "en": "100g sugar",
+    "ar": "100 جرام سكر"
+   }
+  },
+  {
+   "ref": "mint",
+   "ingredientId": "cw.ing.mint_fresh",
+   "qty": {
+    "value": 15,
+    "unit": "g"
+   },
+   "display": {
+    "en": "a handful of fresh mint leaves",
+    "ar": "حفنة نعناع طازج"
+   }
+  },
+  {
+   "ref": "water",
+   "ingredientId": "cw.ing.water",
+   "qty": {
+    "value": 1,
+    "unit": "l"
+   },
+   "display": {
+    "en": "1 litre cold water",
+    "ar": "لتر ماء بارد"
+   }
+  },
+  {
+   "ref": "ice",
+   "ingredientId": "cw.ing.ice",
+   "qty": {
+    "value": 1,
+    "unit": "pcs"
+   },
+   "display": {
+    "en": "ice, to serve",
+    "ar": "ثلج للتقديم"
+   }
+  }
+ ],
+ "equipment": [
+  {
+   "ref": "blender",
+   "class": "cw.eq.appliance.blender"
+  },
+  {
+   "ref": "pitcher",
+   "class": "cw.eq.vessel.pitcher"
+  }
+ ],
+ "process": {
+  "nodes": [
+   {
+    "id": "n1",
+    "op": "cw.op.legacy_step",
+    "params": {
+     "sourceStep": 1,
+     "phase": "prep",
+     "opHint": "cw.op.blend"
+    },
+    "attention": "continuous"
+   },
+   {
+    "id": "n2",
+    "op": "cw.op.legacy_step",
+    "params": {
+     "sourceStep": 2,
+     "phase": "prep",
+     "opHint": "cw.op.mix"
+    },
+    "attention": "continuous"
+   },
+   {
+    "id": "n3",
+    "op": "cw.op.legacy_step",
+    "params": {
+     "sourceStep": 3,
+     "phase": "finish",
+     "opHint": "cw.op.serve"
+    },
+    "attention": "continuous"
+   }
+  ]
+ },
+ "safety": {
+  "hazards": [],
+  "allergens": {
+   "eu14": [],
+   "us9": [],
+   "mayContain": []
+  },
+  "supervision": {
+   "default": "presence_required",
+   "reasons": {
+    "all": "V0 document: a person cooks from the original steps; no step is machine-verified (RFC-0009)."
+   }
+  },
+  "abort": {
+   "steps": [
+    "alert_user"
+   ]
+  }
+ },
+ "text": {
+  "en": {
+   "title": "Mint Lemonade",
+   "intro": "A simple cold drink, written as the worked example for a community submission.",
+   "steps": {
+    "n1": "Blend the lemon juice, sugar, mint leaves and half the water until the mint is finely broken up.",
+    "n2": "Pour into a pitcher, stir in the rest of the water, and taste for sweetness.",
+    "n3": "Chill or add ice, and serve."
+   }
+  },
+  "ar": {
+   "title": "ليموناضة بالنعناع",
+   "intro": "مشروب بارد بسيط، كُتب كمثال عملي لإضافة وصفة من المجتمع.",
+   "steps": {
+    "n1": "يُخلط عصير الليمون مع السكر وورق النعناع ونصف كمية الماء حتى يتفتت النعناع جيداً.",
+    "n2": "يُصب الخليط في إبريق، ويُضاف باقي الماء، ويُتذوق لضبط الحلاوة.",
+    "n3": "يُبرد أو يُضاف إليه ثلج، ويُقدّم."
+   }
+  }
+ },
+ "nutrition": {
+  "perServing": {
+   "kcal": 80,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 20,
+   "fiber": 0,
+   "sugar": 19
+  },
+  "basis": "Rough estimate for this demo; not measured."
+ },
+ "source": {
+  "name": "Community submission example",
+  "url": "https://github.com/amado2k5/cookwala/blob/main/docs/CONTRIBUTE-RECIPES.md",
+  "citation": "Original recipe, written for docs/CONTRIBUTE-RECIPES.md as the worked example for recipes/community/ (RFC-0013)."
+ },
+ "license": "CC-BY-4.0",
+ "layers": {
+  "r1": true,
+  "r2": false,
+  "r3": false
+ },
+ "hash": "sha256:ee8aac8bee1662f736afe031236e9c5f86aeeaea44cd39c0462cf59bde3aca89"
+}

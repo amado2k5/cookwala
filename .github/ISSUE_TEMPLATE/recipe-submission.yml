@@ -1,0 +1,106 @@
+name: Submit a recipe (no git required)
+description: >-
+  Paste a recipe and a maintainer (or a bot acting on your behalf) will turn it into a pull
+  request against recipes/community/. If you're comfortable with git and GitHub, a pull request
+  is faster and merges automatically once it passes the checks — see docs/CONTRIBUTE-RECIPES.md.
+title: "[recipe] "
+labels: ["recipe-submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for adding a recipe to Cookwala. Everything below becomes public, under the
+        licence you pick. This form is for people who don't want to use git — if you do, open a
+        pull request instead with the "Recipe submission" template, it's faster.
+  - type: input
+    id: dish_name
+    attributes:
+      label: Dish name
+      placeholder: "Mint Lemonade"
+    validations:
+      required: true
+  - type: dropdown
+    id: ownership
+    attributes:
+      label: Is this your own recipe?
+      options:
+        - "Yes, I wrote this recipe myself"
+        - "No, it's from a book, website, channel or another person"
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source (if not your own)
+      description: Name and URL of the book, site, channel or person. Required if you answered "No" above.
+      placeholder: "https://example.com/my-recipe, by Jane Doe"
+  - type: dropdown
+    id: license
+    attributes:
+      label: Licence for your own recipe
+      description: Ignored if this recipe is from someone else — those enter as facts-only until rights are confirmed (docs/CONTRIBUTE-RECIPES.md).
+      options:
+        - "CC-BY-4.0 (credit required, most common choice)"
+        - "CC0 (public domain, no credit required)"
+    validations:
+      required: false
+  - type: textarea
+    id: ingredients
+    attributes:
+      label: Ingredients
+      description: One per line, with quantity.
+      placeholder: |
+        4 lemons, juiced
+        100g sugar
+        a handful of fresh mint leaves
+        1 litre cold water
+        ice, to serve
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps
+      description: One step per line, in order.
+      placeholder: |
+        Blend the lemon juice, sugar, mint leaves and half the water until the mint is finely broken up.
+        Pour into a pitcher, stir in the rest of the water, and taste for sweetness.
+        Chill or add ice, and serve.
+    validations:
+      required: true
+  - type: input
+    id: servings
+    attributes:
+      label: Servings
+      placeholder: "4"
+    validations:
+      required: true
+  - type: input
+    id: cuisine
+    attributes:
+      label: Cuisine (optional)
+      placeholder: "Egyptian"
+  - type: input
+    id: allergens
+    attributes:
+      label: Known allergens (optional)
+      placeholder: "milk, nuts"
+  - type: input
+    id: github_login
+    attributes:
+      label: Your GitHub username
+      description: >-
+        Used to credit you as the submitter and, once this is your first recipe, to claim your
+        id prefix in recipes/community/NAMESPACES.json. If you don't have one, a maintainer will
+        ask before merging.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: This recipe contains no pork, alcohol, or hidden non-halal ingredients (or I've said otherwise above).
+          required: false
+        - label: I'm not pasting a copyrighted recipe's exact wording without permission — I've named the source instead.
+          required: true

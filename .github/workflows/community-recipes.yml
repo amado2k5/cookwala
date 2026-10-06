@@ -1,0 +1,79 @@
+name: Community recipe submissions
+
+# Runs the same checks a maintainer would run by hand on any pull request that adds or changes
+# a recipe under recipes/community/ (docs/CONTRIBUTE-RECIPES.md, RFC-0013): schema, semantics,
+# and that the recipe's id prefix is claimed in NAMESPACES.json by the account opening this PR.
+# tools/validate_specs.py already runs these checks for every push to main (pages.yml); this
+# workflow adds the ownership check (which only makes sense on a pull request) and posts the
+# result as a comment so a contributor doesn't have to read Actions logs.
+
+on:
+  pull_request:
+    paths: ['recipes/community/**']
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install jsonschema pyyaml graphql-core cryptography
+      - name: Validate schema and semantics (every recipe, not just this PR's)
+        id: validate
+        continue-on-error: true
+        run: python tools/validate_specs.py 2>&1 | tee /tmp/validate.log
+      - name: Check namespace ownership for this pull request
+        id: namespaces
+        continue-on-error: true
+        run: python tools/check_community_namespaces.py --author "${{ github.event.pull_request.user.login }}" 2>&1 | tee /tmp/namespaces.log
+      - name: Comment the result
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const validate = fs.readFileSync('/tmp/validate.log', 'utf8');
+            const namespaces = fs.readFileSync('/tmp/namespaces.log', 'utf8');
+            const ok = '${{ steps.validate.outcome }}' === 'success' && '${{ steps.namespaces.outcome }}' === 'success';
+            const tail = s => s.split('\n').slice(-40).join('\n');
+            const body = [
+              ok ? '**Schema, semantics and namespace checks passed.** A maintainer will review and merge.'
+                 : '**Some checks failed.** Fix the items below and push again; this comment updates automatically.',
+              '',
+              '<details><summary>recipes/community/ namespace check</summary>',
+              '',
+              '```',
+              tail(namespaces),
+              '```',
+              '</details>',
+              '',
+              '<details><summary>Full validator output (tail)</summary>',
+              '',
+              '```',
+              tail(validate),
+              '```',
+              '</details>',
+              '',
+              'See [docs/CONTRIBUTE-RECIPES.md](https://github.com/${{ github.repository }}/blob/main/docs/CONTRIBUTE-RECIPES.md) for what each check means.',
+            ].join('\n');
+            const marker = '<!-- community-recipes-check -->';
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.body && c.body.includes(marker));
+            const full = marker + '\n' + body;
+            if (existing) {
+              await github.rest.issues.updateComment({ owner: context.repo.owner, repo: context.repo.repo, comment_id: existing.id, body: full });
+            } else {
+              await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, body: full });
+            }
+      - name: Fail the job if either check failed
+        if: steps.validate.outcome != 'success' || steps.namespaces.outcome != 'success'
+        run: exit 1

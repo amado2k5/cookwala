@@ -155,6 +155,15 @@ for path in sorted((ROOT / 'recipes').rglob('*.cookwala.json')) if (ROOT / 'reci
 failures += _bad
 print(f'recipes/: {_n} imported documents, {_bad} with problems ({_time.time() - _t0:.1f}s)')
 
+# ---- community recipe submissions (RFC-0013): namespace ownership and placement
+sys.path.insert(0, str(ROOT / 'tools'))
+import check_community_namespaces as _ccn
+_ccn_problems = _ccn.check(ROOT)
+for _p in _ccn_problems[:20]:
+    print(f'  {_p}')
+failures += len(_ccn_problems)
+print(f'recipes/community/: {"ok" if not _ccn_problems else f"{len(_ccn_problems)} problem(s)"}')
+
 
 # ---- strictness: every object schema with properties must say what to do with unknown fields
 def strictness(node, where, in_branch=False):

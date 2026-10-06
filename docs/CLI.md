@@ -49,6 +49,11 @@ cookwala convert --to cooklang fah-234.cookwala.json
 cookwala export cooklang fah-234 -o fah-234.cook     # same, by recipe id; --lang ar picks the text language
 cookwala export schema-org fah-234                   # JSON-LD to stdout
 cookwala sign my-dish.cookwala.json --key ~/.cookwala/keys/ed25519   # for index operators
+cookwala submit my-dish.cookwala.json --author your-github-login [--open-pr]
+                                           # add it to recipes/community/: hash, place, check
+                                           # schema+semantics+namespace ownership, then open a
+                                           # pull request (needs `gh`, --open-pr) or print the
+                                           # commands to do it by hand (docs/CONTRIBUTE-RECIPES.md, RFC-0013)
 ```
 
 ## Kitchen (hub)

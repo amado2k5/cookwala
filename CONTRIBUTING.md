@@ -14,8 +14,11 @@ Thank you. There are many ways to help, and most don't need code.
 
 ## Rules for specific contributions
 
-- **Recipes:** include the source and licence; never copy copyrighted text or photos.
-  Temperatures must sit inside the operation envelopes (the validator checks this).
+- **Recipes:** anyone can add one, not just the founder's own collections — see
+  [docs/CONTRIBUTE-RECIPES.md](docs/CONTRIBUTE-RECIPES.md) for the three doors (pull request,
+  GitHub issue, API) and RFC-0013. Include the source and licence; never copy copyrighted
+  text or photos. Temperatures must sit inside the operation envelopes (the validator checks
+  this).
 - **Vocabularies:** add ingredients, operations, equipment, sensors or hazards with labels in
   as many languages as you can, plus links (Wikidata, FoodOn, USDA FoodData Central).
 - **Rule packs and policy packs:** cite the legal or scientific source and effective date for

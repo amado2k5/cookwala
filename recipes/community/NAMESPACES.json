@@ -1,0 +1,30 @@
+{
+ "$schema": "https://cookwala.ai/v1/schemas/catalog.schema.json#/$defs/CommunityNamespaceFile",
+ "note": "Anyone may add a recipe to Cookwala (RFC-0013, docs/CONTRIBUTE-RECIPES.md). Each contributor claims one id prefix here, once, in the same pull request as their first recipe. Every recipe under recipes/community/<prefix>/ must use that prefix. tools/check_community_namespaces.py enforces this in CI; it also runs inside tools/validate_specs.py.",
+ "rules": [
+  "A prefix is 2-16 lowercase letters/digits/hyphens, must not collide with a reserved prefix below or with any prefix already claimed here, and every recipe id under it must start with '<prefix>-'.",
+  "Proof of ownership is whichever GitHub login opened the claiming pull request; 'owner' here must equal that login. Moving a namespace to a different login needs a pull request from the current owner (or a maintainer, if the owner is unreachable, recorded in docs/DECISIONS.md).",
+  "A namespace is never deleted once merged, even if every recipe under it is later recalled: the claim stays as a tombstone so the prefix can't be impersonated.",
+  "This file lists community-submitted recipes only. The founder's own collections (archive, chefteta, osool, abdennour, abuhaty, world) are reserved below and are not claimable."
+ ],
+ "reservedPrefixes": [
+  "meat-", "des-", "veg-", "pasta-", "bake-", "sea-", "salad-", "stuff-", "savory-", "quick-", "bev-", "soup-", "leg-",
+  "add-", "osool-", "ec-", "fah-", "w-", "example-", "n"
+ ],
+ "namespaces": [
+  {
+   "prefix": "demo-",
+   "owner": "amado2k5",
+   "verification": "github_account",
+   "addedAt": "2026-10-06T00:00:00Z",
+   "description": "Reference example used in docs/CONTRIBUTE-RECIPES.md and the conformance vector for this file. Not a real recipe collection."
+  },
+  {
+   "prefix": "issue-",
+   "owner": "amado2k5",
+   "verification": "github_account",
+   "addedAt": "2026-10-06T00:00:00Z",
+   "description": "Intake bucket for recipes submitted through the 'Submit a recipe' issue form (no git required). tools/recipe_from_issue.py writes new submissions here; a maintainer renames the file and id into the contributor's own namespace (claiming one on their behalf if needed) before or when merging."
+  }
+ ]
+}

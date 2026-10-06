@@ -18,6 +18,12 @@
     cookwala init my-dish                          scaffold a recipe, validate it, hash it
     cookwala hub [--port 7878]                     run the reference hub (Core API, simulated device)
     cookwala mcp                                   run the MCP server on stdio
+    cookwala submit RECIPE.json [--author LOGIN] [--open-pr]
+                                                    add a recipe to recipes/community/ (RFC-0013,
+                                                    docs/CONTRIBUTE-RECIPES.md): hashes it, checks it
+                                                    and the id-prefix claim, then opens a pull request
+                                                    with `gh` if --open-pr is given and `gh` is on PATH,
+                                                    otherwise prints the commands to do it by hand.
 """
 import json
 import pathlib
@@ -142,8 +148,67 @@ def cmd_mcp(a):
     sys.argv = ['cookwala_mcp.py', *a]; runpy.run_path(str(ROOT / 'sdk' / 'mcp' / 'cookwala_mcp.py'), run_name='__main__'); return 0
 
 
+def cmd_submit(a):
+    """Add a recipe to recipes/community/: hash it, place it, check it, then open or print a PR (RFC-0013)."""
+    import shutil
+    src = pathlib.Path(a[0])
+    author = a[a.index('--author') + 1] if '--author' in a else None
+    open_pr = '--open-pr' in a
+    doc = _load(src)
+    rid = doc.get('id', '')
+    namespaces = json.loads((ROOT / 'recipes' / 'community' / 'NAMESPACES.json').read_text())
+    matching = [ns for ns in namespaces['namespaces'] if rid.startswith(ns['prefix'])]
+    if not matching:
+        prefix_guess = rid.split('-')[0] + '-' if '-' in rid else rid + '-'
+        print(f"error: id {rid!r} doesn't match any prefix claimed in recipes/community/NAMESPACES.json.\n"
+              f"Add an entry there first, e.g.:\n"
+              f'  {{"prefix": "{prefix_guess}", "owner": "<your GitHub login>", "verification": "github_account", "addedAt": "<today>"}}\n'
+              f'See docs/CONTRIBUTE-RECIPES.md.')
+        return 1
+    prefix = max((ns['prefix'] for ns in matching), key=len)
+    if author and matching[0]['owner'] != author and not any(ns['owner'] == author for ns in matching):
+        print(f"error: prefix {prefix!r} is owned by {matching[0]['owner']!r}, not {author!r}. "
+              f'Pick a different id prefix, or ask the owner to submit it.')
+        return 1
+
+    doc.pop('hash', None)
+    doc['hash'] = ref.doc_hash(doc)
+    dest_dir = ROOT / 'recipes' / 'community' / prefix.rstrip('-')
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    dest = dest_dir / f'{rid}.cookwala.json'
+    dest.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + '\n')
+    print(f'wrote {dest.relative_to(ROOT)}  hash {doc["hash"]}')
+
+    problems = _tool('check_community_namespaces.py', ['--author', author] if author else [])
+    if problems != 0:
+        print('Fix the problems above (or add --author once you know your GitHub login), then run `cookwala submit` again.')
+        return problems
+    if _tool('validate_specs.py', []) != 0:
+        print('`validate_specs.py` found problems above; fix them before opening a pull request.')
+        return 1
+
+    branch = f'recipe-{rid}'
+    if open_pr and shutil.which('gh') and shutil.which('git'):
+        subprocess.call(['git', 'checkout', '-b', branch], cwd=ROOT)
+        subprocess.call(['git', 'add', str(dest.relative_to(ROOT)), 'recipes/community/NAMESPACES.json'], cwd=ROOT)
+        subprocess.call(['git', 'commit', '-s', '-m', f'recipes: add {rid}'], cwd=ROOT)
+        subprocess.call(['git', 'push', '-u', 'origin', branch], cwd=ROOT)
+        subprocess.call(['gh', 'pr', 'create', '--title', f'recipes: add {rid}', '--body',
+                          f'Adds `{dest.relative_to(ROOT)}` under the `{prefix}` namespace. See docs/CONTRIBUTE-RECIPES.md.',
+                          '--template', 'recipe-submission.md'], cwd=ROOT)
+        return 0
+    print(f'Checks passed. To open a pull request by hand:\n'
+          f'  git checkout -b {branch}\n'
+          f'  git add {dest.relative_to(ROOT)} recipes/community/NAMESPACES.json\n'
+          f'  git commit -s -m "recipes: add {rid}"\n'
+          f'  git push -u origin {branch}\n'
+          f'Then open a pull request using the "Recipe submission" template.\n'
+          f'(Install the gh CLI and pass --open-pr to do this automatically.)')
+    return 0
+
+
 COMMANDS = {'search': cmd_search, 'get': cmd_get, 'hash': cmd_hash, 'verify': cmd_verify, 'dryrun': cmd_dryrun, 'envelope': cmd_envelope, 'convert': cmd_convert, 'sms': cmd_sms, 'constraints': cmd_constraints,
-            'validate': cmd_validate, 'conformance': cmd_conformance, 'humanitarian': cmd_humanitarian, 'export': cmd_export, 'init': cmd_init, 'hub': cmd_hub, 'mcp': cmd_mcp}
+            'validate': cmd_validate, 'conformance': cmd_conformance, 'humanitarian': cmd_humanitarian, 'export': cmd_export, 'init': cmd_init, 'hub': cmd_hub, 'mcp': cmd_mcp, 'submit': cmd_submit}
 
 
 def main(argv=None):

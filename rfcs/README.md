@@ -18,6 +18,7 @@ name a qualified reviewer before they are accepted.
 | [0012](0012-signing-header.md) | The signing header: a signature covers alg, hash, kid, kind and signedAt; one verification path; independent witnesses | accepted 2026-10-05, window to 2026-11-04 | 2026-10-05 to 2026-11-04 |
 | [0011](0011-sensor-trust.md) | Sensor trust: health, calibration records and plausibility checks decide which sensors count as a rung | draft, needs a metrology or appliance-safety reviewer | |
 | [0010](0010-certifications.md) | Certifications of ingredients, lots, recipes, meals and kitchens (halal, kosher, vegetarian, organic, …): detached, signed, re-certifiable | draft, needs review by certification bodies | |
+| [0013](0013-community-recipe-submissions.md) | Community recipe submissions: anyone can add a recipe, by pull request, CLI or API | proposed | |
 
 Statuses: `proposed` → `comment` → `accepted` or `rejected` → `implemented`. An RFC is a
 short document: problem, proposal, alternatives considered, migration, open questions.

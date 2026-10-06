@@ -50,6 +50,11 @@ class RecipeBuilder:
         self.docs = {}
         for p in sorted((ROOT / 'recipes').glob('*/*.cookwala.json')):
             d = json.loads(p.read_text(encoding='utf-8')); self.docs[d['id']] = d
+        # recipes/community/<prefix>/<id>.cookwala.json: anyone's submissions (RFC-0013), one
+        # directory level deeper than the founder's own collections above.
+        for p in sorted((ROOT / 'recipes' / 'community').glob('*/*.cookwala.json')) if (ROOT / 'recipes' / 'community').exists() else []:
+            if p.name == 'NAMESPACES.json': continue
+            d = json.loads(p.read_text(encoding='utf-8')); self.docs[d['id']] = d
         self.examples = {}
         for p in sorted((ROOT / 'examples').glob('*.cookwala.json')):
             d = json.loads(p.read_text(encoding='utf-8')); d['id'] = p.name.replace('.cookwala.json', ''); self.examples[d['id']] = d  # URLs use the file name, as /v1/recipes/ does
@@ -65,8 +70,8 @@ class RecipeBuilder:
             out.append({'id': rid, 'revision': d.get('revision', 1), 'hash': d['hash'], 'title': L(d['dish']['names'], lang), 'cuisine': d['dish'].get('cuisine', []), 'course': d['dish'].get('course', 'other'), 'tags': d['dish'].get('tags', []),
                         'level': d['verification']['level'], 'servings': d['yield']['servings'], 'allergens': d['safety']['allergens'].get('eu14', []), 'supervision': d['safety']['supervision']['default'], 'x-collection': 'cookwala', 'x-license': d.get('license', 'CC-BY-4.0')})
         for rid, d in self.docs.items():
-            out.append({'id': rid, 'revision': 1, 'hash': d['hash'], 'title': L(d['dish']['names'], lang), 'cuisine': d['dish'].get('cuisine') or ['EG'], 'course': d['dish']['course'], 'tags': d['dish'].get('tags', []), 'level': 'V0', 'servings': d['yield']['servings'],
-                        'allergens': d['safety']['allergens'].get('eu14', []), 'supervision': 'presence_required', 'thumb': next((i['url'] for i in d['dish'].get('images', []) if i.get('role') == 'thumb'), None), 'x-collection': d['source'].get('collection'), 'x-license': d.get('license')})
+            out.append({'id': rid, 'revision': 1, 'hash': d['hash'], 'title': L(d['dish']['names'], lang), 'cuisine': d['dish'].get('cuisine') or ['EG'], 'course': d['dish'].get('course', 'other'), 'tags': d['dish'].get('tags', []), 'level': 'V0', 'servings': d['yield']['servings'],
+                        'allergens': d['safety']['allergens'].get('eu14', []), 'supervision': 'presence_required', 'thumb': next((i['url'] for i in d['dish'].get('images', []) if i.get('role') == 'thumb'), None), 'x-collection': d.get('source', {}).get('collection'), 'x-license': d.get('license')})
         return [{k: v for k, v in e.items() if v is not None} for e in out]
 
     def build_data(self):

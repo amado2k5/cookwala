@@ -1165,6 +1165,46 @@
      "$ref": "common.schema.json#/$defs/DateTime"
     }
    }
+  },
+  "CommunityNamespaceFile": {
+   "type": "object",
+   "description": "recipes/community/NAMESPACES.json: the id-prefix claims that let anyone add a recipe to Cookwala without colliding with another contributor or a reserved collection (docs/CONTRIBUTE-RECIPES.md, RFC-0013). Checked by tools/check_community_namespaces.py.",
+   "required": ["reservedPrefixes", "namespaces"],
+   "unevaluatedProperties": false,
+   "properties": {
+    "$schema": { "type": "string" },
+    "note": { "type": "string" },
+    "rules": { "type": "array", "items": { "type": "string" } },
+    "reservedPrefixes": {
+     "type": "array",
+     "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+     "description": "Prefixes used by the founder's own collections (tools/export_fifi.collections.json), the spec examples and the process-graph node id convention; never claimable."
+    },
+    "namespaces": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": ["prefix", "owner", "verification", "addedAt"],
+      "unevaluatedProperties": false,
+      "properties": {
+       "prefix": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9]{1,14}-$",
+        "description": "Every recipe id under recipes/community/<prefix>/ must start with this, including the trailing hyphen."
+       },
+       "owner": {
+        "type": "string",
+        "description": "The GitHub login (or verified domain, reverse-DNS) that proved control of this prefix."
+       },
+       "verification": {
+        "enum": ["github_account", "dns_txt", "well_known"]
+       },
+       "addedAt": { "$ref": "common.schema.json#/$defs/DateTime" },
+       "description": { "type": "string", "maxLength": 300 }
+      }
+     }
+    }
+   }
   }
  }
 }

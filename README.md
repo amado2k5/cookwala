@@ -36,6 +36,7 @@ profile. Live at [cookwala.ai](https://cookwala.ai). Nothing is deployed in the 
 | Review nutrition and food-safety rules | [rule packs](profiles/humanitarian/) · [review template](docs/health/REVIEW-TEMPLATE.md) · [claims policy](docs/health/CLAIMS-POLICY.md) |
 | Understand what a household robot may know | [Household Context Profile](docs/HOUSEHOLD-CONTEXT.md) · [facet registry](vocab/facets.json) · [RFC-0001](rfcs/0001-household-context-profile.md) |
 | Publish or find things | [Registry and directory](docs/REGISTRY.md) · [federation](docs/FEDERATION.md) · [certification path](docs/CERTIFICATION.md) |
+| Add a recipe | [Open to anyone](docs/CONTRIBUTE-RECIPES.md): by pull request, by GitHub issue (no git needed) or by API (RFC-0013) |
 | Teach, research, legislate, think | [lesson kit](docs/education/LESSON-KIT.md) · [research topics](docs/education/RESEARCH-TOPICS.md) · [policy brief](docs/policy/BRIEF.md) · [model language](docs/policy/MODEL-LANGUAGE.md) · [essays](docs/essays/) |
 | Play the simulators | [home](https://cookwala.ai/sim/) · [city](https://cookwala.ai/sim/city/) · [country](https://cookwala.ai/sim/country/) · [world](https://cookwala.ai/sim/world/) (illustrative models, not forecasts) |
 | See every stakeholder's path | [docs/STAKEHOLDERS.md](docs/STAKEHOLDERS.md) · [messaging rules](docs/MESSAGING.md) · [roadmap](docs/ROADMAP.md) |
