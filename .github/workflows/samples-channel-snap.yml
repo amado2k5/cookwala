@@ -1,0 +1,34 @@
+name: Snap channel test
+
+# Builds cookwala-samples_*.snap with snapcraft and installs it --dangerous on the same runner —
+# the closest thing to `snap install` that needs no Snap Store account. `snapcraft upload` is
+# maintainer-gated: see samples/packaging/snap/SUBMIT.md.
+on:
+  pull_request:
+    paths: ['samples/packaging/snap/**', 'samples/python/**', '.github/workflows/samples-channel-snap.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install snapcraft and a build toolchain
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq python3-venv
+          sudo snap install snapcraft --classic
+      - name: Build the snap (destructive mode; the runner is disposable)
+        working-directory: samples/packaging/snap
+        run: snapcraft pack --destructive-mode
+      - name: Install --dangerous and run the demo
+        working-directory: samples/packaging/snap
+        run: |
+          sudo snap install --dangerous cookwala-samples_*.snap
+          cookwala-samples demo | tee /tmp/demo.md
+          grep -q '3 completed' /tmp/demo.md
+          sudo snap remove cookwala-samples
+          ! snap list cookwala-samples 2>/dev/null
