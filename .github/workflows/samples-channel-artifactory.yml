@@ -28,28 +28,17 @@ jobs:
           python samples/packaging/build.py
       - name: Start a throwaway Artifactory OSS
         run: |
-          # Since 7.84 Artifactory refuses the bundled Derby DB unless it is explicitly allowed;
-          # give the container a writable var dir carrying that system.yaml. The repositories REST
-          # API is Pro-only, so the local repos come in through a bootstrap config descriptor —
-          # the supported OSS path. The optional microservices (metadata/event/integration/
-          # observability/scheduler) are off: none participates in upload/serve and on a shared
-          # runner they starve the core of CPU for 20+ minutes.
+          # Since 7.84 Artifactory refuses the bundled Derby DB unless it is explicitly allowed
+          # (harmless on 7.49, which still permits it). The repositories REST API is Pro-only,
+          # so the local repos come in through a bootstrap config descriptor — the supported
+          # OSS path. Do NOT disable services in system.yaml: the platform gate waits for the
+          # statically-required set (jfmd/jffe/jfob…) and disabling them hangs init forever.
           mkdir -p /tmp/afvar/etc/artifactory
           cat > /tmp/afvar/etc/system.yaml <<'YAML'
           shared:
             database:
               type: derby
               allowNonPostgresql: true
-          metadata:
-            enabled: false
-          event:
-            enabled: false
-          integration:
-            enabled: false
-          observability:
-            enabled: false
-          scheduler:
-            enabled: false
           YAML
           cat > /tmp/afvar/etc/artifactory/artifactory.config.bootstrap.xml <<'XML'
           <config version="2">
