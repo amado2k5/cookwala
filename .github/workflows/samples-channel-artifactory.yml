@@ -48,18 +48,22 @@ jobs:
           docker run -d --name af -p 8081:8081 -p 8082:8082 -v /tmp/afvar:/var/opt/jfrog/artifactory \
             releases-docker.jfrog.io/jfrog/artifactory-oss:latest
           # The router answers ping early; wait until the API itself serves version with auth.
-          for i in $(seq 1 150); do
+          # First boot with an empty var dir takes ~10-15 min on a shared runner.
+          for i in $(seq 1 240); do
             curl -fsS -u admin:password http://localhost:8082/artifactory/api/system/version && break || sleep 5
           done
       - name: The bootstrap descriptor created the local repositories
         run: |
-          # GET is allowed on OSS (only the create/update REST is Pro-gated); a 200 with our keys
-          # proves the bootstrap descriptor was imported.
+          # The repositories REST API is Pro-gated entirely, so prove the generic repo exists the
+          # only way OSS lets us: upload into it (fails with 404 if the repo is absent).
+          echo probe > /tmp/probe.txt
           for i in $(seq 1 30); do
-            repos=$(curl -fsS -u admin:password http://localhost:8082/artifactory/api/repositories) && break || sleep 10
+            curl -fsS -u admin:password -T /tmp/probe.txt \
+              http://localhost:8082/artifactory/cookwala-generic-local/probe.txt && break
+            sleep 10
           done
-          echo "$repos" | grep -q cookwala-pypi-local && echo "$repos" | grep -q cookwala-maven-local \
-            && echo 'pypi/npm/maven/generic local repositories are up'
+          curl -fsS -u admin:password http://localhost:8082/artifactory/cookwala-generic-local/probe.txt | grep -q probe
+          echo 'bootstrap descriptor imported: generic repo accepts and serves artifacts'
       - name: Run the real publish script
         env:
           ARTIFACTORY_URL: http://localhost:8082/artifactory
