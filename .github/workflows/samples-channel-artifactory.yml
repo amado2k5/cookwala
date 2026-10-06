@@ -29,9 +29,21 @@ jobs:
       - name: Start a throwaway Artifactory OSS
         run: |
           # Since 7.84 Artifactory refuses the bundled Derby DB unless it is explicitly allowed;
-          # give the container a writable var dir carrying that system.yaml.
-          mkdir -p /tmp/afvar/etc
+          # give the container a writable var dir carrying that system.yaml. The repositories REST
+          # API is Pro-only, so the local repos come in through a bootstrap config descriptor —
+          # the supported OSS path.
+          mkdir -p /tmp/afvar/etc/artifactory
           printf 'shared:\n  database:\n    type: derby\n    allowNonPostgresql: true\n' > /tmp/afvar/etc/system.yaml
+          cat > /tmp/afvar/etc/artifactory/artifactory.config.bootstrap.xml <<'XML'
+          <config version="2">
+            <localRepositories>
+              <localRepository><key>cookwala-pypi-local</key><type>pypi</type><includesPattern>**/*</includesPattern><repoLayoutRef>pypi-default</repoLayoutRef></localRepository>
+              <localRepository><key>cookwala-npm-local</key><type>npm</type><includesPattern>**/*</includesPattern><repoLayoutRef>npm-default</repoLayoutRef></localRepository>
+              <localRepository><key>cookwala-maven-local</key><type>maven</type><includesPattern>**/*</includesPattern><repoLayoutRef>maven-2-default</repoLayoutRef></localRepository>
+              <localRepository><key>cookwala-generic-local</key><type>generic</type><includesPattern>**/*</includesPattern><repoLayoutRef>simple-default</repoLayoutRef></localRepository>
+            </localRepositories>
+          </config>
+          XML
           sudo chmod -R 777 /tmp/afvar
           docker run -d --name af -p 8081:8081 -p 8082:8082 -v /tmp/afvar:/var/opt/jfrog/artifactory \
             releases-docker.jfrog.io/jfrog/artifactory-oss:latest
@@ -39,20 +51,15 @@ jobs:
           for i in $(seq 1 150); do
             curl -fsS -u admin:password http://localhost:8082/artifactory/api/system/version && break || sleep 5
           done
-      - name: Create local repositories (admin:password is the OSS default)
+      - name: The bootstrap descriptor created the local repositories
         run: |
-          repo() { for i in $(seq 1 12); do
-            out=$(curl -sS -u admin:password -H content-type:application/json -X PUT -w '\n%{http_code}' \
-              "http://localhost:8082/artifactory/api/repositories/$1" \
-              -d "{\"key\":\"$1\",\"rclass\":\"local\",\"packageType\":\"$2\"}")
-            code=${out##*$'\n'}; body=${out%$'\n'*}
-            case "$code" in 2*) echo "$body"; return 0;; esac
-            echo "  attempt $i: HTTP $code $body"; sleep 10
-          done; return 1; }
-          repo cookwala-pypi-local pypi
-          repo cookwala-npm-local npm
-          repo cookwala-maven-local maven
-          repo cookwala-generic-local generic
+          # GET is allowed on OSS (only the create/update REST is Pro-gated); a 200 with our keys
+          # proves the bootstrap descriptor was imported.
+          for i in $(seq 1 30); do
+            repos=$(curl -fsS -u admin:password http://localhost:8082/artifactory/api/repositories) && break || sleep 10
+          done
+          echo "$repos" | grep -q cookwala-pypi-local && echo "$repos" | grep -q cookwala-maven-local \
+            && echo 'pypi/npm/maven/generic local repositories are up'
       - name: Run the real publish script
         env:
           ARTIFACTORY_URL: http://localhost:8082/artifactory
