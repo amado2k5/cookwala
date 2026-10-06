@@ -3,9 +3,10 @@
 Artifactory is deliberately **BYO-instance** on the samples page: there is no public
 `cookwala-samples` Artifactory, and the tile does not claim one. What is proven is that
 `publish.sh` really works — the `samples-channel-artifactory` workflow runs it against a throwaway
-Artifactory OSS container on every change: local pypi/npm/maven/generic repositories are created
-through the REST API, the script publishes every artifact, and the pypi and maven packages install
-back out of the instance.
+Artifactory OSS container on every change: the local pypi/npm/maven/generic repositories are
+declared in an `artifactory.config.bootstrap.xml` (the repository REST API is Pro-only — on OSS
+even creating a local repository needs it), the script publishes every artifact through the real
+REST endpoints, and the pypi and maven packages install back out of the instance.
 
 ## What exists
 
