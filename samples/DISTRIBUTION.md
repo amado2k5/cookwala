@@ -40,7 +40,7 @@ pass `--base-url` to point them at another host, such as an Artifactory generic 
 | **GitHub release** | download the pyz, deb, wheel, sdist and `SHA256SUMS` | `.github/workflows/samples.yml` | CI on tag | nothing extra |
 | **Azure Functions** | deploy | `cloud/azure-functions/` | CI on demand (`samples-cloud.yml`, `target=azure`), or by hand (`az`, `func`) | an Azure subscription + `cloud-test` environment secrets |
 | **AWS Lambda** | deploy | `cloud/aws-lambda/` (SAM) | CI on demand (`samples-cloud.yml`, `target=aws`), or by hand (`sam deploy`) | an AWS account + `cloud-test` environment secret |
-| **Google Cloud Run functions** | deploy | `cloud/gcp-functions/` | by hand (`gcloud`) | a GCP project |
+| **Google Cloud Run functions** | deploy | `cloud/gcp-functions/` | CI on demand (`samples-cloud.yml`, `target=gcp`), or by hand (`gcloud`) | a GCP project + `cloud-test` environment secrets |
 | **OpenShift, OpenShift Serverless** | deploy | `cloud/openshift/` | by hand (`oc`) | a cluster |
 
 Not provided, with the reason: **winget** needs a native Windows installer (exe or msi) and the
@@ -112,11 +112,10 @@ usage error. The four CLIs now give the same exit codes and the same reports.
 ### Not run here
 
 `snapcraft` (needs snapd), a real `choco install` and `scoop install` (need Windows), and the OpenShift template (needs
-a cluster). For the clouds: the **Azure Functions** and **AWS Lambda** deploys are proven — see below. The Google Cloud
-deploy exists as a `workflow_dispatch` job in `.github/workflows/samples-cloud.yml`, written end-to-end with
-`always()` teardown, but has never run — it needs the OIDC credentials named at the top of the job.
+a cluster). All three cloud deploys — **Azure Functions**, **AWS Lambda** and **Google Cloud Run functions** — are
+proven against real accounts; see below.
 
-### Proven against a real account: Azure Functions and AWS Lambda
+### Proven against real accounts: Azure Functions, AWS Lambda, Google Cloud
 
 Run [37443213472](https://github.com/amado2k5/cookwala/actions/runs/37443213472) (2026-10-06, `samples-cloud.yml`
 dispatched with `target=azure` behind the protected `cloud-test` environment):
@@ -151,3 +150,18 @@ Two findings this run exposed, both fixed in the same PR: the SAM template's `Au
 `AWS::Lambda::Permission` for `lambda:InvokeFunctionUrl`, and anonymous Function-URL calls are blocked on brand-new
 AWS accounts regardless — so the workflow proves the deploy through the API Gateway `HttpApiUrl` output instead.
 Required secret in the `cloud-test` environment: `AWS_ROLE_TO_ASSUME` (the role ARN).
+
+Run [37450278019](https://github.com/amado2k5/cookwala/actions/runs/37450278019) (2026-10-06, `target=gcp`):
+
+- OIDC via `google-github-actions/auth` — a workload identity pool + provider on project
+  `cookwala-ci-5604` impersonating service account `github-ci@`, conditioned on the numeric
+  `repository_id` (`1403544608`), so the repo-rename subject quirk cannot apply.
+- `gcloud functions deploy --gen2` created `cookwala-samples-ci-37450278019` in `europe-west1`
+  (Cloud Run function, `--allow-unauthenticated`).
+- Called the public `.run.app` URL: `/health` returned `{"ok": true, ...}` and
+  `/v1/samples/demo?format=markdown` produced the report with `3 completed`.
+- `if: always()` teardown deleted the function.
+
+Required secrets in the `cloud-test` environment: `GCP_PROJECT`, `GCP_SERVICE_ACCOUNT`,
+`GCP_WORKLOAD_IDENTITY_PROVIDER`. Gen2 functions need an open billing account on the project —
+a fresh billing account's free trial plus the always-free 2M-invocation tier keeps CI cost at ~$0.
