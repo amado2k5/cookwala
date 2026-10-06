@@ -21,11 +21,17 @@
       <form class="controls" id="demoForm" aria-label="Dry-run settings">
         <label><b class="num">1</b> Recipe <select id="dRecipe"></select></label>
         <label><b class="num">2</b> Device <select id="dDevice"></select></label>
-        <label class="check"><input type="checkbox" id="dHuman" checked> <b class="num">3</b> A person is in the kitchen<br><span class="note">unchecked = any step needing a person is refused</span></label>
+        <fieldset style="border: none; padding: 0; margin: 12px 0;">
+          <legend style="font-weight: 600; padding: 0; margin: 0 0 8px 0;"><b class="num">3</b> Human presence</legend>
+          <label class="radio"><input type="radio" name="humanLevel" value="none"> No human in kitchen</label>
+          <label class="radio"><input type="radio" name="humanLevel" value="house"> Human in house (not watching)</label>
+          <label class="radio"><input type="radio" name="humanLevel" value="nearby"> Human nearby (can supervise if called)</label>
+          <label class="radio" checked><input type="radio" name="humanLevel" value="kitchen" checked> Human in kitchen (actively supervising)</label>
+        </fieldset>
         <label class="check"><input type="checkbox" id="dModel" checked> Allow educated guesses where a sensor is missing<br><span class="note">logged, not trusted</span></label>
         <button type="button" class="btn primary" id="dPreset">Watch it refuse an unsafe step</button>
       </form>
-      <p class="note"><strong>Custom device:</strong> Pick a preset device above, or build your own below (extends step 2). The two checkboxes decide as much as the device itself: uncheck the person and every step that needs one is refused; uncheck estimates and a step with no sensor falls back to plain timing — or is refused.</p>
+      <p class="note"><strong>Custom device:</strong> Pick a preset device above, or build your own below (extends step 2). Most recipes need a human actively supervising in the kitchen. Some prep-heavy recipes might work with a human nearby. Pure automation (no human) rarely works with current safety standards.</p>
       <details id="builder"><summary>Build your own device (extends step 2)</summary>
         <div class="builder" id="builderBody"></div>
       </details>

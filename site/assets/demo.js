@@ -35,9 +35,10 @@
   function pill(text, cls) { var s = document.createElement('span'); s.className = 'pill ' + cls; s.textContent = text; return s; }
 
   function currentDevice() { var k = $('#dDevice').value; return k === 'custom' ? custom : DEVICES[k]; }
+  function getHumanLevel() { var radios = document.querySelectorAll('input[name="humanLevel"]'); for (var i = 0; i < radios.length; i++) if (radios[i].checked) return radios[i].value; return 'kitchen'; }
   function render() {
     if (!recipe || !ops) return;
-    var dev = currentDevice(); var res = CookwalaDryRun.dryRun(recipe, caps(dev), ops, $('#dHuman').checked, $('#dModel').checked);
+    var dev = currentDevice(); var level = getHumanLevel(); var humanPresent = level === 'nearby' || level === 'kitchen'; var res = CookwalaDryRun.dryRun(recipe, caps(dev), ops, humanPresent, $('#dModel').checked);
     var v = $('#verdict'); v.className = 'verdict ' + (res.state === 'accepted' ? 'ok' : 'bad'); v.textContent = '';
     var tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = res.state === 'accepted' ? T.accepted : T.refused; v.append(tag);
     if (res.state === 'accepted') {
@@ -59,7 +60,7 @@
     share();
   }
   function share() {
-    var q = new URLSearchParams({ r: $('#dRecipe').value, d: $('#dDevice').value, h: $('#dHuman').checked ? 1 : 0, m: $('#dModel').checked ? 1 : 0 });
+    var q = new URLSearchParams({ r: $('#dRecipe').value, d: $('#dDevice').value, h: getHumanLevel(), m: $('#dModel').checked ? 1 : 0 });
     if ($('#dDevice').value === 'custom' && custom) q.set('c', custom.ops.map(function (o) { return o.replace('cw.op.', ''); }).join(',') + '|' + custom.sensors.map(function (s) { return s.replace('cw.sense.', ''); }).join(',') + '|' + custom.cues.map(function (s) { return s.replace('cw.sense.', ''); }).join(','));
     var url = location.origin + location.pathname + '?' + q.toString() + '#demo'; $('#shareUrl').value = url;
     if ((touched || location.search) && history.replaceState) history.replaceState(null, '', '?' + q.toString() + location.hash);
@@ -81,7 +82,8 @@
   function runPreset() {
     touched = true;
     selR.value = 'koshari'; selD.value = 'hob_robot_basic';
-    $('#dHuman').checked = true; $('#dModel').checked = true;
+    var rb = document.querySelector('input[name="humanLevel"][value="kitchen"]'); if (rb) rb.checked = true;
+    $('#dModel').checked = true;
     $('#verdict').textContent = T.loading;
     loadRecipe('koshari').then(function () { var v = $('#verdict'); if (v.scrollIntoView) v.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
   }
@@ -94,12 +96,13 @@
   if (params.get('c')) { var parts = params.get('c').split('|'); custom.ops = parts[0] ? parts[0].split(',').map(function (x) { return 'cw.op.' + x; }) : []; custom.sensors = parts[1] ? parts[1].split(',').map(function (x) { return 'cw.sense.' + x; }) : []; custom.cues = parts[2] ? parts[2].split(',').map(function (x) { return 'cw.sense.' + x; }) : []; }
   if (params.get('r') && RECIPES.some(function (r) { return r[0] === params.get('r'); })) selR.value = params.get('r');
   if (params.get('d') && (DEVICES[params.get('d')] || params.get('d') === 'custom')) selD.value = params.get('d');
-  if (params.has('h')) $('#dHuman').checked = params.get('h') === '1';
+  if (params.has('h')) { var hLevel = params.get('h'); if (['none', 'house', 'nearby', 'kitchen'].indexOf(hLevel) !== -1) { var rb = document.querySelector('input[name="humanLevel"][value="' + hLevel + '"]'); if (rb) rb.checked = true; } }
   if (params.has('m')) $('#dModel').checked = params.get('m') === '1';
   buildBuilder();
   selR.addEventListener('change', function () { touched = true; $('#verdict').textContent = T.loading; loadRecipe(selR.value); });
   selD.addEventListener('change', function () { touched = true; if (selD.value === 'custom') { var b = $('#builder'); if (b) { b.open = true; if (b.scrollIntoView) b.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } } render(); });
-  ['#dHuman', '#dModel'].forEach(function (s) { $(s).addEventListener('change', function () { touched = true; render(); }); });
+  ['#dModel'].forEach(function (s) { $(s).addEventListener('change', function () { touched = true; render(); }); });
+  var humanRadios = document.querySelectorAll('input[name="humanLevel"]'); for (var i = 0; i < humanRadios.length; i++) { humanRadios[i].addEventListener('change', function () { touched = true; render(); }); }
   var dPreset = $('#dPreset'); if (dPreset) dPreset.addEventListener('click', runPreset);
   var heroTry = document.getElementById('heroTry'); if (heroTry) heroTry.addEventListener('click', runPreset);
   $('#demoForm').addEventListener('submit', function (e) { e.preventDefault(); });
