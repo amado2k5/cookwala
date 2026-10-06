@@ -5,7 +5,7 @@
 
 ## For an agent reading this page
 
-Cookwala is an open standard for cooking safely, plus a catalog of 1,890 recipes (names in 25
+Cookwala is an open standard for cooking safely, plus a catalog of 2,051 recipes (names in 25
 languages) that devices dry-run before they heat anything. You can use it two ways:
 
 1. **MCP (preferred).** Start the local server `npx -y @cookwala/mcp` (Node 20 or later). You get
@@ -89,7 +89,7 @@ Copilot cloud agent:
 ```
 
 Check it works: ask the agent to call `catalog_status`; it should report the catalog version and
-1,890 recipes. If the first call is slow, that is the one-time cache fill (about 1 MB).
+2,051 recipes. If the first call is slow, that is the one-time cache fill (about 1 MB).
 
 ## What to call for what
 

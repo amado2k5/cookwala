@@ -1,5 +1,5 @@
 {
- "note": "Per-collection rights switch for the fifi.cooking import (docs/EXPORT-FIFI.md section 2, RFC-0009). text: full publishes the family's steps and notes; text: facts publishes only structured facts (names, ingredient lines and quantities, times, nutrition and cost estimates, allergens, source link) and withholds the step text until rights are confirmed in writing. Set export to false to exclude a collection entirely. Decision 2026-10-05: every collection whose content derives from a book or a channel is facts-only.",
+ "note": "Per-collection rights switch for the fifi.cooking import (docs/EXPORT-FIFI.md section 2, RFC-0009). text: full publishes the family's steps and notes; text: facts publishes only structured facts (names, ingredient lines and quantities, times, nutrition and cost estimates, allergens, source link) and withholds the step text until rights are confirmed in writing. Set export to false to exclude a collection entirely. Decision 2026-10-05: every collection whose content derives from a book or a channel is facts-only. Decision 2026-10-06: world (World Cuisines) recipes derive from third-party websites, so they follow the same rule and publish facts only; flip text to full per recipe source once rights are confirmed.",
  "collections": [
   {
    "id": "archive",
@@ -66,6 +66,17 @@
    "license": "LicenseRef-source-credited",
    "sourceName": "Fatma Abu Haty YouTube channel",
    "citation": "Rewritten from the Fatma Abu Haty channel and credited; creator permission to be confirmed",
+   "text": "facts"
+  },
+  {
+   "id": "world",
+   "prefixes": [
+    "w-"
+   ],
+   "export": true,
+   "license": "LicenseRef-source-credited",
+   "sourceName": "World Cuisines project, fifi.cooking",
+   "citation": "Rewritten from the public recipe site named in each recipe's source and credited there; halal-gated by fifi.cooking; structured facts only until the source rights are confirmed",
    "text": "facts"
   }
  ]

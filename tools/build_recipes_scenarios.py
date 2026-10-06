@@ -65,7 +65,7 @@ class RecipeBuilder:
             out.append({'id': rid, 'revision': d.get('revision', 1), 'hash': d['hash'], 'title': L(d['dish']['names'], lang), 'cuisine': d['dish'].get('cuisine', []), 'course': d['dish'].get('course', 'other'), 'tags': d['dish'].get('tags', []),
                         'level': d['verification']['level'], 'servings': d['yield']['servings'], 'allergens': d['safety']['allergens'].get('eu14', []), 'supervision': d['safety']['supervision']['default'], 'x-collection': 'cookwala', 'x-license': d.get('license', 'CC-BY-4.0')})
         for rid, d in self.docs.items():
-            out.append({'id': rid, 'revision': 1, 'hash': d['hash'], 'title': L(d['dish']['names'], lang), 'cuisine': ['EG'], 'course': d['dish']['course'], 'tags': d['dish'].get('tags', []), 'level': 'V0', 'servings': d['yield']['servings'],
+            out.append({'id': rid, 'revision': 1, 'hash': d['hash'], 'title': L(d['dish']['names'], lang), 'cuisine': d['dish'].get('cuisine') or ['EG'], 'course': d['dish']['course'], 'tags': d['dish'].get('tags', []), 'level': 'V0', 'servings': d['yield']['servings'],
                         'allergens': d['safety']['allergens'].get('eu14', []), 'supervision': 'presence_required', 'thumb': next((i['url'] for i in d['dish'].get('images', []) if i.get('role') == 'thumb'), None), 'x-collection': d['source'].get('collection'), 'x-license': d.get('license')})
         return [{k: v for k, v in e.items() if v is not None} for e in out]
 
@@ -87,7 +87,7 @@ class RecipeBuilder:
                 (d / f'{n}.json').write_bytes(raw); shards.append({'path': f'/v1/index/{lang}/{n}.json', 'hash': sha(raw), 'bytes': len(raw)})
             compact = [{'id': e['id'], 't': e['title'], 'c': e['course'], 'k': e.get('x-collection'), 'l': e['level']} for e in ents]
             (d / 'search.json').write_text(json.dumps(compact, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
-        counts = {'recipes': len(self.docs) + len(self.examples), 'byLevel': {'V0': len(self.docs), 'V1': len(self.examples)}, 'countries': 1, 'languages': len(self.langs)}
+        counts = {'recipes': len(self.docs) + len(self.examples), 'byLevel': {'V0': len(self.docs), 'V1': len(self.examples)}, 'countries': len({c for d in list(self.docs.values()) + list(self.examples.values()) for c in (d['dish'].get('cuisine') or ['EG'])}), 'languages': len(self.langs)}
         version = sha(json.dumps([e['hash'] for e in self.entries('en')]).encode())[7:19]
         manifest = {'cookwala': '0.2.0', 'version': version, 'generatedAt': self.b.now, 'counts': counts, 'languages': self.langs, 'shards': shards}
         (self.out / 'v1' / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')

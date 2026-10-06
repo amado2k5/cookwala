@@ -1,6 +1,6 @@
 # fifi.cooking export report
 
-Generated 2026-10-05 by `tools/export_fifi.py` (deterministic stages only; every document is V0, RFC-0009).
+Generated 2026-10-05 (world collection added 2026-10-06) by `tools/export_fifi.py` (deterministic stages only; every document is V0, RFC-0009).
 
 | Collection | Documents | Licence | Text |
 |---|---|---|---|
@@ -9,6 +9,7 @@ Generated 2026-10-05 by `tools/export_fifi.py` (deterministic stages only; every
 | osool | 324 | `LicenseRef-source-credited` | facts |
 | abdennour | 158 | `LicenseRef-source-credited` | facts |
 | abuhaty | 808 | `LicenseRef-source-credited` | facts |
+| world | 161 | `LicenseRef-source-credited` | facts |
 
 Ingredients: 18040 lines; parsed from English amounts 17266 (95.7%), from Arabic 649 (3.6%), fallback to 1 piece with the original text kept 125 (0.7%).
 

@@ -42,6 +42,12 @@ def collection_of(rid):
     return next(c for c in COLLECTIONS if c['id'] == 'archive')
 
 
+def cuisine_of(rid):
+    """ISO 3166 country code of a recipe's cuisine: w-<iso2>-NNN ids (World Cuisines) carry it; the family collections are Egyptian."""
+    m = re.match(r'^w-([a-z]{2})-', rid)
+    return [m.group(1).upper()] if m else ['EG']
+
+
 # ---------------------------------------------------------------- quantities (E2)
 FRACS = {'½': 0.5, '¼': 0.25, '¾': 0.75, '⅓': 1 / 3, '⅔': 2 / 3, '⅛': 0.125, '⅜': 0.375, '⅝': 0.625, '⅞': 0.875, '⅕': 0.2}
 UNITS_EN = [
@@ -281,7 +287,7 @@ def convert(d, vocab, stats):
         'cookwala': '0.2.0', 'id': rid, 'revision': 1, 'updated': dt.date.today().isoformat(),
         'legacy': {'dataUrl': f'{FIFI}/data/recipes/{rid}.json', 'pageUrl': f'{FIFI}/recipe/{rid}/'},
         'verification': {'level': 'V0', 'generatedBy': 'tools/export_fifi.py (deterministic, RFC-0009)', 'notes': 'Described, not machine-verified: original ingredients and steps from fifi.cooking; quantities parsed from the text where possible; no end conditions, hazards or critical control points have been verified. Every step is an unclassified legacy step that a device never executes.'},
-        'dish': {'names': names, 'localName': rec.get('title') or rid, 'cuisine': ['EG'], 'course': COURSE.get(rec.get('category') or '', 'other'),
+        'dish': {'names': names, 'localName': rec.get('title') or rid, 'cuisine': cuisine_of(rid), 'course': COURSE.get(rec.get('category') or '', 'other'),
                  'tags': [t for t in [en.get('category'), en.get('cookingMethod'), coll['id']] if t],
                  'images': [{'url': f'{FIFI}/recipe-images/{rid}.jpg', 'role': 'banner'}, {'url': f'{FIFI}/recipe-images/thumbs/{rid}.jpg', 'role': 'thumb'}]},
         'yield': {'servings': servings_of(rec, est)},
@@ -326,7 +332,7 @@ def convert(d, vocab, stats):
                    'steps': {} if facts_only else {k: v for k, v in stp.items() if v}, 'legacySteps': [] if facts_only else [v for v in stp.values() if v],
                    'x-ingredients': {ing['ref']: ((t.get('ingredients') or {}).get(ing['legacyId']) or {}) for ing in ingredients},
                    'x-category': t.get('category') or '', 'x-cookingMethod': t.get('cookingMethod') or ''}
-    index = {'id': rid, 'revision': 1, 'hash': doc['hash'], 'title': names.get('en', rid), 'cuisine': ['EG'], 'course': doc['dish']['course'], 'tags': doc['dish']['tags'], 'level': 'V0',
+    index = {'id': rid, 'revision': 1, 'hash': doc['hash'], 'title': names.get('en', rid), 'cuisine': cuisine_of(rid), 'course': doc['dish']['course'], 'tags': doc['dish']['tags'], 'level': 'V0',
              'servings': doc['yield']['servings'], 'allergens': eu, 'supervision': 'presence_required', 'thumb': f'{FIFI}/recipe-images/thumbs/{rid}.jpg',
              'x-titles': names, 'x-collection': coll['id'], 'x-license': coll['license'], 'x-steps': len(nodes), 'x-ingredients': len(ingredients), **({'x-text': 'facts'} if facts_only else {})}
     if est.get('kcal'): index['kcal'] = est['kcal']

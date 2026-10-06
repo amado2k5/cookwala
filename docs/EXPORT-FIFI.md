@@ -14,7 +14,7 @@ Done, deterministically, by `tools/export_fifi.py`: E0 extract with the per-coll
 (`tools/export_fifi.collections.json`), E1-lite (one vocabulary entry per distinct English ingredient
 name, labels in 25 languages; no clustering or FoodOn/USDA links yet), E2 quantities (99.3 % parsed;
 the rest keep the original text as `display` with a flag), E6 carry-over, E7 text (en and ar in the
-document; 23 languages as sidecars). All 1,881 documents are published at **V0** under RFC-0009:
+document; 23 languages as sidecars). All 2,042 documents are published (1,881 on 2026-10-05, the 161 world recipes on 2026-10-06) at **V0** under RFC-0009:
 every step is an unclassified `cw.op.legacy_step`, so no device executes them. Not done: E3 to E5
 (equipment beyond the cooking-method default, process graphs, hazards and critical control points),
 E8 to E11 at V1 and above, and the sync workflow. The licences of four collections await the
@@ -29,8 +29,8 @@ founder's confirmation and are shown as "credited; licence under review".
 | `osool` | `osool-*` | 324 | *Osool El Tahy* cookbook |
 | `chefteta` | `add-*` | 257 | Additional recipes (chapter 7) |
 | `abdennour` | `ec-*` | 158 | *Egyptian Cooking* book |
-| `world` | `w-<iso2>-*` | in progress | World Cuisines project (rewritten, credited, halal-gated) |
-| **Total** | | **1,881 + world** | |
+| `world` | `w-<iso2>-*` | 161 (CN 21, FR 14, JP 43, MA 27, MX 49, VN 7) | World Cuisines project (rewritten, credited, halal-gated); facts only |
+| **Total** | | **2,042** | |
 
 Each recipe is already published as `fifirecipes/public/data/recipes/{id}.json` (recipe +
 estimate + 24-language translations; ~96 MB total). The format is documented in
@@ -137,10 +137,13 @@ to all-V1, plus ongoing V2 review.
 
 The MCP server (`@cookwala/mcp`, [MCP](MCP.md)) has two tools that read fifi.cooking's own `/data/` files, so an
 agent can find recipes added after the last export: `fifi_search` and `fifi_source`. They apply the same per-collection
-`text` policy as this exporter. On 2026-10-06 fifi.cooking listed 2,042 recipes and the catalog held 1,881: the 161
-missing ones are the World Cuisines recipes (`w-cn-*`, `w-fr-*`, `w-jp-*`, `w-ma-*`, `w-mx-*`, `w-vn-*`).
+`text` policy as this exporter. On 2026-10-06 fifi.cooking listed 2,042 recipes and the catalog held 1,881. The 161 missing ones, the World
+Cuisines recipes (`w-cn-*`, `w-fr-*`, `w-jp-*`, `w-ma-*`, `w-mx-*`, `w-vn-*`), were exported the same day.
 
-**Decision needed before the next export run.** `tools/export_fifi.collections.json` has no `world` entry. The exporter
-files an unlisted id under `archive`, whose policy is `text: full` and licence CC-BY-4.0. Add a `world` entry with the
-rights you confirm (prefix `w-`, `sourceName`, `citation`, `license`, `text`) before running `export_fifi.py`. Until then
-the MCP tools treat `w-*` as facts-only, which is the safe default.
+**Decision taken 2026-10-06.** `tools/export_fifi.collections.json` now has a `world` entry with `text: facts` and the
+licence `LicenseRef-source-credited`. The world recipes are rewritten from public recipe sites (each recipe's `source`
+names and links the site), so they follow the 2026-10-05 rule for derived content: structured facts only, no step text,
+until the source rights are confirmed. To publish steps for a source you have cleared, set `text` to `full` for it and
+re-run the exporter. The cuisine of a `w-<iso2>-*` recipe is that country; the family collections stay Egyptian. Existing
+documents were not regenerated in this run: the source site has changed since 2026-10-05 and a full re-export would
+rewrite about 1,200 of them, which is a separate review.
