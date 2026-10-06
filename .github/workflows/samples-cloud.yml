@@ -73,7 +73,7 @@ jobs:
         run: |
           kubectl port-forward -n kourier-system svc/kourier 8080:80 & PF=$!
           sleep 3
-          H='Host: cookwala-samples.default.example.com'
+          H="Host: $(kubectl get ksvc cookwala-samples -o jsonpath='{.status.url}' | sed 's|.*://||')"
           curl -fsS -H "$H" localhost:8080/health
           curl -fsS -H "$H" 'localhost:8080/v1/samples/demo?format=markdown' -o /tmp/kdemo.md
           grep -q '3 completed' /tmp/kdemo.md && echo 'knative demo verified over HTTP'
