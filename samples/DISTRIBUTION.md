@@ -40,9 +40,9 @@ pass `--base-url` to point them at another host, such as an Artifactory generic 
 | **Helm (Kubernetes)** | `helm install samples packaging/helm/cookwala-samples` | `packaging/helm/cookwala-samples/` | from the repository; an OCI chart push is one command (`helm push`) | a chart registry, if wanted |
 | **JFrog Artifactory** | the native client of each type, pointed at your Artifactory | `packaging/artifactory/publish.sh` | CI on tag, or by hand | `ARTIFACTORY_URL`, `ARTIFACTORY_USER`, `ARTIFACTORY_TOKEN` (+ `ARTIFACTORY_DOCKER_REGISTRY`) |
 | **GitHub release** | download the pyz, deb, wheel, sdist and `SHA256SUMS` | `.github/workflows/samples.yml` | CI on tag | nothing extra |
-| **Azure Functions** | deploy | `cloud/azure-functions/` | by hand (`az`, `func`) | an Azure subscription |
-| **AWS Lambda** | deploy | `cloud/aws-lambda/` (SAM) | by hand (`sam deploy`) | an AWS account |
-| **Google Cloud Run functions** | deploy | `cloud/gcp-functions/` | by hand (`gcloud`) | a GCP project |
+| **Azure Functions** | deploy | `cloud/azure-functions/` | CI on demand (`samples-cloud.yml`, `target=azure`), or by hand (`az`, `func`) | an Azure subscription + `cloud-test` environment secrets |
+| **AWS Lambda** | deploy | `cloud/aws-lambda/` (SAM) | CI on demand (`samples-cloud.yml`, `target=aws`), or by hand (`sam deploy`) | an AWS account + `cloud-test` environment secret |
+| **Google Cloud Run functions** | deploy | `cloud/gcp-functions/` | CI on demand (`samples-cloud.yml`, `target=gcp`), or by hand (`gcloud`) | a GCP project + `cloud-test` environment secrets |
 | **OpenShift, OpenShift Serverless** | deploy | `cloud/openshift/` | by hand (`oc`) | a cluster |
 
 Not provided, with the reason: **winget** needs a native Windows installer (exe or msi) and the
@@ -109,10 +109,108 @@ usage error. The four CLIs now give the same exit codes and the same reports.
 | pyz, wheel and sdist build; `twine check` passes | `packaging/build.py` |
 | the Helm chart lints and renders a Deployment, Service, Ingress and Route | Helm 3.16 |
 | the Helm chart installs into a throwaway kind cluster and the Knative service answers over Kourier, both serving `/health` and the demo report | `.github/workflows/samples-cloud.yml` `kind` job (kind, Knative Serving 1.23) |
+| the Azure Functions deploy runs on a real subscription: Bicep stack, zip publish, `/health` + `/plan` + demo report over the public URL, then the resource group is deleted | `.github/workflows/samples-cloud.yml` `azure` job (`workflow_dispatch`, `cloud-test` environment) |
 
 ### Not run here
 
 The OpenShift template (needs a real cluster; Helm and Knative on a throwaway kind cluster are covered by the `kind`
 job). Everything else above runs in CI: `snap install` (`samples-channel-snap.yml`), `choco install` and
 `scoop install` on `windows-latest` (`samples-channel-chocolatey.yml`, `samples-channel-scoop.yml`), and all three
-cloud deploys on real accounts — see below.
+cloud deploys — **Azure Functions**, **AWS Lambda** and **Google Cloud Run functions** — are proven against real
+accounts; see below.
+
+### Proven against real accounts: Azure Functions, AWS Lambda, Google Cloud
+
+Run [37443213472](https://github.com/amado2k5/cookwala/actions/runs/37443213472) (2026-10-06, `samples-cloud.yml`
+dispatched with `target=azure` behind the protected `cloud-test` environment):
+
+- OIDC login via `azure/login` — a Microsoft Entra app registration (`cookwala-ci`) with a federated credential
+  scoped to `environment:cloud-test`; no stored client secret.
+- `az group create` + `az deployment group create` deployed `samples/cloud/azure-functions/main.bicep` (storage
+  account, Y1 consumption plan, Application Insights, Function App) to `eastus` — overridable via the `AZURE_REGION`
+  variable, since new subscriptions reject some regions (`RequestDisallowedByAzure` / "not accepting new customers").
+- Zip-deployed `samples/cloud/azure-functions/` with a remote build.
+- Called the real endpoints: `GET /api/health` returned `{"ok": true, ...}`, `POST /api/v1/samples/plan` ranked the
+  devices, and `GET /api/v1/samples/demo?format=markdown` produced the report with `3 completed`.
+- `if: always()` teardown deleted the resource group.
+
+What the job actually did, from the run log:
+
+```text
+$ az group create -n cw-samples-ci-37443213472 -l eastus --tags ttl=1d purpose=samples-ci
+$ az deployment group create -g cw-samples-ci-37443213472 -f samples/cloud/azure-functions/main.bicep -p appName=cwci37443213472
+$ az functionapp deployment source config-zip -g cw-samples-ci-37443213472 -n cwci37443213472 --src /tmp/app.zip --build-remote true
+$ curl "https://cwci37443213472.azurewebsites.net/api/health?code=<key>"
+{"ok": true, "service": "cookwala-samples", "version": "0.3.0", "core": "0.2.0"}
+$ curl "https://cwci37443213472.azurewebsites.net/api/v1/samples/demo?format=markdown&code=<key>"
+# Cookwala samples demo (offline, simulated kitchen) ... 3 completed ...
+azure function demo verified
+$ az group delete --yes --no-wait -n cw-samples-ci-37443213472
+```
+
+Required secrets in the `cloud-test` environment: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`.
+One setup detail worth noting: because this repository was renamed, GitHub emits the OIDC subject with numeric entity
+ids (`repo:amado2k5@20147989/cookwala@1403544608:environment:cloud-test`) — the federated credential's subject must
+match that form, not `repo:amado2k5/cookwala:...`.
+
+Run [37448439405](https://github.com/amado2k5/cookwala/actions/runs/37448439405) (2026-10-06, `target=aws`):
+
+- OIDC role assumption via `configure-aws-credentials` — an IAM OIDC provider for
+  `token.actions.githubusercontent.com` plus a `cookwala-ci` role whose trust policy matches
+  `repo:amado2k5*/cookwala*:environment:cloud-test`; no stored access keys.
+- `sam build` + `sam deploy` created the stack `cw-samples-ci-37448439405` in `eu-west-1`: the Lambda function,
+  its execution role, and an HTTP API.
+- Called the public `HttpApiUrl`: `/health` returned `{"ok": true, ...}` and `/v1/samples/demo?format=markdown`
+  produced the report with `3 completed`.
+- `if: always()` teardown ran `sam delete`.
+
+Two findings this run exposed, both fixed in the same PR: the SAM template's `AuthType: NONE` needed an explicit
+`AWS::Lambda::Permission` for `lambda:InvokeFunctionUrl`, and anonymous Function-URL calls are blocked on brand-new
+AWS accounts regardless — so the workflow proves the deploy through the API Gateway `HttpApiUrl` output instead.
+
+The blocked path and the working path, verified by hand against a real stack:
+
+```text
+$ sam deploy --stack-name cw-debug --region eu-west-1 --parameter-overrides FunctionUrlAuth=NONE
+Successfully created/updated stack - cw-debug
+$ curl https://4yaogxj73phvz24wu7w3p6t5uu0hhhfh.lambda-url.eu-west-1.on.aws/health
+{"Message":"Forbidden ..."}            # 403 even with AuthType NONE + public policy (new-account block)
+$ curl https://eh00djbagh.execute-api.eu-west-1.amazonaws.com/health
+{"ok": true, "service": "cookwala-samples", "version": "0.3.0", "core": "0.2.0"}
+$ curl "https://eh00djbagh.execute-api.eu-west-1.amazonaws.com/v1/samples/demo?format=markdown"
+# Cookwala samples demo (offline, simulated kitchen) ... 3 completed ...
+$ sam delete --no-prompts --stack-name cw-debug    # Deleted successfully
+```
+
+Required secret in the `cloud-test` environment: `AWS_ROLE_TO_ASSUME` (the role ARN).
+
+Run [37450278019](https://github.com/amado2k5/cookwala/actions/runs/37450278019) (2026-10-06, `target=gcp`):
+
+- OIDC via `google-github-actions/auth` — a workload identity pool + provider on project
+  `cookwala-ci-5604` impersonating service account `github-ci@`, conditioned on the numeric
+  `repository_id` (`1403544608`), so the repo-rename subject quirk cannot apply.
+- `gcloud functions deploy --gen2` created `cookwala-samples-ci-37450278019` in `europe-west1`
+  (Cloud Run function, `--allow-unauthenticated`).
+- Called the public `.run.app` URL: `/health` returned `{"ok": true, ...}` and
+  `/v1/samples/demo?format=markdown` produced the report with `3 completed`.
+- `if: always()` teardown deleted the function.
+
+What the job actually did, from the run log:
+
+```text
+$ gcloud functions deploy cookwala-samples-ci-37450278019 --gen2 --runtime python312 \
+    --region europe-west1 --source samples/cloud/gcp-functions --entry-point samples \
+    --trigger-http --allow-unauthenticated --project cookwala-ci-5604
+serviceConfig:
+  uri: https://cookwala-samples-ci-37450278019-wokqyuqweq-ew.a.run.app
+$ curl https://cookwala-samples-ci-37450278019-wokqyuqweq-ew.a.run.app/health
+{"ok": true, "service": "cookwala-samples", "version": "0.3.0", "core": "0.2.0"}
+$ curl "https://cookwala-samples-ci-37450278019-wokqyuqweq-ew.a.run.app/v1/samples/demo?format=markdown"
+# Cookwala samples demo (offline, simulated kitchen) ... 3 completed ...
+gcp function demo verified
+$ gcloud functions delete cookwala-samples-ci-37450278019 --gen2 --region europe-west1
+```
+
+Required secrets in the `cloud-test` environment: `GCP_PROJECT`, `GCP_SERVICE_ACCOUNT`,
+`GCP_WORKLOAD_IDENTITY_PROVIDER`. Gen2 functions need an open billing account on the project —
+a fresh billing account's free trial plus the always-free 2M-invocation tier keeps CI cost at ~$0.

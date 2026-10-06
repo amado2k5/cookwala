@@ -139,6 +139,9 @@ jobs:
     env:
       RG: cw-samples-ci-${{ github.run_id }}
       APP: cwci${{ github.run_id }}
+      # New subscriptions are often region-restricted ("not accepting new customers");
+      # override with an AZURE_REGION environment/repo variable if the default is blocked.
+      REGION: ${{ vars.AZURE_REGION || 'eastus' }}
     steps:
       - uses: actions/checkout@v4
       - name: Required secrets are set
@@ -157,7 +160,7 @@ jobs:
           subscription-id: '${{ secrets.AZURE_SUBSCRIPTION_ID }}'
       - name: Deploy the Bicep stack
         run: |
-          az group create -n "$RG" -l westeurope --tags ttl=1d purpose=samples-ci
+          az group create -n "$RG" -l "$REGION" --tags ttl=1d purpose=samples-ci
           az deployment group create -g "$RG" -f samples/cloud/azure-functions/main.bicep -p appName="$APP" -o table
       - name: Publish the function (zip deploy, remote build)
         run: |
@@ -174,6 +177,8 @@ jobs:
       - name: Teardown the resource group
         if: always()
         run: |
+          # If azure/login failed there is nothing to delete; a missing RG is success too.
+          az group exists -n "$RG" 2>/dev/null | grep -q true || exit 0
           az group delete --yes --no-wait -n "$RG" \
             || { echo "::error::teardown failed — delete resource group $RG by hand"; exit 1; }
 
@@ -201,13 +206,17 @@ jobs:
           sam build
           sam deploy --stack-name "$STACK" --resolve-s3 --capabilities CAPABILITY_IAM \
             --no-confirm-changeset --parameter-overrides FunctionUrlAuth=NONE
-      - name: Call the Function URL and assert the demo report
+      - name: Call the HTTP API and assert the demo report
         working-directory: samples/cloud/aws-lambda
         run: |
+          # Use the HttpApiUrl output, not the Lambda Function URL: AWS blocks anonymous
+          # function-url invocations on brand-new accounts even with AuthType NONE and a
+          # public resource policy — the HTTP API front door proves the same deploy path.
           url=$(sam list stack-outputs --stack-name "$STACK" --output json \
-            | python3 -c 'import json,sys; print(next(o["OutputValue"] for o in json.load(sys.stdin) if o["OutputKey"]=="FunctionUrl"))')
-          for i in $(seq 1 20); do curl -fsS "${url}health" && break || sleep 10; done
-          curl -fsS "${url}v1/samples/demo?format=markdown" -o /tmp/demo.md
+            | python3 -c 'import json,sys; print(next(o["OutputValue"] for o in json.load(sys.stdin) if o["OutputKey"]=="HttpApiUrl"))')
+          base=${url%/v1/samples}
+          for i in $(seq 1 20); do curl -fsS "${base}/health" && break || sleep 10; done
+          curl -fsS "${base}/v1/samples/demo?format=markdown" -o /tmp/demo.md
           grep -q '3 completed' /tmp/demo.md && echo 'lambda demo verified'
       - name: Teardown the stack
         if: always()

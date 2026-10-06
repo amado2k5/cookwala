@@ -84,6 +84,7 @@ python -m cookwala_samples demo --hub http://localhost:7878</code></pre></li>
         <li>The Python tests compare the dry run with <code>tools/cookwala_ref.py</code> for every example recipe and device, and validate every request, status, log and incident against the JSON Schemas.</li>
         <li>Each port runs the demo against the reference hub over HTTP.</li>
         <li>CI installs the <code>.deb</code>, runs the container as an arbitrary user on a read-only filesystem, and lints the Helm chart.</li>
+        <li>All three cloud deploys are proven on real accounts — Azure Functions, AWS Lambda and Google Cloud Run functions: dispatch-only jobs build the stack, publish the function, assert <code>/health</code>, <code>/v1/samples/plan</code> and the demo report over the public URL, then tear everything down.</li>
       </ul>
       <p><a href="/docs/SAMPLES-SPEC/">The cross-language contract</a> · <a href="/docs/DISTRIBUTION/">Distribution and releasing</a></p>
     </div>

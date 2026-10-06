@@ -9,6 +9,9 @@ Parameters:
     Default: AWS_IAM
     Description: AWS_IAM keeps the Function URL private; NONE makes it public (the service never calls other hosts)
 
+Conditions:
+  PublicUrl: !Equals [!Ref FunctionUrlAuth, NONE]
+
 Resources:
   CookwalaSamples:
     Type: AWS::Serverless::Function
@@ -27,6 +30,19 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
+
+  # AuthType NONE alone is not enough — the function's resource policy must also allow
+  # lambda:InvokeFunctionUrl for the public principal. (Note: AWS still blocks anonymous
+  # function-url calls on brand-new accounts regardless; the HttpApiUrl output is the
+  # reliable public front door.)
+  PublicUrlAccess:
+    Type: AWS::Lambda::Permission
+    Condition: PublicUrl
+    Properties:
+      FunctionName: !Ref CookwalaSamples
+      Action: lambda:InvokeFunctionUrl
+      Principal: '*'
+      FunctionUrlAuthType: NONE
 
 Outputs:
   FunctionUrl:
