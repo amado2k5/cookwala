@@ -29,18 +29,19 @@ jobs:
       - name: Start a throwaway Artifactory OSS
         run: |
           docker run -d --name af -p 8081:8081 -p 8082:8082 releases-docker.jfrog.io/jfrog/artifactory-oss:latest
-          for i in $(seq 1 60); do curl -fsS http://localhost:8082/artifactory/api/system/ping && break || sleep 5; done
+          # The router answers ping early; wait until the API itself serves version with auth.
+          for i in $(seq 1 90); do
+            curl -fsS -u admin:password http://localhost:8082/artifactory/api/system/version && break || sleep 5
+          done
       - name: Create local repositories (admin:password is the OSS default)
         run: |
-          A='-u admin:password -H content-type:application/json'
-          curl -fsS $A -X PUT http://localhost:8082/artifactory/api/repositories/cookwala-pypi-local \
-            -d '{"key":"cookwala-pypi-local","rclass":"local","packageType":"pypi"}'
-          curl -fsS $A -X PUT http://localhost:8082/artifactory/api/repositories/cookwala-npm-local \
-            -d '{"key":"cookwala-npm-local","rclass":"local","packageType":"npm"}'
-          curl -fsS $A -X PUT http://localhost:8082/artifactory/api/repositories/cookwala-maven-local \
-            -d '{"key":"cookwala-maven-local","rclass":"local","packageType":"maven"}'
-          curl -fsS $A -X PUT http://localhost:8082/artifactory/api/repositories/cookwala-generic-local \
-            -d '{"key":"cookwala-generic-local","rclass":"local","packageType":"generic"}'
+          repo() { for i in $(seq 1 12); do curl -fsS -u admin:password -H content-type:application/json -X PUT \
+            "http://localhost:8082/artifactory/api/repositories/$1" \
+            -d "{\"key\":\"$1\",\"rclass\":\"local\",\"packageType\":\"$2\"}" && return 0; sleep 10; done; return 1; }
+          repo cookwala-pypi-local pypi
+          repo cookwala-npm-local npm
+          repo cookwala-maven-local maven
+          repo cookwala-generic-local generic
       - name: Run the real publish script
         env:
           ARTIFACTORY_URL: http://localhost:8082/artifactory
