@@ -84,7 +84,7 @@ python -m cookwala_samples demo --hub http://localhost:7878</code></pre></li>
         <li>اختبارات بايثون تقارن التجربة الجافة مع <code>tools/cookwala_ref.py</code> لكل وصفة وجهاز في الأمثلة، وتتحقق من كل طلب وحالة وسجل وحادثة مقابل مخططات JSON.</li>
         <li>كل نسخة تشغّل العرض مع الموزّع المرجعي عبر HTTP.</li>
         <li>التكامل المستمر يثبّت حزمة <code>.deb</code>، ويشغّل الحاوية بمستخدم عشوائي على نظام ملفات للقراءة فقط، ويفحص مخطط Helm.</li>
-        <li>نشر Azure Functions مُثبت على اشتراك حقيقي: مهمة تعمل عند الطلب تبني حزمة Bicep، وتنشر الدالة، وتتحقق من <code>/health</code> و<code>/v1/samples/plan</code> وتقرير العرض عبر الرابط العام، ثم تحذف مجموعة الموارد.</li>
+        <li>نشر Azure Functions وAWS Lambda مُثبت على حسابات حقيقية: مهام تعمل عند الطلب تبني البنية، وتنشر الدالة، وتتحقق من <code>/health</code> و<code>/v1/samples/plan</code> وتقرير العرض عبر الرابط العام، ثم تهدم كل شيء.</li>
       </ul>
       <p><a href="/docs/SAMPLES-SPEC/">العقد بين اللغات</a> · <a href="/docs/DISTRIBUTION/">التوزيع والإصدار</a></p>
     </div>

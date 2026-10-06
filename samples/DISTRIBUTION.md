@@ -39,7 +39,7 @@ pass `--base-url` to point them at another host, such as an Artifactory generic 
 | **JFrog Artifactory** | the native client of each type, pointed at your Artifactory | `packaging/artifactory/publish.sh` | CI on tag, or by hand | `ARTIFACTORY_URL`, `ARTIFACTORY_USER`, `ARTIFACTORY_TOKEN` (+ `ARTIFACTORY_DOCKER_REGISTRY`) |
 | **GitHub release** | download the pyz, deb, wheel, sdist and `SHA256SUMS` | `.github/workflows/samples.yml` | CI on tag | nothing extra |
 | **Azure Functions** | deploy | `cloud/azure-functions/` | CI on demand (`samples-cloud.yml`, `target=azure`), or by hand (`az`, `func`) | an Azure subscription + `cloud-test` environment secrets |
-| **AWS Lambda** | deploy | `cloud/aws-lambda/` (SAM) | by hand (`sam deploy`) | an AWS account |
+| **AWS Lambda** | deploy | `cloud/aws-lambda/` (SAM) | CI on demand (`samples-cloud.yml`, `target=aws`), or by hand (`sam deploy`) | an AWS account + `cloud-test` environment secret |
 | **Google Cloud Run functions** | deploy | `cloud/gcp-functions/` | by hand (`gcloud`) | a GCP project |
 | **OpenShift, OpenShift Serverless** | deploy | `cloud/openshift/` | by hand (`oc`) | a cluster |
 
@@ -112,11 +112,11 @@ usage error. The four CLIs now give the same exit codes and the same reports.
 ### Not run here
 
 `snapcraft` (needs snapd), a real `choco install` and `scoop install` (need Windows), and the OpenShift template (needs
-a cluster). For the clouds: the **Azure Functions** deploy is proven — see below. The AWS Lambda and Google Cloud
-deploys exist as `workflow_dispatch` jobs in `.github/workflows/samples-cloud.yml`, written end-to-end with `always()`
-teardown, but have never run — they need the OIDC credentials named at the top of each job.
+a cluster). For the clouds: the **Azure Functions** and **AWS Lambda** deploys are proven — see below. The Google Cloud
+deploy exists as a `workflow_dispatch` job in `.github/workflows/samples-cloud.yml`, written end-to-end with
+`always()` teardown, but has never run — it needs the OIDC credentials named at the top of the job.
 
-### Proven against a real account: Azure Functions
+### Proven against a real account: Azure Functions and AWS Lambda
 
 Run [37443213472](https://github.com/amado2k5/cookwala/actions/runs/37443213472) (2026-10-06, `samples-cloud.yml`
 dispatched with `target=azure` behind the protected `cloud-test` environment):
@@ -135,3 +135,19 @@ Required secrets in the `cloud-test` environment: `AZURE_CLIENT_ID`, `AZURE_TENA
 One setup detail worth noting: because this repository was renamed, GitHub emits the OIDC subject with numeric entity
 ids (`repo:amado2k5@20147989/cookwala@1403544608:environment:cloud-test`) — the federated credential's subject must
 match that form, not `repo:amado2k5/cookwala:...`.
+
+Run [37448439405](https://github.com/amado2k5/cookwala/actions/runs/37448439405) (2026-10-06, `target=aws`):
+
+- OIDC role assumption via `configure-aws-credentials` — an IAM OIDC provider for
+  `token.actions.githubusercontent.com` plus a `cookwala-ci` role whose trust policy matches
+  `repo:amado2k5*/cookwala*:environment:cloud-test`; no stored access keys.
+- `sam build` + `sam deploy` created the stack `cw-samples-ci-37448439405` in `eu-west-1`: the Lambda function,
+  its execution role, and an HTTP API.
+- Called the public `HttpApiUrl`: `/health` returned `{"ok": true, ...}` and `/v1/samples/demo?format=markdown`
+  produced the report with `3 completed`.
+- `if: always()` teardown ran `sam delete`.
+
+Two findings this run exposed, both fixed in the same PR: the SAM template's `AuthType: NONE` needed an explicit
+`AWS::Lambda::Permission` for `lambda:InvokeFunctionUrl`, and anonymous Function-URL calls are blocked on brand-new
+AWS accounts regardless — so the workflow proves the deploy through the API Gateway `HttpApiUrl` output instead.
+Required secret in the `cloud-test` environment: `AWS_ROLE_TO_ASSUME` (the role ARN).
