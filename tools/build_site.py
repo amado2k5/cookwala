@@ -165,53 +165,21 @@ DOCS = [
 DOC_INDEX = {d[0]: d for g in DOCS for d in g[1]}
 DOC_BY_PATH = {d[1].split('/')[-1].upper().replace('.MD', ''): d[0] for g in DOCS for d in g[1]}
 DOC_BY_PATH.update({'BRIEF': 'POLICY-BRIEF', 'README': None})
-# Samples distribution channels: (icon ids, name, install or deploy command, status, source path in the repository).
-# 'live' means a release is on that registry now; move a tile to 'live' only after installing from it.
+# Samples distribution channels live in samples/dist-channels.json: the single source of truth,
+# shared with tools/check_samples_claims.py. 'status' is one of the keys of DIST_LABELS below;
+# 'live' means a release is on that registry now — move a tile to 'live' only after installing from it.
 SAMPLES_VERSION = (ROOT / 'samples' / 'VERSION').read_text(encoding='utf-8').strip()
-DIST = [
-    ('lang', [
-        (['pypi'], 'PyPI', 'pip install cookwala-samples', 'live', 'samples/python/pyproject.toml'),
-        (['npm'], 'npm', 'npx @cookwala/samples demo', 'live', 'samples/js/package.json'),
-        (['maven', 'java'], 'Maven Central', f'ai.cookwala:cookwala-samples:{SAMPLES_VERSION}', 'live', 'samples/java/pom.xml'),
-        (['gradle'], 'Gradle', f'implementation("ai.cookwala:cookwala-samples:{SAMPLES_VERSION}")', 'live', 'samples/java/build.gradle.kts'),
-        (['nuget'], 'NuGet', 'dotnet add package Cookwala.Samples', 'live', 'samples/dotnet'),
-        (['dotnet'], '.NET tool', 'dotnet tool install -g Cookwala.Samples.Tool', 'live', 'samples/dotnet'),
-    ]),
-    ('os', [
-        (['homebrew'], 'Homebrew', 'brew install amado2k5/cookwala/cookwala-samples', 'live', 'samples/packaging/homebrew/cookwala-samples.rb.in'),
-        (['chocolatey'], 'Chocolatey', 'choco install cookwala-samples', 'ready', 'samples/packaging/chocolatey'),
-        (['scoop'], 'Scoop', 'scoop install cookwala-samples', 'manual', 'samples/packaging/scoop/cookwala-samples.json.in'),
-        (['debian', 'ubuntu'], 'apt (Debian, Ubuntu)', f'sudo apt install ./cookwala-samples_{SAMPLES_VERSION}_all.deb', 'live', 'samples/packaging/build.py'),
-        (['fedora', 'redhat'], 'RPM (dnf, yum, zypper)', 'sudo dnf install cookwala-samples', 'manual', 'samples/packaging/rpm/cookwala-samples.spec.in'),
-        (['arch'], 'pacman (Arch, AUR)', 'yay -S cookwala-samples', 'manual', 'samples/packaging/arch/PKGBUILD.in'),
-        (['alpine'], 'apk (Alpine)', 'apk add cookwala-samples', 'manual', 'samples/packaging/alpine/APKBUILD.in'),
-        (['conda'], 'conda-forge', 'conda install -c conda-forge cookwala-samples', 'manual', 'samples/packaging/conda/meta.yaml.in'),
-        (['snap'], 'Snap', 'sudo snap install cookwala-samples --edge', 'manual', 'samples/packaging/snap/snapcraft.yaml'),
-        (['zipapp', 'python'], 'Single file (any OS)', f'python3 cookwala-samples-{SAMPLES_VERSION}.pyz demo', 'live', 'samples/packaging/build.py'),
-    ]),
-    ('containers', [
-        (['docker'], 'OCI image', 'docker run -p 8080:8080 ghcr.io/amado2k5/cookwala-samples', 'ready', 'samples/packaging/docker/Containerfile'),
-        (['helm', 'kubernetes'], 'Helm (Kubernetes)', 'helm install samples samples/packaging/helm/cookwala-samples', 'repo', 'samples/packaging/helm/cookwala-samples'),
-        (['openshift'], 'OpenShift', 'oc process -f samples/cloud/openshift/template.yaml | oc apply -f -', 'deploy', 'samples/cloud/openshift/template.yaml'),
-        (['knative'], 'OpenShift Serverless, Knative', 'oc apply -f samples/cloud/openshift/knative-service.yaml', 'deploy', 'samples/cloud/openshift/knative-service.yaml'),
-    ]),
-    ('cloud', [
-        (['cloud-fn'], 'Azure Functions', 'func azure functionapp publish <app>', 'deploy', 'samples/cloud/azure-functions'),
-        (['lambda'], 'AWS Lambda', 'sam build && sam deploy --guided', 'deploy', 'samples/cloud/aws-lambda'),
-        (['gcp'], 'Google Cloud Run functions', 'gcloud functions deploy cookwala-samples --gen2', 'deploy', 'samples/cloud/gcp-functions'),
-    ]),
-    ('enterprise', [
-        (['jfrog'], 'JFrog Artifactory', 'samples/packaging/artifactory/publish.sh', 'live', 'samples/packaging/artifactory/publish.sh'),
-        (['github'], 'GitHub Releases', 'github.com/amado2k5/cookwala/releases', 'live', '.github/workflows/samples.yml'),
-        (['githubactions'], 'CI for every port', 'Python, Node, Java, .NET, packages', 'repo', '.github/workflows/samples.yml'),
-    ]),
-]
+DIST = json.loads((ROOT / 'samples' / 'dist-channels.json').read_text(encoding='utf-8'))['groups']
 DIST_LABELS = {
     'en': {'lang': 'Language registries', 'os': 'Operating-system package managers', 'containers': 'Containers and Kubernetes', 'cloud': 'Serverless functions',
-           'enterprise': 'Enterprise and release', 'live': 'Published · install now', 'ready': 'Built and tested · not yet published', 'manual': 'Manifest ready · submitted by hand',
+           'enterprise': 'Enterprise and release', 'live': 'Published · install now', 'ready': 'Built and tested · not yet published', 'manual': 'Manifest ready · not yet submitted',
+           'byoi': 'Script ready · bring your own instance', 'oss-tested': 'Script ready · tested against Artifactory OSS',
+           'citested': 'Deployed and tested in CI · deploy to your own account',
            'deploy': 'Deploy to your own account', 'repo': 'In the repository, runs today', 'source': 'Manifest'},
     'ar': {'lang': 'سجلات لغات البرمجة', 'os': 'مديرو حزم أنظمة التشغيل', 'containers': 'الحاويات وKubernetes', 'cloud': 'الدوال السحابية',
-           'enterprise': 'المؤسسات والإصدار', 'live': 'منشورة · ثبّتها الآن', 'ready': 'مبنية ومختبرة · لم تُنشر بعد', 'manual': 'الملف جاهز · يُقدَّم يدويًا',
+           'enterprise': 'المؤسسات والإصدار', 'live': 'منشورة · ثبّتها الآن', 'ready': 'مبنية ومختبرة · لم تُنشر بعد', 'manual': 'الملف جاهز · لم يُقدَّم بعد',
+           'byoi': 'السكربت جاهز · على خادمك الخاص', 'oss-tested': 'السكربت جاهز · مُختبَر على Artifactory OSS',
+           'citested': 'مُختبَرة في التكامل المستمر · انشرها في حسابك',
            'deploy': 'انشرها في حسابك', 'repo': 'في المستودع، تعمل اليوم', 'source': 'الملف'},
 }
 ESSAYS = [('inheriting-culinary-culture', 'Who inherits a recipe?'), ('dignity-in-automated-care', 'Dignity in automated care'), ('what-a-household-robot-may-know', 'What a household robot may know'), ('refusal-as-a-virtue', 'Refusal as a virtue'), ('like-bees', 'Like bees')]
@@ -417,15 +385,17 @@ class Builder:
     def dist_grid(self, lang):
         L = DIST_LABELS.get(lang, DIST_LABELS['en'])
         out = []
-        for gkey, tiles in DIST:
+        for g in DIST:
             cells = []
-            for icons, name, cmd, status, src in tiles:
-                svg = ''.join(f'<svg class="dist-ico" aria-hidden="true" focusable="false"><use href="/assets/dist-icons.svg#{i}"/></svg>' for i in icons)
-                href = REPO.replace('/blob/', '/tree/' if not src.rsplit('/', 1)[-1].count('.') else '/blob/') + src
-                cells.append(f'<li class="dist"><div class="dist-icons">{svg}</div><h4>{html.escape(name)}</h4>'
-                             f'<code class="dist-cmd">{html.escape(cmd)}</code><p class="dist-status {status}">{html.escape(L[status])}</p>'
+            for t in g['tiles']:
+                svg = ''.join(f'<svg class="dist-ico" aria-hidden="true" focusable="false"><use href="/assets/dist-icons.svg#{i}"/></svg>' for i in t['icons'])
+                href = REPO.replace('/blob/', '/tree/' if not t['src'].rsplit('/', 1)[-1].count('.') else '/blob/') + t['src']
+                note = (t.get('note') or {}).get(lang) or (t.get('note') or {}).get('en', '')
+                status = html.escape(L[t['status']]) + (f' · {html.escape(note)}' if note else '')
+                cells.append(f'<li class="dist"><div class="dist-icons">{svg}</div><h4>{html.escape(t["name"])}</h4>'
+                             f'<code class="dist-cmd">{html.escape(t["cmd"].replace("{{VERSION}}", SAMPLES_VERSION))}</code><p class="dist-status {t["status"]}">{status}</p>'
                              f'<a class="dist-src" href="{href}" rel="noopener">{html.escape(L["source"])} <span aria-hidden="true">→</span></a></li>')
-            out.append(f'<section class="dist-group"><h3>{html.escape(L[gkey])}</h3><ul class="dist-grid">{"".join(cells)}</ul></section>')
+            out.append(f'<section class="dist-group"><h3>{html.escape(L[g["key"]])}</h3><ul class="dist-grid">{"".join(cells)}</ul></section>')
         return ''.join(out)
 
     # ---- content pages

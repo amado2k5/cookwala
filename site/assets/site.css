@@ -262,7 +262,7 @@ dfn.gloss:hover::after, dfn.gloss:focus-visible::after { content: attr(data-glos
 .dist-ico { width: 28px; height: 28px; fill: currentColor; }
 .dist-cmd { display: block; font: 12.5px/1.5 var(--mono); background: var(--band); border-radius: 6px; padding: 6px 8px; overflow-wrap: anywhere; direction: ltr; text-align: left; }
 .dist-status { margin: 0; font: 500 11px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .03em; color: var(--warn); }
-.dist-status.repo { color: var(--ok); } .dist-status.deploy { color: var(--ink-2); }
+.dist-status.repo, .dist-status.live, .dist-status.citested, .dist-status.oss-tested { color: var(--ok); } .dist-status.deploy { color: var(--ink-2); }
 .dist-src { font-size: 14px; font-weight: 500; color: var(--ember); text-decoration: none; } .dist-src:hover { text-decoration: underline; }
 .role-grid .card h3 { display: flex; gap: 8px; align-items: baseline; } .role-grid .card h3 span { font: 500 12px/1 var(--mono); color: var(--ink-2); }
 .samples-highlight { padding-block: 8px 28px; }

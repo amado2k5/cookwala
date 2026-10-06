@@ -1,0 +1,57 @@
+{
+  "comment": "Samples distribution tiles, one per channel. The single source of truth for site/content/*/samples.html (rendered by tools/build_site.py) and for tools/check_samples_claims.py. 'check' names the public verification the claims checker runs; 'note' adds a short dated qualifier after the status. Move a tile to 'live' only after installing from the public registry in a clean environment.",
+  "groups": [
+    {
+      "key": "lang",
+      "tiles": [
+        {"icons": ["pypi"], "name": "PyPI", "cmd": "pip install cookwala-samples", "status": "live", "src": "samples/python/pyproject.toml", "check": "pypi"},
+        {"icons": ["npm"], "name": "npm", "cmd": "npx @cookwala/samples demo", "status": "live", "src": "samples/js/package.json", "check": "npm"},
+        {"icons": ["maven", "java"], "name": "Maven Central", "cmd": "ai.cookwala:cookwala-samples:{{VERSION}}", "status": "live", "src": "samples/java/pom.xml", "check": "maven"},
+        {"icons": ["gradle"], "name": "Gradle", "cmd": "implementation(\"ai.cookwala:cookwala-samples:{{VERSION}}\")", "status": "live", "src": "samples/java/build.gradle.kts", "check": "maven"},
+        {"icons": ["nuget"], "name": "NuGet", "cmd": "dotnet add package Cookwala.Samples", "status": "live", "src": "samples/dotnet", "check": "nuget"},
+        {"icons": ["dotnet"], "name": ".NET tool", "cmd": "dotnet tool install -g Cookwala.Samples.Tool", "status": "live", "src": "samples/dotnet", "check": "nuget-tool"}
+      ]
+    },
+    {
+      "key": "os",
+      "tiles": [
+        {"icons": ["homebrew"], "name": "Homebrew", "cmd": "brew install amado2k5/cookwala/cookwala-samples", "status": "live", "src": "samples/packaging/homebrew/cookwala-samples.rb.in", "check": "homebrew-tap"},
+        {"icons": ["chocolatey"], "name": "Chocolatey", "cmd": "choco install cookwala-samples", "status": "ready", "src": "samples/packaging/chocolatey", "check": "chocolatey",
+         "note": {"en": "0.3.0 submitted; pending automated review (checked 2026-10-06)", "ar": "أُرسلت 0.3.0؛ بانتظار المراجعة الآلية (رُوجعت 2026-10-06)"}},
+        {"icons": ["scoop"], "name": "Scoop", "cmd": "scoop install cookwala-samples", "status": "manual", "src": "samples/packaging/scoop/cookwala-samples.json.in", "check": "scoop-bucket"},
+        {"icons": ["debian", "ubuntu"], "name": "apt (Debian, Ubuntu)", "cmd": "sudo apt install ./cookwala-samples_{{VERSION}}_all.deb", "status": "live", "src": "samples/packaging/build.py", "check": "gh-asset:deb"},
+        {"icons": ["fedora", "redhat"], "name": "RPM (dnf, yum, zypper)", "cmd": "sudo dnf install cookwala-samples", "status": "manual", "src": "samples/packaging/rpm/cookwala-samples.spec.in", "check": "rpm"},
+        {"icons": ["arch"], "name": "pacman (Arch, AUR)", "cmd": "yay -S cookwala-samples", "status": "manual", "src": "samples/packaging/arch/PKGBUILD.in", "check": "aur"},
+        {"icons": ["alpine"], "name": "apk (Alpine)", "cmd": "apk add cookwala-samples", "status": "manual", "src": "samples/packaging/alpine/APKBUILD.in", "check": "alpine"},
+        {"icons": ["conda"], "name": "conda-forge", "cmd": "conda install -c conda-forge cookwala-samples", "status": "manual", "src": "samples/packaging/conda/meta.yaml.in", "check": "conda-forge"},
+        {"icons": ["snap"], "name": "Snap", "cmd": "sudo snap install cookwala-samples --edge", "status": "manual", "src": "samples/packaging/snap/snapcraft.yaml", "check": "snap"},
+        {"icons": ["zipapp", "python"], "name": "Single file (any OS)", "cmd": "python3 cookwala-samples-{{VERSION}}.pyz demo", "status": "live", "src": "samples/packaging/build.py", "check": "gh-asset:pyz"}
+      ]
+    },
+    {
+      "key": "containers",
+      "tiles": [
+        {"icons": ["docker"], "name": "OCI image", "cmd": "docker run --rm -p 8080:8080 ghcr.io/amado2k5/cookwala-samples", "status": "live", "src": "samples/packaging/docker/Containerfile", "check": "ghcr"},
+        {"icons": ["helm", "kubernetes"], "name": "Helm (Kubernetes)", "cmd": "helm install samples samples/packaging/helm/cookwala-samples", "status": "repo", "src": "samples/packaging/helm/cookwala-samples"},
+        {"icons": ["openshift"], "name": "OpenShift", "cmd": "oc process -f samples/cloud/openshift/template.yaml | oc apply -f -", "status": "deploy", "src": "samples/cloud/openshift/template.yaml"},
+        {"icons": ["knative"], "name": "OpenShift Serverless, Knative", "cmd": "oc apply -f samples/cloud/openshift/knative-service.yaml", "status": "deploy", "src": "samples/cloud/openshift/knative-service.yaml"}
+      ]
+    },
+    {
+      "key": "cloud",
+      "tiles": [
+        {"icons": ["cloud-fn"], "name": "Azure Functions", "cmd": "func azure functionapp publish <app>", "status": "deploy", "src": "samples/cloud/azure-functions"},
+        {"icons": ["lambda"], "name": "AWS Lambda", "cmd": "sam build && sam deploy --guided", "status": "deploy", "src": "samples/cloud/aws-lambda"},
+        {"icons": ["gcp"], "name": "Google Cloud Run functions", "cmd": "gcloud functions deploy cookwala-samples --gen2", "status": "deploy", "src": "samples/cloud/gcp-functions"}
+      ]
+    },
+    {
+      "key": "enterprise",
+      "tiles": [
+        {"icons": ["jfrog"], "name": "JFrog Artifactory", "cmd": "samples/packaging/artifactory/publish.sh", "status": "byoi", "src": "samples/packaging/artifactory/publish.sh"},
+        {"icons": ["github"], "name": "GitHub Releases", "cmd": "github.com/amado2k5/cookwala/releases", "status": "live", "src": ".github/workflows/samples.yml", "check": "github-release"},
+        {"icons": ["githubactions"], "name": "CI for every port", "cmd": "Python, Node, Java, .NET, packages", "status": "repo", "src": ".github/workflows/samples.yml", "check": "workflow:samples.yml"}
+      ]
+    }
+  ]
+}
