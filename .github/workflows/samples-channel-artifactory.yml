@@ -47,10 +47,10 @@ jobs:
           sudo chmod -R 777 /tmp/afvar
           docker run -d --name af -p 8081:8081 -p 8082:8082 -v /tmp/afvar:/var/opt/jfrog/artifactory \
             releases-docker.jfrog.io/jfrog/artifactory-oss:latest
-          # The router answers ping early; wait until the API itself serves version with auth.
-          # First boot with an empty var dir takes ~10-15 min on a shared runner.
+          # Router ping/version answer long before the artifactory core registers; only the
+          # readiness endpoint goes 200 once every service is up. First boot takes ~15 min.
           for i in $(seq 1 240); do
-            curl -fsS -u admin:password http://localhost:8082/artifactory/api/system/version && break || sleep 5
+            curl -fsS http://localhost:8082/artifactory/api/v1/system/readiness | grep -q '"ready".*true' && break || sleep 5
           done
       - name: The bootstrap descriptor created the local repositories
         run: |
