@@ -82,8 +82,9 @@ jobs:
       - name: Teardown
         if: always()
         run: |
-          kubectl get ksvc -o wide || true
-          kubectl describe ksvc cookwala-samples | tail -20 || true
+          kubectl get ksvc,revision,deployment -o wide || true
+          kubectl describe revision -l serving.knative.dev/service=cookwala-samples | tail -25 || true
+          kubectl get events --sort-by=.lastTimestamp | tail -20 || true
           helm uninstall samples || true
           kubectl delete ksvc/cookwala-samples --ignore-not-found || true
           kubectl get pods -A || true
