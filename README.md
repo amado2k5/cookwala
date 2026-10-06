@@ -23,6 +23,21 @@ not a claim. Everything is open, royalty-free, model-neutral and device-neutral.
 **Status:** Core 0.2 is a draft under public review; everything else is a draft or experimental
 profile. Live at [cookwala.ai](https://cookwala.ai). Nothing is deployed in the field yet.
 
+### v0.2.0 Feature Status
+
+| Feature | Status | Note |
+|---------|--------|------|
+| Recipe format & schemas | ✅ Shipping | 2,043 recipes, 25+ languages each |
+| Dry-run (device compatibility) | ✅ Shipping | Python & TypeScript SDKs produce identical results |
+| Temperature envelope validation | ✅ Shipping | Safety limits enforced on device |
+| Python SDK | ✅ Shipping | CLI + library (all Core operations) |
+| TypeScript SDK | ✅ Shipping | MCP server + library (all Core operations) |
+| Allergen data | ⚠️ 86% | 282 recipes missing allergen info (need 90%) |
+| Search endpoint | ⏳ Blocked | Documented in OpenAPI, edge worker not deployed |
+| Halal certification | 🔧 40% | Verification functions available, CLI/API/registry not yet |
+| Humanitarian Profile | 🔧 Draft | SMS parsing & relief mode working |
+| Certifications (RFC-0010) | 🔧 40% | Schema & conformance tests ready, deployment pending |
+
 ## Start here
 
 | You want to… | Go to |

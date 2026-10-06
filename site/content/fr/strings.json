@@ -33,7 +33,7 @@
    "/recipes/"
   ],
   [
-   "Humanitaire",
+   "Banques alimentaires et aide",
    "/humanitarian/"
   ],
   [
@@ -352,6 +352,30 @@
   [
    "points? de contrôle",
    "un résumé signé d'un journal d'événements, contresigné par des témoins, pour qu'une réécriture ultérieure soit détectable"
+  ],
+  [
+   "norme ouverte",
+   "une spécification publique que chacun peut implémenter, sans redevance et sans demander la permission"
+  ],
+  [
+   "normatif",
+   "la partie de la norme qu'une implémentation doit suivre pour être dite conforme"
+  ],
+  [
+   "serveur MCP",
+   "un petit programme qui donne à un agent IA un accès en lecture seule aux outils et données de Cookwala"
+  ],
+  [
+   "ROS 2",
+   "Robot Operating System 2, le middleware que la plupart des robots utilisent pour se déplacer et communiquer"
+  ],
+  [
+   "grammaire SMS",
+   "le format exact de messages texte qu'un téléphone basique utilise pour proposer, réclamer et remettre des aliments"
+  ],
+  [
+   "Profil Humanitaire",
+   "l'extension qui définit les documents de sauvetage alimentaire : offre, demande, remise, distribution, impact"
   ]
  ],
  "position": {
@@ -383,40 +407,14 @@
  "path_note": "Chaque élément prévu a une porte : la seule chose qui doit arriver d'abord. Si vous pouvez en ouvrir une (un relecteur, un appareil, une banque alimentaire, un financement), dites-le dans les <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">discussions GitHub</a> ; une adresse directe suivra de la part du fondateur.",
  "hero": {
   "h1": "Les robots apprennent à bouger. Personne n'avait écrit comment cuisiner.",
-  "sub": "Cookwala est la norme ouverte pour cuisiner en sécurité : les personnes, les cuisines et les robots.",
-  "cards": [
-   [
-    "Fabricants d'appareils",
-    "Des recettes que votre four, votre plaque ou votre robot vérifie avant de chauffer, et refuse quand il ne peut pas vérifier une étape.",
-    "Quoi implémenter en une semaine",
-    "/for/device-makers/"
-   ],
-   [
-    "Développeurs",
-    "Un dry run dans le navigateur, un paquet Python, un hub de référence, 131 vecteurs de conformité publics, et des exemples d’agents et d’orchestrateurs en quatre langages.",
-    "Démarrage en cinq minutes",
-    "/developers/"
-   ],
-   [
-    "Banques alimentaires",
-    "Offre, demande, remise avec contrôle de température, distribution et résumé d'impact, par SMS et tableur, sans données personnelles.",
-    "Le profil humanitaire",
-    "/humanitarian/"
-   ],
-   [
-    "Financeurs et partenaires",
-    "Ce qui existe, compté ; ce qui n'existe pas, dit ; et la seule preuve qui changerait le verdict de tout lecteur extérieur.",
-    "Où nous en sommes",
-    "/investors/"
-   ]
-  ]
+  "sub": "Un livre de règles gratuit et ouvert qui permet à n'importe quel appareil de cuisine de vérifier une recette étape par étape avant de la cuisiner — et de refuser les étapes qu'il ne peut pas faire en sécurité. Essayez-le ci-dessous."
  },
  "origin": {
   "h": "Tout a commencé par un livre de cuisine familial",
   "p": "Cookwala est né d'une archive familiale de cuisine égyptienne, les recettes de la Dre Fatma Alkawokgy (1943 à 2026), publiée sur fifi.cooking en 25 langues. Elles ont été écrites pour des personnes. « Faire frire jusqu'à ce que ce soit doré. » « Couvrir d'eau. » « Laisser mijoter jusqu'à ce que ce soit prêt. » Quiconque a grandi dans cette cuisine sait exactement ce que ces lignes veulent dire. Une machine ne le sait pas, ni un étranger. Quand l'un de ces plats a été décrit pour qu'un four, un robot ou une banque alimentaire puisse le vérifier avant de cuisiner, il est apparu que personne n'avait écrit ce qu'est « mijoter », quand le poulet est sûr, ni quand une étape doit être refusée. Cookwala est la tentative de l'écrire, en public, pour que les plats survivent aux machines et que les machines refusent plutôt que deviner.",
   "by": "le fondateur"
  },
- "try_dryrun": "Essayer le dry run",
+ "try_dryrun": "Regardez-le refuser une étape dangereuse ↓",
  "contact_pending": "Une adresse de contact direct pour les programmes, les bailleurs de fonds et la presse sera ajoutée par le fondateur ; d'ici là, ouvrez un issue ou une discussion sur GitHub. Il n'y a pas de formulaire sur ce site car il n'y a pas de backend ni de notice de confidentialité pour l'accompagner.",
  "contact_email_label": "Courriel pour les programmes, les financeurs et la presse"
 }

@@ -12,10 +12,11 @@
       <form class="controls" id="demoForm" aria-label="إعدادات التجربة الجافة">
         <label>الوصفة <select id="dRecipe"></select></label>
         <label>الجهاز <select id="dDevice"></select></label>
-        <label class="check"><input type="checkbox" id="dHuman" checked> يوجد شخص في المطبخ</label>
-        <label class="check"><input type="checkbox" id="dModel" checked> يُسمح بالتقديرات المسجّلة عند غياب الحساس</label>
+        <label class="check"><input type="checkbox" id="dHuman" checked> يوجد شخص في المطبخ <span class="hint">(ألغِ التحديد وكل خطوة تحتاج شخصًا تُرفَض)</span></label>
+        <label class="check"><input type="checkbox" id="dModel" checked> اسمح بالتقديرات المسجّلة حيث لا حساس في الجهاز <span class="hint">(ألغِ التحيد وتسقط تلك الخطوات إلى التوقيت فقط — أو تُرفَض)</span></label>
+        <button type="button" class="btn primary" id="dPreset">شاهده يرفض خطوة غير آمنة</button>
       </form>
-      <details id="builder" open><summary>ابنِ جهازك</summary><div class="builder" id="builderBody"></div></details>
+      <details id="builder" open><summary>ابنِ جهازك (يوسّع قائمة الأجهزة)</summary><div class="builder" id="builderBody"></div></details>
       <div class="verdict" id="verdict" role="status" aria-live="polite">جارٍ تحميل الوصفة ومفردات العمليات…</div>
       <div class="table-wrap"><table class="steps-t" id="steps"><thead><tr><th>الخطوة</th><th>العملية</th><th>النطاق الآمن</th><th>من</th><th>التحقق</th></tr></thead><tbody></tbody></table></div>
       <div class="share"><span>شارك هذه النتيجة</span><input id="shareUrl" type="text" readonly aria-label="رابط للمشاركة"><button type="button" class="btn" id="copyShare">نسخ</button></div>

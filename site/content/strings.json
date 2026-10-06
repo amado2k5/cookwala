@@ -34,7 +34,7 @@
     "/recipes/"
    ],
    [
-    "Humanitarian",
+    "Food banks & aid",
     "/humanitarian/"
    ],
    [
@@ -372,6 +372,30 @@
    [
     "checkpoints?",
     "a signed summary of an event log that witnesses counter-sign, so a later rewrite can be detected"
+   ],
+   [
+    "open standard",
+    "a public specification that anyone may implement, royalty-free, without asking permission"
+   ],
+   [
+    "normative",
+    "the part of the standard an implementation must follow to be called conformant"
+   ],
+   [
+    "MCP server",
+    "a small program that gives an AI agent read-only access to Cookwala tools and data"
+   ],
+   [
+    "ROS 2",
+    "Robot Operating System 2, the middleware most robots use to move and communicate"
+   ],
+   [
+    "SMS grammar",
+    "the exact text-message format a basic phone uses to offer, claim and hand over food"
+   ],
+   [
+    "Humanitarian Profile",
+    "the add-on that defines food-rescue documents: offer, claim, handover, distribution, impact"
    ]
   ],
   "position": {
@@ -403,40 +427,14 @@
   "path_note": "Every planned item has a gate: the one thing that has to happen first. If you can open one (a reviewer, a device, a food bank, funding), say so in <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">GitHub Discussions</a>; a direct address will follow from the founder.",
   "hero": {
    "h1": "Robots are learning to move. Nobody had written down how to cook.",
-   "sub": "Cookwala is the open standard for cooking safely: people, kitchens and robots.",
-   "cards": [
-    [
-     "Device makers",
-     "Recipes your oven, hob or robot can check before it heats anything, and refuse when it cannot verify a step.",
-     "What to implement in a week",
-     "/for/device-makers/"
-    ],
-    [
-     "Developers",
-     "A dry run in the browser, a Python package, a reference hub, 131 public conformance vectors, and sample agents and orchestrators in four languages.",
-     "Five-minute quickstart",
-     "/developers/"
-    ],
-    [
-     "Food banks",
-     "Offer, claim, handover with a temperature check, distribution and an impact summary, by SMS and spreadsheet, with no personal data.",
-     "The humanitarian profile",
-     "/humanitarian/"
-    ],
-    [
-     "Funders and partners",
-     "What exists, counted; what does not, stated; and the one proof that would change every outside reader's verdict.",
-     "Where this stands",
-     "/investors/"
-    ]
-   ]
+   "sub": "A free, open rulebook that lets any kitchen device check a recipe step by step before it cooks — and refuses the steps it cannot do safely. Try it below."
   },
   "origin": {
    "h": "It started with a family cookbook",
    "p": "Cookwala began with a family archive of Egyptian home cooking, the recipes of Dr. Fatma Alkawokgy (1943 to 2026), published at fifi.cooking in 25 languages. They were written for people. \"Fry until golden.\" \"Add water to cover.\" \"Let it simmer until it is ready.\" Anyone who grew up in that kitchen knows exactly what those lines mean. A machine does not, and neither does a stranger. When one of those dishes was described so that an oven, a robot or a food bank could check it before cooking, it turned out that nobody had written down what \"simmer\" is, when chicken is safe, or when a step must be refused. Cookwala is the attempt to write that down, in the open, so that the dishes outlive the machines and the machines refuse rather than guess.",
    "by": "the founder"
   },
-  "try_dryrun": "Try the dry run",
+  "try_dryrun": "Watch it refuse an unsafe step ↓",
   "contact_pending": "A direct contact address for programs, funders and press will be added by the founder; until then, open an issue or a discussion on GitHub. There is no form on this site because there is no backend and no privacy notice to go with one.",
   "contact_email_label": "Email for programs, funders and press"
  },
@@ -475,7 +473,7 @@
     "/recipes/"
    ],
    [
-    "العمل الإنساني",
+    "بنوك الطعام والإغاثة",
     "/humanitarian/"
    ],
    [
@@ -809,6 +807,30 @@
    [
     "نقاط تفتيش",
     "ملخّص موقَّع لسجل الأحداث يوقّعه شهود أيضًا، فيُكشف أي تعديل لاحق"
+   ],
+   [
+    "المعيار المفتوح",
+    "مواصفة عامة يجوز لأي شخص تطبيقها بلا رسوم ودون استئذان"
+   ],
+   [
+    "معيارية",
+    "الجزء من المعيار الذي يجب على التنفيذ اتباعه ليُعدّ مطابقًا"
+   ],
+   [
+    "خادم MCP",
+    "برنامج صغير يمنح وكيل ذكاء اصطناعي وصولًا للقراءة فقط إلى أدوات كوكوالا وبياناته"
+   ],
+   [
+    "ROS 2",
+    "نظام تشغيل الروبوتات 2، الوسيط الذي تستخدمه معظم الروبوتات للحركة والتواصل"
+   ],
+   [
+    "قواعد الرسائل النصية",
+    "صيغة الرسائل الدقيقة التي يستخدمها هاتف بسيط لعرض الطعام وحجزه وتسليمه"
+   ],
+   [
+    "الملف الإنساني",
+    "الإضافة التي تعرّف وثائق إنقاذ الطعام: عرض، حجز، تسليم، توزيع، أثر"
    ]
   ],
   "position": {
@@ -840,40 +862,14 @@
   "path_note": "لكل بند مخطَّط بوابة: الشيء الوحيد الذي يجب أن يحدث أولًا. إن كان بوسعك فتح إحداها (مراجع، جهاز، بنك طعام، تمويل) فقل ذلك في <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">نقاشات GitHub</a>؛ وسيتبع عنوان مباشر من المؤسِّس.",
   "hero": {
    "h1": "الروبوتات تتعلّم الحركة. ولم يكتب أحد كيف يُطهى الطعام.",
-   "sub": "كوكوالا هو المعيار المفتوح للطهي الآمن: للناس والمطابخ والروبوتات.",
-   "cards": [
-    [
-     "صانعو الأجهزة",
-     "وصفات يفحصها فرنك أو موقدك أو روبوتك قبل أن يسخّن أي شيء، ويرفضها حين لا يستطيع التحقق من خطوة.",
-     "ما الذي تطبّقه في أسبوع",
-     "/for/device-makers/"
-    ],
-    [
-     "المطوّرون",
-     "تشغيل جاف في المتصفح، حزمة بايثون، موزّع مرجعي، و131 متّجه مطابقة عامًا، وأمثلة لوكلاء ومنسّقين بأربع لغات.",
-     "بداية سريعة في خمس دقائق",
-     "/developers/"
-    ],
-    [
-     "بنوك الطعام",
-     "عرض، مطالبة، تسليم مع فحص حرارة، توزيع وملخّص أثر، بالرسائل النصية وجداول البيانات، بلا بيانات شخصية.",
-     "الملف الإنساني",
-     "/humanitarian/"
-    ],
-    [
-     "المموّلون والشركاء",
-     "ما هو موجود، محصيًا؛ وما ليس موجودًا، معلنًا؛ والدليل الوحيد الذي سيغيّر حكم كل قارئ خارجي.",
-     "أين نقف",
-     "/investors/"
-    ]
-   ]
+   "sub": "دليل قواعد مجاني ومفتوح يتيح لأي جهاز مطبخ فحص الوصفة خطوة بخطوة قبل طهيها — ويرفض الخطوات التي لا يستطيع أداءها بأمان. جرّبه بالأسفل."
   },
   "origin": {
    "h": "بدأت بكتاب طبخ عائلي",
    "p": "بدأ كوكوالا بأرشيف عائلي للطبخ المنزلي المصري، وصفات الدكتورة فاطمة القواقجي (1943 إلى 2026)، المنشور على fifi.cooking بخمس وعشرين لغة. كُتبت للناس. «اقلِ حتى يصفرّ.» «أضف ماءً حتى يغمر.» «دعه على نار هادئة حتى يستوي.» كل من نشأ في ذلك المطبخ يعرف تمامًا معنى هذه الجمل. أما الآلة فلا تعرف، ولا الغريب. وحين وُصف طبق منها بحيث يستطيع فرن أو روبوت أو بنك طعام فحصه قبل الطهي، تبيّن أن أحدًا لم يكتب ما هو «النار الهادئة»، ولا متى يكون الدجاج آمنًا، ولا متى يجب رفض خطوة. كوكوالا هو محاولة كتابة ذلك علنًا، لتبقى الأطباق بعد الآلات، ولترفض الآلات بدل أن تخمّن.",
    "by": "المؤسِّس"
   },
-  "try_dryrun": "جرّب التشغيل الجاف",
+  "try_dryrun": "شاهده يرفض خطوة غير آمنة ↓",
   "contact_pending": "سيضيف المؤسس عنوان اتصال مباشرًا للبرامج والمموّلين والصحافة؛ وحتى ذلك الحين افتح مسألة أو نقاشًا على GitHub. لا نموذج في هذا الموقع لأنه لا خلفية له ولا إشعار خصوصية يرافقه.",
   "contact_email_label": "البريد الإلكتروني للبرامج والمموّلين والصحافة"
  }

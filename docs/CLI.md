@@ -56,6 +56,26 @@ cookwala submit my-dish.cookwala.json --author your-github-login [--open-pr]
                                            # commands to do it by hand (docs/CONTRIBUTE-RECIPES.md, RFC-0013)
 ```
 
+### Certification (RFC-0010) — Planned, not yet available
+
+The following commands will be available after v0.2.0:
+
+```bash
+# Not yet implemented:
+cookwala certify my-recipe.cookwala.json --scheme halal --authority did:web:authority.example --key ~/.cookwala/keys/ed25519
+cookwala verify-cert cert-halal-recipe-2026-10.json --keys keys.json
+cookwala current-certs my-recipe.cookwala.json --scheme halal
+```
+
+For now, use Python functions directly:
+```python
+import cookwala as cw
+ok, reason = cw.verify_certification(cert, keys)
+result = cw.current_certifications(certs, keys)
+```
+
+See [CERTIFICATION_IMPLEMENTATION_STATUS.md](../CERTIFICATION_IMPLEMENTATION_STATUS.md) for current status.
+
 ## Kitchen (hub)
 
 ```bash

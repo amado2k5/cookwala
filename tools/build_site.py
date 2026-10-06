@@ -284,10 +284,6 @@ class Builder:
         more = ''.join(f'<a href="{self.path_for(lang, p)}">{html.escape(label)}</a>' for label, p in S['more'])
         return items, more
 
-    def hero_cards(self, lang):
-        H = self.strings[lang].get('hero') or self.strings['en']['hero']
-        return '<div class="cards hero-cards">' + ''.join(f'<a class="card" href="{self.path_for(lang, c[3])}"><h3>{html.escape(c[0])}</h3><p>{html.escape(c[1])}</p><span class="go">{html.escape(c[2])} →</span></a>' for c in H['cards']) + '</div>'
-
     def origin_block(self, lang):
         O = self.strings[lang].get('origin') or self.strings['en']['origin']
         return (f'<section class="band" aria-labelledby="origin-h"><div class="wrap narrow"><h2 id="origin-h">{html.escape(O["h"])}</h2>'
@@ -360,7 +356,6 @@ class Builder:
         if '{{contact_block}}' in body:
             S_ = self.strings[lang]
             body = body.replace('{{contact_block}}', f'<p><b>{html.escape(S_.get("contact_email_label", "Email"))}:</b> <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a></p>' if CONTACT_EMAIL else f'<p class="note">{S_.get("contact_pending", "")}</p>')
-        if '{{hero_cards}}' in body: body = body.replace('{{hero_cards}}', self.hero_cards(lang))
         if '{{origin_block}}' in body: body = body.replace('{{origin_block}}', self.origin_block(lang))
         if '{{position_block}}' in body: body = body.replace('{{position_block}}', self.position_block(lang))
         if '{{dist_grid}}' in body: body = body.replace('{{dist_grid}}', self.dist_grid(lang))

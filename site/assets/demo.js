@@ -4,9 +4,9 @@
   var $ = function (s) { return document.querySelector(s); };
   var AR = document.documentElement.lang === 'ar';
   var T = AR ? { accepted: 'مقبول', refused: 'مرفوض', device: 'الجهاز', person: 'شخص', refusedW: 'مرفوض', notReached: 'لم تُصَل', sensor: 'حساس', model: 'تقدير مسجَّل', time: 'الوقت فقط', human: 'شخص', personNearby: 'شخص قريب', loading: 'جارٍ تحميل الوصفة والمفردات…', fail: 'تعذّر تحميل بيانات العرض. جرّب الأمر cookwala dryrun.',
-    can: function (d, n, dev) { return 'يستطيع ' + d + ' طهي هذا: ' + n + ' خطوة بالجهاز من أصل ' + dev + '.'; }, watch: function (w) { return ' يجب أن يراقب شخص ' + w + ' من خطوات الجهاز لأن لا شيء فيه يستطيع التحقق منها.'; }, est: function (e) { return ' ' + e + ' خطوة تعتمد على تقديرات مسجَّلة.'; }, before: 'قبل أن يسخن أي شيء: ', step: 'الخطوة', reason: 'السبب', ops: 'العمليات', sensors: 'الحساسات', cues: 'إشارات الرؤية', copied: 'تم النسخ', copy: 'نسخ', custom: 'جهاز مخصّص' }
+    can: function (d, n, dev) { return 'يستطيع ' + d + ' طهي هذا: ' + n + ' خطوة بالجهاز من أصل ' + dev + '.'; }, watch: function (w) { return ' يجب أن يراقب شخص ' + w + ' من خطوات الجهاز لأن لا شيء فيه يستطيع التحقق منها.'; }, est: function (e) { return ' ' + e + ' خطوة تعتمد على تقديرات مسجَّلة.'; }, before: 'قبل أن يسخن أي شيء: ', step: 'الخطوة', reason: 'السبب', ops: 'العمليات', sensors: 'الحساسات', cues: 'إشارات الرؤية', copied: 'تم النسخ', copy: 'نسخ', custom: 'جهاز مخصّص — ابنِه بالأسفل' }
     : { accepted: 'ACCEPTED', refused: 'REFUSED', device: 'Device', person: 'Person', refusedW: 'Refused', notReached: 'not reached', sensor: 'Sensor', model: 'Estimate (logged)', time: 'Time only', human: 'Person', personNearby: 'person nearby', loading: 'Loading the recipe and the operation vocabulary…', fail: 'The demo could not load its data. Try the command-line dry run in the quickstart.',
-    can: function (d, n, dev) { return 'The ' + d + ' can cook this: ' + n + ' of ' + dev + ' steps by the device, the rest by a person.'; }, watch: function (w) { return ' A person must watch ' + w + ' of the device\'s steps, because nothing on it can check them.'; }, est: function (e) { return ' ' + e + ' steps rely on logged estimates.'; }, before: 'Before anything heats up: ', step: 'step', reason: 'reason', ops: 'Operations', sensors: 'Sensors', cues: 'Vision cues', copied: 'Copied', copy: 'Copy', custom: 'Custom device' };
+    can: function (d, n, dev) { return 'The ' + d + ' can cook this: ' + n + ' of ' + dev + ' steps by the device, the rest by a person.'; }, watch: function (w) { return ' A person must watch ' + w + ' of the device\'s steps, because nothing on it can check them.'; }, est: function (e) { return ' ' + e + ' steps rely on logged estimates.'; }, before: 'Before anything heats up: ', step: 'step', reason: 'reason', ops: 'Operations', sensors: 'Sensors', cues: 'Vision cues', copied: 'Copied', copy: 'Copy', custom: 'Custom device — build it below' };
 
   var RECIPES = [['shakshuka', 'Shakshuka · شكشوكة'], ['koshari', 'Koshari · كشري'], ['lentil-soup', 'Lentil soup · شوربة عدس'], ['molokhia', 'Molokhia with chicken · ملوخية'], ['kofta-oven', 'Oven kofta · كفتة'], ['rice-vermicelli', 'Rice with vermicelli · رز بالشعرية'], ['ful-medames', 'Ful medames · فول'], ['salata-baladi', 'Salata baladi · سلطة'], ['basbousa', 'Basbousa · بسبوسة']];
   var HEAT = ['cw.op.heat', 'cw.op.saute', 'cw.op.simmer', 'cw.op.boil', 'cw.op.toast', 'cw.op.bake', 'cw.op.roast', 'cw.op.melt', 'cw.op.reduce', 'cw.op.hold', 'cw.op.cool', 'cw.op.chill'];
@@ -22,7 +22,7 @@
     oven: { name: AR ? 'فرن ذكي بمجسّ داخلي' : 'Smart oven with a core probe', ops: ['cw.op.bake', 'cw.op.roast', 'cw.op.heat', 'cw.op.rest'], sensors: ['cw.sense.oven_temp', 'cw.sense.core_temp'], cues: [] }
   };
   var RUNG = { sensor: T.sensor, model: T.model, time: T.time, human: T.human };
-  var recipe = null, ops = null, ar = AR, custom = null;
+  var recipe = null, ops = null, ar = AR, custom = null, touched = false;
 
   function caps(d) { return { capabilities: { ops: d.ops.map(function (o) { return { op: o }; }), sensors: d.sensors.map(function (s) { return { sensor: s }; }).concat([{ sensor: 'cw.sense.vision', visionCues: d.cues }]) } }; }
   function stepText(node) {
@@ -62,7 +62,7 @@
     var q = new URLSearchParams({ r: $('#dRecipe').value, d: $('#dDevice').value, h: $('#dHuman').checked ? 1 : 0, m: $('#dModel').checked ? 1 : 0 });
     if ($('#dDevice').value === 'custom' && custom) q.set('c', custom.ops.map(function (o) { return o.replace('cw.op.', ''); }).join(',') + '|' + custom.sensors.map(function (s) { return s.replace('cw.sense.', ''); }).join(',') + '|' + custom.cues.map(function (s) { return s.replace('cw.sense.', ''); }).join(','));
     var url = location.origin + location.pathname + '?' + q.toString() + '#demo'; $('#shareUrl').value = url;
-    if (history.replaceState) history.replaceState(null, '', '?' + q.toString() + location.hash);
+    if ((touched || location.search) && history.replaceState) history.replaceState(null, '', '?' + q.toString() + location.hash);
   }
   function loadRecipe(id) {
     return fetch('/v1/recipes/' + id + '.cookwala.json').then(function (r) { return r.json(); }).then(function (r) { recipe = r; render(); });
@@ -75,7 +75,15 @@
       body.append(fs);
     }
     body.textContent = ''; group(T.ops, ALL_OPS, 'cw.op.', 'ops'); group(T.sensors, SENSORS, 'cw.sense.', 'sensors'); group(T.cues, CUES, 'cw.sense.', 'cues');
-    body.addEventListener('change', function (e) { var c = e.target; if (!c.dataset.key) return; var arr = custom[c.dataset.key]; var i = arr.indexOf(c.value); if (c.checked && i === -1) arr.push(c.value); if (!c.checked && i !== -1) arr.splice(i, 1); $('#dDevice').value = 'custom'; render(); });
+    body.addEventListener('change', function (e) { var c = e.target; if (!c.dataset.key) return; var arr = custom[c.dataset.key]; var i = arr.indexOf(c.value); if (c.checked && i === -1) arr.push(c.value); if (!c.checked && i !== -1) arr.splice(i, 1); $('#dDevice').value = 'custom'; touched = true; render(); });
+  }
+
+  function runPreset() {
+    touched = true;
+    selR.value = 'koshari'; selD.value = 'hob_robot_basic';
+    $('#dHuman').checked = true; $('#dModel').checked = true;
+    $('#verdict').textContent = T.loading;
+    loadRecipe('koshari').then(function () { var v = $('#verdict'); if (v.scrollIntoView) v.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
   }
 
   var params = new URLSearchParams(location.search);
@@ -89,8 +97,11 @@
   if (params.has('h')) $('#dHuman').checked = params.get('h') === '1';
   if (params.has('m')) $('#dModel').checked = params.get('m') === '1';
   buildBuilder();
-  selR.addEventListener('change', function () { $('#verdict').textContent = T.loading; loadRecipe(selR.value); });
-  ['#dDevice', '#dHuman', '#dModel'].forEach(function (s) { $(s).addEventListener('change', render); });
+  selR.addEventListener('change', function () { touched = true; $('#verdict').textContent = T.loading; loadRecipe(selR.value); });
+  selD.addEventListener('change', function () { touched = true; if (selD.value === 'custom') { var b = $('#builder'); if (b) { b.open = true; if (b.scrollIntoView) b.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } } render(); });
+  ['#dHuman', '#dModel'].forEach(function (s) { $(s).addEventListener('change', function () { touched = true; render(); }); });
+  var dPreset = $('#dPreset'); if (dPreset) dPreset.addEventListener('click', runPreset);
+  var heroTry = document.getElementById('heroTry'); if (heroTry) heroTry.addEventListener('click', runPreset);
   $('#demoForm').addEventListener('submit', function (e) { e.preventDefault(); });
   $('#copyShare').addEventListener('click', function () { navigator.clipboard.writeText($('#shareUrl').value).then(function () { $('#copyShare').textContent = T.copied; setTimeout(function () { $('#copyShare').textContent = T.copy; }, 1500); }); });
   fetch('/v1/vocab/ops.json').then(function (r) { return r.json(); }).then(function (v) { ops = Object.fromEntries(v.entries.map(function (e) { return [e.id, e]; })); return loadRecipe(selR.value); })

@@ -1,4 +1,4 @@
-<!--meta {"title": "Cookwala: der offene Standard für sicheres Kochen", "description": "Ein offener, lizenzfreier Standard für sicheres Kochen: Menschen, Küchen und Roboter. Was zu machen ist, wann es fertig ist und was niemals passieren darf, geprüft auf dem Gerät. Probieren Sie den Live dry run aus.", "path": "/", "status": "core", "scripts": ["dryrun.js", "demo.js", "pathfinder.js"]} -->
+<!--meta {"title": "Cookwala: der offene Standard für sicheres Kochen", "description": "Ein kostenloses, offenes Regelwerk, mit dem jedes Küchengerät ein Rezept Schritt für Schritt prüft, bevor es kocht — und die Schritte ablehnt, die es nicht sicher ausführen kann. Live auf dieser Seite ausprobieren.", "path": "/", "status": "core", "scripts": ["dryrun.js", "demo.js", "pathfinder.js"]} -->
 <section class="hero wrap">
   {{chip}}
   <h1>{{s:hero.h1}}</h1>
@@ -8,24 +8,25 @@
     <li><b>Wann es fertig ist.</b> Temperaturen, Hinweise zum Lebensmittelzustand und Zeiten, die es messen kann.</li>
     <li><b>Was niemals passieren darf.</b> Sicherheitsgrenzwerte, die das Gerät selbst erzwingt.</li>
   </ol>
-  <div class="cta"><a class="btn primary" href="#demo">{{s:try_dryrun}}</a></div>
-  {{hero_cards}}
+  <div class="cta"><a class="btn primary" id="heroTry" href="#demo">{{s:try_dryrun}}</a></div>
 </section>
 
 <section id="demo" class="band" aria-labelledby="demo-h">
   <div class="wrap">
     <div class="sec-head">
       <h2 id="demo-h">Kann dieses Gerät dieses Rezept kochen?</h2>
-      <p>Ein Cookwala-Gerät prüft jeden Schritt, bevor es etwas aufheizt, und verweigert die Ausführung, anstatt zu raten. Wählen Sie ein Rezept, wählen oder erstellen Sie ein Gerät und beobachten Sie, wie sich die Antwort ändert. Dies führt dieselben Regeln wie <code>cookwala dryrun</code> aus, vollständig in Ihrem Browser.</p>
+      <p>Bevor etwas aufheizt, prüft ein Cookwala-Gerät jeden Schritt und verweigert die Ausführung, anstatt zu raten. Wählen Sie ein Rezept, wählen oder erstellen Sie ein Gerät und beobachten Sie, wie sich die Antwort ändert. Dies führt dieselben Regeln wie <code>cookwala dryrun</code> aus, vollständig in Ihrem Browser.</p>
     </div>
     <div class="demo">
       <form class="controls" id="demoForm" aria-label="Dry-run settings">
-        <label>Rezept <select id="dRecipe"></select></label>
-        <label>Gerät <select id="dDevice"></select></label>
-        <label class="check"><input type="checkbox" id="dHuman" checked> Eine Person ist in der Küche</label>
-        <label class="check"><input type="checkbox" id="dModel" checked> Protokollierte Schätzungen sind erlaubt, wenn ein Sensor fehlt</label>
+        <label><b class="num">1</b> Rezept <select id="dRecipe"></select></label>
+        <label><b class="num">2</b> Gerät <select id="dDevice"></select></label>
+        <label class="check"><input type="checkbox" id="dHuman" checked> <b class="num">3</b> Eine Person ist in der Küche</label>
+        <label class="check"><input type="checkbox" id="dModel" checked> Protokollierte Schätzungen erlauben, wo dem Gerät ein Sensor fehlt</label>
+        <button type="button" class="btn primary" id="dPreset">Sehen Sie, wie ein unsicherer Schritt abgelehnt wird</button>
       </form>
-      <details id="builder"><summary>Bauen Sie Ihr eigenes Gerät</summary>
+      <p class="note">Zu Schritt 2 gibt es unten einen Builder für Ihr eigenes Gerät. Die beiden Kästchen entscheiden so viel wie das Gerät selbst: entfernen Sie die Person, wird jeder Schritt abgelehnt, der eine braucht; entfernen Sie die Schätzungen, fällt ein Schritt ohne Sensor auf bloße Zeit zurück — oder wird abgelehnt.</p>
+      <details id="builder"><summary>Bauen Sie Ihr eigenes Gerät (erweitert Schritt 2)</summary>
         <div class="builder" id="builderBody"></div>
       </details>
       <div class="verdict" id="verdict" role="status" aria-live="polite">Loading the recipe and the operation vocabulary…</div>
@@ -36,49 +37,28 @@
   </div>
 </section>
 
-<section class="wrap" aria-labelledby="path-h">
-  <div class="sec-head"><h2 id="path-h">Finden Sie Ihren Weg</h2><p>Innerhalb einer Minute: warum Cookwala für Sie wichtig ist, und eine Sache, die Sie heute tun können.</p></div>
-  <div class="pathfinder" id="pathfinder">
-    <div class="row">
-      <label>Ich bin <select id="pfWho" aria-label="Ich bin"></select></label>
-      <label>und ich möchte <select id="pfWant" aria-label="ich möchte"></select></label>
-    </div>
-    <div class="result" id="pfResult"></div>
-    <noscript><ul>
-      <li><a href="/for/developers/">Entwickler, Roboter- und Gerätehersteller, KI-Agenten-Entwickler</a></li><li><a href="/for/companies/">Unternehmen, Lebensmittelhändler, Restaurants, Versicherer</a></li><li><a href="/for/providers/">Anbieter: Lebensmittelhändler, landwirtschaftliche Betriebe, Lieferdienste, Energieversorger, KI-Anbieter, Rezeptverleger</a></li><li><a href="/for/food/">Landwirte, Köche, Chefköche, Kochschulen</a></li><li><a href="/for/humanitarian/">NGOs, food banks, Schulmahlzeiten- und Hilfsprogramme</a></li><li><a href="/for/health/">Ernährungsberater, Lebensmittelsicherheitsbeauftragte, öffentliches Gesundheitswesen</a></li><li><a href="/for/education/">Lehrer, Professoren, Forscher, Studenten</a></li><li><a href="/for/government/">Regierungen, Regulierungsbehörden, Gesetzgeber, Normungsgremien</a></li><li><a href="/for/capital/">Investoren, Philanthropien, Entwicklungsbanken</a></li><li><a href="/for/thought/">Philosophen, Ethiker, Futuristen</a></li><li><a href="/for/everyone/">Alle</a></li>
-    </ul></noscript>
+{{origin_block}}
+
+<section class="wrap" aria-labelledby="prob-h">
+  <h2 id="prob-h">Warum jetzt</h2>
+  <div class="three">
+    <p>Heimroboter werden ausgeliefert und Küchenroboter nehmen Bestellungen entgegen. Jeder Hersteller schreibt seine eigenen geschlossenen Rezepte, meist aus wenigen Küchen, und entscheidet allein, was „simmer“ oder „done“ bedeutet.</p>
+    <p>Unsichere Lebensmittel verursachen jährlich etwa 600 Millionen Krankheiten <span class="kind measured" title="WHO, Estimates of the global burden of foodborne diseases, 2015">measured · WHO</span>. Etwa 14 % der Lebensmittel gehen verloren, bevor sie ein Geschäft erreichen <span class="kind measured" title="FAO, The State of Food and Agriculture 2019">measured · FAO</span>, während im Jahr 2023 etwa 733 Millionen Menschen mit Hunger konfrontiert waren <span class="kind measured" title="FAO, IFAD, UNICEF, WFP, WHO: SOFI 2024">measured · SOFI 2024</span>.</p>
+    <p>Cookwala ist die gemeinsame, offene Ebene: ein Weg, ein Rezept so zu beschreiben, dass eine Person, eine food bank, ein Ofen oder ein humanoider Roboter es in jeder Küche sicher lesen, prüfen und kochen kann, mit dem Namen des Kochs darauf. <a href="/why/">Warum dies, warum now</a> · <a href="/impact/">Impact, mit Quellen</a></p>
   </div>
+  <p class="note">Drei Ziele — helfen, Hunger zu beenden, Menschen gesünder machen, Roboter für Menschen arbeiten lassen — jedes mit seinem gemessenen Problem, was jetzt existiert und was wir niemals behaupten werden: <a href="/goals/">Wie dies hilft →</a></p>
 </section>
 
-<section class="band" aria-labelledby="prob-h">
+<section class="band" aria-labelledby="road-h">
   <div class="wrap">
-    <h2 id="prob-h">Warum jetzt</h2>
-    <div class="three">
-      <p>Heimroboter werden ausgeliefert und Küchenroboter nehmen Bestellungen entgegen. Jeder Hersteller schreibt seine eigenen geschlossenen Rezepte, meist aus wenigen Küchen, und entscheidet allein, was „simmer“ oder „done“ bedeutet.</p>
-      <p>Unsichere Lebensmittel verursachen jährlich etwa 600 Millionen Krankheiten <span class="kind measured" title="WHO, Estimates of the global burden of foodborne diseases, 2015">measured · WHO</span>. Etwa 14 % der Lebensmittel gehen verloren, bevor sie ein Geschäft erreichen <span class="kind measured" title="FAO, The State of Food and Agriculture 2019">measured · FAO</span>, während im Jahr 2023 etwa 733 Millionen Menschen mit Hunger konfrontiert waren <span class="kind measured" title="FAO, IFAD, UNICEF, WFP, WHO: SOFI 2024">measured · SOFI 2024</span>.</p>
-      <p>Cookwala ist die gemeinsame, offene Ebene: ein Weg, ein Rezept so zu beschreiben, dass eine Person, eine food bank, ein Ofen oder ein humanoider Roboter es in jeder Küche sicher lesen, prüfen und kochen kann, mit dem Namen des Kochs darauf. <a href="/why/">Warum dies, warum now</a> · <a href="/impact/">Impact, mit Quellen</a></p>
+    <h2 id="road-h">Now, next, later</h2>
+    <div class="road">
+      <div><h3>Now</h3><ul><li>Core 0.2 Standard und Schemata</li><li>Dry run, Validator, {{stat:conformanceVectors}} Conformance-Vektoren, Conformance-Berichte</li><li>Python-Paket und CLI, TypeScript-Typen, MCP-Server, Reference Hub, ROS 2-Schnittstellen</li><li>{{stat:recipesV1}} Beispielrezepte bei V1 und {{stat:recipesV0}} importierte Rezepte von fifi.cooking bei V0, mit Namen in 25 Sprachen und Text auf Arabisch und Englisch: <a href="/recipes/">das Rezeptverzeichnis</a></li><li>SDK-Clients in {{stat:sdkLanguages}} Sprachen und {{stat:scenarios}} ausgeführte Szenarien: <a href="/scenarios/">SDK und Szenarien</a></li><li>Humanitarian Profile 0.2 mit einer SMS-Grammatik und vier bearbeiteten Abläufen</li><li>Household Context Profile: nur abgeleitete Constraints werden übertragen</li><li>Vier Simulatoren, illustrativ</li></ul></div>
+      <div><h3>Next</h3><ul><li>Professionelle Überprüfung von Envelopes und Rule Packs</li><li>Ein Food-Bank-Pilotprojekt (noch nicht finanziert)</li><li>Agent-Safety-Ergebnisse pro Modell</li><li>Verpackte SDKs; ein Registry-Service</li><li>Ein erster Gerätehersteller gegen den Referenz-Hub</li><li>Core 0.3; ein Lenkungsausschuss</li></ul></div>
+      <div><h3>Later</h3><ul><li>Ein echtes Gerät, das ein Cookwala-Rezept kocht, uneditiert</li><li>Zertifizierung mit einem unabhängigen Zertifizierer</li><li>Eine neutrale Grundlage für den Standard</li><li>Ein Mitwirkernetzwerk, das Robotern jede Küche lehrt, mit Namensnennung</li><li>Angebotsignale, nach wettbewerbsrechtlicher Prüfung</li></ul></div>
     </div>
-  </div>
-</section>
-
-<section class="wrap" aria-labelledby="loop-h">
-  <h2 id="loop-h">Ein Loop</h2>
-  <ol class="loop">
-    <li><span class="n">1</span><h3>Describe</h3><p>Write a recipe as steps with end conditions and hazards. Hash and sign it.</p><code>cookwala hash recipe.json</code></li>
-    <li><span class="n">2</span><h3>Check</h3><p>Validate it, then dry-run it against a device before cooking.</p><code>cookwala dryrun recipe.json --device oven.json</code></li>
-    <li><span class="n">3</span><h3>Cook</h3><p>The device runs it through the Core API or ROS 2, keeping every step inside its safe band.</p><code>POST /v1/executions</code></li>
-    <li><span class="n">4</span><h3>Learn</h3><p>With consent, the log becomes a trace and a training example for robots.</p><code>cookwala export lerobot …</code></li>
-  </ol>
-</section>
-
-<section class="band" aria-labelledby="three-h">
-  <div class="wrap">
-    <h2 id="three-h">Drei Loops, ein Standard</h2>
-    <div class="cards">
-      <a class="card" href="/developers/"><h3>Cook</h3><p>Ein Gerät führt einen dry run eines signierten Rezepts durch, verweigert oder akzeptiert, kocht innerhalb von envelopes, protokolliert ohne personenbezogene Daten. Core 0.2, normativ.</p><span class="go">Quickstart →</span></a>
-      <a class="card" href="/humanitarian/"><h3>Rettung</h3><p>Angebot → Beanspruchung → Übergabe mit Temperaturprüfung → Verteilung → Auswirkung mit einer Methode unter jeder Nummer. Per SMS und Tabellenkalkulation, keine personenbezogenen Daten.</p><span class="go">Humanitarian Profile →</span></a>
-      <a class="card" href="/registry/"><h3>Finden und veröffentlichen</h3><p>Rezepte, Geräte, rule packs, Benchmarks unter nachgewiesenen Namen mit exakten Versionen und Hashes; ein directory von Organisationen, die um Listung gebeten haben.</p><span class="go">Registry →</span></a>
-    </div>
+    <p class="note">{{s:path_note}}</p>
+    <p class="note"><a href="/roadmap/">Die Roadmap mit einem Status zu jedem Element</a> · <a href="/docs/CRITIQUES/">was wir bisher falsch gemacht haben</a></p>
   </div>
 </section>
 
@@ -101,29 +81,17 @@
   </div>
 </section>
 
-<section class="wrap" aria-labelledby="mission-h">
-  <h2 id="mission-h">Warum wir dies tun</h2>
-  <div class="three">
-    <div><h3>Helfen, Hunger zu beenden</h3><p>Lebensmittel, die weggeworfen würden, gelangen sicher auf einen Teller; Programme, die ihre Zahlen vergleichen können; später, Farmen und Geschäfte, die einen Bedarf planen. Hunger hat viele Ursachen: Armut, Konflikt, Klima, Preise, Politik. Der Anteil von Cookwala ist real und partiell, und wir sagen welchen.</p></div>
-    <div><h3>Menschen gesünder machen</h3><p>Kritische Kontrollpunkte, die ein Gerät einhalten muss; Warmhalten und Kühlen, das es aufzeichnen muss; rule packs für Natrium, Zucker, Fett, Obst und Gemüse sowie für die Pflege von Kindern und älteren Menschen, überprüfbar durch Ernährungsberater und Lebensmittelsicherheitsbeauftragte.</p></div>
-    <div><h3>Roboter für Menschen arbeiten lassen</h3><p>Roboter, die jede Küche sicher zubereiten, mit Zustimmung und Anerkennung lernen, Menschen bedienen, die nicht für sich selbst kochen können, und menschliche Zeit zurückgeben, mit einer Arbeitnehmerstimme am Tisch, an dem dies geregelt wird.</p></div>
-  </div>
-  <p><a href="/impact/">Jede Zahl, mit ihrer Quelle und ihrem Label →</a></p>
-</section>
-
-{{origin_block}}
-
-
-<section class="band" aria-labelledby="road-h">
-  <div class="wrap">
-    <h2 id="road-h">Now, next, later</h2>
-    <div class="road">
-      <div><h3>Now</h3><ul><li>Core 0.2 Standard und Schemata</li><li>Dry run, Validator, {{stat:conformanceVectors}} Conformance-Vektoren, Conformance-Berichte</li><li>Python-Paket und CLI, TypeScript-Typen, MCP-Server, Reference Hub, ROS 2-Schnittstellen</li><li>{{stat:recipesV1}} Beispielrezepte bei V1 und {{stat:recipesV0}} importierte Rezepte von fifi.cooking bei V0, mit Namen in 25 Sprachen und Text auf Arabisch und Englisch: <a href="/recipes/">das Rezeptverzeichnis</a></li><li>SDK-Clients in {{stat:sdkLanguages}} Sprachen und {{stat:scenarios}} ausgeführte Szenarien: <a href="/scenarios/">SDK und Szenarien</a></li><li>Humanitarian Profile 0.2 mit einer SMS-Grammatik und vier bearbeiteten Abläufen</li><li>Household Context Profile: nur abgeleitete Constraints werden übertragen</li><li>Vier Simulatoren, illustrativ</li></ul></div>
-      <div><h3>Next</h3><ul><li>Professionelle Überprüfung von Envelopes und Rule Packs</li><li>Ein Food-Bank-Pilotprojekt (noch nicht finanziert)</li><li>Agent-Safety-Ergebnisse pro Modell</li><li>Verpackte SDKs; ein Registry-Service</li><li>Ein erster Gerätehersteller gegen den Referenz-Hub</li><li>Core 0.3; ein Lenkungsausschuss</li></ul></div>
-      <div><h3>Later</h3><ul><li>Ein echtes Gerät, das ein Cookwala-Rezept kocht, uneditiert</li><li>Zertifizierung mit einem unabhängigen Zertifizierer</li><li>Eine neutrale Grundlage für den Standard</li><li>Ein Mitwirkernetzwerk, das Robotern jede Küche lehrt, mit Namensnennung</li><li>Angebotsignale, nach wettbewerbsrechtlicher Prüfung</li></ul></div>
+<section class="wrap" aria-labelledby="path-h">
+  <div class="sec-head"><h2 id="path-h">Finden Sie Ihren Weg</h2><p>Innerhalb einer Minute: warum Cookwala für Sie wichtig ist, und eine Sache, die Sie heute tun können.</p></div>
+  <div class="pathfinder" id="pathfinder">
+    <div class="row">
+      <label>Ich bin <select id="pfWho" aria-label="Ich bin"></select></label>
+      <label>und ich möchte <select id="pfWant" aria-label="ich möchte"></select></label>
     </div>
-    <p class="note">{{s:path_note}}</p>
-    <p class="note"><a href="/roadmap/">Die Roadmap mit einem Status zu jedem Element</a> · <a href="/docs/CRITIQUES/">was wir bisher falsch gemacht haben</a></p>
+    <div class="result" id="pfResult"></div>
+    <noscript><ul>
+      <li><a href="/for/developers/">Entwickler, Roboter- und Gerätehersteller, KI-Agenten-Entwickler</a></li><li><a href="/for/companies/">Unternehmen, Lebensmittelhändler, Restaurants, Versicherer</a></li><li><a href="/for/providers/">Anbieter: Lebensmittelhändler, landwirtschaftliche Betriebe, Lieferdienste, Energieversorger, KI-Anbieter, Rezeptverleger</a></li><li><a href="/for/food/">Landwirte, Köche, Chefköche, Kochschulen</a></li><li><a href="/for/humanitarian/">NGOs, food banks, Schulmahlzeiten- und Hilfsprogramme</a></li><li><a href="/for/health/">Ernährungsberater, Lebensmittelsicherheitsbeauftragte, öffentliches Gesundheitswesen</a></li><li><a href="/for/education/">Lehrer, Professoren, Forscher, Studenten</a></li><li><a href="/for/government/">Regierungen, Regulierungsbehörden, Gesetzgeber, Normungsgremien</a></li><li><a href="/for/capital/">Investoren, Philanthropien, Entwicklungsbanken</a></li><li><a href="/for/thought/">Philosophen, Ethiker, Futuristen</a></li><li><a href="/for/everyone/">Alle</a></li>
+    </ul></noscript>
   </div>
 </section>
 
@@ -147,4 +115,3 @@
     </div>
   </div>
 </section>
-

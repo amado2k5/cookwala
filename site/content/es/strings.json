@@ -33,7 +33,7 @@
    "/recipes/"
   ],
   [
-   "Humanitario",
+   "Bancos de alimentos y ayuda",
    "/humanitarian/"
   ],
   [
@@ -352,6 +352,30 @@
   [
    "checkpoints?",
    "un resumen firmado de un registro de eventos, contrafirmado por testigos, para que una reescritura posterior sea detectable"
+  ],
+  [
+   "estándar abierto",
+   "una especificación pública que cualquiera puede implementar, libre de regalías y sin pedir permiso"
+  ],
+  [
+   "normativo",
+   "la parte de la norma que una implementación debe seguir para considerarse conforme"
+  ],
+  [
+   "servidor MCP",
+   "un pequeño programa que da a un agente de IA acceso de solo lectura a las herramientas y los datos de Cookwala"
+  ],
+  [
+   "ROS 2",
+   "Robot Operating System 2, el middleware que la mayoría de los robots usan para moverse y comunicarse"
+  ],
+  [
+   "gramática SMS",
+   "el formato exacto de mensajes de texto que un teléfono básico usa para ofrecer, reclamar y entregar alimentos"
+  ],
+  [
+   "Perfil Humanitario",
+   "el complemento que define los documentos de rescate de alimentos: oferta, reclamación, entrega, distribución, impacto"
   ]
  ],
  "position": {
@@ -383,40 +407,14 @@
  "path_note": "Cada elemento previsto tiene una puerta: lo único que debe ocurrir primero. Si puede abrir una (un revisor, un aparato, un banco de alimentos, financiación), dígalo en las <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">discusiones de GitHub</a>; el fundador publicará una dirección directa.",
  "hero": {
   "h1": "Los robots están aprendiendo a moverse. Nadie había escrito cómo cocinar.",
-  "sub": "Cookwala es el estándar abierto para cocinar con seguridad: personas, cocinas y robots.",
-  "cards": [
-   [
-    "Fabricantes de aparatos",
-    "Recetas que su horno, placa o robot comprueba antes de calentar nada, y rechaza cuando no puede verificar un paso.",
-    "Qué implementar en una semana",
-    "/for/device-makers/"
-   ],
-   [
-    "Desarrolladores",
-    "Un dry run en el navegador, un paquete Python, un hub de referencia, 131 vectores de conformidad públicos y ejemplos de agentes y orquestadores en cuatro lenguajes.",
-    "Inicio rápido en cinco minutos",
-    "/developers/"
-   ],
-   [
-    "Bancos de alimentos",
-    "Oferta, reclamación, entrega con control de temperatura, distribución y resumen de impacto, por SMS y hoja de cálculo, sin datos personales.",
-    "El perfil humanitario",
-    "/humanitarian/"
-   ],
-   [
-    "Financiadores y socios",
-    "Lo que existe, contado; lo que no, dicho; y la única prueba que cambiaría el veredicto de cualquier lector externo.",
-    "Dónde estamos",
-    "/investors/"
-   ]
-  ]
+  "sub": "Un libro de reglas gratuito y abierto que permite a cualquier aparato de cocina comprobar una receta paso a paso antes de cocinarla — y rechazar los pasos que no puede hacer con seguridad. Pruébelo abajo."
  },
  "origin": {
   "h": "Empezó con un libro de cocina familiar",
   "p": "Cookwala empezó con un archivo familiar de cocina casera egipcia, las recetas de la Dra. Fatma Alkawokgy (1943 a 2026), publicado en fifi.cooking en 25 idiomas. Se escribieron para personas. «Freír hasta que esté dorado.» «Cubrir con agua.» «Dejar a fuego lento hasta que esté listo.» Quien creció en esa cocina sabe exactamente qué significan esas líneas. Una máquina no, y un extraño tampoco. Cuando uno de esos platos se describió para que un horno, un robot o un banco de alimentos pudiera comprobarlo antes de cocinar, resultó que nadie había escrito qué es «fuego lento», cuándo el pollo es seguro o cuándo hay que rechazar un paso. Cookwala es el intento de escribirlo, en abierto, para que los platos sobrevivan a las máquinas y las máquinas rechacen en vez de adivinar.",
   "by": "el fundador"
  },
- "try_dryrun": "Probar el dry run",
+ "try_dryrun": "Vea cómo rechaza un paso inseguro ↓",
  "contact_pending": "El fundador añadirá una dirección de contacto directo para programas, financiadores y prensa; hasta entonces, abra un issue o una discusión en GitHub. No hay ningún formulario en este sitio porque no hay un backend ni un aviso de privacidad que lo acompañe.",
  "contact_email_label": "Correo para programas, financiadores y prensa"
 }

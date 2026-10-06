@@ -12,10 +12,11 @@
       <form class="controls" id="demoForm" aria-label="Dry-run settings">
         <label>Receita <select id="dRecipe"></select></label>
         <label>Dispositivo <select id="dDevice"></select></label>
-        <label class="check"><input type="checkbox" id="dHuman" checked> Uma pessoa está na cozinha</label>
-        <label class="check"><input type="checkbox" id="dModel" checked> Estimativas registadas permitidas onde um sensor está em falta</label>
+        <label class="check"><input type="checkbox" id="dHuman" checked> Uma pessoa está na cozinha <span class="hint">(desmarque e todo passo que precisar de uma é recusado)</span></label>
+        <label class="check"><input type="checkbox" id="dModel" checked> Permitir estimativas registadas onde o dispositivo não tem sensor <span class="hint">(desmarque e esses passos recaem sobre o tempo simples — ou são recusados)</span></label>
+        <button type="button" class="btn primary" id="dPreset">Veja-o recusar um passo inseguro</button>
       </form>
-      <details id="builder" open><summary>Crie o seu próprio dispositivo</summary><div class="builder" id="builderBody"></div></details>
+      <details id="builder" open><summary>Crie o seu próprio dispositivo (amplia o menu de dispositivos)</summary><div class="builder" id="builderBody"></div></details>
       <div class="verdict" id="verdict" role="status" aria-live="polite">Loading the recipe and the operation vocabulary…</div>
       <div class="table-wrap"><table class="steps-t" id="steps"><thead><tr><th>Etapa</th><th>Operação</th><th>Faixa de segurança</th><th>Quem</th><th>Verificado por</th></tr></thead><tbody></tbody></table></div>
       <div class="share"><span>Share this result</span><input id="shareUrl" type="text" readonly aria-label="Shareable link"><button type="button" class="btn" id="copyShare">Copiar</button></div>
