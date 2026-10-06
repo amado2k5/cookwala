@@ -5,6 +5,9 @@ The reference library and the `cookwala` command, standard library only. From a 
 ```bash
 pip install -e sdk/python            # library + `cookwala` command
 pip install -e "sdk/python[full]"    # adds schema validation, Ed25519 signatures, API reference checks
+cookwala search koshari --cuisine EG       # find recipes (words match every language's name)
+cookwala get example-koshari --lang ar     # view one; --json for the document
+cookwala export cooklang shakshuka -o shakshuka.cook   # also: export schema-org, convert --to cooklang
 cookwala hash examples/shakshuka.cookwala.json
 cookwala dryrun examples/shakshuka.cookwala.json --device examples/capabilities/robot-arm.json --human-present
 cookwala conformance --report report.json

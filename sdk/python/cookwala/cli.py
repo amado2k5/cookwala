@@ -10,6 +10,10 @@
     cookwala validate                              every schema, example, vocabulary and API in the repo
     cookwala conformance [--report report.json]    Core and profile vectors; writes a ConformanceReport
     cookwala humanitarian [--pack P ...] FILE...   rule-pack findings on offers, handovers, distributions
+    cookwala search [WORDS] [--cuisine EG] [--course main] [--tag T] [--free-of nuts] [--level V1] [--limit 20] [--json]
+    cookwala get ID [--lang ar] [--json]           view a recipe (ID from search, or a file path)
+    cookwala export cooklang ID [-o FILE]          Cookwala recipe -> Cooklang (also: cookwala convert --to cooklang ID)
+    cookwala export schema-org ID [-o FILE]        Cookwala recipe -> schema.org JSON-LD
     cookwala export lerobot|otel RECIPE LOG OUT    datasets and traces, with consent
     cookwala init my-dish                          scaffold a recipe, validate it, hash it
     cookwala hub [--port 7878]                     run the reference hub (Core API, simulated device)
@@ -21,7 +25,7 @@ import runpy
 import subprocess
 import sys
 
-from . import ROOT, ref
+from . import ROOT, ref, catalog
 
 
 def _load(p):
@@ -54,7 +58,46 @@ def cmd_envelope(a):
     res = ref.check_envelope(op, trace, target, alt); print(json.dumps(res)); return 0 if res['envelopeOk'] else 1
 
 
+def _opt(a, flag, default=None):
+    return a[a.index(flag) + 1] if flag in a else default
+
+
+def _positional(a, flags_with_value):
+    out, skip = [], False
+    for x in a:
+        if skip: skip = False
+        elif x in flags_with_value: skip = True
+        elif not x.startswith('--') and x != '-o': out.append(x)
+    return out
+
+
+def cmd_search(a):
+    q = ' '.join(_positional(a, ('--cuisine', '--course', '--tag', '--free-of', '--level', '--limit', '--lang')))
+    hits, total = catalog.search(q, _opt(a, '--cuisine'), _opt(a, '--course'), _opt(a, '--tag'), (_opt(a, '--free-of') or '').split(',') if '--free-of' in a else None,
+                                 _opt(a, '--level'), int(_opt(a, '--limit', 20)))
+    lang = _opt(a, '--lang', 'en')
+    if '--json' in a: print(json.dumps(hits, indent=1, ensure_ascii=False)); return 0 if hits else 1
+    for h in hits:
+        print(f"{h['id']:<18} {h.get('x-titles', {}).get(lang) or h['title']:<44} {h.get('level', ''):<3} {','.join(h.get('cuisine', []))}")
+    print(f"{len(hits)} of {total} match" + ('' if hits else '; try fewer words or `cookwala search --limit 5`'), file=sys.stderr)
+    return 0 if hits else 1
+
+
+def cmd_get(a):
+    rid = _positional(a, ('--lang',))[0]
+    d = catalog.load(rid)
+    print(json.dumps(d, indent=1, ensure_ascii=False) if '--json' in a else catalog.render(d, _opt(a, '--lang', 'en'))); return 0
+
+
+def _emit(text, a):
+    out = _opt(a, '-o')
+    if out: pathlib.Path(out).write_text(text); print(f'wrote {out}')
+    else: print(text, end='' if text.endswith('\n') else '\n')
+
+
 def cmd_convert(a):
+    if '--to' in a:  # recipe export, as in docs/CLI.md
+        return cmd_export([_opt(a, '--to'), *_positional(a, ('--to', '--lang')), *(['--lang', _opt(a, '--lang')] if '--lang' in a else []), *(['-o', _opt(a, '-o')] if '-o' in a else [])])
     density = float(a[a.index('--density') + 1]) if '--density' in a else None
     try:
         print(round(ref.convert(float(a[0]), a[1], a[2], density), 6)); return 0
@@ -74,7 +117,11 @@ def cmd_constraints(a):
 def cmd_validate(a): return _tool('validate_specs.py', a)
 def cmd_conformance(a): return _tool('run_conformance.py', a)
 def cmd_humanitarian(a): return _tool('humanitarian_check.py', a)
-def cmd_export(a): return _tool('execlog_export.py', a)
+def cmd_export(a):
+    if a and a[0] in ('cooklang', 'schema-org'):
+        d = catalog.load(_positional(a[1:], ('--lang',))[0]); lang = _opt(a, '--lang', 'en')
+        _emit(catalog.to_cooklang(d, lang) if a[0] == 'cooklang' else json.dumps(catalog.to_schema_org(d, lang), indent=1, ensure_ascii=False), a); return 0
+    return _tool('execlog_export.py', a)
 
 
 def cmd_init(a):
@@ -95,7 +142,7 @@ def cmd_mcp(a):
     sys.argv = ['cookwala_mcp.py', *a]; runpy.run_path(str(ROOT / 'sdk' / 'mcp' / 'cookwala_mcp.py'), run_name='__main__'); return 0
 
 
-COMMANDS = {'hash': cmd_hash, 'verify': cmd_verify, 'dryrun': cmd_dryrun, 'envelope': cmd_envelope, 'convert': cmd_convert, 'sms': cmd_sms, 'constraints': cmd_constraints,
+COMMANDS = {'search': cmd_search, 'get': cmd_get, 'hash': cmd_hash, 'verify': cmd_verify, 'dryrun': cmd_dryrun, 'envelope': cmd_envelope, 'convert': cmd_convert, 'sms': cmd_sms, 'constraints': cmd_constraints,
             'validate': cmd_validate, 'conformance': cmd_conformance, 'humanitarian': cmd_humanitarian, 'export': cmd_export, 'init': cmd_init, 'hub': cmd_hub, 'mcp': cmd_mcp}
 
 
@@ -105,7 +152,9 @@ def main(argv=None):
         print(__doc__); return 0 if argv and argv[0] in ('-h', '--help', 'help') else 2
     try:
         return COMMANDS[argv[0]](argv[1:])
-    except (IndexError, FileNotFoundError, KeyError) as e:
+    except FileNotFoundError as e:
+        print(f'error: {e}'); return 1
+    except (IndexError, KeyError) as e:
         print(f'usage error: {e}\n'); print(__doc__); return 2
 
 
