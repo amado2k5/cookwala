@@ -172,13 +172,13 @@ DIST = [
     ('lang', [
         (['pypi'], 'PyPI', 'pip install cookwala-samples', 'live', 'samples/python/pyproject.toml'),
         (['npm'], 'npm', 'npx @cookwala/samples demo', 'live', 'samples/js/package.json'),
-        (['maven', 'java'], 'Maven Central', f'ai.cookwala:cookwala-samples:{SAMPLES_VERSION}', 'ready', 'samples/java/pom.xml'),
-        (['gradle'], 'Gradle', f'implementation("ai.cookwala:cookwala-samples:{SAMPLES_VERSION}")', 'ready', 'samples/java/build.gradle.kts'),
+        (['maven', 'java'], 'Maven Central', f'ai.cookwala:cookwala-samples:{SAMPLES_VERSION}', 'live', 'samples/java/pom.xml'),
+        (['gradle'], 'Gradle', f'implementation("ai.cookwala:cookwala-samples:{SAMPLES_VERSION}")', 'live', 'samples/java/build.gradle.kts'),
         (['nuget'], 'NuGet', 'dotnet add package Cookwala.Samples', 'live', 'samples/dotnet'),
         (['dotnet'], '.NET tool', 'dotnet tool install -g Cookwala.Samples.Tool', 'live', 'samples/dotnet'),
     ]),
     ('os', [
-        (['homebrew'], 'Homebrew', 'brew install amado2k5/cookwala/cookwala-samples', 'ready', 'samples/packaging/homebrew/cookwala-samples.rb.in'),
+        (['homebrew'], 'Homebrew', 'brew install amado2k5/cookwala/cookwala-samples', 'live', 'samples/packaging/homebrew/cookwala-samples.rb.in'),
         (['chocolatey'], 'Chocolatey', 'choco install cookwala-samples', 'ready', 'samples/packaging/chocolatey'),
         (['scoop'], 'Scoop', 'scoop install cookwala-samples', 'manual', 'samples/packaging/scoop/cookwala-samples.json.in'),
         (['debian', 'ubuntu'], 'apt (Debian, Ubuntu)', f'sudo apt install ./cookwala-samples_{SAMPLES_VERSION}_all.deb', 'live', 'samples/packaging/build.py'),
@@ -201,7 +201,7 @@ DIST = [
         (['gcp'], 'Google Cloud Run functions', 'gcloud functions deploy cookwala-samples --gen2', 'deploy', 'samples/cloud/gcp-functions'),
     ]),
     ('enterprise', [
-        (['jfrog'], 'JFrog Artifactory', 'samples/packaging/artifactory/publish.sh', 'ready', 'samples/packaging/artifactory/publish.sh'),
+        (['jfrog'], 'JFrog Artifactory', 'samples/packaging/artifactory/publish.sh', 'live', 'samples/packaging/artifactory/publish.sh'),
         (['github'], 'GitHub Releases', 'github.com/amado2k5/cookwala/releases', 'live', '.github/workflows/samples.yml'),
         (['githubactions'], 'CI for every port', 'Python, Node, Java, .NET, packages', 'repo', '.github/workflows/samples.yml'),
     ]),
