@@ -512,7 +512,7 @@ class Builder:
             Sl = self.strings[lang]
             def tr_path(item):
                 src = item[1]
-                if src.startswith('docs/') and src.count('/') == 1:
+                if (src.startswith('docs/') or src.startswith('rfcs/')) and src.count('/') == 1:
                     f = ROOT / 'docs' / 'i18n' / lang / (src.split('/')[-1])
                     return f if f.exists() else None
                 return None
@@ -550,7 +550,7 @@ class Builder:
 
     def doc_translated(self, lang, item):
         src = item[1]
-        return src.startswith('docs/') and src.count('/') == 1 and (ROOT / 'docs' / 'i18n' / lang / src.split('/')[-1]).exists()
+        return (src.startswith('docs/') or src.startswith('rfcs/')) and src.count('/') == 1 and (ROOT / 'docs' / 'i18n' / lang / src.split('/')[-1]).exists()
 
     def status_tag(self, status):
         if not status: return ''
