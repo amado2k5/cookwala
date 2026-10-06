@@ -1,0 +1,261 @@
+name: Samples cloud and cluster deploys
+
+# Proves the cluster and cloud tiles on the samples page. The kind job needs no secrets and runs
+# on every relevant change; the cloud jobs are workflow_dispatch-only (they create billable
+# resources) behind the protected `cloud-test` environment, and fail fast naming the secrets a
+# maintainer still has to set — see samples/devin/CLAIMS-TASK.md section 8.
+on:
+  pull_request:
+    paths: ['samples/packaging/helm/**', 'samples/packaging/docker/**', 'samples/cloud/**', '.github/workflows/samples-cloud.yml']
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Deploy target to prove
+        type: choice
+        options: [kind, azure, aws, gcp]
+        required: true
+        default: kind
+
+permissions:
+  contents: read
+
+jobs:
+  kind:
+    name: Helm chart and Knative service on a throwaway kind cluster
+    if: github.event_name == 'pull_request' || inputs.target == 'kind'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Build the image the chart and the Knative service run
+        run: docker build -f samples/packaging/docker/Containerfile -t cookwala-samples:ci samples
+      - uses: helm/kind-action@06c1ae10762d3b9c1644e7fe69596ae519e015a2  # v1.15.0
+        with: {cluster_name: kind}
+      - name: Load the image into the cluster
+        run: kind load docker-image cookwala-samples:ci
+      - name: helm lint and install the chart
+        run: |
+          helm lint samples/packaging/helm/cookwala-samples
+          helm install samples samples/packaging/helm/cookwala-samples \
+            --set image.repository=cookwala-samples --set image.tag=ci --set image.pullPolicy=IfNotPresent \
+            --wait --timeout 180s
+      - name: Call the Helm service
+        run: |
+          kubectl port-forward svc/samples 8080:80 & PF=$!
+          sleep 3
+          curl -fsS localhost:8080/health
+          curl -fsS -X POST localhost:8080/v1/samples/plan -H 'content-type: application/json' \
+            -d '{"order":{"dish":"koshari"},"humanPresent":true}'
+          curl -fsS 'localhost:8080/v1/samples/demo?format=markdown' -o /tmp/demo.md
+          grep -q '3 completed' /tmp/demo.md && echo 'demo report verified over HTTP'
+          kill $PF
+      - name: Install Knative Serving (knative-v1.23.0) and Kourier
+        run: |
+          kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.23.0/serving-crds.yaml
+          kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.23.0/serving-core.yaml
+          kubectl apply -f https://github.com/knative-extensions/net-kourier/releases/download/knative-v1.23.0/kourier.yaml
+          kubectl wait --for=condition=Available deployment -n knative-serving --all --timeout=300s
+          kubectl patch configmap/config-network -n knative-serving --type merge \
+            -p '{"data":{"ingress-class":"kourier.ingress.networking.knative.dev"}}'
+          # kind has no load balancer; stamp a fake ingress IP so the Knative Ingress can report Ready.
+          kubectl wait --for=condition=Available deployment -n kourier-system 3scale-kourier-gateway --timeout=300s
+          kubectl patch svc kourier -n kourier-system --type merge --subresource status \
+            -p '{"status":{"loadBalancer":{"ingress":[{"ip":"127.0.0.1"}]}}}'
+      # The manifest is applied verbatim: it already points at the public ghcr.io image, which is
+      # what a user deploys. (A kind-local tag cannot work anyway — the revision controller
+      # resolves image tags to digests against a real registry.)
+      - name: Apply the Knative service
+        run: |
+          kubectl apply -f samples/cloud/openshift/knative-service.yaml
+          kubectl wait --for=condition=Ready ksvc/cookwala-samples --timeout=300s
+      - name: Call the Knative service through Kourier
+        run: |
+          # The route is ClusterLocal (this Knative only advertises svc.cluster.local), so it is
+          # served by kourier-internal, not the external kourier service.
+          kubectl port-forward -n kourier-system svc/kourier-internal 8080:80 & PF=$!
+          sleep 3
+          H="Host: $(kubectl get ksvc cookwala-samples -o jsonpath='{.status.url}' | sed 's|.*://||')"
+          echo "routing with $H"
+          for i in $(seq 1 18); do curl -fsS -H "$H" localhost:8080/health && break || sleep 5; done
+          curl -fsS -H "$H" 'localhost:8080/v1/samples/demo?format=markdown' -o /tmp/kdemo.md
+          grep -q '3 completed' /tmp/kdemo.md && echo 'knative demo verified over HTTP'
+          kill $PF
+      - name: Teardown
+        if: always()
+        run: |
+          kubectl get ksvc,revision,deployment -o wide || true
+          kubectl get king -o yaml | grep -E "host|visibility" | head -10 || true
+          kubectl describe revision -l serving.knative.dev/service=cookwala-samples | tail -25 || true
+          kubectl get events --sort-by=.lastTimestamp | tail -20 || true
+          helm uninstall samples || true
+          kubectl delete ksvc/cookwala-samples --ignore-not-found || true
+          kubectl get pods -A || true
+
+  validate:
+    name: Cloud manifests validate offline
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Bicep compiles
+        run: |
+          curl -sL https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64 -o /tmp/bicep && chmod +x /tmp/bicep
+          /tmp/bicep build samples/cloud/azure-functions/main.bicep --stdout > /dev/null && echo 'main.bicep compiles'
+      - name: SAM template is valid
+        run: |
+          pip -q install aws-sam-cli
+          cd samples/cloud/aws-lambda && sam validate --region eu-west-1
+      - name: OpenShift and Knative manifests parse and stay portable
+        run: |
+          pip -q install pyyaml
+          python3 - <<'PY'
+          import json, yaml
+          t = yaml.safe_load(open('samples/cloud/openshift/template.yaml'))
+          assert t['kind'] == 'Template' and t['apiVersion'].startswith('template.openshift.io/'), 'not an OpenShift Template'
+          k = yaml.safe_load(open('samples/cloud/openshift/knative-service.yaml'))
+          assert k['apiVersion'] == 'serving.knative.dev/v1' and k['kind'] == 'Service'
+          json.load(open('samples/cloud/azure-functions/host.json'))
+          print('openshift template, knative service and host.json parse')
+          PY
+      - name: Function runtimes are currently supported
+        run: |
+          grep -q "Python|3.11" samples/cloud/azure-functions/main.bicep   # Azure Functions: supported until Oct 2027
+          grep -q "'~4'" samples/cloud/azure-functions/main.bicep           # FUNCTIONS_EXTENSION_VERSION ~4: current
+          grep -q 'python3.12' samples/cloud/aws-lambda/template.yaml       # Lambda python3.12: supported until Oct 2028
+          grep -q 'python312' samples/cloud/gcp-functions/main.py           # Cloud Run functions python312: GA
+          echo 'all function runtimes are in their supported windows'
+      - name: The public-function safety property holds
+        run: python -m unittest samples/python/tests/test_service_isolation.py
+
+  azure:
+    name: Azure Functions deploy (needs cloud-test secrets)
+    if: github.event_name == 'workflow_dispatch' && inputs.target == 'azure'
+    environment: cloud-test
+    permissions: {id-token: write, contents: read}
+    runs-on: ubuntu-latest
+    env:
+      RG: cw-samples-ci-${{ github.run_id }}
+      APP: cwci${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Required secrets are set
+        env:
+          AZURE_CLIENT_ID: '${{ secrets.AZURE_CLIENT_ID }}'
+          AZURE_TENANT_ID: '${{ secrets.AZURE_TENANT_ID }}'
+          AZURE_SUBSCRIPTION_ID: '${{ secrets.AZURE_SUBSCRIPTION_ID }}'
+        run: |
+          for s in AZURE_CLIENT_ID AZURE_TENANT_ID AZURE_SUBSCRIPTION_ID; do
+            [ -n "${!s}" ] || { echo "::error::repo secret $s is not set — see samples/devin/CLAIMS-TASK.md section 8"; exit 1; }
+          done
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906  # v3.1.0
+        with:
+          client-id: '${{ secrets.AZURE_CLIENT_ID }}'
+          tenant-id: '${{ secrets.AZURE_TENANT_ID }}'
+          subscription-id: '${{ secrets.AZURE_SUBSCRIPTION_ID }}'
+      - name: Deploy the Bicep stack
+        run: |
+          az group create -n "$RG" -l westeurope --tags ttl=1d purpose=samples-ci
+          az deployment group create -g "$RG" -f samples/cloud/azure-functions/main.bicep -p appName="$APP" -o table
+      - name: Publish the function (zip deploy, remote build)
+        run: |
+          cd samples/cloud/azure-functions && zip -qr /tmp/app.zip .
+          az functionapp deployment source config-zip -g "$RG" -n "$APP" --src /tmp/app.zip --build-remote true
+      - name: Call the endpoints and assert the demo report
+        run: |
+          base="https://$APP.azurewebsites.net/api"
+          for i in $(seq 1 30); do code=$(az functionapp keys list -g "$RG" -n "$APP" --query 'functionKeys.default' -o tsv) && [ -n "$code" ] && break || sleep 10; done
+          for i in $(seq 1 40); do curl -fsS "$base/health?code=$code" && break || sleep 15; done
+          curl -fsS -X POST "$base/v1/samples/plan?code=$code" -H 'content-type: application/json' -d '{"order":{"dish":"koshari"},"humanPresent":true}'
+          curl -fsS "$base/v1/samples/demo?format=markdown&code=$code" -o /tmp/demo.md
+          grep -q '3 completed' /tmp/demo.md && echo 'azure function demo verified'
+      - name: Teardown the resource group
+        if: always()
+        run: |
+          az group delete --yes --no-wait -n "$RG" \
+            || { echo "::error::teardown failed — delete resource group $RG by hand"; exit 1; }
+
+  aws:
+    name: AWS Lambda deploy (needs cloud-test secrets)
+    if: github.event_name == 'workflow_dispatch' && inputs.target == 'aws'
+    environment: cloud-test
+    permissions: {id-token: write, contents: read}
+    runs-on: ubuntu-latest
+    env:
+      STACK: cw-samples-ci-${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Required secrets are set
+        env: {AWS_ROLE_TO_ASSUME: '${{ secrets.AWS_ROLE_TO_ASSUME }}'}
+        run: '[ -n "$AWS_ROLE_TO_ASSUME" ] || { echo "::error::repo secret AWS_ROLE_TO_ASSUME is not set — see samples/devin/CLAIMS-TASK.md section 8"; exit 1; }'
+      - uses: aws-actions/setup-sam@89ddb14d60e682855e3fea4be85b3c56485de310  # v3
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd  # v6.3.0
+        with:
+          role-to-assume: '${{ secrets.AWS_ROLE_TO_ASSUME }}'
+          aws-region: eu-west-1
+      - name: sam build and deploy
+        working-directory: samples/cloud/aws-lambda
+        run: |
+          sam build
+          sam deploy --stack-name "$STACK" --resolve-s3 --capabilities CAPABILITY_IAM \
+            --no-confirm-changeset --parameter-overrides FunctionUrlAuth=NONE
+      - name: Call the Function URL and assert the demo report
+        working-directory: samples/cloud/aws-lambda
+        run: |
+          url=$(sam list stack-outputs --stack-name "$STACK" --output json \
+            | python3 -c 'import json,sys; print(next(o["OutputValue"] for o in json.load(sys.stdin) if o["OutputKey"]=="FunctionUrl"))')
+          for i in $(seq 1 20); do curl -fsS "${url}health" && break || sleep 10; done
+          curl -fsS "${url}v1/samples/demo?format=markdown" -o /tmp/demo.md
+          grep -q '3 completed' /tmp/demo.md && echo 'lambda demo verified'
+      - name: Teardown the stack
+        if: always()
+        working-directory: samples/cloud/aws-lambda
+        run: sam delete --no-prompts --stack-name "$STACK" || { echo "::error::teardown failed — delete stack $STACK by hand"; exit 1; }
+
+  gcp:
+    name: Google Cloud Run function deploy (needs cloud-test secrets)
+    if: github.event_name == 'workflow_dispatch' && inputs.target == 'gcp'
+    environment: cloud-test
+    permissions: {id-token: write, contents: read}
+    runs-on: ubuntu-latest
+    env:
+      FN: cookwala-samples-ci-${{ github.run_id }}
+      REGION: europe-west1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Required secrets are set
+        env:
+          GCP_WORKLOAD_IDENTITY_PROVIDER: '${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}'
+          GCP_SERVICE_ACCOUNT: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
+          GCP_PROJECT: '${{ secrets.GCP_PROJECT }}'
+        run: |
+          for s in GCP_WORKLOAD_IDENTITY_PROVIDER GCP_SERVICE_ACCOUNT GCP_PROJECT; do
+            [ -n "${!s}" ] || { echo "::error::repo secret $s is not set — see samples/devin/CLAIMS-TASK.md section 8"; exit 1; }
+          done
+      - name: The public-function safety property holds before --allow-unauthenticated
+        run: python -m unittest samples/python/tests/test_service_isolation.py
+      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093  # v3
+        with:
+          workload_identity_provider: '${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}'
+          service_account: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
+      - uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db  # v3.0.1
+      - name: Deploy the function
+        run: |
+          gcloud functions deploy "$FN" --gen2 --runtime python312 --region "$REGION" \
+            --source samples/cloud/gcp-functions --entry-point samples --trigger-http \
+            --allow-unauthenticated --project "$GCP_PROJECT" --quiet
+      - name: Call the endpoints and assert the demo report
+        run: |
+          url=$(gcloud functions describe "$FN" --gen2 --region "$REGION" --project "$GCP_PROJECT" --format 'value(serviceConfig.uri)')
+          for i in $(seq 1 20); do curl -fsS "$url/health" && break || sleep 10; done
+          curl -fsS "$url/v1/samples/demo?format=markdown" -o /tmp/demo.md
+          grep -q '3 completed' /tmp/demo.md && echo 'gcp function demo verified'
+      - name: Teardown the function
+        if: always()
+        run: |
+          gcloud functions delete "$FN" --gen2 --region "$REGION" --project "$GCP_PROJECT" --quiet \
+            || { echo "::error::teardown failed — delete function $FN in $REGION by hand"; exit 1; }
