@@ -13,6 +13,8 @@
 #
 # Needs the tools of each channel you publish: python -m build + twine, npm, mvn, dotnet, docker, curl.
 # Run samples/packaging/build.py first (pyz, wheel, sdist, deb).
+# Note: Artifactory OSS serves only maven/gradle/ivy/sbt + generic — the other targets need a
+# licensed (Pro) instance; on OSS their api/<type> endpoints simply do not exist.
 set -euo pipefail
 
 : "${ARTIFACTORY_URL:?set ARTIFACTORY_URL}" "${ARTIFACTORY_USER:?set ARTIFACTORY_USER}" "${ARTIFACTORY_TOKEN:?set ARTIFACTORY_TOKEN}"

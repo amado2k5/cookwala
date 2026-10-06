@@ -1,8 +1,11 @@
 name: Artifactory channel test
 
-# Proves samples/packaging/artifactory/publish.sh end to end: a throwaway Artifactory OSS container,
-# four OSS-supported local repositories, the real publish script, then install the packages back.
-# OSS covers pypi/npm/maven/generic — NuGet, Debian and RPM are Pro-only (see publish.sh header).
+# Proves samples/packaging/artifactory/publish.sh end to end: a throwaway Artifactory OSS
+# container, local repositories created by the OSS config-import mechanism, the real publish
+# script, then the artifacts resolve back out of the instance.
+# Artifactory OSS serves Maven/Gradle/Ivy/SBT and generic repositories only — pypi, npm,
+# NuGet, Debian and RPM are Pro features, so this job exercises `publish.sh maven generic`
+# (the package types an OSS instance can actually deploy to and serve from).
 on:
   pull_request:
     paths: ['samples/packaging/artifactory/**', 'samples/python/**', 'samples/js/**', 'samples/java/**', '.github/workflows/samples-channel-artifactory.yml']
@@ -18,21 +21,21 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
-      - uses: actions/setup-node@v4
-        with: {node-version: '22'}
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '21', cache: maven}
       - name: Build the distributables
         run: |
-          pip install build twine
+          pip install build
           python samples/packaging/build.py
       - name: Start a throwaway Artifactory OSS
         run: |
-          # Since 7.84 Artifactory refuses the bundled Derby DB unless it is explicitly allowed
-          # (harmless on 7.49, which still permits it). The repositories REST API is Pro-only,
-          # so the local repos come in through a bootstrap config descriptor — the supported
-          # OSS path. Do NOT disable services in system.yaml: the platform gate waits for the
-          # statically-required set (jfmd/jffe/jfob…) and disabling them hangs init forever.
+          # Newer Artifactory refuses the bundled Derby DB unless explicitly allowed
+          # (harmless on 7.49, which still permits it). The repositories REST API is
+          # Pro-gated, so the local repos come in through
+          # etc/artifactory/artifactory.repository.config.import.json — the supported
+          # OSS bootstrap mechanism on 7.49+. Do NOT disable services in system.yaml:
+          # the platform gate waits for the statically-required set (jfmd/jffe/jfob…)
+          # and disabling them hangs init forever.
           mkdir -p /tmp/afvar/etc/artifactory
           cat > /tmp/afvar/etc/system.yaml <<'YAML'
           shared:
@@ -40,33 +43,29 @@ jobs:
               type: derby
               allowNonPostgresql: true
           YAML
-          cat > /tmp/afvar/etc/artifactory/artifactory.config.bootstrap.xml <<'XML'
-          <config version="2">
-            <localRepositories>
-              <localRepository><key>cookwala-pypi-local</key><type>pypi</type><includesPattern>**/*</includesPattern><repoLayoutRef>pypi-default</repoLayoutRef></localRepository>
-              <localRepository><key>cookwala-npm-local</key><type>npm</type><includesPattern>**/*</includesPattern><repoLayoutRef>npm-default</repoLayoutRef></localRepository>
-              <localRepository><key>cookwala-maven-local</key><type>maven</type><includesPattern>**/*</includesPattern><repoLayoutRef>maven-2-default</repoLayoutRef></localRepository>
-              <localRepository><key>cookwala-generic-local</key><type>generic</type><includesPattern>**/*</includesPattern><repoLayoutRef>simple-default</repoLayoutRef></localRepository>
-            </localRepositories>
-          </config>
-          XML
+          cat > /tmp/afvar/etc/artifactory/artifactory.repository.config.import.json <<'JSON'
+          {
+            "localRepoConfigs": [
+              {"type": "local", "key": "cookwala-maven-local",   "packageType": "maven",   "repoLayout": "maven-2-default", "includesPattern": "**/*"},
+              {"type": "local", "key": "cookwala-generic-local", "packageType": "generic", "repoLayout": "simple-default",  "includesPattern": "**/*"}
+            ]
+          }
+          JSON
           sudo chmod -R 777 /tmp/afvar
           # Pinned to the 7.49 line: latest boots the full 8.x-era service stack which needs
           # 25+ min on a shared runner; 7.49 comes up in a few minutes. Every request goes to
           # port 8081 — the artifactory webapp directly. Port 8082 is the router, and it 503s
-          # all traffic until every statically-required service (jfmd/jffe/jfob…) is healthy,
-          # which is exactly what never finishes on a 2-core runner.
+          # all traffic until every statically-required service (jfmd/jffe/jfob…) is healthy.
           docker run -d --name af -p 8081:8081 -v /tmp/afvar:/var/opt/jfrog/artifactory \
             releases-docker.jfrog.io/jfrog/artifactory-oss:7.49.8
-          # api/system/version returns an artifactoryTracer NPE (500) until the Spring context
-          # finishes; once init completes it answers 200. First boot is CPU-bound against ~8
-          # bundled services and has measured anywhere from 13 to 25+ minutes on a shared
-          # runner, so allow 35 and fail loudly with container logs if it still is not up.
-          for i in $(seq 1 420); do
+          # api/system/version 500s until the Spring context finishes; once init completes it
+          # answers 200. First boot is CPU-bound against ~8 bundled services, so allow 15 min
+          # and fail loudly with container logs if it still is not up.
+          for i in $(seq 1 180); do
             curl -fsSo /dev/null -u admin:password http://localhost:8081/artifactory/api/system/version && break || sleep 5
           done
           curl -fsSo /dev/null -u admin:password http://localhost:8081/artifactory/api/system/version || { docker logs --tail 80 af; exit 1; }
-      - name: The bootstrap descriptor created the local repositories
+      - name: The config import created the local repositories
         run: |
           # The repositories REST API is Pro-gated entirely, so prove the generic repo exists the
           # only way OSS lets us: upload into it (fails with 404 if the repo is absent).
@@ -77,21 +76,19 @@ jobs:
             sleep 10
           done
           curl -fsS -u admin:password http://localhost:8081/artifactory/cookwala-generic-local/probe.txt | grep -q probe
-          echo 'bootstrap descriptor imported: generic repo accepts and serves artifacts'
-      - name: Run the real publish script
+          echo 'config import worked: generic repo accepts and serves artifacts'
+      - name: Run the real publish script (the types OSS serves)
         env:
           ARTIFACTORY_URL: http://localhost:8081/artifactory
           ARTIFACTORY_USER: admin
           ARTIFACTORY_TOKEN: password
-        run: samples/packaging/artifactory/publish.sh pypi npm maven generic
-      - name: Install back what was published and run the demo
+        run: samples/packaging/artifactory/publish.sh maven generic
+      - name: Resolve back what was published
         run: |
-          pip install --index-url http://admin:password@localhost:8081/artifactory/api/pypi/cookwala-pypi-local/simple cookwala-samples
-          cookwala-samples demo | grep -q '3 completed'
           mvn -B -q dependency:get -Dartifact=ai.cookwala:cookwala-samples:$(cat samples/VERSION) \
             -DremoteRepositories=af::default::http://admin:password@localhost:8081/artifactory/cookwala-maven-local
           curl -fsS -u admin:password http://localhost:8081/artifactory/cookwala-generic-local/cookwala-samples/$(cat samples/VERSION)/SHA256SUMS | head -3
-          echo 'pypi, maven and generic round-trips verified'
+          echo 'maven and generic round-trips verified'
       - name: Teardown
         if: always()
         run: docker logs --tail 150 af | grep -iE "error|derby|exception|fail|ready" | tail -30 || true; docker rm -f af
