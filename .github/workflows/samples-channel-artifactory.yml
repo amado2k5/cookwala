@@ -41,9 +41,14 @@ jobs:
           done
       - name: Create local repositories (admin:password is the OSS default)
         run: |
-          repo() { for i in $(seq 1 12); do curl -fsS -u admin:password -H content-type:application/json -X PUT \
-            "http://localhost:8082/artifactory/api/repositories/$1" \
-            -d "{\"key\":\"$1\",\"rclass\":\"local\",\"packageType\":\"$2\"}" && return 0; sleep 10; done; return 1; }
+          repo() { for i in $(seq 1 12); do
+            out=$(curl -sS -u admin:password -H content-type:application/json -X PUT -w '\n%{http_code}' \
+              "http://localhost:8082/artifactory/api/repositories/$1" \
+              -d "{\"key\":\"$1\",\"rclass\":\"local\",\"packageType\":\"$2\"}")
+            code=${out##*$'\n'}; body=${out%$'\n'*}
+            case "$code" in 2*) echo "$body"; return 0;; esac
+            echo "  attempt $i: HTTP $code $body"; sleep 10
+          done; return 1; }
           repo cookwala-pypi-local pypi
           repo cookwala-npm-local npm
           repo cookwala-maven-local maven
