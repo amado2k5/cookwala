@@ -38,7 +38,7 @@ pass `--base-url` to point them at another host, such as an Artifactory generic 
 | **Helm (Kubernetes)** | `helm install samples packaging/helm/cookwala-samples` | `packaging/helm/cookwala-samples/` | from the repository; an OCI chart push is one command (`helm push`) | a chart registry, if wanted |
 | **JFrog Artifactory** | the native client of each type, pointed at your Artifactory | `packaging/artifactory/publish.sh` | CI on tag, or by hand | `ARTIFACTORY_URL`, `ARTIFACTORY_USER`, `ARTIFACTORY_TOKEN` (+ `ARTIFACTORY_DOCKER_REGISTRY`) |
 | **GitHub release** | download the pyz, deb, wheel, sdist and `SHA256SUMS` | `.github/workflows/samples.yml` | CI on tag | nothing extra |
-| **Azure Functions** | deploy | `cloud/azure-functions/` | by hand (`az`, `func`) | an Azure subscription |
+| **Azure Functions** | deploy | `cloud/azure-functions/` | CI on demand (`samples-cloud.yml`, `target=azure`), or by hand (`az`, `func`) | an Azure subscription + `cloud-test` environment secrets |
 | **AWS Lambda** | deploy | `cloud/aws-lambda/` (SAM) | by hand (`sam deploy`) | an AWS account |
 | **Google Cloud Run functions** | deploy | `cloud/gcp-functions/` | by hand (`gcloud`) | a GCP project |
 | **OpenShift, OpenShift Serverless** | deploy | `cloud/openshift/` | by hand (`oc`) | a cluster |
@@ -107,10 +107,31 @@ usage error. The four CLIs now give the same exit codes and the same reports.
 | pyz, wheel and sdist build; `twine check` passes | `packaging/build.py` |
 | the Helm chart lints and renders a Deployment, Service, Ingress and Route | Helm 3.16 |
 | the Helm chart installs into a throwaway kind cluster and the Knative service answers over Kourier, both serving `/health` and the demo report | `.github/workflows/samples-cloud.yml` `kind` job (kind, Knative Serving 1.23) |
+| the Azure Functions deploy runs on a real subscription: Bicep stack, zip publish, `/health` + `/plan` + demo report over the public URL, then the resource group is deleted | `.github/workflows/samples-cloud.yml` `azure` job (`workflow_dispatch`, `cloud-test` environment) |
 
 ### Not run here
 
-`snapcraft` (needs snapd), a real `choco install` and `scoop install` (need Windows), the OpenShift template (needs a
-cluster), and any deployment to a real cloud account: the Azure Functions, AWS Lambda and Google Cloud deploys exist as
-`workflow_dispatch` jobs in `.github/workflows/samples-cloud.yml`, written end-to-end with `always()` teardown, but they
-have never run — they need the OIDC credentials named at the top of each job.
+`snapcraft` (needs snapd), a real `choco install` and `scoop install` (need Windows), and the OpenShift template (needs
+a cluster). For the clouds: the **Azure Functions** deploy is proven — see below. The AWS Lambda and Google Cloud
+deploys exist as `workflow_dispatch` jobs in `.github/workflows/samples-cloud.yml`, written end-to-end with `always()`
+teardown, but have never run — they need the OIDC credentials named at the top of each job.
+
+### Proven against a real account: Azure Functions
+
+Run [37443213472](https://github.com/amado2k5/cookwala/actions/runs/37443213472) (2026-10-06, `samples-cloud.yml`
+dispatched with `target=azure` behind the protected `cloud-test` environment):
+
+- OIDC login via `azure/login` — a Microsoft Entra app registration (`cookwala-ci`) with a federated credential
+  scoped to `environment:cloud-test`; no stored client secret.
+- `az group create` + `az deployment group create` deployed `samples/cloud/azure-functions/main.bicep` (storage
+  account, Y1 consumption plan, Application Insights, Function App) to `eastus` — overridable via the `AZURE_REGION`
+  variable, since new subscriptions reject some regions (`RequestDisallowedByAzure` / "not accepting new customers").
+- Zip-deployed `samples/cloud/azure-functions/` with a remote build.
+- Called the real endpoints: `GET /api/health` returned `{"ok": true, ...}`, `POST /api/v1/samples/plan` ranked the
+  devices, and `GET /api/v1/samples/demo?format=markdown` produced the report with `3 completed`.
+- `if: always()` teardown deleted the resource group.
+
+Required secrets in the `cloud-test` environment: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`.
+One setup detail worth noting: because this repository was renamed, GitHub emits the OIDC subject with numeric entity
+ids (`repo:amado2k5@20147989/cookwala@1403544608:environment:cloud-test`) — the federated credential's subject must
+match that form, not `repo:amado2k5/cookwala:...`.
