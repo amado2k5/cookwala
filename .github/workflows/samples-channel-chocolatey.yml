@@ -1,0 +1,47 @@
+name: Chocolatey channel test
+
+# Two things on a real Windows runner: choco pack + a local-source install proves the nuspec and
+# the install/uninstall scripts, and the moderation-feed status is printed so the samples page
+# note stays current. `choco push` to the community feed is maintainer-gated (see SUBMIT.md).
+on:
+  pull_request:
+    paths: ['samples/packaging/chocolatey/**', 'samples/python/**', '.github/workflows/samples-channel-chocolatey.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  install:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Build the distributables; render the manifest against a local asset server
+        run: |
+          pip install build
+          python samples/packaging/build.py --base-url http://localhost:8899
+          # A locally built pyz is not the release pyz, so the rendered checksum only matches the
+          # file this job serves. install-test.sh does the same; the feed package embeds the
+          # release hash from the tag-time build.
+          Start-Process python -ArgumentList '-m','http.server','8899','--directory','samples/build' -WindowStyle Hidden
+          Start-Sleep 2
+          Invoke-WebRequest http://localhost:8899/cookwala-samples-$(Get-Content samples/VERSION).pyz -OutFile $env:TEMP\t.pyz
+      - name: choco pack
+        working-directory: samples/build/manifests/chocolatey
+        run: choco pack cookwala-samples.nuspec
+      - name: choco install from the local source, demo, uninstall
+        working-directory: samples/build/manifests/chocolatey
+        run: |
+          # Local source for our nupkg + the community feed for the python3 dependency.
+          choco install cookwala-samples --source ".;https://community.chocolatey.org/api/v2/" -y --no-progress
+          cookwala-samples demo | Tee-Object demo.md | Out-Null
+          if (-not (Select-String -Path demo.md -Pattern '3 completed')) { throw 'demo report differs' }
+          choco uninstall cookwala-samples -y
+      - name: Public feed status (informational — the claims checker gates on this)
+        shell: powershell
+        run: |
+          $feed = Invoke-RestMethod "https://community.chocolatey.org/api/v2/Packages()?`$filter=Id eq 'cookwala-samples' and IsLatestVersion"
+          foreach ($e in $feed) { "{0} {1}: PackageStatus={2}" -f $e.properties.Id, $e.properties.Version, $e.properties.PackageStatus }
+          if (-not $feed) { 'no cookwala-samples entry on the community feed' }
