@@ -206,13 +206,17 @@ jobs:
           sam build
           sam deploy --stack-name "$STACK" --resolve-s3 --capabilities CAPABILITY_IAM \
             --no-confirm-changeset --parameter-overrides FunctionUrlAuth=NONE
-      - name: Call the Function URL and assert the demo report
+      - name: Call the HTTP API and assert the demo report
         working-directory: samples/cloud/aws-lambda
         run: |
+          # Use the HttpApiUrl output, not the Lambda Function URL: AWS blocks anonymous
+          # function-url invocations on brand-new accounts even with AuthType NONE and a
+          # public resource policy — the HTTP API front door proves the same deploy path.
           url=$(sam list stack-outputs --stack-name "$STACK" --output json \
-            | python3 -c 'import json,sys; print(next(o["OutputValue"] for o in json.load(sys.stdin) if o["OutputKey"]=="FunctionUrl"))')
-          for i in $(seq 1 20); do curl -fsS "${url}health" && break || sleep 10; done
-          curl -fsS "${url}v1/samples/demo?format=markdown" -o /tmp/demo.md
+            | python3 -c 'import json,sys; print(next(o["OutputValue"] for o in json.load(sys.stdin) if o["OutputKey"]=="HttpApiUrl"))')
+          base=${url%/v1/samples}
+          for i in $(seq 1 20); do curl -fsS "${base}/health" && break || sleep 10; done
+          curl -fsS "${base}/v1/samples/demo?format=markdown" -o /tmp/demo.md
           grep -q '3 completed' /tmp/demo.md && echo 'lambda demo verified'
       - name: Teardown the stack
         if: always()
