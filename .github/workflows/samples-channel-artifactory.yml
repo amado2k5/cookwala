@@ -1,0 +1,60 @@
+name: Artifactory channel test
+
+# Proves samples/packaging/artifactory/publish.sh end to end: a throwaway Artifactory OSS container,
+# four OSS-supported local repositories, the real publish script, then install the packages back.
+# OSS covers pypi/npm/maven/generic — NuGet, Debian and RPM are Pro-only (see publish.sh header).
+on:
+  pull_request:
+    paths: ['samples/packaging/artifactory/**', 'samples/python/**', 'samples/js/**', 'samples/java/**', '.github/workflows/samples-channel-artifactory.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  oss:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21', cache: maven}
+      - name: Build the distributables
+        run: |
+          pip install build twine
+          python samples/packaging/build.py
+      - name: Start a throwaway Artifactory OSS
+        run: |
+          docker run -d --name af -p 8081:8081 -p 8082:8082 releases-docker.jfrog.io/jfrog/artifactory-oss:latest
+          for i in $(seq 1 60); do curl -fsS http://localhost:8082/artifactory/api/system/ping && break || sleep 5; done
+      - name: Create local repositories (admin:password is the OSS default)
+        run: |
+          A='-u admin:password -H content-type:application/json'
+          curl -fsS $A -X PUT http://localhost:8082/artifactory/api/repositories/cookwala-pypi-local \
+            -d '{"key":"cookwala-pypi-local","rclass":"local","packageType":"pypi"}'
+          curl -fsS $A -X PUT http://localhost:8082/artifactory/api/repositories/cookwala-npm-local \
+            -d '{"key":"cookwala-npm-local","rclass":"local","packageType":"npm"}'
+          curl -fsS $A -X PUT http://localhost:8082/artifactory/api/repositories/cookwala-maven-local \
+            -d '{"key":"cookwala-maven-local","rclass":"local","packageType":"maven"}'
+          curl -fsS $A -X PUT http://localhost:8082/artifactory/api/repositories/cookwala-generic-local \
+            -d '{"key":"cookwala-generic-local","rclass":"local","packageType":"generic"}'
+      - name: Run the real publish script
+        env:
+          ARTIFACTORY_URL: http://localhost:8082/artifactory
+          ARTIFACTORY_USER: admin
+          ARTIFACTORY_TOKEN: password
+        run: samples/packaging/artifactory/publish.sh pypi npm maven generic
+      - name: Install back what was published and run the demo
+        run: |
+          pip install --index-url http://admin:password@localhost:8082/artifactory/api/pypi/cookwala-pypi-local/simple cookwala-samples
+          cookwala-samples demo | grep -q '3 completed'
+          mvn -B -q dependency:get -Dartifact=ai.cookwala:cookwala-samples:$(cat samples/VERSION) \
+            -DremoteRepositories=af::default::http://admin:password@localhost:8082/artifactory/cookwala-maven-local
+          curl -fsS -u admin:password http://localhost:8082/artifactory/cookwala-generic-local/cookwala-samples/$(cat samples/VERSION)/SHA256SUMS | head -3
+          echo 'pypi, maven and generic round-trips verified'
+      - name: Teardown
+        if: always()
+        run: docker logs --tail 40 af || true; docker rm -f af
