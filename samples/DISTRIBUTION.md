@@ -2,7 +2,7 @@
 
 **Status (2026-10-06): published on PyPI, npm, Maven Central, NuGet, Homebrew and GHCR** (tag
 `samples-v0.3.0`), with the single file and the `.deb` on GitHub Releases. Chocolatey is submitted
-and in moderation; Scoop, RPM, pacman (AUR), apk, conda-forge and Snap have manifests ready but
+and in moderation; RPM, pacman (AUR), apk, conda-forge and Snap have manifests ready but
 nothing submitted yet. JFrog Artifactory is a bring-your-own-instance channel — `publish.sh` pushes
 to whatever instance you point it at; there is no public one. Version: [`VERSION`](VERSION)
 (`python packaging/build.py --check-versions` fails CI if a manifest disagrees).
@@ -29,7 +29,7 @@ pass `--base-url` to point them at another host, such as an Artifactory generic 
 | **NuGet** | `dotnet add package Cookwala.Samples` · `dotnet tool install -g Cookwala.Samples.Tool` | `dotnet/Directory.Build.props`, `dotnet/src/*/*.csproj` | CI on tag | a nuget.org trusted-publishing policy (owner amado2k5, repo cookwala, workflow `samples.yml`, environment `release`, pattern `Cookwala.*`); the package owner name is read from the `NUGET_USER` repository variable (default `amado2026`); or a `NUGET_API_KEY` secret |
 | **Homebrew (macOS, Linux)** | `brew install amado2k5/cookwala/cookwala-samples` | `packaging/homebrew/cookwala-samples.rb.in` | CI on tag, to the tap repository | a tap repo `amado2k5/homebrew-cookwala`, `HOMEBREW_TAP_TOKEN` |
 | **Chocolatey (Windows)** | `choco install cookwala-samples` | `packaging/chocolatey/` | CI on tag (Windows runner) | `CHOCO_API_KEY`; community moderation before it is public |
-| **Scoop (Windows)** | `scoop bucket add cookwala https://github.com/amado2k5/scoop-cookwala` · `scoop install cookwala-samples` | `packaging/scoop/cookwala-samples.json.in` | by hand: copy the rendered manifest into the bucket repo | a bucket repository (`amado2k5/scoop-cookwala`, being set up) |
+| **Scoop (Windows)** | `scoop bucket add cookwala https://github.com/amado2k5/scoop-cookwala` · `scoop install cookwala-samples` | `packaging/scoop/cookwala-samples.json.in` | Excavator updates `version`/`hash` on each `samples-v*` release | live — bucket published, see `packaging/scoop/SUBMIT.md` |
 | **apt (Debian, Ubuntu)** | `sudo apt install ./cookwala-samples_0.3.0_all.deb`, or from an apt repository | built by `packaging/build.py` | GitHub release asset; Artifactory Debian repo | an apt repository (Artifactory, Cloudsmith, a PPA) for `apt install cookwala-samples` |
 | **RPM (dnf, yum, zypper)** | `sudo dnf install cookwala-samples` | `packaging/rpm/cookwala-samples.spec.in` | by hand: `rpmbuild -ba`, Fedora COPR or openSUSE OBS | a COPR or OBS project |
 | **pacman (Arch, AUR)** | `yay -S cookwala-samples` | `packaging/arch/PKGBUILD.in` | by hand: push the rendered PKGBUILD to the AUR | an AUR account |
@@ -88,7 +88,7 @@ apt a repository made with `apt-ftparchive`, Homebrew a local tap and a local co
 | Homebrew | `brew install` from a tap (installs python@3.12), run, `brew test` passes | Homebrew's Linux container |
 | conda | `conda build` on the rendered recipe from the sdist (its tests run), `conda create`, run | Miniforge container |
 | Chocolatey | `choco pack` makes the `.nupkg`; the install and uninstall scripts run under PowerShell, download the asset, check its sha256, create and remove the command; Chocolatey's three helper functions are stood in | PowerShell on Linux; a real `choco install` needs Windows |
-| Scoop | the manifest parses; `pre_install` writes the launcher; running it needs Windows | PowerShell on Linux |
+| Scoop | `scoop install` from the live bucket on `windows-latest`, then `cookwala-samples demo` — daily + on packaging changes | `.github/workflows/samples-channel-scoop.yml` |
 | OCI image | runs the demo; serves HTTP as an arbitrary uid on a read-only root filesystem | Docker |
 | AWS Lambda | the handler answers inside AWS's own `public.ecr.aws/lambda/python:3.12` image (runtime interface emulator) | Docker |
 | Azure Functions | `func start` with Azure Functions Core Tools 4 serves `/api/health`, `/api/v1/samples/plan` and the demo | local Functions host |
@@ -112,7 +112,7 @@ usage error. The four CLIs now give the same exit codes and the same reports.
 
 ### Not run here
 
-`snapcraft` (needs snapd), a real `choco install` and `scoop install` (need Windows), the OpenShift template (needs a
-cluster), and any deployment to a real cloud account: the Azure Functions, AWS Lambda and Google Cloud deploys exist as
-`workflow_dispatch` jobs in `.github/workflows/samples-cloud.yml`, written end-to-end with `always()` teardown, but they
-have never run — they need the OIDC credentials named at the top of each job.
+The OpenShift template (needs a real cluster; Helm and Knative on a throwaway kind cluster are covered by the `kind`
+job). Everything else above runs in CI: `snap install` (`samples-channel-snap.yml`), `choco install` and
+`scoop install` on `windows-latest` (`samples-channel-chocolatey.yml`, `samples-channel-scoop.yml`), and all three
+cloud deploys on real accounts — see below.

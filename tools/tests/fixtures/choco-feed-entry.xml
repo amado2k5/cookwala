@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<feed xml:base="https://community.chocolatey.org/api/v2/" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Packages</title>
+  <id>https://community.chocolatey.org/api/v2/Packages</id>
+  <updated>2026-10-06T02:07:30Z</updated>
+  <entry>
+    <id>https://community.chocolatey.org/api/v2/Packages(Id='cookwala-samples',Version='0.3.0')</id>
+    <title type="text">cookwala-samples</title>
+    <m:properties><d:Version>0.3.0</d:Version><d:PackageStatus>Approved</d:PackageStatus></m:properties>
+  </entry>
+</feed>
