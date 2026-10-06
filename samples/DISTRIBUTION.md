@@ -100,15 +100,17 @@ usage error. The four CLIs now give the same exit codes and the same reports.
 
 | What | How |
 |---|---|
-| Python: 30 tests, including equality with the reference dry run for every example recipe and device, JSON Schema validation of every request, status, log and incident, and the demo against the reference hub over HTTP | `python -m unittest discover -s samples/python/tests` |
+| Python: 33 tests, including equality with the reference dry run for every example recipe and device, JSON Schema validation of every request, status, log and incident, the demo against the reference hub over HTTP, and every service endpoint with the network disabled | `python -m unittest discover -s samples/python/tests` |
 | JavaScript: 42 tests (Node 18 and 22); Markdown and CSV demo reports byte-identical to Python | `npm test` in `samples/js` |
 | Java: tests under both Maven and Gradle (Java 17 and 21); demo identical to Python; sources and javadoc jars for Maven Central | `mvn -B package`, `gradle build` in `samples/java` |
 | .NET: 55 tests; demo identical to Python | `dotnet test` in `samples/dotnet` |
 | pyz, wheel and sdist build; `twine check` passes | `packaging/build.py` |
 | the Helm chart lints and renders a Deployment, Service, Ingress and Route | Helm 3.16 |
+| the Helm chart installs into a throwaway kind cluster and the Knative service answers over Kourier, both serving `/health` and the demo report | `.github/workflows/samples-cloud.yml` `kind` job (kind, Knative Serving 1.23) |
 
 ### Not run here
 
-`snapcraft` (needs snapd), a real `choco install` and `scoop install` (need Windows), `helm install` into a live
-cluster (Kubernetes would not start inside this sandbox; CI runners can), the OpenShift template (needs a cluster), and
-any deployment to a real cloud account or registry.
+`snapcraft` (needs snapd), a real `choco install` and `scoop install` (need Windows), the OpenShift template (needs a
+cluster), and any deployment to a real cloud account: the Azure Functions, AWS Lambda and Google Cloud deploys exist as
+`workflow_dispatch` jobs in `.github/workflows/samples-cloud.yml`, written end-to-end with `always()` teardown, but they
+have never run — they need the OIDC credentials named at the top of each job.
