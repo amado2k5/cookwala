@@ -33,7 +33,7 @@ jobs:
           mkdir -p /tmp/afvar/etc
           printf 'shared:\n  database:\n    type: derby\n    allowNonPostgresql: true\n' > /tmp/afvar/etc/system.yaml
           sudo chmod -R 777 /tmp/afvar
-          docker run -d --name af -p 8081:8081 -p 8082:8082 -v /tmp/afvar:/opt/jfrog/artifactory/var \
+          docker run -d --name af -p 8081:8081 -p 8082:8082 -v /tmp/afvar:/var/opt/jfrog/artifactory \
             releases-docker.jfrog.io/jfrog/artifactory-oss:latest
           # The router answers ping early; wait until the API itself serves version with auth.
           for i in $(seq 1 150); do
@@ -64,4 +64,4 @@ jobs:
           echo 'pypi, maven and generic round-trips verified'
       - name: Teardown
         if: always()
-        run: docker logs --tail 40 af || true; docker rm -f af
+        run: docker logs --tail 150 af | grep -iE "error|derby|exception|fail|ready" | tail -30 || true; docker rm -f af
