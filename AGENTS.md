@@ -57,3 +57,25 @@ bash tools/build_site.sh _site                 # when you touch site/, docs/ or 
 · `sdk/mcp-js/` the MCP server (pure core in `src/core/`, also served to the browser) · `sdk/mcp/` the Python MCP script
 · `site/` pages and `.well-known` · `docs/` the documentation set (registered in `tools/build_site.py`) · `recipes/` the export from fifi.cooking.
 Pages are discovered from `site/content/en/*.html`; Arabic pages sit in `site/content/ar/`, other languages fall back to English.
+
+<!-- BEGIN AWS Agent Toolkit rules -->
+# AWS Guidance
+
+- Where these AWS rules conflict with the project's own instructions, the
+  project's instructions take precedence.
+- Prefer the AWS MCP Server for AWS interactions — it provides sandboxed
+  execution, observability, and audit logging. If unavailable, use the
+  AWS CLI directly.
+- Before starting a task, check whether a relevant AWS skill is available.
+  Load the skill with `retrieve_skill` and prefer its guidance over
+  general knowledge.
+- When uncertain about specific AWS details (API parameters, permissions,
+  limits, error codes), verify against documentation rather than guessing.
+  State uncertainty explicitly if you cannot confirm.
+- When creating infrastructure, prefer infrastructure-as-code (AWS CDK or
+  CloudFormation) over direct CLI commands.
+- When working with infrastructure, follow AWS Well-Architected Framework
+  principles.
+- Do not use em dashes in AWS resource names or descriptions. Use
+  hyphens instead.
+<!-- END AWS Agent Toolkit rules -->
