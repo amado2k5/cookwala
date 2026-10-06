@@ -28,9 +28,10 @@ jobs:
       - name: choco install from the local source, demo, uninstall
         working-directory: samples/build/manifests/chocolatey
         run: |
-          choco install cookwala-samples --source . -y --no-progress
-          cookwala-samples demo | Tee-Object /tmp/demo.md | Select-String '3 completed' | Out-Null
-          if (-not (Select-String -Path /tmp/demo.md -Pattern '3 completed')) { throw 'demo report differs' }
+          # Local source for our nupkg + the community feed for the python3 dependency.
+          choco install cookwala-samples --source ".;https://community.chocolatey.org/api/v2/" -y --no-progress
+          cookwala-samples demo | Tee-Object demo.md | Out-Null
+          if (-not (Select-String -Path demo.md -Pattern '3 completed')) { throw 'demo report differs' }
           choco uninstall cookwala-samples -y
       - name: Public feed status (informational — the claims checker gates on this)
         shell: powershell
