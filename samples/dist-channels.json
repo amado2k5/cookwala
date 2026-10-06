@@ -18,7 +18,7 @@
         {"icons": ["homebrew"], "name": "Homebrew", "cmd": "brew install amado2k5/cookwala/cookwala-samples", "status": "live", "src": "samples/packaging/homebrew/cookwala-samples.rb.in", "check": "homebrew-tap"},
         {"icons": ["chocolatey"], "name": "Chocolatey", "cmd": "choco install cookwala-samples", "status": "ready", "src": "samples/packaging/chocolatey", "check": "chocolatey",
          "note": {"en": "0.3.0 submitted; pending automated review (checked 2026-10-06)", "ar": "أُرسلت 0.3.0؛ بانتظار المراجعة الآلية (رُوجعت 2026-10-06)"}},
-        {"icons": ["scoop"], "name": "Scoop", "cmd": "scoop install cookwala-samples", "status": "manual", "src": "samples/packaging/scoop/cookwala-samples.json.in", "check": "scoop-bucket"},
+        {"icons": ["scoop"], "name": "Scoop", "cmd": "scoop bucket add cookwala amado2k5/scoop-cookwala && scoop install cookwala-samples", "status": "live", "src": "samples/packaging/scoop/cookwala-samples.json.in", "check": "scoop-bucket"},
         {"icons": ["debian", "ubuntu"], "name": "apt (Debian, Ubuntu)", "cmd": "sudo apt install ./cookwala-samples_{{VERSION}}_all.deb", "status": "live", "src": "samples/packaging/build.py", "check": "gh-asset:deb"},
         {"icons": ["fedora", "redhat"], "name": "RPM (dnf, yum, zypper)", "cmd": "sudo dnf install cookwala-samples", "status": "manual", "src": "samples/packaging/rpm/cookwala-samples.spec.in", "check": "rpm"},
         {"icons": ["arch"], "name": "pacman (Arch, AUR)", "cmd": "yay -S cookwala-samples", "status": "manual", "src": "samples/packaging/arch/PKGBUILD.in", "check": "aur"},
