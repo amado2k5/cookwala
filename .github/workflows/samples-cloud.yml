@@ -139,6 +139,9 @@ jobs:
     env:
       RG: cw-samples-ci-${{ github.run_id }}
       APP: cwci${{ github.run_id }}
+      # New subscriptions are often region-restricted ("not accepting new customers");
+      # override with an AZURE_REGION environment/repo variable if the default is blocked.
+      REGION: ${{ vars.AZURE_REGION || 'eastus' }}
     steps:
       - uses: actions/checkout@v4
       - name: Required secrets are set
@@ -157,7 +160,7 @@ jobs:
           subscription-id: '${{ secrets.AZURE_SUBSCRIPTION_ID }}'
       - name: Deploy the Bicep stack
         run: |
-          az group create -n "$RG" -l westeurope --tags ttl=1d purpose=samples-ci
+          az group create -n "$RG" -l "$REGION" --tags ttl=1d purpose=samples-ci
           az deployment group create -g "$RG" -f samples/cloud/azure-functions/main.bicep -p appName="$APP" -o table
       - name: Publish the function (zip deploy, remote build)
         run: |
@@ -174,6 +177,8 @@ jobs:
       - name: Teardown the resource group
         if: always()
         run: |
+          # If azure/login failed there is nothing to delete; a missing RG is success too.
+          az group exists -n "$RG" 2>/dev/null | grep -q true || exit 0
           az group delete --yes --no-wait -n "$RG" \
             || { echo "::error::teardown failed — delete resource group $RG by hand"; exit 1; }
 
