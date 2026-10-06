@@ -58,6 +58,10 @@ jobs:
           kubectl wait --for=condition=Available deployment -n knative-serving --all --timeout=300s
           kubectl patch configmap/config-network -n knative-serving --type merge \
             -p '{"data":{"ingress-class":"kourier.ingress.networking.knative.dev"}}'
+          # kind has no load balancer; stamp a fake ingress IP so the Knative Ingress can report Ready.
+          kubectl wait --for=condition=Available deployment -n kourier-system 3scale-kourier-gateway --timeout=300s
+          kubectl patch svc kourier -n kourier-system --type merge --subresource status \
+            -p '{"status":{"loadBalancer":{"ingress":[{"ip":"127.0.0.1"}]}}}'
       # The manifest is already portable Knative Serving; the only adaptations for kind are the
       # locally built image and IfNotPresent so the node keeps what `kind load` gave it.
       - name: Apply the Knative service (adapted for kind)
@@ -78,6 +82,8 @@ jobs:
       - name: Teardown
         if: always()
         run: |
+          kubectl get ksvc -o wide || true
+          kubectl describe ksvc cookwala-samples | tail -20 || true
           helm uninstall samples || true
           kubectl delete ksvc/cookwala-samples --ignore-not-found || true
           kubectl get pods -A || true
