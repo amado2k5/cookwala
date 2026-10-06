@@ -1,0 +1,49 @@
+name: Samples claims check
+
+# Daily guard: every 'Published' tile on /samples/ is checked against its public registry, and
+# every 'not yet' tile is checked for having quietly gone live. Runs on a PR only when the claims
+# themselves change, so it never blocks unrelated work.
+on:
+  schedule:
+    - {cron: '23 5 * * *'}
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'samples/dist-channels.json'
+      - 'site/content/*/samples.html'
+      - 'samples/DISTRIBUTION.md'
+      - 'tools/check_samples_claims.py'
+      - 'tools/tests/**'
+      - 'tools/build_site.py'
+      - '.github/workflows/samples-claims.yml'
+
+permissions:
+  contents: read
+  issues: write   # one tracking issue on failure, updated not duplicated
+
+jobs:
+  claims:
+    name: Every tile status vs its public registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Unit tests (offline, recorded fixtures)
+        run: python -m unittest discover -s tools/tests
+      - name: Check the claims
+        id: claims
+        env: {GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'}
+        run: python tools/check_samples_claims.py --report claims-report.md
+      - name: Open or update the tracking issue
+        if: steps.claims.outcome == 'failure'
+        env: {GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}'}
+        run: |
+          title='Samples page claims out of date'
+          issue=$(gh issue list --repo "${{ github.repository }}" --state open --search "in:title \"$title\"" --json number --jq '.[0].number // empty')
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --repo "${{ github.repository }}" --body-file claims-report.md
+            echo "updated issue #$issue"
+          else
+            gh issue create --repo "${{ github.repository }}" --title "$title" --body-file claims-report.md
+          fi
