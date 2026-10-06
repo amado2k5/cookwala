@@ -9,6 +9,9 @@
     <owners>amado2k5</owners>
     <projectUrl>https://cookwala.ai</projectUrl>
     <projectSourceUrl>https://github.com/amado2k5/cookwala/tree/main/samples</projectSourceUrl>
+    <packageSourceUrl>https://github.com/amado2k5/cookwala/tree/main/samples/packaging/chocolatey</packageSourceUrl>
+    <iconUrl>https://cookwala.ai/assets/icon.svg</iconUrl>
+    <releaseNotes>https://github.com/amado2k5/cookwala/releases/tag/samples-v{{VERSION}}</releaseNotes>
     <licenseUrl>https://github.com/amado2k5/cookwala/blob/main/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>cookwala cooking robots food-safety agents orchestration samples cli</tags>
