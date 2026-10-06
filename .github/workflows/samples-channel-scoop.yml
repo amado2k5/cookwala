@@ -22,6 +22,7 @@ jobs:
           Invoke-RestMethod get.scoop.sh | Invoke-Expression
           scoop bucket add cookwala https://github.com/amado2k5/scoop-cookwala
           scoop install cookwala-samples
+          "$env:USERPROFILE\scoop\shims" >> $env:GITHUB_PATH
       - name: The demo reports the same results as a clean install
         shell: powershell
         run: |
