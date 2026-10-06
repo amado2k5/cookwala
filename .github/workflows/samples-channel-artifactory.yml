@@ -1,0 +1,94 @@
+name: Artifactory channel test
+
+# Proves samples/packaging/artifactory/publish.sh end to end: a throwaway Artifactory OSS
+# container, local repositories created by the OSS config-import mechanism, the real publish
+# script, then the artifacts resolve back out of the instance.
+# Artifactory OSS serves Maven/Gradle/Ivy/SBT and generic repositories only — pypi, npm,
+# NuGet, Debian and RPM are Pro features, so this job exercises `publish.sh maven generic`
+# (the package types an OSS instance can actually deploy to and serve from).
+on:
+  pull_request:
+    paths: ['samples/packaging/artifactory/**', 'samples/python/**', 'samples/js/**', 'samples/java/**', '.github/workflows/samples-channel-artifactory.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  oss:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21', cache: maven}
+      - name: Build the distributables
+        run: |
+          pip install build
+          python samples/packaging/build.py
+      - name: Start a throwaway Artifactory OSS
+        run: |
+          # Newer Artifactory refuses the bundled Derby DB unless explicitly allowed
+          # (harmless on 7.49, which still permits it). The repositories REST API is
+          # Pro-gated, so the local repos come in through
+          # etc/artifactory/artifactory.repository.config.import.json — the supported
+          # OSS bootstrap mechanism on 7.49+. Do NOT disable services in system.yaml:
+          # the platform gate waits for the statically-required set (jfmd/jffe/jfob…)
+          # and disabling them hangs init forever.
+          mkdir -p /tmp/afvar/etc/artifactory
+          cat > /tmp/afvar/etc/system.yaml <<'YAML'
+          shared:
+            database:
+              type: derby
+              allowNonPostgresql: true
+          YAML
+          cat > /tmp/afvar/etc/artifactory/artifactory.repository.config.import.json <<'JSON'
+          {
+            "localRepoConfigs": [
+              {"type": "local", "key": "cookwala-maven-local",   "packageType": "maven",   "repoLayout": "maven-2-default", "includesPattern": "**/*"},
+              {"type": "local", "key": "cookwala-generic-local", "packageType": "generic", "repoLayout": "simple-default",  "includesPattern": "**/*"}
+            ]
+          }
+          JSON
+          sudo chmod -R 777 /tmp/afvar
+          # Pinned to the 7.49 line: latest boots the full 8.x-era service stack which needs
+          # 25+ min on a shared runner; 7.49 comes up in a few minutes. Every request goes to
+          # port 8081 — the artifactory webapp directly. Port 8082 is the router, and it 503s
+          # all traffic until every statically-required service (jfmd/jffe/jfob…) is healthy.
+          docker run -d --name af -p 8081:8081 -v /tmp/afvar:/var/opt/jfrog/artifactory \
+            releases-docker.jfrog.io/jfrog/artifactory-oss:7.49.8
+          # api/system/version 500s until the Spring context finishes; once init completes it
+          # answers 200. First boot is CPU-bound against ~8 bundled services, so allow 15 min
+          # and fail loudly with container logs if it still is not up.
+          for i in $(seq 1 180); do
+            curl -fsSo /dev/null -u admin:password http://localhost:8081/artifactory/api/system/version && break || sleep 5
+          done
+          curl -fsSo /dev/null -u admin:password http://localhost:8081/artifactory/api/system/version || { docker logs --tail 80 af; exit 1; }
+      - name: The config import created the local repositories
+        run: |
+          # The repositories REST API is Pro-gated entirely, so prove the generic repo exists the
+          # only way OSS lets us: upload into it (fails with 404 if the repo is absent).
+          echo probe > /tmp/probe.txt
+          for i in $(seq 1 30); do
+            curl -fsS -u admin:password -T /tmp/probe.txt \
+              http://localhost:8081/artifactory/cookwala-generic-local/probe.txt && break
+            sleep 10
+          done
+          curl -fsS -u admin:password http://localhost:8081/artifactory/cookwala-generic-local/probe.txt | grep -q probe
+          echo 'config import worked: generic repo accepts and serves artifacts'
+      - name: Run the real publish script (the types OSS serves)
+        env:
+          ARTIFACTORY_URL: http://localhost:8081/artifactory
+          ARTIFACTORY_USER: admin
+          ARTIFACTORY_TOKEN: password
+        run: samples/packaging/artifactory/publish.sh maven generic
+      - name: Resolve back what was published
+        run: |
+          mvn -B -q dependency:get -Dartifact=ai.cookwala:cookwala-samples:$(cat samples/VERSION) \
+            -DremoteRepositories=af::default::http://admin:password@localhost:8081/artifactory/cookwala-maven-local
+          curl -fsS -u admin:password http://localhost:8081/artifactory/cookwala-generic-local/cookwala-samples/$(cat samples/VERSION)/SHA256SUMS | head -3
+          echo 'maven and generic round-trips verified'
+      - name: Teardown
+        if: always()
+        run: docker logs --tail 150 af | grep -iE "error|derby|exception|fail|ready" | tail -30 || true; docker rm -f af
