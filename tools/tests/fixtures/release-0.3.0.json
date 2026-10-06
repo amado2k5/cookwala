@@ -1,0 +1,11 @@
+{
+  "tag_name": "samples-v0.3.0",
+  "html_url": "https://github.com/amado2k5/cookwala/releases/tag/samples-v0.3.0",
+  "assets": [
+    {"name": "cookwala-samples-0.3.0.pyz", "browser_download_url": "https://example.test/cookwala-samples-0.3.0.pyz"},
+    {"name": "cookwala-samples_0.3.0_all.deb", "browser_download_url": "https://example.test/cookwala-samples_0.3.0_all.deb"},
+    {"name": "cookwala_samples-0.3.0-py3-none-any.whl", "browser_download_url": "https://example.test/cookwala_samples-0.3.0-py3-none-any.whl"},
+    {"name": "cookwala_samples-0.3.0.tar.gz", "browser_download_url": "https://example.test/cookwala_samples-0.3.0.tar.gz"},
+    {"name": "SHA256SUMS", "browser_download_url": "https://example.test/SHA256SUMS"}
+  ]
+}
