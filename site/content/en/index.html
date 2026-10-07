@@ -31,8 +31,8 @@
         <label class="check"><input type="checkbox" id="dModel" checked> Allow educated guesses where a sensor is missing<br><span class="note">logged, not trusted</span></label>
         <button type="button" class="btn primary" id="dPreset">Watch it refuse an unsafe step</button>
       </form>
-      <p class="note"><strong>Custom device:</strong> Pick a preset device above, or build your own below (extends step 2). Most recipes need a human actively supervising in the kitchen. Some prep-heavy recipes might work with a human nearby. Pure automation (no human) rarely works with current safety standards.</p>
-      <details id="builder"><summary>Build your own device (extends step 2)</summary>
+      <p class="note"><strong>Step 1:</strong> Pick a preset device above. <strong>Step 2:</strong> Or build your own below. Most recipes need a human actively supervising; fewer work with no human.</p>
+      <details id="builder"><summary>Build your own device</summary>
         <div class="builder" id="builderBody"></div>
       </details>
       <div class="verdict" id="verdict" role="status" aria-live="polite">Loading the recipe and the operation vocabulary…</div>
@@ -41,9 +41,24 @@
       <p class="note">Bands come from <a href="/v1/vocab/ops.json">the operation vocabulary</a>. "Estimate" is a logged model estimate; "time" is nominal time only. A step that nothing can check is refused. Deep frying has one rung: no oil thermometer, no deep frying.</p>
     </div>
   </div>
+  <p class="note">Try <code>cookwala dryrun your-recipe.yaml --device device.yaml</code> to run the same rules locally, entirely offline. <a href="/docs/CLI/">CLI docs</a> · <a href="/docs/AI-AGENTS/">Using Cookwala from your agent</a></p>
 </section>
 
 {{origin_block}}
+
+<section class="wrap" aria-labelledby="path-h">
+  <div class="sec-head"><h2 id="path-h">Find your path</h2><p>Within a minute: why Cookwala matters to you, and one thing you can do today.</p></div>
+  <div class="pathfinder" id="pathfinder">
+    <div class="row">
+      <label>I am <select id="pfWho" aria-label="I am"></select></label>
+      <label>and I want to <select id="pfWant" aria-label="I want to"></select></label>
+    </div>
+    <div class="result" id="pfResult"></div>
+    <noscript><ul>
+      <li><a href="/for/developers/">Developers, robot and appliance makers, AI-agent builders</a></li><li><a href="/for/companies/">Companies, grocers, restaurants, insurers</a></li><li><a href="/for/providers/">Providers: grocers, farms, delivery, energy, AI vendors, recipe publishers</a></li><li><a href="/for/food/">Farmers, cooks, chefs, culinary schools</a></li><li><a href="/for/humanitarian/">NGOs, food banks, school-meal and relief programs</a></li><li><a href="/for/health/">Dietitians, food-safety officers, public health</a></li><li><a href="/for/education/">Teachers, professors, researchers, students</a></li><li><a href="/for/government/">Governments, regulators, legislators, standards bodies</a></li><li><a href="/for/capital/">Investors, philanthropies, development banks</a></li><li><a href="/for/thought/">Philosophers, ethicists, futurists</a></li><li><a href="/for/everyone/">Everyone</a></li>
+    </ul></noscript>
+  </div>
+</section>
 
 <section class="wrap" aria-labelledby="prob-h">
   <h2 id="prob-h">Why now</h2>
@@ -84,20 +99,6 @@
       <p><a href="/docs/CORE/">Read Core 0.2</a> · <a href="/trust/">Trust</a> · <a href="/docs/CRITIQUES/">Critiques we published</a></p>
     </div>
     <figure class="diagram">{{diagram:dryrun}}<figcaption class="note">{{s:home.d4_caption}}</figcaption></figure>
-  </div>
-</section>
-
-<section class="wrap" aria-labelledby="path-h">
-  <div class="sec-head"><h2 id="path-h">Find your path</h2><p>Within a minute: why Cookwala matters to you, and one thing you can do today.</p></div>
-  <div class="pathfinder" id="pathfinder">
-    <div class="row">
-      <label>I am <select id="pfWho" aria-label="I am"></select></label>
-      <label>and I want to <select id="pfWant" aria-label="I want to"></select></label>
-    </div>
-    <div class="result" id="pfResult"></div>
-    <noscript><ul>
-      <li><a href="/for/developers/">Developers, robot and appliance makers, AI-agent builders</a></li><li><a href="/for/companies/">Companies, grocers, restaurants, insurers</a></li><li><a href="/for/providers/">Providers: grocers, farms, delivery, energy, AI vendors, recipe publishers</a></li><li><a href="/for/food/">Farmers, cooks, chefs, culinary schools</a></li><li><a href="/for/humanitarian/">NGOs, food banks, school-meal and relief programs</a></li><li><a href="/for/health/">Dietitians, food-safety officers, public health</a></li><li><a href="/for/education/">Teachers, professors, researchers, students</a></li><li><a href="/for/government/">Governments, regulators, legislators, standards bodies</a></li><li><a href="/for/capital/">Investors, philanthropies, development banks</a></li><li><a href="/for/thought/">Philosophers, ethicists, futurists</a></li><li><a href="/for/everyone/">Everyone</a></li>
-    </ul></noscript>
   </div>
 </section>
 
