@@ -173,6 +173,13 @@ wheat gluten and "coconut" as nuts:
 - `gluten_free`, `dairy_free`, `nut_free` (`fifi-allergen-1`) and `diabetic_friendly` (`fifi-diabetic-1`) arrive as ordinary `safety.dietary`
   claims. `safety.x-diabetic` carries the estimate for every recipe (`friendly`, `borderline`, `not_friendly`, `unknown`), so "not friendly" can be
   told from "not assessed".
+- **Gluten and lactose on every recipe.** `safety.x-gluten` and `safety.x-lactose` (`{status, ruleset, basis}`) carry an explicit status for every
+  recipe, not only a positive claim. Gluten: `free` (none found, nothing bought or compound could hide it; the same rule as the `gluten_free` claim),
+  `contains`, `check_labels`, `not_assessed`. Lactose (`fifi-lactose-1`): `free` (no milk product found; also written as the `lactose_free` claim),
+  `contains` (milk, cream, yogurt, soft cheese...), `low_or_possible` (only butter, ghee or a hard aged cheese found, or a bought item may hide milk),
+  `not_assessed`. Butter and ghee are dairy but carry little lactose, so `dairy_free` and `lactose_free` are different claims. The API and MCP treat
+  these statuses as authoritative for `diet=gluten_free` and `diet=lactose_free`; a recipe without one falls back to the ingredient screen.
+  Of 2,380 recipes: gluten 747 free, 1,310 contains, 323 check labels; lactose 578 free, 1,094 contains, 708 low or possible.
 - Nothing here is a certification, a guarantee or medical advice. The diabetic estimate comes from the modelled nutrition per serving (sugar 5 g or
   less, carbohydrate 30 g or less, carbohydrate at most 40% of the energy, 12 servings or fewer; not friendly above 15 g sugar or 60 g carbohydrate).
 - 2,257 existing documents were re-exported for this change. The 105 recipes fifi.cooking has gained since the last export (world cuisines: Lebanon,

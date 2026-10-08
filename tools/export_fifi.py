@@ -190,6 +190,8 @@ EU14 = {'cereals_gluten', 'crustaceans', 'eggs', 'fish', 'peanuts', 'soybeans', 
 US9 = {'milk': 'milk', 'eggs': 'eggs', 'fish': 'fish', 'crustaceans': 'crustacean_shellfish', 'nuts': 'tree_nuts', 'peanuts': 'peanuts', 'cereals_gluten': 'wheat', 'soybeans': 'soybeans', 'sesame': 'sesame'}
 ALLERGEN_STATUS = {'contains', 'none_found', 'check_labels', 'not_assessed'}
 DIABETIC_STATUS = {'friendly', 'borderline', 'not_friendly', 'unknown'}
+GLUTEN_STATUS = {'free', 'contains', 'check_labels', 'not_assessed'}
+LACTOSE_STATUS = {'free', 'contains', 'low_or_possible', 'not_assessed'}
 
 
 def allergens(names_en):
@@ -327,6 +329,12 @@ def convert(d, vocab, stats):
     fd = d.get('diabetic')
     if isinstance(fd, dict) and fd.get('status') in DIABETIC_STATUS:
         doc['safety']['x-diabetic'] = {k: v for k, v in (('status', fd['status']), ('ruleset', fd.get('ruleset')), ('basis', fd.get('basis'))) if v}
+    # gluten and lactose status for EVERY recipe (free, contains, check_labels or low_or_possible, not_assessed), from fifi.cooking's
+    # scripts/diet/allergens.py. Screens from the ingredient and step text, never certifications; cross-contact is not assessed.
+    for key, field, allowed in (('x-gluten', 'gluten', GLUTEN_STATUS), ('x-lactose', 'lactose', LACTOSE_STATUS)):
+        fs = d.get(field)
+        if isinstance(fs, dict) and fs.get('status') in allowed:
+            doc['safety'][key] = {k: v for k, v in (('status', fs['status']), ('ruleset', fs.get('ruleset')), ('basis', fs.get('basis'))) if v}
     if rec.get('difficulty') in ('easy', 'medium'): doc['dish']['difficulty'] = rec['difficulty']
     elif rec.get('difficulty') == 'master': doc['dish']['difficulty'] = 'hard'
     if prep_min or cook_min:

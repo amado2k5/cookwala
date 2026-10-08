@@ -17,7 +17,7 @@ The REST API at `https://mcp.cookwala.ai/api/*` is open, read-only and needs no 
 | Cost | `cost_tier=budget`, `cost_max`, sort `cost` (relative, because the data states no currency) |
 | Hot, cold, frying, baking | `style=hot\|cold\|no_cook\|mixed`, `method=deep_fry,bake,grill,simmer,...`, `operation=` |
 | Time and effort | `time_max`, `ingredients_max`, `steps_max`, `difficulty` |
-| Diet | `diet=vegetarian,vegan,pork_free,alcohol_free,dairy_free` (inferred from ingredient names, never a certification), `allergen_free=milk,eggs` |
+| Diet | `diet=vegetarian,vegan,pork_free,alcohol_free,dairy_free,lactose_free,gluten_free` (inferred from ingredient names, never a certification), `allergen_free=milk,eggs` |
 | Scale a recipe, shopping list | `getRecipe?view=ingredients&servings=12`, `shoppingList?ids=a,b&servings=8` |
 | Compare, find similar, surprise me | `compareRecipes`, `similarRecipes`, `randomRecipe` |
 | Plan a day | `planMeals?kcal=1800&diet=vegetarian` |

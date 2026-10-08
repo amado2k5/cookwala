@@ -50,7 +50,7 @@ registry entry stay the default way to use the server; the hosted endpoint exist
 - See [CERTIFICATION_IMPLEMENTATION_STATUS.md](CERTIFICATION_IMPLEMENTATION_STATUS.md) for full status
 
 **Allergen Data Coverage**
-- Allergens come from fifi.cooking's analysis (`safety.allergens.x-status`, docs/EXPORT-FIFI.md §11): of the 2,380 recipes it analysed, 2,056 contain at least one allergen, 254 have none found, 70 need label checks; the 50 Cooking with Kids recipes carry the authors' declared allergens (a recipe with none declared is `check_labels`, never `none_found`). They are screens, not guarantees
+- Allergens come from fifi.cooking's analysis (`safety.allergens.x-status`, docs/EXPORT-FIFI.md §11): of the 2,380 recipes it analysed, 2,056 contain at least one allergen, 254 have none found, 70 need label checks; the 50 Cooking with Kids recipes carry the authors' declared allergens (a recipe with none declared is `check_labels`, never `none_found`). They are screens, not guarantees Every fifi.cooking recipe also has a gluten and a lactose status (`safety.x-gluten`, `safety.x-lactose`; free, contains, check labels / low or possible), used by `diet=gluten_free` and `diet=lactose_free`; the Cooking with Kids recipes have none, so they use the ingredient screen.
 - The older coverage figures in [TEST_RESULTS_FINAL.md](TEST_RESULTS_FINAL.md) (86.3%, 310 recipes with an empty list) measured the previous name-based guess
 
 **Cross-SDK Compatibility**

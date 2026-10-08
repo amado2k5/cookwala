@@ -16,7 +16,7 @@
 | serves six | `serves=6` |
 | vegetarian, vegan, pescatarian | `diet=vegetarian` and so on (screens, not certifications) |
 | halal, kosher | `diet=halal`, `diet=kosher` (reviewed claims, not certifications) |
-| gluten-free, dairy-free, nut-free | `diet=gluten_free`, `dairy_free`, `nut_free` |
+| gluten-free, dairy-free, lactose-free, nut-free | `diet=gluten_free`, `dairy_free`, `lactose_free`, `nut_free` (rows carry `gluten_status`, `lactose_status`) |
 | no allergens | `no_allergens=true` (means none found, not a guarantee) |
 | without milk or eggs | `allergen_free=milk,eggs` |
 | good for diabetics | `diabetic_friendly=true` (an estimate) |

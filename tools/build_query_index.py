@@ -180,7 +180,7 @@ def record(rid, d):
     if not meat: diet.append('pescatarian')
     if not pork: diet.append('pork_free')
     if not alcohol: diet.append('alcohol_free')
-    if not dairy: diet.append('dairy_free')
+    if not dairy: diet.append('dairy_free'); diet.append('lactose_free')
     gelatin_like = any(has(r, BYPRODUCT) for r in refs) or bool(tokens(title) & {stem(x) for x in BYPRODUCT})
     shell = any(tokens(r) & {stem(x) for x in SHELLFISH} for r in refs) or bool({'crustaceans', 'molluscs'} & set(al_codes)) or bool(tokens(re.sub(r'\bscallop(?:ed)?\s+shells?\b', '', title, flags=re.I)) & {stem(x) for x in SHELLFISH})
     bad_fish = any(tokens(r) & {stem(x) for x in NONKOSHER_FISH} for r in refs) or bool(tokens(title) & {stem(x) for x in NONKOSHER_FISH})
@@ -243,6 +243,10 @@ def record(rid, d):
     if serv and 'pr' in rec: rec['tp'] = round(rec['pr'] * serv)
     xd = (d.get('safety') or {}).get('x-diabetic')
     if isinstance(xd, dict) and xd.get('status'): rec['dsx'] = xd['status']
+    # gluten and lactose status published for every fifi.cooking recipe (free, contains, check_labels / low_or_possible, not_assessed)
+    for key, rk in (('x-gluten', 'gx'), ('x-lactose', 'lx')):
+        xs = (d.get('safety') or {}).get(key)
+        if isinstance(xs, dict) and xs.get('status'): rec[rk] = xs['status']
     sd = (d.get('safety') or {}).get('dietary')
     if isinstance(sd, list):  # published classification (schema: safety.dietary[]): authoritative when present, even if empty
         rec['dk'] = True

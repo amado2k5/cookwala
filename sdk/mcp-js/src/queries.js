@@ -119,7 +119,7 @@ export async function recipeOp(ctx, id) {
   if (!ID.test(id)) throw new QueryError(400, 'bad_id', 'recipe ids use letters, digits, dot, dash and underscore');
   const { doc, hash, hashVerified } = await cat.recipe(id);
   const rec = items.find((r) => r.id === id);
-  const head = { id, lang, allergen_info: rec ? allergenInfo(rec) : undefined, diabetic: rec ? diabeticInfo(rec) : undefined, hash, hash_verified: hashVerified, level: doc.verification && doc.verification.level, level_note: LEVEL_NOTE[doc.verification && doc.verification.level], note: NOTE };
+  const head = { id, lang, allergen_info: rec ? allergenInfo(rec) : undefined, diabetic: rec ? diabeticInfo(rec) : undefined, gluten_status: rec ? rec.gx : undefined, lactose_status: rec ? rec.lx : undefined, hash, hash_verified: hashVerified, level: doc.verification && doc.verification.level, level_note: LEVEL_NOTE[doc.verification && doc.verification.level], note: NOTE };
   const servings = Number(a.servings) > 0 ? Number(a.servings) : undefined;
   if (a.include !== undefined && a.include !== '') {
     const asked = list(a.include).map((x) => x.toLowerCase());

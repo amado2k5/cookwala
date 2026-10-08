@@ -272,4 +272,22 @@ test('Cooking with Kids: the 50 recipes of the kids collection come first, with 
   const ar = await call('/api/search?collection=kids&lang=ar&limit=3'); assert.ok(ar.json.items.every((i) => /[؀-ۿ]/.test(i.title)), 'kids recipes have Arabic titles');
   const peanut = await call('/api/search?collection=kids&no_allergens=true&limit=25'); assert.ok(peanut.json.items.every((i) => i.allergen_status !== 'contains'), 'declared allergens are respected');
   assert.ok((await call('/api/search?collection=kids&kids=true&allergen_free=peanuts&limit=25')).json.items.every((i) => !/peanut/i.test(i.title)));
+
+test('gluten and lactose: the published status is authoritative for diet=gluten_free and diet=lactose_free', async () => {
+  const { dietOk, normDiet, row } = await import('../src/core/query.js');
+  assert.equal(normDiet('lactose-free'), 'lactose_free');
+  assert.equal(normDiet('Lactose free'), 'lactose_free');
+  // published status wins over the ingredient screen, in both directions
+  assert.equal(dietOk({ gx: 'contains', di: ['gluten_free'] }, 'gluten_free'), false);
+  assert.equal(dietOk({ gx: 'check_labels', di: ['gluten_free'] }, 'gluten_free'), false);
+  assert.equal(dietOk({ gx: 'free', di: [] }, 'gluten_free'), true);
+  assert.equal(dietOk({ lx: 'contains', di: ['lactose_free'] }, 'lactose_free'), false);
+  assert.equal(dietOk({ lx: 'low_or_possible', di: ['lactose_free'] }, 'lactose_free'), false, 'butter or ghee is not "lactose-free"');
+  assert.equal(dietOk({ lx: 'free', di: [] }, 'lactose_free'), true);
+  // a recipe with no published status falls back to the screen
+  assert.equal(dietOk({ di: ['lactose_free'] }, 'lactose_free'), true);
+  assert.equal(dietOk({ di: [] }, 'lactose_free'), false);
+  // list rows carry both statuses
+  const o = row({ id: 'x', t: 'X', gx: 'contains', lx: 'free' });
+  assert.equal(o.gluten_status, 'contains'); assert.equal(o.lactose_status, 'free');
 });
