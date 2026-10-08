@@ -258,3 +258,18 @@ test('fifi.cooking allergen analysis replaces the substring guess: eggplant is n
   assert.ok(dia.length > 400 && dia.length < 900);
   assert.ok(all.filter((i) => i.diabetic_friendly === 'friendly').every((i) => i.diabetic.basis !== 'nutrition_estimate' || (i.servings <= 12 && (i.carbs_g * 4) / i.kcal_per_serving <= 0.4)), 'the energy-share and serving limits hold');
 });
+
+test('Cooking with Kids: the 50 recipes of the kids collection come first, with age bands and grown-up steps', async () => {
+  const all = await call('/api/search?collection=kids&limit=25'); assert.equal(all.json.total, 50);
+  assert.ok(all.json.items.every((i) => i.kids_recipe && i.kids_age));
+  const kids = await call('/api/search?kids=true&limit=25');  // default order: the kids collection first, then the inferred ones
+  assert.ok(kids.json.total > 50); assert.ok(kids.json.items.every((i) => i.kids_recipe), 'the first 25 are all Cooking with Kids recipes');
+  const young = await call('/api/search?kids_age=3-5&limit=25'); assert.ok(young.json.total > 0); assert.ok(young.json.items.every((i) => i.kids_age === '3-5'));
+  const seven = await call('/api/search?kids_age=7&limit=25'); assert.ok(seven.json.items.every((i) => i.kids_age === '6-8'), 'an age in years maps to its band');
+  assert.equal(young.json.applied_filters.kids, true, 'kids_age implies kids=true');
+  const stove = (await call('/api/search?kids_age=6-8&limit=25')).json.items.find((i) => (i.grown_up_help || []).includes('stove'));
+  assert.ok(stove, 'recipes say which steps need a grown-up');
+  const ar = await call('/api/search?collection=kids&lang=ar&limit=3'); assert.ok(ar.json.items.every((i) => /[؀-ۿ]/.test(i.title)), 'kids recipes have Arabic titles');
+  const peanut = await call('/api/search?collection=kids&no_allergens=true&limit=25'); assert.ok(peanut.json.items.every((i) => i.allergen_status !== 'contains'), 'declared allergens are respected');
+  assert.ok((await call('/api/search?collection=kids&kids=true&allergen_free=peanuts&limit=25')).json.items.every((i) => !/peanut/i.test(i.title)));
+});

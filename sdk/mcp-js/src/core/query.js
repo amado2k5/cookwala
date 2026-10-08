@@ -164,6 +164,7 @@ export function filterRecipes(items, a0) {
   set('operation', list(a.operation).map(norm)); set('equipment', list(a.equipment).map(norm)); set('diet', (() => { const dl = list(a.diet).map(normDiet); for (const d of ['no_allergens', 'diabetic_friendly']) if ((a[d] === true || a[d] === 'true') && !dl.includes(d)) dl.push(d); return dl; })()); set('allergen_free', list(a.allergen_free).map(norm));
   set('ingredient', list(a.ingredient)); set('ingredient_any', list(a.ingredient_any)); set('category', list(a.category));
   if (a.servings_exact !== undefined && a.servings_exact !== '') f.servings_exact = num(a.servings_exact);
+  if (a.kids_age !== undefined && a.kids_age !== '') { const ka = kidsAge(a.kids_age); if (ka) { f.kids_age = ka; f.kids = true; } }
   for (const k of ['has_protein', 'has_nutrition', 'has_video', 'kids', 'has_notes', 'kid_friendly']) if (a[k] !== undefined && a[k] !== '') f[k] = a[k] === true || a[k] === 'true'; set('exclude_ingredient', list(a.exclude_ingredient)); set('level', list(a.level).map((x) => x.toUpperCase())); set('difficulty', list(a.difficulty).map(norm));
   set('collection', list(a.collection).map(norm)); set('site', list(a.site).map(norm)); set('cost_tier', list(a.cost_tier).map(norm));
   for (const [name] of Object.entries(FIELDS)) { set(name + '_min', num(a[name + '_min'])); set(name + '_max', num(a[name + '_max'])); }
@@ -188,6 +189,7 @@ export function filterRecipes(items, a0) {
     if (f.servings_exact !== undefined && r.sv !== f.servings_exact) continue;
     if (f.has_nutrition !== undefined && (r.kcal !== undefined) !== f.has_nutrition) continue;
     if ((f.kids ?? f.kid_friendly) !== undefined && !!r.kd !== (f.kids ?? f.kid_friendly)) continue;
+    if (f.kids_age && r.ka !== f.kids_age) continue;
     if (f.has_notes !== undefined && !!r.hn !== f.has_notes) continue;
     if (f.has_video !== undefined && !!r.vid !== f.has_video) continue;
     if (f.has_protein !== undefined && (f.has_protein ? !(r.pr > 0) : r.pr !== 0)) continue;
@@ -241,10 +243,20 @@ export function sortRecipes(matches, sort, seed) {
 
 const r1 = (v) => (v === undefined ? undefined : Math.round(v * 10) / 10);
 
+/** '3-5', '6 to 8', '9+', or an age in years (7) -> the age band the Cooking with Kids recipes use: '3-5', '6-8' or '9+'. */
+export function kidsAge(v) {
+  const t = String(v).trim().toLowerCase();
+  if (['3-5', '6-8', '9+'].includes(t)) return t;
+  const m = t.match(/\d+/g);
+  if (!m) return undefined;
+  const n = Number(m[0]);
+  return n >= 9 ? '9+' : n >= 6 ? '6-8' : n >= 2 ? '3-5' : undefined;
+}
+
 /** The row the API returns for a recipe. */
 export function row(r, detail = 'brief') {
   const o = {
-    id: r.id, title: r.tl || r.t, title_en: r.tl && r.tl !== r.t ? r.t : undefined, title_ar: r.ta, cuisine: r.cu, course: r.co, difficulty: r.df, level: r.lv, servings: r.sv, time_min: r.mn, prep_min: r.ac, cook_min: r.pt,
+    id: r.id, title: r.tl || r.t, title_en: r.tl && r.tl !== r.t ? r.t : undefined, title_ar: r.ta, kids_recipe: r.k === 'kids' ? true : undefined, kids_age: r.ka, grown_up_help: r.kh, cuisine: r.cu, course: r.co, difficulty: r.df, level: r.lv, servings: r.sv, time_min: r.mn, prep_min: r.ac, cook_min: r.pt,
     kcal_per_serving: r.kcal, protein_g: r.pr, total_kcal: r.tk, total_protein_g: r.tp, fat_g: r.fa, carbs_g: r.ca, cost_per_serving: r.cps, cost_tier: r.ct, style: r.st, methods: r.me,
     allergen_status: allergenInfo(r).status, diabetic_friendly: diabeticInfo(r).status, diet_inferred: r.di, diet_basis: r.dk ? 'published' : 'inferred', kosher_type: r.dk && (r.dc || []).includes('kosher') ? r.dkt : undefined, diet_review: r.dx ? { held_back_claims: r.dx, reason: 'The published claim conflicts with the recipe title or ingredient names; excluded from diet results until reviewed.' } : undefined, dietary_claims: r.dk ? (r.dc || []).map((c) => ({ claim: c, basis: (r.dcc || []).includes(c) ? 'certified' : 'ingredients', ruleset: r.drs && r.drs[c], note: r.dcn && r.dcn[c], certification_ids: r.dcr && r.dcr[c] })) : undefined, allergens: r.al, n_ingredients: r.ni, n_steps: r.ns, has_video: r.vid ? true : undefined, kid_friendly_inferred: r.kd ? true : undefined, has_background_notes: r.hn ? true : undefined, page: `https://cookwala.ai/recipes/${r.id}/`,
   };
@@ -256,6 +268,7 @@ export function search(items, a) {
   const { matches, applied } = filterRecipes(items, a);
   const sort = a.sort || (a.q ? 'relevance' : 'name');
   sortRecipes(matches, sort, a.seed);
+  if (applied.kids === true && !a.sort) matches.sort((x, y) => (y.r.k === 'kids') - (x.r.k === 'kids'));  // the Cooking with Kids recipes come before the inferred ones
   const limit = Math.min(Math.max(num(a.limit) ?? 10, 1), 25); const offset = Math.max(num(a.offset) ?? 0, 0);
   const next = offset + limit < matches.length ? offset + limit : undefined;
   return { total: matches.length, limit, offset, next_offset: next, sort, applied_filters: applied, items: matches.slice(offset, offset + limit).map((m) => row(m.r, a.detail === 'full' ? 'full' : 'brief')) };

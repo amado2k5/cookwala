@@ -78,6 +78,17 @@
    "sourceName": "World Cuisines project, fifi.cooking",
    "citation": "Rewritten from the public recipe site named in each recipe's source and credited there; halal-gated by fifi.cooking; structured facts only until the source rights are confirmed",
    "text": "facts"
+  },
+  {
+   "id": "kids",
+   "prefixes": [
+    "kids-"
+   ],
+   "export": true,
+   "license": "CC-BY-4.0",
+   "sourceName": "Cooking with Kids, fifi.cooking",
+   "citation": "Recipes written for children and their grown-ups at fifi.cooking (Cooking with Kids); some are simple versions of recipes in the family archive of Dr. Fatma Alkawokgy",
+   "text": "full"
   }
  ]
 }

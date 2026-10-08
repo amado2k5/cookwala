@@ -27,12 +27,12 @@ profile. Live at [cookwala.ai](https://cookwala.ai). Nothing is deployed in the 
 
 | Feature | Status | Note |
 |---------|--------|------|
-| Recipe format & schemas | ✅ Shipping | 2,389 recipes (2,380 imported from fifi.cooking at V0, 9 at V1), names in 29 languages |
+| Recipe format & schemas | ✅ Shipping | 2,439 recipes (2,430 imported from fifi.cooking at V0, including 50 Cooking with Kids recipes, 9 at V1), names in 29 languages |
 | Dry-run (device compatibility) | ✅ Shipping | Python & TypeScript SDKs produce identical results |
 | Temperature envelope validation | ✅ Shipping | Safety limits enforced on device |
 | Python SDK | ✅ Shipping | CLI + library (all Core operations) |
 | TypeScript SDK | ✅ Shipping | MCP server + library (all Core operations) |
-| Allergen data | 🔧 Analysis, not certification | All 2,380 imported recipes carry fifi.cooking's whole-word allergen analysis (2,056 contain allergens, 254 none found, 70 need label checks); screens, not guarantees ([export notes](docs/EXPORT-FIFI.md)) |
+| Allergen data | 🔧 Analysis, not certification | The 2,380 recipes fifi.cooking analysed carry its whole-word allergen analysis (2,056 contain allergens, 254 none found, 70 need label checks); the 50 Cooking with Kids recipes carry the authors' declared allergens; screens, not guarantees ([export notes](docs/EXPORT-FIFI.md)) |
 | MCP server `@cookwala/mcp` | ✅ Published | 0.3.0 on npm (`npx -y @cookwala/mcp`), listed in the MCP Registry as `ai.cookwala/cookwala`; 24 read-only tools (16 in 0.2.0, 24 from 0.3.0), [try it in five minutes](docs/MCP-TRY-IT.md); optional token-protected hosted endpoint `mcp.cookwala.ai/mcp` for [mcprush](https://mcprush.com/cookwala/cookwala-mcp) tracking; open [recipe REST API](docs/REST-API.md) at `mcp.cookwala.ai/api` |
 | Search | 🔧 Partial | Static `/v1/search` is documented in OpenAPI but not deployed; search is served by the open [REST API](docs/REST-API.md) (`mcp.cookwala.ai/api/search`), the MCP `search_recipes` tool and the CLI |
 | Humanitarian Profile | 🔧 Draft | SMS parsing & relief mode working |
@@ -44,7 +44,7 @@ profile. Live at [cookwala.ai](https://cookwala.ai). Nothing is deployed in the 
 |---|---|
 | See it work in 2 minutes | [Live dry run](https://cookwala.ai/#demo) · `cookwala dryrun examples/koshari.cookwala.json --device examples/capabilities/robot-arm.json` |
 | Read the standard | [docs/CORE.md](docs/CORE.md) (normative) · [whitepaper](docs/WHITEPAPER.md) · [RFCs](rfcs/) |
-| Browse 2,389 recipes, or use the SDK in your language | [Recipe index](https://cookwala.ai/recipes/) (9 at V1, 2,380 imported from fifi.cooking at V0 (22 cuisines), names in 29 languages, text in Arabic and English) · [SDK and 100 scenarios](https://cookwala.ai/scenarios/) in Python, TypeScript, JavaScript, Go, Rust, Java, Kotlin, C#, Swift, C++, Ruby, PHP and curl · [the site in six languages](https://cookwala.ai/fr/) (English and Arabic by hand; French, Spanish, German and Portuguese by machine, labelled) |
+| Browse 2,439 recipes, or use the SDK in your language | [Recipe index](https://cookwala.ai/recipes/) (9 at V1, 2,430 imported from fifi.cooking at V0 (22 cuisines, and 50 Cooking with Kids recipes), names in 29 languages, text in Arabic and English) · [SDK and 100 scenarios](https://cookwala.ai/scenarios/) in Python, TypeScript, JavaScript, Go, Rust, Java, Kotlin, C#, Swift, C++, Ruby, PHP and curl · [the site in six languages](https://cookwala.ai/fr/) (English and Arabic by hand; French, Spanish, German and Portuguese by machine, labelled) |
 | Build a device, hub or agent | [Quickstart](docs/QUICKSTART.md) · [Robots, ROS 2, datasets](docs/ROBOTICS.md) · [reference hub](hub/) · [MCP server for AI agents](docs/MCP.md) (`npx -y @cookwala/mcp`, [connect Claude, Codex, Copilot, Cursor, Windsurf, Devin, Antigravity](docs/AI-AGENTS.md)) · [Python](sdk/python/) · [TypeScript](sdk/typescript/) · [conformance](conformance/) |
 | Start from working sample code | [Samples](samples/): clients, agents, orchestrators, gates, recovery and reporting in Python, JavaScript, Java and C#, on simulated devices or a hub · packaged for pip, npm, Maven, Gradle, NuGet, Homebrew, Chocolatey, Scoop, apt, RPM, pacman, conda, snap, OCI and Artifactory, and as functions on Azure, AWS, Google Cloud and OpenShift ([status](samples/DISTRIBUTION.md): published on PyPI, npm, Maven Central, NuGet, Homebrew and GHCR; the other channels are prepared, not yet submitted) |
 | Rescue food with phones and spreadsheets | [Humanitarian Profile 0.2](docs/HUMANITARIAN-PROFILE.md) · [four worked flows](examples/humanitarian/flows/) · [pilot protocol](docs/humanitarian/PILOT-PROTOCOL.md) · [concept note](docs/humanitarian/CONCEPT-NOTE.md) |

@@ -4,7 +4,7 @@ Applies to Codex, Copilot, Cursor, Windsurf, Devin, Antigravity, Claude Code and
 
 ## What this repository is
 The open standard for cooking safely (people, kitchens, robots): schemas, vocabularies, a reference library
-(`tools/cookwala_ref.py`), SDKs, a reference hub, 2,389 recipes (2,380 imported from fifi.cooking, 9 written for the standard), and the website cookwala.ai (static, GitHub Pages).
+(`tools/cookwala_ref.py`), SDKs, a reference hub, 2,439 recipes (2,430 imported from fifi.cooking, 50 of them the Cooking with Kids recipes, and 9 written for the standard), and the website cookwala.ai (static, GitHub Pages).
 
 ## Using Cookwala from your own agent
 Read [docs/AI-AGENTS.md](docs/AI-AGENTS.md) (also at https://cookwala.ai/docs/AI-AGENTS/). Short form: run the MCP server
@@ -17,7 +17,7 @@ or "is not deployed", check the live source:
 
 | What | Where it lives | How to check |
 |---|---|---|
-| MCP server `@cookwala/mcp` | npm, published since 0.1.0 (2026-10-06); 0.2.0 on 2026-10-07; 0.3.0 on 2026-10-08 (24 tools, the REST API), with provenance | `npm view @cookwala/mcp version` or https://registry.npmjs.org/@cookwala/mcp |
+| MCP server `@cookwala/mcp` | npm, published since 0.1.0 (2026-10-06); 0.2.0 on 2026-10-07; 0.3.0 on 2026-10-08 (24 tools, the REST API); 0.3.1 (Cooking with Kids, `kids_age`) is in the repository and is on npm once `publish-mcp` has run, with provenance | `npm view @cookwala/mcp version` or https://registry.npmjs.org/@cookwala/mcp |
 | MCP Registry entry `ai.cookwala/cookwala` | official MCP Registry, listed since 2026-10-06 (domain proof at `/.well-known/mcp-registry-auth`) | `curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=ai.cookwala"` |
 | Release secrets `MCP_PRIVATE_KEY`, `NPM_TOKEN` | repository secrets, set; they match the live domain proof (the 0.2.0 registry login succeeded) | the last run of the `publish-mcp` workflow |
 | Hosted MCP endpoint `https://mcp.cookwala.ai/mcp` | Cloudflare Worker `cookwala-mcp` (source `sdk/mcp-js/worker/`), live since 2026-10-08; `/mcp` needs the gateway token, `/health` is public. Listed at [mcprush.com](https://mcprush.com/cookwala/cookwala-mcp) (claim CLM-0139) | `curl https://mcp.cookwala.ai/health`; a `POST /mcp` without the token must answer 401 |
@@ -50,7 +50,7 @@ registry entry stay the default way to use the server; the hosted endpoint exist
 - See [CERTIFICATION_IMPLEMENTATION_STATUS.md](CERTIFICATION_IMPLEMENTATION_STATUS.md) for full status
 
 **Allergen Data Coverage**
-- Allergens come from fifi.cooking's analysis (`safety.allergens.x-status`, docs/EXPORT-FIFI.md §11): of 2,380 recipes, 2,056 contain at least one allergen, 254 have none found, 70 need label checks. They are screens, not guarantees
+- Allergens come from fifi.cooking's analysis (`safety.allergens.x-status`, docs/EXPORT-FIFI.md §11): of the 2,380 recipes it analysed, 2,056 contain at least one allergen, 254 have none found, 70 need label checks; the 50 Cooking with Kids recipes carry the authors' declared allergens (a recipe with none declared is `check_labels`, never `none_found`). They are screens, not guarantees
 - The older coverage figures in [TEST_RESULTS_FINAL.md](TEST_RESULTS_FINAL.md) (86.3%, 310 recipes with an empty list) measured the previous name-based guess
 
 **Cross-SDK Compatibility**

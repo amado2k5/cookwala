@@ -180,3 +180,19 @@ wheat gluten and "coconut" as nuts:
 
 Do not edit claims in this repo: change them in fifi.cooking and re-run the export. Adding claims changes a document's hash
 but the exporter does not bump `revision`.
+
+## 12. The Cooking with Kids recipes (2026-10-08)
+
+fifi.cooking's "Cooking with Kids" mode has its own dataset of 50 recipes (`src/data/kids/*.ts`, served as `public/data/kids/<lang>/<id>.json` in 29 languages), separate from the recipe files `tools/export_fifi.py` reads. `tools/export_fifi_kids.py` exports them as a collection of their own:
+
+```bash
+python tools/export_fifi_kids.py --src ~/Documents/GitHub/fifirecipes/public/data/kids
+```
+
+- Ids are `kids-<name>` (collection `kids`, prefix `kids-` in `tools/export_fifi.collections.json`, licence CC-BY-4.0, step text published because the recipes were written for fifi.cooking; some are simple versions of family-archive recipes).
+- The script maps a kids recipe onto the same shape as a fifi recipe and reuses `export_fifi.convert` (quantities, hash, sidecars). It writes only `recipes/kids/`, `recipes/text/<lang>/kids.json.gz`, the 50 entries in `recipes/INDEX.json` and ingredient names that are new in `vocab/ingredients.json`. Nothing else is touched, so it does not import the other recipes fifi.cooking has gained.
+- Ingredient lines are free text ("2 slices of bread"). The English line is split into amount and name for the vocabulary; every language keeps the whole line as display text. Names are cut at a comma, a bracket or "or", so "peanut butter (or tahini)" is `peanut_butter`.
+- Extra facts live in the document's `x-kids` block: age band, group, no-cook, minutes, tools and `grownUpSteps` (step number and reason). Supervision is always `presence_required`.
+- Allergens are the ones the authors declared. A recipe with none declared is `check_labels`; `none_found` is reserved for fifi.cooking's strict analysis.
+- There are no nutrition or cost estimates for these recipes, so they do not appear in calorie, protein or cost filters.
+- The query index flags every kids-collection recipe as kid-friendly (`kd`) and carries the age band (`ka`) and the grown-up reasons (`kh`); the API puts them before the inferred ones when `kids=true` and adds the `kids_age` filter.
