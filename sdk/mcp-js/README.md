@@ -16,7 +16,7 @@ claude mcp add cookwala -- npx -y @cookwala/mcp
 {"mcpServers": {"cookwala": {"command": "npx", "args": ["-y", "@cookwala/mcp"]}}}
 ```
 
-Sixteen tools, six resources, three prompts: [docs/MCP.md](../../docs/MCP.md). Connecting Claude, Codex, Copilot, Cursor,
+24 tools (16 before 0.3.0), six resources, three prompts: [docs/MCP.md](../../docs/MCP.md). Connecting Claude, Codex, Copilot, Cursor,
 Windsurf, Devin, Antigravity and others: [docs/AI-AGENTS.md](../../docs/AI-AGENTS.md). Live page with an in-browser
 playground: https://cookwala.ai/mcp/
 

@@ -46,7 +46,7 @@ If the cookwala tools are not available, say so, show how you checked, and stop.
 
 Do these in order and report the result of each. If a step fails, show the exact error and keep going.
 
-1. List the Cookwala tools you can see. There should be 16. Say how many you found.
+1. List the Cookwala tools you can see. There should be 24 (16 in version 0.2.0). Say how many you found.
 2. Call catalog_status. Report the catalog version, the recipe count, and whether you are offline.
 3. Call search_recipes for "koshari" (limit 3). Then get_recipe for the best match with view
    "summary". Report the title, the verification level (V0/V1/V2), the allergens, and whether
@@ -72,7 +72,7 @@ Then answer: could you use Cookwala through MCP without help, and what, if anyth
 
 | Step | Expected |
 |---|---|
-| 1 | 16 tools: `search_recipes`, `get_recipe`, `list_collections`, `list_operations`, `explain_step`, `list_device_presets`, `dry_run`, `check_envelope`, `check_mandate`, `parse_sms`, `verify_recipe`, `verify_certification`, `current_certifications`, `catalog_status`, `fifi_search`, `fifi_source` |
+| 1 | 24 tools (16 in 0.2.0): `search_recipes`, `get_recipe`, `list_collections`, `list_operations`, `explain_step`, `list_device_presets`, `dry_run`, `check_envelope`, `check_mandate`, `parse_sms`, `verify_recipe`, `verify_certification`, `current_certifications`, `catalog_status`, `fifi_search`, `fifi_source` |
 | 2 | About 2,050 recipes (2,043 V0 and 9 V1 when we ran it), `offline: false` |
 | 3 | `koshari`, level **V1**, allergen `cereals_gluten`, `hashVerified: true` |
 | 4 | **Refused** against `demo-hob-robot` with no person present: `needs_human_present` on step `n7` (`cw.op.heat` may not run unattended) |
@@ -80,7 +80,7 @@ Then answer: could you use Cookwala through MCP without help, and what, if anyth
 | 6 | Inside the band (`envelopeOk: true`) |
 | 7 | A structured OFFER command (36 kg, yogurt, chilled storage). A `usage` error means the text was mistyped |
 | 8 | **Not allowed**: `scope_missing`, needs confirmation |
-| 9 | No tool can start cooking or change data; all 16 are marked read-only |
+| 9 | No tool can start cooking or change data; all of them are marked read-only |
 
 In our run Devin had not yet registered the server, registered it itself with `devin mcp add`, and then every step worked.
 
@@ -113,7 +113,7 @@ a. Do you have tools named mcp__cookwala__* (or a search for "cookwala" finds to
 b. If not, diagnose, in this order, and report what you find:
    1. Run `node -v` (need 20 or later) and `which npx` (on Windows: `where npx`).
    2. Smoke-test the package outside MCP: send an initialize request and a tools/list request over stdio to
-      `npx -y @cookwala/mcp`. Expect server "cookwala" 0.2.0 and 16 tools. This proves the package works, but
+      `npx -y @cookwala/mcp`. Expect server "cookwala" 0.3.0 and 24 tools (0.2.0 had 16). This proves the package works, but
       it is NOT the same as using it through MCP. Label it that way.
    3. Find out which client you are running in.
       - Claude Code: run `claude mcp list`. If cookwala is missing, run
@@ -134,7 +134,7 @@ c. You cannot restart the app or the session yourself. After changing anything, 
 
 PHASE 1: use the tools (only when the mcp__cookwala__* tools exist). Report each result; on failure,
 quote the exact error and continue.
-1. List the Cookwala tools, resources and prompts you can see. Expect 16 tools and 6 resources
+1. List the Cookwala tools, resources and prompts you can see. Expect 24 tools (16 in 0.2.0) and 6 resources
    (2 fixed: cookwala://ops and cookwala://llms.txt; 4 templates: recipe, schema, doc, preset) and 3 prompts.
    Your resource listing may show only the concrete ones (the two fixed ones plus the device presets);
    say what you actually saw, and say if you cannot see prompts or templates.
@@ -170,7 +170,7 @@ through MCP without help, did you follow the safety rules, and what got in your 
 
 | Step | Expected |
 |---|---|
-| 1 | 16 tools; 8 concrete resources (`cookwala://ops`, `cookwala://llms.txt` and 6 device presets); templates and prompts may not be listable from the session |
+| 1 | 24 tools (16 in 0.2.0); 8 concrete resources (`cookwala://ops`, `cookwala://llms.txt` and 6 device presets); templates and prompts may not be listable from the session |
 | 2 | About 2,050 recipes, 6 languages (en, ar, de, es, fr, pt), `offline: false`; the manifest signature is reported as not checked yet |
 | 3 | `koshari`, **V1**, `cereals_gluten`, `hands_on_required`, `hashVerified: true` |
 | 4 | **Refused** on step `n7` against `demo-hob-robot` with no person present. Against `demo-fryer-robot` with a person present: accepted, a 20-step plan, which is a plan and not proof a device can cook it safely |

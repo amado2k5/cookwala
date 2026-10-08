@@ -58,7 +58,7 @@ Check: `curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=ai.co
 
 ## Hosted endpoint (optional)
 
-`worker/` serves the same 16 read-only tools over Streamable HTTP (stateless, JSON responses) at `/mcp`, with `/health` unauthenticated.
+`worker/` serves the same 24 read-only tools over Streamable HTTP (stateless, JSON responses) at `/mcp`, with `/health` unauthenticated.
 It exists for directories that need an https address (for example mcprush call tracking). The npm package stays the default, and the
 Worker logs nothing and stores nothing.
 

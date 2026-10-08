@@ -10,6 +10,8 @@ import {
   verifyCertification, currentCertifications, currentBySubject,
 } from './core/index.js';
 import { allergenInfo, diabeticInfo, dietOk } from './core/query.js';
+import { FILTERS, LIST } from './openapi.js';
+import { QueryError, loadQuery, recipeOp, searchOp, pantryOp, compareOp, ingredientOp, aggregateOp, mealPlanOp, similarOp, shoppingListOp, listingOp, LISTING_KINDS } from './queries.js';
 
 // The hosted Worker has no package.json on disk; it passes its version to createServer instead.
 export const VERSION = (() => { try { return JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version; } catch { return '0.0.0'; } })();
@@ -19,6 +21,7 @@ export const INSTRUCTIONS = [
   'Dry runs never cook; starting an execution needs a hub, a mandate with start_cooking, and the device enforces its own safety limits.',
   'V0 recipes are described, not machine-verified: say so to the person, and never present a V0 step as safe for a device.',
   'Typical flow: search_recipes, get_recipe, then dry_run against list_device_presets or the device capabilities you were given, then explain_step for any step that matters.',
+  'For anything beyond a title search (cuisine, ingredients, nutrition, diet, method, source, language, what I can cook with what I have) use query_recipes; catalog_listing says which values exist; get_recipe with include returns any parts of a recipe.',
   'Recipes missing from the catalog may exist on fifi.cooking: use fifi_search and fifi_source (facts only where rights are not confirmed).',
 ].join(' ');
 
@@ -35,11 +38,22 @@ const fail = (code, detail, extra = {}) => ({ isError: true, content: [{ type: '
 const wrap = (fn) => async (args) => {
   try { return await fn(args); }
   catch (e) {
+    if (e instanceof QueryError) return fail(e.code, e.detail, e.extra);
     if (e instanceof CatalogError) return fail(e.code, e.detail, { path: e.path });
     if (e instanceof RangeError && e.message === 'invalid_timestamp') return fail('invalid_timestamp', 'times must be RFC 3339 date-times with an offset, for example 2026-10-07T12:00:00Z');
     return fail('internal_error', String(e && e.message || e));
   }
 };
+
+// Tool arguments for the query tools come from the same parameter table as the REST API (src/openapi.js), so the two cannot drift apart.
+const zodOf = (p) => {
+  const t = p.schema && p.schema.type; const comma = /comma list/i.test(p.description || '');
+  let z0 = p.schema && p.schema.enum ? z.enum(p.schema.enum) : t === 'boolean' ? z.boolean() : t === 'integer' ? z.number().int() : t === 'number' ? z.number() : comma ? z.union([z.string(), z.array(z.string())]) : z.string();
+  return z0.optional().describe(p.description || p.name);
+};
+const shapeOf = (params) => Object.fromEntries(params.map((p) => [p.name, zodOf(p)]));
+const FILTER_SHAPE = shapeOf([...FILTERS, ...LIST]);
+const csv = z.union([z.string(), z.array(z.string())]);
 
 const CERT_KEYS = {
   keys: z.array(z.record(z.any())).optional().describe('KeyRecords of the authorities you trust'),
@@ -82,8 +96,10 @@ export function buildTools(cat) {
       } },
     { name: 'get_recipe', title: 'Get a recipe', annotations: NET,
       description: 'Fetch one recipe by id. The hash is recomputed (RFC 8785 + SHA-256) before anything is returned. Every response also carries allergens (contains or none_found) and diabetic (friendly, borderline, not_friendly or unknown), both estimates. view: summary, ingredients, process, text or full.',
-      shape: { id: z.string(), lang, view: z.enum(['summary', 'ingredients', 'process', 'text', 'full']).default('summary') },
+      shape: { id: z.string(), lang, view: z.enum(['summary', 'ingredients', 'process', 'text', 'full']).default('summary'),
+        include: csv.optional().describe('Instead of view: any parts of the recipe, a comma list of summary, ingredients, steps (or recipe, method), nutrition, cost, equipment, notes (history, tips), safety, links (video), all'), servings: z.number().positive().optional().describe('Scale ingredient quantities and nutrition totals (used with include)') },
       run: async (a) => {
+        if (a.include) return ok(await recipeOp(await loadQuery(cat, { lang: a.lang, include: a.include, servings: a.servings }), a.id));
         const { doc, hash, hashVerified } = await cat.recipe(a.id);
         let recipe = doc;
         if ((a.view === 'text' || a.view === 'full') && a.lang !== 'en' && a.lang !== 'ar') {
@@ -189,6 +205,39 @@ export function buildTools(cat) {
         const [file, cfg, entries] = await Promise.all([cat.fifiRecipe(a.id), cat.fifiConfig(), cat.index('en')]);
         return ok(shapeFifi(file, cfg, entries.find((e) => e.id === a.id) || null));
       } },
+    // ---- query tools: the same operations as the REST API (src/queries.js), read-only
+    { name: 'query_recipes', title: 'Query recipes (cuisine, ingredients, nutrition, diet, method, source, language)', annotations: NET,
+      description: 'The full recipe search: filter by country or cuisine, category, ingredients in or out, cooking method (baking, frying...), style, diet (vegetarian, vegan, halal, kosher, gluten_free...), no_allergens, diabetic_friendly, kids, source (a cook or book name), nutrition per serving or per whole recipe, cost tier, prep and cook time, servings, language; sort and page. Give have (ingredients the person has) for a "what can I cook with these" ranking. Diet, allergen, diabetic and kids flags are inferred or reviewed claims, never certifications or medical advice.',
+      shape: { ...FILTER_SHAPE, have: csv.optional().describe('Ingredients the person has; ranks recipes by how many are covered (staples such as salt and oil are not counted as missing)'), max_missing: z.number().int().optional().describe('With have: most missing ingredients allowed (default 3)'), min_have: z.number().int().optional() },
+      run: async (a) => { const ctx = await loadQuery(cat, a); return ok(a.have ? pantryOp(ctx) : searchOp(ctx)); } },
+    { name: 'similar_recipes', title: 'Recipes similar to one', annotations: NET,
+      description: 'Recipes similar to one recipe, ranked by shared ingredients, course, cuisine and cooking methods.',
+      shape: { id: z.string(), limit: z.number().int().min(1).max(25).optional(), lang: z.string().optional() },
+      run: async (a) => ok(similarOp(await loadQuery(cat, { lang: a.lang, limit: a.limit }), a.id)) },
+    { name: 'compare_recipes', title: 'Compare recipes side by side', annotations: NET,
+      description: 'Nutrition, cost, time and size of 2 to 6 recipes with the lowest and highest of each, plus allergen and diabetic information.',
+      shape: { ids: csv.describe('Recipe ids, 2 to 6'), lang: z.string().optional() },
+      run: async (a) => ok(compareOp(await loadQuery(cat, { lang: a.lang, ids: a.ids }))) },
+    { name: 'ingredient_profile', title: 'About an ingredient', annotations: NET,
+      description: 'How many recipes use an ingredient, which cuisines and courses, average calories, what it is often cooked with, and examples.',
+      shape: { name: z.string().describe('For example lentils, tahini, eggplant'), lang: z.string().optional() },
+      run: async (a) => ok(ingredientOp(await loadQuery(cat, { lang: a.lang, name: a.name }))) },
+    { name: 'catalog_stats', title: 'Statistics across the catalog', annotations: NET,
+      description: 'Count, average, minimum and maximum of a metric per group, for questions such as which cuisine has the lightest dishes. Accepts every query_recipes filter.',
+      shape: { group_by: z.enum(['cuisine', 'course', 'method', 'style', 'difficulty', 'collection', 'tag', 'level', 'cost_tier', 'diet', 'allergen']), metric: z.string().optional().describe('kcal (default), protein, fat, carbs, fiber, sugar, sodium, time, active, passive, cost, ingredients, steps, servings, total_kcal, total_protein'), order: z.enum(['asc', 'desc']).optional(), ...FILTER_SHAPE },
+      run: async (a) => ok(aggregateOp(await loadQuery(cat, a))) },
+    { name: 'plan_meals', title: 'Plan a day of meals', annotations: NET,
+      description: 'Picks dishes close to a calorie target, one serving each. Accepts diet, cuisine, no_allergens, diabetic_friendly and the other filters. Estimates only, not dietary or medical advice.',
+      shape: { kcal: z.number().optional().describe('Daily calorie target (default 2000)'), meals: z.number().int().min(1).max(5).optional(), seed: z.string().optional().describe('Change for a different plan'), ...FILTER_SHAPE },
+      run: async (a) => ok(mealPlanOp(await loadQuery(cat, a))) },
+    { name: 'shopping_list', title: 'Combined shopping list', annotations: NET,
+      description: 'Merges and scales the ingredients of up to 8 recipes. Lines without a parsed quantity are listed separately as written.',
+      shape: { ids: csv.describe('Recipe ids, up to 8'), servings: z.number().positive().optional().describe('Scale every recipe to this many servings') },
+      run: async (a) => ok(await shoppingListOp(await loadQuery(cat, { ids: a.ids, servings: a.servings }))) },
+    { name: 'catalog_listing', title: 'List what the catalog contains', annotations: NET,
+      description: `Listings: ${LISTING_KINDS.join(', ')}. facets has every filter value; languages, countries, categories, sources and methods say what exists and how many recipes; diets lists the dietary categories with their definitions, coverage and limits; diet_review lists published claims held back because the recipe contradicts them; ingredients looks up ingredient names (q); certifications lists real certificates (today only fictional examples) and recipe claims with basis certified.`,
+      shape: { kind: z.enum(LISTING_KINDS), q: z.string().optional().describe('For ingredients: the start of an ingredient word'), limit: z.number().int().optional(), scheme: z.string().optional().describe('For certifications: halal, kosher, vegetarian...'), ref: z.string().optional().describe('For certifications: ingredient or recipe reference') },
+      run: async (a) => ok(await listingOp(await loadQuery(cat, a), a.kind)) },
   ];
 }
 
