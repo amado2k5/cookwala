@@ -112,8 +112,13 @@ def check(final):
             ok = re.fullmatch(r'#[0-9A-Fa-f]{6}', i[f]) is not None
             need(ok, f'interface.{f}: use #RRGGBB')
             if ok: need(ratio(i[f], bg) >= 2, f'interface.{f}: needs at least 2:1 contrast against {bg}')
-    for k, v in o.get('publication', {}).get('translations', {}).items():
-        need(len((v or {}).get('subtitle') or '') <= 30, f'translations.{k}.subtitle: at most 30 characters')
+    for k, v in (o.get('publication', {}).get('translations') or {}).items():
+        v = v or {}
+        need(bool(k) and re.fullmatch(r'[a-z]{2,3}(-[A-Z]{2})?', k) is not None, f'translations.{k}: use a locale such as fr-FR')
+        sub, desc = v.get('subtitle') or '', v.get('description') or ''
+        need(len(sub) <= 30 and '\n' not in sub, f'translations.{k}.subtitle: one line of at most 30 characters')
+        need(len(desc) <= 4000 and '\t' not in desc, f'translations.{k}.description: at most 4000 characters, no tabs')
+        need(bool(sub.strip() or desc.strip()), f'translations.{k}: needs a subtitle or a description')
     need(all(re.fullmatch(r'[A-Z]{2}', c) for c in o.get('publication', {}).get('countries', [])), 'publication.countries: uppercase country codes')
     blob = json.dumps(m)
     need('test_credentials' not in blob and 'reviewer_instructions' not in blob, 'metadata must not contain test_credentials or reviewer_instructions')
