@@ -4,6 +4,12 @@
 **RFC Status:** RFC-0010 (Certifications) — DRAFT  
 **Core vs Profile:** Profile feature (not Core 0.2)
 
+> **Update 2026-10-07:** CLI commands (`verify-cert`, `current-certs`, `certify`, `revoke-cert`) are implemented in
+> `sdk/python/cookwala/cli.py` with tests in `sdk/python/tests/test_cli_certifications.py`, and the API endpoints are
+> published statically on cookwala.ai (`/v1/certifications/index.json`, `/v1/certifications/{id}.json`, built by
+> `tools/build_certifications.py`, every document verified before publishing). Sections 1 and 3 below are out of
+> date on those points; the rest (MCP tools, certifier registry, recipe integration, search) still stands.
+
 ---
 
 ## What IS Implemented ✅

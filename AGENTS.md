@@ -19,9 +19,9 @@ Read [docs/AI-AGENTS.md](docs/AI-AGENTS.md) (also at https://cookwala.ai/docs/AI
 
 **Certification System (RFC-0010)**
 - Verification functions available in Python (`cw.verify_certification()`, `cw.current_certifications()`)
-- API endpoints documented but not deployed
-- Certifier registration system not yet built
-- CLI commands not yet implemented
+- CLI: `cookwala verify-cert`, `current-certs`, `certify`, `revoke-cert` (docs/CLI.md)
+- Published statically: `/v1/certifications/index.json` (full list, filter client-side) and `/v1/certifications/{id}.json`
+- Certifier registration system not yet built; no MCP tools for certifications yet
 - See [CERTIFICATION_IMPLEMENTATION_STATUS.md](CERTIFICATION_IMPLEMENTATION_STATUS.md) for full status
 
 **Allergen Data Coverage**

@@ -13,6 +13,8 @@
     "changes": "https://cookwala.ai/v1/changes/{since}.json",
     "vocab": "https://cookwala.ai/v1/vocab/{name}.json",
     "policies": "https://cookwala.ai/v1/policies/{id}.json",
+    "certifications": "https://cookwala.ai/v1/certifications/index.json",
+    "certification": "https://cookwala.ai/v1/certifications/{id}.json",
     "schemas": "https://cookwala.ai/v1/schemas/{name}.schema.json",
     "openapi": "https://cookwala.ai/v1/api/index.openapi.yaml",
     "coreApi": "https://cookwala.ai/v1/api/core.openapi.yaml",

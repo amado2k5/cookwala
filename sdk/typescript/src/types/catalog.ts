@@ -37,6 +37,10 @@ export type Discovery = {
     conformance?: string;
     /** Default safety-limits pack. */
     safetyLimits?: string;
+    /** Every Certification this catalog relays (RFC-0010; profile). On a static host the list is unfiltered; readers filter and verify each document themselves. */
+    certifications?: string;
+    /** Template for one Certification document by id (RFC-0010; profile). */
+    certification?: string;
     /** Vendor extensions (x-<name>) and other pattern properties. */
     [key: `x-${string}`]: unknown;
   };

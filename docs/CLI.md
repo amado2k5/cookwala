@@ -56,25 +56,36 @@ cookwala submit my-dish.cookwala.json --author your-github-login [--open-pr]
                                            # commands to do it by hand (docs/CONTRIBUTE-RECIPES.md, RFC-0013)
 ```
 
-### Certification (RFC-0010) — Planned, not yet available
+### Certification (RFC-0010)
 
-The following commands will be available after v0.2.0:
+Implemented in the Python CLI (`sdk/python`). `--keys` is always required: it is the list of authority
+KeyRecords you trust, and there is no default trust list. Exit codes: `0` ok, `1` nothing current or bad
+input, `2` a certification failed verification.
 
 ```bash
-# Not yet implemented:
-cookwala certify my-recipe.cookwala.json --scheme halal --authority did:web:authority.example --key ~/.cookwala/keys/ed25519
-cookwala verify-cert cert-halal-recipe-2026-10.json --keys keys.json
-cookwala current-certs my-recipe.cookwala.json --scheme halal
+# Readers: does this certification hold for the recipe I have?
+cookwala verify-cert cert-halal-kofta-oven-2026-10.json --keys keys.json --subject kofta-oven.cookwala.json
+cookwala verify-cert examples/certifications --keys conformance/keys/certification-test-keys.json --json
+
+# Which certifications hold right now (newest per authority and scheme wins; older ones are superseded)
+cookwala current-certs kofta-oven.cookwala.json --keys keys.json [--certs DIR_OR_FILE ...] [--scheme halal] [--authority did:web:...]
+
+# Certifying authorities: issue and withdraw (Ed25519 seed file, 64 hex characters)
+cookwala certify my-recipe.cookwala.json --scheme halal --authority did:web:authority.example \
+    --key ~/.cookwala/keys/ed25519.seed --name "Authority name" --valid-until 2027-10-01T00:00:00Z -o cert.json
+cookwala revoke-cert cert.json --key ~/.cookwala/keys/ed25519.seed --reason "ingredient source changed" -o cert.json
+cookwala revoke-cert cert.json --key ~/.cookwala/keys/ed25519.seed --suspend -o cert.json
 ```
 
-For now, use Python functions directly:
-```python
-import cookwala as cw
-ok, reason = cw.verify_certification(cert, keys)
-result = cw.current_certifications(certs, keys)
-```
+`certify` prints the public key for the seed; the authority publishes it as a KeyRecord at its `did:web`
+so readers can verify. `current-certs` defaults `--certs` to `examples/certifications`, whose authorities
+are fictional and sign with the public RFC 8032 test keys.
 
-See [CERTIFICATION_IMPLEMENTATION_STATUS.md](../CERTIFICATION_IMPLEMENTATION_STATUS.md) for current status.
+The catalog relays certifications at `https://cookwala.ai/v1/certifications/index.json` (all documents) and
+`https://cookwala.ai/v1/certifications/{id}.json` (one). The site is static, so filter the list yourself.
+
+Still to come: certifier registration and key management, certification search over the recipe catalog,
+MCP tools. See [CERTIFICATION_IMPLEMENTATION_STATUS.md](../CERTIFICATION_IMPLEMENTATION_STATUS.md).
 
 ## Kitchen (hub)
 
