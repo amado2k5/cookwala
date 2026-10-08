@@ -11,8 +11,9 @@ languages) that devices dry-run before they heat anything. You can use it two wa
 1. **MCP (preferred).** Start the local server `npx -y @cookwala/mcp` (Node 20 or later; published on npm and listed in
    the official MCP Registry as `ai.cookwala/cookwala`). You get
    sixteen read-only tools. Reference: [MCP](MCP.md).
-2. **Plain HTTP, no MCP.** Everything the server reads is a static file you can GET: see
-   [Without MCP](#without-mcp).
+2. **Plain HTTP, no MCP.** The open [recipe REST API](REST-API.md) at `https://mcp.cookwala.ai/api` searches and filters the
+   catalog (cuisine, ingredients, nutrition, diet, method, language...) and returns recipes in parts; everything the MCP server reads
+   is also a static file you can GET: see [Without MCP](#without-mcp).
 
 Five rules, whichever way you connect:
 

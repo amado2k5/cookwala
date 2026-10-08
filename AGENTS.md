@@ -21,6 +21,7 @@ or "is not deployed", check the live source:
 | MCP Registry entry `ai.cookwala/cookwala` | official MCP Registry, listed since 2026-10-06 (domain proof at `/.well-known/mcp-registry-auth`) | `curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=ai.cookwala"` |
 | Release secrets `MCP_PRIVATE_KEY`, `NPM_TOKEN` | repository secrets, set; they match the live domain proof (the 0.2.0 registry login succeeded) | the last run of the `publish-mcp` workflow |
 | Hosted MCP endpoint `https://mcp.cookwala.ai/mcp` | Cloudflare Worker `cookwala-mcp` (source `sdk/mcp-js/worker/`), live since 2026-10-08; `/mcp` needs the gateway token, `/health` is public. Listed at mcprush.com (claim CLM-0139) | `curl https://mcp.cookwala.ai/health`; a `POST /mcp` without the token must answer 401 |
+| Open MCP route and recipe REST API `https://mcp.cookwala.ai` (`POST /`, `/open/mcp`, `/api/*`) | same Worker, no token, read-only; OpenAPI at `/api/openapi.json`; data from `/v1/query/*` built by `tools/build_query_index.py`; docs [docs/REST-API.md](docs/REST-API.md) | `curl "https://mcp.cookwala.ai/api/search?q=koshari&limit=1"`; new routes go live only after the `Deploy hosted MCP endpoint` workflow |
 | Hosted-endpoint secrets and variables | repository secrets `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `MCP_GATEWAY_TOKEN` (the token mcprush issued); variable `CF_WORKERS_SUBDOMAIN` (`ahamdy`) | the last run of the `Deploy hosted MCP endpoint` workflow |
 | Website, schemas, `/v1/certifications` | cookwala.ai (GitHub Pages, deployed from `main` on every merge) | the `Validate and publish cookwala.ai` workflow |
 
@@ -35,7 +36,7 @@ registry entry stay the default way to use the server; the hosted endpoint exist
 ## Known Limitations (v0.2.0)
 
 **Search Endpoint**
-- `/v1/search` is documented in OpenAPI spec but not deployed
+- `/v1/search` is documented in OpenAPI spec but not deployed; a search API exists instead at `https://mcp.cookwala.ai/api/search` ([docs/REST-API.md](docs/REST-API.md))
 - Use `cookwala search` CLI command or catalog index instead
 - Edge worker infrastructure needed for deployment (planned). A Cloudflare account and Worker deploy workflow now exist for
   the MCP endpoint (`sdk/mcp-js/worker/`); `/v1/search` could reuse them but is not built

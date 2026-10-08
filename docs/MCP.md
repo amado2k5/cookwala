@@ -143,8 +143,9 @@ and cannot start cooking.
   it is off unless a maintainer turns it on. Local stdio use is never tracked.
 - **Status.** Live at `https://mcp.cookwala.ai/mcp` (since 2026-10-08), served by the Worker `cookwala-mcp` on Cloudflare
   (`https://cookwala-mcp.ahamdy.workers.dev/mcp` also answers). It is registered at mcprush as *Cookwala MCP* (claim CLM-0139).
-  `GET /health` is public. `POST /mcp` needs the gateway token, so it is not an open public endpoint: to use Cookwala from
-  your own agent, run the npm package (`npx -y @cookwala/mcp`). The registry entry `ai.cookwala/cookwala` lists only the npm
+  `GET /health` is public. `POST /mcp` needs the gateway token (it is the route mcprush counts). For your own agent run the npm package
+  (`npx -y @cookwala/mcp`), or for a client that only speaks HTTP or cannot send a header use the open routes above and the
+  [recipe REST API](REST-API.md) (`/api/*`). The registry entry `ai.cookwala/cookwala` lists only the npm
   package, not this endpoint.
 
 ## Registry
