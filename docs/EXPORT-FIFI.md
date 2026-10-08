@@ -159,5 +159,22 @@ index. They are positive claims only (halal, kosher, vegetarian, vegan), never c
 a relevant fact is uncertain. `tools/build_query_index.py` adds halal and kosher to the `diet` facet from these claims. Vegetarian and vegan in search still
 use the looser name heuristic (about 114 more recipes pass it than hold a reviewed vegetarian claim); the documents carry the stricter reviewed claims.
 
+### Allergens, diabetic estimate and gluten, dairy and nut-free claims (2026-10-08)
+
+fifi.cooking also publishes `allergens` and `diabetic` per recipe (method in its `docs/DIETARY-CLASSIFICATION.md`, script
+`scripts/diet/allergens.py`). The exporter now uses them instead of its own substring guess, which read "eggplant" as eggs, "cornflour" as
+wheat gluten and "coconut" as nuts:
+
+- `safety.allergens.eu14` and `us9` come from fifi.cooking's list (whole-word scan of ingredients and steps plus the reviewed facts), with
+  `x-status` (`contains`, `none_found`, `check_labels`, `not_assessed`) and `x-ruleset` (`fifi-allergen-1`). `none_found` is strict: the recipe
+  was reviewed and has no bought or compound item that could hide an allergen. The old guess remains only for a source file without `allergens`.
+- `gluten_free`, `dairy_free`, `nut_free` (`fifi-allergen-1`) and `diabetic_friendly` (`fifi-diabetic-1`) arrive as ordinary `safety.dietary`
+  claims. `safety.x-diabetic` carries the estimate for every recipe (`friendly`, `borderline`, `not_friendly`, `unknown`), so "not friendly" can be
+  told from "not assessed".
+- Nothing here is a certification, a guarantee or medical advice. The diabetic estimate comes from the modelled nutrition per serving (sugar 5 g or
+  less, carbohydrate 30 g or less, carbohydrate at most 40% of the energy, 12 servings or fewer; not friendly above 15 g sugar or 60 g carbohydrate).
+- 2,257 existing documents were re-exported for this change. The 105 recipes fifi.cooking has gained since the last export (world cuisines: Lebanon,
+  Iran, Italy, Korea, Peru, the Philippines and others) were deliberately left out; importing them is a separate run and review.
+
 Do not edit claims in this repo: change them in fifi.cooking and re-run the export. Adding claims changes a document's hash
 but the exporter does not bump `revision`.

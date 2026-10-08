@@ -240,3 +240,21 @@ test('allergens and diabetic status: filters, row fields, and both on every reci
   assert.equal((await call('/api/diets/safe%20for%20diabetics?limit=1')).json.diet, 'diabetic_friendly');
   assert.equal((await call('/api/diets/allergen-free?limit=1')).json.diet, 'no_allergens');
 });
+
+test('fifi.cooking allergen analysis replaces the substring guess: eggplant is not egg, cornflour is not wheat, coconut is not a nut', async () => {
+  const all = [];
+  for (let off = 0; off < 2400; off += 25) { const r = await call(`/api/search?limit=25&offset=${off}&detail=full`); if (!r.json.items.length) break; all.push(...r.json.items); }
+  const by = new Map(all.map((i) => [i.id, i]));
+  assert.ok(!by.get('add-070').allergen_info.contains.includes('eggs'), 'pickled eggplant has no eggs');
+  assert.ok(!by.get('ec-218').allergen_info.contains.includes('cereals_gluten'), 'cornflour is not wheat gluten');
+  assert.ok(!by.get('w-id-007').allergen_info.contains.includes('nuts'), 'coconut water is not a nut');
+  const status = new Set(all.map((i) => i.allergen_status));
+  for (const s of ['contains', 'none_found', 'check_labels']) assert.ok(status.has(s), `status ${s} is used`);
+  const labels = all.find((i) => i.allergen_status === 'check_labels');
+  assert.match(labels.allergen_info.note, /check the labels/i);
+  const noAllergens = await call('/api/diets/no_allergens?limit=25'); assert.ok(noAllergens.json.items.every((i) => i.allergen_status === 'none_found'), 'check_labels is never listed as no allergens');
+  assert.ok(noAllergens.json.total < 400, 'none found is the strict set');
+  const dia = all.filter((i) => i.diabetic_friendly === 'friendly');
+  assert.ok(dia.length > 400 && dia.length < 900);
+  assert.ok(all.filter((i) => i.diabetic_friendly === 'friendly').every((i) => i.diabetic.basis !== 'nutrition_estimate' || (i.servings <= 12 && (i.carbs_g * 4) / i.kcal_per_serving <= 0.4)), 'the energy-share and serving limits hold');
+});

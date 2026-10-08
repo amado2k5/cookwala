@@ -69,19 +69,25 @@ const hasIng = (r, term) => (r.ig || []).some((i) => ingMatches(i, term));
 /** Allergens in one recipe: the declared list plus anything the ingredient names reveal. "none_found" needs both to be empty. */
 export function allergenInfo(r) {
   const declared = [...new Set(r.al || [])]; const found = [...new Set(r.ax || [])]; const contains = [...new Set([...declared, ...found])].sort();
-  return { status: contains.length ? 'contains' : 'none_found', contains, may_contain: r.am && r.am.length ? r.am : undefined, declared, also_found_in_ingredient_names: found.length ? found : undefined,
-    note: contains.length ? 'Allergens come from the recipe\'s declared list plus an ingredient-name check; they may be incomplete.' : 'No allergen was found in the declared list or in the ingredient names. This is not a guarantee: allergen data is incomplete for some recipes (about 14% had none recorded), so check the ingredient list and the packaged items you use.' };
+  // r.as: the status fifi.cooking published (none_found, check_labels, not_assessed); without it, none_found needs both screens empty
+  const status = contains.length ? 'contains' : (r.as && r.as !== 'contains' ? r.as : 'none_found');
+  const note = status === 'contains' ? 'Allergens come from the recipe\'s analysis of its ingredients and steps; they may be incomplete.'
+    : status === 'check_labels' ? 'No allergen was named, but a bought or compound item (stock, sauce, spice mix...) may hide one: check the labels.'
+    : status === 'not_assessed' ? 'This recipe has not been assessed for allergens yet.'
+    : 'No allergen was found in the ingredients or steps. This is not a guarantee: allergen data is incomplete for some recipes, so check the ingredient list and the packaged items you use.';
+  return { status, contains, may_contain: r.am && r.am.length ? r.am : undefined, declared, also_found_in_ingredient_names: found.length ? found : undefined, source: r.as ? 'fifi.cooking analysis' : 'declared list plus ingredient-name check', note };
 }
-export const DIABETIC_RULE = { friendly: 'sugar 5 g or less and carbohydrate 30 g or less per serving', not_friendly: 'sugar over 15 g or carbohydrate over 60 g per serving', otherwise: 'borderline' };
+export const DIABETIC_RULE = { friendly: 'sugar 5 g or less and carbohydrate 30 g or less per serving, carbohydrate at most 40% of the energy, 12 servings or fewer', not_friendly: 'sugar over 15 g or carbohydrate over 60 g per serving', otherwise: 'borderline' };
 /** An estimate from modelled per-serving nutrition, or a published diabetic_friendly claim. Never a medical statement. */
 export function diabeticInfo(r) {
   const note = 'Estimate from modelled nutrition per serving, not medical advice. Portion size, how a body responds, and medication vary: people with diabetes should check with their clinician or dietitian.';
-  if (r.dk && (r.dc || []).includes('diabetic_friendly') && !(r.dx || []).includes('diabetic_friendly')) return { status: 'friendly', basis: 'published', reasons: ['The recipe carries a reviewed diabetic_friendly claim.'], note };
+  if (r.dk && (r.dc || []).includes('diabetic_friendly') && !(r.dx || []).includes('diabetic_friendly')) return { status: 'friendly', basis: 'published', reasons: ['The recipe carries a diabetic_friendly claim.'], per_serving: { carbs_g: r.ca, sugar_g: r.su, fiber_g: r.fi, kcal: r.kcal }, rule: DIABETIC_RULE, note };
+  if (r.dsx && r.dsx !== 'unknown') return { status: r.dsx, basis: 'fifi.cooking estimate', reasons: ['The status comes from fifi.cooking\'s estimate of the recipe (see rule).'], per_serving: { carbs_g: r.ca, sugar_g: r.su, fiber_g: r.fi, kcal: r.kcal }, rule: DIABETIC_RULE, note };
   if (r.ca === undefined || r.su === undefined) return { status: 'unknown', basis: 'no_nutrition_data', reasons: ['No carbohydrate and sugar estimate for this recipe.'], note };
   const per = { carbs_g: r.ca, sugar_g: r.su, fiber_g: r.fi, kcal: r.kcal };
   let status = 'borderline'; let why;
   if (r.su > 15 || r.ca > 60) { status = 'not_friendly'; why = `${r.su > 15 ? `sugar ${r.su} g is over 15 g` : `carbohydrate ${r.ca} g is over 60 g`} per serving`; }
-  else if (r.su <= 5 && r.ca <= 30) { status = 'friendly'; why = `sugar ${r.su} g and carbohydrate ${r.ca} g per serving are within the limits`; }
+  else if (r.su <= 5 && r.ca <= 30 && r.kcal > 0 && (r.ca * 4) / r.kcal <= 0.4 && r.sv > 0 && r.sv <= 12) { status = 'friendly'; why = `sugar ${r.su} g and carbohydrate ${r.ca} g per serving are within the limits`; }
   else why = `sugar ${r.su} g and carbohydrate ${r.ca} g per serving sit between the limits`;
   return { status, basis: 'nutrition_estimate', reasons: [why], per_serving: per, rule: DIABETIC_RULE, note };
 }
@@ -99,8 +105,8 @@ export const DIET_INFO = {
   gluten_free: { label: 'Gluten-free (inferred)', basis: 'declared allergens plus ingredient names', definition: 'No declared gluten allergen and no wheat, flour, bread, pasta, semolina, barley, rye, couscous or similar found. Cross-contact is not assessed.', caveat: 'Not suitable as coeliac advice; check labels.' },
   nut_free: { label: 'Nut-free (inferred)', basis: 'declared allergens plus ingredient names', definition: 'No declared nut or peanut allergen and no nuts found in the ingredient names. Seeds such as sesame are separate.', caveat: 'Check labels; allergen data is incomplete for some recipes.' },
   shellfish_free: { label: 'Shellfish-free (inferred)', basis: 'declared allergens plus ingredient names', definition: 'No crustaceans or molluscs found.' },
-  no_allergens: { label: 'No allergens found (not a guarantee)', basis: 'declared allergens plus ingredient names', definition: 'No major allergen (milk, eggs, gluten, nuts, peanuts, sesame, soy, fish, shellfish, celery, mustard, lupin) in the declared list or in the ingredient names. Allergen data is incomplete for some recipes.', caveat: 'Not a guarantee: always read labels and ask about cross-contact.' },
-  diabetic_friendly: { label: 'Diabetic-friendly (estimate, not medical advice)', basis: 'published claim, else modelled nutrition', definition: 'A reviewed diabetic_friendly claim, or per-serving sugar 5 g or less and carbohydrate 30 g or less in the modelled nutrition estimate. Recipes over 15 g sugar or 60 g carbohydrate are not_friendly; the rest are borderline; recipes with no nutrition are unknown.', caveat: 'Modelled estimate, not medical advice; individual response and portions vary. Check with a clinician or dietitian.' },
+  no_allergens: { label: 'No allergens found (not a guarantee)', basis: 'declared allergens plus ingredient names', definition: 'The recipe was reviewed and no major allergen (milk, eggs, gluten, nuts, peanuts, sesame, soy, fish, shellfish, celery, mustard, lupin, sulphites) was found in its ingredients or steps, and no bought or compound item could hide one. Recipes needing label checks are not listed.', caveat: 'Not a guarantee: always read labels and ask about cross-contact.' },
+  diabetic_friendly: { label: 'Diabetic-friendly (estimate, not medical advice)', basis: 'published claim, else modelled nutrition', definition: 'A diabetic_friendly claim, or per serving sugar 5 g or less, carbohydrate 30 g or less, carbohydrate at most 40% of the energy and 12 servings or fewer in the modelled nutrition estimate. Recipes over 15 g sugar or 60 g carbohydrate are not_friendly; the rest are borderline; recipes with no nutrition are unknown.', caveat: 'Modelled estimate, not medical advice; individual response and portions vary. Check with a clinician or dietitian.' },
   dairy_free: { label: 'Dairy-free', basis: 'inferred', definition: 'No milk, butter, ghee, cheese, yogurt or cream found.' },
   egg_free: { label: 'Egg-free', basis: 'inferred', definition: 'No eggs or mayonnaise found.' },
 };

@@ -214,6 +214,7 @@ def record(rid, d):
         if any(tokens(r) & st_ for r in refs) or (code in ('fish', 'crustaceans', 'molluscs', 'eggs', 'milk') and bool(tokens(title_core_early(names)) & st_)): found.add(code)
     if any((tokens(r) & {stem(x) for x in GLUTEN}) and not ('flour' in tokens(r) and tokens(r) & GLUTEN_FREE_FLOUR) for r in refs) or any('soy_sauce' in r.lower() for r in refs): found.add('cereals_gluten')
     if 'soy_sauce' in ' '.join(refs).lower(): found.add('soybeans')
+    published_allergens = ((d.get('safety') or {}).get('allergens') or {}).get('x-status')  # fifi.cooking's analysis replaces the screen below
     extra_allergens = sorted(found - set(alist) - ({'nuts', 'peanuts'} if 'nuts' in alist and 'peanuts' not in found else set()))
     n = (d.get('nutrition') or {}).get('perServing') or {}
     c = d.get('cost') or {}
@@ -224,7 +225,7 @@ def record(rid, d):
         'cu': dish.get('cuisine') or ['EG'], 'co': dish.get('course', 'other'), 'tg': dish.get('tags', []),
         'df': dish.get('difficulty'), 'lv': d['verification']['level'], 'k': (d.get('source') or {}).get('collection') or 'cookwala',
         'sv': serv, 'ig': refs, 'ni': len(refs), 'op': sorted(opset), 'me': methods, 'st': style, 'ns': len(ops),
-        'mn': duration_min(d.get('process', {}).get('totalTime')), 'ac': duration_min(d.get('process', {}).get('activeTime')), 'al': alist, 'ax': extra_allergens,
+        'mn': duration_min(d.get('process', {}).get('totalTime')), 'ac': duration_min(d.get('process', {}).get('activeTime')), 'al': alist, 'ax': [] if published_allergens else extra_allergens, 'as': published_allergens,
         'am': sorted(al.get('mayContain', [])), 'di': diet,
         'eq': sorted({e.get('class', '').replace('cw.eq.', '') for e in d.get('equipment', []) if e.get('class')}),
         'img': bool(dish.get('images')),
@@ -238,6 +239,8 @@ def record(rid, d):
     if rec.get('mn') and rec.get('ac') and rec['mn'] >= rec['ac']: rec['pt'] = rec['mn'] - rec['ac']  # unattended cooking, resting or waiting time
     if serv and 'kcal' in rec: rec['tk'] = round(rec['kcal'] * serv)
     if serv and 'pr' in rec: rec['tp'] = round(rec['pr'] * serv)
+    xd = (d.get('safety') or {}).get('x-diabetic')
+    if isinstance(xd, dict) and xd.get('status'): rec['dsx'] = xd['status']
     sd = (d.get('safety') or {}).get('dietary')
     if isinstance(sd, list):  # published classification (schema: safety.dietary[]): authoritative when present, even if empty
         rec['dk'] = True
