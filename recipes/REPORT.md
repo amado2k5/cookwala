@@ -9,52 +9,52 @@ Generated 2026-10-08 by `tools/export_fifi.py` (deterministic stages only; every
 | osool | 324 | `LicenseRef-source-credited` | facts |
 | abdennour | 158 | `LicenseRef-source-credited` | facts |
 | abuhaty | 808 | `LicenseRef-source-credited` | facts |
-| world | 376 | `LicenseRef-source-credited` | facts |
+| world | 499 | `LicenseRef-source-credited` | facts |
 
-Ingredients: 22253 lines; parsed from English amounts 21338 (95.9%), from Arabic 763 (3.4%), fallback to 1 piece with the original text kept 152 (0.7%).
+Ingredients: 23631 lines; parsed from English amounts 22636 (95.8%), from Arabic 834 (3.5%), fallback to 1 piece with the original text kept 161 (0.7%).
 
-Vocabulary: 5190 ingredient entries with labels in 29 languages.
+Vocabulary: 5482 ingredient entries with labels in 29 languages.
 
 Step operation hints (for the V1 conversion; never used for control):
 
-- cw.op.mix: 3686
-- cw.op.fry: 2549
-- cw.op.cut: 1509
-- cw.op.boil: 1312
-- cw.op.bake: 1298
-- none: 679
-- cw.op.transfer: 571
-- cw.op.whisk: 455
-- cw.op.layer: 453
-- cw.op.serve: 415
-- cw.op.rest: 410
-- cw.op.knead: 399
-- cw.op.form: 302
-- cw.op.simmer: 300
-- cw.op.heat: 261
-- cw.op.stuff: 212
-- cw.op.chill: 207
-- cw.op.drain: 192
-- cw.op.roast: 172
-- cw.op.roll_out: 154
-- cw.op.soak: 149
-- cw.op.cool: 148
-- cw.op.marinate: 143
-- cw.op.wash: 127
-- cw.op.garnish: 122
-- cw.op.crush: 85
-- cw.op.season: 84
-- cw.op.melt: 83
+- cw.op.mix: 3842
+- cw.op.fry: 2715
+- cw.op.cut: 1577
+- cw.op.boil: 1416
+- cw.op.bake: 1373
+- none: 698
+- cw.op.transfer: 598
+- cw.op.whisk: 476
+- cw.op.layer: 460
+- cw.op.serve: 451
+- cw.op.rest: 434
+- cw.op.knead: 412
+- cw.op.simmer: 316
+- cw.op.form: 310
+- cw.op.heat: 269
+- cw.op.stuff: 222
+- cw.op.chill: 215
+- cw.op.drain: 197
+- cw.op.roast: 185
+- cw.op.soak: 164
+- cw.op.roll_out: 162
+- cw.op.cool: 156
+- cw.op.marinate: 148
+- cw.op.wash: 132
+- cw.op.garnish: 124
+- cw.op.season: 90
+- cw.op.crush: 89
+- cw.op.melt: 85
+- cw.op.peel: 78
 - cw.op.saute: 75
-- cw.op.grate: 70
-- cw.op.peel: 70
-- cw.op.deep_fry: 62
+- cw.op.grate: 72
+- cw.op.deep_fry: 71
+- cw.op.steam: 64
 - cw.op.freeze: 61
-- cw.op.blend: 57
-- cw.op.toast: 54
-- cw.op.steam: 54
+- cw.op.blend: 58
+- cw.op.toast: 56
 - cw.op.caramelize: 42
-- cw.op.reduce: 26
-- cw.op.grill: 19
+- cw.op.reduce: 28
+- cw.op.grill: 27
 
 Sidecar languages: bn, cs, de, el, es, fa, fr, he, hi, id, it, ja, ko, ku, nl, pl, ps, pt, ru, sq, sv, sw, te, tr, ur, vi, zh.

@@ -241,7 +241,9 @@ def convert(d, vocab, stats):
         s = slug(name_en); base = s; k = 2
         ref_ = re.sub(r'[^A-Za-z0-9_-]', '', s[:40]) or f'ing{i}'
         if not ref_[0].isalpha(): ref_ = 'i' + ref_
-        while ref_ in refs: ref_ = f'{base[:36]}_{k}'; k += 1
+        while ref_ in refs:
+            ref_ = f'{base[:36]}_{k}'; k += 1
+            if not ref_[0].isalpha(): ref_ = 'i' + ref_  # refs must start with a letter ('7 spice' -> i7_spice_2)
         refs.add(ref_)
         vid = 'cw.ing.' + s
         entry = vocab.setdefault(vid, {'id': vid, 'label': {}, 'category': ing.get('category'), 'count': 0, '_labels': collections.defaultdict(collections.Counter)})
