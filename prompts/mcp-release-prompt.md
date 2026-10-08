@@ -1,3 +1,6 @@
+> **Historical: executed on 2026-10-06.** `@cookwala/mcp` is published on npm and listed in the MCP Registry; the
+> domain proof and secrets exist. Do not run this prompt again. For the next release follow `sdk/mcp-js/RELEASING.md`.
+
 # Release the Cookwala MCP server: one prompt for Claude desktop (or Devin)
 
 Written 2026-10-06. Everything is already built, tested and merged to `main` of `amado2k5/cookwala`.
