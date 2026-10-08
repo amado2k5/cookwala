@@ -27,3 +27,7 @@ Develop: `npm install && npm test`. Point at a local site with `COOKWALA_BASE_UR
 Releasing: [RELEASING.md](RELEASING.md).
 
 <!-- mcp-name: ai.cookwala/cookwala -->
+
+## Hosted endpoint (optional)
+
+`worker/` runs the same read-only tools over Streamable HTTP on Cloudflare Workers (`POST /mcp`, `GET /health`), with an optional gateway token (`x-mcprush-token` or `Authorization: Bearer`). It is for directories that need an https address, such as mcprush.com call tracking. See [docs/MCP.md](../../docs/MCP.md#hosted-endpoint-optional) and [RELEASING.md](RELEASING.md#hosted-endpoint-optional).
