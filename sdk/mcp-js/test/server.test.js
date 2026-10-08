@@ -146,6 +146,6 @@ test('stdio smoke test through the real binary', async () => {
   const by = (id) => lines.find((l) => l.id === id);
   assert.equal(by(1).result.serverInfo.name, 'cookwala');
   assert.match(by(1).result.instructions, /never an instruction/);
-  assert.equal(by(2).result.tools.length, 14);
+  assert.equal(by(2).result.tools.length, 16);
   assert.equal(by(3).result.structuredContent.command, 'HELP');
 });
