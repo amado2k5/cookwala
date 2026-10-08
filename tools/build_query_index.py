@@ -30,7 +30,7 @@ MEAT = {'beef', 'lamb', 'mutton', 'veal', 'chicken', 'turkey', 'duck', 'goose', 
 FISH = {'fish', 'shrimp', 'prawn', 'prawns', 'shrimps', 'tuna', 'sardine', 'sardines', 'salmon', 'cod', 'tilapia', 'mullet', 'bass', 'bream', 'calamari', 'squid', 'octopus', 'crab', 'lobster', 'mussels', 'clams', 'oyster', 'oysters', 'anchovy', 'anchovies', 'fillet', 'seafood', 'catfish', 'trout', 'mackerel', 'herring', 'eel', 'sole', 'flounder', 'haddock', 'hake', 'snapper', 'grouper', 'carp', 'perch', 'pike', 'halibut', 'swordfish', 'sea', 'monkfish', 'turbot', 'pollock', 'plaice', 'whiting', 'sprat', 'skate', 'ray', 'shark', 'barramundi', 'mahi', 'roe', 'caviar', 'bonito', 'katsuo', 'katsuobushi', 'niboshi', 'dashi', 'shirodashi', 'hondashi', 'worcestershire', 'belacan', 'terasi', 'nam', 'pla', 'nuoc', 'mam', 'scallop', 'scallops', 'cuttlefish', 'urchin', 'tobiko', 'surimi', 'kamaboko', 'narutomaki'} - {'sea', 'ray', 'nam', 'mam'}
 PORK = {'pork', 'bacon', 'ham', 'lard', 'chorizo', 'prosciutto', 'pancetta', 'chashu', 'guanciale', 'salami', 'pepperoni', 'hamhock'}
 ALCOHOL = {'wine', 'beer', 'rum', 'brandy', 'liqueur', 'vodka', 'mirin', 'sake', 'whisky', 'whiskey', 'cognac', 'gin', 'amaretto', 'kirsch', 'sherry', 'port', 'marsala', 'bourbon', 'tequila', 'champagne', 'cider'}
-DAIRY = {'milk', 'butter', 'ghee', 'cheese', 'yogurt', 'yoghurt', 'cream', 'labneh', 'feta', 'halloumi', 'mozzarella', 'parmesan', 'ricotta', 'kashk', 'whey', 'casein', 'custard', 'cheddar', 'mascarpone', 'buttermilk', 'samna', 'qishta', 'kaymak', 'rumi', 'rumy', 'cottage'}
+DAIRY = {'milk', 'butter', 'ghee', 'cheese', 'yogurt', 'yoghurt', 'cream', 'labneh', 'feta', 'halloumi', 'mozzarella', 'parmesan', 'ricotta', 'kashk', 'whey', 'casein', 'custard', 'cheddar', 'mascarpone', 'buttermilk', 'samna', 'qishta', 'kaymak', 'cottage'}
 EGG = {'egg', 'eggs', 'mayonnaise', 'mayo', 'meringue'}
 HONEY = {'honey'}
 DAIRY_FREE_PAIRS = {'peanut_butter', 'almond_butter', 'cocoa_butter', 'shea_butter', 'nut_butter', 'coconut_milk', 'almond_milk', 'soy_milk', 'oat_milk', 'rice_milk', 'coconut_cream', 'cream_of_tartar', 'sesame_butter', 'seed_butter', 'coconut_butter', 'butter_beans', 'butter_bean', 'butterbeans', 'ice_cream_cone'}
@@ -41,8 +41,8 @@ for _w in (MEAT, FISH, PORK, ALCOHOL, DAIRY, EGG, HONEY):
 def stem(w): return w[:-1] if len(w) > 3 and w.endswith('s') and not w.endswith('ss') else w
 
 
-MEAT -= {'minced', 'heart', 'cheek', 'cheeks'}
-MEAT |= {'basturma', 'pastirma', 'sujuk', 'soujouk', 'merguez', 'mortadella', 'kielbasa', 'bratwurst', 'frankfurter', 'hotdog', 'pepperoni', 'sheep', 'lahma', 'lahm', 'laham', 'aspic', 'jellied', 'rennet', 'lung', 'sweetbread', 'spleen', 'intestine', 'trotter', 'offal', 'giblet', 'gizzard', 'brain', 'tongue', 'trotter', 'poultry', 'fowl', 'hen', 'squab', 'chickens', 'lambs', 'cutlet', 'shank', 'thigh', 'breast', 'leg', 'rib'} - {'breast', 'leg', 'rib'}
+MEAT -= {'minced', 'heart', 'cheek', 'cheeks', 'cutlet', 'cutlets'}
+MEAT |= {'basturma', 'pastirma', 'sujuk', 'soujouk', 'merguez', 'mortadella', 'kielbasa', 'bratwurst', 'frankfurter', 'hotdog', 'pepperoni', 'sheep', 'lahma', 'lahm', 'laham', 'aspic', 'jellied', 'rennet', 'lung', 'sweetbread', 'spleen', 'intestine', 'trotter', 'offal', 'giblet', 'gizzard', 'brain', 'tongue', 'trotter', 'poultry', 'fowl', 'hen', 'squab', 'chickens', 'lambs', 'shank', 'thigh', 'breast', 'leg', 'rib'} - {'breast', 'leg', 'rib'}
 STEMMED = {id(w): {stem(x) for x in w} for w in (MEAT, FISH, PORK, ALCOHOL, DAIRY, EGG, HONEY)}
 NOT_MEATLESS_TITLE = re.compile(r'\b(vegetarian|vegan|meatless|mock|veggie|plant-based)\b', re.I)
 SPICY = {'chili', 'chilli', 'chile', 'chilies', 'chillies', 'chilis', 'cayenne', 'harissa', 'jalapeno', 'habanero', 'serrano', 'sambal', 'gochujang', 'gochugaru', 'wasabi', 'tabasco', 'sriracha', 'shatta', 'datta', 'scotch', 'bonnet', 'vindaloo', 'piri'}
@@ -81,6 +81,8 @@ def tokens(ref): return {stem(t) for t in re.split(r'[^a-z]+', ref.lower()) if t
 
 
 GENERIC_BASE = {'stock', 'broth', 'bouillon', 'dashi', 'shirodashi', 'hondashi'}
+MEAT_NG = MEAT - GENERIC_BASE  # fixed sets (has() caches stems by id), used for titles where a bare 'stock' means nothing
+FISH_NG = FISH - GENERIC_BASE
 PLANT_BASE = {'vegetable', 'veg', 'veggie', 'mushroom', 'kombu', 'kelp', 'shiitake', 'miso', 'vegan', 'plant', 'seaweed'}
 
 
@@ -95,6 +97,8 @@ def has(ref, words, exceptions=()):
         generic = toks & {stem(x) for x in GENERIC_BASE}
         if generic: return not (toks & {stem(x) for x in PLANT_BASE}) and bool(toks & st)
         return False
+    if words is ALCOHOL and ('vinegar' in toks or ('cheese' in toks and 'rum' in toks)): return False  # vinegars are not alcohol; a truncated 'grated rum[i] cheese' is not rum
+    if False: return False  # vinegars (cider, wine, rice) are not counted as alcohol, as in the reviewed rule set
     if words is PORK and 'halal' in toks: return False  # e.g. pepperoni_slices_halal (beef)
     if any(e in r for e in exceptions): return False
     st = STEMMED.get(id(words))
@@ -150,9 +154,10 @@ def record(rid, d):
     style = 'no_cook' if not heat else ('mixed' if cold else 'hot')
     if not heat and cold: style = 'cold'
     title = names.get('en') or ''
+    title_core = re.sub(r'\bscallop(?:ed)?\s+shells?\b', '', title, flags=re.I) if False else re.sub(r'\((?:for|to serve with|served with)\b[^)]*\)', '', re.sub(r'\b(?:for|to serve with|served with)\b[^()]*', '', title, flags=re.I), flags=re.I)
     by_title = not NOT_MEATLESS_TITLE.search(title)
-    meat = any(has(r, MEAT, MEAT_FREE_PAIRS) for r in refs) or (by_title and has(title, MEAT)); fish = any(has(r, FISH) for r in refs) or (by_title and has(title, FISH))
-    pork = any(has(r, PORK) for r in refs) or (by_title and not any('halal' in r.lower() for r in refs) and has(title, PORK)); alcohol = any(has(r, ALCOHOL, ('port_', 'portion', 'sauce_wine_free')) for r in refs)
+    meat = any(has(r, MEAT, MEAT_FREE_PAIRS) for r in refs) or (by_title and has(title_core, MEAT_NG)); fish = any(has(r, FISH) for r in refs) or (by_title and has(title_core, FISH_NG))
+    pork = any(has(r, PORK) for r in refs) or (by_title and not any('halal' in r.lower() for r in refs) and has(title_core, PORK)); alcohol = any(has(r, ALCOHOL, ('port_', 'portion', 'sauce_wine_free')) for r in refs)
     dairy = any(has(r, DAIRY, DAIRY_FREE_PAIRS) for r in refs); egg = any(has(r, EGG) for r in refs); honey = any(has(r, HONEY) for r in refs)
     diet = []
     if not meat and not fish: diet.append('vegetarian')
@@ -162,7 +167,7 @@ def record(rid, d):
     if not alcohol: diet.append('alcohol_free')
     if not dairy: diet.append('dairy_free')
     gelatin_like = any(has(r, BYPRODUCT) for r in refs) or bool(tokens(title) & {stem(x) for x in BYPRODUCT})
-    shell = any(tokens(r) & {stem(x) for x in SHELLFISH} for r in refs) or bool({'crustaceans', 'molluscs'} & set(al_codes)) or bool(tokens(title) & {stem(x) for x in SHELLFISH})
+    shell = any(tokens(r) & {stem(x) for x in SHELLFISH} for r in refs) or bool({'crustaceans', 'molluscs'} & set(al_codes)) or bool(tokens(re.sub(r'\bscallop(?:ed)?\s+shells?\b', '', title, flags=re.I)) & {stem(x) for x in SHELLFISH})
     bad_fish = any(tokens(r) & {stem(x) for x in NONKOSHER_FISH} for r in refs) or bool(tokens(title) & {stem(x) for x in NONKOSHER_FISH})
     meat_strict = meat and any(tokens(r) & ({stem(x) for x in MEAT} - {stem(x) for x in MEAT_STRICT_EXCLUDE}) for r in refs + [title])
     if not pork and not alcohol and not gelatin_like: diet.append('halal_ingredients')
@@ -173,10 +178,6 @@ def record(rid, d):
     if not ({'nuts', 'peanuts'} & set(al_codes)) and not any(tokens(r) & {stem(x) for x in NUTS} for r in refs): diet.append('nut_free')
     if not shell: diet.append('shellfish_free')
     if not egg: diet.append('egg_free')
-    # halal and kosher exist only as reviewed claims (safety.dietary, from fifi.cooking scripts/diet). vegetarian and vegan keep the
-    # name heuristic here: it is looser than the reviewed claims, which also read the steps and withhold on doubt.
-    claims = {c['claim'] for c in (d.get('safety') or {}).get('dietary', [])}
-    diet = sorted(set(diet) | (claims & {'halal', 'kosher'}))
     al_codes = list((d.get('safety') or {}).get('allergens', {}).get('eu14', [])) + list((d.get('safety') or {}).get('allergens', {}).get('us9', []))
     ttoks = tokens(title + ' ' + ' '.join(dish.get('tags', [])))
     spicy = any(has(r, SPICY) or (('hot' in tokens(r)) and (tokens(r) & {'pepper', 'sauce', 'peppers', 'chill'})) for r in refs)
@@ -223,6 +224,17 @@ def record(rid, d):
         if cert: rec['dcc'] = cert
         rs = {x['claim']: x['ruleset'] for x in sd if x.get('ruleset') and x.get('claim')}
         if rs: rec['drs'] = rs
+        for x in sd:
+            if x.get('claim') == 'kosher':
+                m = re.search(r'\((dairy|pareve|meat)\)', x.get('note') or '')
+                if m: rec['dkt'] = m.group(1)
+        # a published claim that the recipe's own title or ingredient names contradict is held back and listed for review
+        conflicts = []
+        if ({'vegetarian', 'vegan'} & set(rec['dc'])) and (meat_strict or fish): conflicts.append('vegetarian' if 'vegetarian' in rec['dc'] else 'vegan')
+        if 'vegan' in rec['dc'] and (dairy or egg or honey): conflicts.append('vegan')
+        if 'halal' in rec['dc'] and (pork or alcohol): conflicts.append('halal')
+        if 'kosher' in rec['dc'] and (pork or shell or bad_fish): conflicts.append('kosher')
+        if conflicts: rec['dx'] = sorted(set(conflicts))
         nt = {x['claim']: x['note'] for x in sd if x.get('note') and x.get('claim')}
         if nt: rec['dcn'] = nt
         refs_c = {x['claim']: [c.get('id') for c in x.get('certifications', []) if c.get('id')] for x in sd if x.get('certifications') and x.get('claim')}
@@ -279,7 +291,7 @@ def main(out):
     ing = Counter(i for r in recs for i in r.get('ig', []))
     facets = {'count': len(recs), 'languages': {lg: LANG_NAMES.get(lg, lg) for lg in langs}, 'sources': sources, 'cuisine': cnt('cu'), 'course': cnt('co', False), 'tags': cnt('tg'), 'difficulty': cnt('df', False), 'level': cnt('lv', False),
               'collection': cnt('k', False), 'method': cnt('me'), 'operation': cnt('op'), 'style': cnt('st', False), 'diet': cnt('di'), 'allergen': cnt('al'),
-              'equipment': cnt('eq'), 'cost_tier': cnt('ct', False), 'kids': sum(1 for r in recs if r.get('kd')), 'dietary_classified': sum(1 for r in recs if r.get('dk')), 'dietary_certified': sum(1 for r in recs if r.get('dcc')), 'with_background_notes': sum(1 for r in recs if r.get('hn')), 'top_ingredients': dict(ing.most_common(300)), 'categories': dict(cats.most_common(150)),
+              'equipment': cnt('eq'), 'cost_tier': cnt('ct', False), 'kids': sum(1 for r in recs if r.get('kd')), 'dietary_classified': sum(1 for r in recs if r.get('dk')), 'dietary_certified': sum(1 for r in recs if r.get('dcc')), 'dietary_conflicts': sum(1 for r in recs if r.get('dx')), 'with_background_notes': sum(1 for r in recs if r.get('hn')), 'top_ingredients': dict(ing.most_common(300)), 'categories': dict(cats.most_common(150)),
               'ranges': {k: [min(r[k] for r in recs if k in r), max(r[k] for r in recs if k in r)] for k in ('kcal', 'pr', 'fa', 'ca', 'fi', 'su', 'mn', 'ac', 'pt', 'tk', 'tp', 'cps', 'ni', 'ns', 'sv') if any(k in r for r in recs)},
               'notes': {'diet': 'inferred from ingredient names and declared allergens, never certified; halal_ingredients and kosher_* only screen ingredients and cannot verify slaughter, supervision or utensils', 'kids': 'kid_friendly is INFERRED: mild (no chilli, alcohol, caffeine or offal), simple (easy or medium, 15 ingredients or fewer) and kid-appealing; not medical advice', 'nutrition': 'per serving, modelled estimates unless the recipe says otherwise',
                         'cost': 'the data states no currency; cost_tier is relative within this catalog', 'time': 'mn is total minutes where the recipe states it; ac is hands-on (active) minutes and pt is the unattended remainder (cooking, resting, waiting)'}}
