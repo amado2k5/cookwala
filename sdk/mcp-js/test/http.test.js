@@ -52,3 +52,20 @@ test('only POST is accepted on /mcp', async () => {
   const res = await handleRequest(new Request('https://mcp.test/mcp'), {}, { catalog: catalog() });
   assert.equal(res.status, 405);
 });
+
+test('/open/mcp needs no token and /mcp still does', async () => {
+  const env = { MCP_GATEWAY_TOKEN: 's3cret' };
+  const opts = { catalog: catalog() };
+  const mk = (path) => new Request('https://mcp.test' + path, { method: 'POST', headers: { 'content-type': 'application/json', accept: 'application/json, text/event-stream' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list', params: {} }) });
+  assert.equal((await handleRequest(mk('/mcp'), env, opts)).status, 401);
+  const res = await handleRequest(mk('/open/mcp'), env, opts);
+  assert.equal(res.status, 200);
+  assert.equal((await res.json()).result.tools.length, 16);
+});
+
+test('POST to the bare domain is the open endpoint', async () => {
+  const req = new Request('https://mcp.test/', { method: 'POST', headers: { 'content-type': 'application/json', accept: 'application/json, text/event-stream' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list', params: {} }) });
+  const res = await handleRequest(req, { MCP_GATEWAY_TOKEN: 'x' }, { catalog: catalog() });
+  assert.equal(res.status, 200);
+  assert.equal((await handleRequest(new Request('https://mcp.test/'), {}, {})).status, 200);
+});
