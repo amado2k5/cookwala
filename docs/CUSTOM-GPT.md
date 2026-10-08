@@ -1,5 +1,7 @@
 # Cookwala as a ChatGPT GPT (and any HTTP client)
 
+> **Legacy.** OpenAI is retiring Custom GPTs (reported for 11 December 2026) and replacing them with plugins; Custom Actions do not carry over. Use the [ChatGPT plugin](CHATGPT-PLUGIN.md) for anything new. This recipe works until then.
+
 The REST API at `https://mcp.cookwala.ai/api/*` is open, read-only and needs no token. Its OpenAPI description is
 `https://mcp.cookwala.ai/api/openapi.json` (OpenAPI 3.1, about 28 operations). It is separate from the token-protected `/mcp` route.
 
