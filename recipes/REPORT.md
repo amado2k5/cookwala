@@ -1,6 +1,6 @@
 # fifi.cooking export report
 
-Generated 2026-10-05 (world collection added 2026-10-06) by `tools/export_fifi.py` (deterministic stages only; every document is V0, RFC-0009).
+Generated 2026-10-08 by `tools/export_fifi.py` (deterministic stages only; every document is V0, RFC-0009).
 
 | Collection | Documents | Licence | Text |
 |---|---|---|---|
@@ -9,52 +9,52 @@ Generated 2026-10-05 (world collection added 2026-10-06) by `tools/export_fifi.p
 | osool | 324 | `LicenseRef-source-credited` | facts |
 | abdennour | 158 | `LicenseRef-source-credited` | facts |
 | abuhaty | 808 | `LicenseRef-source-credited` | facts |
-| world | 161 | `LicenseRef-source-credited` | facts |
+| world | 376 | `LicenseRef-source-credited` | facts |
 
-Ingredients: 18040 lines; parsed from English amounts 17266 (95.7%), from Arabic 649 (3.6%), fallback to 1 piece with the original text kept 125 (0.7%).
+Ingredients: 22253 lines; parsed from English amounts 21338 (95.9%), from Arabic 763 (3.4%), fallback to 1 piece with the original text kept 152 (0.7%).
 
-Vocabulary: 3953 ingredient entries with labels in 25 languages.
+Vocabulary: 5190 ingredient entries with labels in 29 languages.
 
 Step operation hints (for the V1 conversion; never used for control):
 
-- cw.op.mix: 3048
-- cw.op.fry: 2082
-- cw.op.cut: 1230
-- cw.op.bake: 1068
-- cw.op.boil: 1056
-- none: 576
-- cw.op.transfer: 488
-- cw.op.layer: 421
-- cw.op.whisk: 380
-- cw.op.knead: 352
-- cw.op.rest: 339
-- cw.op.serve: 330
-- cw.op.form: 240
-- cw.op.simmer: 233
-- cw.op.heat: 210
-- cw.op.stuff: 183
-- cw.op.chill: 169
-- cw.op.drain: 143
-- cw.op.roll_out: 140
-- cw.op.marinate: 134
-- cw.op.roast: 128
-- cw.op.cool: 114
-- cw.op.wash: 107
-- cw.op.garnish: 106
-- cw.op.soak: 100
-- cw.op.saute: 71
-- cw.op.season: 71
-- cw.op.melt: 68
-- cw.op.crush: 68
-- cw.op.grate: 57
-- cw.op.peel: 56
-- cw.op.freeze: 54
-- cw.op.blend: 52
-- cw.op.deep_fry: 49
-- cw.op.toast: 47
-- cw.op.caramelize: 41
-- cw.op.steam: 31
-- cw.op.grill: 18
-- cw.op.reduce: 17
+- cw.op.mix: 3686
+- cw.op.fry: 2549
+- cw.op.cut: 1509
+- cw.op.boil: 1312
+- cw.op.bake: 1298
+- none: 679
+- cw.op.transfer: 571
+- cw.op.whisk: 455
+- cw.op.layer: 453
+- cw.op.serve: 415
+- cw.op.rest: 410
+- cw.op.knead: 399
+- cw.op.form: 302
+- cw.op.simmer: 300
+- cw.op.heat: 261
+- cw.op.stuff: 212
+- cw.op.chill: 207
+- cw.op.drain: 192
+- cw.op.roast: 172
+- cw.op.roll_out: 154
+- cw.op.soak: 149
+- cw.op.cool: 148
+- cw.op.marinate: 143
+- cw.op.wash: 127
+- cw.op.garnish: 122
+- cw.op.crush: 85
+- cw.op.season: 84
+- cw.op.melt: 83
+- cw.op.saute: 75
+- cw.op.grate: 70
+- cw.op.peel: 70
+- cw.op.deep_fry: 62
+- cw.op.freeze: 61
+- cw.op.blend: 57
+- cw.op.toast: 54
+- cw.op.steam: 54
+- cw.op.caramelize: 42
+- cw.op.reduce: 26
+- cw.op.grill: 19
 
-Sidecar languages: de, el, es, fa, fr, he, hi, id, it, ja, ko, ku, nl, pl, ps, pt, ru, sv, sw, te, tr, ur, zh.
+Sidecar languages: bn, cs, de, el, es, fa, fr, he, hi, id, it, ja, ko, ku, nl, pl, ps, pt, ru, sq, sv, sw, te, tr, ur, vi, zh.
