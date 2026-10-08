@@ -11,7 +11,7 @@ to done without the evidence named.
 | Core 0.2: envelopes, sensor ladders, refusal, local safety limits, signed records, agent rules | done (draft, under review) |
 | 101 conformance vectors (Core and profiles), conformance report format | done |
 | Reference library, Python package and CLI, TypeScript types, MCP server (Python script), reference hub, ROS 2 interface package | done (editable and source installs; registries next) |
-| MCP service for AI agents: `@cookwala/mcp` (16 read-only tools, stdio, reads the static catalog, no hosting), agent guide for Claude, Codex, Copilot, Cursor, Windsurf, Devin, Antigravity, fifi.cooking bridge | built and tested; npm publish and MCP Registry listing wait for the release keys (BACKLOG D-13) |
+| MCP service for AI agents: `@cookwala/mcp` (16 read-only tools, stdio, reads the static catalog, no hosting), agent guide for Claude, Codex, Copilot, Cursor, Windsurf, Devin, Antigravity, fifi.cooking bridge | published: `npx -y @cookwala/mcp`, listed in the MCP Registry as `ai.cookwala/cookwala` |
 | Nine example recipes in English and Arabic | done (V1: structured, not field-verified) |
 | 2,042 fifi.cooking recipes imported at V0 (1,881 Egyptian family and book collections, 161 World Cuisines), text in 25 languages | done (RFC-0009; five collections publish facts only until rights are confirmed) |
 | SDK clients in 13 languages; 100 executed scenarios | done (Go, Rust, Kotlin, C#, PHP not yet compiled on CI) |

@@ -3,7 +3,7 @@
   "name": "ai.cookwala/cookwala",
   "title": "Cookwala",
   "description": "Search Cookwala recipes, dry-run them on a device, check safe bands, mandates and SMS. Read-only.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "websiteUrl": "https://cookwala.ai/mcp/",
   "repository": {
     "url": "https://github.com/amado2k5/cookwala",
@@ -15,7 +15,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@cookwala/mcp",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "runtimeHint": "npx",
       "transport": {
         "type": "stdio"
