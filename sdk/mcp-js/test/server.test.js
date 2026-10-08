@@ -28,7 +28,7 @@ test('lists 24 read-only tools, 6 resources and 3 prompts', async () => {
   const { client } = await connect({ baseUrl: fx.dir, cacheDir: fs.mkdtempSync(path.join(os.tmpdir(), 'cwc-')) });
   const tools = (await client.listTools()).tools;
   assert.equal(tools.length, 24);
-  for (const t of tools) { assert.equal(t.annotations.readOnlyHint, true, t.name); assert.equal(t.annotations.destructiveHint, false, t.name); }
+  for (const t of tools) { assert.equal(t.annotations.readOnlyHint, true, t.name); assert.equal(t.annotations.destructiveHint, false, t.name); assert.equal(t.annotations.idempotentHint, true, t.name); assert.equal(t.annotations.openWorldHint, false, t.name); assert.ok(t.annotations.title && t.title, t.name); }
   assert.equal((await client.listResourceTemplates()).resourceTemplates.length, 4);
   assert.equal((await client.listResources()).resources.filter((r) => !r.uri.startsWith('cookwala://preset/')).length, 2);
   assert.equal((await client.listPrompts()).prompts.length, 3);

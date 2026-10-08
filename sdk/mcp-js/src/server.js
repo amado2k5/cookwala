@@ -26,7 +26,8 @@ export const INSTRUCTIONS = [
 ].join(' ');
 
 const READ = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
-const NET = { ...READ, openWorldHint: true };
+// Every tool reads a fixed, first-party catalog (cookwala.ai, fifi.cooking) and never the open web, so none is open-world.
+const NET = READ;
 const lang = z.string().regex(/^[a-z]{2,3}$/).default('en').describe('Language code, for example en or ar');
 
 // The query index (/v1/query/recipes.json) carries per-recipe allergen and nutrition facts; loaded only when a call needs them.
@@ -261,7 +262,7 @@ export function createServer(opts = {}) {
   const cat = opts.catalog || new Catalog(opts);
   const server = new McpServer({ name: 'cookwala', version: opts.version || VERSION }, { instructions: INSTRUCTIONS });
   const tools = buildTools(cat);
-  for (const t of tools) server.registerTool(t.name, { title: t.title, description: t.description, inputSchema: t.shape, annotations: t.annotations }, wrap(t.run));
+  for (const t of tools) server.registerTool(t.name, { title: t.title, description: t.description, inputSchema: t.shape, annotations: { title: t.title, ...t.annotations } }, wrap(t.run));
 
   const res = (uri, mimeType, text) => ({ contents: [{ uri: uri.href, mimeType, text }] });
   const guard = (fn) => async (uri, vars) => { try { return await fn(uri, vars); } catch (e) { if (e instanceof CatalogError) throw new Error(`${e.code}: ${e.detail}`); throw e; } };
