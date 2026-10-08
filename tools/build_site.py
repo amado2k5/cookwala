@@ -56,7 +56,7 @@ FONTS = {
     'zh': 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
     'ko': 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
 }
-CONTACT_EMAIL = ''  # set to hello@cookwala.ai once the mailbox or forwarding exists; empty keeps the GitHub-only note
+CONTACT_EMAIL = 'eat@cookwala.ai'  # forwarding address on Cloudflare Email Routing; empty falls back to the GitHub-only note
 GLOSSED_PAGES = {'/', '/why/', '/goals/', '/trust/', '/humanitarian/'}
 SCRIPT_OF = {'ar': 'arabic', 'ur': 'arabic', 'fa': 'arabic', 'ps': 'arabic', 'he': 'hebrew', 'ru': 'cyrillic', 'el': 'greek', 'hi': 'devanagari', 'te': 'telugu', 'ja': 'ja', 'zh': 'zh', 'ko': 'ko'}
 AUTONYM = {'en': 'English', 'ar': 'العربية', 'fr': 'Français', 'es': 'Español', 'ja': '日本語', 'hi': 'हिन्दी', 'pt': 'Português', 'ru': 'Русский', 'zh': '简体中文', 'de': 'Deutsch', 'it': 'Italiano', 'el': 'Ελληνικά', 'ur': 'اردو', 'fa': 'فارسی', 'tr': 'Türkçe', 'ku': 'Kurdî', 'id': 'Bahasa Indonesia', 'sw': 'Kiswahili', 'ko': '한국어', 'nl': 'Nederlands', 'ps': 'پښتو', 'he': 'עברית', 'pl': 'Polski', 'sv': 'Svenska', 'te': 'తెలుగు'}
