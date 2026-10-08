@@ -29,6 +29,7 @@
     <h2>Why there is nothing to host</h2>
     <p>This site is a set of static files on GitHub Pages, and Pages cannot answer a remote MCP request. So the server does not live here. Your agent starts it on your own machine over stdio, and it reads the same public files you can open in a browser: the signed index, the recipes, the vocabularies and the device presets.</p>
     <p>Every index file is checked against the hash in the manifest, and every recipe's hash is recomputed before anything is returned. A mismatch returns an error and no content. After the first run it works offline from its cache. It sends no telemetry and has no accounts.</p>
+    <p>There is also an optional hosted endpoint, <code>mcp.cookwala.ai</code>, on Cloudflare rather than on this site. It serves the same read-only tools and exists so directories such as mcprush.com can list and count calls to it. It needs a token, so for your own agent use the npm package above. <a href="/docs/MCP/#hosted-endpoint-optional">Details</a>.</p>
   </div>
   <div>
 <pre class="code" aria-label="How the pieces connect"><code>agent ──stdio──▶ npx @cookwala/mcp
@@ -46,7 +47,7 @@ fifi.cooking  /data/…</code></pre>
 
 <section class="band" id="tools">
   <div class="wrap">
-    <h2>Fourteen read-only tools</h2>
+    <h2>Sixteen read-only tools</h2>
     <p class="note">Every tool is marked read-only. Results are structured JSON. Recipe text comes back as data, never as instructions.</p>
     <div class="cards">
       <div class="card"><h3>Find and read</h3><p><code>search_recipes</code> (by words, cuisine, course, level, collection, allergen-free), <code>get_recipe</code> (summary, ingredients, process, text or full, hash verified), <code>list_collections</code>.</p></div>

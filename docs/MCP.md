@@ -2,7 +2,8 @@
 
 > **Status: experimental, read-only.** Package `@cookwala/mcp` 0.2.0, **published on npm** (`npx -y @cookwala/mcp`) and **listed in the official MCP
 > Registry**; registry name
-> `ai.cookwala/cookwala`. It never starts cooking.
+> `ai.cookwala/cookwala`. An optional token-protected hosted endpoint, `https://mcp.cookwala.ai/mcp`, serves the same tools
+> for directory call tracking (see [Hosted endpoint](#hosted-endpoint-optional)). It never starts cooking.
 
 Cookwala is available to any [Model Context Protocol](https://modelcontextprotocol.io) client as
 a **local server that reads the public catalog**. There is no Cookwala server to run or pay for
@@ -134,7 +135,11 @@ and cannot start cooking.
 - **mcprush and telemetry.** Cookwala itself collects none. If you enable tracking at mcprush,
   calls go through its gateway and mcprush counts them; that is mcprush's data, not Cookwala's, and
   it is off unless a maintainer turns it on. Local stdio use is never tracked.
-- **Status.** Not deployed yet; the URL will be added here when it is.
+- **Status.** Live at `https://mcp.cookwala.ai/mcp` (since 2026-10-08), served by the Worker `cookwala-mcp` on Cloudflare
+  (`https://cookwala-mcp.ahamdy.workers.dev/mcp` also answers). It is registered at mcprush as *Cookwala MCP* (claim CLM-0139).
+  `GET /health` is public. `POST /mcp` needs the gateway token, so it is not an open public endpoint: to use Cookwala from
+  your own agent, run the npm package (`npx -y @cookwala/mcp`). The registry entry `ai.cookwala/cookwala` lists only the npm
+  package, not this endpoint.
 
 ## Registry
 
