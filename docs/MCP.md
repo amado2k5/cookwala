@@ -84,8 +84,8 @@ fifi.cooking is where the recipes are written; Cookwala is the standard form the
   `search_recipes` read those. Each document keeps `legacy.pageUrl` and `legacy.dataUrl`, and
   `get_recipe` returns them under `sources.fifi`.
 - **Live route.** `fifi_search` and `fifi_source` read fifi.cooking's own `/data/` files, so an agent
-  can find recipes that were added after the last export. (The 161 world-cuisine recipes, ids
-  `w-*`, were exported on 2026-10-06 and are now in the catalog, facts only.) They are the only calls that leave the catalog origin, they contact
+  can find recipes that were added after the last export. (The 376 world-cuisine recipes, ids
+  `w-*`, were exported by 2026-10-08 and are now in the catalog, facts only.) They are the only calls that leave the catalog origin, they contact
   `https://fifi.cooking` only, and they are marked `openWorldHint`.
 - **Rights rules apply on the live route too.** `fifi_source` returns steps and notes only for
   collections whose `text` policy in `tools/export_fifi.collections.json` is `full`. Every other

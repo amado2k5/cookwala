@@ -29,7 +29,7 @@ Do these first, from a Mac or desktop with a terminal. Nothing here can be deleg
    package, so decide before the first publish.
 6. **Approve when the agent asks.** It will pause before: pushing to `main`, setting repository secrets, pushing the
    release tag. A tag cannot be taken back from npm (a published version is permanent), so read that prompt.
-7. **Optional, your call:** the 161 world recipes are published facts-only. To publish their steps, confirm the source
+7. **Optional, your call:** the 376 world recipes are published facts-only. To publish their steps, confirm the source
    rights and say so; that is a separate change.
 
 Things that are not needed: a DNS record, a domain transfer, paid hosting, a registry account (the MCP Registry has
