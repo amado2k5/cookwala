@@ -144,3 +144,15 @@ test('source, category, totals, prep/cook time, and parts-on-demand', async () =
   assert.ok((await call('/api/recipes/koshari?include=all')).json.safety);
   assert.equal((await call('/api/recipes/koshari?include=banana')).status, 400);
 });
+
+test('country, ingredient lookup, kids filter, background notes', async () => {
+  const jp = await call('/api/search?country=Japanese&limit=25'); assert.ok(jp.json.total > 10); assert.ok(jp.json.items.every((i) => i.cuisine.includes('JP')));
+  assert.ok((await call('/api/search?country=India&limit=5')).json.total > 10);
+  const cs = await call('/api/countries'); assert.ok(cs.json.countries.find((c) => c.code === 'EG' && c.name === 'Egypt'));
+  const il = await call('/api/ingredients?q=lent'); assert.ok(il.json.items.length > 0 && il.json.items.every((i) => /lent/.test(i.ingredient)));
+  const kids = await call('/api/search?kids=true&limit=25&detail=full'); assert.ok(kids.json.total > 100); assert.ok(kids.json.items.every((i) => i.kid_friendly_inferred));
+  assert.ok(kids.json.items.every((i) => !i.diet_inferred || i.diet_inferred.includes('alcohol_free')));
+  const n = await call('/api/recipes/basbousa?include=history'); assert.equal(n.status, 200); assert.ok('available' in n.json.notes);
+  const t = await call('/api/recipes/koshari?include=tips'); assert.ok(t.json.notes);
+  assert.equal((await call('/api/search?has_notes=true&limit=3')).status, 200);
+});

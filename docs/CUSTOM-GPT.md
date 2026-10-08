@@ -1,7 +1,7 @@
 # Cookwala as a ChatGPT GPT (and any HTTP client)
 
 The REST API at `https://mcp.cookwala.ai/api/*` is open, read-only and needs no token. Its OpenAPI description is
-`https://mcp.cookwala.ai/api/openapi.json` (OpenAPI 3.1, about 22 operations). It is separate from the token-protected `/mcp` route.
+`https://mcp.cookwala.ai/api/openapi.json` (OpenAPI 3.1, about 25 operations). It is separate from the token-protected `/mcp` route.
 
 ## What you can ask
 
@@ -21,6 +21,10 @@ The REST API at `https://mcp.cookwala.ai/api/*` is open, read-only and needs no 
 | Plan a day | `planMeals?kcal=1800&diet=vegetarian` |
 | Statistics | `aggregateStats?group_by=cuisine&metric=kcal&order=asc`, `ingredientProfile?name=tahini` |
 | By source | `source=Fatma Abu Haty` (also `Samia Abdennour`, `Chef Teta`, `Osool El Tahy`, `family archive`, or a website), `/api/sources/{source}`, `/api/sources` |
+| By country | `country=Egypt` (or `Egyptian`, `Japan`, `India`, `Korea`, `Italy`...; same as `cuisine`), `/api/countries` |
+| By ingredient | `ingredient=lentils,onions` (all), `ingredient_any=...`, `exclude_ingredient=`, `/api/ingredients?q=lent` to look names up, `/api/pantry?have=` |
+| Kids | `kids=true` (inferred: mild, simple, kid-appealing; each result lists cautions such as honey, nuts and sesame) |
+| History, background, tips | `getRecipe?include=history` (background and step tips where the recipe has any; about 50 recipes do), `has_notes=true` |
 | By category or method | `category=Soups`, `category=desserts`; `method=baking` (or frying, grilling...) or `/api/methods/baking` with paging (`next_offset`) |
 | Servings and totals | `serves=6`, `servings_exact=4`, `total_kcal_max=2000` and `total_protein_min=100` for the whole recipe, `has_protein=false` |
 | Prep and cook time | `prep_time_max` (hands-on minutes), `cook_time_min` (unattended minutes: cooking, resting, waiting), `time_max` (total); sort `prep_time` |
@@ -53,6 +57,8 @@ How to work
   "no oven" = exclude method bake; "cold dish" = style=cold or no_cook; "fried" = method=fry,deep_fry; "few ingredients" = ingredients_max.
 - When the person picks a dish, call getRecipe with view=ingredients, then view=steps. Offer to scale servings, build a shopping list, compare, or find similar.
 - Ask only for the parts the person wants: getRecipe with include=ingredients, or include=ingredients,nutrition,cost,links, and so on. Use source= when they name a cook or book, method= for baking, frying and the like, lang= when they write in another language (reply in that language).
+- Kids: kids=true is an inference, not a guarantee. Always repeat the cautions (honey under 12 months, nuts, sesame, choking hazards) and say allergies need checking.
+- History and tips: use include=history; if available is false, say the recipe has none and do not invent a history.
 - Prep time is hands-on time; cook time is the unattended remainder. Video links are the original creator's; say they are external.
 - Keep answers short on a phone: three to five results as a list with title, kcal, time, and one line why it fits. Reply in the person's language.
 

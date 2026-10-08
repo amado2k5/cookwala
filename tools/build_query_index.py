@@ -44,6 +44,10 @@ def stem(w): return w[:-1] if len(w) > 3 and w.endswith('s') and not w.endswith(
 MEAT |= {'lung', 'sweetbread', 'spleen', 'intestine', 'heart', 'cheek', 'trotter', 'offal', 'giblet', 'gizzard', 'brain', 'tongue', 'trotter', 'poultry', 'fowl', 'hen', 'squab', 'chickens', 'lambs', 'cutlet', 'shank', 'thigh', 'breast', 'leg', 'rib'} - {'breast', 'leg', 'rib'}
 STEMMED = {id(w): {stem(x) for x in w} for w in (MEAT, FISH, PORK, ALCOHOL, DAIRY, EGG, HONEY)}
 NOT_MEATLESS_TITLE = re.compile(r'\b(vegetarian|vegan|meatless|mock|veggie|plant-based)\b', re.I)
+SPICY = {'chili', 'chilli', 'chile', 'chilies', 'chillies', 'chilis', 'cayenne', 'harissa', 'jalapeno', 'habanero', 'serrano', 'sambal', 'gochujang', 'gochugaru', 'wasabi', 'tabasco', 'sriracha', 'shatta', 'datta', 'scotch', 'bonnet', 'vindaloo', 'piri'}
+OFFAL = {'liver', 'kidney', 'tripe', 'brain', 'lung', 'sweetbread', 'spleen', 'tongue', 'heart', 'giblet', 'gizzard', 'head', 'trotter', 'intestine', 'offal', 'mumbar'}
+CAFFEINE = {'coffee', 'espresso', 'mocha', 'matcha'}
+KID_WORDS = {'pasta', 'macaroni', 'pizza', 'nugget', 'nuggets', 'fries', 'pancake', 'pancakes', 'cake', 'cupcake', 'cookie', 'cookies', 'biscuit', 'biscuits', 'sandwich', 'sandwiches', 'burger', 'burgers', 'wrap', 'wraps', 'pudding', 'custard', 'smoothie', 'milkshake', 'popcorn', 'fritters', 'fritter', 'dumpling', 'dumplings', 'noodles', 'mini', 'kid', 'kids', 'child', 'children', 'lunchbox', 'sweets', 'candy', 'chocolate', 'jelly', 'pie', 'rolls', 'roll', 'toast', 'omelette', 'omelet', 'meatballs', 'meatball', 'kofta', 'sausage', 'sausages', 'basbousa', 'konafa', 'kunafa', 'mashed', 'bread', 'waffle', 'waffles', 'crepe', 'crepes', 'donut', 'doughnut', 'muffin', 'muffins', 'brownie', 'brownies', 'tart'}
 # what most kitchens already have: ignored when ranking by "ingredients I have"
 STAPLES = {'salt', 'water', 'warm_water', 'cold_water', 'hot_water', 'boiling_water', 'oil', 'pepper', 'black_pepper', 'salt_and_pepper', 'sugar', 'ice', 'ice_water', 'cooking_oil', 'vegetable_oil', 'sunflower_oil'}
 
@@ -71,7 +75,9 @@ def tokens(ref): return {stem(t) for t in re.split(r'[^a-z]+', ref.lower()) if t
 def has(ref, words, exceptions=()):
     r = ref.lower()
     if any(e in r for e in exceptions): return False
-    return bool(tokens(r) & STEMMED[id(words)])
+    st = STEMMED.get(id(words))
+    if st is None: st = STEMMED[id(words)] = {stem(x) for x in words}
+    return bool(tokens(r) & st)
 
 
 def op_of(node):
@@ -85,6 +91,17 @@ def duration_min(iso):
     if not m: return None
     d, h, mi, s = (float(x) if x else 0 for x in m.groups())
     return int(round(d * 1440 + h * 60 + mi + s / 60)) or None
+
+
+NOTES_IDS = set()
+
+
+def load_notes():
+    import gzip
+    for p in (ROOT / 'recipes' / 'text').glob('*/*.json.gz'):
+        with gzip.open(p, 'rt', encoding='utf-8') as fh:
+            for rid, t in json.load(fh).items():
+                if t.get('culturalNotes'): NOTES_IDS.add(rid)
 
 
 def load_docs():
@@ -122,6 +139,19 @@ def record(rid, d):
     if not alcohol: diet.append('alcohol_free')
     if not dairy: diet.append('dairy_free')
     if not egg: diet.append('egg_free')
+    al_codes = list((d.get('safety') or {}).get('allergens', {}).get('eu14', [])) + list((d.get('safety') or {}).get('allergens', {}).get('us9', []))
+    ttoks = tokens(title + ' ' + ' '.join(dish.get('tags', [])))
+    spicy = any(has(r, SPICY) or (('hot' in tokens(r)) and (tokens(r) & {'pepper', 'sauce', 'peppers', 'chill'})) for r in refs)
+    offal = any(has(r, OFFAL) for r in refs) or bool(tokens(title) & {stem(w) for w in OFFAL})
+    caff = any(has(r, CAFFEINE) for r in refs)
+    mild = not alcohol and not spicy and not offal and not caff and dish.get('difficulty') in (None, 'easy', 'medium') and len(refs) <= 15
+    appeal = dish.get('course') in ('dessert', 'bread', 'breakfast') or bool(ttoks & {stem(w) for w in KID_WORDS})
+    explicit_kids = bool(tokens(title + ' ' + ' '.join(dish.get('tags', []))) & {'kid', 'child', 'lunchbox', 'toddler'})
+    kid = (mild and appeal) or (explicit_kids and not alcohol)
+    cautions = []
+    if any(has(r, HONEY) for r in refs): cautions.append('contains honey: not for babies under 12 months')
+    if 'nuts' in set(al_codes) or 'peanuts' in set(al_codes): cautions.append('contains nuts or peanuts: allergy risk, and whole nuts are a choking hazard for young children')
+    if 'sesame' in set(al_codes): cautions.append('contains sesame: allergy risk')
     al = d.get('safety', {}).get('allergens', {})
     alist = sorted(set(al.get('eu14', [])) | set(al.get('us9', [])))
     n = (d.get('nutrition') or {}).get('perServing') or {}
@@ -137,6 +167,8 @@ def record(rid, d):
         'am': sorted(al.get('mayContain', [])), 'di': diet,
         'eq': sorted({e.get('class', '').replace('cw.eq.', '') for e in d.get('equipment', []) if e.get('class')}),
         'img': bool(dish.get('images')),
+        'kd': True if kid else None, 'kc': cautions if kid else None,
+        'hn': True if (rid in NOTES_IDS or any((t or {}).get('intro') for t in (d.get('text') or {}).values()) or any(n.get('notes') for n in d.get('process', {}).get('nodes', []))) else None,
         'vid': True if re.search(r'(youtube\.com|youtu\.be|vimeo\.com)', (d.get('source') or {}).get('url') or '') else None,
         'sn': (d.get('source') or {}).get('name') if ((d.get('source') or {}).get('collection') or 'cookwala') in ('world', 'community') else None,
     }
@@ -154,7 +186,7 @@ def record(rid, d):
 
 def main(out):
     out = pathlib.Path(out)
-    docs = load_docs()
+    docs = load_docs(); load_notes()
     recs = [record(rid, d) for rid, d in docs.items()]
     # relative cost tier from the catalog itself, because the data states no currency
     costs = sorted(r['cps'] for r in recs if 'cps' in r)
@@ -197,9 +229,9 @@ def main(out):
     ing = Counter(i for r in recs for i in r.get('ig', []))
     facets = {'count': len(recs), 'languages': {lg: LANG_NAMES.get(lg, lg) for lg in langs}, 'sources': sources, 'cuisine': cnt('cu'), 'course': cnt('co', False), 'tags': cnt('tg'), 'difficulty': cnt('df', False), 'level': cnt('lv', False),
               'collection': cnt('k', False), 'method': cnt('me'), 'operation': cnt('op'), 'style': cnt('st', False), 'diet': cnt('di'), 'allergen': cnt('al'),
-              'equipment': cnt('eq'), 'cost_tier': cnt('ct', False), 'top_ingredients': dict(ing.most_common(300)), 'categories': dict(cats.most_common(150)),
+              'equipment': cnt('eq'), 'cost_tier': cnt('ct', False), 'kids': sum(1 for r in recs if r.get('kd')), 'with_background_notes': sum(1 for r in recs if r.get('hn')), 'top_ingredients': dict(ing.most_common(300)), 'categories': dict(cats.most_common(150)),
               'ranges': {k: [min(r[k] for r in recs if k in r), max(r[k] for r in recs if k in r)] for k in ('kcal', 'pr', 'fa', 'ca', 'fi', 'su', 'mn', 'ac', 'pt', 'tk', 'tp', 'cps', 'ni', 'ns', 'sv') if any(k in r for r in recs)},
-              'notes': {'diet': 'inferred from ingredient names, not certified', 'nutrition': 'per serving, modelled estimates unless the recipe says otherwise',
+              'notes': {'diet': 'inferred from ingredient names, not certified', 'kids': 'kid_friendly is INFERRED: mild (no chilli, alcohol, caffeine or offal), simple (easy or medium, 15 ingredients or fewer) and kid-appealing; not medical advice', 'nutrition': 'per serving, modelled estimates unless the recipe says otherwise',
                         'cost': 'the data states no currency; cost_tier is relative within this catalog', 'time': 'mn is total minutes where the recipe states it; ac is hands-on (active) minutes and pt is the unattended remainder (cooking, resting, waiting)'}}
     (q / 'facets.json').write_text(json.dumps(facets, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
     print(f'query index: {len(recs)} recipes, {len(ing)} distinct ingredients')

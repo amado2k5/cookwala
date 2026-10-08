@@ -40,6 +40,9 @@ const FILTERS = [
   q('has_video', 'true: only recipes with a video link (the creator\'s YouTube video).', { type: 'boolean' }),
   q('prep_time_max', 'Maximum hands-on (active) minutes: the time someone actually works. Same as active_max.', { type: 'number' }), q('prep_time_min', 'Minimum hands-on minutes.', { type: 'number' }),
   q('cook_time_max', 'Maximum unattended minutes (cooking, resting, waiting): total time minus hands-on time.', { type: 'number' }), q('cook_time_min', 'Minimum unattended minutes.', { type: 'number' }),
+  q('country', 'Country or nationality: Egypt, Egyptian, Japan, India, Korea, Iran, Italy, Spain, Greece, Mexico, Morocco... or a code (EG, JP). Same as cuisine. See /api/countries.'),
+  q('kids', 'true: recipes that look kid-friendly. INFERRED, not certified: mild (no chilli, alcohol, caffeine or offal), easy or medium, 15 ingredients or fewer, and kid-appealing (sweets, bread, pasta, sandwiches, kofta, pancakes...). Each result lists kid_cautions such as honey (not under 12 months), nuts and sesame.', { type: 'boolean' }),
+  q('has_notes', 'true: only recipes that have published background, history or tips.', { type: 'boolean' }),
   q('has_image', 'true to return only recipes with a photo.', { type: 'boolean' }),
 ];
 const LANG = q('lang', 'Language for titles and, where available, ingredient names and step wording: a code (ar, fr, es, de, zh...), a tag such as ar-EG, or a name such as Arabic. See /api/languages. Falls back to English and says so.');
@@ -63,7 +66,7 @@ export function openapi(version = '0.0.0') {
     servers: [{ url: 'https://mcp.cookwala.ai' }],
     paths: {
       '/api/search': get('searchRecipes', 'Search and filter recipes', 'Combine any filters. Use sort for "highest protein", "lowest calories", "cheapest", "quickest". Total is the count before limit.', [...FILTERS, ...LIST]),
-      '/api/recipes/{id}': get('getRecipe', 'Get one recipe, or any combination of its parts', 'Ask for exactly what the person wants with include, a comma list: summary, ingredients, steps (the method; also recipe), nutrition, cost, equipment, notes, safety, links (video and source links), or all. Example: include=ingredients,nutrition,cost,links. view returns a single part instead. Ingredients can be scaled with servings; lang translates names and wording where published.', [
+      '/api/recipes/{id}': get('getRecipe', 'Get one recipe, or any combination of its parts', 'Ask for exactly what the person wants with include, a comma list: summary, ingredients, steps (the method; also recipe), nutrition, cost, equipment, notes (history, background and cooking tips when the recipe has any), safety, links (video and source links), or all. Example: include=ingredients,nutrition,cost,links. view returns a single part instead. Ingredients can be scaled with servings; lang translates names and wording where published.', [
         idParam, q('include', 'Comma list of parts: summary, ingredients, steps, nutrition, cost, equipment, notes, safety, links, all. Takes precedence over view.'), q('view', 'summary, ingredients, steps, nutrition, cost, safety or full.', { type: 'string', enum: ['summary', 'ingredients', 'steps', 'nutrition', 'cost', 'safety', 'links', 'full'] }),
         q('servings', 'Scale ingredient quantities and nutrition totals to this many servings.', { type: 'number' }), LANG]),
       '/api/recipes/{id}/similar': get('similarRecipes', 'Recipes similar to one', 'Ranked by shared ingredients, course, cuisine and cooking methods.', [idParam, q('limit', 'Up to 25.', { type: 'integer' }), LANG]),
@@ -80,6 +83,8 @@ export function openapi(version = '0.0.0') {
       '/api/methods': get('listMethods', 'Cooking methods with recipe counts', 'Baking, frying, deep frying, roasting, grilling, boiling, simmering, steaming, chilling, freezing, marinating, no-cook and more, with how many recipes use each and other names for it.'),
       '/api/methods/{method}': get('recipesByMethod', 'All recipes that use a cooking method', 'Everything cooked by one method, for example baking. Accepts every search filter and paging (limit up to 25, then next_offset). Use sort and filters to narrow, for example method baking with course dessert.', [
         { name: 'method', in: 'path', required: true, description: 'bake, fry, deep_fry, roast, grill, boil, simmer, steam, toast, chill, freeze, marinate, ferment, no_cook, or a name such as baking or frying.', schema: { type: 'string' } }, ...FILTERS.filter((f) => f.name !== 'method'), ...LIST]),
+      '/api/countries': get('listCountries', 'Countries', 'Every country with recipes and how many. Then search with country=.'),
+      '/api/ingredients': get('listIngredients', 'Find ingredient names', 'Look up how an ingredient is recorded, with recipe counts, for example q=lent. Use the result with ingredient= or have=.', [q('q', 'Start of an ingredient word.'), q('limit', 'Up to 50.', { type: 'integer' })]),
       '/api/categories': get('listCategories', 'Categories', 'Book categories (Soups, Eastern Desserts, Quick Meals...) and courses with recipe counts.'),
       '/api/sources': get('listSources', 'Recipe sources', 'Every source (Fatma Abu Haty, Samia Abdennour, Chef Teta, family archive...) with recipe counts, other names, and whether step wording is published.'),
       '/api/sources/{source}': get('recipesBySource', 'All recipes from one source', 'Only that source\'s recipes, for example Fatma Abu Haty. Accepts every search filter and paging.', [

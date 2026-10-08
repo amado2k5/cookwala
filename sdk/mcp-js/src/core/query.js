@@ -1,7 +1,9 @@
 // Pure query engine over the compact query index (/v1/query/recipes.json, built by tools/build_query_index.py).
 // No I/O. Used by the REST API (src/api.js). Everything here is read-only.
 
-const COUNTRY = { egypt: 'EG', egyptian: 'EG', mexico: 'MX', mexican: 'MX', japan: 'JP', japanese: 'JP', morocco: 'MA', moroccan: 'MA', china: 'CN', chinese: 'CN', france: 'FR', french: 'FR', vietnam: 'VN', vietnamese: 'VN' };
+const COUNTRY_NAMES = {"EG": ["egypt", "egyptian"], "MX": ["mexico", "mexican"], "JP": ["japan", "japanese"], "MA": ["morocco", "moroccan"], "CN": ["china", "chinese"], "FR": ["france", "french"], "VN": ["vietnam", "vietnamese"], "IN": ["india", "indian"], "ID": ["indonesia", "indonesian"], "KR": ["korea", "south korea", "korean"], "IR": ["iran", "iranian", "persian"], "IT": ["italy", "italian"], "ES": ["spain", "spanish"], "GR": ["greece", "greek"], "ET": ["ethiopia", "ethiopian"], "DZ": ["algeria", "algerian"], "LY": ["libya", "libyan"], "TN": ["tunisia", "tunisian"], "LB": ["lebanon", "lebanese"], "SY": ["syria", "syrian"], "JO": ["jordan", "jordanian"], "PS": ["palestine", "palestinian"], "IQ": ["iraq", "iraqi"], "SA": ["saudi arabia", "saudi"], "TR": ["turkey", "turkish"], "CY": ["cyprus", "cypriot"], "SD": ["sudan", "sudanese"], "YE": ["yemen", "yemeni"], "US": ["usa", "united states", "american"], "GB": ["uk", "united kingdom", "british", "england", "english"], "DE": ["germany", "german"], "TH": ["thailand", "thai"], "PT": ["portugal", "portuguese"], "BR": ["brazil", "brazilian"], "PE": ["peru", "peruvian"]};
+export const COUNTRY = Object.fromEntries(Object.entries(COUNTRY_NAMES).flatMap(([c, ns]) => ns.map((n) => [n, c])));
+export const COUNTRY_LABEL = Object.fromEntries(Object.entries(COUNTRY_NAMES).map(([c, ns]) => [c, ns[0].replace(/\b\w/g, (m) => m.toUpperCase())]));
 
 export const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const words = (s) => norm(s).split(/[^a-z0-9؀-ۿ]+/).filter(Boolean);
@@ -88,13 +90,13 @@ const ALIAS = { prep_time_max: 'active_max', prep_time_min: 'active_min', cook_t
 export function filterRecipes(items, a0) {
   const a = { ...a0 }; for (const [from, to] of Object.entries(ALIAS)) if (a[from] !== undefined && a[from] !== '' && a[to] === undefined) a[to] = a[from];
   const f = {}; const keep = [];
-  const cu = list(a.cuisine).map((c) => COUNTRY[norm(c)] || c.toUpperCase());
+  const cu = [...list(a.cuisine), ...list(a.country)].map((c) => COUNTRY[norm(c)] || c.toUpperCase());
   const set = (k, v) => { if (v !== undefined && !(Array.isArray(v) && !v.length)) f[k] = v; };
   set('cuisine', cu); set('course', list(a.course).map(norm)); set('tag', list(a.tag).map(norm)); const meth = list(a.method).map((m) => normMethod(m) || norm(m)); set('method', meth); set('style', list(a.style).map(norm));
   set('operation', list(a.operation).map(norm)); set('equipment', list(a.equipment).map(norm)); set('diet', list(a.diet).map(norm)); set('allergen_free', list(a.allergen_free).map(norm));
   set('ingredient', list(a.ingredient)); set('ingredient_any', list(a.ingredient_any)); set('category', list(a.category));
   if (a.servings_exact !== undefined && a.servings_exact !== '') f.servings_exact = num(a.servings_exact);
-  for (const k of ['has_protein', 'has_nutrition', 'has_video']) if (a[k] !== undefined && a[k] !== '') f[k] = a[k] === true || a[k] === 'true'; set('exclude_ingredient', list(a.exclude_ingredient)); set('level', list(a.level).map((x) => x.toUpperCase())); set('difficulty', list(a.difficulty).map(norm));
+  for (const k of ['has_protein', 'has_nutrition', 'has_video', 'kids', 'has_notes', 'kid_friendly']) if (a[k] !== undefined && a[k] !== '') f[k] = a[k] === true || a[k] === 'true'; set('exclude_ingredient', list(a.exclude_ingredient)); set('level', list(a.level).map((x) => x.toUpperCase())); set('difficulty', list(a.difficulty).map(norm));
   set('collection', list(a.collection).map(norm)); set('site', list(a.site).map(norm)); set('cost_tier', list(a.cost_tier).map(norm));
   for (const [name] of Object.entries(FIELDS)) { set(name + '_min', num(a[name + '_min'])); set(name + '_max', num(a[name + '_max'])); }
   set('protein_density_min', num(a.protein_density_min));
@@ -116,6 +118,8 @@ export function filterRecipes(items, a0) {
     if (f.category && !f.category.some((c) => catMatch(r, c))) continue;
     if (f.servings_exact !== undefined && r.sv !== f.servings_exact) continue;
     if (f.has_nutrition !== undefined && (r.kcal !== undefined) !== f.has_nutrition) continue;
+    if ((f.kids ?? f.kid_friendly) !== undefined && !!r.kd !== (f.kids ?? f.kid_friendly)) continue;
+    if (f.has_notes !== undefined && !!r.hn !== f.has_notes) continue;
     if (f.has_video !== undefined && !!r.vid !== f.has_video) continue;
     if (f.has_protein !== undefined && (f.has_protein ? !(r.pr > 0) : r.pr !== 0)) continue;
     if (f.exclude_ingredient && f.exclude_ingredient.some((i) => hasIng(r, i))) continue;
@@ -173,9 +177,9 @@ export function row(r, detail = 'brief') {
   const o = {
     id: r.id, title: r.tl || r.t, title_en: r.tl && r.tl !== r.t ? r.t : undefined, title_ar: r.ta, cuisine: r.cu, course: r.co, difficulty: r.df, level: r.lv, servings: r.sv, time_min: r.mn, prep_min: r.ac, cook_min: r.pt,
     kcal_per_serving: r.kcal, protein_g: r.pr, total_kcal: r.tk, total_protein_g: r.tp, fat_g: r.fa, carbs_g: r.ca, cost_per_serving: r.cps, cost_tier: r.ct, style: r.st, methods: r.me,
-    diet_inferred: r.di, allergens: r.al, n_ingredients: r.ni, n_steps: r.ns, has_video: r.vid ? true : undefined, page: `https://cookwala.ai/recipes/${r.id}/`,
+    diet_inferred: r.di, allergens: r.al, n_ingredients: r.ni, n_steps: r.ns, has_video: r.vid ? true : undefined, kid_friendly_inferred: r.kd ? true : undefined, has_background_notes: r.hn ? true : undefined, page: `https://cookwala.ai/recipes/${r.id}/`,
   };
-  if (detail === 'full') Object.assign(o, { fiber_g: r.fi, sugar_g: r.su, sodium_mg: r.na, ingredients: r.ig, operations: r.op, equipment: r.eq, may_contain: r.am, collection: r.k, tags: r.tg, cost_total: r.cost, cost_buckets: r.cb, currency: r.cur, protein_density: r1(protDensity(r)) });
+  if (detail === 'full') Object.assign(o, { fiber_g: r.fi, sugar_g: r.su, sodium_mg: r.na, ingredients: r.ig, operations: r.op, equipment: r.eq, may_contain: r.am, collection: r.k, tags: r.tg, kid_cautions: r.kc, cost_total: r.cost, cost_buckets: r.cb, currency: r.cur, protein_density: r1(protDensity(r)) });
   return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined && !(Array.isArray(v) && !v.length)));
 }
 
@@ -343,4 +347,13 @@ export function resolveSource(sources, q) {
   // a name that matches a collection exactly beats looser matches ("fatma haty" must not pull in other Fatmas)
   const exact = ids.filter((id) => { const s = sources[id]; return [s.name, ...(s.aliases || []), id].some((n) => norm(n) === norm(q)); });
   return { ids: exact.length ? exact : ids, sites };
+}
+
+/** Ingredient names with how many recipes use them: for "what ingredients do you know that start with len...". */
+export function ingredientList(items, staples, q, limit = 20) {
+  const c = new Map(); const want = stems(q || '');
+  for (const r of items) for (const i of new Set(r.ig || [])) { if (i.length > 40) continue; c.set(i, (c.get(i) || 0) + 1); }
+  const stap = new Set(staples);
+  const out = [...c.entries()].filter(([i]) => !want.length || want.every((w) => stems(i).some((x) => x === w || x.startsWith(w)))).sort((a, b) => b[1] - a[1]).slice(0, Math.min(limit, 50));
+  return out.map(([i, n]) => ({ ingredient: i.replace(/_/g, ' '), recipes: n, staple: stap.has(i) || undefined }));
 }

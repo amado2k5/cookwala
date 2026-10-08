@@ -3,7 +3,7 @@
 // Served by the Worker under /api/*. The OpenAPI document is /api/openapi.json (src/openapi.js).
 import { CatalogError } from './catalog.js';
 import { explainStep, listOperations, checkEnvelope, dryRun, recipeView, LEVEL_NOTE } from './core/index.js';
-import { normLang, normMethod, resolveSource, methodCounts, METHOD_LABELS, localizeItems, search, pantry, similar, compare, ingredientProfile, aggregate, mealPlan, shoppingList, scaleIngredients, filterRecipes, sortRecipes, row, list } from './core/query.js';
+import { COUNTRY_LABEL, ingredientList, normLang, normMethod, resolveSource, methodCounts, METHOD_LABELS, localizeItems, search, pantry, similar, compare, ingredientProfile, aggregate, mealPlan, shoppingList, scaleIngredients, filterRecipes, sortRecipes, row, list } from './core/query.js';
 import { openapi } from './openapi.js';
 
 const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'GET, POST, OPTIONS', 'access-control-allow-headers': 'content-type' };
@@ -46,7 +46,7 @@ async function stepsView(cat, id, doc, lang) {
   };
 }
 
-const PART_ALIASES = { summary: 'summary', overview: 'summary', info: 'summary', ingredients: 'ingredients', ingredient: 'ingredients', recipe: 'steps', method: 'steps', steps: 'steps', instructions: 'steps', directions: 'steps', nutrition: 'nutrition', nutritional: 'nutrition', calories: 'nutrition', cost: 'cost', price: 'cost', safety: 'safety', allergens: 'safety', links: 'links', video: 'links', videos: 'links', link: 'links', sources: 'links', images: 'links', notes: 'notes', equipment: 'equipment' };
+const PART_ALIASES = { summary: 'summary', overview: 'summary', info: 'summary', ingredients: 'ingredients', ingredient: 'ingredients', recipe: 'steps', method: 'steps', steps: 'steps', instructions: 'steps', directions: 'steps', nutrition: 'nutrition', nutritional: 'nutrition', calories: 'nutrition', cost: 'cost', price: 'cost', safety: 'safety', allergens: 'safety', links: 'links', video: 'links', videos: 'links', link: 'links', sources: 'links', images: 'links', notes: 'notes', history: 'notes', tips: 'notes', tooltips: 'notes', story: 'notes', background: 'notes', equipment: 'equipment' };
 const PARTS = ['summary', 'ingredients', 'steps', 'nutrition', 'cost', 'equipment', 'notes', 'safety', 'links'];
 const isVideo = (u) => /(youtube\.com|youtu\.be|vimeo\.com)/i.test(u || '');
 
@@ -72,7 +72,19 @@ async function recipeParts(cat, id, doc, rec, lang, servings, want) {
         total_for_recipe: doc.nutrition && doc.yield && doc.yield.servings ? Object.fromEntries(Object.entries(doc.nutrition.perServing).map(([k, v]) => [k, Math.round(v * doc.yield.servings * 10) / 10])) : undefined,
         scaled_total: servings && doc.nutrition ? Object.fromEntries(Object.entries(doc.nutrition.perServing).map(([k, v]) => [k, Math.round(v * servings * 10) / 10])) : undefined }; break;
       case 'cost': out.cost = { ...doc.cost, cost_per_serving: rec && rec.cps, cost_tier: rec && rec.ct, currency_note: doc.cost && doc.cost.currency ? undefined : 'The data states no currency; cost_tier is relative within this catalog (budget, mid, premium).' }; break;
-      case 'notes': out.notes = (side && (side.culturalNotes || side.intro)) || (doc.text && doc.text[lang] && doc.text[lang].intro) || undefined; break;
+      case 'notes': {
+        const tryLangs = [lang, ...(lang === 'en' ? ['fr', 'es', 'de', 'it'] : ['en'])]; let found = null; let from = null;
+        for (const lg of tryLangs) {
+          const sc = lg === lang ? side : await sidecar(cat, id, doc, lg); const t = (doc.text && doc.text[lg]) || {};
+          const text = (sc && sc.culturalNotes) || t.culturalNotes || t.intro || (sc && sc.intro);
+          if (text) { found = text; from = lg; break; }
+        }
+        const tips = (doc.process.nodes || []).filter((n) => n.notes).map((n) => ({ node: n.id, tip: typeof n.notes === 'string' ? n.notes : (n.notes[lang] || n.notes.en || Object.values(n.notes)[0]) }));
+        const hazards = (doc.process.nodes || []).filter((n) => (n.hazards || []).length).map((n) => ({ node: n.id, hazards: n.hazards }));
+        out.notes = { background: found || undefined, background_language: found && from !== lang ? from : undefined, step_tips: tips.length ? tips : undefined, step_hazards: hazards.length ? hazards : undefined,
+          available: !!(found || tips.length), note: found || tips.length ? (from && from !== lang ? 'Background is shown in the language it is published in; translate it for the person and say so.' : undefined) : 'This recipe has no published history, background or tips. Do not make any up; you may offer general knowledge, clearly labelled as not from Cookwala.' };
+        break;
+      }
       case 'safety': out.safety = { safety: doc.safety, verification: doc.verification }; break;
       case 'links': {
         const src = doc.source || {}; const videos = isVideo(src.url) ? [{ title: src.name, url: src.url, note: 'The original creator\'s video. Cookwala links to it and does not host it; the link may start at the time of this dish.' }] : [];
@@ -191,6 +203,8 @@ export async function handleApi(request, env, { catalog, version }) {
       const map = {}; if (Number(a.servings) > 0) map['*'] = Number(a.servings);
       return reply(200, { recipes: ids, servings: map['*'], ...shoppingList(docs, map) });
     }
+    if (path === '/api/countries') { const f = await cat.json('/v1/query/facets.json'); return reply(200, { countries: Object.entries(f.cuisine).map(([code, n]) => ({ code, name: COUNTRY_LABEL[code] || code, recipes: n })), note: 'Pass country=<name or code> (for example Egypt, Japanese, KR) to /api/search. "cuisine" means the same thing. Recipes from most countries are few; Egypt dominates the catalog.' }); }
+    if (path === '/api/ingredients') return reply(200, { query: a.q, items: ingredientList(index.items, index.staples, a.q, Number(a.limit) || 20), note: 'Ingredient names as recorded; pass any of them (or a plain word such as lentil) as ingredient= to /api/search, or several as have= to /api/pantry.' });
     if (path === '/api/categories') { const f = await cat.json('/v1/query/facets.json'); return reply(200, { categories: f.categories, courses: f.course, note: 'Pass category=<name> (a book category such as Soups, Eastern Desserts, Fish & Seafood, or a course such as dessert) to /api/search. Matching is by words, so "desserts" finds Eastern Desserts and Western Desserts.' }); }
     if (path === '/api/methods') return reply(200, { methods: methodCounts(index.items), note: 'Pass any of these (or a name such as baking, frying, grilling) as method= to /api/search, or list a method\'s recipes with /api/methods/{method}. Methods are derived from each recipe\'s cooking steps and the source category.' });
     let m;
