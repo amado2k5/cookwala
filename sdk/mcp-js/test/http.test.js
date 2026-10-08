@@ -62,3 +62,10 @@ test('/open/mcp needs no token and /mcp still does', async () => {
   assert.equal(res.status, 200);
   assert.equal((await res.json()).result.tools.length, 16);
 });
+
+test('POST to the bare domain is the open endpoint', async () => {
+  const req = new Request('https://mcp.test/', { method: 'POST', headers: { 'content-type': 'application/json', accept: 'application/json, text/event-stream' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list', params: {} }) });
+  const res = await handleRequest(req, { MCP_GATEWAY_TOKEN: 'x' }, { catalog: catalog() });
+  assert.equal(res.status, 200);
+  assert.equal((await handleRequest(new Request('https://mcp.test/'), {}, {})).status, 200);
+});

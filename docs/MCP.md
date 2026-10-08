@@ -132,7 +132,7 @@ and cannot start cooking.
 - **Gateway token.** If the secret `MCP_GATEWAY_TOKEN` is set, `/mcp` answers 401 unless the call
   carries it as `x-mcprush-token` or `Authorization: Bearer <token>`. Unset, the endpoint is open
   (the data is public).
-- **Open endpoint.** `POST https://mcp.cookwala.ai/open/mcp` serves the same sixteen read-only tools with no token, for chat apps
+- **Open endpoint.** `POST https://mcp.cookwala.ai` (also `/open/mcp`) serves the same sixteen read-only tools with no token, for chat apps
   (for example ChatGPT connectors on a phone) that cannot send a header. It is not counted by mcprush. Same data, same rules:
   read-only, nothing is stored or logged, nothing can start cooking.
 - **Deploy.** Manual workflow `Deploy hosted MCP endpoint` (needs `CLOUDFLARE_API_TOKEN` and
