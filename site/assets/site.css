@@ -74,6 +74,11 @@ h3 { font-weight: 600; font-size: 17px; margin: 0 0 6px; }
 
 /* ---- chips and statuses */
 .chip { display: inline-flex; gap: 8px; align-items: center; font: 500 12px/1 var(--mono); color: var(--ink-2); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; margin: 0 0 6px; text-transform: uppercase; letter-spacing: .04em; }
+/* dietary badges on recipe pages (reviewed claims; not certifications) */
+.diet { margin: 16px 0; } .diet h3 { font-size: 14px; margin: 0 0 8px; }
+.diet-chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0 0 8px; }
+.diet-chip { font: 600 13px/1 var(--sans, inherit); color: var(--ink); background: var(--band); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; }
+.diet-chip::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); margin-inline-end: 8px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ember); flex: none; }
 .dot.draft, .dot.exp, .dot.planned, .dot.funded { background: var(--warn); } .dot.model { background: var(--ink-2); } .dot.core { background: var(--ok); }
 .status { font: 500 10px/1 var(--mono); color: var(--warn); margin-inline-start: 6px; text-transform: uppercase; } .status.core { color: var(--ok); } .status.model { color: var(--ink-2); }
