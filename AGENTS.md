@@ -4,7 +4,7 @@ Applies to Codex, Copilot, Cursor, Windsurf, Devin, Antigravity, Claude Code and
 
 ## What this repository is
 The open standard for cooking safely (people, kitchens, robots): schemas, vocabularies, a reference library
-(`tools/cookwala_ref.py`), SDKs, a reference hub, 2,051 recipes, and the website cookwala.ai (static, GitHub Pages).
+(`tools/cookwala_ref.py`), SDKs, a reference hub, 2,266 recipes, and the website cookwala.ai (static, GitHub Pages).
 
 ## Using Cookwala from your own agent
 Read [docs/AI-AGENTS.md](docs/AI-AGENTS.md) (also at https://cookwala.ai/docs/AI-AGENTS/). Short form: run the MCP server
@@ -49,8 +49,8 @@ registry entry stay the default way to use the server; the hosted endpoint exist
 - See [CERTIFICATION_IMPLEMENTATION_STATUS.md](CERTIFICATION_IMPLEMENTATION_STATUS.md) for full status
 
 **Allergen Data Coverage**
-- Currently 86.2% (target: 90%)
-- 282 recipes missing allergen information
+- Currently 86.3% (target: 90%)
+- 310 recipes missing allergen information
 - Backfill in progress
 - See [TEST_RESULTS_FINAL.md](TEST_RESULTS_FINAL.md) for details
 

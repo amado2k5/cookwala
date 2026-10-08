@@ -83,5 +83,5 @@ recipe step for LeRobot-style datasets. Both refuse logs whose household didn't 
 
 ## 7. More
 
-- The recipe index: 2,051 documents at https://cookwala.ai/recipes/ (9 written for the standard at V1; 2,042 imported from fifi.cooking at V0, with text in 25 languages).
+- The recipe index: 2,266 documents at https://cookwala.ai/recipes/ (9 written for the standard at V1; 2,257 imported from fifi.cooking at V0, with text in 29 languages).
 - The SDK in your language and 100 executed scenarios: https://cookwala.ai/scenarios/ (`scenarios/OPERATIONS.md` lists the 25 operations; `python tools/scenarios/run.py` executes every scenario against a hub).
