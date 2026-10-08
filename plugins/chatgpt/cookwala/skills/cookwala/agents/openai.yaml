@@ -1,0 +1,7 @@
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "cookwala"
+      description: "Search, read, scale and plan recipes from the read-only Cookwala catalog"
+      transport: "streamable_http"
+      url: "https://mcp.cookwala.ai/open/mcp"

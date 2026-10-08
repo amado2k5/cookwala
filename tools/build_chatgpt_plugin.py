@@ -34,6 +34,10 @@ def rel(path, field):
     need(isinstance(path, str) and (PKG / path).is_file(), f'{field}: file not found: {path}')
 
 
+def servers_url(mcp):
+    return next(iter(mcp.get('mcpServers', {}).values()), {}).get('url', '\0')
+
+
 def check(final):
     mf = PKG / 'plugin.json'
     need(mf.is_file(), 'plugin.json missing at the plugin root')
@@ -75,12 +79,39 @@ def check(final):
 
     tc = o.get('review', {}).get('test_cases', {})
     pos, neg = tc.get('positive', []), tc.get('negative', [])
-    need(len(pos) >= 5, f'review.test_cases.positive: at least 5 required, found {len(pos)}')
-    need(len(neg) >= 3, f'review.test_cases.negative: at least 3 required, found {len(neg)}')
+    need(len(pos) == 5, f'review.test_cases.positive: initial MCP review requires exactly 5, found {len(pos)}')
+    need(len(neg) == 3, f'review.test_cases.negative: initial MCP review requires exactly 3, found {len(neg)}')
     for n, c in enumerate(pos): need(all(c.get(k) for k in ('description', 'prompt', 'tools_triggered', 'expected_behavior')), f'positive case {n + 1}: description, prompt, tools_triggered and expected_behavior are required')
+    for n, c in enumerate(pos): need(isinstance(c.get('tools_triggered'), str), f'positive case {n + 1}: tools_triggered must be a single string (comma-separated tool names), not a list')
+    for n, c in enumerate(pos + neg): need(all(isinstance(c.get(k), str) for k in ('description', 'prompt', 'expected_behavior')), f'test case {n + 1}: description, prompt and expected_behavior must be strings')
     for n, c in enumerate(neg): need(all(c.get(k) for k in ('description', 'prompt', 'expected_behavior')), f'negative case {n + 1}: description, prompt and expected_behavior are required')
     if o.get('review', {}).get('demo_recording_url'): https(o['review']['demo_recording_url'], 'review.demo_recording_url')
     else: (err if final else warn)('review.demo_recording_url: required for MCP review; record it and add the URL before submitting')
+
+    # tool names named in tools_triggered must exist on the server
+    known = set(re.findall(r"name: '([a-z_]+)', title:", (ROOT / 'sdk' / 'mcp-js' / 'src' / 'server.js').read_text(encoding='utf-8')))
+    for n, c in enumerate(pos):
+        for t in re.split(r'\s*,\s*', c.get('tools_triggered', '')):
+            need(t in known, f'positive case {n + 1}: tools_triggered names unknown tool "{t}"')
+    prompts = [c.get('prompt') for c in pos + neg]
+    need(len(set(prompts)) == len(prompts), 'test-case prompts must be unique')
+    need(len(set(dp)) == len(dp), 'interface.defaultPrompt: prompts must be unique')
+    # colours: #RRGGBB, at least 2:1 against white (light) and #212121 (dark)
+    def lum(h):
+        c = [int(h[k:k + 2], 16) / 255 for k in (1, 3, 5)]
+        c = [x / 12.92 if x <= 0.03928 else ((x + 0.055) / 1.055) ** 2.4 for x in c]
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+    def ratio(a, b):
+        la, lb = sorted((lum(a), lum(b)), reverse=True)
+        return (la + 0.05) / (lb + 0.05)
+    for f, bg in (('brandColor', '#ffffff'), ('brandColorDark', '#212121')):
+        if i.get(f):
+            ok = re.fullmatch(r'#[0-9A-Fa-f]{6}', i[f]) is not None
+            need(ok, f'interface.{f}: use #RRGGBB')
+            if ok: need(ratio(i[f], bg) >= 2, f'interface.{f}: needs at least 2:1 contrast against {bg}')
+    for k, v in o.get('publication', {}).get('translations', {}).items():
+        need(len((v or {}).get('subtitle') or '') <= 30, f'translations.{k}.subtitle: at most 30 characters')
+    need(all(re.fullmatch(r'[A-Z]{2}', c) for c in o.get('publication', {}).get('countries', [])), 'publication.countries: uppercase country codes')
     blob = json.dumps(m)
     need('test_credentials' not in blob and 'reviewer_instructions' not in blob, 'metadata must not contain test_credentials or reviewer_instructions')
 
@@ -96,6 +127,8 @@ def check(final):
     for s in skills:
         fm = re.match(r'---\n(.*?)\n---\n', s.read_text(encoding='utf-8'), re.S)
         need(bool(fm) and re.search(r'^name: \S', fm.group(1), re.M) and re.search(r'^description: \S', fm.group(1), re.M), f'{s.relative_to(PKG)}: front matter needs name and description')
+    dep = PKG / 'skills' / 'cookwala' / 'agents' / 'openai.yaml'
+    need(dep.is_file() and 'streamable_http' in dep.read_text(encoding='utf-8') and servers_url(mcp) in dep.read_text(encoding='utf-8'), 'skills/cookwala/agents/openai.yaml must declare the MCP dependency with the same URL as mcp.json')
     for f in PKG.rglob('*'):
         need(not (f.is_file() and re.search(r'(token|secret|password|\.env)', f.name, re.I)), f'{f.relative_to(PKG)}: looks like a credential file')
     return m
