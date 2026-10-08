@@ -21,7 +21,7 @@ The one-time setup below is **done** (2026-10-06). Do not redo it unless you are
 | What | State |
 |---|---|
 | `https://mcp.cookwala.ai/mcp` (Cloudflare Worker `cookwala-mcp`) | live since 2026-10-08; custom domain attached in the Cloudflare dashboard (Worker, Settings, Domains and Routes) |
-| mcprush listing | claimed as *Cookwala MCP*, reference CLM-0139; its endpoint check passes |
+| mcprush listing | claimed as [*Cookwala MCP*](https://mcprush.com/cookwala/cookwala-mcp), reference CLM-0139; its endpoint check passes |
 | Token | mcprush's token is stored as repository secret `MCP_GATEWAY_TOKEN`; the Worker answers 401 to `/mcp` without it |
 | Not changed | `server.json` lists only the npm package: the hosted endpoint is token-protected, so it is not a public `remotes` entry |
 

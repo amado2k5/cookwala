@@ -23,18 +23,18 @@ not a claim. Everything is open, royalty-free, model-neutral and device-neutral.
 **Status:** Core 0.2 is a draft under public review; everything else is a draft or experimental
 profile. Live at [cookwala.ai](https://cookwala.ai). Nothing is deployed in the field yet.
 
-### v0.2.0 Feature Status
+### Feature status (Core 0.2, MCP server 0.3.0)
 
 | Feature | Status | Note |
 |---------|--------|------|
-| Recipe format & schemas | ✅ Shipping | 2,266 recipes, 29 languages each |
+| Recipe format & schemas | ✅ Shipping | 2,389 recipes (2,380 imported from fifi.cooking at V0, 9 at V1), names in 29 languages |
 | Dry-run (device compatibility) | ✅ Shipping | Python & TypeScript SDKs produce identical results |
 | Temperature envelope validation | ✅ Shipping | Safety limits enforced on device |
 | Python SDK | ✅ Shipping | CLI + library (all Core operations) |
 | TypeScript SDK | ✅ Shipping | MCP server + library (all Core operations) |
-| Allergen data | ⚠️ 86% | 282 recipes missing allergen info (need 90%) |
-| MCP server `@cookwala/mcp` | ✅ Published | 0.2.0 on npm (`npx -y @cookwala/mcp`), listed in the MCP Registry as `ai.cookwala/cookwala`; 24 read-only tools (16 in 0.2.0, 24 from 0.3.0), [try it in five minutes](docs/MCP-TRY-IT.md); optional token-protected hosted endpoint `mcp.cookwala.ai/mcp` for mcprush tracking; open [recipe REST API](docs/REST-API.md) at `mcp.cookwala.ai/api` |
-| Search endpoint | ⏳ Blocked | Documented in OpenAPI, edge worker not deployed |
+| Allergen data | 🔧 Analysis, not certification | All 2,380 imported recipes carry fifi.cooking's whole-word allergen analysis (2,056 contain allergens, 254 none found, 70 need label checks); screens, not guarantees ([export notes](docs/EXPORT-FIFI.md)) |
+| MCP server `@cookwala/mcp` | ✅ Published | 0.3.0 on npm (`npx -y @cookwala/mcp`), listed in the MCP Registry as `ai.cookwala/cookwala`; 24 read-only tools (16 in 0.2.0, 24 from 0.3.0), [try it in five minutes](docs/MCP-TRY-IT.md); optional token-protected hosted endpoint `mcp.cookwala.ai/mcp` for [mcprush](https://mcprush.com/cookwala/cookwala-mcp) tracking; open [recipe REST API](docs/REST-API.md) at `mcp.cookwala.ai/api` |
+| Search | 🔧 Partial | Static `/v1/search` is documented in OpenAPI but not deployed; search is served by the open [REST API](docs/REST-API.md) (`mcp.cookwala.ai/api/search`), the MCP `search_recipes` tool and the CLI |
 | Humanitarian Profile | 🔧 Draft | SMS parsing & relief mode working |
 | Certifications (RFC-0010: halal, kosher, vegetarian, ...) | 🔧 Partial | Verify, issue and revoke in the CLI; `search --certified`; MCP tools; static `/v1/certifications`. Certifier registry not yet; example authorities are fictional |
 

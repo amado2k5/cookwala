@@ -94,8 +94,8 @@ fifi.cooking is where the recipes are written; Cookwala is the standard form the
   `search_recipes` read those. Each document keeps `legacy.pageUrl` and `legacy.dataUrl`, and
   `get_recipe` returns them under `sources.fifi`.
 - **Live route.** `fifi_search` and `fifi_source` read fifi.cooking's own `/data/` files, so an agent
-  can find recipes that were added after the last export. (The 376 world-cuisine recipes, ids
-  `w-*`, were exported by 2026-10-08 and are now in the catalog, facts only.) They are the only calls that leave the catalog origin, they contact
+  can find recipes that were added after the last export. (The 499 world-cuisine recipes, ids
+  `w-*`, from 21 countries, are in the catalog, facts only.) They are the only calls that leave the catalog origin, they contact
   `https://fifi.cooking` only, and they are marked `openWorldHint`.
 - **Rights rules apply on the live route too.** `fifi_source` returns steps and notes only for
   collections whose `text` policy in `tools/export_fifi.collections.json` is `full`. Every other
@@ -152,7 +152,7 @@ and cannot start cooking.
   calls go through its gateway and mcprush counts them; that is mcprush's data, not Cookwala's, and
   it is off unless a maintainer turns it on. Local stdio use is never tracked.
 - **Status.** Live at `https://mcp.cookwala.ai/mcp` (since 2026-10-08), served by the Worker `cookwala-mcp` on Cloudflare
-  (`https://cookwala-mcp.ahamdy.workers.dev/mcp` also answers). It is registered at mcprush as *Cookwala MCP* (claim CLM-0139).
+  (`https://cookwala-mcp.ahamdy.workers.dev/mcp` also answers). It is registered at mcprush as [*Cookwala MCP*](https://mcprush.com/cookwala/cookwala-mcp) (claim CLM-0139).
   `GET /health` is public. `POST /mcp` needs the gateway token (it is the route mcprush counts). For your own agent run the npm package
   (`npx -y @cookwala/mcp`), or for a client that only speaks HTTP or cannot send a header use the open routes above and the
   [recipe REST API](REST-API.md) (`/api/*`). The registry entry `ai.cookwala/cookwala` lists only the npm

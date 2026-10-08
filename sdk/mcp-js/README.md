@@ -5,7 +5,7 @@ temperature bands, agent mandates and humanitarian SMS, and look recipes up on f
 It reads the static catalog on cookwala.ai, checks every hash, caches locally and works offline after the first run.
 It never starts cooking.
 
-Published on npm (0.2.0) and listed in the official MCP Registry as `ai.cookwala/cookwala`.
+Published on npm (0.3.0) and listed in the official MCP Registry as `ai.cookwala/cookwala`.
 
 ```bash
 npx -y @cookwala/mcp
@@ -30,4 +30,4 @@ Releasing: [RELEASING.md](RELEASING.md).
 
 ## Hosted endpoint (optional)
 
-`worker/` runs the same read-only tools over Streamable HTTP on Cloudflare Workers (`POST /mcp`, `GET /health`), with an optional gateway token (`x-mcprush-token` or `Authorization: Bearer`). It is live at `https://mcp.cookwala.ai/mcp` (token required; `GET /health` is public) for directories that need an https address, such as mcprush.com call tracking. To use Cookwala from your own agent, run the npm package. See [docs/MCP.md](../../docs/MCP.md#hosted-endpoint-optional) and [RELEASING.md](RELEASING.md#hosted-endpoint-optional).
+`worker/` runs the same read-only tools over Streamable HTTP on Cloudflare Workers (`POST /mcp`, `GET /health`), with an optional gateway token (`x-mcprush-token` or `Authorization: Bearer`). It is live at `https://mcp.cookwala.ai/mcp` (token required; `GET /health` is public) for directories that need an https address, such as [mcprush](https://mcprush.com/cookwala/cookwala-mcp) call tracking. To use Cookwala from your own agent, run the npm package. See [docs/MCP.md](../../docs/MCP.md#hosted-endpoint-optional) and [RELEASING.md](RELEASING.md#hosted-endpoint-optional).

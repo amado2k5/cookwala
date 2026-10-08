@@ -4,7 +4,7 @@ Applies to Codex, Copilot, Cursor, Windsurf, Devin, Antigravity, Claude Code and
 
 ## What this repository is
 The open standard for cooking safely (people, kitchens, robots): schemas, vocabularies, a reference library
-(`tools/cookwala_ref.py`), SDKs, a reference hub, 2,266 recipes, and the website cookwala.ai (static, GitHub Pages).
+(`tools/cookwala_ref.py`), SDKs, a reference hub, 2,389 recipes (2,380 imported from fifi.cooking, 9 written for the standard), and the website cookwala.ai (static, GitHub Pages).
 
 ## Using Cookwala from your own agent
 Read [docs/AI-AGENTS.md](docs/AI-AGENTS.md) (also at https://cookwala.ai/docs/AI-AGENTS/). Short form: run the MCP server
@@ -17,10 +17,10 @@ or "is not deployed", check the live source:
 
 | What | Where it lives | How to check |
 |---|---|---|
-| MCP server `@cookwala/mcp` | npm, published since 0.1.0 (2026-10-06); 0.2.0 on 2026-10-07, with provenance | `npm view @cookwala/mcp version` or https://registry.npmjs.org/@cookwala/mcp |
+| MCP server `@cookwala/mcp` | npm, published since 0.1.0 (2026-10-06); 0.2.0 on 2026-10-07; 0.3.0 on 2026-10-08 (24 tools, the REST API), with provenance | `npm view @cookwala/mcp version` or https://registry.npmjs.org/@cookwala/mcp |
 | MCP Registry entry `ai.cookwala/cookwala` | official MCP Registry, listed since 2026-10-06 (domain proof at `/.well-known/mcp-registry-auth`) | `curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=ai.cookwala"` |
 | Release secrets `MCP_PRIVATE_KEY`, `NPM_TOKEN` | repository secrets, set; they match the live domain proof (the 0.2.0 registry login succeeded) | the last run of the `publish-mcp` workflow |
-| Hosted MCP endpoint `https://mcp.cookwala.ai/mcp` | Cloudflare Worker `cookwala-mcp` (source `sdk/mcp-js/worker/`), live since 2026-10-08; `/mcp` needs the gateway token, `/health` is public. Listed at mcprush.com (claim CLM-0139) | `curl https://mcp.cookwala.ai/health`; a `POST /mcp` without the token must answer 401 |
+| Hosted MCP endpoint `https://mcp.cookwala.ai/mcp` | Cloudflare Worker `cookwala-mcp` (source `sdk/mcp-js/worker/`), live since 2026-10-08; `/mcp` needs the gateway token, `/health` is public. Listed at [mcprush.com](https://mcprush.com/cookwala/cookwala-mcp) (claim CLM-0139) | `curl https://mcp.cookwala.ai/health`; a `POST /mcp` without the token must answer 401 |
 | Open MCP route and recipe REST API `https://mcp.cookwala.ai` (`POST /`, `/open/mcp`, `/api/*`) | same Worker, no token, read-only; OpenAPI at `/api/openapi.json`; data from `/v1/query/*` built by `tools/build_query_index.py`; docs [docs/REST-API.md](docs/REST-API.md) | `curl "https://mcp.cookwala.ai/api/search?q=koshari&limit=1"`; new routes go live only after the `Deploy hosted MCP endpoint` workflow |
 | Hosted-endpoint secrets and variables | repository secrets `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `MCP_GATEWAY_TOKEN` (the token mcprush issued); variable `CF_WORKERS_SUBDOMAIN` (`ahamdy`) | the last run of the `Deploy hosted MCP endpoint` workflow |
 | Website, schemas, `/v1/certifications` | cookwala.ai (GitHub Pages, deployed from `main` on every merge) | the `Validate and publish cookwala.ai` workflow |
@@ -33,7 +33,7 @@ Releasing a new `@cookwala/mcp` version does not update the hosted endpoint: run
 by hand afterwards (it tests, deploys the Worker, applies `MCP_GATEWAY_TOKEN` and checks `/health`). The npm package and the
 registry entry stay the default way to use the server; the hosted endpoint exists for mcprush call tracking.
 
-## Known Limitations (v0.2.0)
+## Known Limitations (MCP 0.3.0, Core 0.2)
 
 **Search Endpoint**
 - `/v1/search` is documented in OpenAPI spec but not deployed; a search API exists instead at `https://mcp.cookwala.ai/api/search` ([docs/REST-API.md](docs/REST-API.md))
