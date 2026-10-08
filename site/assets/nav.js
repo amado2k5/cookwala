@@ -16,10 +16,17 @@
       try { localStorage.setItem('cw-theme', next); } catch (e) { /* storage may be unavailable */ }
     });
   }
+  // The copied text is the code only: the button may sit inside the <pre>, and its label must never reach the clipboard.
+  function codeText(pre) {
+    var code = pre.querySelector('code');
+    if (code) return code.innerText;
+    var c = pre.cloneNode(true); c.querySelectorAll('button.copy').forEach(function (x) { x.remove(); });
+    return c.textContent;
+  }
   document.querySelectorAll('.codeblock pre, pre.code').forEach(function (pre) {
     var b = document.createElement('button'); b.type = 'button'; b.className = 'copy'; b.textContent = document.documentElement.lang === 'ar' ? 'نسخ' : 'Copy';
     b.addEventListener('click', function () {
-      navigator.clipboard.writeText(pre.innerText).then(function () { b.textContent = document.documentElement.lang === 'ar' ? 'تم النسخ' : 'Copied'; setTimeout(function () { b.textContent = document.documentElement.lang === 'ar' ? 'نسخ' : 'Copy'; }, 1500); }, function () { b.textContent = 'Blocked'; });
+      navigator.clipboard.writeText(codeText(pre)).then(function () { b.textContent = document.documentElement.lang === 'ar' ? 'تم النسخ' : 'Copied'; setTimeout(function () { b.textContent = document.documentElement.lang === 'ar' ? 'نسخ' : 'Copy'; }, 1500); }, function () { b.textContent = 'Blocked'; });
     });
     var wrap = pre.parentElement; if (wrap && wrap.classList.contains('codeblock')) wrap.appendChild(b); else { pre.style.position = 'relative'; pre.appendChild(b); }
   });
