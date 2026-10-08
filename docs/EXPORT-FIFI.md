@@ -20,7 +20,9 @@ every step is an unclassified `cw.op.legacy_step`, so no device executes them. N
 E8 to E11 at V1 and above, and the sync workflow. The licences of four collections await the
 founder's confirmation and are shown as "credited; licence under review".
 
-> **Refresh 2026-10-08.** A full re-run produced 2,257 documents (215 new world recipes). The source gained bn, cs, sq and vi, so documents now carry 29 name languages; existing documents were rewritten.
+> **Refresh 2026-10-08 (second run).** After the last World Cuisines chapters went live, a full re-run produced 2,380 documents (123 new world recipes: LB, MY, NG, PE, PH, TH, TR). They carry reviewed dietary claims, allergen status and the diabetic estimate, and the fifi.cooking translations were cleaned of mixed-script text, so existing documents changed too. The exporter now keeps ingredient refs letter-first when a duplicate name starts with a digit (`7 spice` -> `i7_spice_2`).
+
+> **Refresh 2026-10-08 (first run).** A full re-run produced 2,257 documents (215 new world recipes). The source gained bn, cs, sq and vi, so documents now carry 29 name languages; existing documents were rewritten.
 
 ## 1. Starting point (measured 2026-10-03)
 
@@ -31,8 +33,8 @@ founder's confirmation and are shown as "credited; licence under review".
 | `osool` | `osool-*` | 324 | *Osool El Tahy* cookbook |
 | `chefteta` | `add-*` | 257 | Additional recipes (chapter 7) |
 | `abdennour` | `ec-*` | 158 | *Egyptian Cooking* book |
-| `world` | `w-<iso2>-*` | 376 (CN 21, ES 19, ET 5, FR 14, GR 16, ID 35, IN 50, IR 31, IT 26, JP 43, KR 33, MA 27, MX 49, VN 7) | World Cuisines project (rewritten, credited, halal-gated); facts only |
-| **Total** | | **2,257** | |
+| `world` | `w-<iso2>-*` | 499 (CN 21, ES 19, ET 5, FR 14, GR 16, ID 35, IN 50, IR 31, IT 26, JP 43, KR 33, LB 34, MA 27, MX 49, MY 23, NG 14, PE 9, PH 2, TH 18, TR 23, VN 7) | World Cuisines project (rewritten, credited, halal-gated); facts only |
+| **Total** | | **2,380** | |
 
 Each recipe is already published as `fifirecipes/public/data/recipes/{id}.json` (recipe +
 estimate + 24-language translations; ~96 MB total). The format is documented in

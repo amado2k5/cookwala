@@ -10,7 +10,7 @@
   "en": "A V0 imported recipe is refused on a robot and assigned to a person when one is present"
  },
  "goal": {
-  "en": "The fifi.cooking collection holds 2,257 described recipes (V0, RFC-0009). Every step is a legacy step that no device can execute. The dry run refuses them on any robot alone and hands every step to a person when one is present."
+  "en": "The fifi.cooking collection holds 2,380 described recipes (V0, RFC-0009). Every step is a legacy step that no device can execute. The dry run refuses them on any robot alone and hands every step to a person when one is present."
  },
  "docs": [
   "/docs/RECIPE-FORMAT/",

@@ -50,7 +50,7 @@ registry entry stay the default way to use the server; the hosted endpoint exist
 - See [CERTIFICATION_IMPLEMENTATION_STATUS.md](CERTIFICATION_IMPLEMENTATION_STATUS.md) for full status
 
 **Allergen Data Coverage**
-- Allergens come from fifi.cooking's analysis (`safety.allergens.x-status`, docs/EXPORT-FIFI.md §11): of 2,257 recipes, 1,957 contain at least one allergen, 233 have none found, 67 need label checks. They are screens, not guarantees
+- Allergens come from fifi.cooking's analysis (`safety.allergens.x-status`, docs/EXPORT-FIFI.md §11): of 2,380 recipes, 2,056 contain at least one allergen, 254 have none found, 70 need label checks. They are screens, not guarantees
 - The older coverage figures in [TEST_RESULTS_FINAL.md](TEST_RESULTS_FINAL.md) (86.3%, 310 recipes with an empty list) measured the previous name-based guess
 
 **Cross-SDK Compatibility**
