@@ -156,3 +156,14 @@ test('country, ingredient lookup, kids filter, background notes', async () => {
   const t = await call('/api/recipes/koshari?include=tips'); assert.ok(t.json.notes);
   assert.equal((await call('/api/search?has_notes=true&limit=3')).status, 200);
 });
+
+test('diet flags: known animal products never pass vegetarian or vegan (regression)', async () => {
+  const veg = await call('/api/search?diet=vegetarian&limit=25&detail=full&q=sole'); assert.ok(!veg.json.items.some((i) => i.id === 'osool-420'));
+  const all = new Set();
+  for (let off = 0; off < 2400; off += 25) {
+    const r = await call(`/api/search?diet=vegetarian&limit=25&offset=${off}`); if (!r.json.items.length) break;
+    for (const i of r.json.items) all.add(i.id);
+  }
+  for (const id of ['osool-420', 'osool-954', 'ec-194', 'ec-219', 'w-jp-006', 'w-jp-023', 'add-245', 'w-mx-028', 'w-mx-029', 'add-103', 'bake-01']) assert.ok(!all.has(id), `${id} must not be vegetarian`);
+  for (const id of ['osool-957', 'fah-364', 'w-jp-021']) assert.ok(all.has(id), `${id} should still be vegetarian`);
+});

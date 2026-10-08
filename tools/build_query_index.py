@@ -27,7 +27,7 @@ METHODS = {
     'chill': {'chill', 'refrigerate'}, 'freeze': {'freeze'}, 'marinate': {'marinate'}, 'ferment': {'ferment'},
 }
 MEAT = {'beef', 'lamb', 'mutton', 'veal', 'chicken', 'turkey', 'duck', 'goose', 'rabbit', 'meat', 'mince', 'minced', 'liver', 'kidney', 'tripe', 'oxtail', 'goat', 'camel', 'quail', 'pigeon', 'sausage', 'sausages', 'kofta', 'shawarma', 'brisket', 'steak', 'ribs', 'drumsticks', 'wings', 'bone', 'bones', 'marrow', 'broth', 'stock', 'bouillon', 'gelatin', 'gelatine', 'suet', 'tallow', 'sujuk', 'pastrami', 'salami', 'ham', 'bacon', 'pork', 'lard', 'chorizo', 'prosciutto', 'pancetta', 'chashu', 'guanciale'}
-FISH = {'fish', 'shrimp', 'prawn', 'prawns', 'shrimps', 'tuna', 'sardine', 'sardines', 'salmon', 'cod', 'tilapia', 'mullet', 'bass', 'bream', 'calamari', 'squid', 'octopus', 'crab', 'lobster', 'mussels', 'clams', 'oyster', 'oysters', 'anchovy', 'anchovies', 'fillet', 'seafood', 'catfish', 'trout', 'mackerel', 'herring', 'eel'}
+FISH = {'fish', 'shrimp', 'prawn', 'prawns', 'shrimps', 'tuna', 'sardine', 'sardines', 'salmon', 'cod', 'tilapia', 'mullet', 'bass', 'bream', 'calamari', 'squid', 'octopus', 'crab', 'lobster', 'mussels', 'clams', 'oyster', 'oysters', 'anchovy', 'anchovies', 'fillet', 'seafood', 'catfish', 'trout', 'mackerel', 'herring', 'eel', 'sole', 'flounder', 'haddock', 'hake', 'snapper', 'grouper', 'carp', 'perch', 'pike', 'halibut', 'swordfish', 'sea', 'monkfish', 'turbot', 'pollock', 'plaice', 'whiting', 'sprat', 'skate', 'ray', 'shark', 'barramundi', 'mahi', 'roe', 'caviar', 'bonito', 'katsuo', 'katsuobushi', 'niboshi', 'dashi', 'shirodashi', 'hondashi', 'worcestershire', 'belacan', 'terasi', 'nam', 'pla', 'nuoc', 'mam', 'scallop', 'scallops', 'cuttlefish', 'urchin', 'tobiko', 'surimi', 'kamaboko', 'narutomaki'} - {'sea', 'ray', 'nam', 'mam'}
 PORK = {'pork', 'bacon', 'ham', 'lard', 'chorizo', 'prosciutto', 'pancetta', 'chashu', 'guanciale', 'salami', 'pepperoni', 'hamhock'}
 ALCOHOL = {'wine', 'beer', 'rum', 'brandy', 'liqueur', 'vodka', 'mirin', 'sake', 'whisky', 'whiskey', 'cognac', 'gin', 'amaretto', 'kirsch', 'sherry', 'port', 'marsala', 'bourbon', 'tequila', 'champagne', 'cider'}
 DAIRY = {'milk', 'butter', 'ghee', 'cheese', 'yogurt', 'yoghurt', 'cream', 'labneh', 'feta', 'halloumi', 'mozzarella', 'parmesan', 'ricotta', 'kashk', 'whey', 'casein', 'custard', 'cheddar', 'mascarpone', 'buttermilk', 'samna', 'qishta', 'kaymak', 'rumi', 'rumy', 'cottage'}
@@ -41,7 +41,7 @@ for _w in (MEAT, FISH, PORK, ALCOHOL, DAIRY, EGG, HONEY):
 def stem(w): return w[:-1] if len(w) > 3 and w.endswith('s') and not w.endswith('ss') else w
 
 
-MEAT |= {'lung', 'sweetbread', 'spleen', 'intestine', 'heart', 'cheek', 'trotter', 'offal', 'giblet', 'gizzard', 'brain', 'tongue', 'trotter', 'poultry', 'fowl', 'hen', 'squab', 'chickens', 'lambs', 'cutlet', 'shank', 'thigh', 'breast', 'leg', 'rib'} - {'breast', 'leg', 'rib'}
+MEAT |= {'basturma', 'pastirma', 'sujuk', 'soujouk', 'merguez', 'mortadella', 'kielbasa', 'bratwurst', 'frankfurter', 'hotdog', 'pepperoni', 'sheep', 'lahma', 'lahm', 'laham', 'aspic', 'jellied', 'rennet', 'lung', 'sweetbread', 'spleen', 'intestine', 'heart', 'cheek', 'trotter', 'offal', 'giblet', 'gizzard', 'brain', 'tongue', 'trotter', 'poultry', 'fowl', 'hen', 'squab', 'chickens', 'lambs', 'cutlet', 'shank', 'thigh', 'breast', 'leg', 'rib'} - {'breast', 'leg', 'rib'}
 STEMMED = {id(w): {stem(x) for x in w} for w in (MEAT, FISH, PORK, ALCOHOL, DAIRY, EGG, HONEY)}
 NOT_MEATLESS_TITLE = re.compile(r'\b(vegetarian|vegan|meatless|mock|veggie|plant-based)\b', re.I)
 SPICY = {'chili', 'chilli', 'chile', 'chilies', 'chillies', 'chilis', 'cayenne', 'harissa', 'jalapeno', 'habanero', 'serrano', 'sambal', 'gochujang', 'gochugaru', 'wasabi', 'tabasco', 'sriracha', 'shatta', 'datta', 'scotch', 'bonnet', 'vindaloo', 'piri'}
@@ -72,8 +72,22 @@ SOURCE_ALIASES = {
 def tokens(ref): return {stem(t) for t in re.split(r'[^a-z]+', ref.lower()) if t}
 
 
+GENERIC_BASE = {'stock', 'broth', 'bouillon', 'dashi', 'shirodashi', 'hondashi'}
+PLANT_BASE = {'vegetable', 'veg', 'veggie', 'mushroom', 'kombu', 'kelp', 'shiitake', 'miso', 'vegan', 'plant', 'seaweed'}
+
+
 def has(ref, words, exceptions=()):
     r = ref.lower()
+    toks = tokens(r)
+    st = STEMMED.get(id(words))
+    if st is None: st = STEMMED[id(words)] = {stem(x) for x in words}
+    if words in (MEAT, FISH):
+        specific = toks & (st - {stem(x) for x in GENERIC_BASE})
+        if specific and not (toks & {'free', 'less', 'without'}): return True  # "chicken or vegetable stock" is still chicken
+        generic = toks & {stem(x) for x in GENERIC_BASE}
+        if generic: return not (toks & {stem(x) for x in PLANT_BASE}) and bool(toks & st)
+        return False
+    if words is PORK and 'halal' in toks: return False  # e.g. pepperoni_slices_halal (beef)
     if any(e in r for e in exceptions): return False
     st = STEMMED.get(id(words))
     if st is None: st = STEMMED[id(words)] = {stem(x) for x in words}
@@ -129,7 +143,7 @@ def record(rid, d):
     title = names.get('en') or ''
     by_title = not NOT_MEATLESS_TITLE.search(title)
     meat = any(has(r, MEAT, MEAT_FREE_PAIRS) for r in refs) or (by_title and has(title, MEAT)); fish = any(has(r, FISH) for r in refs) or (by_title and has(title, FISH))
-    pork = any(has(r, PORK) for r in refs) or (by_title and has(title, PORK)); alcohol = any(has(r, ALCOHOL, ('port_', 'portion', 'sauce_wine_free')) for r in refs)
+    pork = any(has(r, PORK) for r in refs) or (by_title and not any('halal' in r.lower() for r in refs) and has(title, PORK)); alcohol = any(has(r, ALCOHOL, ('port_', 'portion', 'sauce_wine_free')) for r in refs)
     dairy = any(has(r, DAIRY, DAIRY_FREE_PAIRS) for r in refs); egg = any(has(r, EGG) for r in refs); honey = any(has(r, HONEY) for r in refs)
     diet = []
     if not meat and not fish: diet.append('vegetarian')
