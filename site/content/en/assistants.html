@@ -1,0 +1,30 @@
+<!--meta {"title": "Use Cookwala in an AI assistant", "description": "Connect Cookwala recipes to ChatGPT, Claude, Gemini and other assistants with one URL. Free, read-only, no account or token.", "path": "/assistants/", "status": ""} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / AI assistants</p>
+  <h1>Ask Cookwala from your AI assistant</h1>
+  <p class="lead">One URL gives an assistant the Cookwala recipe catalog: search by cuisine, ingredient, nutrition, cost, method, diet, allergen and language, scale a recipe, plan a day, build a shopping list. It is read-only, needs no account and no token.</p>
+</section>
+
+<section class="wrap">
+  <h2>The URL</h2>
+  <p><code>https://mcp.cookwala.ai/open/mcp</code> (MCP, streamable HTTP, 24 read-only tools). For tools that take an OpenAPI description: <code>https://mcp.cookwala.ai/api/openapi.json</code>.</p>
+  <h2>Where it works</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Assistant</th><th>How to add it</th></tr></thead>
+    <tbody>
+      <tr><td>ChatGPT</td><td>A custom GPT that imports the OpenAPI URL above (no authentication), or the MCP URL where your plan offers connectors. <a href="/docs/CUSTOM-GPT/">Step by step</a></td></tr>
+      <tr><td>Claude</td><td>Settings, Connectors, Add custom connector, paste the MCP URL. Or run <code>npx -y @cookwala/mcp</code> locally. <a href="/mcp/">Details</a></td></tr>
+      <tr><td>Gemini</td><td>Settings, Connected apps, Add a custom app, paste the MCP URL (where your account and region offer custom apps). <a href="/docs/MCP-MOBILE/">On a phone</a></td></tr>
+      <tr><td>Copilot Studio, Perplexity, Cursor, VS Code and others</td><td>Add a remote MCP server or custom connector with the MCP URL. <a href="/docs/MCP/">MCP reference</a></td></tr>
+    </tbody></table></div>
+  <h2>Things to try</h2>
+  <ul>
+    <li>"How do I cook béchamel?"</li>
+    <li>"High-protein vegetarian dinners under 500 kcal."</li>
+    <li>"What can I make with lentils, rice and onions?"</li>
+    <li>"Recipes with no allergens found that are diabetic-friendly."</li>
+    <li>"Plan a 1,800 kcal day without dairy, with a shopping list."</li>
+  </ul>
+  <h2>Please know</h2>
+  <p>Allergen, diet and diabetic labels are screens from ingredient names, not guarantees and not medical advice; nutrition and cost are estimates. Read the <a href="/terms/">terms</a> and the <a href="/privacy/">privacy policy</a>. Help and bug reports: <a href="https://github.com/amado2k5/cookwala/issues" rel="noopener">GitHub issues</a>.</p>
+</section>
