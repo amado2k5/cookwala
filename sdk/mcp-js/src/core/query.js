@@ -66,6 +66,44 @@ export const ingMatches = (ref, term) => { const t = stems(term); const have = n
 const catMatch = (r, c) => { const w = stems(c); if (!w.length) return false; return [r.co, ...(r.tg || [])].some((t) => { const ts = new Set(stems(t)); return w.every((x) => ts.has(x)); }); };
 const hasIng = (r, term) => (r.ig || []).some((i) => ingMatches(i, term));
 
+export const DIET_INFO = {
+  vegetarian: { label: 'Vegetarian', basis: 'published, else inferred', definition: 'Reviewed claim where the recipe has one, otherwise an ingredient screen: no meat, poultry, fish, seafood, gelatin, animal rennet or meat stock found in the ingredient names or title. Dairy, eggs and honey allowed.' },
+  vegan: { label: 'Vegan', basis: 'inferred', definition: 'Vegetarian and no dairy, eggs or honey found in the ingredient names.' },
+  pescatarian: { label: 'Pescatarian', basis: 'inferred', definition: 'No meat or poultry found; fish and seafood allowed.' },
+  halal_ingredients: { label: 'Halal by ingredients (reviewed claim, NOT certified halal)', basis: 'published', definition: 'The recipe carries a reviewed halal claim (rule set fifi-diet-1): no pork, alcohol or other hidden non-halal ingredient found. Recipes without the claim were withheld on doubt or not assessed, so they are not listed. It cannot show that meat is halal-slaughtered or that utensils are clean: meat and poultry still need halal-certified sources.', caveat: 'Never present this as halal certification.' },
+  pork_free: { label: 'Pork-free', basis: 'inferred', definition: 'No pork, bacon, ham, lard or similar found.' },
+  alcohol_free: { label: 'Alcohol-free', basis: 'inferred', definition: 'No wine, beer, spirits, liqueur, mirin or sake found (wine vinegar counts as alcohol here, to be cautious).' },
+  kosher_meat: { label: 'Kosher-style, meat (NOT certified kosher)', basis: 'inferred', definition: 'Reviewed kosher claim of type meat (rule set fifi-diet-1): ingredients kosher-compatible, contains meat or poultry. Recipes without the claim are not listed. Needs kosher-slaughtered meat and supervision.', caveat: 'Never present this as kosher certification.' },
+  kosher_dairy: { label: 'Kosher-style, dairy (NOT certified kosher)', basis: 'inferred', definition: 'Reviewed kosher claim of type dairy: ingredients kosher-compatible, contains dairy and no meat. Cheese and processed items may need a hechsher.', caveat: 'Never present this as kosher certification.' },
+  kosher_pareve: { label: 'Kosher-style, pareve (NOT certified kosher)', basis: 'inferred', definition: 'Reviewed kosher claim of type pareve: ingredients kosher-compatible, neither meat nor dairy. Processed items may need a hechsher.', caveat: 'Never present this as kosher certification.' },
+  kosher_any: { label: 'Kosher-style, any type (NOT certified kosher)', basis: 'inferred', definition: 'Any recipe with a reviewed kosher claim (meat, dairy or pareve).', caveat: 'Never present this as kosher certification.' },
+  gluten_free: { label: 'Gluten-free (inferred)', basis: 'declared allergens plus ingredient names', definition: 'No declared gluten allergen and no wheat, flour, bread, pasta, semolina, barley, rye, couscous or similar found. Cross-contact is not assessed.', caveat: 'Not suitable as coeliac advice; check labels.' },
+  nut_free: { label: 'Nut-free (inferred)', basis: 'declared allergens plus ingredient names', definition: 'No declared nut or peanut allergen and no nuts found in the ingredient names. Seeds such as sesame are separate.', caveat: 'Check labels; allergen data is incomplete for some recipes.' },
+  shellfish_free: { label: 'Shellfish-free (inferred)', basis: 'declared allergens plus ingredient names', definition: 'No crustaceans or molluscs found.' },
+  dairy_free: { label: 'Dairy-free', basis: 'inferred', definition: 'No milk, butter, ghee, cheese, yogurt or cream found.' },
+  egg_free: { label: 'Egg-free', basis: 'inferred', definition: 'No eggs or mayonnaise found.' },
+};
+const DIET_ALIASES = { halal: 'halal_ingredients', 'halal friendly': 'halal_ingredients', 'halal-friendly': 'halal_ingredients', halal_friendly: 'halal_ingredients', kosher: 'kosher_any', kosher_style: 'kosher_any', 'kosher meat': 'kosher_meat', 'kosher dairy': 'kosher_dairy', pareve: 'kosher_pareve', parve: 'kosher_pareve', 'kosher pareve': 'kosher_pareve', veg: 'vegetarian', veggie: 'vegetarian', 'gluten free': 'gluten_free', 'gluten-free': 'gluten_free', coeliac: 'gluten_free', celiac: 'gluten_free', 'nut free': 'nut_free', 'nut-free': 'nut_free', 'dairy free': 'dairy_free', 'lactose free': 'dairy_free', lactose_free: 'dairy_free', 'egg free': 'egg_free', 'pork free': 'pork_free', 'alcohol free': 'alcohol_free', 'shellfish free': 'shellfish_free', 'no pork': 'pork_free', 'no alcohol': 'alcohol_free' };
+export const normDiet = (d) => { const k = norm(d).trim(); const u = k.replace(/\s+/g, '_'); return DIET_INFO[u] ? u : (DIET_ALIASES[k] || DIET_ALIASES[u] || u); };
+// published claim (safety.dietary[] in the recipe) that corresponds to an inferred category
+const PUBLISHED = { halal_ingredients: 'halal', kosher_any: 'kosher', kosher_meat: 'kosher', kosher_dairy: 'kosher', kosher_pareve: 'kosher', vegetarian: 'vegetarian', vegan: 'vegan', gluten_free: 'gluten_free', dairy_free: 'dairy_free', nut_free: 'nut_free' };
+const inferredOk = (r, d) => (d === 'kosher_any' ? (r.di || []).some((x) => x.startsWith('kosher_')) : (r.di || []).includes(d));
+/** A recipe with a published classification is judged by its published claims; others by the ingredient screen. */
+const RELIGIOUS = new Set(['halal_ingredients', 'kosher_any', 'kosher_meat', 'kosher_dairy', 'kosher_pareve']);
+export const dietOk = (r, d) => {
+  const claim = PUBLISHED[d];
+  const held = (c) => (r.dx || []).includes(c); // a claim the recipe's own title or ingredients contradict is held back (see /api/diets/review)
+  const has = (c) => (r.dc || []).includes(c) && !held(c);
+  if (RELIGIOUS.has(d)) {
+    // halal and kosher come only from the reviewed claims: a recipe without one was withheld on doubt, which is not the same as "fine"
+    if (!r.dk || !has(claim)) return false;
+    if (d === 'kosher_meat' || d === 'kosher_dairy' || d === 'kosher_pareve') return r.dkt ? 'kosher_' + r.dkt === d : inferredOk(r, d); // the kosher type is in the claim's note
+    return true;
+  }
+  if (r.dk && (d === 'vegetarian' || d === 'vegan')) return has(d) || (d === 'vegetarian' && has('vegan')); // a vegan claim implies vegetarian
+  if (claim && has(claim)) return true; // gluten_free, nut_free, dairy_free: a published claim counts, otherwise the screen decides
+  return inferredOk(r, d);
+};
 export const METHOD_ALIASES = {
   bake: 'bake', baking: 'bake', baked: 'bake', oven: 'bake', fry: 'fry', frying: 'fry', fried: 'fry', 'pan-fry': 'fry', 'pan fry': 'fry', 'pan-frying': 'fry', saute: 'fry', sauteing: 'fry',
   deep_fry: 'deep_fry', 'deep-fry': 'deep_fry', 'deep fry': 'deep_fry', 'deep frying': 'deep_fry', 'deep-frying': 'deep_fry', deepfry: 'deep_fry',
@@ -90,10 +128,11 @@ const ALIAS = { prep_time_max: 'active_max', prep_time_min: 'active_min', cook_t
 export function filterRecipes(items, a0) {
   const a = { ...a0 }; for (const [from, to] of Object.entries(ALIAS)) if (a[from] !== undefined && a[from] !== '' && a[to] === undefined) a[to] = a[from];
   const f = {}; const keep = [];
+  if (a.basis !== undefined && a.basis !== '') f.basis = String(a.basis).toLowerCase();
   const cu = [...list(a.cuisine), ...list(a.country)].map((c) => COUNTRY[norm(c)] || c.toUpperCase());
   const set = (k, v) => { if (v !== undefined && !(Array.isArray(v) && !v.length)) f[k] = v; };
   set('cuisine', cu); set('course', list(a.course).map(norm)); set('tag', list(a.tag).map(norm)); const meth = list(a.method).map((m) => normMethod(m) || norm(m)); set('method', meth); set('style', list(a.style).map(norm));
-  set('operation', list(a.operation).map(norm)); set('equipment', list(a.equipment).map(norm)); set('diet', list(a.diet).map(norm)); set('allergen_free', list(a.allergen_free).map(norm));
+  set('operation', list(a.operation).map(norm)); set('equipment', list(a.equipment).map(norm)); set('diet', list(a.diet).map(normDiet)); set('allergen_free', list(a.allergen_free).map(norm));
   set('ingredient', list(a.ingredient)); set('ingredient_any', list(a.ingredient_any)); set('category', list(a.category));
   if (a.servings_exact !== undefined && a.servings_exact !== '') f.servings_exact = num(a.servings_exact);
   for (const k of ['has_protein', 'has_nutrition', 'has_video', 'kids', 'has_notes', 'kid_friendly']) if (a[k] !== undefined && a[k] !== '') f[k] = a[k] === true || a[k] === 'true'; set('exclude_ingredient', list(a.exclude_ingredient)); set('level', list(a.level).map((x) => x.toUpperCase())); set('difficulty', list(a.difficulty).map(norm));
@@ -111,7 +150,8 @@ export function filterRecipes(items, a0) {
     if (f.style && !f.style.includes(r.st)) continue;
     if (f.operation && !f.operation.every((o) => (r.op || []).includes(o))) continue;
     if (f.equipment && !f.equipment.every((e) => (r.eq || []).some((x) => x.includes(e)))) continue;
-    if (f.diet && !f.diet.every((d) => (r.di || []).includes(d))) continue;
+    if (f.basis === 'published' && f.diet && !r.dk) continue; // strict mode: only recipes classified by their publisher
+    if (f.diet && !f.diet.every((d) => dietOk(r, d))) continue;
     if (f.allergen_free && f.allergen_free.some((x) => (r.al || []).includes(x))) continue;
     if (f.ingredient && !f.ingredient.every((i) => hasIng(r, i))) continue;
     if (f.ingredient_any && !f.ingredient_any.some((i) => hasIng(r, i))) continue;
@@ -177,7 +217,7 @@ export function row(r, detail = 'brief') {
   const o = {
     id: r.id, title: r.tl || r.t, title_en: r.tl && r.tl !== r.t ? r.t : undefined, title_ar: r.ta, cuisine: r.cu, course: r.co, difficulty: r.df, level: r.lv, servings: r.sv, time_min: r.mn, prep_min: r.ac, cook_min: r.pt,
     kcal_per_serving: r.kcal, protein_g: r.pr, total_kcal: r.tk, total_protein_g: r.tp, fat_g: r.fa, carbs_g: r.ca, cost_per_serving: r.cps, cost_tier: r.ct, style: r.st, methods: r.me,
-    diet_inferred: r.di, allergens: r.al, n_ingredients: r.ni, n_steps: r.ns, has_video: r.vid ? true : undefined, kid_friendly_inferred: r.kd ? true : undefined, has_background_notes: r.hn ? true : undefined, page: `https://cookwala.ai/recipes/${r.id}/`,
+    diet_inferred: r.di, diet_basis: r.dk ? 'published' : 'inferred', kosher_type: r.dk && (r.dc || []).includes('kosher') ? r.dkt : undefined, diet_review: r.dx ? { held_back_claims: r.dx, reason: 'The published claim conflicts with the recipe title or ingredient names; excluded from diet results until reviewed.' } : undefined, dietary_claims: r.dk ? (r.dc || []).map((c) => ({ claim: c, basis: (r.dcc || []).includes(c) ? 'certified' : 'ingredients', ruleset: r.drs && r.drs[c], note: r.dcn && r.dcn[c], certification_ids: r.dcr && r.dcr[c] })) : undefined, allergens: r.al, n_ingredients: r.ni, n_steps: r.ns, has_video: r.vid ? true : undefined, kid_friendly_inferred: r.kd ? true : undefined, has_background_notes: r.hn ? true : undefined, page: `https://cookwala.ai/recipes/${r.id}/`,
   };
   if (detail === 'full') Object.assign(o, { fiber_g: r.fi, sugar_g: r.su, sodium_mg: r.na, ingredients: r.ig, operations: r.op, equipment: r.eq, may_contain: r.am, collection: r.k, tags: r.tg, kid_cautions: r.kc, cost_total: r.cost, cost_buckets: r.cb, currency: r.cur, protein_density: r1(protDensity(r)) });
   return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined && !(Array.isArray(v) && !v.length)));
@@ -356,4 +396,15 @@ export function ingredientList(items, staples, q, limit = 20) {
   const stap = new Set(staples);
   const out = [...c.entries()].filter(([i]) => !want.length || want.every((w) => stems(i).some((x) => x === w || x.startsWith(w)))).sort((a, b) => b[1] - a[1]).slice(0, Math.min(limit, 50));
   return out.map(([i, n]) => ({ ingredient: i.replace(/_/g, ' '), recipes: n, staple: stap.has(i) || undefined }));
+}
+
+export function dietCounts(items) {
+  const classified = items.filter((r) => r.dk);
+  return Object.entries(DIET_INFO).map(([id, i]) => ({ id, ...i, recipes: items.filter((r) => dietOk(r, id)).length,
+    published_claims: PUBLISHED[id] ? classified.filter((r) => (r.dc || []).includes(PUBLISHED[id])).length : undefined,
+    certified_claims: PUBLISHED[id] ? items.filter((r) => (r.dcc || []).includes(PUBLISHED[id])).length : undefined, certified: false }));
+}
+export function dietCoverage(items) {
+  const c = items.filter((r) => r.dk);
+  return { recipes: items.length, classified_by_publisher: c.length, unclassified_screened_by_ingredients: items.length - c.length, held_back_for_review: items.filter((r) => r.dx).length };
 }

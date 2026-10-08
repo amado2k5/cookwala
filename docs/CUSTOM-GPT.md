@@ -1,7 +1,7 @@
 # Cookwala as a ChatGPT GPT (and any HTTP client)
 
 The REST API at `https://mcp.cookwala.ai/api/*` is open, read-only and needs no token. Its OpenAPI description is
-`https://mcp.cookwala.ai/api/openapi.json` (OpenAPI 3.1, about 25 operations). It is separate from the token-protected `/mcp` route.
+`https://mcp.cookwala.ai/api/openapi.json` (OpenAPI 3.1, about 28 operations). It is separate from the token-protected `/mcp` route.
 
 ## What you can ask
 
@@ -23,6 +23,7 @@ The REST API at `https://mcp.cookwala.ai/api/*` is open, read-only and needs no 
 | By source | `source=Fatma Abu Haty` (also `Samia Abdennour`, `Chef Teta`, `Osool El Tahy`, `family archive`, or a website), `/api/sources/{source}`, `/api/sources` |
 | By country | `country=Egypt` (or `Egyptian`, `Japan`, `India`, `Korea`, `Italy`...; same as `cuisine`), `/api/countries` |
 | By ingredient | `ingredient=lentils,onions` (all), `ingredient_any=...`, `exclude_ingredient=`, `/api/ingredients?q=lent` to look names up, `/api/pantry?have=` |
+| Halal, kosher, vegetarian and other diets | `/api/diets` (categories, counts, `coverage`), `/api/diets/halal`, `/api/diets/kosher` (`kosher_meat`, `kosher_dairy`, `pareve`), `/api/diets/vegetarian`, `gluten_free`..., or `diet=halal,gluten_free` on search. Halal and kosher come only from the reviewed claims in each recipe (`safety.dietary`, rule set `fifi-diet-1`; about 1,770 of 2,267 recipes): a recipe without the claim was withheld on doubt, so it is not listed. Vegetarian and vegan use the reviewed claim where there is one, else an ingredient screen (`diet_basis` says which); `basis=published` keeps only reviewed ones. Never certifications. `/api/diets/review` lists claims held back because the title or ingredients contradict them. `/api/certifications` lists real certificates (today only fictional examples) |
 | Kids | `kids=true` (inferred: mild, simple, kid-appealing; each result lists cautions such as honey, nuts and sesame) |
 | History, background, tips | `getRecipe?include=history` (background and step tips where the recipe has any; about 50 recipes do), `has_notes=true` |
 | By category or method | `category=Soups`, `category=desserts`; `method=baking` (or frying, grilling...) or `/api/methods/baking` with paging (`next_offset`) |
@@ -57,6 +58,7 @@ How to work
   "no oven" = exclude method bake; "cold dish" = style=cold or no_cook; "fried" = method=fry,deep_fry; "few ingredients" = ingredients_max.
 - When the person picks a dish, call getRecipe with view=ingredients, then view=steps. Offer to scale servings, build a shopping list, compare, or find similar.
 - Ask only for the parts the person wants: getRecipe with include=ingredients, or include=ingredients,nutrition,cost,links, and so on. Use source= when they name a cook or book, method= for baking, frying and the like, lang= when they write in another language (reply in that language).
+- Halal and kosher: these are reviewed ingredient claims, NOT certifications. Say "reviewed halal claim" or "kosher-compatible by ingredients"; never say a recipe is halal or kosher. Always add that meat must be halal-slaughtered or kosher-slaughtered, that processed items, cheese and wine may need a hechsher, and that utensils and cross-contact are not assessed. A recipe missing the claim is not "non-halal"; it was withheld on doubt. If asked for certified recipes, call listCertifications and report honestly what it returns. Claims describe the listed ingredients only, so side sauces and marinades "for fish" or "for meat" are judged without the meat.
 - Kids: kids=true is an inference, not a guarantee. Always repeat the cautions (honey under 12 months, nuts, sesame, choking hazards) and say allergies need checking.
 - History and tips: use include=history; if available is false, say the recipe has none and do not invent a history.
 - Prep time is hands-on time; cook time is the unattended remainder. Video links are the original creator's; say they are external.
