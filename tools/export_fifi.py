@@ -303,6 +303,10 @@ def convert(d, vocab, stats):
         'license': coll['license'],
         'layers': {'r1': True, 'r2': False, 'r3': False},
     }
+    # Dietary claims come from fifi.cooking (scripts/diet there): positive claims, basis "ingredients".
+    # Only the keys the schema allows are copied; anything else in the source is ignored.
+    claims = [{k: c[k] for k in ('claim', 'basis', 'ruleset', 'note') if c.get(k)} for c in (d.get('dietary') or []) if c.get('claim') and c.get('basis') == 'ingredients']
+    if claims: doc['safety']['dietary'] = claims
     if rec.get('difficulty') in ('easy', 'medium'): doc['dish']['difficulty'] = rec['difficulty']
     elif rec.get('difficulty') == 'master': doc['dish']['difficulty'] = 'hard'
     if prep_min or cook_min:
@@ -335,6 +339,7 @@ def convert(d, vocab, stats):
     index = {'id': rid, 'revision': 1, 'hash': doc['hash'], 'title': names.get('en', rid), 'cuisine': cuisine_of(rid), 'course': doc['dish']['course'], 'tags': doc['dish']['tags'], 'level': 'V0',
              'servings': doc['yield']['servings'], 'allergens': eu, 'supervision': 'presence_required', 'thumb': f'{FIFI}/recipe-images/thumbs/{rid}.jpg',
              'x-titles': names, 'x-collection': coll['id'], 'x-license': coll['license'], 'x-steps': len(nodes), 'x-ingredients': len(ingredients), **({'x-text': 'facts'} if facts_only else {})}
+    if claims: index['x-dietary'] = [c['claim'] for c in claims]
     if est.get('kcal'): index['kcal'] = est['kcal']
     if doc['process'].get('totalTime'): index['totalTimeS'] = (prep_min + cook_min) * 60
     return doc, side, index

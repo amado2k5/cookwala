@@ -66,6 +66,7 @@ registry entry stay the default way to use the server; the hosted endpoint exist
 - Nothing here may start cooking from an agent tool. MCP tools stay read-only.
 - No personal data in logs, fixtures or examples. No telemetry. The one opt-in exception is third-party call counting by
   mcprush on the hosted endpoint; Cookwala's own code collects nothing and the npm package is never tracked.
+- Dietary claims (`safety.dietary`) come from fifi.cooking and are never certifications. Change them there, not here (docs/EXPORT-FIFI.md §11).
 - Rights per collection live in `tools/export_fifi.collections.json`; `text: facts` collections never publish step text.
 
 ## Checks before you commit

@@ -139,6 +139,11 @@ def record(rid, d):
     if not alcohol: diet.append('alcohol_free')
     if not dairy: diet.append('dairy_free')
     if not egg: diet.append('egg_free')
+    # Reviewed claims (safety.dietary, fifi.cooking scripts/diet) replace the name heuristic for vegetarian and vegan on
+    # imported documents: they read the steps too and withhold on doubt. halal and kosher exist only as reviewed claims.
+    claims = {c['claim'] for c in (d.get('safety') or {}).get('dietary', [])}
+    if 'legacy' in d: diet = [x for x in diet if x not in ('vegetarian', 'vegan')]
+    diet = sorted(set(diet) | (claims & {'vegetarian', 'vegan', 'halal', 'kosher'}))
     al_codes = list((d.get('safety') or {}).get('allergens', {}).get('eu14', [])) + list((d.get('safety') or {}).get('allergens', {}).get('us9', []))
     ttoks = tokens(title + ' ' + ' '.join(dish.get('tags', [])))
     spicy = any(has(r, SPICY) or (('hot' in tokens(r)) and (tokens(r) & {'pepper', 'sauce', 'peppers', 'chill'})) for r in refs)

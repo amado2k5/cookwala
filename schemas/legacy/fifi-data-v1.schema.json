@@ -109,6 +109,20 @@
       "properties": {
         "recipe": { "$ref": "#/$defs/Recipe" },
         "estimate": { "$ref": "#/$defs/Estimate" },
+        "dietary": {
+          "type": "array",
+          "description": "Positive dietary claims derived from ingredients and steps (scripts/diet). Never a certification. Absent when no claim holds.",
+          "items": {
+            "type": "object",
+            "required": ["claim", "basis", "ruleset"],
+            "properties": {
+              "claim": { "enum": ["halal", "kosher", "vegetarian", "vegan"] },
+              "basis": { "const": "ingredients" },
+              "ruleset": { "type": "string" },
+              "note": { "type": "string" }
+            }
+          }
+        },
         "translations": { "type": "object", "description": "Keyed by language code (24 site languages).", "additionalProperties": { "$ref": "#/$defs/RecipeTranslation" } }
       }
     },
