@@ -7,7 +7,7 @@ const FILTERS = [
   q('cuisine', 'Comma list of country codes or names: EG, MX, JP, MA, CN, FR, VN, or Egyptian, Mexican, Japanese, Moroccan, Chinese, French, Vietnamese.'),
   q('course', 'Comma list: main, dessert, side, salad, soup, bread, drink, breakfast, other.'),
   q('tag', 'Comma list of exact tags from /api/facets (for example Baking, Soups, Grilling, No Cook). All must match.'),
-  q('method', 'Comma list, any may match: fry, deep_fry, bake, roast, grill, boil, simmer, steam, toast, chill, freeze, marinate, ferment.'),
+  q('method', 'Comma list, any may match. Names or aliases: bake (baking, oven), fry (frying, pan-fry), deep_fry, roast, grill (grilling, bbq), boil (poach), simmer (stew, braise), steam, toast, chill, freeze, marinate, ferment, no_cook.'),
   q('style', 'hot (uses heat), cold (chilled or frozen only), no_cook (no heat and no chilling step), mixed (heat and chilling).'),
   q('operation', 'Comma list of cooking operations that must all appear: mix, cut, knead, whisk, boil, fry, bake, roast, grill, chill, freeze, marinate, stuff...'),
   q('equipment', 'Comma list of equipment keywords, for example oven, hob, blender, grill.'),
@@ -29,10 +29,23 @@ const FILTERS = [
   q('servings_min', 'Minimum servings.', { type: 'number' }), q('servings_max', 'Maximum servings.', { type: 'number' }),
   q('ingredients_max', 'Maximum number of ingredients (use for "few ingredients").', { type: 'integer' }), q('steps_max', 'Maximum number of steps.', { type: 'integer' }),
   q('difficulty', 'Comma list: easy, medium, hard.'), q('level', 'Verification level: V0 (described only), V1, V2.'), q('collection', 'Source collection id from /api/facets.'),
+  q('source', 'Who the recipe comes from, by name: "Fatma Abu Haty", "Samia Abdennour", "Chef Teta", "Osool El Tahy", "family archive", or a website for the world collection. Returns only that source. See /api/sources.'),
+  q('category', 'Comma list, any may match: a book category (Soups, Eastern Desserts, Fish & Seafood, Quick Meals, Baking...) or a course. Words match, plural or not. See /api/categories.'),
+  q('ingredient_any', 'Comma list of ingredients, at least one must appear.'),
+  q('serves', 'Feeds at least this many people (same as servings_min).', { type: 'number' }), q('serves_max', 'Feeds at most this many people.', { type: 'number' }),
+  q('servings_exact', 'Exactly this many servings.', { type: 'number' }),
+  q('total_kcal_min', 'Minimum calories for the WHOLE recipe (per-serving kcal times servings).', { type: 'number' }), q('total_kcal_max', 'Maximum calories for the whole recipe.', { type: 'number' }),
+  q('total_protein_min', 'Minimum protein g for the whole recipe.', { type: 'number' }), q('total_protein_max', 'Maximum protein g for the whole recipe.', { type: 'number' }),
+  q('has_protein', 'true: contains protein; false: the data says zero protein.', { type: 'boolean' }), q('has_nutrition', 'true: only recipes with nutrition data; false: only those without.', { type: 'boolean' }),
+  q('has_video', 'true: only recipes with a video link (the creator\'s YouTube video).', { type: 'boolean' }),
+  q('prep_time_max', 'Maximum hands-on (active) minutes: the time someone actually works. Same as active_max.', { type: 'number' }), q('prep_time_min', 'Minimum hands-on minutes.', { type: 'number' }),
+  q('cook_time_max', 'Maximum unattended minutes (cooking, resting, waiting): total time minus hands-on time.', { type: 'number' }), q('cook_time_min', 'Minimum unattended minutes.', { type: 'number' }),
   q('has_image', 'true to return only recipes with a photo.', { type: 'boolean' }),
 ];
+const LANG = q('lang', 'Language for titles and, where available, ingredient names and step wording: a code (ar, fr, es, de, zh...), a tag such as ar-EG, or a name such as Arabic. See /api/languages. Falls back to English and says so.');
 const LIST = [
-  q('sort', 'relevance (default with q), name, kcal, protein, fat, carbs, fiber, sugar, cost, time, ingredients, steps, protein_density, random. Prefix - for descending, for example -protein. Recipes without the value sort last.'),
+  LANG,
+  q('sort', 'relevance (default with q), name, kcal, protein, total_kcal, total_protein, fat, carbs, fiber, sugar, cost, time, prep_time, cook_time, ingredients, steps, protein_density, random. Prefix - for descending, for example -protein. Recipes without the value sort last.'),
   q('limit', 'Results to return, 1 to 25 (default 10).', { type: 'integer' }), q('offset', 'Skip this many results.', { type: 'integer' }),
   q('detail', 'brief (default) or full (adds ingredients, operations, equipment, tags, cost buckets).', { type: 'string', enum: ['brief', 'full'] }),
 ];
@@ -50,20 +63,28 @@ export function openapi(version = '0.0.0') {
     servers: [{ url: 'https://mcp.cookwala.ai' }],
     paths: {
       '/api/search': get('searchRecipes', 'Search and filter recipes', 'Combine any filters. Use sort for "highest protein", "lowest calories", "cheapest", "quickest". Total is the count before limit.', [...FILTERS, ...LIST]),
-      '/api/recipes/{id}': get('getRecipe', 'Get one recipe', 'view: summary (default), ingredients (optionally scaled with servings), steps (operation order, plus wording only where published), nutrition, cost, safety, full.', [
-        idParam, q('view', 'summary, ingredients, steps, nutrition, cost, safety or full.', { type: 'string', enum: ['summary', 'ingredients', 'steps', 'nutrition', 'cost', 'safety', 'full'] }),
-        q('servings', 'Scale ingredient quantities and nutrition totals to this many servings.', { type: 'number' }), q('lang', 'Language code for step text where available.')]),
-      '/api/recipes/{id}/similar': get('similarRecipes', 'Recipes similar to one', 'Ranked by shared ingredients, course, cuisine and cooking methods.', [idParam, q('limit', 'Up to 25.', { type: 'integer' })]),
+      '/api/recipes/{id}': get('getRecipe', 'Get one recipe, or any combination of its parts', 'Ask for exactly what the person wants with include, a comma list: summary, ingredients, steps (the method; also recipe), nutrition, cost, equipment, notes, safety, links (video and source links), or all. Example: include=ingredients,nutrition,cost,links. view returns a single part instead. Ingredients can be scaled with servings; lang translates names and wording where published.', [
+        idParam, q('include', 'Comma list of parts: summary, ingredients, steps, nutrition, cost, equipment, notes, safety, links, all. Takes precedence over view.'), q('view', 'summary, ingredients, steps, nutrition, cost, safety or full.', { type: 'string', enum: ['summary', 'ingredients', 'steps', 'nutrition', 'cost', 'safety', 'links', 'full'] }),
+        q('servings', 'Scale ingredient quantities and nutrition totals to this many servings.', { type: 'number' }), LANG]),
+      '/api/recipes/{id}/similar': get('similarRecipes', 'Recipes similar to one', 'Ranked by shared ingredients, course, cuisine and cooking methods.', [idParam, q('limit', 'Up to 25.', { type: 'integer' }), LANG]),
       '/api/pantry': get('findByPantry', 'What can I cook with what I have', 'Ranks recipes by how many of their ingredients are covered. Salt, water, oil, sugar and pepper are not counted as missing. Accepts every search filter too.', [
-        { ...q('have', 'Comma list of ingredients the person has.'), required: true }, q('max_missing', 'Most missing ingredients allowed (default 3).', { type: 'integer' }), q('min_have', 'Fewest matched ingredients (default 1).', { type: 'integer' }), ...FILTERS.filter((f) => f.name !== 'q' && f.name !== 'ingredient'), q('limit', 'Up to 25.', { type: 'integer' })]),
-      '/api/random': get('randomRecipe', 'Surprise me', 'Random recipes that match the filters. Pass seed for a repeatable pick.', [q('count', '1 to 10.', { type: 'integer' }), q('seed', 'Any text for a repeatable result.'), ...FILTERS]),
-      '/api/compare': get('compareRecipes', 'Compare recipes side by side', 'Nutrition, cost, time and size of 2 to 6 recipes, with the lowest and highest of each.', [{ ...q('ids', 'Comma list of recipe ids.'), required: true }]),
+        { ...q('have', 'Comma list of ingredients the person has.'), required: true }, q('max_missing', 'Most missing ingredients allowed (default 3).', { type: 'integer' }), q('min_have', 'Fewest matched ingredients (default 1).', { type: 'integer' }), ...FILTERS.filter((f) => f.name !== 'q' && f.name !== 'ingredient'), q('limit', 'Up to 25.', { type: 'integer' }), LANG]),
+      '/api/random': get('randomRecipe', 'Surprise me', 'Random recipes that match the filters. Pass seed for a repeatable pick.', [q('count', '1 to 10.', { type: 'integer' }), q('seed', 'Any text for a repeatable result.'), LANG, ...FILTERS]),
+      '/api/compare': get('compareRecipes', 'Compare recipes side by side', 'Nutrition, cost, time and size of 2 to 6 recipes, with the lowest and highest of each.', [{ ...q('ids', 'Comma list of recipe ids.'), required: true }, LANG]),
       '/api/ingredient': get('ingredientProfile', 'About an ingredient', 'How many recipes use it, which cuisines and courses, average calories, what it is often cooked with, examples.', [{ ...q('name', 'Ingredient, for example lentils, tahini, eggplant.'), required: true }]),
       '/api/aggregate': get('aggregateStats', 'Statistics across the catalog', 'Count, average, minimum and maximum of a metric per group, for questions such as "which cuisine has the lightest dishes". Accepts every search filter.', [
         { ...q('group_by', 'cuisine, course, method, style, difficulty, collection, tag, level, cost_tier, diet or allergen.', { type: 'string', enum: ['cuisine', 'course', 'method', 'style', 'difficulty', 'collection', 'tag', 'level', 'cost_tier', 'diet', 'allergen'] }), required: true },
         q('metric', 'kcal (default), protein, fat, carbs, fiber, sugar, sodium, time, cost, ingredients, steps, servings.'), q('order', 'asc or desc by average; default by recipe count.'), q('limit', 'Groups to return (up to 60).', { type: 'integer' }), ...FILTERS]),
       '/api/meal-plan': get('planMeals', 'Plan a day of meals', 'Picks dishes close to a calorie target, one serving each. Accepts filters such as diet, cuisine and exclude_ingredient. Estimates only, not medical advice.', [q('kcal', 'Daily calorie target (default 2000).', { type: 'number' }), q('meals', '1 to 5 (default 3).', { type: 'integer' }), q('seed', 'Change for a different plan.'), ...FILTERS.filter((f) => !['kcal_min', 'kcal_max'].includes(f.name))]),
       '/api/shopping-list': get('shoppingList', 'Combined shopping list', 'Merges and scales the ingredients of up to 8 recipes. Lines without a parsed quantity are listed separately as written.', [{ ...q('ids', 'Comma list of recipe ids.'), required: true }, q('servings', 'Scale every recipe to this many servings.', { type: 'number' })]),
+      '/api/methods': get('listMethods', 'Cooking methods with recipe counts', 'Baking, frying, deep frying, roasting, grilling, boiling, simmering, steaming, chilling, freezing, marinating, no-cook and more, with how many recipes use each and other names for it.'),
+      '/api/methods/{method}': get('recipesByMethod', 'All recipes that use a cooking method', 'Everything cooked by one method, for example baking. Accepts every search filter and paging (limit up to 25, then next_offset). Use sort and filters to narrow, for example method baking with course dessert.', [
+        { name: 'method', in: 'path', required: true, description: 'bake, fry, deep_fry, roast, grill, boil, simmer, steam, toast, chill, freeze, marinate, ferment, no_cook, or a name such as baking or frying.', schema: { type: 'string' } }, ...FILTERS.filter((f) => f.name !== 'method'), ...LIST]),
+      '/api/categories': get('listCategories', 'Categories', 'Book categories (Soups, Eastern Desserts, Quick Meals...) and courses with recipe counts.'),
+      '/api/sources': get('listSources', 'Recipe sources', 'Every source (Fatma Abu Haty, Samia Abdennour, Chef Teta, family archive...) with recipe counts, other names, and whether step wording is published.'),
+      '/api/sources/{source}': get('recipesBySource', 'All recipes from one source', 'Only that source\'s recipes, for example Fatma Abu Haty. Accepts every search filter and paging.', [
+        { name: 'source', in: 'path', required: true, description: 'A name such as "Fatma Abu Haty" or "Samia Abdennour", or a collection id from /api/sources.', schema: { type: 'string' } }, ...FILTERS.filter((f) => f.name !== 'source'), ...LIST]),
+      '/api/languages': get('listLanguages', 'Supported languages', 'The 29 languages recipe titles are available in.'),
       '/api/facets': get('getFacets', 'Every filter value', 'Cuisines, courses, tags, methods, diets, allergens, collections, common ingredients and numeric ranges, with counts. Call this to learn what exists.'),
       '/api/operations': get('listOperations', 'Cooking operations and safe temperature bands', 'Each operation with its medium, temperature band and whether it may run unattended.', [q('family', 'For example heat, cut, cool.')]),
       '/api/devices': get('listDevices', 'Kitchen device presets', 'Preset ids you can pass to dry-run.'),

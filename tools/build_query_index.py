@@ -50,6 +50,21 @@ STAPLES = {'salt', 'water', 'warm_water', 'cold_water', 'hot_water', 'boiling_wa
 
 
 
+LANG_NAMES = {'ar': 'Arabic', 'bn': 'Bengali', 'cs': 'Czech', 'de': 'German', 'el': 'Greek', 'en': 'English', 'es': 'Spanish', 'fa': 'Persian', 'fr': 'French', 'he': 'Hebrew', 'hi': 'Hindi', 'id': 'Indonesian', 'it': 'Italian', 'ja': 'Japanese', 'ko': 'Korean', 'ku': 'Kurdish (Kurmanji)', 'nl': 'Dutch', 'pl': 'Polish', 'ps': 'Pashto', 'pt': 'Portuguese', 'ru': 'Russian', 'sq': 'Albanian', 'sv': 'Swedish', 'sw': 'Swahili', 'te': 'Telugu', 'tr': 'Turkish', 'ur': 'Urdu', 'vi': 'Vietnamese', 'zh': 'Chinese'}
+
+
+# other names people use for a source, so "Fatma Abu Haty" or "Samia Abdennour" finds the right collection
+SOURCE_ALIASES = {
+    'abuhaty': ['Fatma Abu Haty', 'Fatma Abu Hati', 'Abu Haty', 'Abu Hati', 'Fatma Abou Haty', 'YouTube channel', 'فاطمة أبو حاتي', 'فاطمة ابو حاتي'],
+    'archive': ['Fatma Alkawokgy', 'Dr Fatma', 'family archive', 'family recipes', 'fifi.cooking archive', 'Alkawokgy'],
+    'chefteta': ['Chef Teta', 'Teta', 'chefteta.com'],
+    'osool': ['Osool El Tahy', 'Osool', 'Nazira Nicola', 'Bahia Othman', 'Nazira', 'أصول الطهي'],
+    'abdennour': ['Samia Abdennour', 'Abdennour', 'AUC Press', 'Egyptian Cooking and Other Middle Eastern Recipes'],
+    'world': ['World Cuisines', 'world cuisine', 'international'],
+    'cookwala': ['Cookwala', 'examples', 'Cookwala examples'],
+}
+
+
 def tokens(ref): return {stem(t) for t in re.split(r'[^a-z]+', ref.lower()) if t}
 
 
@@ -118,13 +133,18 @@ def record(rid, d):
         'cu': dish.get('cuisine') or ['EG'], 'co': dish.get('course', 'other'), 'tg': dish.get('tags', []),
         'df': dish.get('difficulty'), 'lv': d['verification']['level'], 'k': (d.get('source') or {}).get('collection') or 'cookwala',
         'sv': serv, 'ig': refs, 'ni': len(refs), 'op': sorted(opset), 'me': methods, 'st': style, 'ns': len(ops),
-        'mn': duration_min(d.get('process', {}).get('totalTime')), 'al': alist,
+        'mn': duration_min(d.get('process', {}).get('totalTime')), 'ac': duration_min(d.get('process', {}).get('activeTime')), 'al': alist,
         'am': sorted(al.get('mayContain', [])), 'di': diet,
         'eq': sorted({e.get('class', '').replace('cw.eq.', '') for e in d.get('equipment', []) if e.get('class')}),
         'img': bool(dish.get('images')),
+        'vid': True if re.search(r'(youtube\.com|youtu\.be|vimeo\.com)', (d.get('source') or {}).get('url') or '') else None,
+        'sn': (d.get('source') or {}).get('name') if ((d.get('source') or {}).get('collection') or 'cookwala') in ('world', 'community') else None,
     }
     for k, key in (('kcal', 'kcal'), ('protein', 'pr'), ('fat', 'fa'), ('carbs', 'ca'), ('fiber', 'fi'), ('sugar', 'su'), ('sodiumMg', 'na')):
         if k in n: rec[key] = n[k]
+    if rec.get('mn') and rec.get('ac') and rec['mn'] >= rec['ac']: rec['pt'] = rec['mn'] - rec['ac']  # unattended cooking, resting or waiting time
+    if serv and 'kcal' in rec: rec['tk'] = round(rec['kcal'] * serv)
+    if serv and 'pr' in rec: rec['tp'] = round(rec['pr'] * serv)
     if total is not None:
         rec['cost'] = total; rec['cb'] = c.get('buckets') or {}
         if serv: rec['cps'] = round(total / serv, 2)
@@ -143,6 +163,26 @@ def main(out):
         for r in recs:
             if 'cps' in r: r['ct'] = 'budget' if r['cps'] <= lo else ('mid' if r['cps'] <= hi else 'premium')
     q = out / 'v1' / 'query'; q.mkdir(parents=True, exist_ok=True)
+    # recipe names per language: /v1/query/names/<lang>.json {id: name}, loaded only when a caller asks for that language
+    nd = q / 'names'; nd.mkdir(exist_ok=True)
+    langs = sorted({k for d in docs.values() for k in d['dish'].get('names', {})})
+    for lg in langs:
+        m = {rid: d['dish']['names'][lg] for rid, d in docs.items() if d['dish'].get('names', {}).get(lg)}
+        (nd / f'{lg}.json').write_text(json.dumps(m, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
+    cfg = {c['id']: c for c in json.loads((ROOT / 'tools' / 'export_fifi.collections.json').read_text(encoding='utf-8')).get('collections', [])}
+    sources = {}
+    for r in recs:
+        e = sources.setdefault(r['k'], {'recipes': 0, 'sites': Counter()})
+        e['recipes'] += 1
+        if r.get('sn'): e['sites'][r['sn']] += 1
+    for k, e in sources.items():
+        c = cfg.get(k, {}); sample = next((d for d in docs.values() if ((d.get('source') or {}).get('collection') or 'cookwala') == k), {})
+        e['name'] = c.get('sourceName') or (sample.get('source') or {}).get('name') or k
+        e['citation'] = c.get('citation') or (sample.get('source') or {}).get('citation')
+        e['step_text'] = c.get('text', 'full' if k == 'cookwala' else 'unknown')
+        e['aliases'] = SOURCE_ALIASES.get(k, [])
+        e['sites'] = dict(e['sites'].most_common(60)) or None
+        sources[k] = {a: b for a, b in e.items() if b not in (None, {}, [])}
     (q / 'recipes.json').write_text(json.dumps({'count': len(recs), 'staples': sorted(STAPLES), 'items': recs}, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
 
     def cnt(key, many=True):
@@ -152,13 +192,15 @@ def main(out):
             if v is None: continue
             for x in (v if many and isinstance(v, list) else [v]): c[x] += 1
         return dict(sorted(c.items(), key=lambda kv: (-kv[1], kv[0])))
+    src_ids = {r['k'] for r in recs}
+    cats = Counter(t for r in recs for t in r.get('tg', []) if t not in src_ids)
     ing = Counter(i for r in recs for i in r.get('ig', []))
-    facets = {'count': len(recs), 'cuisine': cnt('cu'), 'course': cnt('co', False), 'tags': cnt('tg'), 'difficulty': cnt('df', False), 'level': cnt('lv', False),
+    facets = {'count': len(recs), 'languages': {lg: LANG_NAMES.get(lg, lg) for lg in langs}, 'sources': sources, 'cuisine': cnt('cu'), 'course': cnt('co', False), 'tags': cnt('tg'), 'difficulty': cnt('df', False), 'level': cnt('lv', False),
               'collection': cnt('k', False), 'method': cnt('me'), 'operation': cnt('op'), 'style': cnt('st', False), 'diet': cnt('di'), 'allergen': cnt('al'),
-              'equipment': cnt('eq'), 'cost_tier': cnt('ct', False), 'top_ingredients': dict(ing.most_common(300)),
-              'ranges': {k: [min(r[k] for r in recs if k in r), max(r[k] for r in recs if k in r)] for k in ('kcal', 'pr', 'fa', 'ca', 'fi', 'su', 'mn', 'cps', 'ni', 'ns') if any(k in r for r in recs)},
+              'equipment': cnt('eq'), 'cost_tier': cnt('ct', False), 'top_ingredients': dict(ing.most_common(300)), 'categories': dict(cats.most_common(150)),
+              'ranges': {k: [min(r[k] for r in recs if k in r), max(r[k] for r in recs if k in r)] for k in ('kcal', 'pr', 'fa', 'ca', 'fi', 'su', 'mn', 'ac', 'pt', 'tk', 'tp', 'cps', 'ni', 'ns', 'sv') if any(k in r for r in recs)},
               'notes': {'diet': 'inferred from ingredient names, not certified', 'nutrition': 'per serving, modelled estimates unless the recipe says otherwise',
-                        'cost': 'the data states no currency; cost_tier is relative within this catalog', 'time': 'mn is total minutes where the recipe states it'}}
+                        'cost': 'the data states no currency; cost_tier is relative within this catalog', 'time': 'mn is total minutes where the recipe states it; ac is hands-on (active) minutes and pt is the unattended remainder (cooking, resting, waiting)'}}
     (q / 'facets.json').write_text(json.dumps(facets, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
     print(f'query index: {len(recs)} recipes, {len(ing)} distinct ingredients')
     return 0

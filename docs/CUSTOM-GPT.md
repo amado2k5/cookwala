@@ -1,7 +1,7 @@
 # Cookwala as a ChatGPT GPT (and any HTTP client)
 
 The REST API at `https://mcp.cookwala.ai/api/*` is open, read-only and needs no token. Its OpenAPI description is
-`https://mcp.cookwala.ai/api/openapi.json` (OpenAPI 3.1, 16 operations). It is separate from the token-protected `/mcp` route.
+`https://mcp.cookwala.ai/api/openapi.json` (OpenAPI 3.1, about 22 operations). It is separate from the token-protected `/mcp` route.
 
 ## What you can ask
 
@@ -20,6 +20,13 @@ The REST API at `https://mcp.cookwala.ai/api/*` is open, read-only and needs no 
 | Compare, find similar, surprise me | `compareRecipes`, `similarRecipes`, `randomRecipe` |
 | Plan a day | `planMeals?kcal=1800&diet=vegetarian` |
 | Statistics | `aggregateStats?group_by=cuisine&metric=kcal&order=asc`, `ingredientProfile?name=tahini` |
+| By source | `source=Fatma Abu Haty` (also `Samia Abdennour`, `Chef Teta`, `Osool El Tahy`, `family archive`, or a website), `/api/sources/{source}`, `/api/sources` |
+| By category or method | `category=Soups`, `category=desserts`; `method=baking` (or frying, grilling...) or `/api/methods/baking` with paging (`next_offset`) |
+| Servings and totals | `serves=6`, `servings_exact=4`, `total_kcal_max=2000` and `total_protein_min=100` for the whole recipe, `has_protein=false` |
+| Prep and cook time | `prep_time_max` (hands-on minutes), `cook_time_min` (unattended minutes: cooking, resting, waiting), `time_max` (total); sort `prep_time` |
+| Any combination of one recipe's parts | `getRecipe?include=ingredients,nutrition,cost,links` (parts: summary, ingredients, steps/recipe, nutrition, cost, equipment, notes, safety, links/video, all) |
+| Videos | `include=links` gives the creator's YouTube video where one exists (about 800 Fatma Abu Haty recipes); `has_video=true` finds them |
+| Another language | `lang=ar` (or `Arabic`, `fr`, `zh`, ...) on search and getRecipe: titles in 29 languages, ingredient names and step wording where published; `/api/languages` |
 | Can my robot cook it | `dryRun` (POST), `explainStep`, `checkTemperature` (POST), `listDevices` |
 
 `getFacets` lists every value a filter accepts. Step wording is published only where the source collection allows it (most V0 recipes
@@ -45,6 +52,8 @@ How to work
 - Map requests to filters: "light" = kcal_max; "high protein" = protein_min or sort=-protein; "cheap" = cost_tier=budget or sort=cost; "quick" = time_max;
   "no oven" = exclude method bake; "cold dish" = style=cold or no_cook; "fried" = method=fry,deep_fry; "few ingredients" = ingredients_max.
 - When the person picks a dish, call getRecipe with view=ingredients, then view=steps. Offer to scale servings, build a shopping list, compare, or find similar.
+- Ask only for the parts the person wants: getRecipe with include=ingredients, or include=ingredients,nutrition,cost,links, and so on. Use source= when they name a cook or book, method= for baking, frying and the like, lang= when they write in another language (reply in that language).
+- Prep time is hands-on time; cook time is the unattended remainder. Video links are the original creator's; say they are external.
 - Keep answers short on a phone: three to five results as a list with title, kcal, time, and one line why it fits. Reply in the person's language.
 
 Honesty rules (always)

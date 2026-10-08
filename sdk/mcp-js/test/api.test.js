@@ -92,7 +92,7 @@ test('every path in the OpenAPI document is routable and operation ids are uniqu
   for (const [p, item] of Object.entries(spec.paths)) {
     for (const [method, op] of Object.entries(item)) {
       assert.ok(!ids.has(op.operationId), 'duplicate ' + op.operationId); ids.add(op.operationId);
-      const path = p.replace('{id}', 'koshari');
+      const path = p.replace('{id}', 'koshari').replace('{method}', 'baking').replace('{source}', 'abdennour');
       const r = await call(path, method.toUpperCase(), method === 'post' ? {} : undefined);
       assert.notEqual(r.status, 404, `${method} ${p} is not routed`);
     }
@@ -104,4 +104,43 @@ test('every path in the OpenAPI document is routable and operation ids are uniqu
 test('rate-limit binding, when present, can reject with 429', async () => {
   const r = await call('/api/search?q=x', 'GET', undefined, { API_LIMITER: { limit: async () => ({ success: false }) } });
   assert.equal(r.status, 429);
+});
+
+test('method queries: aliases, the listing, the per-method endpoint with paging', async () => {
+  const list = await call('/api/methods');
+  assert.ok(list.json.methods.find((m) => m.method === 'bake').recipes > 50);
+  const a = await call('/api/methods/baking?limit=5'); assert.equal(a.json.method, 'bake'); assert.ok(a.json.total > 50); assert.equal(a.json.next_offset, 5);
+  const b = await call('/api/methods/baking?limit=5&offset=5'); assert.notEqual(a.json.items[0].id, b.json.items[0].id);
+  const c = await call('/api/search?method=Baking&course=dessert&limit=25'); assert.ok(c.json.items.every((i) => i.course === 'dessert'));
+  assert.equal(c.json.applied_filters.method[0], 'bake');
+  assert.equal((await call('/api/methods/teleporting')).status, 404);
+  assert.ok((await call('/api/methods/no-cook')).json.items.every((i) => i.style === 'no_cook'));
+});
+
+test('languages: titles, names and steps in the asked language; bad language is a clear 400', async () => {
+  const langs = await call('/api/languages'); assert.ok(Object.keys(langs.json.languages).length >= 25);
+  const fr = await call('/api/search?q=koshari&lang=fr&limit=3'); assert.ok(fr.json.items.length > 0);
+  const ar = await call('/api/search?q=koshari&lang=Arabic&limit=1'); assert.equal(ar.status, 200);
+  const rec = await call('/api/recipes/ec-003?view=ingredients&lang=fr');
+  if (rec.status === 200) assert.ok(rec.json.ingredients.some((i) => i.name_local));
+  assert.equal((await call('/api/search?lang=xx')).status, 400);
+  assert.equal((await call('/api/search?lang=ar-EG&limit=1')).status, 200);
+});
+
+test('source, category, totals, prep/cook time, and parts-on-demand', async () => {
+  const src = await call('/api/search?source=Samia%20Abdennour&limit=25'); assert.ok(src.json.total > 100); assert.ok(src.json.matched_sources.length === 1);
+  const one = await call('/api/sources/abdennour?limit=5'); assert.equal(one.json.matched_sources[0].id, 'abdennour');
+  assert.equal((await call('/api/sources/nobody-here')).status, 404);
+  assert.ok(Object.keys((await call('/api/sources')).json.sources).length >= 5);
+  const cat = await call('/api/search?category=desserts&limit=25'); assert.ok(cat.json.total > 20);
+  assert.ok((await call('/api/categories')).json.categories);
+  const tot = await call('/api/search?total_kcal_max=2000&serves=6&limit=10'); for (const i of tot.json.items) { assert.ok(i.servings >= 6); assert.ok(i.total_kcal <= 2000); }
+  const prep = await call('/api/search?prep_time_max=15&cook_time_min=30&limit=10'); for (const i of prep.json.items) { assert.ok(i.prep_min <= 15); assert.ok(i.cook_min >= 30); }
+  assert.equal((await call('/api/search?has_protein=false&limit=5')).status, 200);
+  const parts = await call('/api/recipes/koshari?include=ingredients,nutrition,cost,links');
+  assert.deepEqual(parts.json.included, ['ingredients', 'nutrition', 'cost', 'links']); assert.ok(parts.json.ingredients.items.length && parts.json.nutrition.per_serving && parts.json.links.cookwala_page);
+  assert.equal(parts.json.steps, undefined);
+  const rec = await call('/api/recipes/koshari?include=recipe,video'); assert.ok(rec.json.steps.steps.length && rec.json.links);
+  assert.ok((await call('/api/recipes/koshari?include=all')).json.safety);
+  assert.equal((await call('/api/recipes/koshari?include=banana')).status, 400);
 });
