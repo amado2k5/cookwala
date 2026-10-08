@@ -16,7 +16,7 @@ claude mcp add cookwala -- npx -y @cookwala/mcp
 {"mcpServers": {"cookwala": {"command": "npx", "args": ["-y", "@cookwala/mcp"]}}}
 ```
 
-Fourteen tools, six resources, three prompts: [docs/MCP.md](../../docs/MCP.md). Connecting Claude, Codex, Copilot, Cursor,
+Sixteen tools, six resources, three prompts: [docs/MCP.md](../../docs/MCP.md). Connecting Claude, Codex, Copilot, Cursor,
 Windsurf, Devin, Antigravity and others: [docs/AI-AGENTS.md](../../docs/AI-AGENTS.md). Live page with an in-browser
 playground: https://cookwala.ai/mcp/
 
@@ -30,4 +30,4 @@ Releasing: [RELEASING.md](RELEASING.md).
 
 ## Hosted endpoint (optional)
 
-`worker/` runs the same read-only tools over Streamable HTTP on Cloudflare Workers (`POST /mcp`, `GET /health`), with an optional gateway token (`x-mcprush-token` or `Authorization: Bearer`). It is for directories that need an https address, such as mcprush.com call tracking. See [docs/MCP.md](../../docs/MCP.md#hosted-endpoint-optional) and [RELEASING.md](RELEASING.md#hosted-endpoint-optional).
+`worker/` runs the same read-only tools over Streamable HTTP on Cloudflare Workers (`POST /mcp`, `GET /health`), with an optional gateway token (`x-mcprush-token` or `Authorization: Bearer`). It is live at `https://mcp.cookwala.ai/mcp` (token required; `GET /health` is public) for directories that need an https address, such as mcprush.com call tracking. To use Cookwala from your own agent, run the npm package. See [docs/MCP.md](../../docs/MCP.md#hosted-endpoint-optional) and [RELEASING.md](RELEASING.md#hosted-endpoint-optional).

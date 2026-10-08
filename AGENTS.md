@@ -20,18 +20,25 @@ or "is not deployed", check the live source:
 | MCP server `@cookwala/mcp` | npm, published since 0.1.0 (2026-10-06); 0.2.0 on 2026-10-07, with provenance | `npm view @cookwala/mcp version` or https://registry.npmjs.org/@cookwala/mcp |
 | MCP Registry entry `ai.cookwala/cookwala` | official MCP Registry, listed since 2026-10-06 (domain proof at `/.well-known/mcp-registry-auth`) | `curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=ai.cookwala"` |
 | Release secrets `MCP_PRIVATE_KEY`, `NPM_TOKEN` | repository secrets, set; they match the live domain proof (the 0.2.0 registry login succeeded) | the last run of the `publish-mcp` workflow |
+| Hosted MCP endpoint `https://mcp.cookwala.ai/mcp` | Cloudflare Worker `cookwala-mcp` (source `sdk/mcp-js/worker/`), live since 2026-10-08; `/mcp` needs the gateway token, `/health` is public. Listed at mcprush.com (claim CLM-0139) | `curl https://mcp.cookwala.ai/health`; a `POST /mcp` without the token must answer 401 |
+| Hosted-endpoint secrets and variables | repository secrets `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `MCP_GATEWAY_TOKEN` (the token mcprush issued); variable `CF_WORKERS_SUBDOMAIN` (`ahamdy`) | the last run of the `Deploy hosted MCP endpoint` workflow |
 | Website, schemas, `/v1/certifications` | cookwala.ai (GitHub Pages, deployed from `main` on every merge) | the `Validate and publish cookwala.ai` workflow |
 
 Releasing the MCP server: bump `version` in `sdk/mcp-js/package.json`, `package-lock.json` and both places in `server.json`,
 merge, then either push a tag `mcp-vX.Y.Z` or run the `publish-mcp` workflow by hand (Actions, "Run workflow" on `main`).
 Agent sessions that cannot push tags use the manual run. Runbook: [sdk/mcp-js/RELEASING.md](sdk/mcp-js/RELEASING.md).
 
+Releasing a new `@cookwala/mcp` version does not update the hosted endpoint: run the `Deploy hosted MCP endpoint` workflow
+by hand afterwards (it tests, deploys the Worker, applies `MCP_GATEWAY_TOKEN` and checks `/health`). The npm package and the
+registry entry stay the default way to use the server; the hosted endpoint exists for mcprush call tracking.
+
 ## Known Limitations (v0.2.0)
 
 **Search Endpoint**
 - `/v1/search` is documented in OpenAPI spec but not deployed
 - Use `cookwala search` CLI command or catalog index instead
-- Edge worker infrastructure needed for deployment (planned)
+- Edge worker infrastructure needed for deployment (planned). A Cloudflare account and Worker deploy workflow now exist for
+  the MCP endpoint (`sdk/mcp-js/worker/`); `/v1/search` could reuse them but is not built
 
 **Certification System (RFC-0010)**
 - Verification functions available in Python (`cw.verify_certification()`, `cw.current_certifications()`)
@@ -57,7 +64,8 @@ Agent sessions that cannot push tags use the manual run. Runbook: [sdk/mcp-js/RE
 - Safety limits are enforced on the device and cannot be raised by a recipe, agent or message. Never write code that lets them be.
 - V0 recipes are described, not machine-verified. Do not label them executable or robot-ready.
 - Nothing here may start cooking from an agent tool. MCP tools stay read-only.
-- No personal data in logs, fixtures or examples. No telemetry.
+- No personal data in logs, fixtures or examples. No telemetry. The one opt-in exception is third-party call counting by
+  mcprush on the hosted endpoint; Cookwala's own code collects nothing and the npm package is never tracked.
 - Rights per collection live in `tools/export_fifi.collections.json`; `text: facts` collections never publish step text.
 
 ## Checks before you commit
