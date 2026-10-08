@@ -45,13 +45,15 @@ locally built site with `COOKWALA_BASE_URL=$PWD/_site` (`bash tools/build_site.s
 
 ## Tools
 
-All sixteen are read-only (`readOnlyHint: true`, `destructiveHint: false`). Results carry
+Version 0.3.0 adds eight query tools (`query_recipes`, `similar_recipes`, `compare_recipes`, `ingredient_profile`, `catalog_stats`, `plan_meals`, `shopping_list`, `catalog_listing`) and `include` on `get_recipe`: every operation of the [recipe REST API](REST-API.md) is also an MCP tool (a test fails if one is not). Version 0.2.0 has the first 16.
+
+All 24 are read-only (`readOnlyHint: true`, `destructiveHint: false`). Results carry
 `structuredContent` and a text copy. Errors set `isError` and return `{error, detail, path}`.
 
 | Tool | Payload | Returns |
 |---|---|---|
 | `search_recipes` | `query`, `lang`, `cuisine[]`, `course`, `tags[]`, `level` (V0/V1/V2), `allergen_free[]`, `supervision`, `collection`, `limit` (10, max 50), `offset` | `{total, items[{id,title,cuisine,course,level,servings,allergens,supervision,collection,license,hash}], nextOffset}` |
-| `get_recipe` | `id`, `lang`, `view` (`summary`, `ingredients`, `process`, `text`, `full`) | `{id, documentId, hash, hashVerified, level, levelNote, textIsData, recipe}` |
+| `get_recipe` | `id`, `lang`, `view` (`summary`, `ingredients`, `process`, `text`, `full`), or `include` (any parts: summary, ingredients, steps, nutrition, cost, equipment, notes/history/tips, safety, links/video, all) with `servings` | `{id, documentId, hash, hashVerified, level, levelNote, textIsData, allergens, diabetic, recipe}`; with `include` the REST shape `{id, allergen_info, diabetic, included[], ...parts}` |
 | `list_collections` | none | `[{collection,count,license,source,citation,fifiText}]` |
 | `list_operations` | `family`, `lang` | `[{id,label,definition,envelope}]` |
 | `explain_step` | `recipe_id`, `node`, `lang` | `{node,op,label,envelope,params,until,hazards,ccp,unattendedAllowed,instruction,instructionIsData}` |
@@ -63,6 +65,14 @@ All sixteen are read-only (`readOnlyHint: true`, `destructiveHint: false`). Resu
 | `verify_recipe` | `recipe` | `{hash, declaredHash, matches, level}` |
 | `verify_certification` | `certification_id` or `certification`, `keys` or `keys_path`, `recipe_id` or `subject_hash`, `now` | `{id, scheme, authority, subject, status, validUntil, valid, reason}` (RFC-0010; reasons as in the reference library) |
 | `current_certifications` | `recipe_id` or `subject_hash`, `scheme`, `authority`, `keys` or `keys_path`, `now` | `{subjectHash, current[], rejected{id: reason}}`: newest verifying document per authority and scheme; read from `/v1/certifications/index.json` |
+| `query_recipes` | every REST filter: `q`, `country`/`cuisine[]`, `category`, `ingredient`, `ingredient_any`, `exclude_ingredient`, `method`, `style`, `diet` (vegetarian, vegan, halal, kosher, gluten_free...), `basis`, `no_allergens`, `diabetic_friendly`, `kids`, `source`, nutrition (`kcal_max`, `protein_min`, `total_kcal_max`...), `cost_tier`, `time_max`, `prep_time_max`, `cook_time_min`, `serves`, `lang`, `sort`, `limit`, `offset`, `detail`; `have`, `max_missing` for the pantry ranking | `{total, items[], next_offset, applied_filters}`, or with `have` `{items[{...,missing[],coverage}]}`; every row carries `allergen_status` and `diabetic_friendly` |
+| `similar_recipes` | `id`, `limit`, `lang` | `{of, items[{...,similarity}]}` |
+| `compare_recipes` | `ids` (2 to 6), `lang` | `{items[], best{field:{lowest,highest}}}` |
+| `ingredient_profile` | `name`, `lang` | `{count, avg_kcal_per_serving, cuisines, courses, often_with[], examples[]}` |
+| `catalog_stats` | `group_by` (cuisine, course, method, style, difficulty, collection, tag, level, cost_tier, diet, allergen), `metric`, `order`, plus any `query_recipes` filter | `{groups[{group,recipes,avg,min,max}]}` |
+| `plan_meals` | `kcal`, `meals`, `seed`, plus filters | `{target_kcal, planned_kcal, items[]}` (estimates, not dietary advice) |
+| `shopping_list` | `ids` (up to 8), `servings` | `{items[{ingredient,unit,quantity,recipes}], no_quantity[]}` |
+| `catalog_listing` | `kind` (facets, languages, countries, categories, sources, methods, diets, diet_review, ingredients, certifications), `q`, `limit`, `scheme`, `ref` | the listing; `diets` has definitions, coverage and limits, `certifications` says plainly that none is real today |
 | `catalog_status` | none | `{baseUrl, catalogVersion, generatedAt, counts, languages, cache, offline, signature, fifiOrigin}` |
 | `fifi_search` | `query`, `lang`, `limit`, `offset` | `{total, items[{id, inCatalog, title, pageUrl}], nextOffset}` |
 | `fifi_source` | `id` | the recipe in fifi.cooking's legacy format, under the catalog's rights rules (see below) |
@@ -123,7 +133,7 @@ fifi.cooking is where the recipes are written; Cookwala is the standard form the
 
 ## Hosted endpoint (optional)
 
-`sdk/mcp-js/worker/` serves the same sixteen read-only tools over Streamable HTTP (stateless, JSON
+`sdk/mcp-js/worker/` serves the same 24 read-only tools over Streamable HTTP (stateless, JSON
 responses) on Cloudflare Workers: `POST /mcp`, plus `GET /health`. The npm package stays the default;
 the endpoint exists for directories that require an https address, for example call tracking at
 [mcprush.com](https://mcprush.com). It reads the same public catalog, writes nothing, logs nothing
@@ -132,7 +142,7 @@ and cannot start cooking.
 - **Gateway token.** If the secret `MCP_GATEWAY_TOKEN` is set, `/mcp` answers 401 unless the call
   carries it as `x-mcprush-token` or `Authorization: Bearer <token>`. Unset, the endpoint is open
   (the data is public).
-- **Open endpoint.** `POST https://mcp.cookwala.ai` (also `/open/mcp`) serves the same sixteen read-only tools with no token, for chat apps
+- **Open endpoint.** `POST https://mcp.cookwala.ai` (also `/open/mcp`) serves the same 24 read-only tools with no token, for chat apps
   (for example ChatGPT connectors on a phone) that cannot send a header. It is not counted by mcprush. Same data, same rules:
   read-only, nothing is stored or logged, nothing can start cooking.
 - **Deploy.** Manual workflow `Deploy hosted MCP endpoint` (needs `CLOUDFLARE_API_TOKEN` and

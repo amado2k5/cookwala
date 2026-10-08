@@ -47,10 +47,11 @@ fifi.cooking  /data/…</code></pre>
 
 <section class="band" id="tools">
   <div class="wrap">
-    <h2>Sixteen read-only tools</h2>
+    <h2>24 read-only tools</h2>
     <p class="note">Every tool is marked read-only. Results are structured JSON. Recipe text comes back as data, never as instructions.</p>
     <div class="cards">
       <div class="card"><h3>Find and read</h3><p><code>search_recipes</code> (by words, cuisine, course, level, collection, allergen-free), <code>get_recipe</code> (summary, ingredients, process, text or full, hash verified), <code>list_collections</code>.</p></div>
+      <div class="card"><h3>Ask anything about the catalog</h3><p><code>query_recipes</code> filters by country, ingredients, nutrition, diet (vegetarian, halal, kosher, gluten-free), allergens, cooking method, source, kids, time and language. <code>similar_recipes</code>, <code>compare_recipes</code>, <code>ingredient_profile</code>, <code>catalog_stats</code>, <code>plan_meals</code>, <code>shopping_list</code> and <code>catalog_listing</code> do the rest. <code>get_recipe</code> takes <code>include</code> for any parts. Same operations as the <a href="/docs/REST-API/">REST API</a>.</p></div>
       <div class="card"><h3>Can this device cook it?</h3><p><code>dry_run</code> against a built-in preset or your own capabilities, <code>list_device_presets</code>, <code>explain_step</code>. Refused or accepted, with the reason, before anything heats.</p></div>
       <div class="card"><h3>Safe bands</h3><p><code>check_envelope</code> checks a temperature trace against an operation's band, with altitude. <code>list_operations</code> shows each operation's envelope and sensor ladder.</p></div>
       <div class="card"><h3>Agent safety</h3><p><code>check_mandate</code> says whether an action is inside a signed mandate. <code>verify_recipe</code> recomputes a recipe's hash. <code>verify_certification</code> and <code>current_certifications</code> check halal, kosher and other certifications against the authority keys you trust. None of them can start or change anything.</p></div>

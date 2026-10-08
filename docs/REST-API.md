@@ -6,6 +6,7 @@
 
 - Base URL: `https://mcp.cookwala.ai`
 - Machine description (OpenAPI 3.1): `https://mcp.cookwala.ai/api/openapi.json` (28 operations, under ChatGPT Actions' limit of 30)
+- Every operation here is also an MCP tool (`query_recipes`, `catalog_listing`, `get_recipe` with `include`, ...; a test fails if one is missing), so use whichever your client speaks.
 - Not the same as the MCP route `/mcp`, which stays token-protected for mcprush call counting. The MCP tools and this API serve the
   same catalog; use MCP when your client speaks it ([MCP](MCP.md)), this API when it only speaks HTTP.
 

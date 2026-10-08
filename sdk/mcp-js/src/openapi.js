@@ -2,7 +2,7 @@
 // One source of truth: test/api.test.js checks that every path here is routable.
 
 const q = (name, description, schema = { type: 'string' }, extra = {}) => ({ name, in: 'query', required: false, description, schema, ...extra });
-const FILTERS = [
+export const FILTERS = [
   q('q', 'Words in the dish name, tags or ingredients. Tolerates typos and accents (for example "bachamel" finds béchamel).'),
   q('cuisine', 'Comma list of country codes or names: EG, MX, JP, MA, CN, FR, VN, or Egyptian, Mexican, Japanese, Moroccan, Chinese, French, Vietnamese.'),
   q('course', 'Comma list: main, dessert, side, salad, soup, bread, drink, breakfast, other.'),
@@ -49,7 +49,7 @@ const FILTERS = [
   q('has_image', 'true to return only recipes with a photo.', { type: 'boolean' }),
 ];
 const LANG = q('lang', 'Language for titles and, where available, ingredient names and step wording: a code (ar, fr, es, de, zh...), a tag such as ar-EG, or a name such as Arabic. See /api/languages. Falls back to English and says so.');
-const LIST = [
+export const LIST = [
   LANG,
   q('sort', 'relevance (default with q), name, kcal, protein, total_kcal, total_protein, fat, carbs, fiber, sugar, cost, time, prep_time, cook_time, ingredients, steps, protein_density, random. Prefix - for descending, for example -protein. Recipes without the value sort last.'),
   q('limit', 'Results to return, 1 to 25 (default 10).', { type: 'integer' }), q('offset', 'Skip this many results.', { type: 'integer' }),

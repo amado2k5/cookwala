@@ -47,9 +47,10 @@ fifi.cooking  /data/…</code></pre>
 
 <section class="band" id="tools">
   <div class="wrap">
-    <h2>ست عشرة أداة للقراءة فقط</h2>
+    <h2>أربع وعشرون أداة للقراءة فقط</h2>
     <p class="note">كل أداة موسومة للقراءة فقط. النتائج JSON منظَّم. نص الوصفة يعود بياناتٍ لا تعليمات.</p>
     <div class="cards">
+      <div class="card"><h3>استعلام موسّع عن الفهرس</h3><p><code>query_recipes</code> يرشّح حسب البلد والمكونات والتغذية والنظام الغذائي (نباتي وحلال وكوشر وخالٍ من الغلوتين) والمسببات والطريقة والمصدر والأطفال والوقت واللغة. و<code>similar_recipes</code> و<code>compare_recipes</code> و<code>ingredient_profile</code> و<code>catalog_stats</code> و<code>plan_meals</code> و<code>shopping_list</code> و<code>catalog_listing</code> تكمل الباقي. وتقبل <code>get_recipe</code> الوسيط <code>include</code> لأي أجزاء. العمليات نفسها في <a href="/docs/REST-API/">واجهة REST</a>.</p></div>
       <div class="card"><h3>البحث والقراءة</h3><p><code>search_recipes</code> (بالكلمات أو المطبخ أو الطبق أو المستوى أو المجموعة أو خلوّ من مسبب حساسية)، و<code>get_recipe</code> (ملخص أو مكونات أو عملية أو نص أو كامل، مع التحقق من البصمة)، و<code>list_collections</code>.</p></div>
       <div class="card"><h3>هل يطبخها هذا الجهاز؟</h3><p><code>dry_run</code> على جهاز جاهز أو على قدراتك، و<code>list_device_presets</code>، و<code>explain_step</code>. مقبولة أو مرفوضة مع السبب قبل أن يسخن أي شيء.</p></div>
       <div class="card"><h3>النطاقات الآمنة</h3><p><code>check_envelope</code> يفحص سجل حرارة مقابل نطاق العملية مع الارتفاع. و<code>list_operations</code> يعرض مظروف كل عملية وسلّم حساساتها.</p></div>

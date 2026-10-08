@@ -21,13 +21,13 @@ test('health and root need no token and say read-only', async () => {
   assert.equal((await handleRequest(new Request('https://mcp.test/nope'), env)).status, 404);
 });
 
-test('/mcp initializes and lists the 16 read-only tools over JSON', async () => {
+test('/mcp initializes and lists the 24 read-only tools over JSON', async () => {
   const init = await handleRequest(rpc('initialize', INIT), {}, { catalog: catalog() });
   assert.equal(init.status, 200);
   assert.equal((await init.json()).result.serverInfo.name, 'cookwala');
   const list = await handleRequest(rpc('tools/list', {}, {}, 2), {}, { catalog: catalog() });
   const tools = (await list.json()).result.tools;
-  assert.equal(tools.length, 16);
+  assert.equal(tools.length, 24);
   for (const t of tools) assert.equal(t.annotations.readOnlyHint, true, t.name);
 });
 
@@ -60,7 +60,7 @@ test('/open/mcp needs no token and /mcp still does', async () => {
   assert.equal((await handleRequest(mk('/mcp'), env, opts)).status, 401);
   const res = await handleRequest(mk('/open/mcp'), env, opts);
   assert.equal(res.status, 200);
-  assert.equal((await res.json()).result.tools.length, 16);
+  assert.equal((await res.json()).result.tools.length, 24);
 });
 
 test('POST to the bare domain is the open endpoint', async () => {

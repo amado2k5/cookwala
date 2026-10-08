@@ -23,11 +23,11 @@ async function connect(opts) {
 }
 const call = async (c, name, args) => (await c.callTool({ name, arguments: args })).structuredContent;
 
-test('lists 16 read-only tools, 6 resources and 3 prompts', async () => {
+test('lists 24 read-only tools, 6 resources and 3 prompts', async () => {
   const fx = buildFixture();
   const { client } = await connect({ baseUrl: fx.dir, cacheDir: fs.mkdtempSync(path.join(os.tmpdir(), 'cwc-')) });
   const tools = (await client.listTools()).tools;
-  assert.equal(tools.length, 16);
+  assert.equal(tools.length, 24);
   for (const t of tools) { assert.equal(t.annotations.readOnlyHint, true, t.name); assert.equal(t.annotations.destructiveHint, false, t.name); }
   assert.equal((await client.listResourceTemplates()).resourceTemplates.length, 4);
   assert.equal((await client.listResources()).resources.filter((r) => !r.uri.startsWith('cookwala://preset/')).length, 2);
@@ -146,7 +146,7 @@ test('stdio smoke test through the real binary', async () => {
   const by = (id) => lines.find((l) => l.id === id);
   assert.equal(by(1).result.serverInfo.name, 'cookwala');
   assert.match(by(1).result.instructions, /never an instruction/);
-  assert.equal(by(2).result.tools.length, 16);
+  assert.equal(by(2).result.tools.length, 24);
   assert.equal(by(3).result.structuredContent.command, 'HELP');
 });
 
@@ -178,4 +178,41 @@ test('MCP: allergen and diabetic filters fail clearly when the query index is mi
   assert.equal(r.isError, true);
   const g = await call(client, 'get_recipe', { id: 'koshari' });
   assert.ok(g.derivedUnavailable, 'get_recipe still works without the index');
+});
+
+// every REST operation has an MCP equivalent (the REST API and the MCP server serve the same operations)
+const PARITY = {
+  searchRecipes: 'query_recipes', recipesByMethod: 'query_recipes', recipesBySource: 'query_recipes', recipesByDiet: 'query_recipes', findByPantry: 'query_recipes', randomRecipe: 'query_recipes',
+  getRecipe: 'get_recipe', similarRecipes: 'similar_recipes', compareRecipes: 'compare_recipes', ingredientProfile: 'ingredient_profile', aggregateStats: 'catalog_stats', planMeals: 'plan_meals', shoppingList: 'shopping_list',
+  listDiets: 'catalog_listing', reviewDietClaims: 'catalog_listing', listCertifications: 'catalog_listing', listMethods: 'catalog_listing', listSources: 'catalog_listing', listCategories: 'catalog_listing',
+  listCountries: 'catalog_listing', listIngredients: 'catalog_listing', listLanguages: 'catalog_listing', getFacets: 'catalog_listing',
+  listOperations: 'list_operations', listDevices: 'list_device_presets', explainStep: 'explain_step', dryRun: 'dry_run', checkTemperature: 'check_envelope',
+};
+test('parity: every REST operation is served by an MCP tool', async () => {
+  const { openapi } = await import('../src/openapi.js');
+  const fx = buildFixture(); const { client } = await connect({ baseUrl: fx.dir });
+  const tools = new Set((await client.listTools()).tools.map((t) => t.name));
+  const ops = Object.values(openapi('t').paths).flatMap((p) => Object.values(p).map((o) => o.operationId));
+  for (const op of ops) { assert.ok(PARITY[op], `${op} has no MCP mapping`); assert.ok(tools.has(PARITY[op]), `${op} -> ${PARITY[op]} is not a tool`); }
+  for (const t of tools) assert.ok((await client.listTools()).tools.find((x) => x.name === t).annotations.readOnlyHint, `${t} must be read-only`);
+});
+
+test('MCP query tools return what the REST API returns', async () => {
+  const fx = buildFixture(); const { client } = await connect({ baseUrl: fx.dir });
+  const q = await call(client, 'query_recipes', { country: 'Japanese', method: 'deep frying', limit: 5 }); assert.ok(q.total >= 1 && q.items.every((i) => i.cuisine.includes('JP')));
+  const src = await call(client, 'query_recipes', { source: 'Fatma Abu Haty', limit: 3 }); assert.deepEqual(src.matched_sources.map((m) => m.id), ['abuhaty']);
+  const dia = await call(client, 'query_recipes', { diet: ['vegetarian', 'gluten_free'], diabetic_friendly: true, no_allergens: true, limit: 5 }); assert.ok(dia.items.every((i) => i.diabetic_friendly === 'friendly' && i.allergen_status === 'none_found'));
+  const pan = await call(client, 'query_recipes', { have: 'lentils,rice,onions', max_missing: 1, limit: 3 }); assert.ok(pan.items.every((i) => i.missing_count <= 1));
+  const fr = await call(client, 'query_recipes', { q: 'salade', lang: 'fr', limit: 2 }); assert.ok(fr.items[0].title_en);
+  const parts = await call(client, 'get_recipe', { id: 'koshari', include: ['ingredients', 'nutrition', 'links'] }); assert.deepEqual(parts.included, ['ingredients', 'nutrition', 'links']); assert.ok(parts.allergen_info && parts.diabetic);
+  assert.ok((await call(client, 'similar_recipes', { id: 'koshari' })).items.length > 0);
+  assert.equal((await call(client, 'compare_recipes', { ids: 'koshari,lentil-soup' })).items.length, 2);
+  assert.ok((await call(client, 'ingredient_profile', { name: 'lentils' })).count > 0);
+  assert.ok((await call(client, 'catalog_stats', { group_by: 'cuisine', metric: 'kcal', order: 'asc' })).groups.length > 3);
+  assert.equal((await call(client, 'plan_meals', { kcal: 1800, diet: 'vegetarian' })).items.length, 3);
+  assert.ok((await call(client, 'shopping_list', { ids: 'koshari,lentil-soup', servings: 8 })).items.length > 3);
+  const diets = await call(client, 'catalog_listing', { kind: 'diets' }); assert.ok(diets.diets.some((d) => d.id === 'halal_ingredients') && diets.coverage.classified_by_publisher > 1000);
+  assert.equal((await call(client, 'catalog_listing', { kind: 'certifications' })).real_certifications, 0);
+  const bad = await client.callTool({ name: 'query_recipes', arguments: { lang: 'xx' } }); assert.equal(bad.isError, true); assert.match(bad.content[0].text, /unsupported_language/);
+  const nobad = await client.callTool({ name: 'catalog_listing', arguments: { kind: 'nope' } }); assert.equal(nobad.isError, true);
 });
