@@ -127,7 +127,7 @@ th { font: 500 12px/1.2 var(--mono); color: var(--ink-2); text-transform: upperc
 /* ---- code */
 pre.code, .codeblock pre { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; overflow-x: auto; line-height: 1.5; direction: ltr; text-align: left; }
 .codeblock { position: relative; margin: 14px 0; } .codeblock .lang { position: absolute; top: 8px; inset-inline-end: 52px; font: 500 11px/1 var(--mono); color: var(--ink-2); text-transform: uppercase; }
-button.copy { position: absolute; top: 8px; inset-inline-end: 8px; font: 500 12px/1 var(--mono); color: var(--ink-2); background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; cursor: pointer; }
+button.copy { position: absolute; top: 8px; inset-inline-end: 8px; font: 500 12px/1 var(--mono); color: var(--ink-2); background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; cursor: pointer; user-select: none; -webkit-user-select: none; }
 pre.code { position: relative; }
 .output { margin: -8px 0 14px; background: var(--band); border: 1px dashed var(--line); border-radius: 0 0 var(--radius) var(--radius); padding: 10px 18px; font-family: var(--mono); font-size: 13px; color: var(--ink-2); white-space: pre-wrap; direction: ltr; text-align: left; }
 .output::before { content: "output"; display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
