@@ -42,6 +42,14 @@ jobs:
           if npm view "@cookwala/mcp@$V" version >/dev/null 2>&1; then echo "@cookwala/mcp@$V is already on npm; skipping"; else npm publish --access public --provenance; fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Wait for npm to serve the version
+        run: |
+          V=$(node -p "require('./package.json').version")
+          for i in $(seq 1 30); do
+            npm view "@cookwala/mcp@$V" version --prefer-online >/dev/null 2>&1 && exit 0
+            sleep 10
+          done
+          echo "@cookwala/mcp@$V not visible on npm after 5 minutes"; exit 1
       - name: Install mcp-publisher
         run: |
           curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
