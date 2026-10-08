@@ -149,3 +149,33 @@ test('stdio smoke test through the real binary', async () => {
   assert.equal(by(2).result.tools.length, 16);
   assert.equal(by(3).result.structuredContent.command, 'HELP');
 });
+
+test('MCP: no_allergens and diabetic_friendly filters, and allergen and diabetic info on get_recipe', async () => {
+  const fx = buildFixture();
+  const { client } = await connect({ baseUrl: fx.dir });
+  const none = await call(client, 'search_recipes', { no_allergens: true, limit: 50 });
+  assert.ok(none.total >= 1);
+  assert.ok(none.items.every((i) => i.allergenStatus === 'none_found'));
+  const dia = await call(client, 'search_recipes', { diabetic_friendly: true, limit: 50 });
+  assert.ok(dia.items.every((i) => i.diabeticFriendly === 'friendly'));
+  const both = await call(client, 'search_recipes', { no_allergens: true, diabetic_friendly: true, limit: 50 });
+  assert.ok(both.total <= Math.min(none.total, dia.total));
+  const plain = await call(client, 'search_recipes', { query: 'koshari' });
+  assert.equal(plain.items[0].allergenStatus, undefined, 'plain searches do not load the query index');
+  const g = await call(client, 'get_recipe', { id: 'koshari', view: 'summary' });
+  assert.equal(g.hashVerified, true, 'extra fields sit outside the hashed document');
+  assert.equal(g.allergens.status, 'contains'); assert.ok(g.allergens.contains.includes('cereals_gluten'));
+  assert.ok(['friendly', 'borderline', 'not_friendly', 'unknown'].includes(g.diabetic.status)); assert.match(g.diabetic.note, /not medical advice/i);
+  const full = await call(client, 'get_recipe', { id: 'koshari', view: 'full' });
+  assert.ok(full.allergens && full.diabetic);
+});
+
+test('MCP: allergen and diabetic filters fail clearly when the query index is missing', async () => {
+  const fx = buildFixture();
+  fs.rmSync(path.join(fx.dir, 'v1', 'query'), { recursive: true, force: true });
+  const { client } = await connect({ baseUrl: fx.dir });
+  const r = await client.callTool({ name: 'search_recipes', arguments: { no_allergens: true } });
+  assert.equal(r.isError, true);
+  const g = await call(client, 'get_recipe', { id: 'koshari' });
+  assert.ok(g.derivedUnavailable, 'get_recipe still works without the index');
+});

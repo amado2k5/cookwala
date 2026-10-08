@@ -66,6 +66,25 @@ export const ingMatches = (ref, term) => { const t = stems(term); const have = n
 const catMatch = (r, c) => { const w = stems(c); if (!w.length) return false; return [r.co, ...(r.tg || [])].some((t) => { const ts = new Set(stems(t)); return w.every((x) => ts.has(x)); }); };
 const hasIng = (r, term) => (r.ig || []).some((i) => ingMatches(i, term));
 
+/** Allergens in one recipe: the declared list plus anything the ingredient names reveal. "none_found" needs both to be empty. */
+export function allergenInfo(r) {
+  const declared = [...new Set(r.al || [])]; const found = [...new Set(r.ax || [])]; const contains = [...new Set([...declared, ...found])].sort();
+  return { status: contains.length ? 'contains' : 'none_found', contains, may_contain: r.am && r.am.length ? r.am : undefined, declared, also_found_in_ingredient_names: found.length ? found : undefined,
+    note: contains.length ? 'Allergens come from the recipe\'s declared list plus an ingredient-name check; they may be incomplete.' : 'No allergen was found in the declared list or in the ingredient names. This is not a guarantee: allergen data is incomplete for some recipes (about 14% had none recorded), so check the ingredient list and the packaged items you use.' };
+}
+export const DIABETIC_RULE = { friendly: 'sugar 5 g or less and carbohydrate 30 g or less per serving', not_friendly: 'sugar over 15 g or carbohydrate over 60 g per serving', otherwise: 'borderline' };
+/** An estimate from modelled per-serving nutrition, or a published diabetic_friendly claim. Never a medical statement. */
+export function diabeticInfo(r) {
+  const note = 'Estimate from modelled nutrition per serving, not medical advice. Portion size, how a body responds, and medication vary: people with diabetes should check with their clinician or dietitian.';
+  if (r.dk && (r.dc || []).includes('diabetic_friendly') && !(r.dx || []).includes('diabetic_friendly')) return { status: 'friendly', basis: 'published', reasons: ['The recipe carries a reviewed diabetic_friendly claim.'], note };
+  if (r.ca === undefined || r.su === undefined) return { status: 'unknown', basis: 'no_nutrition_data', reasons: ['No carbohydrate and sugar estimate for this recipe.'], note };
+  const per = { carbs_g: r.ca, sugar_g: r.su, fiber_g: r.fi, kcal: r.kcal };
+  let status = 'borderline'; let why;
+  if (r.su > 15 || r.ca > 60) { status = 'not_friendly'; why = `${r.su > 15 ? `sugar ${r.su} g is over 15 g` : `carbohydrate ${r.ca} g is over 60 g`} per serving`; }
+  else if (r.su <= 5 && r.ca <= 30) { status = 'friendly'; why = `sugar ${r.su} g and carbohydrate ${r.ca} g per serving are within the limits`; }
+  else why = `sugar ${r.su} g and carbohydrate ${r.ca} g per serving sit between the limits`;
+  return { status, basis: 'nutrition_estimate', reasons: [why], per_serving: per, rule: DIABETIC_RULE, note };
+}
 export const DIET_INFO = {
   vegetarian: { label: 'Vegetarian', basis: 'published, else inferred', definition: 'Reviewed claim where the recipe has one, otherwise an ingredient screen: no meat, poultry, fish, seafood, gelatin, animal rennet or meat stock found in the ingredient names or title. Dairy, eggs and honey allowed.' },
   vegan: { label: 'Vegan', basis: 'inferred', definition: 'Vegetarian and no dairy, eggs or honey found in the ingredient names.' },
@@ -80,10 +99,12 @@ export const DIET_INFO = {
   gluten_free: { label: 'Gluten-free (inferred)', basis: 'declared allergens plus ingredient names', definition: 'No declared gluten allergen and no wheat, flour, bread, pasta, semolina, barley, rye, couscous or similar found. Cross-contact is not assessed.', caveat: 'Not suitable as coeliac advice; check labels.' },
   nut_free: { label: 'Nut-free (inferred)', basis: 'declared allergens plus ingredient names', definition: 'No declared nut or peanut allergen and no nuts found in the ingredient names. Seeds such as sesame are separate.', caveat: 'Check labels; allergen data is incomplete for some recipes.' },
   shellfish_free: { label: 'Shellfish-free (inferred)', basis: 'declared allergens plus ingredient names', definition: 'No crustaceans or molluscs found.' },
+  no_allergens: { label: 'No allergens found (not a guarantee)', basis: 'declared allergens plus ingredient names', definition: 'No major allergen (milk, eggs, gluten, nuts, peanuts, sesame, soy, fish, shellfish, celery, mustard, lupin) in the declared list or in the ingredient names. Allergen data is incomplete for some recipes.', caveat: 'Not a guarantee: always read labels and ask about cross-contact.' },
+  diabetic_friendly: { label: 'Diabetic-friendly (estimate, not medical advice)', basis: 'published claim, else modelled nutrition', definition: 'A reviewed diabetic_friendly claim, or per-serving sugar 5 g or less and carbohydrate 30 g or less in the modelled nutrition estimate. Recipes over 15 g sugar or 60 g carbohydrate are not_friendly; the rest are borderline; recipes with no nutrition are unknown.', caveat: 'Modelled estimate, not medical advice; individual response and portions vary. Check with a clinician or dietitian.' },
   dairy_free: { label: 'Dairy-free', basis: 'inferred', definition: 'No milk, butter, ghee, cheese, yogurt or cream found.' },
   egg_free: { label: 'Egg-free', basis: 'inferred', definition: 'No eggs or mayonnaise found.' },
 };
-const DIET_ALIASES = { halal: 'halal_ingredients', 'halal friendly': 'halal_ingredients', 'halal-friendly': 'halal_ingredients', halal_friendly: 'halal_ingredients', kosher: 'kosher_any', kosher_style: 'kosher_any', 'kosher meat': 'kosher_meat', 'kosher dairy': 'kosher_dairy', pareve: 'kosher_pareve', parve: 'kosher_pareve', 'kosher pareve': 'kosher_pareve', veg: 'vegetarian', veggie: 'vegetarian', 'gluten free': 'gluten_free', 'gluten-free': 'gluten_free', coeliac: 'gluten_free', celiac: 'gluten_free', 'nut free': 'nut_free', 'nut-free': 'nut_free', 'dairy free': 'dairy_free', 'lactose free': 'dairy_free', lactose_free: 'dairy_free', 'egg free': 'egg_free', 'pork free': 'pork_free', 'alcohol free': 'alcohol_free', 'shellfish free': 'shellfish_free', 'no pork': 'pork_free', 'no alcohol': 'alcohol_free' };
+const DIET_ALIASES = { 'no allergens': 'no_allergens', 'allergen free': 'no_allergens', 'allergen-free': 'no_allergens', allergen_free: 'no_allergens', 'allergy safe': 'no_allergens', 'free from allergens': 'no_allergens', diabetic: 'diabetic_friendly', 'diabetic friendly': 'diabetic_friendly', 'diabetic-friendly': 'diabetic_friendly', diabetes: 'diabetic_friendly', 'safe for diabetics': 'diabetic_friendly', 'low sugar': 'diabetic_friendly', halal: 'halal_ingredients', 'halal friendly': 'halal_ingredients', 'halal-friendly': 'halal_ingredients', halal_friendly: 'halal_ingredients', kosher: 'kosher_any', kosher_style: 'kosher_any', 'kosher meat': 'kosher_meat', 'kosher dairy': 'kosher_dairy', pareve: 'kosher_pareve', parve: 'kosher_pareve', 'kosher pareve': 'kosher_pareve', veg: 'vegetarian', veggie: 'vegetarian', 'gluten free': 'gluten_free', 'gluten-free': 'gluten_free', coeliac: 'gluten_free', celiac: 'gluten_free', 'nut free': 'nut_free', 'nut-free': 'nut_free', 'dairy free': 'dairy_free', 'lactose free': 'dairy_free', lactose_free: 'dairy_free', 'egg free': 'egg_free', 'pork free': 'pork_free', 'alcohol free': 'alcohol_free', 'shellfish free': 'shellfish_free', 'no pork': 'pork_free', 'no alcohol': 'alcohol_free' };
 export const normDiet = (d) => { const k = norm(d).trim(); const u = k.replace(/\s+/g, '_'); return DIET_INFO[u] ? u : (DIET_ALIASES[k] || DIET_ALIASES[u] || u); };
 // published claim (safety.dietary[] in the recipe) that corresponds to an inferred category
 const PUBLISHED = { halal_ingredients: 'halal', kosher_any: 'kosher', kosher_meat: 'kosher', kosher_dairy: 'kosher', kosher_pareve: 'kosher', vegetarian: 'vegetarian', vegan: 'vegan', gluten_free: 'gluten_free', dairy_free: 'dairy_free', nut_free: 'nut_free' };
@@ -102,6 +123,8 @@ export const dietOk = (r, d) => {
   }
   if (r.dk && (d === 'vegetarian' || d === 'vegan')) return has(d) || (d === 'vegetarian' && has('vegan')); // a vegan claim implies vegetarian
   if (claim && has(claim)) return true; // gluten_free, nut_free, dairy_free: a published claim counts, otherwise the screen decides
+  if (d === 'no_allergens') return allergenInfo(r).status === 'none_found';
+  if (d === 'diabetic_friendly') return diabeticInfo(r).status === 'friendly';
   return inferredOk(r, d);
 };
 export const METHOD_ALIASES = {
@@ -132,7 +155,7 @@ export function filterRecipes(items, a0) {
   const cu = [...list(a.cuisine), ...list(a.country)].map((c) => COUNTRY[norm(c)] || c.toUpperCase());
   const set = (k, v) => { if (v !== undefined && !(Array.isArray(v) && !v.length)) f[k] = v; };
   set('cuisine', cu); set('course', list(a.course).map(norm)); set('tag', list(a.tag).map(norm)); const meth = list(a.method).map((m) => normMethod(m) || norm(m)); set('method', meth); set('style', list(a.style).map(norm));
-  set('operation', list(a.operation).map(norm)); set('equipment', list(a.equipment).map(norm)); set('diet', list(a.diet).map(normDiet)); set('allergen_free', list(a.allergen_free).map(norm));
+  set('operation', list(a.operation).map(norm)); set('equipment', list(a.equipment).map(norm)); set('diet', (() => { const dl = list(a.diet).map(normDiet); for (const d of ['no_allergens', 'diabetic_friendly']) if ((a[d] === true || a[d] === 'true') && !dl.includes(d)) dl.push(d); return dl; })()); set('allergen_free', list(a.allergen_free).map(norm));
   set('ingredient', list(a.ingredient)); set('ingredient_any', list(a.ingredient_any)); set('category', list(a.category));
   if (a.servings_exact !== undefined && a.servings_exact !== '') f.servings_exact = num(a.servings_exact);
   for (const k of ['has_protein', 'has_nutrition', 'has_video', 'kids', 'has_notes', 'kid_friendly']) if (a[k] !== undefined && a[k] !== '') f[k] = a[k] === true || a[k] === 'true'; set('exclude_ingredient', list(a.exclude_ingredient)); set('level', list(a.level).map((x) => x.toUpperCase())); set('difficulty', list(a.difficulty).map(norm));
@@ -217,9 +240,9 @@ export function row(r, detail = 'brief') {
   const o = {
     id: r.id, title: r.tl || r.t, title_en: r.tl && r.tl !== r.t ? r.t : undefined, title_ar: r.ta, cuisine: r.cu, course: r.co, difficulty: r.df, level: r.lv, servings: r.sv, time_min: r.mn, prep_min: r.ac, cook_min: r.pt,
     kcal_per_serving: r.kcal, protein_g: r.pr, total_kcal: r.tk, total_protein_g: r.tp, fat_g: r.fa, carbs_g: r.ca, cost_per_serving: r.cps, cost_tier: r.ct, style: r.st, methods: r.me,
-    diet_inferred: r.di, diet_basis: r.dk ? 'published' : 'inferred', kosher_type: r.dk && (r.dc || []).includes('kosher') ? r.dkt : undefined, diet_review: r.dx ? { held_back_claims: r.dx, reason: 'The published claim conflicts with the recipe title or ingredient names; excluded from diet results until reviewed.' } : undefined, dietary_claims: r.dk ? (r.dc || []).map((c) => ({ claim: c, basis: (r.dcc || []).includes(c) ? 'certified' : 'ingredients', ruleset: r.drs && r.drs[c], note: r.dcn && r.dcn[c], certification_ids: r.dcr && r.dcr[c] })) : undefined, allergens: r.al, n_ingredients: r.ni, n_steps: r.ns, has_video: r.vid ? true : undefined, kid_friendly_inferred: r.kd ? true : undefined, has_background_notes: r.hn ? true : undefined, page: `https://cookwala.ai/recipes/${r.id}/`,
+    allergen_status: allergenInfo(r).status, diabetic_friendly: diabeticInfo(r).status, diet_inferred: r.di, diet_basis: r.dk ? 'published' : 'inferred', kosher_type: r.dk && (r.dc || []).includes('kosher') ? r.dkt : undefined, diet_review: r.dx ? { held_back_claims: r.dx, reason: 'The published claim conflicts with the recipe title or ingredient names; excluded from diet results until reviewed.' } : undefined, dietary_claims: r.dk ? (r.dc || []).map((c) => ({ claim: c, basis: (r.dcc || []).includes(c) ? 'certified' : 'ingredients', ruleset: r.drs && r.drs[c], note: r.dcn && r.dcn[c], certification_ids: r.dcr && r.dcr[c] })) : undefined, allergens: r.al, n_ingredients: r.ni, n_steps: r.ns, has_video: r.vid ? true : undefined, kid_friendly_inferred: r.kd ? true : undefined, has_background_notes: r.hn ? true : undefined, page: `https://cookwala.ai/recipes/${r.id}/`,
   };
-  if (detail === 'full') Object.assign(o, { fiber_g: r.fi, sugar_g: r.su, sodium_mg: r.na, ingredients: r.ig, operations: r.op, equipment: r.eq, may_contain: r.am, collection: r.k, tags: r.tg, kid_cautions: r.kc, cost_total: r.cost, cost_buckets: r.cb, currency: r.cur, protein_density: r1(protDensity(r)) });
+  if (detail === 'full') Object.assign(o, { fiber_g: r.fi, sugar_g: r.su, sodium_mg: r.na, ingredients: r.ig, operations: r.op, equipment: r.eq, may_contain: r.am, collection: r.k, tags: r.tg, kid_cautions: r.kc, allergen_info: allergenInfo(r), diabetic: diabeticInfo(r), cost_total: r.cost, cost_buckets: r.cb, currency: r.cur, protein_density: r1(protDensity(r)) });
   return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined && !(Array.isArray(v) && !v.length)));
 }
 

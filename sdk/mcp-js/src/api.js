@@ -3,7 +3,7 @@
 // Served by the Worker under /api/*. The OpenAPI document is /api/openapi.json (src/openapi.js).
 import { CatalogError } from './catalog.js';
 import { explainStep, listOperations, checkEnvelope, dryRun, recipeView, LEVEL_NOTE } from './core/index.js';
-import { DIET_INFO, normDiet, dietCounts, dietCoverage, COUNTRY_LABEL, ingredientList, normLang, normMethod, resolveSource, methodCounts, METHOD_LABELS, localizeItems, search, pantry, similar, compare, ingredientProfile, aggregate, mealPlan, shoppingList, scaleIngredients, filterRecipes, sortRecipes, row, list } from './core/query.js';
+import { allergenInfo, diabeticInfo, DIET_INFO, normDiet, dietCounts, dietCoverage, COUNTRY_LABEL, ingredientList, normLang, normMethod, resolveSource, methodCounts, METHOD_LABELS, localizeItems, search, pantry, similar, compare, ingredientProfile, aggregate, mealPlan, shoppingList, scaleIngredients, filterRecipes, sortRecipes, row, list } from './core/query.js';
 import { openapi } from './openapi.js';
 
 const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'GET, POST, OPTIONS', 'access-control-allow-headers': 'content-type' };
@@ -101,7 +101,7 @@ async function recipeEndpoint(cat, id, a, index, lang) {
   if (!ID.test(id)) return err(400, 'bad_id', 'recipe ids use letters, digits, dot, dash and underscore');
   const { doc, hash, hashVerified } = await cat.recipe(id);
   const rec = index.items.find((r) => r.id === id);
-  const head = { id, lang, hash, hash_verified: hashVerified, level: doc.verification && doc.verification.level, level_note: LEVEL_NOTE[doc.verification && doc.verification.level], note: NOTE };
+  const head = { id, lang, allergen_info: rec ? allergenInfo(rec) : undefined, diabetic: rec ? diabeticInfo(rec) : undefined, hash, hash_verified: hashVerified, level: doc.verification && doc.verification.level, level_note: LEVEL_NOTE[doc.verification && doc.verification.level], note: NOTE };
   const servings = Number(a.servings) > 0 ? Number(a.servings) : undefined;
   if (a.include !== undefined && a.include !== '') {
     const asked = list(a.include).map((x) => x.toLowerCase());
