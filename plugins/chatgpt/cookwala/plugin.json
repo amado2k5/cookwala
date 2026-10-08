@@ -5,6 +5,7 @@
   "description": "Find, scale and plan recipes from the open Cookwala catalog. Search by cuisine, ingredient, nutrition, cost, cooking method, time, diet, allergen and language. Read-only: it never starts a kitchen device.",
   "author": {
     "name": "Cookwala",
+    "email": "eat@cookwala.ai",
     "url": "https://cookwala.ai"
   },
   "homepage": "https://cookwala.ai/assistants/",
@@ -106,7 +107,29 @@
       },
       "publication": {
         "release_notes": "First release: recipe search, recipe details, pantry matching, diet, allergen and diabetic screens, meal plans and shopping lists. Read-only.",
-        "countries": []
+        "countries": [],
+        "translations": {
+          "ar-EG": {
+            "subtitle": "وصفات وحميات وتغذية",
+            "description": "كوكوالا فهرس وصفات مفتوح يضم أكثر من 2000 وصفة، معظمها مصرية وشرق أوسطية، إضافةً إلى أطباق مكسيكية ويابانية ومغربية وصينية وفرنسية وفيتنامية وهندية وكورية وإيرانية وإيطالية وإسبانية ويونانية وإثيوبية.\n\nاسأل بكلماتك: كيف أطبخ طبقًا معيّنًا، ماذا أطبخ بالمكونات التي لديّ، خيارات عالية البروتين أو قليلة السعرات، أطباق سريعة أو اقتصادية، ساخنة أو باردة، مقلية أو مخبوزة، وصفات لطبّاخة أو كتاب معيّن، أو خطة وجبات ليوم كامل مع قائمة مشتريات. يمكن تغيير الوصفة لعدد الأشخاص، وتتوفر العناوين بلغات كثيرة.\n\nتصنيفات النظام الغذائي والحساسية والسكري هي فحوص مبنية على أسماء المكونات وعلى ادعاءات تمت مراجعتها. وهي ليست شهادات ولا ضمانات ولا نصيحة طبية. القيم الغذائية والتكلفة تقديرات. كوكوالا للقراءة فقط ولا يجمع أي بيانات شخصية."
+          },
+          "fr-FR": {
+            "subtitle": "Recettes, régimes, nutrition",
+            "description": "Cookwala est un catalogue de recettes ouvert de plus de 2 000 recettes, surtout égyptiennes et du Moyen-Orient, ainsi que des plats mexicains, japonais, marocains, chinois, français, vietnamiens, indiens, coréens, iraniens, italiens, espagnols, grecs et éthiopiens.\n\nPosez vos questions en langage courant : comment cuisiner un plat, que faire avec les ingrédients que vous avez, options riches en protéines ou peu caloriques, plats rapides ou économiques, chauds ou froids, frits ou cuits au four, recettes d'un cuisinier ou d'un livre précis, ou un menu pour la journée avec liste de courses. Les recettes peuvent être adaptées au nombre de personnes, et les titres sont disponibles en de nombreuses langues.\n\nLes étiquettes de régime, d'allergènes et de diabète sont des filtres établis à partir des noms d'ingrédients et d'affirmations vérifiées. Ce ne sont ni des certifications, ni des garanties, ni des conseils médicaux. Les valeurs nutritionnelles et les coûts sont des estimations. Cookwala est en lecture seule et ne collecte aucune donnée personnelle."
+          },
+          "es-ES": {
+            "subtitle": "Recetas, dietas y nutrición",
+            "description": "Cookwala es un catálogo abierto de más de 2000 recetas, sobre todo egipcias y de Oriente Medio, además de platos mexicanos, japoneses, marroquíes, chinos, franceses, vietnamitas, indios, coreanos, iraníes, italianos, españoles, griegos y etíopes.\n\nPregunta con tus palabras: cómo cocinar un plato, qué preparar con los ingredientes que tienes, opciones altas en proteínas o bajas en calorías, platos rápidos o económicos, calientes o fríos, fritos u horneados, recetas de una cocinera o un libro concreto, o un día de comidas con lista de la compra. Las recetas se pueden ajustar al número de personas y los títulos están disponibles en muchos idiomas.\n\nLas etiquetas de dieta, alérgenos y diabetes son filtros basados en los nombres de los ingredientes y en afirmaciones revisadas. No son certificaciones, garantías ni consejo médico. Los valores nutricionales y los costes son estimaciones. Cookwala es de solo lectura y no recopila datos personales."
+          },
+          "de-DE": {
+            "subtitle": "Rezepte, Diäten, Nährwerte",
+            "description": "Cookwala ist ein offener Rezeptkatalog mit mehr als 2.000 Rezepten, überwiegend ägyptisch und aus dem Nahen Osten, dazu mexikanische, japanische, marokkanische, chinesische, französische, vietnamesische, indische, koreanische, iranische, italienische, spanische, griechische und äthiopische Gerichte.\n\nFragen Sie in eigenen Worten: wie ein Gericht gekocht wird, was sich aus den vorhandenen Zutaten machen lässt, eiweißreiche oder kalorienarme Optionen, schnelle oder günstige Gerichte, warm oder kalt, frittiert oder gebacken, Rezepte einer bestimmten Köchin oder eines Buchs oder ein Tagesplan mit Einkaufsliste. Rezepte lassen sich auf die Personenzahl umrechnen, und Titel gibt es in vielen Sprachen.\n\nDiät-, Allergen- und Diabetes-Kennzeichen sind Prüfungen auf Grundlage der Zutatennamen und geprüfter Angaben. Sie sind weder Zertifizierungen noch Garantien noch medizinische Beratung. Nährwerte und Kosten sind Schätzungen. Cookwala ist schreibgeschützt und erhebt keine personenbezogenen Daten."
+          },
+          "pt-BR": {
+            "subtitle": "Receitas, dietas e nutrição",
+            "description": "O Cookwala é um catálogo aberto com mais de 2.000 receitas, principalmente egípcias e do Oriente Médio, além de pratos mexicanos, japoneses, marroquinos, chineses, franceses, vietnamitas, indianos, coreanos, iranianos, italianos, espanhóis, gregos e etíopes.\n\nPergunte com suas palavras: como cozinhar um prato, o que fazer com os ingredientes que você tem, opções ricas em proteína ou com poucas calorias, pratos rápidos ou econômicos, quentes ou frios, fritos ou assados, receitas de uma cozinheira ou livro específico, ou um dia de refeições com lista de compras. As receitas podem ser ajustadas ao número de pessoas e os títulos estão disponíveis em vários idiomas.\n\nOs rótulos de dieta, alérgenos e diabetes são triagens feitas a partir dos nomes dos ingredientes e de afirmações revisadas. Não são certificações, garantias nem aconselhamento médico. Valores nutricionais e custos são estimativas. O Cookwala é somente leitura e não coleta dados pessoais."
+          }
+        }
       }
     }
   }
