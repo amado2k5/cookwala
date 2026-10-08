@@ -27,7 +27,7 @@ profile. Live at [cookwala.ai](https://cookwala.ai). Nothing is deployed in the 
 
 | Feature | Status | Note |
 |---------|--------|------|
-| Recipe format & schemas | ✅ Shipping | 2,043 recipes, 25+ languages each |
+| Recipe format & schemas | ✅ Shipping | 2,266 recipes, 29 languages each |
 | Dry-run (device compatibility) | ✅ Shipping | Python & TypeScript SDKs produce identical results |
 | Temperature envelope validation | ✅ Shipping | Safety limits enforced on device |
 | Python SDK | ✅ Shipping | CLI + library (all Core operations) |
