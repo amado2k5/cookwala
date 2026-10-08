@@ -30,8 +30,9 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           WRANGLER_SEND_METRICS: 'false'
       - name: Set the gateway token
-        if: ${{ env.GATEWAY_TOKEN != '' }}
-        run: printf '%s' "$GATEWAY_TOKEN" | npx -y wrangler@4 secret put MCP_GATEWAY_TOKEN -c worker/wrangler.toml
+        run: |
+          if [ -z "$GATEWAY_TOKEN" ]; then echo "::notice::MCP_GATEWAY_TOKEN is not set; /mcp stays open (the data is public)."; exit 0; fi
+          printf '%s' "$GATEWAY_TOKEN" | npx -y wrangler@4 secret put MCP_GATEWAY_TOKEN -c worker/wrangler.toml
         env:
           GATEWAY_TOKEN: ${{ secrets.MCP_GATEWAY_TOKEN }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
