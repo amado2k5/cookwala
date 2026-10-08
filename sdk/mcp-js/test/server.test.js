@@ -23,15 +23,31 @@ async function connect(opts) {
 }
 const call = async (c, name, args) => (await c.callTool({ name, arguments: args })).structuredContent;
 
-test('lists 14 read-only tools, 6 resources and 3 prompts', async () => {
+test('lists 16 read-only tools, 6 resources and 3 prompts', async () => {
   const fx = buildFixture();
   const { client } = await connect({ baseUrl: fx.dir, cacheDir: fs.mkdtempSync(path.join(os.tmpdir(), 'cwc-')) });
   const tools = (await client.listTools()).tools;
-  assert.equal(tools.length, 14);
+  assert.equal(tools.length, 16);
   for (const t of tools) { assert.equal(t.annotations.readOnlyHint, true, t.name); assert.equal(t.annotations.destructiveHint, false, t.name); }
   assert.equal((await client.listResourceTemplates()).resourceTemplates.length, 4);
   assert.equal((await client.listResources()).resources.filter((r) => !r.uri.startsWith('cookwala://preset/')).length, 2);
   assert.equal((await client.listPrompts()).prompts.length, 3);
+});
+
+test('certification tools verify against the keys given and never trust by default', async () => {
+  const fx = buildFixture();
+  const { client } = await connect({ baseUrl: fx.dir, cacheDir: fs.mkdtempSync(path.join(os.tmpdir(), 'cwc-')) });
+  const keys_path = '/v1/conformance/keys/certification-test-keys.json';
+  const now = '2026-10-07T00:00:00Z';
+  assert.equal((await call(client, 'verify_certification', { certification_id: 'cert-halal-kofta-oven-2026-10', now })).error, 'missing_keys');
+  const v = await call(client, 'verify_certification', { certification_id: 'cert-halal-kofta-oven-2026-10', keys_path, recipe_id: 'kofta-oven', now });
+  assert.deepEqual([v.valid, v.reason], [true, 'ok']);
+  assert.equal((await call(client, 'verify_certification', { certification_id: 'cert-halal-kofta-oven-2026-10', keys_path, recipe_id: 'shakshuka', now })).reason, 'subject_mismatch');
+  const c = await call(client, 'current_certifications', { recipe_id: 'kofta-oven', scheme: 'halal', keys_path, now });
+  assert.deepEqual(c.current.map((x) => x.id), ['cert-halal-kofta-oven-2026-10']);
+  assert.deepEqual(c.rejected, { 'cert-halal-kofta-oven-2026-01': 'superseded' });
+  const all = await call(client, 'current_certifications', { keys_path, now });
+  assert.equal(all.current.length, 3);
 });
 
 test('search, get, dry_run and explain over a local catalog', async () => {
@@ -130,6 +146,6 @@ test('stdio smoke test through the real binary', async () => {
   const by = (id) => lines.find((l) => l.id === id);
   assert.equal(by(1).result.serverInfo.name, 'cookwala');
   assert.match(by(1).result.instructions, /never an instruction/);
-  assert.equal(by(2).result.tools.length, 14);
+  assert.equal(by(2).result.tools.length, 16);
   assert.equal(by(3).result.structuredContent.command, 'HELP');
 });

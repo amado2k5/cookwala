@@ -32,23 +32,42 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 # ---------------------------------------------------------------- canonical JSON (RFC 8785)
 
 
+MAX_SAFE_INTEGER = 2 ** 53 - 1
+
+
 def _num(x):
+    """ECMAScript Number.prototype.toString for a finite double (RFC 8785 section 3.2.2.3).
+
+    Integers beyond 2^53 - 1 are refused: a JavaScript reader would round them, so the two sides would hash
+    different numbers (BACKLOG P-11). Floats use the shortest round-trip digits, then ECMAScript's layout:
+    plain decimals from 1e-7 up to 1e21, exponent form (1e-7, 1.5e+21) outside that range.
+    """
     if isinstance(x, bool):
         raise TypeError('bool is not a number')
     if isinstance(x, int):
+        if abs(x) > MAX_SAFE_INTEGER:
+            raise ValueError('integer beyond 2^53 - 1 cannot be canonicalised exactly (RFC 8785); send it as a string')
         return str(x)
     if not math.isfinite(x):
         raise ValueError('JCS forbids NaN and Infinity')
     if x == 0:
         return '0'
-    if x.is_integer() and abs(x) < 1e21:
-        return str(int(x))
-    r = repr(x)  # shortest round-trip, like ECMAScript Number.prototype.toString
-    if 'e' in r:
-        mant, exp = r.split('e')
-        sign = '-' if exp.startswith('-') else '+'
-        r = f"{mant}e{sign}{int(exp.lstrip('+-'))}"
-    return r
+    sign = '-' if x < 0 else ''
+    from decimal import Decimal
+    t = Decimal(repr(abs(x))).normalize().as_tuple()  # shortest round-trip digits, as ECMAScript requires
+    digits = ''.join(map(str, t.digits)).rstrip('0') or '0'
+    k = len(digits)
+    n = t.exponent + len(t.digits)  # value = 0.digits * 10**n
+    if k <= n <= 21:
+        out = digits + '0' * (n - k)
+    elif 0 < n <= 21:
+        out = digits[:n] + '.' + digits[n:]
+    elif -6 < n <= 0:
+        out = '0.' + '0' * (-n) + digits
+    else:
+        e = n - 1
+        out = digits[0] + ('.' + digits[1:] if k > 1 else '') + 'e' + ('+' if e >= 0 else '-') + str(abs(e))
+    return sign + out
 
 
 def _str(s):
@@ -105,7 +124,37 @@ def public_key_from_seed(seed_hex):
     return b64u(sk.public_key().public_bytes(serialization.Encoding.Raw, serialization.PublicFormat.Raw))
 
 
-def _time(s): return dt.datetime.fromisoformat(s.replace('Z', '+00:00'))
+def _time(s):
+    """Parse an RFC 3339 date-time. Anything else (wrong type, no offset, garbage) raises ValueError('invalid_timestamp'),
+    so callers fail closed with that reason instead of crashing or comparing nonsense (BACKLOG P-12)."""
+    import re
+    if not isinstance(s, str) or not re.match(r'^\d{4}-\d{2}-\d{2}[Tt ]\d{2}:\d{2}:\d{2}(\.\d+)?([Zz]|[+-]\d{2}:\d{2})$', s): raise ValueError('invalid_timestamp')
+    try:
+        return dt.datetime.fromisoformat(s.upper().replace('Z', '+00:00').replace(' ', 'T'))
+    except ValueError:
+        raise ValueError('invalid_timestamp') from None
+
+
+def format_checker():
+    """A jsonschema FormatChecker that enforces date-time (RFC 3339 with an offset, the same rule as _time) and uri
+    (absolute, with a scheme) without the optional rfc3339/rfc3987 packages, so every validator in the repository
+    checks formats the same way (BACKLOG P-12)."""
+    from jsonschema import FormatChecker
+    from urllib.parse import urlsplit
+    fc = FormatChecker()
+
+    @fc.checks('date-time', raises=ValueError)
+    def _dt(v):
+        if not isinstance(v, str): return True
+        _time(v); return True
+
+    @fc.checks('uri', raises=ValueError)
+    def _uri(v):
+        if not isinstance(v, str): return True
+        u = urlsplit(v)
+        if not u.scheme or any(c.isspace() for c in v): raise ValueError('not an absolute URI')
+        return True
+    return fc
 
 
 def _now_iso(): return dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
@@ -144,8 +193,11 @@ def _key_for(sig, keys):
         when = _time(sig['signedAt'])
     except (ValueError, TypeError):
         return None, 'invalid_timestamp'
-    if when < _time(rec['validFrom']) or (rec.get('validTo') and when > _time(rec['validTo'])): return None, 'key_not_valid_at_signing_time'
-    if rec.get('revokedAt') and when >= _time(rec['revokedAt']): return None, 'key_revoked'
+    try:
+        if when < _time(rec['validFrom']) or (rec.get('validTo') and when > _time(rec['validTo'])): return None, 'key_not_valid_at_signing_time'
+        if rec.get('revokedAt') and when >= _time(rec['revokedAt']): return None, 'key_revoked'
+    except (ValueError, KeyError):
+        return None, 'invalid_timestamp'
     return rec, 'ok'
 
 
@@ -323,15 +375,19 @@ def check_envelope(op_id, readings, target=None, altitude_m=0):
 def trusted_sensors(capabilities, now=None):
     """Sensor ids (and the vision cues of trusted cameras) that may satisfy a ladder rung (RFC-0011).
 
-    Excluded: state degraded, fault or unknown; calibration whose validUntil has passed.
-    A sensor record without state or calibration is trusted as declared (0.2 behaviour).
+    Excluded: state degraded, fault or unknown; calibration whose validUntil has passed or cannot be read
+    (fail closed). A sensor record without state or calibration is trusted as declared (0.2 behaviour).
+    An unreadable `now` raises ValueError('invalid_timestamp').
     """
     t = _time(now) if isinstance(now, str) else (now or dt.datetime.now(dt.timezone.utc))
     out = set()
     for s in capabilities.get('capabilities', {}).get('sensors', []):
         if s.get('state', 'ok') != 'ok': continue
         vu = (s.get('calibration') or {}).get('validUntil')
-        if vu and t > _time(vu): continue
+        try:
+            if vu and t > _time(vu): continue
+        except ValueError:
+            continue  # a calibration date nobody can read is not a calibration
         out.add(s['sensor']); out.update(s.get('visionCues', []))
     return out
 
@@ -425,6 +481,56 @@ def check_node_params(op_id, node, limits=None, vocab=None):
     return None
 
 
+_ATTENTION = ('none', 'periodic', 'monitor', 'continuous')
+
+
+def duration_seconds(d):
+    """ISO 8601 duration as used by Cookwala (PnDTnHnMnS) to seconds; None when it cannot be read."""
+    import re
+    m = re.fullmatch(r'P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?', d or '') if isinstance(d, str) else None
+    if not m or d in ('P', 'PT'): return None
+    days, h, mi, s = m.groups()
+    return int(days or 0) * 86400 + int(h or 0) * 3600 + int(mi or 0) * 60 + float(s or 0)
+
+
+def _conditions(c):
+    if isinstance(c, dict):
+        yield c
+        for k in ('all', 'any'):
+            for x in c.get(k) or []: yield from _conditions(x)
+        if c.get('not'): yield from _conditions(c['not'])
+
+
+def recipe_rule_problems(recipe, vocab=None):
+    """Authoring checks beyond the JSON Schema (BACKLOG P-16). Returns a list of (node id, message):
+
+    - every step's numbers within its operation envelope: temperatures, targets, hob heat level, pressure
+      (the same check_node_params an executor runs before planning, so a recipe never ships what a device refuses);
+    - attention at least what the operation's envelope requires (a recipe may ask for more care, never less);
+    - in every end condition, minTime <= nominalTime <= maxTime and each duration readable.
+    """
+    vocab = vocab or _vocab('ops')
+    out = []
+    for node in recipe.get('process', {}).get('nodes', []):
+        nid, op = node.get('id'), node.get('op')
+        if op not in vocab: continue
+        bad = check_node_params(op, node, None, vocab)
+        if bad: out.append((nid, bad[1]))
+        need = (vocab[op].get('envelope') or {}).get('attention')
+        have = node.get('attention')
+        if need in _ATTENTION and have in _ATTENTION and _ATTENTION.index(have) < _ATTENTION.index(need):
+            out.append((nid, f'attention {have} is less than the {op} envelope requires ({need})'))
+        for cond in _conditions(node.get('until')):
+            secs = {k: duration_seconds(cond[k]) for k in ('minTime', 'nominalTime', 'maxTime') if k in cond}
+            for k, v in secs.items():
+                if v is None: out.append((nid, f'{k} {cond[k]!r} is not a readable duration'))
+            lo, nom, hi = secs.get('minTime'), secs.get('nominalTime'), secs.get('maxTime')
+            if lo is not None and hi is not None and lo > hi: out.append((nid, f'minTime {cond["minTime"]} is longer than maxTime {cond["maxTime"]}'))
+            if nom is not None and ((lo is not None and nom < lo) or (hi is not None and nom > hi)):
+                out.append((nid, f'nominalTime {cond["nominalTime"]} is outside minTime..maxTime'))
+    return out
+
+
 def dry_run(recipe, capabilities, human_present=False, allow_model=True, limits=None, now=None):
     """Decide, before cooking, whether a device can run every step of a recipe.
 
@@ -471,12 +577,15 @@ def verify_certification(cert, keys, now=None, subject_hash=None):
     ok, why = verify(cert, keys)
     if not ok: return False, why
     if subject_hash and cert.get('subject', {}).get('hash') != subject_hash: return False, 'subject_mismatch'
-    t = _time(now) if isinstance(now, str) else (now or dt.datetime.now(dt.timezone.utc))
-    st = cert.get('status')
-    if st == 'revoked' and (not cert.get('revokedAt') or t >= _time(cert['revokedAt'])): return False, 'revoked'
-    if st == 'suspended': return False, 'suspended'
-    if cert.get('validFrom') and t < _time(cert['validFrom']): return False, 'not_yet_valid'
-    if cert.get('validUntil') and t > _time(cert['validUntil']): return False, 'expired'
+    try:
+        t = _time(now) if isinstance(now, str) else (now or dt.datetime.now(dt.timezone.utc))
+        st = cert.get('status')
+        if st == 'revoked' and (not cert.get('revokedAt') or t >= _time(cert['revokedAt'])): return False, 'revoked'
+        if st == 'suspended': return False, 'suspended'
+        if cert.get('validFrom') and t < _time(cert['validFrom']): return False, 'not_yet_valid'
+        if cert.get('validUntil') and t > _time(cert['validUntil']): return False, 'expired'
+    except ValueError:
+        return False, 'invalid_timestamp'
     return True, 'ok'
 
 

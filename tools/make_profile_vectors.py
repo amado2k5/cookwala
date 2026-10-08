@@ -116,6 +116,7 @@ cases = [
  ('cert-forged-signature', 'Signed with another key under the authority\'s kid: bad_signature.', {'certification': forged, 'keys': CKEYS, 'now': NOW}),
  ('cert-unsigned', 'A certification without a signature is a claim, not a certification.', {'certification': unsigned, 'keys': CKEYS, 'now': NOW}),
  ('cert-unknown-authority-key', 'The authority\'s KeyRecord is not known: unknown_key; fetch it from authority.id first.', {'certification': cb, 'keys': [CA], 'now': NOW}),
+ ('cert-unreadable-validity', 'A validity date that is not an RFC 3339 date-time with an offset: invalid_timestamp, never treated as open-ended (BACKLOG P-12).', {'certification': mkcert('cert-a-bad-date', CA, CA_SEED, '2026-03-01T00:00:00Z', 'next year'), 'keys': CKEYS, 'now': NOW}),
 ]
 cv = [vec(vid, 'certification', 'certifications', '0010', d, inp, dict(zip(('ok', 'reason'), ref.verify_certification(inp['certification'], inp['keys'], inp.get('now'), inp.get('subjectHash'))))) for vid, d, inp in cases]
 sets = [
@@ -124,8 +125,8 @@ sets = [
  ('certset-expired-and-revoked-dropped', 'Expired and revoked documents are rejected with their reason; the current one stays.', {'certifications': [expired, revoked, c2], 'keys': CKEYS, 'now': NOW, 'subjectHash': RECIPE_HASH}),
 ]
 cv += [vec(vid, 'certification_set', 'certifications', '0010', d, inp, ref.current_certifications(inp['certifications'], inp['keys'], inp['now'], inp['subjectHash'])) for vid, d, inp in sets]
-assert [v['expected'].get('reason') for v in cv[:7]] == ['ok', 'expired', 'revoked', 'subject_mismatch', 'bad_signature', 'unsigned', 'unknown_key'], [v['expected'] for v in cv[:7]]
-assert cv[7]['expected']['current'] == ['cert-a-2026-10'] and cv[8]['expected']['current'] == ['cert-a-2026-10', 'cert-b-2026-06']
+assert [v['expected'].get('reason') for v in cv[:8]] == ['ok', 'expired', 'revoked', 'subject_mismatch', 'bad_signature', 'unsigned', 'unknown_key', 'invalid_timestamp'], [v['expected'] for v in cv[:8]]
+assert cv[8]['expected']['current'] == ['cert-a-2026-10'] and cv[9]['expected']['current'] == ['cert-a-2026-10', 'cert-b-2026-06']
 write('certifications', cv)
 
 
@@ -152,5 +153,11 @@ pl_cases = [
 ]
 sv += [vec(vid, 'plausibility', 'sensor_trust', '0011', d, inp, dict(zip(('ok', 'reason'), ref.check_plausibility(inp['readings'], inp['sensors'])[:2]))) for vid, d, inp in pl_cases]
 assert [v['expected'] for v in sv[:5]] == [{'choice': 'cw.sense.oil_temp'}, {'choice': None}, {'choice': None}, {'choice': 'model'}, {'choice': 'cw.sense.liquid_temp'}], [v['expected'] for v in sv[:5]]
-assert [v['expected']['reason'] for v in sv[5:]] == ['ok', 'implausible', 'non_numeric_reading']
+oil_bad_date = {'sensor': 'cw.sense.oil_temp', 'accuracy': 1.0, 'state': 'ok', 'calibration': {'lastAt': '2026-09-01T00:00:00Z', 'validUntil': 'until further notice', 'by': 'maker'}}
+st_more = [
+ ('trust-unreadable-calibration-no-deep-fry', 'A calibration date nobody can read is not a calibration: the sensor does not count and deep frying is refused (fail closed, BACKLOG P-12).', {'capabilities': caps(oil_bad_date), 'op': 'cw.op.deep_fry', 'humanPresent': True, 'allowModel': True, 'now': NOW11}),
+]
+sv += [vec(vid, 'sensor_trust', 'sensor_trust', '0011', d, inp, {'choice': ref.ladder_choice(inp['op'], ref.trusted_sensors(inp['capabilities'], inp['now']), inp['allowModel'], inp['humanPresent'])}) for vid, d, inp in st_more]
+assert [v['expected']['reason'] for v in sv[5:8]] == ['ok', 'implausible', 'non_numeric_reading']
+assert sv[8]['expected'] == {'choice': None}, sv[8]['expected']
 write('sensor_trust', sv)

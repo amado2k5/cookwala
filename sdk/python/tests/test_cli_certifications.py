@@ -49,6 +49,20 @@ class CertificationCliTest(unittest.TestCase):
         self.assertEqual(res['current'], ['cert-halal-kofta-oven-2026-10'])
         self.assertEqual(res['rejected'], {'cert-halal-kofta-oven-2026-01': 'superseded'})
 
+    def test_mixed_subjects_do_not_supersede_each_other(self):
+        code, out = run('current-certs', '--keys', KEYS, '--json')
+        res = json.loads(out)
+        self.assertEqual(code, 0)
+        self.assertIn('cert-halal-beef-lot-2026-09', res['current'])
+        self.assertEqual(res['rejected'], {'cert-halal-kofta-oven-2026-01': 'superseded'})
+
+    def test_search_certified(self):
+        code, out = run('search', '--certified', 'halal', '--keys', KEYS, '--json')
+        self.assertEqual(code, 0)
+        self.assertEqual([h['id'] for h in json.loads(out)], ['example-kofta-oven'])
+        self.assertEqual(run('search', '--certified', 'vegetarian', '--keys', KEYS, '--json', 'kofta')[0], 1)
+        self.assertEqual(run('search', '--certified', 'halal')[0], 2)  # no keys, no trust
+
     def test_certify_then_revoke(self):
         recipe = str(ROOT / 'examples' / 'shakshuka.cookwala.json')
         cert, revoked = str(self.tmp / 'c.json'), str(self.tmp / 'r.json')

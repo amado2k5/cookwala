@@ -34,9 +34,8 @@ profile. Live at [cookwala.ai](https://cookwala.ai). Nothing is deployed in the 
 | TypeScript SDK | ✅ Shipping | MCP server + library (all Core operations) |
 | Allergen data | ⚠️ 86% | 282 recipes missing allergen info (need 90%) |
 | Search endpoint | ⏳ Blocked | Documented in OpenAPI, edge worker not deployed |
-| Halal certification | 🔧 40% | Verification functions available, CLI/API/registry not yet |
 | Humanitarian Profile | 🔧 Draft | SMS parsing & relief mode working |
-| Certifications (RFC-0010) | 🔧 40% | Schema & conformance tests ready, deployment pending |
+| Certifications (RFC-0010: halal, kosher, vegetarian, ...) | 🔧 Partial | Verify, issue and revoke in the CLI; `search --certified`; MCP tools; static `/v1/certifications`. Certifier registry not yet; example authorities are fictional |
 
 ## Start here
 

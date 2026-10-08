@@ -21,7 +21,8 @@ Read [docs/AI-AGENTS.md](docs/AI-AGENTS.md) (also at https://cookwala.ai/docs/AI
 - Verification functions available in Python (`cw.verify_certification()`, `cw.current_certifications()`)
 - CLI: `cookwala verify-cert`, `current-certs`, `certify`, `revoke-cert` (docs/CLI.md)
 - Published statically: `/v1/certifications/index.json` (full list, filter client-side) and `/v1/certifications/{id}.json`
-- Certifier registration system not yet built; no MCP tools for certifications yet
+- MCP tools: `verify_certification`, `current_certifications` (read-only; keys required, no default trust list)
+- Certifier registration system not yet built
 - See [CERTIFICATION_IMPLEMENTATION_STATUS.md](CERTIFICATION_IMPLEMENTATION_STATUS.md) for full status
 
 **Allergen Data Coverage**

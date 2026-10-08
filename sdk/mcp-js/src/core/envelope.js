@@ -39,13 +39,18 @@ export function checkEnvelope(vocab, opId, readings, target = null, altitudeM = 
   return { envelopeOk: envOk, targetOk: tgtOk, reason };
 }
 
+// RFC 3339 date-time with an offset, the same rule as the Python reference (BACKLOG P-12). NaN otherwise.
+const RFC3339 = /^\d{4}-\d{2}-\d{2}[Tt ]\d{2}:\d{2}:\d{2}(\.\d+)?([Zz]|[+-]\d{2}:\d{2})$/;
+export const parseTime = (s) => (typeof s === 'string' && RFC3339.test(s) ? Date.parse(s.toUpperCase().replace(' ', 'T')) : NaN);
+
 export function trustedSensors(capabilities, now) {
-  const t = now ? new Date(now) : new Date();
+  const t = now ? parseTime(now) : Date.now();
+  if (!Number.isFinite(t)) throw new RangeError('invalid_timestamp');
   const out = new Set();
   for (const s of ((capabilities.capabilities || {}).sensors) || []) {
     if ((s.state || 'ok') !== 'ok') continue;
     const vu = s.calibration && s.calibration.validUntil;
-    if (vu && t > new Date(vu)) continue;
+    if (vu) { const u = parseTime(vu); if (!Number.isFinite(u) || t > u) continue; } // unreadable calibration date: not trusted
     out.add(s.sensor);
     (s.visionCues || []).forEach((c) => out.add(c));
   }

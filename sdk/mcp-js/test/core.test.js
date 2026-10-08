@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './helpers.js';
-import { canonical, docHash, opsIndex, checkEnvelope, ladderChoice, trustedSensors, dryRun, checkMandate, parseSms, searchRecipes, normalize } from '../src/core/index.js';
+import { canonical, docHash, opsIndex, checkEnvelope, ladderChoice, trustedSensors, dryRun, checkMandate, parseSms, searchRecipes, normalize, verifyCertification, currentCertifications, currentBySubject } from '../src/core/index.js';
 
 const vec = (n) => JSON.parse(fs.readFileSync(path.join(ROOT, 'conformance', `${n}.json`), 'utf8'));
 const vocab = opsIndex(JSON.parse(fs.readFileSync(path.join(ROOT, 'vocab/ops.json'), 'utf8')), JSON.parse(fs.readFileSync(path.join(ROOT, 'vocab/units.json'), 'utf8')));
@@ -61,6 +61,41 @@ test('sensor trust vectors match the Python reference', () => {
       assert.equal(ladderChoice(vocab, i.op, trustedSensors(i.capabilities, i.now), i.allowModel ?? true, i.humanPresent ?? false), v.expected.choice, v.id);
     }
   }
+});
+
+test('certification vectors match the Python reference (RFC-0010)', async () => {
+  const vs = JSON.parse(fs.readFileSync(path.join(ROOT, 'conformance', 'profiles', 'certifications.json'), 'utf8'));
+  let n = 0;
+  for (const v of vs) {
+    const i = v.input;
+    if (i.certification) {
+      const [ok, reason] = await verifyCertification(i.certification, i.keys, i.now, i.subjectHash || null);
+      assert.deepEqual({ ok, reason }, v.expected, v.id);
+    } else {
+      assert.deepEqual(await currentCertifications(i.certifications, i.keys, i.now, i.subjectHash || null), v.expected, v.id);
+    }
+    n++;
+  }
+  assert.ok(n >= 11, 'certification vectors missing');
+});
+
+test('published example certifications verify with the test keys', async () => {
+  const keys = JSON.parse(fs.readFileSync(path.join(ROOT, 'conformance', 'keys', 'certification-test-keys.json'), 'utf8'));
+  const dir = path.join(ROOT, 'examples', 'certifications');
+  const certs = fs.readdirSync(dir).map((f) => JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')));
+  const r = await currentBySubject(certs, keys, '2026-10-07T00:00:00Z');
+  assert.equal(r.current.length, 3);
+  assert.deepEqual(r.rejected, { 'cert-halal-kofta-oven-2026-01': 'superseded' });
+  assert.equal((await verifyCertification(certs[0], [], '2026-10-07T00:00:00Z'))[1], 'unknown_key');
+});
+
+test('unreadable times fail closed (BACKLOG P-12)', () => {
+  const m = { scopes: ['start_cooking'], expires: 'whenever' };
+  assert.deepEqual(checkMandate(m, 'start_cooking', undefined, undefined, '2026-10-07T00:00:00Z').reasons, ['invalid_timestamp']);
+  assert.deepEqual(checkMandate({ ...m, expires: '2027-01-01T00:00:00Z' }, 'start_cooking', undefined, undefined, '2026-10-07').reasons, ['invalid_timestamp']);
+  const caps = { capabilities: { sensors: [{ sensor: 'cw.sense.oil_temp', calibration: { validUntil: 'soon' } }] } };
+  assert.equal(trustedSensors(caps, '2026-10-07T00:00:00Z').size, 0);
+  assert.throws(() => trustedSensors(caps, 'yesterday'), /invalid_timestamp/);
 });
 
 test('mandate checks', () => {

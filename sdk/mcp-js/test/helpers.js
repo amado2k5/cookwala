@@ -35,5 +35,10 @@ export function buildFixture({ tamperRecipe } = {}) {
   put('v1/capabilities/index.json', JSON.stringify({ presets }));
   put('v1/fifi/collections.json', fs.readFileSync(path.join(ROOT, 'tools', 'export_fifi.collections.json')));
   put('llms.txt', '# Cookwala test\n');
+  const certDir = path.join(ROOT, 'examples', 'certifications');
+  const certs = fs.readdirSync(certDir).sort().map((f) => JSON.parse(fs.readFileSync(path.join(certDir, f), 'utf8')));
+  for (const c of certs) put(`v1/certifications/${c.id}.json`, JSON.stringify(c));
+  put('v1/certifications/index.json', JSON.stringify(certs));
+  put('v1/conformance/keys/certification-test-keys.json', fs.readFileSync(path.join(ROOT, 'conformance', 'keys', 'certification-test-keys.json')));
   return { dir, entries };
 }

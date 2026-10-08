@@ -40,11 +40,16 @@ hash_vectors = [
      'input': {'z': 1, 'é': 2, 'a': 3, '\U0001F600': 4, 'ﬀ': 5}, 'expected': {}},
     {'id': 'hash-excludes-hash-and-signature', 'kind': 'hash', 'description': 'hash and signature fields are excluded before hashing.',
      'input': {'id': 'r1', 'revision': 3, 'hash': 'sha256:' + '0' * 64, 'signature': {'alg': 'EdDSA', 'kid': 'x', 'sig': 'AA'}}, 'expected': {}},
+    {'id': 'hash-number-layout-ecmascript', 'kind': 'hash', 'description': 'Numbers use ECMAScript Number.prototype.toString: plain decimals from 1e-6 to below 1e21, exponent form outside; shortest round-trip digits. The expected text was produced by Node\'s String(number), a second implementation (BACKLOG P-11).',
+     'input': {'n': [0.00001, 0.000001, 1e-7, 0.000015, 0.0001, 123.456, -0.5, 1e20, 1e21, 1.5e21, 0.30000000000000004, 9007199254740991, 5e-324, 1.7976931348623157e308]},
+     'expected': {'canonical': '{"n":[0.00001,0.000001,1e-7,0.000015,0.0001,123.456,-0.5,100000000000000000000,1e+21,1.5e+21,0.30000000000000004,9007199254740991,5e-324,1.7976931348623157e+308]}'}},
 ]
 for v in hash_vectors:
     v['expected']['canonical'] = v['expected'].get('canonical') or ref.canonical({k: x for k, x in v['input'].items() if k not in ('hash', 'signature')})
     v['expected']['hash'] = ref.doc_hash(v['input'])
 assert ref.canonical(rfc8785_in) == hash_vectors[0]['expected']['canonical'], 'reference canonicalizer disagrees with RFC 8785'
+_nv = next(v for v in hash_vectors if v['id'] == 'hash-number-layout-ecmascript')
+assert ref.canonical(_nv['input']) == _nv['expected']['canonical'], 'reference canonicalizer disagrees with ECMAScript number layout'
 write('hash', hash_vectors)
 
 # ---- signatures

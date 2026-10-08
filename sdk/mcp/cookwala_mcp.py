@@ -109,7 +109,11 @@ def check_mandate(m, action, amount=None, provider=None, now=None):
     if action in ('irreversible', 'safety_override'):
         return {'allowed': False, 'needsConfirmation': True, 'reasons': ['always_confirm']}
     if action not in m.get('scopes', []): reasons.append('scope_missing')
-    if now and m.get('expires') and dt.datetime.fromisoformat(now.replace('Z', '+00:00')) > dt.datetime.fromisoformat(m['expires'].replace('Z', '+00:00')): reasons.append('expired')
+    if now and m.get('expires'):
+        try:
+            if dt.datetime.fromisoformat(now.replace('Z', '+00:00')) > dt.datetime.fromisoformat(m['expires'].replace('Z', '+00:00')): reasons.append('expired')
+        except (ValueError, TypeError, AttributeError):
+            reasons.append('invalid_timestamp')  # an expiry nobody can read never allows anything
     if provider and m.get('allowedProviders') and provider not in m['allowedProviders']: reasons.append('provider_not_allowed')
     if amount is not None:
         try:
