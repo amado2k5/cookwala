@@ -85,7 +85,18 @@ export const DIET_INFO = {
 };
 const DIET_ALIASES = { halal: 'halal_ingredients', 'halal friendly': 'halal_ingredients', 'halal-friendly': 'halal_ingredients', halal_friendly: 'halal_ingredients', kosher: 'kosher_any', kosher_style: 'kosher_any', 'kosher meat': 'kosher_meat', 'kosher dairy': 'kosher_dairy', pareve: 'kosher_pareve', parve: 'kosher_pareve', 'kosher pareve': 'kosher_pareve', veg: 'vegetarian', veggie: 'vegetarian', 'gluten free': 'gluten_free', 'gluten-free': 'gluten_free', coeliac: 'gluten_free', celiac: 'gluten_free', 'nut free': 'nut_free', 'nut-free': 'nut_free', 'dairy free': 'dairy_free', 'lactose free': 'dairy_free', lactose_free: 'dairy_free', 'egg free': 'egg_free', 'pork free': 'pork_free', 'alcohol free': 'alcohol_free', 'shellfish free': 'shellfish_free', 'no pork': 'pork_free', 'no alcohol': 'alcohol_free' };
 export const normDiet = (d) => { const k = norm(d).trim(); const u = k.replace(/\s+/g, '_'); return DIET_INFO[u] ? u : (DIET_ALIASES[k] || DIET_ALIASES[u] || u); };
-const dietOk = (r, d) => (d === 'kosher_any' ? (r.di || []).some((x) => x.startsWith('kosher_')) : (r.di || []).includes(d));
+// published claim (safety.dietary[] in the recipe) that corresponds to an inferred category
+const PUBLISHED = { halal_ingredients: 'halal', kosher_any: 'kosher', kosher_meat: 'kosher', kosher_dairy: 'kosher', kosher_pareve: 'kosher', vegetarian: 'vegetarian', vegan: 'vegan', gluten_free: 'gluten_free', dairy_free: 'dairy_free', nut_free: 'nut_free' };
+const inferredOk = (r, d) => (d === 'kosher_any' ? (r.di || []).some((x) => x.startsWith('kosher_')) : (r.di || []).includes(d));
+/** A recipe with a published classification is judged by its published claims; others by the ingredient screen. */
+export const dietOk = (r, d) => {
+  const claim = PUBLISHED[d];
+  if (r.dk && claim) {
+    if (!(r.dc || []).includes(claim) && !(d === 'vegetarian' && (r.dc || []).includes('vegan'))) return false; // a vegan claim implies vegetarian
+    return d === 'kosher_meat' || d === 'kosher_dairy' || d === 'kosher_pareve' ? inferredOk(r, d) : true; // a kosher claim carries no meat/dairy/pareve type, so keep the inferred type
+  }
+  return inferredOk(r, d);
+};
 export const METHOD_ALIASES = {
   bake: 'bake', baking: 'bake', baked: 'bake', oven: 'bake', fry: 'fry', frying: 'fry', fried: 'fry', 'pan-fry': 'fry', 'pan fry': 'fry', 'pan-frying': 'fry', saute: 'fry', sauteing: 'fry',
   deep_fry: 'deep_fry', 'deep-fry': 'deep_fry', 'deep fry': 'deep_fry', 'deep frying': 'deep_fry', 'deep-frying': 'deep_fry', deepfry: 'deep_fry',
@@ -197,7 +208,7 @@ export function row(r, detail = 'brief') {
   const o = {
     id: r.id, title: r.tl || r.t, title_en: r.tl && r.tl !== r.t ? r.t : undefined, title_ar: r.ta, cuisine: r.cu, course: r.co, difficulty: r.df, level: r.lv, servings: r.sv, time_min: r.mn, prep_min: r.ac, cook_min: r.pt,
     kcal_per_serving: r.kcal, protein_g: r.pr, total_kcal: r.tk, total_protein_g: r.tp, fat_g: r.fa, carbs_g: r.ca, cost_per_serving: r.cps, cost_tier: r.ct, style: r.st, methods: r.me,
-    diet_inferred: r.di, allergens: r.al, n_ingredients: r.ni, n_steps: r.ns, has_video: r.vid ? true : undefined, kid_friendly_inferred: r.kd ? true : undefined, has_background_notes: r.hn ? true : undefined, page: `https://cookwala.ai/recipes/${r.id}/`,
+    diet_inferred: r.di, diet_basis: r.dk ? 'published' : 'inferred', dietary_claims: r.dk ? (r.dc || []).map((c) => ({ claim: c, basis: (r.dcc || []).includes(c) ? 'certified' : 'ingredients', ruleset: r.drs && r.drs[c], note: r.dcn && r.dcn[c], certification_ids: r.dcr && r.dcr[c] })) : undefined, allergens: r.al, n_ingredients: r.ni, n_steps: r.ns, has_video: r.vid ? true : undefined, kid_friendly_inferred: r.kd ? true : undefined, has_background_notes: r.hn ? true : undefined, page: `https://cookwala.ai/recipes/${r.id}/`,
   };
   if (detail === 'full') Object.assign(o, { fiber_g: r.fi, sugar_g: r.su, sodium_mg: r.na, ingredients: r.ig, operations: r.op, equipment: r.eq, may_contain: r.am, collection: r.k, tags: r.tg, kid_cautions: r.kc, cost_total: r.cost, cost_buckets: r.cb, currency: r.cur, protein_density: r1(protDensity(r)) });
   return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined && !(Array.isArray(v) && !v.length)));
@@ -379,5 +390,8 @@ export function ingredientList(items, staples, q, limit = 20) {
 }
 
 export function dietCounts(items) {
-  return Object.entries(DIET_INFO).map(([id, i]) => ({ id, ...i, recipes: items.filter((r) => dietOk(r, id)).length, certified: false }));
+  const classified = items.filter((r) => r.dk);
+  return Object.entries(DIET_INFO).map(([id, i]) => ({ id, ...i, recipes: items.filter((r) => dietOk(r, id)).length,
+    published_claims: PUBLISHED[id] ? classified.filter((r) => (r.dc || []).includes(PUBLISHED[id])).length : undefined,
+    certified_claims: PUBLISHED[id] ? items.filter((r) => (r.dcc || []).includes(PUBLISHED[id])).length : undefined, certified: false }));
 }

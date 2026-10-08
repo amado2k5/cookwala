@@ -211,6 +211,18 @@ def record(rid, d):
     if rec.get('mn') and rec.get('ac') and rec['mn'] >= rec['ac']: rec['pt'] = rec['mn'] - rec['ac']  # unattended cooking, resting or waiting time
     if serv and 'kcal' in rec: rec['tk'] = round(rec['kcal'] * serv)
     if serv and 'pr' in rec: rec['tp'] = round(rec['pr'] * serv)
+    sd = (d.get('safety') or {}).get('dietary')
+    if isinstance(sd, list):  # published classification (schema: safety.dietary[]): authoritative when present, even if empty
+        rec['dk'] = True
+        rec['dc'] = sorted({x.get('claim') for x in sd if x.get('claim')})
+        cert = sorted({x['claim'] for x in sd if x.get('basis') == 'certified' and x.get('claim')})
+        if cert: rec['dcc'] = cert
+        rs = {x['claim']: x['ruleset'] for x in sd if x.get('ruleset') and x.get('claim')}
+        if rs: rec['drs'] = rs
+        nt = {x['claim']: x['note'] for x in sd if x.get('note') and x.get('claim')}
+        if nt: rec['dcn'] = nt
+        refs_c = {x['claim']: [c.get('id') for c in x.get('certifications', []) if c.get('id')] for x in sd if x.get('certifications') and x.get('claim')}
+        if refs_c: rec['dcr'] = refs_c
     if total is not None:
         rec['cost'] = total; rec['cb'] = c.get('buckets') or {}
         if serv: rec['cps'] = round(total / serv, 2)
@@ -263,7 +275,7 @@ def main(out):
     ing = Counter(i for r in recs for i in r.get('ig', []))
     facets = {'count': len(recs), 'languages': {lg: LANG_NAMES.get(lg, lg) for lg in langs}, 'sources': sources, 'cuisine': cnt('cu'), 'course': cnt('co', False), 'tags': cnt('tg'), 'difficulty': cnt('df', False), 'level': cnt('lv', False),
               'collection': cnt('k', False), 'method': cnt('me'), 'operation': cnt('op'), 'style': cnt('st', False), 'diet': cnt('di'), 'allergen': cnt('al'),
-              'equipment': cnt('eq'), 'cost_tier': cnt('ct', False), 'kids': sum(1 for r in recs if r.get('kd')), 'with_background_notes': sum(1 for r in recs if r.get('hn')), 'top_ingredients': dict(ing.most_common(300)), 'categories': dict(cats.most_common(150)),
+              'equipment': cnt('eq'), 'cost_tier': cnt('ct', False), 'kids': sum(1 for r in recs if r.get('kd')), 'dietary_classified': sum(1 for r in recs if r.get('dk')), 'dietary_certified': sum(1 for r in recs if r.get('dcc')), 'with_background_notes': sum(1 for r in recs if r.get('hn')), 'top_ingredients': dict(ing.most_common(300)), 'categories': dict(cats.most_common(150)),
               'ranges': {k: [min(r[k] for r in recs if k in r), max(r[k] for r in recs if k in r)] for k in ('kcal', 'pr', 'fa', 'ca', 'fi', 'su', 'mn', 'ac', 'pt', 'tk', 'tp', 'cps', 'ni', 'ns', 'sv') if any(k in r for r in recs)},
               'notes': {'diet': 'inferred from ingredient names and declared allergens, never certified; halal_ingredients and kosher_* only screen ingredients and cannot verify slaughter, supervision or utensils', 'kids': 'kid_friendly is INFERRED: mild (no chilli, alcohol, caffeine or offal), simple (easy or medium, 15 ingredients or fewer) and kid-appealing; not medical advice', 'nutrition': 'per serving, modelled estimates unless the recipe says otherwise',
                         'cost': 'the data states no currency; cost_tier is relative within this catalog', 'time': 'mn is total minutes where the recipe states it; ac is hands-on (active) minutes and pt is the unattended remainder (cooking, resting, waiting)'}}

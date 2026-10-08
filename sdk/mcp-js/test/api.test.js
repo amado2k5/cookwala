@@ -171,7 +171,7 @@ test('diet flags: known animal products never pass vegetarian or vegan (regressi
 test('diet categories: halal and kosher are labelled screens, never certifications', async () => {
   const diets = await call('/api/diets'); const ids = diets.json.diets.map((d) => d.id);
   for (const id of ['halal_ingredients', 'kosher_meat', 'kosher_dairy', 'kosher_pareve', 'vegetarian', 'gluten_free']) assert.ok(ids.includes(id));
-  assert.ok(diets.json.diets.every((d) => d.certified === false)); assert.match(diets.json.note, /NOT certifications/);
+  assert.ok(diets.json.diets.every((d) => d.certified === false)); assert.match(diets.json.note, /NOT certifications/i);
   const halal = await call('/api/diets/halal?limit=25&detail=full'); assert.equal(halal.json.diet, 'halal_ingredients'); assert.equal(halal.json.certified, false); assert.match(halal.json.label, /NOT certified/); assert.ok(halal.json.total > 1000);
   const text = JSON.stringify(halal.json.items.map((i) => i.ingredients)); assert.ok(!/\b(bacon|pork|lard|wine)\b/.test(text.replace(/_/g, ' ')));
   const all = new Set(); for (let off = 0; off < 2400; off += 25) { const r = await call(`/api/diets/halal?limit=25&offset=${off}`); if (!r.json.items.length) break; r.json.items.forEach((i) => all.add(i.id)); }
@@ -188,4 +188,21 @@ test('diet categories: halal and kosher are labelled screens, never certificatio
 test('certifications list says plainly that nothing real is certified', async () => {
   const c = await call('/api/certifications?scheme=halal'); assert.equal(c.status, 200);
   assert.equal(c.json.real_certifications, 0); assert.ok(c.json.items.every((i) => i.example_only)); assert.match(c.json.note, /No real certification/);
+});
+
+test('published dietary claims (safety.dietary) override the ingredient screen', async () => {
+  const { dietOk } = await import('../src/core/query.js');
+  const classifiedNoVegan = { di: ['vegan', 'halal_ingredients', 'kosher_pareve'], dk: true, dc: ['halal'] };
+  assert.equal(dietOk(classifiedNoVegan, 'vegan'), false, 'classified without a vegan claim is not vegan');
+  assert.equal(dietOk(classifiedNoVegan, 'halal_ingredients'), true);
+  assert.equal(dietOk(classifiedNoVegan, 'kosher_any'), false);
+  assert.equal(dietOk({ di: ['vegan'] }, 'vegan'), true, 'unclassified falls back to the screen');
+  assert.equal(dietOk({ di: [], dk: true, dc: ['vegan'] }, 'vegetarian'), true, 'a published vegan claim implies vegetarian');
+  assert.equal(dietOk({ di: [], dk: true, dc: ['halal'] }, 'halal_ingredients'), true, 'a published halal claim beats the screen');
+  assert.equal(dietOk({ di: ['kosher_dairy'], dk: true, dc: ['kosher'] }, 'kosher_dairy'), true);
+  assert.equal(dietOk({ di: ['kosher_dairy'], dk: true, dc: ['kosher'] }, 'kosher_meat'), false);
+  const r = await call('/api/search?q=basbousa&diet=halal&detail=full&limit=25');
+  const b = r.json.items.find((i) => i.id === 'basbousa'); assert.ok(b, 'basbousa carries a published halal claim');
+  assert.equal(b.diet_basis, 'published'); assert.ok(b.dietary_claims.some((c) => c.claim === 'halal' && c.basis === 'ingredients' && c.ruleset));
+  const d = await call('/api/diets'); assert.ok(d.json.diets.find((x) => x.id === 'halal_ingredients').published_claims >= 1);
 });
