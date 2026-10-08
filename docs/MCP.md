@@ -1,6 +1,6 @@
 # Cookwala as an MCP service
 
-> **Status: experimental, read-only.** Package `@cookwala/mcp` 0.1.0; registry name
+> **Status: experimental, read-only.** Package `@cookwala/mcp` 0.2.0 on npm; registry name
 > `ai.cookwala/cookwala`. It never starts cooking.
 
 Cookwala is available to any [Model Context Protocol](https://modelcontextprotocol.io) client as
