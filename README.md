@@ -33,6 +33,7 @@ profile. Live at [cookwala.ai](https://cookwala.ai). Nothing is deployed in the 
 | Python SDK | ✅ Shipping | CLI + library (all Core operations) |
 | TypeScript SDK | ✅ Shipping | MCP server + library (all Core operations) |
 | Allergen data | ⚠️ 86% | 282 recipes missing allergen info (need 90%) |
+| MCP server `@cookwala/mcp` | ✅ Published | 0.2.0 on npm (`npx -y @cookwala/mcp`), listed in the MCP Registry as `ai.cookwala/cookwala`; 16 read-only tools |
 | Search endpoint | ⏳ Blocked | Documented in OpenAPI, edge worker not deployed |
 | Humanitarian Profile | 🔧 Draft | SMS parsing & relief mode working |
 | Certifications (RFC-0010: halal, kosher, vegetarian, ...) | 🔧 Partial | Verify, issue and revoke in the CLI; `search --certified`; MCP tools; static `/v1/certifications`. Certifier registry not yet; example authorities are fictional |

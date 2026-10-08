@@ -8,7 +8,8 @@
 Cookwala is an open standard for cooking safely, plus a catalog of 2,051 recipes (names in 25
 languages) that devices dry-run before they heat anything. You can use it two ways:
 
-1. **MCP (preferred).** Start the local server `npx -y @cookwala/mcp` (Node 20 or later). You get
+1. **MCP (preferred).** Start the local server `npx -y @cookwala/mcp` (Node 20 or later; published on npm and listed in
+   the official MCP Registry as `ai.cookwala/cookwala`). You get
    sixteen read-only tools. Reference: [MCP](MCP.md).
 2. **Plain HTTP, no MCP.** Everything the server reads is a static file you can GET: see
    [Without MCP](#without-mcp).

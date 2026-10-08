@@ -5,6 +5,8 @@ temperature bands, agent mandates and humanitarian SMS, and look recipes up on f
 It reads the static catalog on cookwala.ai, checks every hash, caches locally and works offline after the first run.
 It never starts cooking.
 
+Published on npm (0.2.0) and listed in the official MCP Registry as `ai.cookwala/cookwala`.
+
 ```bash
 npx -y @cookwala/mcp
 claude mcp add cookwala -- npx -y @cookwala/mcp

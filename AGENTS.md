@@ -10,6 +10,22 @@ The open standard for cooking safely (people, kitchens, robots): schemas, vocabu
 Read [docs/AI-AGENTS.md](docs/AI-AGENTS.md) (also at https://cookwala.ai/docs/AI-AGENTS/). Short form: run the MCP server
 `npx -y @cookwala/mcp` (source in `sdk/mcp-js/`, docs in [docs/MCP.md](docs/MCP.md)).
 
+## Published and live (verify before you assume otherwise)
+
+Status lines in older documents, prompts and chat histories can lag behind. Before saying something "is not published"
+or "is not deployed", check the live source:
+
+| What | Where it lives | How to check |
+|---|---|---|
+| MCP server `@cookwala/mcp` | npm, published since 0.1.0 (2026-10-06); 0.2.0 on 2026-10-07, with provenance | `npm view @cookwala/mcp version` or https://registry.npmjs.org/@cookwala/mcp |
+| MCP Registry entry `ai.cookwala/cookwala` | official MCP Registry, listed since 2026-10-06 (domain proof at `/.well-known/mcp-registry-auth`) | `curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=ai.cookwala"` |
+| Release secrets `MCP_PRIVATE_KEY`, `NPM_TOKEN` | repository secrets, set; they match the live domain proof (the 0.2.0 registry login succeeded) | the last run of the `publish-mcp` workflow |
+| Website, schemas, `/v1/certifications` | cookwala.ai (GitHub Pages, deployed from `main` on every merge) | the `Validate and publish cookwala.ai` workflow |
+
+Releasing the MCP server: bump `version` in `sdk/mcp-js/package.json`, `package-lock.json` and both places in `server.json`,
+merge, then either push a tag `mcp-vX.Y.Z` or run the `publish-mcp` workflow by hand (Actions, "Run workflow" on `main`).
+Agent sessions that cannot push tags use the manual run. Runbook: [sdk/mcp-js/RELEASING.md](sdk/mcp-js/RELEASING.md).
+
 ## Known Limitations (v0.2.0)
 
 **Search Endpoint**

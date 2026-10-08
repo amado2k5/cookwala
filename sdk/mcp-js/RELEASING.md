@@ -1,5 +1,21 @@
 # Releasing @cookwala/mcp
 
+## Status: set up and published
+
+The one-time setup below is **done** (2026-10-06). Do not redo it unless you are rotating the key.
+
+| Version | Date | npm | MCP Registry |
+|---|---|---|---|
+| 0.1.0 | 2026-10-06 | published | listed as `ai.cookwala/cookwala` |
+| 0.2.0 | 2026-10-07 | published, with provenance | listed (adds `verify_certification`, `current_certifications`; fail-closed timestamps) |
+
+- The domain proof is live at https://cookwala.ai/.well-known/mcp-registry-auth. The key was regenerated once, a few
+  minutes after the 0.1.0 release; the `MCP_PRIVATE_KEY` secret matches the current line (the 0.2.0 login succeeded).
+- If you rotate the key, change the published line and the secret together, then confirm with a release run.
+- npm takes a short while to serve a new version; the workflow waits for it before registering. A registry
+  "package not found" right after publishing means it did not wait long enough, not that publishing failed.
+
+
 One-time setup (maintainer):
 
 1. **Registry name proof.** Generate an Ed25519 key, publish the public line, keep the private key as a secret:
@@ -17,8 +33,11 @@ Each release:
 
 1. Bump `version` in `package.json` and both places in `server.json` (`python tools/build_mcp_assets.py /tmp/x` fails if they disagree).
 2. `cd sdk/mcp-js && npm ci && npm test`.
-3. `git tag mcp-vX.Y.Z && git push origin mcp-vX.Y.Z`. The `publish-mcp` workflow tests, publishes to npm with provenance,
-   logs in to the registry by HTTP proof, publishes, and checks the registry lists it.
+3. `git tag mcp-vX.Y.Z && git push origin mcp-vX.Y.Z`, **or** run the `publish-mcp` workflow by hand on `main`
+   (GitHub, Actions, "Publish MCP server", "Run workflow"; agent sessions that cannot push tags use this). The workflow
+   tests, publishes to npm with provenance (skipped if that version is already on npm), waits until npm serves it, logs in
+   to the registry by HTTP proof, publishes, and checks the registry lists it.
+4. Update the table at the top of this file.
 
 Fallback name: if the domain proof cannot be completed, change `name` in `server.json` and `mcpName` in `package.json` to
 `io.github.amado2k5/cookwala` and use `mcp-publisher login github-oidc` in the workflow. `mcpName` is inside the npm tarball,
