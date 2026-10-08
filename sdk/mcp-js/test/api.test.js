@@ -92,7 +92,7 @@ test('every path in the OpenAPI document is routable and operation ids are uniqu
   for (const [p, item] of Object.entries(spec.paths)) {
     for (const [method, op] of Object.entries(item)) {
       assert.ok(!ids.has(op.operationId), 'duplicate ' + op.operationId); ids.add(op.operationId);
-      const path = p.replace('{id}', 'koshari').replace('{method}', 'baking').replace('{source}', 'abdennour');
+      const path = p.replace('{id}', 'koshari').replace('{method}', 'baking').replace('{source}', 'abdennour').replace('{diet}', 'halal');
       const r = await call(path, method.toUpperCase(), method === 'post' ? {} : undefined);
       assert.notEqual(r.status, 404, `${method} ${p} is not routed`);
     }
@@ -166,4 +166,26 @@ test('diet flags: known animal products never pass vegetarian or vegan (regressi
   }
   for (const id of ['osool-420', 'osool-954', 'ec-194', 'ec-219', 'w-jp-006', 'w-jp-023', 'add-245', 'w-mx-028', 'w-mx-029', 'add-103', 'bake-01']) assert.ok(!all.has(id), `${id} must not be vegetarian`);
   for (const id of ['osool-957', 'fah-364', 'w-jp-021']) assert.ok(all.has(id), `${id} should still be vegetarian`);
+});
+
+test('diet categories: halal and kosher are labelled screens, never certifications', async () => {
+  const diets = await call('/api/diets'); const ids = diets.json.diets.map((d) => d.id);
+  for (const id of ['halal_ingredients', 'kosher_meat', 'kosher_dairy', 'kosher_pareve', 'vegetarian', 'gluten_free']) assert.ok(ids.includes(id));
+  assert.ok(diets.json.diets.every((d) => d.certified === false)); assert.match(diets.json.note, /NOT certifications/);
+  const halal = await call('/api/diets/halal?limit=25&detail=full'); assert.equal(halal.json.diet, 'halal_ingredients'); assert.equal(halal.json.certified, false); assert.match(halal.json.label, /NOT certified/); assert.ok(halal.json.total > 1000);
+  const text = JSON.stringify(halal.json.items.map((i) => i.ingredients)); assert.ok(!/\b(bacon|pork|lard|wine)\b/.test(text.replace(/_/g, ' ')));
+  const all = new Set(); for (let off = 0; off < 2400; off += 25) { const r = await call(`/api/diets/halal?limit=25&offset=${off}`); if (!r.json.items.length) break; r.json.items.forEach((i) => all.add(i.id)); }
+  for (const id of ['fah-330', 'fah-405', 'fah-688', 'w-es-004']) assert.ok(!all.has(id), `${id} (pork or alcohol) must not be halal-friendly`);
+  const kosher = await call('/api/diets/kosher?limit=25&detail=full&q=shrimp'); assert.equal(kosher.json.total, 0);
+  const meatDairy = (i) => /(beef|chicken|lamb|meat)/.test((i.ingredients || []).join(' ')) && /(milk|cheese|butter|cream|yogurt)/.test((i.ingredients || []).join(' '));
+  const k = await call('/api/diets/kosher?limit=25&detail=full'); assert.ok(k.json.items.length && !k.json.items.some(meatDairy));
+  assert.equal((await call('/api/diets/pareve?limit=1')).json.diet, 'kosher_pareve');
+  assert.equal((await call('/api/diets/gluten%20free?limit=1')).json.diet, 'gluten_free');
+  assert.equal((await call('/api/diets/nonsense')).status, 404);
+  assert.ok((await call('/api/search?diet=halal,gluten_free&limit=3')).json.total > 100);
+});
+
+test('certifications list says plainly that nothing real is certified', async () => {
+  const c = await call('/api/certifications?scheme=halal'); assert.equal(c.status, 200);
+  assert.equal(c.json.real_certifications, 0); assert.ok(c.json.items.every((i) => i.example_only)); assert.match(c.json.note, /No real certification/);
 });
