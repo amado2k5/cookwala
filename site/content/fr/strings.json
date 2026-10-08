@@ -53,7 +53,11 @@
   [
    "SDK et scénarios",
    "/scenarios/"
-  ], ["Exemples et paquets", "/samples/"],
+  ],
+  [
+   "Exemples et paquets",
+   "/samples/"
+  ],
   [
    "Registry et directory",
    "/registry/"
@@ -131,6 +135,10 @@
   [
    "security.txt",
    "/.well-known/security.txt"
+  ],
+  [
+   "Technologie de fifi.cooking",
+   "https://fifi.cooking/?page=technology&lang=fr"
   ],
   [
    "GitHub",

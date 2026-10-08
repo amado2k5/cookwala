@@ -95,6 +95,6 @@ pick up or argue with: [BACKLOG.md](BACKLOG.md).
 - Recipe data: CC BY 4.0 where marked in each document's `license` field; collections whose rights are not yet confirmed carry `LicenseRef-source-credited` and publish structured facts only ([LICENSES/LicenseRef-source-credited.md](LICENSES/LicenseRef-source-credited.md))
 - Patent pledge: [PATENTS.md](PATENTS.md)
 
-Cookwala is started and operated by [fifi.cooking](https://fifi.cooking). Cookwala data is
+Cookwala is started and operated by [fifi.cooking](https://fifi.cooking). fifi.cooking is open source too (MIT License): a static React, TypeScript, Vite and Tailwind CSS site on GitHub Pages, with native apps for Android, iPhone and iPad, Apple TV, Fire TV and Samsung TV that read its open JSON files. [How it is built](https://fifi.cooking/?page=technology). Cookwala data is
 provided without warranty. Device makers and operators are responsible for safe
 execution and for complying with local law.

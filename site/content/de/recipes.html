@@ -29,6 +29,7 @@
   <div>
     <h2>Woher die Rezepte kommen</h2>
     <p>Die importierten Rezepte sind die fifi.cooking Kollektion: das Familienarchiv von Dr. Fatma Alkawokgy und vier weitere Kollektionen (Chef Teta, <em>Osool El Tahy</em>, <em>Egyptian Cooking</em> von Samia Abdennour und der Fatma Abu Haty Kanal), jeweils im Dokument genannt. Das Familienarchiv wird unter CC BY 4.0 veröffentlicht; die anderen Kollektionen werden als genannte Fakten mit der vom Gründer zu prüfenden Lizenz veröffentlicht und geben dies so an. Über kein Rezept, das das Dokument nicht enthält, wird nichts behauptet.</p>
+    <p>fifi.cooking veröffentlicht seine Rezepte als offene JSON-Dateien unter <code>fifi.cooking/data</code>; die Website und die Apps für Android, iPhone und iPad, Apple TV, Fire TV und Samsung TV lesen alle dieselben Dateien. <a href="https://fifi.cooking/?page=technology&amp;lang=de">Die Technik hinter fifi.cooking</a>.</p>
     <p>Jedes Rezept ist ein JSON-Dokument bei <code>/v1/recipes/&lt;id&gt;.cookwala.json</code>, mit Text-Sidecars pro Sprache bei <code>/v1/recipes/&lt;id&gt;/text/&lt;lang&gt;.json</code>, einem seitenbasierten Index bei <code>/v1/index/&lt;lang&gt;/&lt;page&gt;.json</code> und einem signaturfertigen Manifest bei <code>/v1/manifest.json</code>. Das Export-Tool und sein Bericht befinden sich im Repository (<code>tools/export_fifi.py</code>, <code>recipes/REPORT.md</code>).</p>
   </div>
 </section>

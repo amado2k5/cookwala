@@ -65,6 +65,7 @@ fifi.cooking  /data/…</code></pre>
   <div>
     <h2>fifi.cooking and Cookwala's standard</h2>
     <p>fifi.cooking is where the recipes are written. Cookwala is the standard form they are published in: one document per recipe, with a hash, a licence, a credit and a link back to the original page. Agents read that form through <code>get_recipe</code>.</p>
+    <p>fifi.cooking is a static site (React, TypeScript, Vite and Tailwind CSS on GitHub Pages) and its recipes are plain JSON files under <code>/data</code>. That is what <code>fifi_search</code> and <code>fifi_source</code> read, so no fifi.cooking server is involved. <a href="https://fifi.cooking/?page=technology&amp;lang=en">How it is built</a>.</p>
   </div>
   <div>
     <p>Recipes added to fifi.cooking after the last export are visible through <code>fifi_search</code> with ingredients and times, and the 376 world-cuisine recipes (China, Ethiopia, France, Greece, India, Indonesia, Iran, Italy, Japan, Korea, Morocco, Mexico, Spain, Vietnam) were exported by 8 October 2026 and are in the catalog. Where a collection's rights are not confirmed, as for the book, channel and world collections, steps are withheld. Bringing a newer recipe into the standard is an export run by a maintainer, described in <a href="/docs/EXPORT-FIFI/">the export guide</a>.</p>
