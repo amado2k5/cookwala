@@ -162,7 +162,7 @@ and cannot start cooking.
 
 `search_recipes` takes `no_allergens` and `diabetic_friendly` (booleans, ANDed with the other filters) and then marks each result with
 `allergenStatus` and `diabeticFriendly`; `get_recipe` returns `allergens` and `diabetic` for every recipe, outside the hashed document.
-Both are estimates, not certifications or medical advice (rules in [REST API](REST-API.md#allergens-and-diabetic-friendly-what-the-fields-mean)).
+Both come from fifi.cooking's analysis where the recipe has one, are estimates, and are not certifications or medical advice (rules in [REST API](REST-API.md#allergens-and-diabetic-friendly-what-the-fields-mean)).
 They read `/v1/query/recipes.json`, loaded on first use; without it (offline, no cached copy) the filters fail with a clear error and
 `get_recipe` still works, with `derivedUnavailable`.
 

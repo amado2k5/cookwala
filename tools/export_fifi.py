@@ -186,6 +186,12 @@ def op_hint(text_ar, text_en):
     return None
 
 
+EU14 = {'cereals_gluten', 'crustaceans', 'eggs', 'fish', 'peanuts', 'soybeans', 'milk', 'nuts', 'celery', 'mustard', 'sesame', 'sulphites', 'lupin', 'molluscs'}
+US9 = {'milk': 'milk', 'eggs': 'eggs', 'fish': 'fish', 'crustaceans': 'crustacean_shellfish', 'nuts': 'tree_nuts', 'peanuts': 'peanuts', 'cereals_gluten': 'wheat', 'soybeans': 'soybeans', 'sesame': 'sesame'}
+ALLERGEN_STATUS = {'contains', 'none_found', 'check_labels', 'not_assessed'}
+DIABETIC_STATUS = {'friendly', 'borderline', 'not_friendly', 'unknown'}
+
+
 def allergens(names_en):
     eu, us = set(), set()
     low = [n.lower() for n in names_en]
@@ -281,6 +287,13 @@ def convert(d, vocab, stats):
         if t: names[l] = t
     if 'en' not in names and rec.get('titleEn'): names['en'] = rec['titleEn']
     eu, us = allergens(names_en)
+    # fifi.cooking's own allergen analysis (scripts/diet/allergens.py there: whole-word scan of ingredients and steps plus reviewed facts)
+    # replaces the substring guess above, which read "eggplant" as eggs, "cornflour" as wheat and "coconut" as nuts. The status says whether
+    # none were found for sure ("none_found"), or labels must be checked ("check_labels"), or the recipe was not assessed.
+    fa = d.get('allergens'); x_allergen = {}
+    if isinstance(fa, dict) and fa.get('status') in ALLERGEN_STATUS:
+        eu = sorted(c for c in fa.get('contains', []) if c in EU14); us = sorted({US9[c] for c in eu if c in US9})
+        x_allergen = {'x-status': fa['status'], **({'x-ruleset': fa['ruleset']} if fa.get('ruleset') else {})}
     prep_min, cook_min = minutes_of(rec.get('prepTime')), minutes_of(rec.get('cookTime'))
     doc = {
         '$schema': 'https://cookwala.ai/v1/schemas/recipe.schema.json',
@@ -293,7 +306,7 @@ def convert(d, vocab, stats):
         'yield': {'servings': servings_of(rec, est)},
         'ingredients': ingredients, 'equipment': equipment,
         'process': {'nodes': nodes, 'edges': 'implicit-from-inputs'},
-        'safety': {'hazards': [], 'allergens': {'eu14': eu, 'us9': us, 'mayContain': []},
+        'safety': {'hazards': [], 'allergens': {'eu14': eu, 'us9': us, 'mayContain': [], **x_allergen},
                    'supervision': {'default': 'presence_required', 'reasons': {'all': 'V0 document: a person cooks from the original steps; no step is machine-verified (RFC-0009).'}},
                    'abort': {'steps': ['heat_off', 'alert_user']}},
         'text': {'ar': {'title': rec.get('title') or rid, 'intro': rec.get('culturalNotes') or '', 'steps': steps_ar, 'legacySteps': legacy_ar},
@@ -307,6 +320,11 @@ def convert(d, vocab, stats):
     # Only the keys the schema allows are copied; anything else in the source is ignored.
     claims = [{k: c[k] for k in ('claim', 'basis', 'ruleset', 'note') if c.get(k)} for c in (d.get('dietary') or []) if c.get('claim') and c.get('basis') == 'ingredients']
     if claims: doc['safety']['dietary'] = claims
+    # diabetic estimate from fifi.cooking (never "safe", never medical advice): friendly is also a diabetic_friendly claim above;
+    # borderline and not_friendly are kept here so a reader can tell them from "not assessed".
+    fd = d.get('diabetic')
+    if isinstance(fd, dict) and fd.get('status') in DIABETIC_STATUS:
+        doc['safety']['x-diabetic'] = {k: v for k, v in (('status', fd['status']), ('ruleset', fd.get('ruleset')), ('basis', fd.get('basis'))) if v}
     if rec.get('difficulty') in ('easy', 'medium'): doc['dish']['difficulty'] = rec['difficulty']
     elif rec.get('difficulty') == 'master': doc['dish']['difficulty'] = 'hard'
     if prep_min or cook_min:

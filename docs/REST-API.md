@@ -62,12 +62,12 @@ Nothing here is a certification.
 Both appear on **every recipe response** (`allergen_info` and `diabetic` at the top of each `/api/recipes/{id}` answer; `allergen_status` and
 `diabetic_friendly` on every list row; the full objects with `detail=full` or `compare`).
 
-- `allergen_info.status` is `contains` or `none_found`. `contains` lists the declared allergens plus any the ingredient names reveal
-  (`also_found_in_ingredient_names`). `none_found` needs **both** to be empty. It is never a guarantee: the declared lists are
+- `allergen_info.status` is `contains`, `none_found`, `check_labels` or `not_assessed`. The analysis comes from fifi.cooking (see [export guide](EXPORT-FIFI.md)). `contains` lists the declared allergens plus any the ingredient names reveal
+  (`also_found_in_ingredient_names`). `none_found` needs the recipe to be reviewed, with nothing found and no bought or compound item (stock cube, sauce, spice mix...) that could hide an allergen; `check_labels` is the case with such an item. It is never a guarantee: the declared lists are
   heuristic and about 14% of recipes had none recorded, so always read labels and ask about cross-contact.
 - `diabetic.status` is `friendly`, `borderline`, `not_friendly` or `unknown`. It is an **estimate, not medical advice**, never "safe": a
   reviewed `diabetic_friendly` claim (`safety.dietary`) wins; otherwise the modelled per-serving nutrition decides
-  (friendly: sugar 5 g or less and carbohydrate 30 g or less; not friendly: sugar over 15 g or carbohydrate over 60 g; else borderline;
+  (friendly: sugar 5 g or less, carbohydrate 30 g or less, carbohydrate at most 40% of the energy and 12 servings or fewer; not friendly: sugar over 15 g or carbohydrate over 60 g; else borderline;
   no nutrition: unknown). The rule and the numbers are in the response. Portions, glycaemic response and medication vary; people with
   diabetes should check with their clinician or dietitian.
 
