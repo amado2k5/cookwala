@@ -27,7 +27,7 @@ METHODS = {
     'chill': {'chill', 'refrigerate'}, 'freeze': {'freeze'}, 'marinate': {'marinate'}, 'ferment': {'ferment'},
 }
 MEAT = {'beef', 'lamb', 'mutton', 'veal', 'chicken', 'turkey', 'duck', 'goose', 'rabbit', 'meat', 'mince', 'liver', 'kidney', 'tripe', 'oxtail', 'goat', 'camel', 'quail', 'pigeon', 'sausage', 'sausages', 'kofta', 'shawarma', 'brisket', 'steak', 'ribs', 'drumsticks', 'wings', 'bone', 'bones', 'marrow', 'broth', 'stock', 'bouillon', 'gelatin', 'gelatine', 'suet', 'tallow', 'sujuk', 'pastrami', 'salami', 'ham', 'bacon', 'pork', 'lard', 'chorizo', 'prosciutto', 'pancetta', 'chashu', 'guanciale'}
-FISH = {'fish', 'shrimp', 'prawn', 'prawns', 'shrimps', 'tuna', 'sardine', 'sardines', 'salmon', 'cod', 'tilapia', 'mullet', 'bass', 'bream', 'calamari', 'squid', 'octopus', 'crab', 'lobster', 'mussels', 'clams', 'oyster', 'oysters', 'anchovy', 'anchovies', 'fillet', 'seafood', 'catfish', 'trout', 'mackerel', 'herring', 'eel', 'sole', 'flounder', 'haddock', 'hake', 'snapper', 'grouper', 'carp', 'perch', 'pike', 'halibut', 'swordfish', 'sea', 'monkfish', 'turbot', 'pollock', 'plaice', 'whiting', 'sprat', 'skate', 'ray', 'shark', 'barramundi', 'mahi', 'roe', 'caviar', 'bonito', 'katsuo', 'katsuobushi', 'niboshi', 'dashi', 'shirodashi', 'hondashi', 'worcestershire', 'belacan', 'terasi', 'nam', 'pla', 'nuoc', 'mam', 'scallop', 'scallops', 'cuttlefish', 'urchin', 'tobiko', 'surimi', 'kamaboko', 'narutomaki'} - {'sea', 'ray', 'nam', 'mam'}
+FISH = {'fish', 'shrimp', 'prawn', 'prawns', 'shrimps', 'tuna', 'sardine', 'sardines', 'salmon', 'cod', 'tilapia', 'mullet', 'bass', 'bream', 'calamari', 'squid', 'octopus', 'crab', 'lobster', 'mussels', 'clams', 'oyster', 'oysters', 'anchovy', 'anchovies', 'seafood', 'catfish', 'trout', 'mackerel', 'herring', 'eel', 'sole', 'flounder', 'haddock', 'hake', 'snapper', 'grouper', 'carp', 'perch', 'pike', 'halibut', 'swordfish', 'sea', 'monkfish', 'turbot', 'pollock', 'plaice', 'whiting', 'sprat', 'skate', 'ray', 'shark', 'barramundi', 'mahi', 'roe', 'caviar', 'bonito', 'katsuo', 'katsuobushi', 'niboshi', 'dashi', 'shirodashi', 'hondashi', 'worcestershire', 'belacan', 'terasi', 'nam', 'pla', 'nuoc', 'mam', 'scallop', 'scallops', 'cuttlefish', 'urchin', 'tobiko', 'surimi', 'kamaboko', 'narutomaki'} - {'sea', 'ray', 'nam', 'mam'}
 PORK = {'pork', 'bacon', 'ham', 'lard', 'chorizo', 'prosciutto', 'pancetta', 'chashu', 'guanciale', 'salami', 'pepperoni', 'hamhock'}
 ALCOHOL = {'wine', 'beer', 'rum', 'brandy', 'liqueur', 'vodka', 'mirin', 'sake', 'whisky', 'whiskey', 'cognac', 'gin', 'amaretto', 'kirsch', 'sherry', 'port', 'marsala', 'bourbon', 'tequila', 'champagne', 'cider'}
 DAIRY = {'milk', 'butter', 'ghee', 'cheese', 'yogurt', 'yoghurt', 'cream', 'labneh', 'feta', 'halloumi', 'mozzarella', 'parmesan', 'ricotta', 'kashk', 'whey', 'casein', 'custard', 'cheddar', 'mascarpone', 'buttermilk', 'samna', 'qishta', 'kaymak', 'cottage'}
@@ -56,6 +56,14 @@ MEAT_STRICT_EXCLUDE = {'rennet', 'aspic', 'gelatin', 'gelatine', 'jellied', 'isi
 GLUTEN = {'flour', 'wheat', 'semolina', 'bread', 'breadcrumbs', 'breadcrumb', 'pasta', 'macaroni', 'spaghetti', 'noodles', 'vermicelli', 'couscous', 'bulgur', 'burghul', 'freekeh', 'farika', 'barley', 'rye', 'phyllo', 'filo', 'pastry', 'dough', 'biscuit', 'biscuits', 'cake', 'oat', 'oats', 'orzo', 'lasagna', 'lasagne', 'crackers', 'cracker', 'pita', 'toast', 'baguette', 'croissant', 'tortilla', 'seitan', 'malt', 'ramen', 'udon', 'somen', 'soba', 'panko', 'beer'}
 GLUTEN_FREE_FLOUR = {'rice', 'corn', 'cornflour', 'chickpea', 'gram', 'almond', 'coconut', 'besan', 'potato', 'tapioca', 'cassava', 'sorghum', 'millet', 'masa', 'arrowroot', 'glutinous'}
 NUTS = {'almond', 'walnut', 'pistachio', 'hazelnut', 'cashew', 'pecan', 'peanut', 'macadamia', 'nut', 'nuts', 'praline', 'marzipan', 'nutella', 'gianduja'}
+ALLERGEN_WORDS = {
+    'milk': DAIRY | {'whey', 'casein', 'lactose'}, 'eggs': EGG, 'fish': FISH | {'anchovy', 'anchovies'},
+    'crustaceans': {'shrimp', 'prawn', 'crab', 'lobster', 'crayfish', 'crawfish', 'langoustine', 'krill'},
+    'molluscs': {'mussel', 'clam', 'oyster', 'scallop', 'squid', 'calamari', 'octopus', 'cuttlefish', 'snail', 'abalone', 'cockle', 'whelk'},
+    'nuts': {'almond', 'walnut', 'pistachio', 'hazelnut', 'cashew', 'pecan', 'macadamia', 'praline', 'marzipan', 'nutella', 'gianduja', 'nut', 'nuts'}, 'peanuts': {'peanut'},
+    'sesame': {'sesame', 'tahini', 'tahina', 'halawa', 'halva', 'halwa', 'gomasio'}, 'soybeans': {'soy', 'soya', 'soybean', 'tofu', 'edamame', 'miso', 'tempeh', 'natto'},
+    'celery': {'celery', 'celeriac'}, 'mustard': {'mustard'}, 'lupin': {'lupin', 'lupini', 'termis'},
+}
 # what most kitchens already have: ignored when ranking by "ingredients I have"
 STAPLES = {'salt', 'water', 'warm_water', 'cold_water', 'hot_water', 'boiling_water', 'oil', 'pepper', 'black_pepper', 'salt_and_pepper', 'sugar', 'ice', 'ice_water', 'cooking_oil', 'vegetable_oil', 'sunflower_oil'}
 
@@ -130,6 +138,13 @@ def load_notes():
                 if t.get('culturalNotes'): NOTES_IDS.add(rid)
 
 
+def title_core_early(names):
+    # titles for the allergen screen: drop 'for X' accompaniment phrases and scallop shells
+    t = (names or {}).get('en') or ''
+    t = re.sub(r'\bscallop(?:ed)?\s+shells?\b', '', t, flags=re.I)
+    return re.sub(r'\((?:for|to serve with|served with)\b[^)]*\)', '', re.sub(r'\b(?:for|to serve with|served with)\b[^()]*', '', t, flags=re.I), flags=re.I)
+
+
 def load_docs():
     docs = {}
     for p in sorted((ROOT / 'recipes').glob('*/*.cookwala.json')):
@@ -193,6 +208,13 @@ def record(rid, d):
     if 'sesame' in set(al_codes): cautions.append('contains sesame: allergy risk')
     al = d.get('safety', {}).get('allergens', {})
     alist = sorted(set(al.get('eu14', [])) | set(al.get('us9', [])))
+    found = set()
+    for code, words in ALLERGEN_WORDS.items():
+        st_ = {stem(x) for x in words}
+        if any(tokens(r) & st_ for r in refs) or (code in ('fish', 'crustaceans', 'molluscs', 'eggs', 'milk') and bool(tokens(title_core_early(names)) & st_)): found.add(code)
+    if any((tokens(r) & {stem(x) for x in GLUTEN}) and not ('flour' in tokens(r) and tokens(r) & GLUTEN_FREE_FLOUR) for r in refs) or any('soy_sauce' in r.lower() for r in refs): found.add('cereals_gluten')
+    if 'soy_sauce' in ' '.join(refs).lower(): found.add('soybeans')
+    extra_allergens = sorted(found - set(alist) - ({'nuts', 'peanuts'} if 'nuts' in alist and 'peanuts' not in found else set()))
     n = (d.get('nutrition') or {}).get('perServing') or {}
     c = d.get('cost') or {}
     serv = d.get('yield', {}).get('servings') or None
@@ -202,7 +224,7 @@ def record(rid, d):
         'cu': dish.get('cuisine') or ['EG'], 'co': dish.get('course', 'other'), 'tg': dish.get('tags', []),
         'df': dish.get('difficulty'), 'lv': d['verification']['level'], 'k': (d.get('source') or {}).get('collection') or 'cookwala',
         'sv': serv, 'ig': refs, 'ni': len(refs), 'op': sorted(opset), 'me': methods, 'st': style, 'ns': len(ops),
-        'mn': duration_min(d.get('process', {}).get('totalTime')), 'ac': duration_min(d.get('process', {}).get('activeTime')), 'al': alist,
+        'mn': duration_min(d.get('process', {}).get('totalTime')), 'ac': duration_min(d.get('process', {}).get('activeTime')), 'al': alist, 'ax': extra_allergens,
         'am': sorted(al.get('mayContain', [])), 'di': diet,
         'eq': sorted({e.get('class', '').replace('cw.eq.', '') for e in d.get('equipment', []) if e.get('class')}),
         'img': bool(dish.get('images')),

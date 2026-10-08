@@ -148,6 +148,14 @@ and cannot start cooking.
   [recipe REST API](REST-API.md) (`/api/*`). The registry entry `ai.cookwala/cookwala` lists only the npm
   package, not this endpoint.
 
+### Allergen and diabetic information in the tools
+
+`search_recipes` takes `no_allergens` and `diabetic_friendly` (booleans, ANDed with the other filters) and then marks each result with
+`allergenStatus` and `diabeticFriendly`; `get_recipe` returns `allergens` and `diabetic` for every recipe, outside the hashed document.
+Both are estimates, not certifications or medical advice (rules in [REST API](REST-API.md#allergens-and-diabetic-friendly-what-the-fields-mean)).
+They read `/v1/query/recipes.json`, loaded on first use; without it (offline, no cached copy) the filters fail with a clear error and
+`get_recipe` still works, with `derivedUnavailable`.
+
 ## Registry
 
 Registered in the official MCP Registry as `ai.cookwala/cookwala` (metadata only; the package is

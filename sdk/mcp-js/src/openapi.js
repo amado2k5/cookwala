@@ -12,7 +12,7 @@ const FILTERS = [
   q('operation', 'Comma list of cooking operations that must all appear: mix, cut, knead, whisk, boil, fry, bake, roast, grill, chill, freeze, marinate, stuff...'),
   q('equipment', 'Comma list of equipment keywords, for example oven, hob, blender, grill.'),
   q('basis', 'published: with diet, only recipes classified by their publisher (safety.dietary); any (default): published claims plus an ingredient screen for unclassified recipes.', { type: 'string', enum: ['published', 'any'] }),
-  q('diet', 'Comma list, all must hold. Published classification where the recipe has one, otherwise an ingredient screen; NEVER certified: vegetarian, vegan, pescatarian, halal (ingredients only), kosher (meat, dairy or pareve style), kosher_meat, kosher_dairy, kosher_pareve, pork_free, alcohol_free, dairy_free, egg_free, gluten_free, nut_free, shellfish_free. See /api/diets.'),
+  q('diet', 'Comma list, all must hold. Published classification where the recipe has one, otherwise an ingredient screen; NEVER certified: vegetarian, vegan, pescatarian, halal (ingredients only), kosher (meat, dairy or pareve style), kosher_meat, kosher_dairy, kosher_pareve, pork_free, alcohol_free, dairy_free, egg_free, gluten_free, nut_free, shellfish_free, no_allergens, diabetic_friendly. See /api/diets.'),
   q('allergen_free', 'Comma list of declared allergens to exclude: milk, eggs, cereals_gluten, nuts, peanuts, sesame, fish, crustaceans, molluscs, soybeans, celery, mustard, lupin. Missing allergen data is not a guarantee.'),
   q('ingredient', 'Comma list of ingredients that must all appear (for example lentils,onions).'),
   q('exclude_ingredient', 'Comma list of ingredients that must not appear.'),
@@ -44,6 +44,8 @@ const FILTERS = [
   q('country', 'Country or nationality: Egypt, Egyptian, Japan, India, Korea, Iran, Italy, Spain, Greece, Mexico, Morocco... or a code (EG, JP). Same as cuisine. See /api/countries.'),
   q('kids', 'true: recipes that look kid-friendly. INFERRED, not certified: mild (no chilli, alcohol, caffeine or offal), easy or medium, 15 ingredients or fewer, and kid-appealing (sweets, bread, pasta, sandwiches, kofta, pancakes...). Each result lists kid_cautions such as honey (not under 12 months), nuts and sesame.', { type: 'boolean' }),
   q('has_notes', 'true: only recipes that have published background, history or tips.', { type: 'boolean' }),
+  q('no_allergens', 'true: only recipes with no major allergen in the declared list or the ingredient names (not a guarantee; allergen data is incomplete for some recipes). Same as diet=no_allergens.', { type: 'boolean' }),
+  q('diabetic_friendly', 'true: only recipes that look diabetic-friendly: a reviewed claim, or per serving sugar 5 g or less and carbohydrate 30 g or less in the modelled nutrition. An estimate, not medical advice. Same as diet=diabetic_friendly.', { type: 'boolean' }),
   q('has_image', 'true to return only recipes with a photo.', { type: 'boolean' }),
 ];
 const LANG = q('lang', 'Language for titles and, where available, ingredient names and step wording: a code (ar, fr, es, de, zh...), a tag such as ar-EG, or a name such as Arabic. See /api/languages. Falls back to English and says so.');

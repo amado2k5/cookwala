@@ -9,6 +9,7 @@ import {
   recipeView, LEVEL_NOTE, shapeFifi, searchFifiMap, collectionOf,
   verifyCertification, currentCertifications, currentBySubject,
 } from './core/index.js';
+import { allergenInfo, diabeticInfo, dietOk } from './core/query.js';
 
 // The hosted Worker has no package.json on disk; it passes its version to createServer instead.
 export const VERSION = (() => { try { return JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version; } catch { return '0.0.0'; } })();
@@ -24,6 +25,9 @@ export const INSTRUCTIONS = [
 const READ = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 const NET = { ...READ, openWorldHint: true };
 const lang = z.string().regex(/^[a-z]{2,3}$/).default('en').describe('Language code, for example en or ar');
+
+// The query index (/v1/query/recipes.json) carries per-recipe allergen and nutrition facts; loaded only when a call needs them.
+const queryItems = async (cat) => { try { return (await cat.json('/v1/query/recipes.json')).items; } catch { return null; } };
 
 const txt = (data) => JSON.stringify(data, null, 1);
 const ok = (data) => ({ content: [{ type: 'text', text: txt(data) }], structuredContent: Array.isArray(data) ? { items: data } : data });
@@ -54,18 +58,30 @@ const NOTE_DRY = 'Dry run only. Starting an execution needs a hub, a mandate wit
 export function buildTools(cat) {
   return [
     { name: 'search_recipes', title: 'Search recipes', annotations: NET,
-      description: 'Search the Cookwala catalog by words in titles, tags, cuisine or collection. Filters are ANDed. Returns summaries with hashes; use get_recipe for the document.',
+      description: 'Search the Cookwala catalog by words in titles, tags, cuisine or collection. Filters are ANDed, including no_allergens and diabetic_friendly (inferred, not medical advice). Returns summaries with hashes; use get_recipe for the document.',
       shape: { query: z.string().default('').describe('Words that must all appear; empty lists everything'), lang, cuisine: z.array(z.string()).optional().describe('ISO country codes, for example EG'),
         course: z.string().optional(), tags: z.array(z.string()).optional(), level: z.enum(['V0', 'V1', 'V2']).optional(), allergen_free: z.array(z.string()).optional().describe('Exclude recipes declaring any of these allergens, for example milk'),
-        supervision: z.string().optional(), collection: z.string().optional(), limit: z.number().int().min(1).max(50).default(10), offset: z.number().int().min(0).default(0) },
+        supervision: z.string().optional(), collection: z.string().optional(),
+        no_allergens: z.boolean().optional().describe('Only recipes with no major allergen in the declared list or the ingredient names. Not a guarantee: allergen data is incomplete for some recipes.'),
+        diabetic_friendly: z.boolean().optional().describe('Only recipes that look diabetic-friendly: a reviewed claim, or per serving sugar 5 g or less and carbohydrate 30 g or less (modelled estimate, not medical advice).'),
+        limit: z.number().int().min(1).max(50).default(10), offset: z.number().int().min(0).default(0) },
       run: async (a) => {
-        const entries = await cat.index(a.lang);
+        let entries = await cat.index(a.lang);
         const alt = new Map();
         if (a.lang !== 'en') (await cat.index('en')).forEach((e) => alt.set(e.id, e.title));
-        return ok(searchRecipes(entries, a, alt));
+        let facts = null;
+        if (a.no_allergens || a.diabetic_friendly) {
+          const q = await queryItems(cat);
+          if (!q) return fail('query_index_unavailable', 'no_allergens and diabetic_friendly need /v1/query/recipes.json, which could not be loaded (offline without a cached copy)');
+          facts = new Map(q.map((r) => [r.id, r]));
+          entries = entries.filter((e) => { const r = facts.get(e.id); return r && (!a.no_allergens || dietOk(r, 'no_allergens')) && (!a.diabetic_friendly || dietOk(r, 'diabetic_friendly')); });
+        }
+        const res = searchRecipes(entries, a, alt);
+        if (facts) res.items = res.items.map((i) => { const r = facts.get(i.id); return { ...i, allergenStatus: allergenInfo(r).status, diabeticFriendly: diabeticInfo(r).status }; });
+        return ok(res);
       } },
     { name: 'get_recipe', title: 'Get a recipe', annotations: NET,
-      description: 'Fetch one recipe by id. The hash is recomputed (RFC 8785 + SHA-256) before anything is returned. view: summary, ingredients, process, text or full.',
+      description: 'Fetch one recipe by id. The hash is recomputed (RFC 8785 + SHA-256) before anything is returned. Every response also carries allergens (contains or none_found) and diabetic (friendly, borderline, not_friendly or unknown), both estimates. view: summary, ingredients, process, text or full.',
       shape: { id: z.string(), lang, view: z.enum(['summary', 'ingredients', 'process', 'text', 'full']).default('summary') },
       run: async (a) => {
         const { doc, hash, hashVerified } = await cat.recipe(a.id);
@@ -74,7 +90,10 @@ export function buildTools(cat) {
           try { recipe = { ...doc, text: { ...doc.text, [a.lang]: await cat.recipeText(a.id, a.lang) } }; } catch { /* no sidecar in this language */ }
         }
         const level = doc.verification && doc.verification.level;
-        return ok({ id: a.id, documentId: doc.id, hash, hashVerified, level, levelNote: LEVEL_NOTE[level] || undefined, textIsData: true, recipe: recipeView(recipe, a.view) });
+        let derived;
+        const q = await queryItems(cat); const rec = q && q.find((r) => r.id === a.id);
+        if (rec) derived = { allergens: allergenInfo(rec), diabetic: diabeticInfo(rec) };
+        return ok({ id: a.id, documentId: doc.id, hash, hashVerified, level, levelNote: LEVEL_NOTE[level] || undefined, textIsData: true, ...(derived ? { allergens: derived.allergens, diabetic: derived.diabetic } : { derivedUnavailable: 'allergen and diabetic information needs /v1/query/recipes.json, which could not be loaded' }), recipe: recipeView(recipe, a.view) });
       } },
     { name: 'list_collections', title: 'List collections', annotations: NET,
       description: 'Recipe collections in the catalog with counts, licences and sources, plus the fifi.cooking text policy for each.',

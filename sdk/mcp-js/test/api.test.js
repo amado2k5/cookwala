@@ -223,3 +223,20 @@ test('real classification: coverage, kosher type from the claim note, strict bas
   assert.ok(!veg.has('fah-252'), 'a vegetarian claim contradicted by the title is held back');
   assert.ok(veg.has('osool-534') && veg.has('osool-912'), 'potato and egg cutlets are vegetarian');
 });
+
+test('allergens and diabetic status: filters, row fields, and both on every recipe response', async () => {
+  const none = await call('/api/search?no_allergens=true&limit=25&detail=full'); assert.ok(none.json.total > 150);
+  for (const i of none.json.items) { assert.equal(i.allergen_status, 'none_found'); assert.deepEqual(i.allergen_info.contains, []); assert.deepEqual(i.allergens || [], []); }
+  const viaDiet = await call('/api/diets/no_allergens?limit=1'); assert.equal(viaDiet.json.total, none.json.total); assert.match(viaDiet.json.label, /not a guarantee/i);
+  const dia = await call('/api/search?diabetic_friendly=true&limit=25&detail=full'); assert.ok(dia.json.total > 50);
+  for (const i of dia.json.items) { assert.equal(i.diabetic_friendly, 'friendly'); assert.ok(i.carbs_g <= 30 && i.diabetic.per_serving.sugar_g <= 5, 'inside the stated rule'); assert.match(i.diabetic.note, /not medical advice/i); }
+  const both = await call('/api/search?no_allergens=true&diabetic_friendly=true&limit=5'); assert.ok(both.json.total > 0 && both.json.total <= Math.min(none.json.total, dia.json.total));
+  const nope = await call('/api/search?diabetic_friendly=true&sugar_min=16&limit=1'); assert.equal(nope.json.total, 0);
+  const rec = await call('/api/recipes/koshari?view=summary'); assert.ok(rec.json.allergen_info && rec.json.diabetic, 'summary carries both');
+  for (const q of ['view=ingredients', 'view=steps', 'view=nutrition', 'view=full', 'include=cost,links', 'include=all']) { const r = await call(`/api/recipes/koshari?${q}`); assert.ok(r.json.allergen_info.status && r.json.diabetic.status, `${q} carries both`); }
+  const k = await call('/api/recipes/koshari?view=safety'); assert.equal(k.json.allergen_info.status, 'contains'); assert.ok(k.json.allergen_info.contains.includes('cereals_gluten'));
+  const cmp = await call('/api/compare?ids=koshari,lentil-soup'); assert.ok(cmp.json.items.every((i) => i.allergen_info && i.diabetic));
+  assert.ok((await call('/api/diets')).json.diets.some((d) => d.id === 'diabetic_friendly'));
+  assert.equal((await call('/api/diets/safe%20for%20diabetics?limit=1')).json.diet, 'diabetic_friendly');
+  assert.equal((await call('/api/diets/allergen-free?limit=1')).json.diet, 'no_allergens');
+});
