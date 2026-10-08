@@ -49,10 +49,14 @@ const wrap = (fn) => async (args) => {
 const zodOf = (p) => {
   const t = p.schema && p.schema.type; const comma = /comma list/i.test(p.description || '');
   let z0 = p.schema && p.schema.enum ? z.enum(p.schema.enum) : t === 'boolean' ? z.boolean() : t === 'integer' ? z.number().int() : t === 'number' ? z.number() : comma ? z.union([z.string(), z.array(z.string())]) : z.string();
-  return z0.optional().describe(p.description || p.name);
+  const d = String(p.description || p.name); const short = d.length > 150 ? (d.match(/^.{40,150}?[.;:](?=\s|$)/) || [d.slice(0, 147) + '...'])[0] : d; // first sentence: the full text is in the REST OpenAPI
+  return z0.optional().describe(short);
 };
 const shapeOf = (params) => Object.fromEntries(params.map((p) => [p.name, zodOf(p)]));
 const FILTER_SHAPE = shapeOf([...FILTERS, ...LIST]);
+// stats and meal plans take the common filters only, to keep the tool list small for the client's context
+const COMMON = new Set(['q', 'country', 'course', 'category', 'method', 'style', 'diet', 'basis', 'allergen_free', 'no_allergens', 'diabetic_friendly', 'ingredient', 'exclude_ingredient', 'kids', 'source', 'cost_tier', 'time_max', 'lang']);
+const COMMON_SHAPE = shapeOf(FILTERS.filter((p) => COMMON.has(p.name)).concat(LIST.filter((p) => p.name === 'lang')));
 const csv = z.union([z.string(), z.array(z.string())]);
 
 const CERT_KEYS = {
@@ -223,12 +227,12 @@ export function buildTools(cat) {
       shape: { name: z.string().describe('For example lentils, tahini, eggplant'), lang: z.string().optional() },
       run: async (a) => ok(ingredientOp(await loadQuery(cat, { lang: a.lang, name: a.name }))) },
     { name: 'catalog_stats', title: 'Statistics across the catalog', annotations: NET,
-      description: 'Count, average, minimum and maximum of a metric per group, for questions such as which cuisine has the lightest dishes. Accepts every query_recipes filter.',
-      shape: { group_by: z.enum(['cuisine', 'course', 'method', 'style', 'difficulty', 'collection', 'tag', 'level', 'cost_tier', 'diet', 'allergen']), metric: z.string().optional().describe('kcal (default), protein, fat, carbs, fiber, sugar, sodium, time, active, passive, cost, ingredients, steps, servings, total_kcal, total_protein'), order: z.enum(['asc', 'desc']).optional(), ...FILTER_SHAPE },
+      description: 'Count, average, minimum and maximum of a metric per group, for questions such as which cuisine has the lightest dishes. Accepts the common query_recipes filters (country, course, category, method, diet, source, ingredients, allergens, time, language).',
+      shape: { group_by: z.enum(['cuisine', 'course', 'method', 'style', 'difficulty', 'collection', 'tag', 'level', 'cost_tier', 'diet', 'allergen']), metric: z.string().optional().describe('kcal (default), protein, fat, carbs, fiber, sugar, sodium, time, active, passive, cost, ingredients, steps, servings, total_kcal, total_protein'), order: z.enum(['asc', 'desc']).optional(), ...COMMON_SHAPE },
       run: async (a) => ok(aggregateOp(await loadQuery(cat, a))) },
     { name: 'plan_meals', title: 'Plan a day of meals', annotations: NET,
       description: 'Picks dishes close to a calorie target, one serving each. Accepts diet, cuisine, no_allergens, diabetic_friendly and the other filters. Estimates only, not dietary or medical advice.',
-      shape: { kcal: z.number().optional().describe('Daily calorie target (default 2000)'), meals: z.number().int().min(1).max(5).optional(), seed: z.string().optional().describe('Change for a different plan'), ...FILTER_SHAPE },
+      shape: { kcal: z.number().optional().describe('Daily calorie target (default 2000)'), meals: z.number().int().min(1).max(5).optional(), seed: z.string().optional().describe('Change for a different plan'), ...COMMON_SHAPE },
       run: async (a) => ok(mealPlanOp(await loadQuery(cat, a))) },
     { name: 'shopping_list', title: 'Combined shopping list', annotations: NET,
       description: 'Merges and scales the ingredients of up to 8 recipes. Lines without a parsed quantity are listed separately as written.',
