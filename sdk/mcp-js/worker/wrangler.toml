@@ -14,3 +14,10 @@ COOKWALA_BASE_URL = "https://cookwala.ai"
 
 # Secret, set with: npx wrangler secret put MCP_GATEWAY_TOKEN -c worker/wrangler.toml
 # When set, /mcp requires it as x-mcprush-token or Authorization: Bearer. Unset means the endpoint is open (the data is public).
+
+# Optional rate limit for the open /api/* routes (src/api.js uses env.API_LIMITER when it exists and answers 429 when it says no).
+# [[unsafe.bindings]]
+# name = "API_LIMITER"
+# type = "ratelimit"
+# namespace_id = "1001"
+# simple = { limit = 120, period = 60 }
