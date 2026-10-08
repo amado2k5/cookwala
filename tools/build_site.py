@@ -78,6 +78,7 @@ DOCS = [
         ('HUMANITARIAN-PROFILE', 'docs/HUMANITARIAN-PROFILE.md', 'Humanitarian Profile 0.2', 'الملف الإنساني 0.2', 'draft'),
         ('HUB', 'hub/README.md', 'Reference hub', 'الموزّع المرجعي', ''),
         ('MCP', 'docs/MCP.md', 'MCP server (npm and registry)', 'خادم MCP (npm والسجل)', 'exp'),
+        ('MCP-TRY-IT', 'docs/MCP-TRY-IT.md', 'Try Cookwala in your AI app (5 minutes)', 'جرّب كوكوالا في تطبيق الذكاء الاصطناعي (5 دقائق)', 'exp'),
         ('AI-AGENTS', 'docs/AI-AGENTS.md', 'AI agents: connect Cookwala to your agent', 'وكلاء الذكاء الاصطناعي: اربط كوكوالا بوكيلك', 'exp'),
         ('MCP-PYTHON', 'sdk/mcp/README.md', 'MCP server (Python script)', 'خادم MCP (سكربت بايثون)', ''),
         ('SDK', 'scenarios/OPERATIONS.md', 'SDK operations (all languages)', 'عمليات حزمة التطوير (كل اللغات)', ''),
@@ -289,6 +290,17 @@ class Builder:
         return (f'<section class="band" aria-labelledby="origin-h"><div class="wrap narrow"><h2 id="origin-h">{html.escape(O["h"])}</h2>'
                 f'<p class="lead">{html.escape(O["p"])}</p><p class="note">— <a href="https://github.com/amado2k5" rel="noopener">{html.escape(O["by"])}</a></p></div></section>')
 
+    def mcp_live_block(self, lang):
+        M = self.strings[lang].get('mcp_live') or self.strings['en']['mcp_live']
+        e = html.escape
+        return (f'<section class="band mcp-live" aria-labelledby="mcp-live-h"><div class="wrap narrow">'
+                f'<p class="chip"><span class="dot exp" aria-hidden="true"></span>{e(M["chip"])}</p>'
+                f'<h2 id="mcp-live-h">{e(M["h"])}</h2><p class="lead">{e(M["p"])}</p>'
+                f'<pre class="code" dir="ltr"><code>{e(M["cmd"])}</code></pre>'
+                f'<p class="note">{e(M["note"])}</p>'
+                f'<div class="cta"><a class="btn primary" href="/mcp/#install">{e(M["install"])}</a>'
+                f'<a class="btn" href="/docs/MCP-TRY-IT/">{e(M["try"])}</a></div></div></section>')
+
     def position_block(self, lang):
         P = self.strings[lang].get('position') or self.strings['en']['position']
         rows = ''.join(f'<tr><th scope="row">{html.escape(a)}</th><td>{html.escape(b)}</td></tr>' for a, b in P['rows'])
@@ -357,6 +369,7 @@ class Builder:
             S_ = self.strings[lang]
             body = body.replace('{{contact_block}}', f'<p><b>{html.escape(S_.get("contact_email_label", "Email"))}:</b> <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a></p>' if CONTACT_EMAIL else f'<p class="note">{S_.get("contact_pending", "")}</p>')
         if '{{origin_block}}' in body: body = body.replace('{{origin_block}}', self.origin_block(lang))
+        if '{{mcp_live_block}}' in body: body = body.replace('{{mcp_live_block}}', self.mcp_live_block(lang))
         if '{{position_block}}' in body: body = body.replace('{{position_block}}', self.position_block(lang))
         if '{{dist_grid}}' in body: body = body.replace('{{dist_grid}}', self.dist_grid(lang))
         if '{{sdk_cards}}' in body: body = body.replace('{{sdk_cards}}', self.sb.sdk_cards(lang))

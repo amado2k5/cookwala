@@ -24,6 +24,9 @@ endpoint: the client starts it. The same JavaScript core also runs in your
 browser on the [MCP page](https://cookwala.ai/mcp/), which is the proof that nothing runs on a
 server.
 
+> **Try it in five minutes:** exact steps and a test prompt for Devin and Claude, with the answers to expect, are in
+> [Try Cookwala in your AI app](MCP-TRY-IT.md).
+
 ## Install
 
 ```bash
