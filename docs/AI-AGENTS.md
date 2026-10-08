@@ -45,7 +45,7 @@ keep the command and arguments and follow the client's current docs.
 | **GitHub Copilot cloud agent** | Repository Settings, Copilot, Cloud agent, MCP configuration: the `type: local` block below with `tools: ["*"]`. Allow `registry.npmjs.org`, `cookwala.ai` and `fifi.cooking` in the agent firewall. |
 | **Cursor** | `.cursor/mcp.json` or `~/.cursor/mcp.json`, generic block below. |
 | **Windsurf** | `~/.codeium/windsurf/mcp_config.json` (Windows: `%USERPROFILE%\.codeium\windsurf\mcp_config.json`), generic block below, then refresh MCP in Cascade. |
-| **Devin** | Settings, MCP Marketplace, Add Your Own: transport STDIO, command `npx`, args `-y @cookwala/mcp`. Devin runs in a cloud machine, so it needs Node 20+ and outbound HTTPS to `cookwala.ai`. |
+| **Devin** | Settings, MCP Marketplace, Add Your Own: transport STDIO, command `npx`, args `-y @cookwala/mcp` (or `devin mcp add cookwala -- npx -y @cookwala/mcp`). Test it with the prompt in [Try Cookwala in your AI app](MCP-TRY-IT.md). Devin runs in a cloud machine, so it needs Node 20+ and outbound HTTPS to `cookwala.ai`. |
 | **Google Antigravity** | Agent panel, MCP Servers, Manage MCP Servers, View raw config (the shared file is `~/.gemini/config/mcp_config.json`), generic block below, then restart. |
 | **Gemini CLI** | `~/.gemini/settings.json`, generic block below. |
 | **Anything else** | Any client that can launch a stdio MCP server: command `npx`, args `-y @cookwala/mcp`. |

@@ -425,6 +425,15 @@
    ]
   },
   "path_note": "Every planned item has a gate: the one thing that has to happen first. If you can open one (a reviewer, a device, a food bank, funding), say so in <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">GitHub Discussions</a>; a direct address will follow from the founder.",
+  "mcp_live": {
+    "chip": "Live now",
+    "h": "Our MCP server is live. Use it in your AI app today.",
+    "p": "Claude Code, Devin, Cursor, Windsurf, Codex, Copilot and any other app that can run an MCP server can now search the Cookwala recipes, dry-run a recipe against a device and check safe temperature bands. It is read-only and can never start cooking. No account, no server to run.",
+    "cmd": "claude mcp add cookwala -- npx -y @cookwala/mcp",
+    "note": "Needs Node 20 or later. The same package, @cookwala/mcp, works in any MCP-capable app. Listed in the official MCP Registry as ai.cookwala/cookwala.",
+    "install": "Add it to your app",
+    "try": "Try the five-minute test"
+  },
   "hero": {
    "h1": "Robots are learning to move. Nobody had written down how to cook.",
    "sub": "A free, open rulebook that lets any kitchen device check a recipe step by step before it cooks — and refuses the steps it cannot do safely. Try it below."
@@ -860,6 +869,15 @@
    ]
   },
   "path_note": "لكل بند مخطَّط بوابة: الشيء الوحيد الذي يجب أن يحدث أولًا. إن كان بوسعك فتح إحداها (مراجع، جهاز، بنك طعام، تمويل) فقل ذلك في <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">نقاشات GitHub</a>؛ وسيتبع عنوان مباشر من المؤسِّس.",
+  "mcp_live": {
+    "chip": "متاح الآن",
+    "h": "خادم MCP الخاص بنا يعمل الآن. استخدمه في تطبيق الذكاء الاصطناعي اليوم.",
+    "p": "يمكن لـ Claude Code وDevin وCursor وWindsurf وCodex وCopilot وأي تطبيق آخر يشغّل خوادم MCP أن يبحث الآن في وصفات كوكوالا، ويجري تجربة جافة لوصفة على جهاز، ويفحص نطاقات الحرارة الآمنة. هو للقراءة فقط ولا يستطيع أبدًا بدء الطهي. دون حساب ودون خادم تشغّله.",
+    "cmd": "claude mcp add cookwala -- npx -y @cookwala/mcp",
+    "note": "يحتاج إلى Node 20 أو أحدث. الحزمة نفسها، @cookwala/mcp، تعمل في أي تطبيق يدعم MCP. مُدرَجة في سجل MCP الرسمي باسم ai.cookwala/cookwala.",
+    "install": "أضفه إلى تطبيقك",
+    "try": "جرّب الاختبار في خمس دقائق"
+  },
   "hero": {
    "h1": "الروبوتات تتعلّم الحركة. ولم يكتب أحد كيف يُطهى الطعام.",
    "sub": "دليل قواعد مجاني ومفتوح يتيح لأي جهاز مطبخ فحص الوصفة خطوة بخطوة قبل طهيها — ويرفض الخطوات التي لا يستطيع أداءها بأمان. جرّبه بالأسفل."
