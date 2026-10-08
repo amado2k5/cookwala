@@ -1,0 +1,24 @@
+<!--meta {"title": "Privacy policy", "description": "What the Cookwala website, the open API and the MCP servers collect: nothing of your own, no accounts, no tracking. What the hosts see and what is never stored.", "path": "/privacy/", "status": ""} -->
+<section class="hero wrap">
+  <p class="crumb"><a href="/">Cookwala</a> / Privacy</p>
+  <h1>Privacy policy</h1>
+  <p class="lead">Cookwala has no accounts, no sign-in, no cookies of its own and no analytics. The recipe data is public. This page says what that means for the website, the open API at <code>mcp.cookwala.ai</code>, and the MCP server, in plain terms. Last updated 8 October 2026.</p>
+</section>
+
+<section class="wrap">
+  <h2>What Cookwala collects</h2>
+  <p>Nothing about you. Cookwala's own code does not store the questions people ask, does not keep a log of who called which tool, does not set tracking cookies and does not send telemetry. The npm package <code>@cookwala/mcp</code> runs on your machine and is never tracked.</p>
+  <h2>The open API and MCP endpoint</h2>
+  <ul>
+    <li><b>What is sent:</b> the request you make (a search, a recipe id, filters) goes to <code>https://mcp.cookwala.ai</code>. It is answered from public files on cookwala.ai and discarded. Nothing is written to a database; there is none.</li>
+    <li><b>What the host sees:</b> the service runs on Cloudflare Workers and the website on GitHub Pages. Like any web host, they process the network address and request details to serve the request and to protect against abuse, under their own policies: <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener">Cloudflare</a> and <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub</a>. Cookwala does not receive or keep that data.</li>
+    <li><b>Rate limiting:</b> if a per-address limit is switched on for the open API, the address is used only as a short-lived counter key at the host.</li>
+    <li><b>The gated route:</b> the token-protected <code>/mcp</code> route is listed at mcprush.com, which counts calls made through its gateway. That is the one opt-in exception; the open route and the npm package are not tracked.</li>
+  </ul>
+  <h2>When you use Cookwala inside an AI assistant</h2>
+  <p>If you use Cookwala from ChatGPT, Claude, Gemini or another assistant, the assistant's provider sees your conversation under its own privacy policy. Cookwala only receives the tool call the assistant makes, such as a search term or a recipe id. Do not put personal or medical information in a question; Cookwala does not need it and the data is not personal.</p>
+  <h2>Health-related fields</h2>
+  <p>Allergen, diet and diabetic labels describe recipes, not people. They are screens from ingredient names, never guarantees and never medical advice. Cookwala does not ask for, receive or store anyone's health information.</p>
+  <h2>Contact, and reports</h2>
+  <p>Questions about this policy: <a href="https://github.com/amado2k5/cookwala/issues" rel="noopener">github.com/amado2k5/cookwala/issues</a>. Security problems: <a href="/.well-known/security.txt">security.txt</a>. This policy changes only by a public commit in <a href="https://github.com/amado2k5/cookwala" rel="noopener">the repository</a>, so its history is visible.</p>
+</section>
