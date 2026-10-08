@@ -26,10 +26,14 @@ export class Catalog {
     this.local = !isUrl(this.base);
     this.offline = opts.offline ?? (env.COOKWALA_OFFLINE === '1');
     this.lang = opts.lang || env.COOKWALA_LANG || 'en';
-    this.fetch = opts.fetch || globalThis.fetch;
+    this.fetch = opts.fetch || ((...a) => globalThis.fetch(...a)); // unbound: Workers reject a detached fetch
     this.now = opts.now || (() => Date.now());
-    const xdg = env.XDG_CACHE_HOME || path.join(os.homedir(), '.cache');
-    this.cacheDir = opts.cacheDir || env.COOKWALA_CACHE_DIR || path.join(xdg, 'cookwala-mcp');
+    // diskCache: false is for hosted runtimes (the Worker) that have no home directory; files then stay in memory only.
+    this.diskCache = opts.diskCache !== false;
+    if (this.diskCache) {
+      const xdg = env.XDG_CACHE_HOME || path.join(os.homedir(), '.cache');
+      this.cacheDir = opts.cacheDir || env.COOKWALA_CACHE_DIR || path.join(xdg, 'cookwala-mcp');
+    } else this.cacheDir = null;
     this.mem = new Map();
     this.usedCache = false;
     this.networkFailed = false;
@@ -42,6 +46,7 @@ export class Catalog {
   }
 
   async _readCache(file) {
+    if (!this.diskCache) return null;
     try {
       const [body, meta] = await Promise.all([fs.readFile(file), fs.readFile(file + '.meta', 'utf8').then(JSON.parse)]);
       return { body, meta };
@@ -49,6 +54,7 @@ export class Catalog {
   }
 
   async _writeCache(file, body, meta) {
+    if (!this.diskCache) return;
     try {
       await fs.mkdir(path.dirname(file), { recursive: true });
       await fs.writeFile(file, body);
@@ -63,7 +69,7 @@ export class Catalog {
       catch { throw new CatalogError('not_found', `no such file under ${this.base}`, p); }
     }
     const org = origin || this.base;
-    const file = this._cacheFile(org, p);
+    const file = this.diskCache ? this._cacheFile(org, p) : null;
     const cached = force ? null : await this._readCache(file);
     const fresh = cached && this.now() - cached.meta.fetchedAt < REVALIDATE_MS;
     if (cached && (fresh || this.offline)) { this.usedCache = true; return { bytes: new Uint8Array(cached.body), fromCache: true }; }
@@ -193,14 +199,14 @@ export class Catalog {
     let manifest = null, error;
     try { manifest = await this.manifest(); } catch (e) { error = e.code || String(e); }
     let bytes = 0;
-    try {
+    if (this.diskCache) try {
       const walk = async (d) => { for (const e of await fs.readdir(d, { withFileTypes: true })) { const f = path.join(d, e.name); if (e.isDirectory()) await walk(f); else bytes += (await fs.stat(f)).size; } };
       await walk(this.cacheDir);
     } catch { /* no cache yet */ }
     return {
       baseUrl: this.base, catalogVersion: manifest && manifest.version, generatedAt: manifest && manifest.generatedAt,
       counts: manifest && manifest.counts, languages: manifest && manifest.languages,
-      cache: { dir: this.local ? null : this.cacheDir, bytes, servedFromCache: this.usedCache },
+      cache: { dir: this.local || !this.diskCache ? null : this.cacheDir, bytes, servedFromCache: this.usedCache },
       offline: this.offline || this.networkFailed, signature: 'manifest signature is not checked: /.well-known/cookwala.json publishes no keys yet',
       fifiOrigin: FIFI_ORIGIN, ...(error ? { error } : {}),
     };

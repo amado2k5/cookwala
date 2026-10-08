@@ -44,3 +44,19 @@ Fallback name: if the domain proof cannot be completed, change `name` in `server
 so decide before the first publish.
 
 Check: `curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=ai.cookwala"`.
+
+## Hosted endpoint (optional)
+
+`worker/` serves the same 16 read-only tools over Streamable HTTP (stateless, JSON responses) at `/mcp`, with `/health` unauthenticated.
+It exists for directories that need an https address (for example mcprush call tracking). The npm package stays the default, and the
+Worker logs nothing and stores nothing.
+
+1. Cloudflare: create an API token with *Workers Scripts: Edit*; add repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
+2. Run the `Deploy hosted MCP endpoint` workflow. It prints nothing secret; the endpoint is `https://cookwala-mcp.<your-subdomain>.workers.dev/mcp`.
+3. Custom name: put `cookwala.ai` DNS on Cloudflare and uncomment `routes` in `worker/wrangler.toml` for `mcp.cookwala.ai`
+   (a GitHub Pages apex cannot be proxied by a Worker; use the subdomain).
+4. Gateway token: when the directory gives you one, add it as repository secret `MCP_GATEWAY_TOKEN` and re-run the workflow.
+   `/mcp` then answers 401 unless the call carries it as `x-mcprush-token` or `Authorization: Bearer`.
+5. Check: `curl https://<endpoint>/health`, then POST `{"jsonrpc":"2.0","id":1,"method":"tools/list"}` to `/mcp`.
+
+Local: `npx wrangler dev -c worker/wrangler.toml`.

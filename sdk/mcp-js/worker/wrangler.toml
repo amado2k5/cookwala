@@ -1,0 +1,16 @@
+# Hosted, read-only Cookwala MCP endpoint: https://mcp.cookwala.ai/mcp
+# Deploy: npx wrangler deploy -c worker/wrangler.toml   (see RELEASING.md, "Hosted endpoint")
+name = "cookwala-mcp"
+main = "index.js"
+compatibility_date = "2025-09-01"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+# Uncomment after the zone cookwala.ai is on Cloudflare (or point a CNAME of mcp.cookwala.ai at the workers.dev name):
+# routes = [{ pattern = "mcp.cookwala.ai", custom_domain = true }]
+
+[vars]
+COOKWALA_BASE_URL = "https://cookwala.ai"
+
+# Secret, set with: npx wrangler secret put MCP_GATEWAY_TOKEN -c worker/wrangler.toml
+# When set, /mcp requires it as x-mcprush-token or Authorization: Bearer. Unset means the endpoint is open (the data is public).
