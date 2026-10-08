@@ -17,8 +17,9 @@ cookwala search "couscous" --cuisine MA --exclude-allergens nuts --min-level V1
 cookwala get fah-234                       # pretty view in --lang
 cookwala get fah-234 --json > fah-234.cookwala.json
 # The Python CLI (sdk/python) implements search, get and the cooklang/schema-org exports offline against the
-# repository catalog: --cuisine, --course, --tag, --free-of nuts, --level V1, --limit, --json. Cooklang export
-# omits hazards, CCPs and end conditions (Cooklang cannot carry them); never drive a device from it.
+# repository catalog: --cuisine, --course, --tag, --free-of nuts, --level V1, --limit, --json, and
+# --certified halal --keys KEYS.json (only recipes whose exact revision holds a current, verified certification).
+# Cooklang export omits hazards, CCPs and end conditions (Cooklang cannot carry them); never drive a device from it.
 cookwala vocab ops                         # list operations
 cookwala vocab show cw.op.simmer           # definition, params schema, sensors
 cookwala policies list --jurisdiction SA
@@ -84,8 +85,8 @@ are fictional and sign with the public RFC 8032 test keys.
 The catalog relays certifications at `https://cookwala.ai/v1/certifications/index.json` (all documents) and
 `https://cookwala.ai/v1/certifications/{id}.json` (one). The site is static, so filter the list yourself.
 
-Still to come: certifier registration and key management, certification search over the recipe catalog,
-MCP tools. See [CERTIFICATION_IMPLEMENTATION_STATUS.md](../CERTIFICATION_IMPLEMENTATION_STATUS.md).
+Also: `cookwala search --certified halal --keys keys.json`, and the MCP tools `verify_certification` and
+`current_certifications`. Still to come: certifier registration and key management. See [CERTIFICATION_IMPLEMENTATION_STATUS.md](../CERTIFICATION_IMPLEMENTATION_STATUS.md).
 
 ## Kitchen (hub)
 

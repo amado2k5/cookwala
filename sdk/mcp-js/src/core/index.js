@@ -7,3 +7,4 @@ export * from './search.js';
 export * from './explain.js';
 export * from './views.js';
 export * from './fifi.js';
+export * from './certify.js';

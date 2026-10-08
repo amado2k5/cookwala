@@ -37,13 +37,16 @@
     return null;
   }
   // RFC-0011: only healthy sensors with unexpired calibration may satisfy a rung (mirror of trusted_sensors)
+  const RFC3339 = /^\d{4}-\d{2}-\d{2}[Tt ]\d{2}:\d{2}:\d{2}(\.\d+)?([Zz]|[+-]\d{2}:\d{2})$/;
+  const parseTime = (s) => (typeof s === 'string' && RFC3339.test(s) ? Date.parse(s.toUpperCase().replace(' ', 'T')) : NaN);
   function trustedSensors(device, now) {
-    const t = now ? new Date(now) : new Date();
+    const t = now ? parseTime(now) : Date.now();
+    if (!Number.isFinite(t)) throw new RangeError('invalid_timestamp');
     const sensors = new Set();
     ((device.capabilities || {}).sensors || []).forEach((s) => {
       if ((s.state || 'ok') !== 'ok') return;
       const vu = s.calibration && s.calibration.validUntil;
-      if (vu && t > new Date(vu)) return;
+      if (vu) { const u = parseTime(vu); if (!Number.isFinite(u) || t > u) return; } // unreadable calibration date: not trusted
       sensors.add(s.sensor); (s.visionCues || []).forEach((c) => sensors.add(c));
     });
     return sensors;

@@ -38,7 +38,7 @@ locally built site with `COOKWALA_BASE_URL=$PWD/_site` (`bash tools/build_site.s
 
 ## Tools
 
-All fourteen are read-only (`readOnlyHint: true`, `destructiveHint: false`). Results carry
+All sixteen are read-only (`readOnlyHint: true`, `destructiveHint: false`). Results carry
 `structuredContent` and a text copy. Errors set `isError` and return `{error, detail, path}`.
 
 | Tool | Payload | Returns |
@@ -54,6 +54,8 @@ All fourteen are read-only (`readOnlyHint: true`, `destructiveHint: false`). Res
 | `check_mandate` | `mandate`, `action`, `amount`, `provider`, `now` | `{allowed, needsConfirmation, reasons[]}` |
 | `parse_sms` | `text` | the structured Humanitarian command, or `{ok:false, error}` |
 | `verify_recipe` | `recipe` | `{hash, declaredHash, matches, level}` |
+| `verify_certification` | `certification_id` or `certification`, `keys` or `keys_path`, `recipe_id` or `subject_hash`, `now` | `{id, scheme, authority, subject, status, validUntil, valid, reason}` (RFC-0010; reasons as in the reference library) |
+| `current_certifications` | `recipe_id` or `subject_hash`, `scheme`, `authority`, `keys` or `keys_path`, `now` | `{subjectHash, current[], rejected{id: reason}}`: newest verifying document per authority and scheme; read from `/v1/certifications/index.json` |
 | `catalog_status` | none | `{baseUrl, catalogVersion, generatedAt, counts, languages, cache, offline, signature, fifiOrigin}` |
 | `fifi_search` | `query`, `lang`, `limit`, `offset` | `{total, items[{id, inCatalog, title, pageUrl}], nextOffset}` |
 | `fifi_source` | `id` | the recipe in fifi.cooking's legacy format, under the catalog's rights rules (see below) |

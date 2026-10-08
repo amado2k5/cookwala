@@ -11,6 +11,7 @@
     cookwala conformance [--report report.json]    Core and profile vectors; writes a ConformanceReport
     cookwala humanitarian [--pack P ...] FILE...   rule-pack findings on offers, handovers, distributions
     cookwala search [WORDS] [--cuisine EG] [--course main] [--tag T] [--free-of nuts] [--level V1] [--limit 20] [--json]
+                    [--certified halal --keys KEYS.json [--certs DIR]]   only recipes with a current, verified certification
     cookwala get ID [--lang ar] [--json]           view a recipe (ID from search, or a file path)
     cookwala export cooklang ID [-o FILE]          Cookwala recipe -> Cooklang (also: cookwala convert --to cooklang ID)
     cookwala export schema-org ID [-o FILE]        Cookwala recipe -> schema.org JSON-LD
@@ -83,10 +84,35 @@ def _positional(a, flags_with_value):
     return out
 
 
+def _certified_hashes(a):
+    """Subject hashes that hold a current certification of the --certified scheme, verified with --keys."""
+    keys = _need_keys(a)
+    srcs = [a[i + 1] for i, x in enumerate(a) if x == '--certs'] or [str(ROOT / 'examples' / 'certifications')]
+    certs = [c for c in _cert_files(srcs) if c.get('scheme') == _opt(a, '--certified')]
+    out = set()
+    for h in {c.get('subject', {}).get('hash') for c in certs} - {None}:
+        r = ref.current_certifications([c for c in certs if c.get('subject', {}).get('hash') == h], keys, None, h)
+        if r['current']: out.add(h)
+    return out
+
+
+def _hit_hash(h):
+    if h.get('hash'): return h['hash']
+    try:
+        d = catalog.load(h['id']); return d.get('hash') or ref.doc_hash(d)
+    except FileNotFoundError:
+        return None
+
+
 def cmd_search(a):
-    q = ' '.join(_positional(a, ('--cuisine', '--course', '--tag', '--free-of', '--level', '--limit', '--lang')))
+    q = ' '.join(_positional(a, ('--cuisine', '--course', '--tag', '--free-of', '--level', '--limit', '--lang', '--certified', '--keys', '--certs')))
+    limit = int(_opt(a, '--limit', 20))
     hits, total = catalog.search(q, _opt(a, '--cuisine'), _opt(a, '--course'), _opt(a, '--tag'), (_opt(a, '--free-of') or '').split(',') if '--free-of' in a else None,
-                                 _opt(a, '--level'), int(_opt(a, '--limit', 20)))
+                                 _opt(a, '--level'), 10 ** 9 if '--certified' in a else limit)
+    if '--certified' in a:  # only recipes whose exact revision holds a current, verified certification of that scheme
+        ok = _certified_hashes(a)
+        hits = [h for h in hits if _hit_hash(h) in ok]
+        total = len(hits); hits = hits[:limit]
     lang = _opt(a, '--lang', 'en')
     if '--json' in a: print(json.dumps(hits, indent=1, ensure_ascii=False)); return 0 if hits else 1
     for h in hits:
@@ -278,7 +304,14 @@ def cmd_current_certs(a):
     if '--scheme' in a: certs = [c for c in certs if c.get('scheme') == _opt(a, '--scheme')]
     if '--authority' in a: certs = [c for c in certs if c.get('authority', {}).get('id') == _opt(a, '--authority')]
     if sh: certs = [c for c in certs if c.get('subject', {}).get('hash') == sh]
-    res = ref.current_certifications(certs, keys, now, sh)
+    if sh:
+        res = ref.current_certifications(certs, keys, now, sh)
+    else:  # one call per subject, so a certification of one subject never supersedes another's
+        res = {'current': [], 'rejected': {}}
+        for h in sorted({c.get('subject', {}).get('hash', '') for c in certs}):
+            r = ref.current_certifications([c for c in certs if c.get('subject', {}).get('hash', '') == h], keys, now, h or None)
+            res['current'] += r['current']; res['rejected'].update(r['rejected'])
+        res['current'].sort()
     by_id = {c['id']: c for c in certs}
     if '--json' in a:
         print(json.dumps({**res, 'subjectHash': sh, 'certifications': [by_id[i] for i in res['current']]}, indent=1, ensure_ascii=False))

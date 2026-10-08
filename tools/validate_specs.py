@@ -9,6 +9,9 @@ from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'tools'))
+import cookwala_ref as _ref  # noqa: E402
+FORMATS = _ref.format_checker()  # date-time and uri are enforced, not just annotations (BACKLOG P-12)
 BASE = 'https://cookwala.ai/v1/schemas/'
 failures = 0
 
@@ -23,7 +26,7 @@ print(f'schemas: {len(schemas)} valid')
 
 def check(doc, ref, label):
     global failures
-    errors = list(Draft202012Validator({'$ref': ref}, registry=registry).iter_errors(doc))
+    errors = list(Draft202012Validator({'$ref': ref}, registry=registry, format_checker=FORMATS).iter_errors(doc))
     for error in errors[:20]:
         print(f'  {label} {list(error.path)}: {error.message[:200]}')
     failures += len(errors)
@@ -117,7 +120,7 @@ def check_recipe_semantics(recipe, label):
         if not op:
             problems.append(f"{node.get('id')}: unknown op {node.get('op')}"); continue
         params = node.get('params', {})
-        for e in Draft202012Validator(op.get('paramsSchema', {}), registry=registry).iter_errors(params):
+        for e in Draft202012Validator(op.get('paramsSchema', {}), registry=registry, format_checker=FORMATS).iter_errors(params):
             problems.append(f"{node['id']} params: {e.message[:120]}")
         env = op.get('envelope', {})
         if 'tempC' in env:
@@ -130,6 +133,15 @@ def check_recipe_semantics(recipe, label):
             for t in temps:
                 if not lo <= t <= hi:
                     problems.append(f"{node['id']}: {t} °C is outside the {node['op']} envelope {lo}–{hi} °C")
+    warnings = []
+    for nid, msg in _ref.recipe_rule_problems(recipe):  # heat level, pressure, attention, time windows (BACKLOG P-16)
+        line = f'{nid}: {msg}'
+        if msg.startswith('attention '):
+            warnings.append(line)  # reported, not failed: whether the envelope's attention is a minimum awaits a decision (BACKLOG P-16)
+        elif not any(p.startswith(f'{nid}: ') and '°C is outside' in p and '°C is outside' in msg for p in problems):
+            problems.append(line)
+    for msg in warnings:
+        print(f'  {label} warning {msg}')
     for msg in problems:
         print(f'  {label} {msg}')
     failures += len(problems)
@@ -142,7 +154,7 @@ for path in sorted((ROOT / 'examples').glob('*.cookwala.json')):
 # ---- imported V0 recipes (RFC-0009): schema plus semantics, summarised
 import time as _time
 _t0 = _time.time(); _n = 0; _bad = 0
-_rv = Draft202012Validator(json.loads((ROOT / 'schemas' / 'recipe.schema.json').read_text()), registry=registry)
+_rv = Draft202012Validator(json.loads((ROOT / 'schemas' / 'recipe.schema.json').read_text()), registry=registry, format_checker=FORMATS)
 for path in sorted((ROOT / 'recipes').rglob('*.cookwala.json')) if (ROOT / 'recipes').exists() else []:
     doc = json.loads(path.read_text()); _n += 1
     errs = [e.message[:100] for e in _rv.iter_errors(doc)]

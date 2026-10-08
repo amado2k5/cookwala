@@ -291,7 +291,7 @@ class Handler(BaseHTTPRequestHandler):
             for p in (ROOT / 'schemas').glob('*.schema.json'):
                 s = json.loads(p.read_text()); reg = reg.with_resource(s['$id'], Resource.from_contents(s))
             sid = json.loads((ROOT / 'schemas' / schema_file).read_text())['$id']
-            self._validators[key] = Draft202012Validator({'$ref': f'{sid}#/$defs/{kind}'}, registry=reg)
+            self._validators[key] = Draft202012Validator({'$ref': f'{sid}#/$defs/{kind}'}, registry=reg, format_checker=ref.format_checker())
         return [f"{'/'.join(map(str, e.absolute_path)) or '$'}: {e.message[:120]}" for e in self._validators[key].iter_errors(doc)]
 
     # ---- reference tools (not part of the Core API; the same functions the CLI exposes, over HTTP, so every language SDK can call them)
@@ -327,7 +327,7 @@ class Handler(BaseHTTPRequestHandler):
                 schema = {'$ref': f"{schema['$id']}#/$defs/{doc_kind}"}  # container schemas: validate the named document kind (same as tools/validate_specs.py)
             elif not schema.get('properties') and not schema.get('required'):
                 return {'ok': None, 'errors': [f"{body.get('kind')} is a container schema; the document needs a 'kind' naming one of: {', '.join(sorted(schema.get('$defs', {})))}"]}
-            errs = [f"{'/'.join(map(str, e.absolute_path))}: {e.message[:160]}" for e in Draft202012Validator(schema, registry=reg).iter_errors(body['doc'])]
+            errs = [f"{'/'.join(map(str, e.absolute_path))}: {e.message[:160]}" for e in Draft202012Validator(schema, registry=reg, format_checker=ref.format_checker()).iter_errors(body['doc'])]
             return {'ok': not errs, 'errors': errs}
         if name == 'humanitarian':
             import importlib.util
@@ -345,7 +345,11 @@ class Handler(BaseHTTPRequestHandler):
         if name not in TOOLS: return self._problem(404, 'not-found', f'unknown tool {name}; see /v1 for the list')
         try:
             out = self._tool(name, self._body())
-        except (KeyError, FileNotFoundError, ValueError, TypeError) as e:
+        except ValueError as e:
+            if str(e) == 'invalid_timestamp':
+                return self._problem(400, 'invalid-timestamp', 'times must be RFC 3339 date-times with an offset, for example 2026-10-07T12:00:00Z')
+            return self._problem(400, 'invalid-request', f'{type(e).__name__}: {e}')
+        except (KeyError, FileNotFoundError, TypeError) as e:
             return self._problem(400, 'invalid-request', f'{type(e).__name__}: {e}')
         except Exception as e:  # never close the socket without a problem document
             return self._problem(500, 'tool-error', f'{type(e).__name__}: {e}')

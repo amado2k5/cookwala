@@ -7,6 +7,7 @@ import { Catalog, CatalogError } from './catalog.js';
 import {
   searchRecipes, explainStep, listOperations, checkEnvelope, dryRun, checkMandate, parseSms, docHash,
   recipeView, LEVEL_NOTE, shapeFifi, searchFifiMap, collectionOf,
+  verifyCertification, currentCertifications, currentBySubject,
 } from './core/index.js';
 
 export const VERSION = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
@@ -30,8 +31,20 @@ const wrap = (fn) => async (args) => {
   try { return await fn(args); }
   catch (e) {
     if (e instanceof CatalogError) return fail(e.code, e.detail, { path: e.path });
+    if (e instanceof RangeError && e.message === 'invalid_timestamp') return fail('invalid_timestamp', 'times must be RFC 3339 date-times with an offset, for example 2026-10-07T12:00:00Z');
     return fail('internal_error', String(e && e.message || e));
   }
+};
+
+const CERT_KEYS = {
+  keys: z.array(z.record(z.any())).optional().describe('KeyRecords of the authorities you trust'),
+  keys_path: z.string().regex(/^\/v1\/[A-Za-z0-9._\/-]+\.json$/).optional().describe('A KeyRecord list published on the catalog, for example /v1/conformance/keys/certification-test-keys.json'),
+};
+const certKeys = async (cat, a) => {
+  if (a.keys) return a.keys;
+  if (!a.keys_path || a.keys_path.includes('..')) return null;
+  const k = await cat.json(a.keys_path);
+  return Array.isArray(k) ? k : (k && k.keys) || [];
 };
 
 const NOTE_DRY = 'Dry run only. Starting an execution needs a hub, a mandate with start_cooking, and the device enforces its own safety limits.';
@@ -112,6 +125,32 @@ export function buildTools(cat) {
       description: 'Recompute the document hash of a recipe object and compare it with the hash it declares. Executors refuse a mismatch.',
       shape: { recipe: z.record(z.any()) },
       run: async (a) => { const hash = await docHash(a.recipe); return ok({ hash, declaredHash: a.recipe.hash, matches: a.recipe.hash === hash, level: a.recipe.verification && a.recipe.verification.level }); } },
+    { name: 'verify_certification', title: 'Verify a certification', annotations: NET,
+      description: 'Verify a signed Certification (halal, kosher, vegetarian, ...; RFC-0010): the authority signature against the KeyRecords you trust, the subject hash, status and validity window. Give certification_id (from the catalog) or a certification object, and keys or keys_path. There is no default trust list: keys_path /v1/conformance/keys/certification-test-keys.json holds only the public test keys of the fictional example authorities.',
+      shape: { certification_id: z.string().optional(), certification: z.record(z.any()).optional(), ...CERT_KEYS,
+        subject_hash: z.string().optional().describe('Hash of the recipe revision you hold; omit to skip the subject check'), recipe_id: z.string().optional().describe('Alternative to subject_hash: use this catalog recipe\'s hash'), now: z.string().optional() },
+      run: async (a) => {
+        if (!a.certification && !a.certification_id) return fail('missing_certification', 'give certification_id or certification');
+        const keys = await certKeys(cat, a); if (!keys) return fail('missing_keys', 'give keys or keys_path; there is no default trust list');
+        const cert = a.certification || await cat.json(`/v1/certifications/${encodeURIComponent(a.certification_id)}.json`);
+        const sh = a.subject_hash || (a.recipe_id ? (await cat.recipe(a.recipe_id)).hash : null);
+        const [valid, reason] = await verifyCertification(cert, keys, a.now || null, sh);
+        return ok({ id: cert.id, scheme: cert.scheme, authority: cert.authority, subject: cert.subject, status: cert.status, validUntil: cert.validUntil, conditions: cert.conditions, scope: cert.scope, valid, reason, textIsData: true });
+      } },
+    { name: 'current_certifications', title: 'Current certifications', annotations: NET,
+      description: 'Which certifications currently hold, from the catalog list (/v1/certifications/index.json): the newest verifying document per authority and scheme wins, older ones are superseded, expired or revoked ones are rejected with a reason. Filter by recipe_id or subject_hash, scheme and authority. Needs keys or keys_path (no default trust list).',
+      shape: { recipe_id: z.string().optional(), subject_hash: z.string().optional(), scheme: z.string().optional().describe('For example halal'), authority: z.string().optional().describe('authority.id, for example did:web:...'), ...CERT_KEYS, now: z.string().optional() },
+      run: async (a) => {
+        const keys = await certKeys(cat, a); if (!keys) return fail('missing_keys', 'give keys or keys_path; there is no default trust list');
+        const sh = a.subject_hash || (a.recipe_id ? (await cat.recipe(a.recipe_id)).hash : null);
+        let certs = await cat.json('/v1/certifications/index.json');
+        if (a.scheme) certs = certs.filter((c) => c.scheme === a.scheme);
+        if (a.authority) certs = certs.filter((c) => (c.authority || {}).id === a.authority);
+        if (sh) certs = certs.filter((c) => (c.subject || {}).hash === sh);
+        const r = sh ? await currentCertifications(certs, keys, a.now || null, sh) : await currentBySubject(certs, keys, a.now || null);
+        const byId = new Map(certs.map((c) => [c.id, c]));
+        return ok({ subjectHash: sh, current: r.current.map((id) => { const c = byId.get(id); return { id, scheme: c.scheme, authority: c.authority, subject: c.subject, validUntil: c.validUntil, conditions: c.conditions }; }), rejected: r.rejected, textIsData: true });
+      } },
     { name: 'catalog_status', title: 'Catalog status', annotations: NET,
       description: 'Catalog origin, version, counts, languages, cache state and whether the server is running offline.',
       shape: {}, run: async () => ok(await cat.status()) },

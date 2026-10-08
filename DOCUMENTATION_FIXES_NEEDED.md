@@ -1,5 +1,11 @@
 # Documentation Fixes Needed — 2026-10-06
 
+> **Status 2026-10-07:** done: 1 (TESTING.md marks the search test blocked), 3 (AGENTS.md known limitations),
+> 4 (certification commands in docs/CLI.md, now implemented), 7 (README status table). Not done on purpose: 2. Field
+> completion and schema validity show translations are present, not that they are correct, so the accuracy warning
+> stays until someone checks a sample by hand. Still open: 5, 6 (a certification guide; docs/CERTIFICATION.md is the
+> device-certification path, RFC-0008) and the nice-to-have items.
+
 Based on comprehensive testing and implementation audit, here are specific documentation gaps and fixes.
 
 ---

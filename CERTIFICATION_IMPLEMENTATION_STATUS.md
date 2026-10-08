@@ -9,6 +9,8 @@
 > published statically on cookwala.ai (`/v1/certifications/index.json`, `/v1/certifications/{id}.json`, built by
 > `tools/build_certifications.py`, every document verified before publishing). Sections 1 and 3 below are out of
 > date on those points; the rest (MCP tools, certifier registry, recipe integration, search) still stands.
+> **Update 2026-10-07 (later):** MCP tools `verify_certification` and `current_certifications`, and
+> `cookwala search --certified SCHEME --keys KEYS`, are implemented. Open: certifier registry, recipe integration, transparency logs.
 
 ---
 

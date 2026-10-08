@@ -57,5 +57,32 @@
    "canonical": "{\"id\":\"r1\",\"revision\":3}",
    "hash": "sha256:7109125541aba1adbf55944eb58c11708b6743146b13b68e0e2945f5c2154a2b"
   }
+ },
+ {
+  "id": "hash-number-layout-ecmascript",
+  "kind": "hash",
+  "description": "Numbers use ECMAScript Number.prototype.toString: plain decimals from 1e-6 to below 1e21, exponent form outside; shortest round-trip digits. The expected text was produced by Node's String(number), a second implementation (BACKLOG P-11).",
+  "input": {
+   "n": [
+    1e-05,
+    1e-06,
+    1e-07,
+    1.5e-05,
+    0.0001,
+    123.456,
+    -0.5,
+    1e+20,
+    1e+21,
+    1.5e+21,
+    0.30000000000000004,
+    9007199254740991,
+    5e-324,
+    1.7976931348623157e+308
+   ]
+  },
+  "expected": {
+   "canonical": "{\"n\":[0.00001,0.000001,1e-7,0.000015,0.0001,123.456,-0.5,100000000000000000000,1e+21,1.5e+21,0.30000000000000004,9007199254740991,5e-324,1.7976931348623157e+308]}",
+   "hash": "sha256:cc4b2aeaa08ca742570cc2e8466b7c3ffe568a96c816fc3c6d03ae34221020e3"
+  }
  }
 ]

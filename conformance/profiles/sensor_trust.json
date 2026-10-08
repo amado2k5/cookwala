@@ -275,5 +275,45 @@
    "ok": false,
    "reason": "non_numeric_reading"
   }
+ },
+ {
+  "id": "trust-unreadable-calibration-no-deep-fry",
+  "kind": "sensor_trust",
+  "profile": "sensor_trust",
+  "rfc": "0011",
+  "description": "A calibration date nobody can read is not a calibration: the sensor does not count and deep frying is refused (fail closed, BACKLOG P-12).",
+  "input": {
+   "capabilities": {
+    "capabilities": {
+     "ops": [
+      {
+       "op": "cw.op.deep_fry"
+      },
+      {
+       "op": "cw.op.simmer"
+      }
+     ],
+     "sensors": [
+      {
+       "sensor": "cw.sense.oil_temp",
+       "accuracy": 1.0,
+       "state": "ok",
+       "calibration": {
+        "lastAt": "2026-09-01T00:00:00Z",
+        "validUntil": "until further notice",
+        "by": "maker"
+       }
+      }
+     ]
+    }
+   },
+   "op": "cw.op.deep_fry",
+   "humanPresent": true,
+   "allowModel": true,
+   "now": "2026-10-05T00:00:00Z"
+  },
+  "expected": {
+   "choice": null
+  }
  }
 ]

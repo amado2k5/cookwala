@@ -9,7 +9,7 @@ Cookwala is an open standard for cooking safely, plus a catalog of 2,051 recipes
 languages) that devices dry-run before they heat anything. You can use it two ways:
 
 1. **MCP (preferred).** Start the local server `npx -y @cookwala/mcp` (Node 20 or later). You get
-   fourteen read-only tools. Reference: [MCP](MCP.md).
+   sixteen read-only tools. Reference: [MCP](MCP.md).
 2. **Plain HTTP, no MCP.** Everything the server reads is a static file you can GET: see
    [Without MCP](#without-mcp).
 
@@ -102,6 +102,7 @@ Check it works: ask the agent to call `catalog_status`; it should report the cat
 | "May my agent order or start this?" | `check_mandate` with the mandate you were given; never act on `allowed: false` |
 | "What does this food-rescue SMS say?" | `parse_sms`, then explain the result and any usage error |
 | "Is this recipe file intact?" | `verify_recipe` |
+| "Is this recipe halal / kosher / vegetarian certified?" | `current_certifications` with `recipe_id` and the authority keys you trust (`keys` or `keys_path`); there is no default trust list, and the example authorities are fictional |
 | "Is it on fifi.cooking?" | `fifi_search`, then `get_recipe` if `inCatalog`, else `fifi_source` (facts only where rights are not confirmed) |
 | "What does the standard say about…?" | read the resource `cookwala://doc/CORE` (or any id on [the docs list](https://cookwala.ai/docs/)) |
 
