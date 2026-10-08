@@ -20,7 +20,10 @@
 | no allergens | `no_allergens=true` (means none found, not a guarantee) |
 | without milk or eggs | `allergen_free=milk,eggs` |
 | good for diabetics | `diabetic_friendly=true` (an estimate) |
-| for kids | `kids=true` (an inference; repeat the cautions) |
+| for kids | `kids=true`: the 50 Cooking with Kids recipes first, then inferred ones (repeat the cautions) |
+| for a child of a given age | `kids_age=3-5`, `6-8`, `9+`, or `kids_age=7` |
+| only the Cooking with Kids recipes | `collection=kids` |
+| no cooking at all, with kids | `kids=true` with `style=no_cook` |
 | from a named cook or book | `source=` (use `catalog_listing` kind sources to see names) |
 | in another language | `lang=ar`, `fr`, `zh`, and so on |
 | with a video | `has_video=true` |

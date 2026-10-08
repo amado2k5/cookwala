@@ -1,6 +1,6 @@
 {
   "name": "@cookwala/mcp",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "mcpName": "ai.cookwala/cookwala",
   "description": "Cookwala MCP server: search and read recipes, dry-run them against a device, check safe bands, mandates and humanitarian SMS. Read-only; reads the static catalog on cookwala.ai; never starts cooking.",
   "license": "Apache-2.0",

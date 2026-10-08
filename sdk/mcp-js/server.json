@@ -3,7 +3,7 @@
   "name": "ai.cookwala/cookwala",
   "title": "Cookwala",
   "description": "Search Cookwala recipes by diet, allergen, method and language; dry-run them safely. Read-only.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "websiteUrl": "https://cookwala.ai/mcp/",
   "repository": {
     "url": "https://github.com/amado2k5/cookwala",
@@ -15,7 +15,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@cookwala/mcp",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "runtimeHint": "npx",
       "transport": {
         "type": "stdio"

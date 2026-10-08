@@ -47,6 +47,8 @@ locally built site with `COOKWALA_BASE_URL=$PWD/_site` (`bash tools/build_site.s
 
 Version 0.3.0 adds eight query tools (`query_recipes`, `similar_recipes`, `compare_recipes`, `ingredient_profile`, `catalog_stats`, `plan_meals`, `shopping_list`, `catalog_listing`) and `include` on `get_recipe`: every operation of the [recipe REST API](REST-API.md) is also an MCP tool (a test fails if one is not). Version 0.2.0 has the first 16.
 
+Version 0.3.1 adds the 50 Cooking with Kids recipes (collection `kids`) and a `kids_age` filter (`3-5`, `6-8`, `9+` or an age in years) to `query_recipes`; with `kids=true` those recipes come before the inferred ones, and each result says which steps need a grown-up (`grown_up_help`).
+
 All 24 are read-only (`readOnlyHint: true`, `destructiveHint: false`). Results carry
 `structuredContent` and a text copy. Errors set `isError` and return `{error, detail, path}`.
 

@@ -201,7 +201,9 @@ def record(rid, d):
     mild = not alcohol and not spicy and not offal and not caff and dish.get('difficulty') in (None, 'easy', 'medium') and len(refs) <= 15
     appeal = dish.get('course') in ('dessert', 'bread', 'breakfast') or bool(ttoks & {stem(w) for w in KID_WORDS})
     explicit_kids = bool(tokens(title + ' ' + ' '.join(dish.get('tags', []))) & {'kid', 'child', 'lunchbox', 'toddler'})
-    kid = (mild and appeal) or (explicit_kids and not alcohol)
+    kids_coll = (d.get('source') or {}).get('collection') == 'kids'  # the "Cooking with Kids" recipes written for children (docs/EXPORT-FIFI.md section 12)
+    xk = d.get('x-kids') or {}
+    kid = (mild and appeal) or (explicit_kids and not alcohol) or kids_coll
     cautions = []
     if any(has(r, HONEY) for r in refs): cautions.append('contains honey: not for babies under 12 months')
     if 'nuts' in set(al_codes) or 'peanuts' in set(al_codes): cautions.append('contains nuts or peanuts: allergy risk, and whole nuts are a choking hazard for young children')
@@ -229,7 +231,7 @@ def record(rid, d):
         'am': sorted(al.get('mayContain', [])), 'di': diet,
         'eq': sorted({e.get('class', '').replace('cw.eq.', '') for e in d.get('equipment', []) if e.get('class')}),
         'img': bool(dish.get('images')),
-        'kd': True if kid else None, 'kc': cautions if kid else None,
+        'kd': True if kid else None, 'kc': cautions if kid else None, 'ka': xk.get('ages') or None, 'kh': sorted({g['reason'] for g in xk.get('grownUpSteps', []) if g.get('reason')}) or None,
         'hn': True if (rid in NOTES_IDS or any((t or {}).get('intro') for t in (d.get('text') or {}).values()) or any(n.get('notes') for n in d.get('process', {}).get('nodes', []))) else None,
         'vid': True if re.search(r'(youtube\.com|youtu\.be|vimeo\.com)', (d.get('source') or {}).get('url') or '') else None,
         'sn': (d.get('source') or {}).get('name') if ((d.get('source') or {}).get('collection') or 'cookwala') in ('world', 'community') else None,
