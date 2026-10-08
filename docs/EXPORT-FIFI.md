@@ -35,6 +35,8 @@ founder's confirmation and are shown as "credited; licence under review".
 | `abdennour` | `ec-*` | 158 | *Egyptian Cooking* book |
 | `world` | `w-<iso2>-*` | 499 (CN 21, ES 19, ET 5, FR 14, GR 16, ID 35, IN 50, IR 31, IT 26, JP 43, KR 33, LB 34, MA 27, MX 49, MY 23, NG 14, PE 9, PH 2, TH 18, TR 23, VN 7) | World Cuisines project (rewritten, credited, halal-gated); facts only |
 | **Total** | | **2,380** | |
+| `kids` | `kids-*` | 50 | fifi.cooking's Cooking with Kids recipes (separate import: authors' declared allergens, no gluten or lactose status) |
+| **Total with kids** | | **2,430** | |
 
 Each recipe is already published as `fifirecipes/public/data/recipes/{id}.json` (recipe +
 estimate + 24-language translations; ~96 MB total). The format is documented in
