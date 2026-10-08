@@ -26,7 +26,7 @@
         "shortDescription": "Recipes, diets and nutrition",
         "longDescription": "Cookwala is an open recipe catalog of more than 2,000 recipes, mostly Egyptian and Middle Eastern, plus Mexican, Japanese, Moroccan, Chinese, French, Vietnamese, Indian, Korean, Iranian, Italian, Spanish, Greek and Ethiopian dishes.\n\nAsk in plain words: how to cook a dish, what you can make with the ingredients you have, high-protein or low-calorie options, quick or budget dishes, hot or cold dishes, frying or baking, recipes from a named cook or book, or a day of meals with a shopping list. Recipes can be scaled to the number of people, and titles are available in many languages.\n\nDiet, allergen and diabetic labels are screens built from ingredient names and reviewed claims. They are not certifications, guarantees or medical advice. Nutrition and cost are modelled estimates. Cookwala is read-only and collects no personal data.",
         "developerName": "Cookwala",
-        "category": "Food & Drink",
+        "category": "Other",
         "capabilities": [
           "Search recipes",
           "Read recipes",
@@ -105,7 +105,8 @@
         "commerce_description": "This plugin does not sell products or process payments. It only reads recipe data."
       },
       "publication": {
-        "release_notes": "First release: recipe search, recipe details, pantry matching, diet, allergen and diabetic screens, meal plans and shopping lists. Read-only."
+        "release_notes": "First release: recipe search, recipe details, pantry matching, diet, allergen and diabetic screens, meal plans and shopping lists. Read-only.",
+        "countries": []
       }
     }
   }

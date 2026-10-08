@@ -57,7 +57,8 @@ def check(final):
     i = o.get('interface', {})
     for f, n in (('displayName', 30), ('shortDescription', 30), ('longDescription', 4000), ('developerName', 80)):
         need(0 < len(i.get(f, '')) <= n, f'interface.{f}: 1 to {n} characters')
-    need(bool(i.get('category')), 'interface.category: required (a dashboard category title; confirm the exact title in the dashboard)')
+    CATEGORIES = ('Productivity', 'Creativity', 'Developer Tools', 'Business & Operations', 'Data & Analytics', 'Communication', 'Education & Research', 'Security', 'Finance', 'Healthcare', 'Travel', 'Entertainment', 'Other')
+    need(i.get('category') in CATEGORIES, 'interface.category must be one of: ' + ', '.join(CATEGORIES))
     need(isinstance(i.get('capabilities'), list) and len(i['capabilities']) <= 20 and all(len(c) <= 120 for c in i['capabilities']), 'interface.capabilities: a list of at most 20 items of at most 120 characters')
     for f in ('websiteURL', 'supportURL', 'privacyPolicyURL', 'termsOfServiceURL'): https(i.get(f), f'interface.{f}')
     dp = i.get('defaultPrompt', [])

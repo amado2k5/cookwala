@@ -1,24 +1,45 @@
-<!--meta {"title": "Privacy policy", "description": "What the Cookwala website, the open API and the MCP servers collect: nothing of your own, no accounts, no tracking. What the hosts see and what is never stored.", "path": "/privacy/", "status": ""} -->
+<!--meta {"title": "Privacy policy", "description": "What the Cookwala website, the open API and the MCP servers collect: no personal data, no accounts, no tracking. Categories of data, purposes, recipients, retention and your controls.", "path": "/privacy/", "status": ""} -->
 <section class="hero wrap">
   <p class="crumb"><a href="/">Cookwala</a> / Privacy</p>
   <h1>Privacy policy</h1>
-  <p class="lead">Cookwala has no accounts, no sign-in, no cookies of its own and no analytics. The recipe data is public. This page says what that means for the website, the open API at <code>mcp.cookwala.ai</code>, and the MCP server, in plain terms. Last updated 8 October 2026.</p>
+  <p class="lead">Cookwala has no accounts, no sign-in, no cookies of its own and no analytics. Its recipe data is public and contains no personal data. This policy states, as plainly as it can, the five things a privacy policy should cover. Last updated 8 October 2026.</p>
 </section>
 
 <section class="wrap">
-  <h2>What Cookwala collects</h2>
-  <p>Nothing about you. Cookwala's own code does not store the questions people ask, does not keep a log of who called which tool, does not set tracking cookies and does not send telemetry. The npm package <code>@cookwala/mcp</code> runs on your machine and is never tracked.</p>
-  <h2>The open API and MCP endpoint</h2>
+  <h2>1. Categories of personal data we collect, process or return</h2>
   <ul>
-    <li><b>What is sent:</b> the request you make (a search, a recipe id, filters) goes to <code>https://mcp.cookwala.ai</code>. It is answered from public files on cookwala.ai and discarded. Nothing is written to a database; there is none.</li>
-    <li><b>What the host sees:</b> the service runs on Cloudflare Workers and the website on GitHub Pages. Like any web host, they process the network address and request details to serve the request and to protect against abuse, under their own policies: <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener">Cloudflare</a> and <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub</a>. Cookwala does not receive or keep that data.</li>
-    <li><b>Rate limiting:</b> if a per-address limit is switched on for the open API, the address is used only as a short-lived counter key at the host.</li>
-    <li><b>The gated route:</b> the token-protected <code>/mcp</code> route is listed at mcprush.com, which counts calls made through its gateway. That is the one opt-in exception; the open route and the npm package are not tracked.</li>
+    <li><b>Collected by Cookwala:</b> none. Cookwala's own code does not ask for, receive in a stored form, or keep your name, email, account, location, device identifiers, health information or conversation history.</li>
+    <li><b>Processed in passing:</b> the request you or your AI assistant sends to <code>https://mcp.cookwala.ai</code> (a search term, filters, a recipe id). It is answered from public files and discarded; it is not written to a database, log or file by Cookwala. Search terms are not personal data unless you type personal data into them, so please do not.</li>
+    <li><b>Returned by the tools:</b> recipe data only: titles, ingredients, steps, nutrition and cost estimates, and diet, allergen and diabetic labels about recipes. No tool returns data about a person, and responses carry no session, trace, request or account identifiers.</li>
+    <li><b>Technical data seen by hosting providers:</b> like any web host, Cloudflare (which runs <code>mcp.cookwala.ai</code>) and GitHub (which serves cookwala.ai) handle the network address and request details needed to deliver pages and protect against abuse. Cookwala does not receive or store that data. Cookwala does not enable request logging on its Worker.</li>
+    <li><b>Email:</b> if you write to <a href="mailto:eat@cookwala.ai">eat@cookwala.ai</a>, the message is forwarded to a private mailbox, so your address and what you write reach the maintainer.</li>
   </ul>
-  <h2>When you use Cookwala inside an AI assistant</h2>
-  <p>If you use Cookwala from ChatGPT, Claude, Gemini or another assistant, the assistant's provider sees your conversation under its own privacy policy. Cookwala only receives the tool call the assistant makes, such as a search term or a recipe id. Do not put personal or medical information in a question; Cookwala does not need it and the data is not personal.</p>
-  <h2>Health-related fields</h2>
-  <p>Allergen, diet and diabetic labels describe recipes, not people. They are screens from ingredient names, never guarantees and never medical advice. Cookwala does not ask for, receive or store anyone's health information.</p>
-  <h2>Contact, and reports</h2>
-  <p>Questions about this policy: <a href="mailto:eat@cookwala.ai">eat@cookwala.ai</a> or <a href="https://github.com/amado2k5/cookwala/issues" rel="noopener">GitHub issues</a>. Security problems: <a href="/.well-known/security.txt">security.txt</a>. This policy changes only by a public commit in <a href="https://github.com/amado2k5/cookwala" rel="noopener">the repository</a>, so its history is visible.</p>
+
+  <h2>2. Purposes</h2>
+  <p>The only purpose is to answer your request with recipe data and to keep the service available. Nothing is used for advertising, profiling, tracking, training or sale. If a per-address limit is switched on for the open API, the address is used only as a short-lived counter key, at the host, to slow down abuse.</p>
+
+  <h2>3. Categories of recipients</h2>
+  <ul>
+    <li><b>Cloudflare, Inc.</b> (hosting of the API and MCP endpoint) and <b>GitHub, Inc.</b> (hosting of the website and the repository), as infrastructure providers under their own policies: <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener">Cloudflare</a>, <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub</a>.</li>
+    <li><b>Your AI assistant's provider</b> (for example OpenAI, Anthropic or Google) sees your conversation under its own policy. Cookwala only receives the tool call the assistant makes.</li>
+    <li><b>mcprush.com</b> counts calls made through its gateway to the token-protected <code>/mcp</code> route. This is the one opt-in exception; the open route (<code>/open/mcp</code> and <code>/api/*</code>) and the npm package are not tracked.</li>
+    <li>No other third party receives any data, and none is sold or shared for advertising.</li>
+  </ul>
+
+  <h2>4. Retention</h2>
+  <p>Cookwala keeps nothing about requests, so there is nothing to retain or delete. Providers keep the technical data described above for the periods in their own policies. Emails to <a href="mailto:eat@cookwala.ai">eat@cookwala.ai</a> are kept in the maintainer's mailbox until they are deleted on request or no longer needed.</p>
+
+  <h2>5. Your controls</h2>
+  <ul>
+    <li>There is no account to close and no profile to edit or export.</li>
+    <li>You decide what you type: do not include personal or medical information in a question. Cookwala does not need it.</li>
+    <li>To avoid contacting the hosted endpoint at all, run the server on your machine with <code>npx -y @cookwala/mcp</code>; it only reads the public static files on cookwala.ai.</li>
+    <li>To have an email you sent deleted, write to <a href="mailto:eat@cookwala.ai">eat@cookwala.ai</a> or open an issue at <a href="https://github.com/amado2k5/cookwala/issues" rel="noopener">GitHub</a>.</li>
+  </ul>
+
+  <h2>Health-related labels</h2>
+  <p>Allergen, diet and diabetic labels describe recipes, not people. They are screens from ingredient names and reviewed claims, never guarantees and never medical advice. Cookwala does not ask for, receive or store anyone's health information.</p>
+
+  <h2>Changes and contact</h2>
+  <p>This policy changes only by a public commit in <a href="https://github.com/amado2k5/cookwala" rel="noopener">the repository</a>, so its history is visible. Questions: <a href="mailto:eat@cookwala.ai">eat@cookwala.ai</a>. Security problems: <a href="/.well-known/security.txt">security.txt</a>. See also the <a href="/terms/">terms of use</a>.</p>
 </section>
