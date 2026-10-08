@@ -1,7 +1,9 @@
 // Pure query engine over the compact query index (/v1/query/recipes.json, built by tools/build_query_index.py).
 // No I/O. Used by the REST API (src/api.js). Everything here is read-only.
 
-const COUNTRY = { egypt: 'EG', egyptian: 'EG', mexico: 'MX', mexican: 'MX', japan: 'JP', japanese: 'JP', morocco: 'MA', moroccan: 'MA', china: 'CN', chinese: 'CN', france: 'FR', french: 'FR', vietnam: 'VN', vietnamese: 'VN' };
+const COUNTRY_NAMES = {"EG": ["egypt", "egyptian"], "MX": ["mexico", "mexican"], "JP": ["japan", "japanese"], "MA": ["morocco", "moroccan"], "CN": ["china", "chinese"], "FR": ["france", "french"], "VN": ["vietnam", "vietnamese"], "IN": ["india", "indian"], "ID": ["indonesia", "indonesian"], "KR": ["korea", "south korea", "korean"], "IR": ["iran", "iranian", "persian"], "IT": ["italy", "italian"], "ES": ["spain", "spanish"], "GR": ["greece", "greek"], "ET": ["ethiopia", "ethiopian"], "DZ": ["algeria", "algerian"], "LY": ["libya", "libyan"], "TN": ["tunisia", "tunisian"], "LB": ["lebanon", "lebanese"], "SY": ["syria", "syrian"], "JO": ["jordan", "jordanian"], "PS": ["palestine", "palestinian"], "IQ": ["iraq", "iraqi"], "SA": ["saudi arabia", "saudi"], "TR": ["turkey", "turkish"], "CY": ["cyprus", "cypriot"], "SD": ["sudan", "sudanese"], "YE": ["yemen", "yemeni"], "US": ["usa", "united states", "american"], "GB": ["uk", "united kingdom", "british", "england", "english"], "DE": ["germany", "german"], "TH": ["thailand", "thai"], "PT": ["portugal", "portuguese"], "BR": ["brazil", "brazilian"], "PE": ["peru", "peruvian"]};
+export const COUNTRY = Object.fromEntries(Object.entries(COUNTRY_NAMES).flatMap(([c, ns]) => ns.map((n) => [n, c])));
+export const COUNTRY_LABEL = Object.fromEntries(Object.entries(COUNTRY_NAMES).map(([c, ns]) => [c, ns[0].replace(/\b\w/g, (m) => m.toUpperCase())]));
 
 export const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const words = (s) => norm(s).split(/[^a-z0-9؀-ۿ]+/).filter(Boolean);
@@ -38,7 +40,7 @@ const cache = new WeakMap();
 function prep(r) {
   let p = cache.get(r);
   if (!p) {
-    p = { title: words(r.t + ' ' + (r.ta || '')), tags: words((r.tg || []).join(' ')), ing: (r.ig || []).map((i) => i.replace(/_/g, ' ')).flatMap(words), ingRaw: (r.ig || []).map(norm) };
+    p = { title: words(r.t + ' ' + (r.ta || '') + ' ' + (r.tl || '')), tags: words((r.tg || []).join(' ')), ing: (r.ig || []).map((i) => i.replace(/_/g, ' ')).flatMap(words), ingRaw: (r.ig || []).map(norm) };
     cache.set(r, p);
   }
   return p;
@@ -60,22 +62,42 @@ const stem = (w) => (w.length > 3 && w.endsWith('s') && !w.endsWith('ss') ? w.sl
 const stems = (s) => norm(s).split(/[^a-z0-9]+/).filter(Boolean).map(stem);
 /** Whole-word match (so "rice" never matches "licorice"): every word of the term appears among the ingredient's words. */
 export const ingMatches = (ref, term) => { const t = stems(term); const have = new Set(stems(ref)); return t.length > 0 && t.every((w) => have.has(w)); };
+/** A category is a book category (tag) such as "Eastern Desserts" or a course such as "dessert"; words match, plural or not. */
+const catMatch = (r, c) => { const w = stems(c); if (!w.length) return false; return [r.co, ...(r.tg || [])].some((t) => { const ts = new Set(stems(t)); return w.every((x) => ts.has(x)); }); };
 const hasIng = (r, term) => (r.ig || []).some((i) => ingMatches(i, term));
 
+export const METHOD_ALIASES = {
+  bake: 'bake', baking: 'bake', baked: 'bake', oven: 'bake', fry: 'fry', frying: 'fry', fried: 'fry', 'pan-fry': 'fry', 'pan fry': 'fry', 'pan-frying': 'fry', saute: 'fry', sauteing: 'fry',
+  deep_fry: 'deep_fry', 'deep-fry': 'deep_fry', 'deep fry': 'deep_fry', 'deep frying': 'deep_fry', 'deep-frying': 'deep_fry', deepfry: 'deep_fry',
+  roast: 'roast', roasting: 'roast', roasted: 'roast', grill: 'grill', grilling: 'grill', grilled: 'grill', bbq: 'grill', barbecue: 'grill', broil: 'grill',
+  boil: 'boil', boiling: 'boil', boiled: 'boil', poach: 'boil', poaching: 'boil', simmer: 'simmer', simmering: 'simmer', stew: 'simmer', stewing: 'simmer', braise: 'simmer', braising: 'simmer', 'slow cook': 'simmer', 'slow cooking': 'simmer',
+  steam: 'steam', steaming: 'steam', steamed: 'steam', toast: 'toast', toasting: 'toast', chill: 'chill', chilling: 'chill', refrigerate: 'chill', freeze: 'freeze', freezing: 'freeze', frozen: 'freeze',
+  marinate: 'marinate', marinating: 'marinate', marinade: 'marinate', ferment: 'ferment', fermenting: 'ferment', 'no cook': 'no_cook', 'no-cook': 'no_cook', no_cook: 'no_cook', raw: 'no_cook', 'no heat': 'no_cook',
+};
+export const METHOD_LABELS = { bake: 'Baking', fry: 'Frying (pan and shallow)', deep_fry: 'Deep frying', roast: 'Roasting', grill: 'Grilling', boil: 'Boiling and poaching', simmer: 'Simmering, stewing and braising', steam: 'Steaming', toast: 'Toasting', chill: 'Chilling', freeze: 'Freezing', marinate: 'Marinating', ferment: 'Fermenting', no_cook: 'No cooking (no heat at all)' };
+// book categories (tags) that name the same method, so "baking" also returns recipes the source filed under Baking
+const METHOD_TAGS = { bake: ['baking'], fry: ['frying', 'pan-frying'], grill: ['grilling'], boil: ['boiling'], simmer: ['slow simmering', 'slow simmering (tasbeek)'], deep_fry: [], roast: [], steam: [], toast: [], chill: [], freeze: [], marinate: [], ferment: [] };
+export const normMethod = (m) => METHOD_ALIASES[norm(m).trim().replace(/_/g, ' ')] || METHOD_ALIASES[norm(m).trim()] || null;
+export const methodMatches = (r, m) => (m === 'no_cook' ? r.st === 'no_cook' : (r.me || []).includes(m) || (METHOD_TAGS[m] || []).some((t) => (r.tg || []).some((x) => norm(x) === t)));
+
 export const FIELDS = {
-  kcal: 'kcal', protein: 'pr', fat: 'fa', carbs: 'ca', fiber: 'fi', sugar: 'su', sodium: 'na', time: 'mn', cost: 'cps', ingredients: 'ni', steps: 'ns', servings: 'sv',
+  kcal: 'kcal', protein: 'pr', fat: 'fa', carbs: 'ca', fiber: 'fi', sugar: 'su', sodium: 'na', time: 'mn', active: 'ac', passive: 'pt', total_kcal: 'tk', total_protein: 'tp', cost: 'cps', ingredients: 'ni', steps: 'ns', servings: 'sv',
 };
 const protDensity = (r) => (r.kcal > 0 && r.pr !== undefined ? (r.pr * 4) / r.kcal : undefined);
 
 /** Filters from query-string-like params. Unknown params are ignored; the applied ones are echoed back. */
-export function filterRecipes(items, a) {
+const ALIAS = { prep_time_max: 'active_max', prep_time_min: 'active_min', cook_time_max: 'passive_max', cook_time_min: 'passive_min', serves: 'servings_min', serves_max: 'servings_max', total_calories_max: 'total_kcal_max', total_calories_min: 'total_kcal_min' };
+export function filterRecipes(items, a0) {
+  const a = { ...a0 }; for (const [from, to] of Object.entries(ALIAS)) if (a[from] !== undefined && a[from] !== '' && a[to] === undefined) a[to] = a[from];
   const f = {}; const keep = [];
-  const cu = list(a.cuisine).map((c) => COUNTRY[norm(c)] || c.toUpperCase());
+  const cu = [...list(a.cuisine), ...list(a.country)].map((c) => COUNTRY[norm(c)] || c.toUpperCase());
   const set = (k, v) => { if (v !== undefined && !(Array.isArray(v) && !v.length)) f[k] = v; };
-  set('cuisine', cu); set('course', list(a.course).map(norm)); set('tag', list(a.tag).map(norm)); set('method', list(a.method).map(norm)); set('style', list(a.style).map(norm));
+  set('cuisine', cu); set('course', list(a.course).map(norm)); set('tag', list(a.tag).map(norm)); const meth = list(a.method).map((m) => normMethod(m) || norm(m)); set('method', meth); set('style', list(a.style).map(norm));
   set('operation', list(a.operation).map(norm)); set('equipment', list(a.equipment).map(norm)); set('diet', list(a.diet).map(norm)); set('allergen_free', list(a.allergen_free).map(norm));
-  set('ingredient', list(a.ingredient)); set('exclude_ingredient', list(a.exclude_ingredient)); set('level', list(a.level).map((x) => x.toUpperCase())); set('difficulty', list(a.difficulty).map(norm));
-  set('collection', list(a.collection).map(norm)); set('cost_tier', list(a.cost_tier).map(norm));
+  set('ingredient', list(a.ingredient)); set('ingredient_any', list(a.ingredient_any)); set('category', list(a.category));
+  if (a.servings_exact !== undefined && a.servings_exact !== '') f.servings_exact = num(a.servings_exact);
+  for (const k of ['has_protein', 'has_nutrition', 'has_video', 'kids', 'has_notes', 'kid_friendly']) if (a[k] !== undefined && a[k] !== '') f[k] = a[k] === true || a[k] === 'true'; set('exclude_ingredient', list(a.exclude_ingredient)); set('level', list(a.level).map((x) => x.toUpperCase())); set('difficulty', list(a.difficulty).map(norm));
+  set('collection', list(a.collection).map(norm)); set('site', list(a.site).map(norm)); set('cost_tier', list(a.cost_tier).map(norm));
   for (const [name] of Object.entries(FIELDS)) { set(name + '_min', num(a[name + '_min'])); set(name + '_max', num(a[name + '_max'])); }
   set('protein_density_min', num(a.protein_density_min));
   if (a.has_image !== undefined && a.has_image !== '') f.has_image = a.has_image === true || a.has_image === 'true';
@@ -85,17 +107,26 @@ export function filterRecipes(items, a) {
     if (f.cuisine && !r.cu.some((c) => f.cuisine.includes(c))) continue;
     if (f.course && !f.course.includes(norm(r.co))) continue;
     if (f.tag && !f.tag.every((t) => (r.tg || []).some((x) => norm(x) === t))) continue;
-    if (f.method && !f.method.some((m) => (r.me || []).includes(m))) continue;
+    if (f.method && !f.method.some((m) => methodMatches(r, m))) continue;
     if (f.style && !f.style.includes(r.st)) continue;
     if (f.operation && !f.operation.every((o) => (r.op || []).includes(o))) continue;
     if (f.equipment && !f.equipment.every((e) => (r.eq || []).some((x) => x.includes(e)))) continue;
     if (f.diet && !f.diet.every((d) => (r.di || []).includes(d))) continue;
     if (f.allergen_free && f.allergen_free.some((x) => (r.al || []).includes(x))) continue;
     if (f.ingredient && !f.ingredient.every((i) => hasIng(r, i))) continue;
+    if (f.ingredient_any && !f.ingredient_any.some((i) => hasIng(r, i))) continue;
+    if (f.category && !f.category.some((c) => catMatch(r, c))) continue;
+    if (f.servings_exact !== undefined && r.sv !== f.servings_exact) continue;
+    if (f.has_nutrition !== undefined && (r.kcal !== undefined) !== f.has_nutrition) continue;
+    if ((f.kids ?? f.kid_friendly) !== undefined && !!r.kd !== (f.kids ?? f.kid_friendly)) continue;
+    if (f.has_notes !== undefined && !!r.hn !== f.has_notes) continue;
+    if (f.has_video !== undefined && !!r.vid !== f.has_video) continue;
+    if (f.has_protein !== undefined && (f.has_protein ? !(r.pr > 0) : r.pr !== 0)) continue;
     if (f.exclude_ingredient && f.exclude_ingredient.some((i) => hasIng(r, i))) continue;
     if (f.level && !f.level.includes(r.lv)) continue;
     if (f.difficulty && !f.difficulty.includes(r.df)) continue;
     if (f.collection && !f.collection.includes(norm(r.k))) continue;
+    if (f.site && !f.site.some((x) => norm(r.sn || '') === x)) continue;
     if (f.cost_tier && !f.cost_tier.includes(r.ct)) continue;
     if (f.has_image !== undefined && !!r.img !== f.has_image) continue;
     if (stext.length && stext.some((x) => norm(r.t).includes(x))) continue;
@@ -118,7 +149,7 @@ export function filterRecipes(items, a) {
 
 const SORTS = {
   kcal: (r) => r.kcal, protein: (r) => r.pr, fat: (r) => r.fa, carbs: (r) => r.ca, fiber: (r) => r.fi, sugar: (r) => r.su, sodium: (r) => r.na,
-  cost: (r) => r.cps, time: (r) => r.mn, ingredients: (r) => r.ni, steps: (r) => r.ns, protein_density: protDensity, name: (r) => norm(r.t),
+  cost: (r) => r.cps, time: (r) => r.mn, ingredients: (r) => r.ni, steps: (r) => r.ns, protein_density: protDensity, total_kcal: (r) => r.tk, total_protein: (r) => r.tp, prep_time: (r) => r.ac, cook_time: (r) => r.pt, name: (r) => norm(r.t),
 };
 
 export function sortRecipes(matches, sort, seed) {
@@ -144,11 +175,11 @@ const r1 = (v) => (v === undefined ? undefined : Math.round(v * 10) / 10);
 /** The row the API returns for a recipe. */
 export function row(r, detail = 'brief') {
   const o = {
-    id: r.id, title: r.t, title_ar: r.ta, cuisine: r.cu, course: r.co, difficulty: r.df, level: r.lv, servings: r.sv, time_min: r.mn,
-    kcal_per_serving: r.kcal, protein_g: r.pr, fat_g: r.fa, carbs_g: r.ca, cost_per_serving: r.cps, cost_tier: r.ct, style: r.st, methods: r.me,
-    diet_inferred: r.di, allergens: r.al, n_ingredients: r.ni, n_steps: r.ns, page: `https://cookwala.ai/recipes/${r.id}/`,
+    id: r.id, title: r.tl || r.t, title_en: r.tl && r.tl !== r.t ? r.t : undefined, title_ar: r.ta, cuisine: r.cu, course: r.co, difficulty: r.df, level: r.lv, servings: r.sv, time_min: r.mn, prep_min: r.ac, cook_min: r.pt,
+    kcal_per_serving: r.kcal, protein_g: r.pr, total_kcal: r.tk, total_protein_g: r.tp, fat_g: r.fa, carbs_g: r.ca, cost_per_serving: r.cps, cost_tier: r.ct, style: r.st, methods: r.me,
+    diet_inferred: r.di, allergens: r.al, n_ingredients: r.ni, n_steps: r.ns, has_video: r.vid ? true : undefined, kid_friendly_inferred: r.kd ? true : undefined, has_background_notes: r.hn ? true : undefined, page: `https://cookwala.ai/recipes/${r.id}/`,
   };
-  if (detail === 'full') Object.assign(o, { fiber_g: r.fi, sugar_g: r.su, sodium_mg: r.na, ingredients: r.ig, operations: r.op, equipment: r.eq, may_contain: r.am, collection: r.k, tags: r.tg, cost_total: r.cost, cost_buckets: r.cb, currency: r.cur, protein_density: r1(protDensity(r)) });
+  if (detail === 'full') Object.assign(o, { fiber_g: r.fi, sugar_g: r.su, sodium_mg: r.na, ingredients: r.ig, operations: r.op, equipment: r.eq, may_contain: r.am, collection: r.k, tags: r.tg, kid_cautions: r.kc, cost_total: r.cost, cost_buckets: r.cb, currency: r.cur, protein_density: r1(protDensity(r)) });
   return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined && !(Array.isArray(v) && !v.length)));
 }
 
@@ -157,7 +188,8 @@ export function search(items, a) {
   const sort = a.sort || (a.q ? 'relevance' : 'name');
   sortRecipes(matches, sort, a.seed);
   const limit = Math.min(Math.max(num(a.limit) ?? 10, 1), 25); const offset = Math.max(num(a.offset) ?? 0, 0);
-  return { total: matches.length, limit, offset, sort, applied_filters: applied, items: matches.slice(offset, offset + limit).map((m) => row(m.r, a.detail === 'full' ? 'full' : 'brief')) };
+  const next = offset + limit < matches.length ? offset + limit : undefined;
+  return { total: matches.length, limit, offset, next_offset: next, sort, applied_filters: applied, items: matches.slice(offset, offset + limit).map((m) => row(m.r, a.detail === 'full' ? 'full' : 'brief')) };
 }
 
 /** "What can I cook with what I have": rank by share of (non-staple) ingredients covered. */
@@ -274,4 +306,54 @@ export function shoppingList(docs, servingsMap = {}) {
 export function scaleIngredients(doc, servings) {
   const base = doc.yield && doc.yield.servings; const k = base && servings ? servings / base : 1;
   return (doc.ingredients || []).map((i) => ({ ingredient: i.ref.replace(/_/g, ' '), id: i.ingredientId, quantity: i.qty && typeof i.qty.value === 'number' ? r1(i.qty.value * k) : undefined, unit: i.qty && i.qty.unit, as_written: i.display && (i.display.en || Object.values(i.display)[0]) }));
+}
+
+export const LANG_ALIASES = { arabic: 'ar', bengali: 'bn', czech: 'cs', german: 'de', deutsch: 'de', greek: 'el', english: 'en', spanish: 'es', espanol: 'es', persian: 'fa', farsi: 'fa', french: 'fr', francais: 'fr', hebrew: 'he', hindi: 'hi', indonesian: 'id', italian: 'it', japanese: 'ja', korean: 'ko', kurdish: 'ku', kurmanji: 'ku', dutch: 'nl', polish: 'pl', pashto: 'ps', portuguese: 'pt', russian: 'ru', albanian: 'sq', swedish: 'sv', swahili: 'sw', telugu: 'te', turkish: 'tr', urdu: 'ur', vietnamese: 'vi', chinese: 'zh', mandarin: 'zh' };
+
+/** "ar", "AR", "ar-EG", "zh_CN", "Arabic" -> "ar"; null when it is none of those. */
+export function normLang(v) {
+  if (!v) return 'en';
+  const s = norm(String(v)).trim();
+  if (LANG_ALIASES[s]) return LANG_ALIASES[s];
+  const m = /^([a-z]{2,3})(?:[-_][a-z0-9]+)*$/.exec(s);
+  return m ? m[1] : null;
+}
+
+const localized = new WeakMap();
+/** A copy of the index with titles in another language (cached per language). */
+export function localizeItems(items, lang, names) {
+  let per = localized.get(items); if (!per) { per = new Map(); localized.set(items, per); }
+  if (!per.has(lang)) per.set(lang, items.map((r) => (names[r.id] && names[r.id] !== r.t ? { ...r, tl: names[r.id] } : r)));
+  return per.get(lang);
+}
+
+/** Every method with how many recipes use it. */
+export function methodCounts(items) {
+  return Object.keys(METHOD_LABELS).map((m) => ({ method: m, label: METHOD_LABELS[m], recipes: items.filter((r) => methodMatches(r, m)).length,
+    also_called: Object.entries(METHOD_ALIASES).filter(([k, v]) => v === m && k !== m && !k.includes('_')).map(([k]) => k).slice(0, 6) }));
+}
+
+/** Which collections (and, for the world collection, which source sites) does a name like "fatma haty" mean? */
+export function resolveSource(sources, q) {
+  const want = stems(q).filter((w) => !['the', 'by', 'from', 'of', 'and', 'recipe', 'recipes', 'channel', 'book'].includes(w)); if (!want.length) return { ids: [], sites: [] };
+  const hit = (words, w) => words.some((x) => x === w || (w.length >= 4 && x.length >= 4 && lev(w, x, 1) <= 1));
+  const ids = []; const sites = [];
+  for (const [id, s] of Object.entries(sources || {})) {
+    const idWords = stems(id);
+    const words = [...idWords, ...stems(s.name || ''), ...(s.aliases || []).flatMap(stems)];
+    if (want.every((w) => hit(words, w))) ids.push(id);
+    else for (const site of Object.keys(s.sites || {})) { if (want.every((w) => hit(stems(site), w))) sites.push(site); }
+  }
+  // a name that matches a collection exactly beats looser matches ("fatma haty" must not pull in other Fatmas)
+  const exact = ids.filter((id) => { const s = sources[id]; return [s.name, ...(s.aliases || []), id].some((n) => norm(n) === norm(q)); });
+  return { ids: exact.length ? exact : ids, sites };
+}
+
+/** Ingredient names with how many recipes use them: for "what ingredients do you know that start with len...". */
+export function ingredientList(items, staples, q, limit = 20) {
+  const c = new Map(); const want = stems(q || '');
+  for (const r of items) for (const i of new Set(r.ig || [])) { if (i.length > 40) continue; c.set(i, (c.get(i) || 0) + 1); }
+  const stap = new Set(staples);
+  const out = [...c.entries()].filter(([i]) => !want.length || want.every((w) => stems(i).some((x) => x === w || x.startsWith(w)))).sort((a, b) => b[1] - a[1]).slice(0, Math.min(limit, 50));
+  return out.map(([i, n]) => ({ ingredient: i.replace(/_/g, ' '), recipes: n, staple: stap.has(i) || undefined }));
 }
