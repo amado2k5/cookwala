@@ -1,0 +1,46 @@
+name: Deploy hosted MCP endpoint
+
+# Manual: deploys the read-only Streamable HTTP endpoint (sdk/mcp-js/worker) to Cloudflare Workers.
+# Needs the repository secrets CLOUDFLARE_API_TOKEN (Workers Scripts: Edit) and CLOUDFLARE_ACCOUNT_ID.
+# Optional MCP_GATEWAY_TOKEN: when set, /mcp requires it as x-mcprush-token or Authorization: Bearer.
+# Setup and DNS: sdk/mcp-js/RELEASING.md, "Hosted endpoint".
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sdk/mcp-js
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: npm test
+      - name: Deploy
+        run: npx -y wrangler@4 deploy -c worker/wrangler.toml
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_SEND_METRICS: 'false'
+      - name: Set the gateway token
+        if: ${{ env.GATEWAY_TOKEN != '' }}
+        run: printf '%s' "$GATEWAY_TOKEN" | npx -y wrangler@4 secret put MCP_GATEWAY_TOKEN -c worker/wrangler.toml
+        env:
+          GATEWAY_TOKEN: ${{ secrets.MCP_GATEWAY_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_SEND_METRICS: 'false'
+      - name: The endpoint answers
+        run: |
+          URL="${MCP_URL:-https://cookwala-mcp.${CF_SUBDOMAIN}.workers.dev}"
+          curl -fsS "$URL/health" | grep -q '"readOnly":true'
+        env:
+          MCP_URL: ${{ vars.MCP_URL }}
+          CF_SUBDOMAIN: ${{ vars.CF_WORKERS_SUBDOMAIN }}

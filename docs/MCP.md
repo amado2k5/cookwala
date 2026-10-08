@@ -5,7 +5,8 @@
 > `ai.cookwala/cookwala`. It never starts cooking.
 
 Cookwala is available to any [Model Context Protocol](https://modelcontextprotocol.io) client as
-a **local server that reads the public catalog**. There is no Cookwala server to run or pay for:
+a **local server that reads the public catalog**. There is no Cookwala server to run or pay for
+(an optional [hosted endpoint](#hosted-endpoint-optional) exists for directories that need an https address):
 
 ```
  your machine                                              GitHub Pages (cookwala.ai)
@@ -16,8 +17,9 @@ a **local server that reads the public catalog**. There is no Cookwala server to
                               └─ optional, read-only ────▶ fifi.cooking /data/… (the source site)
 ```
 
-GitHub Pages serves static files over GET only, so a remote MCP endpoint cannot live there. A
-stdio server needs no endpoint: the client starts it. The same JavaScript core also runs in your
+GitHub Pages serves static files over GET only, so a remote MCP endpoint cannot live there (the
+optional hosted endpoint below runs on Cloudflare Workers instead). A stdio server needs no
+endpoint: the client starts it. The same JavaScript core also runs in your
 browser on the [MCP page](https://cookwala.ai/mcp/), which is the proof that nothing runs on a
 server.
 
@@ -97,7 +99,8 @@ fifi.cooking is where the recipes are written; Cookwala is the standard form the
   publishes no keys (`catalog_status` says so).
 - Cache: `$XDG_CACHE_HOME/cookwala-mcp` or `~/.cache/cookwala-mcp`, revalidated with `If-None-Match`
   at most every ten minutes, used when the network fails or `COOKWALA_OFFLINE=1`.
-- No telemetry, no identifiers, no accounts, no personal data. It writes only its cache.
+- No telemetry, no identifiers, no accounts, no personal data. It writes only its cache. (This is the
+  local server; see the hosted endpoint below for the one opt-in exception, third-party call counting.)
 - Only the catalog origin and `https://fifi.cooking` are ever contacted. GitHub Pages answers
   404 with an HTML page; the client treats that as an error, never as data.
 - It does not start cooking, call a hub or order anything. `check_mandate` only answers whether an
@@ -113,6 +116,25 @@ fifi.cooking is where the recipes are written; Cookwala is the standard form the
 | `COOKWALA_CACHE_DIR` | `~/.cache/cookwala-mcp` | Cache directory |
 | `COOKWALA_OFFLINE` | unset | `1` serves only from the cache |
 | `COOKWALA_LANG` | `en` | Default language |
+
+## Hosted endpoint (optional)
+
+`sdk/mcp-js/worker/` serves the same sixteen read-only tools over Streamable HTTP (stateless, JSON
+responses) on Cloudflare Workers: `POST /mcp`, plus `GET /health`. The npm package stays the default;
+the endpoint exists for directories that require an https address, for example call tracking at
+[mcprush.com](https://mcprush.com). It reads the same public catalog, writes nothing, logs nothing
+and cannot start cooking.
+
+- **Gateway token.** If the secret `MCP_GATEWAY_TOKEN` is set, `/mcp` answers 401 unless the call
+  carries it as `x-mcprush-token` or `Authorization: Bearer <token>`. Unset, the endpoint is open
+  (the data is public).
+- **Deploy.** Manual workflow `Deploy hosted MCP endpoint` (needs `CLOUDFLARE_API_TOKEN` and
+  `CLOUDFLARE_ACCOUNT_ID`). Steps, custom domain and the mcprush setup order:
+  [sdk/mcp-js/RELEASING.md](../sdk/mcp-js/RELEASING.md#hosted-endpoint-optional).
+- **mcprush and telemetry.** Cookwala itself collects none. If you enable tracking at mcprush,
+  calls go through its gateway and mcprush counts them; that is mcprush's data, not Cookwala's, and
+  it is off unless a maintainer turns it on. Local stdio use is never tracked.
+- **Status.** Not deployed yet; the URL will be added here when it is.
 
 ## Registry
 
