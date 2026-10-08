@@ -24,6 +24,7 @@ cp -R conformance "$OUT"/v1/conformance
 python3 tools/build_certifications.py "$OUT"   # /v1/certifications/{id}.json and index.json (RFC-0010), verified first
 cp -R sim/index.html sim/app.js sim/style.css sim/engine sim/city sim/country sim/world "$OUT"/sim/
 python3 tools/build_mcp_assets.py "$OUT"   # MCP service: device presets, fifi rights, registry manifest, browser core
+python3 tools/build_query_index.py "$OUT"   # REST API index: /v1/query/recipes.json and facets.json
 python3 tools/bundle_schemas.py "$OUT"/v1/schemas/bundle.json
 python3 tools/site_stats.py "$OUT"/v1/stats.json > /dev/null
 # scenarios: execute against a local hub (records real output) and render the code samples (scenarios/out, gitignored)

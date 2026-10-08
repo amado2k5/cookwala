@@ -5,6 +5,7 @@
 import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js';
 import { createServer, VERSION } from './server.js';
 import { Catalog } from './catalog.js';
+import { handleApi } from './api.js';
 
 const JSON_HEADERS = { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' };
 const json = (status, body, extra = {}) => new Response(JSON.stringify(body), { status, headers: { ...JSON_HEADERS, ...extra } });
@@ -30,7 +31,11 @@ export async function handleRequest(request, env = {}, opts = {}) {
   const url = new URL(request.url);
   if (url.pathname === '/health') return json(200, { ok: true, name: 'cookwala', version: opts.version || VERSION, readOnly: true });
   // The bare domain doubles as the open endpoint for POST, so a chat app only needs https://mcp.cookwala.ai
-  if (url.pathname === '/' && request.method !== 'POST') return json(200, { name: 'cookwala', endpoint: '/mcp', openEndpoint: '/open/mcp', docs: 'https://cookwala.ai/mcp/', transport: 'streamable-http', readOnly: true });
+  if (url.pathname === '/' && request.method !== 'POST') return json(200, { name: 'cookwala', endpoint: '/mcp', openEndpoint: '/open/mcp', api: '/api/openapi.json', docs: 'https://cookwala.ai/mcp/', transport: 'streamable-http', readOnly: true });
+  if (url.pathname === '/api' || url.pathname.startsWith('/api/')) {
+    const catalog = opts.catalog || new Catalog({ diskCache: false, baseUrl: env.COOKWALA_BASE_URL, offline: false, lang: 'en' });
+    return handleApi(request, env, { catalog, version: opts.version || VERSION });
+  }
   const open = url.pathname === '/open/mcp' || url.pathname === '/';
   if (url.pathname !== '/mcp' && !open) return json(404, { error: 'not_found' });
   if (!open && !(await authorized(request, env))) return json(401, { error: 'unauthorized' }, { 'www-authenticate': 'Bearer' });

@@ -4,6 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const sha = (b) => 'sha256:' + createHash('sha256').update(b).digest('hex');
@@ -35,6 +36,7 @@ export function buildFixture({ tamperRecipe } = {}) {
   put('v1/capabilities/index.json', JSON.stringify({ presets }));
   put('v1/fifi/collections.json', fs.readFileSync(path.join(ROOT, 'tools', 'export_fifi.collections.json')));
   put('llms.txt', '# Cookwala test\n');
+  execFileSync('python3', [path.join(ROOT, 'tools', 'build_query_index.py'), dir], { stdio: 'pipe' }); // /v1/query/*.json, the REST API's index
   const certDir = path.join(ROOT, 'examples', 'certifications');
   const certs = fs.readdirSync(certDir).sort().map((f) => JSON.parse(fs.readFileSync(path.join(certDir, f), 'utf8')));
   for (const c of certs) put(`v1/certifications/${c.id}.json`, JSON.stringify(c));
