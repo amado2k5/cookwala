@@ -75,12 +75,13 @@ python tools/validate_specs.py && python tools/run_conformance.py
 node sim/run.mjs
 (cd sdk/mcp-js && npm ci && npm test)          # when you touch sdk/mcp-js or the conformance vectors
 bash tools/build_site.sh _site                 # when you touch site/, docs/ or tools/build_*
+python tools/build_chatgpt_plugin.py --check   # when you touch plugins/chatgpt/ (also runs in build_site.sh)
 ```
 
 ## Where things are
 `schemas/` JSON Schemas · `vocab/` operations, units, facets · `conformance/` test vectors (Python and JavaScript must agree)
 · `sdk/mcp-js/` the MCP server (pure core in `src/core/`, also served to the browser) · `sdk/mcp/` the Python MCP script
-· `site/` pages and `.well-known` · `docs/` the documentation set (registered in `tools/build_site.py`) · `recipes/` the export from fifi.cooking.
+· `plugins/chatgpt/cookwala/` the ChatGPT plugin package (docs/CHATGPT-PLUGIN.md) · `site/` pages and `.well-known` · `docs/` the documentation set (registered in `tools/build_site.py`) · `recipes/` the export from fifi.cooking.
 Pages are discovered from `site/content/en/*.html`; Arabic pages sit in `site/content/ar/`, other languages fall back to English.
 
 <!-- BEGIN AWS Agent Toolkit rules -->

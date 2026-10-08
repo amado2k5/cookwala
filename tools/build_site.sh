@@ -30,6 +30,7 @@ python3 tools/site_stats.py "$OUT"/v1/stats.json > /dev/null
 # scenarios: execute against a local hub (records real output) and render the code samples (scenarios/out, gitignored)
 python3 tools/scenarios/run.py --keep-going > /dev/null || echo "warning: some scenarios failed; see scenarios/out/*/result.json"
 python3 tools/scenarios/render.py > /dev/null
+python3 tools/build_chatgpt_plugin.py --check
 # pages, docs, whitepaper, essays, deck, llms.txt, sitemap (tools/build_site.py)
 python3 tools/build_site.py "$OUT"
 touch "$OUT"/.nojekyll
