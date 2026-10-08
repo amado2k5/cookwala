@@ -11,6 +11,13 @@
     d.ingredients.forEach(function (i) { var li = document.createElement('li'); var n = document.createElement('span'); var e = ings[i.ref] || {}; n.textContent = e.name || (i.display && (i.display.en || i.display.ar)) || i.ref; var qv = document.createElement('span'); qv.className = 'qty'; qv.textContent = e.standardAmount || (i.display && (i.display.en || i.display.ar)) || ''; li.append(n, qv); $('rvIngs').append(li); });
     var steps = s.legacySteps || (d.text && ((d.text[lang] || d.text.en || d.text.ar) || {}).legacySteps) || [];
     steps.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; $('rvSteps').append(li); });
+    var dv = $('rvDiet'), cl = ((d.safety && d.safety.dietary) || []).map(function (c) { return c.claim; });
+    if (dv && cl.length) {
+      var lab = JSON.parse(dv.getAttribute('data-labels') || '{}'), h = document.createElement('h3'), ul = document.createElement('ul'), nt = document.createElement('p');
+      h.textContent = dv.getAttribute('data-title'); ul.className = 'diet-chips'; nt.className = 'note'; nt.textContent = dv.getAttribute('data-note');
+      ['halal', 'kosher', 'vegetarian', 'vegan'].forEach(function (c) { if (cl.indexOf(c) < 0 || !lab[c]) return; var li = document.createElement('li'); li.className = 'diet-chip diet-' + c; li.textContent = lab[c]; ul.append(li); });
+      dv.append(h, ul, nt); dv.hidden = false;
+    }
     var links = $('rvLinks'); var a = document.createElement('a'); a.className = 'btn'; a.href = '/v1/recipes/' + id + '.cookwala.json'; a.textContent = 'JSON'; links.append(a);
     if (d.legacy && d.legacy.pageUrl) { var b = document.createElement('a'); b.className = 'btn'; b.href = d.legacy.pageUrl; b.rel = 'noopener'; b.textContent = 'fifi.cooking'; links.append(b); }
     $('rvSource').textContent = (d.source && d.source.name || '') + '. ' + (d.source && d.source.citation || '');

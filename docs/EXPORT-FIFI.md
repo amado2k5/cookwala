@@ -149,3 +149,15 @@ until the source rights are confirmed. To publish steps for a source you have cl
 re-run the exporter. The cuisine of a `w-<iso2>-*` recipe is that country; the family collections stay Egyptian. Existing
 documents were not regenerated in this run: the source site has changed since 2026-10-05 and a full re-export would
 rewrite about 1,200 of them, which is a separate review.
+
+## 11. Dietary claims (2026-10-08)
+
+fifi.cooking now publishes `dietary` per recipe in `public/data/recipes/<id>.json` (source of truth:
+`src/data/recipeDietary.json` there, method in its `docs/DIETARY-CLASSIFICATION.md`). `tools/export_fifi.py` copies the
+claims into `safety.dietary` of each document (`basis: ingredients`, `ruleset: fifi-diet-1`) and adds `x-dietary` to the
+index. They are positive claims only (halal, kosher, vegetarian, vegan), never certifications; a claim is withheld whenever
+a relevant fact is uncertain. `tools/build_query_index.py` adds halal and kosher to the `diet` facet from these claims. Vegetarian and vegan in search still
+use the looser name heuristic (about 114 more recipes pass it than hold a reviewed vegetarian claim); the documents carry the stricter reviewed claims.
+
+Do not edit claims in this repo: change them in fifi.cooking and re-run the export. Adding claims changes a document's hash
+but the exporter does not bump `revision`.

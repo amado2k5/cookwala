@@ -53,7 +53,11 @@
   [
    "SDK y escenarios",
    "/scenarios/"
-  ], ["Ejemplos y paquetes", "/samples/"],
+  ],
+  [
+   "Ejemplos y paquetes",
+   "/samples/"
+  ],
   [
    "Registry y directory",
    "/registry/"
@@ -131,6 +135,10 @@
   [
    "security.txt",
    "/.well-known/security.txt"
+  ],
+  [
+   "Tecnología de fifi.cooking",
+   "https://fifi.cooking/?page=technology&lang=es"
   ],
   [
    "GitHub",
@@ -214,6 +222,12 @@
   "text_language": "Idioma del texto",
   "nutrition": "Nutrición por porción (estimación modelled, no measured)",
   "allergens": "Alérgenos (inferidos de los nombres de los ingredientes)",
+  "diet": "Idoneidad dietética",
+  "diet_note": "Deducida de los ingredientes y los pasos; no es una certificación. Se supone que la carne procede de sacrificio halal o kosher. Revise las etiquetas de los ingredientes comprados, como el queso y el caldo.",
+  "diet_halal": "Halal",
+  "diet_kosher": "Kosher",
+  "diet_vegetarian": "Vegetariano",
+  "diet_vegan": "Vegano",
   "dry_run": "Dry run de esta receta",
   "v0_note": "Este es un documento V0: los ingredientes y pasos originales de fifi.cooking, con cantidades analizadas del texto donde fue posible. Ningún paso ha sido clasificado, measured o verificado, por lo que un dispositivo asigna cada paso a una persona y se niega a cocinarlo solo (RFC-0009). Se convierte en V1 cuando un grafo de proceso revisado reemplaza los pasos.",
   "load_more": "Mostrar más",

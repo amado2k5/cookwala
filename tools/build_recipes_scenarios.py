@@ -32,6 +32,9 @@ for _p in (ROOT / 'scenarios' / 'i18n').glob('*.json') if (ROOT / 'scenarios' / 
     except ValueError: pass
 
 
+DIET_ORDER = ('halal', 'kosher', 'vegetarian', 'vegan')
+
+
 def L(m, lang):
     return (m.get(lang) or m.get('en') or '') if isinstance(m, dict) else (m or '')
 
@@ -115,6 +118,12 @@ class RecipeBuilder:
         nut_html = f"<p class=\"note\">{html.escape(S['nutrition'])}: " + ', '.join(f'{k} {v}' for k, v in nut.items()) + '</p>' if nut else ''
         al = d['safety']['allergens'].get('eu14', [])
         al_html = f"<p class=\"note\">{html.escape(S['allergens'])}: {html.escape(', '.join(al) if al else '-')}</p>"
+        diet_html = ''
+        claims = [c['claim'] for c in d['safety'].get('dietary', []) if c.get('claim') in DIET_ORDER]
+        if claims:
+            chips = ''.join(f'<li class="diet-chip diet-{c}">{html.escape(S["diet_" + c])}</li>' for c in DIET_ORDER if c in claims)
+            diet_html = (f'<div class="diet"><h3>{html.escape(S["diet"])}</h3><ul class="diet-chips">{chips}</ul>'
+                         f'<p class="note">{html.escape(S["diet_note"])}</p></div>')
         src = d.get('source', {})
         legacy = d.get('legacy', {})
         links = f'<a class="btn" href="/v1/recipes/{rid}.cookwala.json">{html.escape(S["data"])}</a>'
@@ -129,7 +138,7 @@ class RecipeBuilder:
                 f'<h1>{html.escape(title)}</h1><p class="meta">{meta_line} · {html.escape(S["collection"])}: {html.escape(coll)} · <span class="lic">{html.escape(S["licence"])}: {html.escape(lic_txt)}</span></p>'
                 + (f'<p class="lead">{html.escape(intro)}</p>' if intro else '') + f'<p class="cta">{links}</p></section>'
                 f'<section class="wrap"><p class="note about">{S["about"].format(why=self.b.path_for(lang, "/why/"), recipes=self.b.path_for(lang, "/recipes/"), playground=self.b.path_for(lang, "/playground/"))}</p></section>'
-                f'<section class="wrap two"><div><h2>{html.escape(S["ingredients"])}</h2><ul class="ingredients">{ings}</ul>{al_html}{nut_html}</div>'
+                f'<section class="wrap two"><div><h2>{html.escape(S["ingredients"])}</h2><ul class="ingredients">{ings}</ul>{al_html}{diet_html}{nut_html}</div>'
                 f'<div><h2>{html.escape(S["original_steps"] if level == "V0" else S["steps"])}</h2>' + (f'<ol class="steps">{steps_html}</ol>' if steps_html else f'<p class="note">{html.escape(S.get("steps_withheld", ""))}' + (f' <a href="{html.escape(legacy["pageUrl"])}" rel="noopener">{html.escape(S["original_page"])}</a>' if legacy.get('pageUrl') else '') + '</p>') + '</div></section>'
                 f'<section class="band"><div class="wrap"><p class="note">{html.escape(note)}</p><p class="note">{html.escape(S["source"])}: {html.escape(src.get("name", ""))}. {html.escape(src.get("citation", ""))}</p></div></section>')
         return body, title
@@ -152,7 +161,7 @@ class RecipeBuilder:
             S = self.b.strings[lang]['recipes']
             body = (f'<section class="hero wrap recipe-head" id="recipeView" data-lang="{lang}"><p class="crumb"><a href="{self.b.path_for(lang, "/")}">Cookwala</a> / <a href="{self.b.path_for(lang, "/recipes/")}">{html.escape(S["title"])}</a></p>'
                     f'<h1 id="rvTitle">…</h1><p class="meta" id="rvMeta"></p><p class="cta" id="rvLinks"></p></section>'
-                    f'<section class="wrap two"><div><h2>{html.escape(S["ingredients"])}</h2><ul class="ingredients" id="rvIngs"></ul></div><div><h2>{html.escape(S["original_steps"])}</h2><ol class="steps" id="rvSteps"></ol></div></section>'
+                    f'<section class="wrap two"><div><h2>{html.escape(S["ingredients"])}</h2><ul class="ingredients" id="rvIngs"></ul><div class="diet" id="rvDiet" hidden data-title="{html.escape(S["diet"])}" data-note="{html.escape(S["diet_note"])}" data-labels="{html.escape(json.dumps({c: S["diet_" + c] for c in DIET_ORDER}, ensure_ascii=False))}"></div></div><div><h2>{html.escape(S["original_steps"])}</h2><ol class="steps" id="rvSteps"></ol></div></section>'
                     f'<section class="band"><div class="wrap"><p class="note">{html.escape(S["v0_note"])}</p><p class="note">{html.escape(S["machine_text"])}</p><p class="note" id="rvSource"></p></div></section>')
             meta = {'title': S['title'], 'description': S['v0_note'][:160], 'path': '/recipes/view/', 'scripts': ['recipe-view.js'], 'langs': [l for l in self.langs if l not in ('en', 'ar')]}
             self.b.write(lang, '/recipes/view/', self.b.page(lang, meta, body, current='/recipes/'))

@@ -173,6 +173,10 @@ def record(rid, d):
     if not ({'nuts', 'peanuts'} & set(al_codes)) and not any(tokens(r) & {stem(x) for x in NUTS} for r in refs): diet.append('nut_free')
     if not shell: diet.append('shellfish_free')
     if not egg: diet.append('egg_free')
+    # halal and kosher exist only as reviewed claims (safety.dietary, from fifi.cooking scripts/diet). vegetarian and vegan keep the
+    # name heuristic here: it is looser than the reviewed claims, which also read the steps and withhold on doubt.
+    claims = {c['claim'] for c in (d.get('safety') or {}).get('dietary', [])}
+    diet = sorted(set(diet) | (claims & {'halal', 'kosher'}))
     al_codes = list((d.get('safety') or {}).get('allergens', {}).get('eu14', [])) + list((d.get('safety') or {}).get('allergens', {}).get('us9', []))
     ttoks = tokens(title + ' ' + ' '.join(dish.get('tags', [])))
     spicy = any(has(r, SPICY) or (('hot' in tokens(r)) and (tokens(r) & {'pepper', 'sauce', 'peppers', 'chill'})) for r in refs)

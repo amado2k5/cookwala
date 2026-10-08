@@ -54,8 +54,15 @@
    [
     "SDK and scenarios",
     "/scenarios/"
-   ], ["Samples and packages", "/samples/"],
-   ["MCP server and AI agents", "/mcp/"],
+   ],
+   [
+    "Samples and packages",
+    "/samples/"
+   ],
+   [
+    "MCP server and AI agents",
+    "/mcp/"
+   ],
    [
     "Registry and directory",
     "/registry/"
@@ -133,6 +140,10 @@
    [
     "security.txt",
     "/.well-known/security.txt"
+   ],
+   [
+    "fifi.cooking technology",
+    "https://fifi.cooking/?page=technology&lang=en"
    ],
    [
     "GitHub",
@@ -216,6 +227,12 @@
    "text_language": "Text language",
    "nutrition": "Nutrition per serving (modelled estimate, not measured)",
    "allergens": "Allergens (inferred from ingredient names)",
+   "diet": "Dietary suitability",
+   "diet_note": "Worked out from the ingredients and steps; not a certification. Meat is assumed to be halal or kosher slaughtered. Check the labels of bought ingredients such as cheese and stock.",
+   "diet_halal": "Halal",
+   "diet_kosher": "Kosher",
+   "diet_vegetarian": "Vegetarian",
+   "diet_vegan": "Vegan",
    "dry_run": "Dry run this recipe",
    "v0_note": "This is a V0 document: the original ingredients and steps from fifi.cooking, with quantities parsed from the text where possible. No step has been classified, measured or verified, so a device assigns every step to a person and refuses to cook it alone (RFC-0009). It becomes V1 when a reviewed process graph replaces the steps.",
    "load_more": "Show more",
@@ -426,13 +443,13 @@
   },
   "path_note": "Every planned item has a gate: the one thing that has to happen first. If you can open one (a reviewer, a device, a food bank, funding), say so in <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">GitHub Discussions</a>; a direct address will follow from the founder.",
   "mcp_live": {
-    "chip": "Live now",
-    "h": "Our MCP server is live. Use it in your AI app today.",
-    "p": "Claude Code, Devin, Cursor, Windsurf, Codex, Copilot and any other app that can run an MCP server can now search the Cookwala recipes, dry-run a recipe against a device and check safe temperature bands. It is read-only and can never start cooking. No account, no server to run.",
-    "cmd": "claude mcp add cookwala -- npx -y @cookwala/mcp",
-    "note": "Needs Node 20 or later. The same package, @cookwala/mcp, works in any MCP-capable app. Listed in the official MCP Registry as ai.cookwala/cookwala.",
-    "install": "Add it to your app",
-    "try": "Try the five-minute test"
+   "chip": "Live now",
+   "h": "Our MCP server is live. Use it in your AI app today.",
+   "p": "Claude Code, Devin, Cursor, Windsurf, Codex, Copilot and any other app that can run an MCP server can now search the Cookwala recipes, dry-run a recipe against a device and check safe temperature bands. It is read-only and can never start cooking. No account, no server to run.",
+   "cmd": "claude mcp add cookwala -- npx -y @cookwala/mcp",
+   "note": "Needs Node 20 or later. The same package, @cookwala/mcp, works in any MCP-capable app. Listed in the official MCP Registry as ai.cookwala/cookwala.",
+   "install": "Add it to your app",
+   "try": "Try the five-minute test"
   },
   "hero": {
    "h1": "Robots are learning to move. Nobody had written down how to cook.",
@@ -502,8 +519,15 @@
    [
     "حزمة التطوير والسيناريوهات",
     "/scenarios/"
-   ], ["الأمثلة والحزم", "/samples/"],
-   ["خادم MCP ووكلاء الذكاء الاصطناعي", "/mcp/"],
+   ],
+   [
+    "الأمثلة والحزم",
+    "/samples/"
+   ],
+   [
+    "خادم MCP ووكلاء الذكاء الاصطناعي",
+    "/mcp/"
+   ],
    [
     "السجل والدليل",
     "/registry/"
@@ -581,6 +605,10 @@
    [
     "security.txt",
     "/.well-known/security.txt"
+   ],
+   [
+    "تقنية fifi.cooking",
+    "https://fifi.cooking/?page=technology&lang=ar"
    ],
    [
     "GitHub",
@@ -664,6 +692,12 @@
    "text_language": "لغة النص",
    "nutrition": "القيم الغذائية للحصة (تقدير منمذج، غير مقاس)",
    "allergens": "مسببات الحساسية (مستنتجة من أسماء المقادير)",
+   "diet": "الملاءمة الغذائية",
+   "diet_note": "مستنتجة من المكونات والخطوات، وليست شهادة اعتماد. يُفترض أن اللحوم مذبوحة على الطريقة الحلال أو الكوشر. راجع ملصقات المكونات الجاهزة مثل الجبن والمرق.",
+   "diet_halal": "حلال",
+   "diet_kosher": "كوشر",
+   "diet_vegetarian": "نباتي",
+   "diet_vegan": "نباتي صرف (فيغان)",
    "dry_run": "تجربة جافة لهذه الوصفة",
    "v0_note": "هذه وثيقة V0: المقادير والخطوات الأصلية من fifi.cooking، مع كميات مستخرجة من النص حيث أمكن. لم تُصنَّف أي خطوة أو تُقَس أو يُتحقق منها، لذلك يسند الجهاز كل خطوة إلى شخص ويرفض طهيها وحده (RFC-0009). وتصبح V1 حين يحل رسم عمليات مراجَع محل الخطوات.",
    "load_more": "أظهر المزيد",
@@ -870,13 +904,13 @@
   },
   "path_note": "لكل بند مخطَّط بوابة: الشيء الوحيد الذي يجب أن يحدث أولًا. إن كان بوسعك فتح إحداها (مراجع، جهاز، بنك طعام، تمويل) فقل ذلك في <a href=\"https://github.com/amado2k5/cookwala/discussions\" rel=\"noopener\">نقاشات GitHub</a>؛ وسيتبع عنوان مباشر من المؤسِّس.",
   "mcp_live": {
-    "chip": "متاح الآن",
-    "h": "خادم MCP الخاص بنا يعمل الآن. استخدمه في تطبيق الذكاء الاصطناعي اليوم.",
-    "p": "يمكن لـ Claude Code وDevin وCursor وWindsurf وCodex وCopilot وأي تطبيق آخر يشغّل خوادم MCP أن يبحث الآن في وصفات كوكوالا، ويجري تجربة جافة لوصفة على جهاز، ويفحص نطاقات الحرارة الآمنة. هو للقراءة فقط ولا يستطيع أبدًا بدء الطهي. دون حساب ودون خادم تشغّله.",
-    "cmd": "claude mcp add cookwala -- npx -y @cookwala/mcp",
-    "note": "يحتاج إلى Node 20 أو أحدث. الحزمة نفسها، @cookwala/mcp، تعمل في أي تطبيق يدعم MCP. مُدرَجة في سجل MCP الرسمي باسم ai.cookwala/cookwala.",
-    "install": "أضفه إلى تطبيقك",
-    "try": "جرّب الاختبار في خمس دقائق"
+   "chip": "متاح الآن",
+   "h": "خادم MCP الخاص بنا يعمل الآن. استخدمه في تطبيق الذكاء الاصطناعي اليوم.",
+   "p": "يمكن لـ Claude Code وDevin وCursor وWindsurf وCodex وCopilot وأي تطبيق آخر يشغّل خوادم MCP أن يبحث الآن في وصفات كوكوالا، ويجري تجربة جافة لوصفة على جهاز، ويفحص نطاقات الحرارة الآمنة. هو للقراءة فقط ولا يستطيع أبدًا بدء الطهي. دون حساب ودون خادم تشغّله.",
+   "cmd": "claude mcp add cookwala -- npx -y @cookwala/mcp",
+   "note": "يحتاج إلى Node 20 أو أحدث. الحزمة نفسها، @cookwala/mcp، تعمل في أي تطبيق يدعم MCP. مُدرَجة في سجل MCP الرسمي باسم ai.cookwala/cookwala.",
+   "install": "أضفه إلى تطبيقك",
+   "try": "جرّب الاختبار في خمس دقائق"
   },
   "hero": {
    "h1": "الروبوتات تتعلّم الحركة. ولم يكتب أحد كيف يُطهى الطعام.",
