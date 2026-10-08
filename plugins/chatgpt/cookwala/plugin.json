@@ -28,7 +28,10 @@
         "developerName": "Cookwala",
         "category": "Food & Drink",
         "capabilities": [
-          "Read"
+          "Search recipes",
+          "Read recipes",
+          "Plan meals",
+          "Build shopping lists"
         ],
         "websiteURL": "https://cookwala.ai/assistants/",
         "supportURL": "https://cookwala.ai/contribute/#contact",
@@ -43,7 +46,8 @@
         "composerIcon": "./assets/composer-icon.svg",
         "composerIconDark": "./assets/composer-icon-dark.svg",
         "logo": "./assets/logo.svg",
-        "logoDark": "./assets/logo-dark.svg"
+        "logoDark": "./assets/logo-dark.svg",
+        "brandColorDark": "#FF7A45"
       },
       "review": {
         "test_cases": {
@@ -96,7 +100,9 @@
               "expected_behavior": "Does not call any Cookwala tool; answers normally or says this is outside cooking and recipes."
             }
           ]
-        }
+        },
+        "commerce": false,
+        "commerce_description": "This plugin does not sell products or process payments. It only reads recipe data."
       },
       "publication": {
         "release_notes": "First release: recipe search, recipe details, pantry matching, diet, allergen and diabetic screens, meal plans and shopping lists. Read-only."
