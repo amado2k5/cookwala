@@ -3,11 +3,21 @@
   "name": "cookwala",
   "version": "1.0.0",
   "description": "Find, scale and plan recipes from the open Cookwala catalog. Search by cuisine, ingredient, nutrition, cost, cooking method, time, diet, allergen and language. Read-only: it never starts a kitchen device.",
-  "author": { "name": "Cookwala", "url": "https://cookwala.ai" },
+  "author": {
+    "name": "Cookwala",
+    "url": "https://cookwala.ai"
+  },
   "homepage": "https://cookwala.ai/assistants/",
   "repository": "https://github.com/amado2k5/cookwala",
   "license": "Apache-2.0",
-  "keywords": ["recipes", "cooking", "nutrition", "diet", "allergens", "meal planning"],
+  "keywords": [
+    "recipes",
+    "cooking",
+    "nutrition",
+    "diet",
+    "allergens",
+    "meal planning"
+  ],
   "extensions": {
     "com.openai": {
       "onboardingSkill": "./skills/get-started/SKILL.md",
@@ -17,7 +27,9 @@
         "longDescription": "Cookwala is an open recipe catalog of more than 2,000 recipes, mostly Egyptian and Middle Eastern, plus Mexican, Japanese, Moroccan, Chinese, French, Vietnamese, Indian, Korean, Iranian, Italian, Spanish, Greek and Ethiopian dishes.\n\nAsk in plain words: how to cook a dish, what you can make with the ingredients you have, high-protein or low-calorie options, quick or budget dishes, hot or cold dishes, frying or baking, recipes from a named cook or book, or a day of meals with a shopping list. Recipes can be scaled to the number of people, and titles are available in many languages.\n\nDiet, allergen and diabetic labels are screens built from ingredient names and reviewed claims. They are not certifications, guarantees or medical advice. Nutrition and cost are modelled estimates. Cookwala is read-only and collects no personal data.",
         "developerName": "Cookwala",
         "category": "Food & Drink",
-        "capabilities": ["Read"],
+        "capabilities": [
+          "Read"
+        ],
         "websiteURL": "https://cookwala.ai/assistants/",
         "supportURL": "https://cookwala.ai/contribute/#contact",
         "privacyPolicyURL": "https://cookwala.ai/privacy/",
@@ -39,31 +51,31 @@
             {
               "description": "How to cook a named dish",
               "prompt": "How do I cook béchamel?",
-              "tools_triggered": ["query_recipes", "get_recipe"],
+              "tools_triggered": "query_recipes, get_recipe",
               "expected_behavior": "Finds the catalog recipe for making béchamel sauce (and dishes that use it), then gives its ingredients and steps. If step wording is withheld for that recipe, says so, gives the operation order and the source link, and does not invent a method."
             },
             {
               "description": "Nutrition and diet filters together",
               "prompt": "Suggest high-protein vegetarian dinners under 500 kcal per serving.",
-              "tools_triggered": ["query_recipes"],
+              "tools_triggered": "query_recipes",
               "expected_behavior": "Returns three to five recipes with kcal and protein per serving that satisfy both limits, each marked as an inferred vegetarian screen and not a certification."
             },
             {
               "description": "Cook from what is at home",
               "prompt": "What can I make with lentils, rice and onions?",
-              "tools_triggered": ["query_recipes"],
+              "tools_triggered": "query_recipes",
               "expected_behavior": "Ranks recipes by how many of the three ingredients they use and lists what is missing for each. Staples such as salt and oil are not counted as missing."
             },
             {
               "description": "Allergen and diabetic screens with the right wording",
               "prompt": "Show me salads with no allergens found that are diabetic-friendly.",
-              "tools_triggered": ["query_recipes"],
+              "tools_triggered": "query_recipes",
               "expected_behavior": "Lists recipes using the words 'no allergen found' and 'diabetic-friendly estimate', never 'allergen-free' or 'safe for diabetics', and adds that labels must be read and a clinician or dietitian consulted."
             },
             {
               "description": "Meal plan with a shopping list",
               "prompt": "Plan a 1,800 kcal day without dairy and give me one shopping list for it.",
-              "tools_triggered": ["plan_meals", "shopping_list"],
+              "tools_triggered": "plan_meals, shopping_list",
               "expected_behavior": "Returns a plan close to 1,800 kcal with no dairy ingredients found, then one combined shopping list for the chosen recipes."
             }
           ],

@@ -78,6 +78,8 @@ def check(final):
     need(len(pos) >= 5, f'review.test_cases.positive: at least 5 required, found {len(pos)}')
     need(len(neg) >= 3, f'review.test_cases.negative: at least 3 required, found {len(neg)}')
     for n, c in enumerate(pos): need(all(c.get(k) for k in ('description', 'prompt', 'tools_triggered', 'expected_behavior')), f'positive case {n + 1}: description, prompt, tools_triggered and expected_behavior are required')
+    for n, c in enumerate(pos): need(isinstance(c.get('tools_triggered'), str), f'positive case {n + 1}: tools_triggered must be a single string (comma-separated tool names), not a list')
+    for n, c in enumerate(pos + neg): need(all(isinstance(c.get(k), str) for k in ('description', 'prompt', 'expected_behavior')), f'test case {n + 1}: description, prompt and expected_behavior must be strings')
     for n, c in enumerate(neg): need(all(c.get(k) for k in ('description', 'prompt', 'expected_behavior')), f'negative case {n + 1}: description, prompt and expected_behavior are required')
     if o.get('review', {}).get('demo_recording_url'): https(o['review']['demo_recording_url'], 'review.demo_recording_url')
     else: (err if final else warn)('review.demo_recording_url: required for MCP review; record it and add the URL before submitting')
