@@ -106,6 +106,14 @@
       "safetyLimits": {
        "type": "string",
        "description": "Default safety-limits pack."
+      },
+      "certifications": {
+       "type": "string",
+       "description": "Every Certification this catalog relays (RFC-0010; profile). On a static host the list is unfiltered; readers filter and verify each document themselves."
+      },
+      "certification": {
+       "type": "string",
+       "description": "Template for one Certification document by id (RFC-0010; profile)."
       }
      },
      "unevaluatedProperties": false,

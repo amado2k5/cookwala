@@ -52,13 +52,13 @@ result = cw.current_certifications([cert1, cert2], keys)
 
 ---
 
-## Not Yet Built ❌
+## Build Status
 
 | Feature | Status | Note |
 |---------|--------|------|
-| CLI commands | ❌ | `cookwala certify`, `verify-cert` |
+| CLI commands | ✅ | `cookwala verify-cert`, `current-certs`, `certify`, `revoke-cert` (Python CLI) |
 | MCP tools | ❌ | Certification operations |
-| API endpoints | ❌ | `/v1/certifications` defined, not deployed |
+| API endpoints | ✅ | Static on cookwala.ai: `/v1/certifications/index.json` and `/v1/certifications/{id}.json` (no server-side filtering) |
 | Certifier registry | ❌ | Authority credential system |
 | Recipe linking | ❌ | Recipes don't reference certs yet |
 | Search filters | ❌ | No `--certified halal` option |

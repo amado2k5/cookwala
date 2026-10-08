@@ -32,6 +32,8 @@ jobs:
         run: |
           pip install jsonschema pyyaml graphql-core cryptography
           python tools/validate_specs.py
+      - name: Python SDK and CLI tests
+        run: PYTHONPATH=sdk/python python -m unittest discover -s sdk/python/tests -v
       - name: Run Core conformance vectors
         run: python tools/run_conformance.py
       - name: Check humanitarian examples against the rule packs

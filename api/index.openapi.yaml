@@ -610,6 +610,10 @@ paths:
         certifying authorities for recipes, ingredients, lots, products or kitchens. The catalog relays
         them; a reader verifies each against the authority's own KeyRecord, the subject hash it holds,
         the validity window and the status, and treats an authority's newest document as the current one.
+
+        On cookwala.ai (a static host) the full list is published at /v1/certifications/index.json and
+        query parameters are not applied server-side: filter the list yourself, or use
+        `cookwala current-certs`. Each document is also at /v1/certifications/{id}.json.
       parameters:
       - name: subjectHash
         in: query
