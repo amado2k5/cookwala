@@ -49,6 +49,8 @@ def check(final):
     need(0 < len(m.get('description', '')) <= 4000, 'description: 1 to 4000 characters')
     need(0 < len(m.get('author', {}).get('name', '')) <= 120, 'author.name: 1 to 120 characters')
     if m.get('author', {}).get('url'): https(m['author']['url'], 'author.url')
+    need(len(m.get('author', {}).get('email', '')) <= 320, 'author.email: at most 320 characters')
+    need('gmail.com' not in json.dumps(m), 'no personal address may appear in the package; use eat@cookwala.ai')
     for forbidden in ('apps', 'hooks'):
         need(forbidden not in m and forbidden not in m.get('extensions', {}).get('com.openai', {}), f'"{forbidden}" is not allowed: such ZIPs cannot be submitted')
     need(not (PKG / '.app.json').exists() and not (PKG / 'hooks').exists(), '.app.json and hooks/ must not be in the package')

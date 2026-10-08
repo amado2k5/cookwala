@@ -5,6 +5,7 @@
   "description": "Find, scale and plan recipes from the open Cookwala catalog. Search by cuisine, ingredient, nutrition, cost, cooking method, time, diet, allergen and language. Read-only: it never starts a kitchen device.",
   "author": {
     "name": "Cookwala",
+    "email": "eat@cookwala.ai",
     "url": "https://cookwala.ai"
   },
   "homepage": "https://cookwala.ai/assistants/",
