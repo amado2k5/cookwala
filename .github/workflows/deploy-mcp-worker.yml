@@ -39,8 +39,15 @@ jobs:
           WRANGLER_SEND_METRICS: 'false'
       - name: The endpoint answers
         run: |
-          URL="${MCP_URL:-https://cookwala-mcp.${CF_SUBDOMAIN}.workers.dev}"
-          curl -fsS "$URL/health" | grep -q '"readOnly":true'
+          if [ -n "$MCP_URL" ]; then URL="$MCP_URL"
+          elif [ -n "$CF_SUBDOMAIN" ]; then URL="https://cookwala-mcp.${CF_SUBDOMAIN}.workers.dev"
+          else echo "::notice::Deployed. Set the repository variable MCP_URL or CF_WORKERS_SUBDOMAIN to enable the health check."; exit 0
+          fi
+          for i in 1 2 3 4 5 6; do
+            curl -fsS "$URL/health" | grep -q '"readOnly":true' && { echo "$URL/health ok"; exit 0; }
+            sleep 10
+          done
+          echo "$URL/health did not answer"; exit 1
         env:
           MCP_URL: ${{ vars.MCP_URL }}
           CF_SUBDOMAIN: ${{ vars.CF_WORKERS_SUBDOMAIN }}
