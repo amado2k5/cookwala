@@ -156,7 +156,7 @@
 | لایه | now | next | later |
 |---|---|---|---|
 | **Standard** | Core 0.2, profiles (draft / experimental) | Core 0.3 پس از اولین بازخورد دستگاه | Core 1.0 تحت یک بنیاد |
-| **Index and registry** | دستور پخت‌های نمونه؛ registry spec | تبدیل شده fifi.cooking corpus (1,881 recipes, Arabic + English); namespaces تأیید شده | مجموعه‌های جامعه، غذاهای جهان |
+| **Index and registry** | دستور پخت‌های نمونه؛ registry spec | تبدیل شده fifi.cooking corpus (2,380 recipes, Arabic + English); namespaces تأیید شده | مجموعه‌های جامعه، غذاهای جهان |
 | **Tools** | Validator، کتابخانه مرجع، dry run، conformance، اکسپورترها | `pip install cookwala` (CLI + library); JS/TS SDK | ویرایشگر دستور پخت (web) |
 | **Reference hub** | Core API spec | Docker hub با یک دستگاه شبیه‌سازی شده، تا quickstart `curl` به صورت محلی کار کند | کیت Hardware-in-the-loop |
 | **Bindings** | ROS 2 actions، Matter، LeRobot، OpenTelemetry | بسته ROS 2؛ سرور MCP؛ وظیفه Open-RMF | بنچمارک Isaac Lab "cook in simulation" |

@@ -172,7 +172,7 @@
 | Επίπεδο | Now | Next | Later |
 |---|---|---|---|
 | **Standard** | Core 0.2, profiles (draft / experimental) | Core 0.3 μετά το πρώτο feedback από συσκευή | Core 1.0 υπό ένα foundation |
-| **Index and registry** | Παραδείγματα συνταγών; registry spec | fifi.cooking corpus μετατρέφθηκε (1,881 recipes, Arabic + English); verified namespaces | Community collections, παγκόσμιες κουζίνες |
+| **Index and registry** | Παραδείγματα συνταγών; registry spec | fifi.cooking corpus μετατρέφθηκε (2,380 recipes, Arabic + English); verified namespaces | Community collections, παγκόσμιες κουζίνες |
 | **Tools** | Validator, reference library, dry run, conformance, exporters | `pip install cookwala` (CLI + library); JS/TS SDK | Recipe editor (web) |
 | **Reference hub** | Core API spec | Docker hub με μια simulated συσκευή, ώστε το quickstart `curl` να λειτουργεί τοπικά | Hardware-in-the-loop kit |
 | **Bindings** | ROS 2 actions, Matter, LeRobot, OpenTelemetry | ROS 2 package; MCP server; Open-RMF task | Isaac Lab "cook in simulation" benchmark |

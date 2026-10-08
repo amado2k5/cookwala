@@ -172,7 +172,7 @@ to check all three on the device.
 | Layer | Now | Next | Later |
 |---|---|---|---|
 | **Standard** | Core 0.2, profiles (draft / experimental) | Core 0.3 after first device feedback | Core 1.0 under a foundation |
-| **Index and registry** | Example recipes; registry spec | fifi.cooking corpus converted (1,881 recipes, Arabic + English); verified namespaces | Community collections, world cuisines |
+| **Index and registry** | Example recipes; registry spec | fifi.cooking corpus converted (2,380 recipes, Arabic + English); verified namespaces | Community collections, world cuisines |
 | **Tools** | Validator, reference library, dry run, conformance, exporters | `pip install cookwala` (CLI + library); JS/TS SDK | Recipe editor (web) |
 | **Reference hub** | Core API spec | Docker hub with a simulated device, so the quickstart `curl` works locally | Hardware-in-the-loop kit |
 | **Bindings** | ROS 2 actions, Matter, LeRobot, OpenTelemetry | ROS 2 package; MCP server; Open-RMF task | Isaac Lab "cook in simulation" benchmark |

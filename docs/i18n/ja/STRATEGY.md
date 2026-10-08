@@ -147,7 +147,7 @@
 | レイヤー | Now | Next | Later |
 |---|---|---|---|
 | **Standard** | Core 0.2, profiles (draft / experimental) | 最初のデバイスフィードバック後の Core 0.3 | 基盤の下での Core 1.0 |
-| **Index and registry** | レシピ例; registry 仕様 | fifi.cooking コーパスの変換済み (1,881 recipes, Arabic + English); 検証済み namespaces | コミュニティコレクション, 世界の料理 |
+| **Index and registry** | レシピ例; registry 仕様 | fifi.cooking コーパスの変換済み (2,380 recipes, Arabic + English); 検証済み namespaces | コミュニティコレクション, 世界の料理 |
 | **Tools** | Validator, リファレンスライブラリ, dry run, conformance, exporters | `pip install cookwala` (CLI + library); JS/TS SDK | レシピエディタ (web) |
 | **Reference hub** | Core API 仕様 | シミュレーションデバイスを備えた Docker hub (quickstart `curl` がローカルで動作可能) | Hardware-in-the-loop kit |
 | **Bindings** | ROS 2 actions, Matter, LeRobot, OpenTelemetry | ROS 2 package; MCP server; Open-RMF task | Isaac Lab "cook in simulation" benchmark |

@@ -171,7 +171,7 @@ design degli stakeholder (`STAKEHOLDERS.md`) e le regole di messaggistica (`MESS
 | Livello | Now | Next | Later |
 |---|---|---|---|
 | **Standard** | Core 0.2, profili (draft / experimental) | Core 0.3 dopo il primo feedback del dispositivo | Core 1.0 sotto una foundation |
-| **Index and registry** | Ricette di esempio; registry spec | corpus fifi.cooking convertito (1,881 recipes, Arabic + English); namespaces verificati | Collezioni della community, world cuisines |
+| **Index and registry** | Ricette di esempio; registry spec | corpus fifi.cooking convertito (2,380 recipes, Arabic + English); namespaces verificati | Collezioni della community, world cuisines |
 | **Tools** | Validator, reference library, dry run, conformance, exporters | `pip install cookwala` (CLI + library); JS/TS SDK | Recipe editor (web) |
 | **Reference hub** | Core API spec | Docker hub con un dispositivo simulato, così il quickstart `curl` funziona localmente | Hardware-in-the-loop kit |
 | **Bindings** | ROS 2 actions, Matter, LeRobot, OpenTelemetry | ROS 2 package; MCP server; Open-RMF task | Isaac Lab "cook in simulation" benchmark |

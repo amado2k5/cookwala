@@ -147,7 +147,7 @@ paydaş tasarımı (`STAKEHOLDERS.md`) ve mesajlaşma kuralları (`MESSAGING.md`
 | Katman | Now | Next | Later |
 |---|---|---|---|
 | **Standard** | Core 0.2, profiller (taslak / deneysel) | İlk cihaz geri bildiriminden sonra Core 0.3 | Bir temel altında Core 1.0 |
-| **Index and registry** | Örnek tarifler; registry spec | fifi.cooking korpusu dönüştürüldü (1,881 tarif, Arapça + İngilizce); doğrulanmış namespaces | Topluluk koleksiyonları, dünya mutfakları |
+| **Index and registry** | Örnek tarifler; registry spec | fifi.cooking korpusu dönüştürüldü (2,380 tarif, Arapça + İngilizce); doğrulanmış namespaces | Topluluk koleksiyonları, dünya mutfakları |
 | **Tools** | Validator, referans kütüphanesi, dry run, conformance, exporters | `pip install cookwala` (CLI + kütüphane); JS/TS SDK | Tarif editörü (web) |
 | **Reference hub** | Core API spec | Simüle edilmiş bir cihaz ile Docker hub, böylece quickstart `curl` yerel olarak çalışır | Hardware-in-the-loop kiti |
 | **Bindings** | ROS 2 actions, Matter, LeRobot, OpenTelemetry | ROS 2 paketi; MCP server; Open-RMF task | Isaac Lab "cook in simulation" benchmark |

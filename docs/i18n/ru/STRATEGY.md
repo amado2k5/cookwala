@@ -171,7 +171,7 @@
 | Слой | Now | Next | Later |
 |---|---|---|---|
 | **Standard** | Core 0.2, профили (draft / experimental) | Core 0.3 после первой обратной связи от устройств | Core 1.0 на базе фундамента |
-| **Index and registry** | Примеры рецептов; спецификация registry | корпус fifi.cooking конвертирован (1,881 recipes, Arabic + English); проверенные namespaces | Коллекции сообщества, кухни мира |
+| **Index and registry** | Примеры рецептов; спецификация registry | корпус fifi.cooking конвертирован (2,380 recipes, Arabic + English); проверенные namespaces | Коллекции сообщества, кухни мира |
 | **Tools** | Validator, справочная библиотека, dry run, conformance, экспортеры | `pip install cookwala` (CLI + library); JS/TS SDK | Редактор рецептов (web) |
 | **Reference hub** | Спецификация Core API | Docker hub с симулируемым устройством, чтобы quickstart `curl` работал локально | Hardware-in-the-loop kit |
 | **Bindings** | ROS 2 actions, Matter, LeRobot, OpenTelemetry | ROS 2 package; MCP server; Open-RMF task | Isaac Lab "cook in simulation" benchmark |

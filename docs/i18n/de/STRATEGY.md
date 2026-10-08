@@ -171,7 +171,7 @@ ist die Erstprüfung; der Benchmark ersetzt sie, sofern sie voneinander abweiche
 | Layer | Now | Next | Later |
 |---|---|---|---|
 | **Standard** | Core 0.2, Profile (draft / experimental) | Core 0.3 nach erstem Geräte-Feedback | Core 1.0 unter einem Fundament |
-| **Index and registry** | Beispielrezepte; registry spec | fifi.cooking corpus konvertiert (1,881 Rezepte, Arabisch + Englisch); verifizierte Namespaces | Community-Sammlungen, Weltküchen |
+| **Index and registry** | Beispielrezepte; registry spec | fifi.cooking corpus konvertiert (2,380 Rezepte, Arabisch + Englisch); verifizierte Namespaces | Community-Sammlungen, Weltküchen |
 | **Tools** | Validator, Referenzbibliothek, dry run, conformance, Exporter | `pip install cookwala` (CLI + library); JS/TS SDK | Rezepteditor (web) |
 | **Reference hub** | Core API spec | Docker hub mit einem simulierten Gerät, damit der Quickstart `curl` lokal funktioniert | Hardware-in-the-loop Kit |
 | **Bindings** | ROS 2 actions, Matter, LeRobot, OpenTelemetry | ROS 2 package; MCP server; Open-RMF task | Isaac Lab "cook in simulation" Benchmark |

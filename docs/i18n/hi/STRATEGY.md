@@ -158,7 +158,7 @@
 | Layer | Now | Next | Later |
 |---|---|---|---|
 | **Standard** | Core 0.2, profiles (draft / experimental) | पहले device feedback के बाद Core 0.3 | एक foundation के तहत Core 1.0 |
-| **Index and registry** | Example recipes; registry spec | fifi.cooking corpus परिवर्तित (1,881 recipes, Arabic + English); verified namespaces | Community collections, world cuisines |
+| **Index and registry** | Example recipes; registry spec | fifi.cooking corpus परिवर्तित (2,380 recipes, Arabic + English); verified namespaces | Community collections, world cuisines |
 | **Tools** | Validator, reference library, dry run, conformance, exporters | `pip install cookwala` (CLI + library); JS/TS SDK | Recipe editor (web) |
 | **Reference hub** | Core API spec | एक simulated device के साथ Docker hub, ताकि quickstart `curl` स्थानीय रूप से काम करे | Hardware-in-the-loop kit |
 | **Bindings** | ROS 2 actions, Matter, LeRobot, OpenTelemetry | ROS 2 package; MCP server; Open-RMF task | Isaac Lab "cook in simulation" benchmark |

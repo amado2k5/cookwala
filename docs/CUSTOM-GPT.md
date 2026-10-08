@@ -25,7 +25,7 @@ The REST API at `https://mcp.cookwala.ai/api/*` is open, read-only and needs no 
 | By source | `source=Fatma Abu Haty` (also `Samia Abdennour`, `Chef Teta`, `Osool El Tahy`, `family archive`, or a website), `/api/sources/{source}`, `/api/sources` |
 | By country | `country=Egypt` (or `Egyptian`, `Japan`, `India`, `Korea`, `Italy`...; same as `cuisine`), `/api/countries` |
 | By ingredient | `ingredient=lentils,onions` (all), `ingredient_any=...`, `exclude_ingredient=`, `/api/ingredients?q=lent` to look names up, `/api/pantry?have=` |
-| Halal, kosher, vegetarian and other diets | `/api/diets` (categories, counts, `coverage`), `/api/diets/halal`, `/api/diets/kosher` (`kosher_meat`, `kosher_dairy`, `pareve`), `/api/diets/vegetarian`, `gluten_free`..., or `diet=halal,gluten_free` on search. Halal and kosher come only from the reviewed claims in each recipe (`safety.dietary`, rule set `fifi-diet-1`; about 1,770 of 2,267 recipes): a recipe without the claim was withheld on doubt, so it is not listed. Vegetarian and vegan use the reviewed claim where there is one, else an ingredient screen (`diet_basis` says which); `basis=published` keeps only reviewed ones. Never certifications. `/api/diets/review` lists claims held back because the title or ingredients contradict them. `/api/certifications` lists real certificates (today only fictional examples) |
+| Halal, kosher, vegetarian and other diets | `/api/diets` (categories, counts, `coverage`), `/api/diets/halal`, `/api/diets/kosher` (`kosher_meat`, `kosher_dairy`, `pareve`), `/api/diets/vegetarian`, `gluten_free`..., or `diet=halal,gluten_free` on search. Halal and kosher come only from the reviewed claims in each recipe (`safety.dietary`, rule set `fifi-diet-1`; about 1,780 of 2,380 recipes): a recipe without the claim was withheld on doubt, so it is not listed. Vegetarian and vegan use the reviewed claim where there is one, else an ingredient screen (`diet_basis` says which); `basis=published` keeps only reviewed ones. Never certifications. `/api/diets/review` lists claims held back because the title or ingredients contradict them. `/api/certifications` lists real certificates (today only fictional examples) |
 | Allergens | `no_allergens=true` (none found, not a guarantee), `allergen_free=milk,eggs`; every recipe has `allergen_info` |
 | Diabetic-friendly | `diabetic_friendly=true`; every recipe has `diabetic` (status, reasons, the rule). An estimate, not medical advice |
 | Kids | `kids=true` (inferred: mild, simple, kid-appealing; each result lists cautions such as honey, nuts and sesame) |
@@ -52,7 +52,7 @@ are facts-only); the `steps` view always gives the operation order and the sourc
 7. Save with visibility Anyone with the link, or Everyone to list it in the GPT Store.
 
 ```text
-You are Cookwala, a cooking assistant backed by the open Cookwala recipe catalog (about 2,260 recipes, mostly Egyptian and Middle Eastern, plus
+You are Cookwala, a cooking assistant backed by the open Cookwala recipe catalog (about 2,390 recipes, mostly Egyptian and Middle Eastern, plus
 Mexican, Japanese, Moroccan, Chinese, French, Vietnamese, Indian, Indonesian, Korean, Iranian, Italian, Spanish, Greek and Ethiopian). Answer ONLY from the Cookwala actions. Never invent a recipe, id, quantity or number. If a
 search finds nothing, say so, relax one filter, and try again, or offer the closest results.
 
