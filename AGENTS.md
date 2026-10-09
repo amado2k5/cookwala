@@ -29,9 +29,14 @@ Releasing the MCP server: bump `version` in `sdk/mcp-js/package.json`, `package-
 merge, then either push a tag `mcp-vX.Y.Z` or run the `publish-mcp` workflow by hand (Actions, "Run workflow" on `main`).
 Agent sessions that cannot push tags use the manual run. Runbook: [sdk/mcp-js/RELEASING.md](sdk/mcp-js/RELEASING.md).
 
-Releasing a new `@cookwala/mcp` version does not update the hosted endpoint: run the `Deploy hosted MCP endpoint` workflow
-by hand afterwards (it tests, deploys the Worker, applies `MCP_GATEWAY_TOKEN` and checks `/health`). The npm package and the
-registry entry stay the default way to use the server; the hosted endpoint exists for mcprush call tracking.
+A release also deploys the hosted endpoint: after `publish-mcp` has published to npm and the registry, its `deploy-hosted` job calls the
+`Deploy hosted MCP endpoint` workflow for the same commit (a tag push always does; a manual run can untick `deploy_hosted`). That workflow waits
+until cookwala.ai has published the commit's data, runs `sdk/mcp-js/scripts/check-compat.mjs` (stops if a live tool, API operation, parameter or
+enum value would disappear or a parameter became required; `allow_breaking` overrides it), deploys, applies `MCP_GATEWAY_TOKEN` and checks that
+`/health` reports the version just deployed. It can still be run by hand on any branch (data wait off by default). The job uses the GitHub
+environment `hosted-mcp-production`: add required reviewers to it to put a person in front of every deploy. The version the endpoint reports is
+`sdk/mcp-js/package.json` at that commit; nothing bumps it, so bump it as part of the release. The npm package and the registry entry stay the
+default way to use the server; the hosted endpoint exists for mcprush call tracking.
 
 ## Known Limitations (MCP 0.3.0, Core 0.2)
 

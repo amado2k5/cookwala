@@ -47,7 +47,8 @@ Each release:
 3. `git tag mcp-vX.Y.Z && git push origin mcp-vX.Y.Z`, **or** run the `publish-mcp` workflow by hand on `main`
    (GitHub, Actions, "Publish MCP server", "Run workflow"; agent sessions that cannot push tags use this). The workflow
    tests, publishes to npm with provenance (skipped if that version is already on npm), waits until npm serves it, logs in
-   to the registry by HTTP proof, publishes, and checks the registry lists it.
+   to the registry by HTTP proof, publishes, and checks the registry lists it. Then its `deploy-hosted` job deploys the hosted
+   endpoint for the same commit (see "Hosted endpoint" below); a manual run can untick `deploy_hosted` to publish without deploying.
 4. Update the table at the top of this file.
 
 Fallback name: if the domain proof cannot be completed, change `name` in `server.json` and `mcpName` in `package.json` to
@@ -65,7 +66,11 @@ Worker logs nothing and stores nothing.
 1. Cloudflare: create an API token with *Workers Scripts: Edit*; add repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
 2. Add the repository variable (not a secret) `CF_WORKERS_SUBDOMAIN` with your workers.dev subdomain (`ahamdy`), or `MCP_URL` with the full
    base URL; the workflow's last step uses it for the health check and only prints a notice when neither is set.
-3. Run the `Deploy hosted MCP endpoint` workflow (Actions, "Run workflow" on `main`). It prints nothing secret; the endpoint is
+3. Deploy: a release does it for you (`Publish MCP server` calls `Deploy hosted MCP endpoint` after publishing), or run that workflow by hand
+   (Actions, "Run workflow" on `main`). Either way it waits for cookwala.ai to publish the commit's data (automatic for releases; the
+   `wait_for_pages` box for a manual run), stops if the new tools or API would break the live ones (`scripts/check-compat.mjs`; tick
+   `allow_breaking` for a deliberate break), deploys, and checks `/health` reports the deployed version. To require a person before every
+   deploy, open Settings, Environments, `hosted-mcp-production` and add required reviewers. It prints nothing secret; the endpoint is
    `https://cookwala-mcp.<your-subdomain>.workers.dev/mcp`.
 4. Custom name (done for `mcp.cookwala.ai`): with `cookwala.ai` on Cloudflare, open the Worker, Settings, Domains and Routes, Add,
    Custom domain. Cloudflare creates the DNS record and certificate; delete any existing `mcp` record first (one that pointed at

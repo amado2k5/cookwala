@@ -6,6 +6,15 @@ on:
   push:
     tags: ['mcp-v*']
   workflow_dispatch:
+    inputs:
+      deploy_hosted:
+        description: After publishing, also deploy the hosted endpoint (mcp.cookwala.ai)
+        type: boolean
+        default: true
+      allow_breaking:
+        description: Let the hosted deploy go ahead even if it would break the live tools or API
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -64,3 +73,17 @@ jobs:
             sleep 10
           done
           echo "ai.cookwala/cookwala not found in the registry"; exit 1
+
+  # Runs only if every publish step succeeded, for the same commit, so the hosted endpoint matches what npm and the registry now serve.
+  # A tag push cannot carry inputs, so it always deploys; a manual run can untick deploy_hosted.
+  deploy-hosted:
+    needs: publish
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_hosted }}
+    permissions:
+      contents: read
+      actions: read
+    uses: ./.github/workflows/deploy-mcp-worker.yml
+    with:
+      wait_for_pages: true
+      allow_breaking: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_breaking }}
+    secrets: inherit

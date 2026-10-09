@@ -1,18 +1,43 @@
 name: Deploy hosted MCP endpoint
 
-# Manual: deploys the read-only Streamable HTTP endpoint (sdk/mcp-js/worker) to Cloudflare Workers.
+# Deploys the read-only Streamable HTTP endpoint (sdk/mcp-js/worker) to Cloudflare Workers.
+# Two ways in:
+#  - by hand (Actions, "Run workflow"), deploying the branch you pick;
+#  - from "Publish MCP server": after a release (tag mcp-vX.Y.Z or a manual publish) has gone to npm and the registry, that workflow
+#    calls this one for the SAME commit, after cookwala.ai has published the data that commit expects.
+# Before it deploys, scripts/check-compat.mjs compares the new tools and API with the live ones and stops on a breaking change.
 # Needs the repository secrets CLOUDFLARE_API_TOKEN (Workers Scripts: Edit) and CLOUDFLARE_ACCOUNT_ID.
 # Optional MCP_GATEWAY_TOKEN: when set, /mcp requires it as x-mcprush-token or Authorization: Bearer.
-# Setup and DNS: sdk/mcp-js/RELEASING.md, "Hosted endpoint".
+# The job uses the GitHub environment "hosted-mcp-production": add required reviewers to it (Settings, Environments) to put a
+# person in front of every deploy. Setup and DNS: sdk/mcp-js/RELEASING.md, "Hosted endpoint".
 on:
   workflow_dispatch:
+    inputs:
+      wait_for_pages:
+        description: Wait until cookwala.ai has published this commit's data before deploying
+        type: boolean
+        default: false
+      allow_breaking:
+        description: Deploy even if the compatibility check finds a breaking change (a deliberate breaking release)
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      wait_for_pages:
+        type: boolean
+        default: true
+      allow_breaking:
+        type: boolean
+        default: false
 
 permissions:
   contents: read
+  actions: read   # to see whether the Pages workflow has finished for this commit
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: hosted-mcp-production
     defaults:
       run:
         working-directory: sdk/mcp-js
@@ -23,6 +48,28 @@ jobs:
           node-version: '22'
       - run: npm ci
       - run: npm test
+      - name: Wait for cookwala.ai to publish this commit
+        if: ${{ inputs.wait_for_pages }}
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # The Worker reads its data from cookwala.ai, so new code must not go live before the matching data does.
+          # The Pages workflow queues (never cancels) its runs, so "the run for this commit succeeded" means the data is live.
+          for i in $(seq 1 120); do
+            R=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow pages.yml --commit "$GITHUB_SHA" --event push --json status,conclusion --jq '.[0] | "\(.status) \(.conclusion)"' 2>/dev/null || true)
+            case "$R" in
+              "completed success") echo "cookwala.ai has published $GITHUB_SHA"; exit 0 ;;
+              completed*) echo "The Pages run for $GITHUB_SHA ended with: $R. Not deploying."; exit 1 ;;
+              "") if [ "$i" -gt 18 ]; then echo "::warning::No Pages run found for $GITHUB_SHA after 3 minutes; deploying anyway."; exit 0; fi ;;
+            esac
+            sleep 10
+          done
+          echo "cookwala.ai did not finish publishing $GITHUB_SHA within 20 minutes. Not deploying."; exit 1
+      - name: Compatibility with the live endpoint
+        env:
+          ALLOW_BREAKING: ${{ inputs.allow_breaking && '1' || '0' }}
+        run: node scripts/check-compat.mjs
       - name: Deploy
         run: npx -y wrangler@4 deploy -c worker/wrangler.toml
         env:
@@ -38,17 +85,19 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           WRANGLER_SEND_METRICS: 'false'
-      - name: The endpoint answers
+      - name: The endpoint answers with the version just deployed
         run: |
+          VERSION=$(node -p "require('./package.json').version")
           if [ -n "$MCP_URL" ]; then URL="$MCP_URL"
           elif [ -n "$CF_SUBDOMAIN" ]; then URL="https://cookwala-mcp.${CF_SUBDOMAIN}.workers.dev"
-          else echo "::notice::Deployed. Set the repository variable MCP_URL or CF_WORKERS_SUBDOMAIN to enable the health check."; exit 0
+          else echo "::notice::Deployed version $VERSION. Set the repository variable MCP_URL or CF_WORKERS_SUBDOMAIN to enable the health check."; exit 0
           fi
           for i in 1 2 3 4 5 6; do
-            curl -fsS "$URL/health" | grep -q '"readOnly":true' && { echo "$URL/health ok"; exit 0; }
+            BODY=$(curl -fsS "$URL/health" || true)
+            if echo "$BODY" | grep -q '"readOnly":true' && echo "$BODY" | grep -q "\"version\":\"$VERSION\""; then echo "$URL/health ok, version $VERSION"; exit 0; fi
             sleep 10
           done
-          echo "$URL/health did not answer"; exit 1
+          echo "$URL/health did not answer with version $VERSION (it says: ${BODY:-nothing})"; exit 1
         env:
           MCP_URL: ${{ vars.MCP_URL }}
           CF_SUBDOMAIN: ${{ vars.CF_WORKERS_SUBDOMAIN }}
