@@ -1,8 +1,9 @@
 # Distributing the Cookwala samples
 
 **Status (2026-10-06): published on PyPI, npm, Maven Central, NuGet, Homebrew and GHCR** (tag
-`samples-v0.3.0`), with the single file and the `.deb` on GitHub Releases. Chocolatey is submitted
-and in moderation; RPM, pacman (AUR), apk, conda-forge and Snap have manifests ready but
+`samples-v0.3.0`), with the single file and the `.deb` on GitHub Releases. Chocolatey rejected 0.3.0
+on 2026-10-08 (not installable software; see packaging/chocolatey/SUBMIT.md), so Windows users have Scoop,
+pip and npm; RPM, pacman (AUR), apk, conda-forge and Snap have manifests ready but
 nothing submitted yet. JFrog Artifactory is a bring-your-own-instance channel — `publish.sh` pushes
 to whatever instance you point it at; there is no public one. Version: [`VERSION`](VERSION)
 (`python packaging/build.py --check-versions` fails CI if a manifest disagrees).
@@ -28,7 +29,7 @@ pass `--base-url` to point them at another host, such as an Artifactory generic 
 | **GitHub Packages (Maven)** | as above, with the GitHub Packages repository | `java/build.gradle.kts` | CI on tag | nothing extra (`GITHUB_TOKEN`) |
 | **NuGet** | `dotnet add package Cookwala.Samples` · `dotnet tool install -g Cookwala.Samples.Tool` | `dotnet/Directory.Build.props`, `dotnet/src/*/*.csproj` | CI on tag | a nuget.org trusted-publishing policy (owner amado2k5, repo cookwala, workflow `samples.yml`, environment `release`, pattern `Cookwala.*`); the package owner name is read from the `NUGET_USER` repository variable (default `amado2026`); or a `NUGET_API_KEY` secret |
 | **Homebrew (macOS, Linux)** | `brew install amado2k5/cookwala/cookwala-samples` | `packaging/homebrew/cookwala-samples.rb.in` | CI on tag, to the tap repository | a tap repo `amado2k5/homebrew-cookwala`, `HOMEBREW_TAP_TOKEN` |
-| **Chocolatey (Windows)** | `choco install cookwala-samples` | `packaging/chocolatey/` | CI on tag (Windows runner) | `CHOCO_API_KEY`; community moderation before it is public |
+| **Chocolatey (Windows)** | `choco install cookwala-samples` | `packaging/chocolatey/` | CI on tag (Windows runner) | not published: rejected by community moderation 2026-10-08 |
 | **Scoop (Windows)** | `scoop bucket add cookwala https://github.com/amado2k5/scoop-cookwala` · `scoop install cookwala-samples` | `packaging/scoop/cookwala-samples.json.in` | Excavator updates `version`/`hash` on each `samples-v*` release | live — bucket published, see `packaging/scoop/SUBMIT.md` |
 | **apt (Debian, Ubuntu)** | `sudo apt install ./cookwala-samples_0.3.0_all.deb`, or from an apt repository | built by `packaging/build.py` | GitHub release asset; Artifactory Debian repo | an apt repository (Artifactory, Cloudsmith, a PPA) for `apt install cookwala-samples` |
 | **RPM (dnf, yum, zypper)** | `sudo dnf install cookwala-samples` | `packaging/rpm/cookwala-samples.spec.in` | by hand: `rpmbuild -ba`, Fedora COPR or openSUSE OBS | a COPR or OBS project |
