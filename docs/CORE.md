@@ -231,7 +231,7 @@ and it has real users.
 | Agents | Mandate inside Missions only | `AgentMandate` in common; required for agent requests |
 | Safety | Declared in recipes | Also enforced locally through SafetyLimits; recalls; incident reports |
 | Data | No dataset model | Consented, personal-data-free ExecutionLog |
-| Conformance | Schema validation only | 137 vectors (57 Core, 80 profile) plus a reference implementation |
+| Conformance | Schema validation only | {{stat:conformanceVectors}} vectors (Core and profiles) plus a reference implementation |
 | Signature (0.2.1, RFC-0012) | Over the bare hash string; `signedAt` optional and unsigned | Over the signing header `{alg, hash, kid, kind, signedAt}`; `signedAt` required; one verification path for documents, events and checkpoints; checkpoints need an independent witness |
 
 To migrate a 0.1 document: convert °F to °C; replace relative tolerances on temperatures with

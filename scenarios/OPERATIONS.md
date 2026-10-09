@@ -1,6 +1,6 @@
 # The SDK operations every language client implements
 
-One client, the same twenty-five operations in every language, all talking to a Cookwala hub
+One client, the same operations (see the table) in every language, all talking to a Cookwala hub
 over HTTP (the reference hub, `python hub/cookwala_hub.py`, or any conforming hub). The hub's
 `/v1/tools/*` endpoints are the reference library (`tools/cookwala_ref.py`) over HTTP, so a
 client in any language gets exactly the behaviour the conformance vectors test. Core API

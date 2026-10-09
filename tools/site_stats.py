@@ -7,6 +7,7 @@ import datetime as dt
 import json
 import os
 import pathlib
+import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -24,11 +25,13 @@ for it in index_items:
 langs = set()
 for r in recipes:
     langs |= set(json.loads(r.read_text()).get('text', {}).keys())
+sdk_ops = len(re.findall(r'^\| \d+ \|', (ROOT / 'scenarios' / 'OPERATIONS.md').read_text(), re.M))  # rows of the operations table
+site_langs = len({d.name for d in (ROOT / 'site' / 'content').iterdir() if d.is_dir()} | {d.name for d in (ROOT / 'docs' / 'i18n').iterdir() if d.is_dir()} | {'en'})  # a landing or translated docs per language
 limits = len(json.loads((ROOT / 'profiles' / 'core' / 'safety-limits.default.json').read_text())['limits'])
 rules = sum(len(json.loads(p.read_text())['rules']) for p in (ROOT / 'profiles' / 'humanitarian').glob('*.rulepack.json'))
 evals = __import__('yaml').safe_load((ROOT / 'evals' / 'kitchen-agent-safety' / 'promptfooconfig.yaml').read_text())['tests']
 facets = len(json.loads((ROOT / 'vocab' / 'facets.json').read_text())['entries'])
-AR = {'cooking operations with a physical definition': 'عملية طهي بتعريف فيزيائي', 'cooking operations in the vocabulary': 'عملية طهي في المفردات', 'conformance test vectors': 'متّجه اختبار مطابقة', 'JSON schemas': 'مخطط JSON', 'default on-device safety limits': 'حدّ سلامة افتراضي على الجهاز', 'agent-safety test cases': 'حالة اختبار لسلامة الوكلاء', 'food-safety and nutrition rules for food banks': 'قاعدة سلامة غذاء وتغذية لبنوك الطعام', 'recipes published in the index': 'وصفة منشورة في الفهرس', 'languages in published recipes': 'لغة في الوصفات المنشورة', 'languages with recipe names; full text is Arabic and English': 'لغة لأسماء الوصفات؛ النص الكامل بالعربية والإنجليزية', 'languages with code samples and a client, curl counted': 'لغة بأمثلة برمجية وعميل، مع احتساب curl', 'playable simulators': 'محاكٍ قابل للتشغيل', 'fifi.cooking recipes planned for conversion': 'وصفة من fifi.cooking مخطَّط تحويلها', 'household and device facet types with privacy rules': 'نوع معلومة منزلية بقواعد خصوصية'}
+AR = {'cooking operations with a physical definition': 'عملية طهي بتعريف فيزيائي', 'cooking operations in the vocabulary': 'عملية طهي في المفردات', 'conformance test vectors': 'متّجه اختبار مطابقة', 'JSON schemas': 'مخطط JSON', 'default on-device safety limits': 'حدّ سلامة افتراضي على الجهاز', 'agent-safety test cases': 'حالة اختبار لسلامة الوكلاء', 'food-safety and nutrition rules for food banks': 'قاعدة سلامة غذاء وتغذية لبنوك الطعام', 'recipes published in the index': 'وصفة منشورة في الفهرس', 'languages in published recipes': 'لغة في الوصفات المنشورة', 'languages for recipe titles; ingredient names and steps where published': 'لغة لعناوين الوصفات؛ مع أسماء المكونات والخطوات حيث نُشرت', 'languages with code samples and a client, curl counted': 'لغة بأمثلة برمجية وعميل، مع احتساب curl', 'languages the site and documentation are available in': 'لغة نُشر بها الموقع', 'playable simulators': 'محاكٍ قابل للتشغيل', 'fifi.cooking recipes planned for conversion': 'وصفة من fifi.cooking مخطَّط تحويلها', 'household and device facet types with privacy rules': 'نوع معلومة منزلية بقواعد خصوصية'}
 m = lambda v, label: {'value': v, 'label': label, 'labelAr': AR.get(label, label), 'kind': 'measured'}
 stats = {
     'generatedAt': dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds'),
@@ -47,8 +50,9 @@ stats = {
         'recipesV0': m(len(imported), 'recipes imported from fifi.cooking at V0'),
         'scenarios': m(len(scenarios), 'SDK scenarios, each executed against the reference hub'),
         'sdkLanguages': m(sdk_langs, 'languages with code samples and a client, curl counted'),
-        'sdkOperations': m(25, 'operations in every SDK client'),
-        'languages': m(len(title_langs | langs), 'languages with recipe names; full text is Arabic and English'),
+        'sdkOperations': m(sdk_ops, 'operations in every SDK client'),
+        'languages': m(len(title_langs | langs), 'languages for recipe titles; ingredient names and steps where published'),
+        'siteLanguages': m(site_langs, 'languages the site and documentation are available in'),
         'simulators': m(4, 'playable simulators'),
         'facets': m(facets, 'household and device facet types with privacy rules'),
         'recipesInConversion': {'value': len(imported), 'label': 'V0 recipes awaiting conversion to V1', 'labelAr': 'وصفة V0 تنتظر التحويل إلى V1', 'kind': 'planned'},

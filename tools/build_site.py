@@ -201,8 +201,19 @@ def fill(template, mapping):
     return re.sub(r'\{\{(\w+)\}\}', rep, template)
 
 
+STATS = {'figures': {}}  # set by Builder once v1/stats.json exists; the single source of every counted value
+
+
+def fill_stats(text):
+    """Replace {{stat:key}} with the build-counted value (docs, essays, pages)."""
+    def one(m):
+        f = STATS.get('figures', {}).get(m.group(1))
+        return f'{f["value"]:,}' if f else '…'
+    return re.sub(r'\{\{stat:(\w+)\}\}', one, text)
+
+
 def read(p):
-    return (ROOT / p).read_text(encoding='utf-8')
+    return fill_stats((ROOT / p).read_text(encoding='utf-8'))
 
 
 def parse_fragment(text):
@@ -240,6 +251,7 @@ class Builder:
         self.urls = []
         self.year = dt.date.today().year
         self.stats = json.loads((self.out / 'v1' / 'stats.json').read_text()) if (self.out / 'v1' / 'stats.json').exists() else {'figures': {}}
+        STATS.clear(); STATS.update(self.stats)
 
     # ---- helpers
     EN_ONLY = ('/docs/', '/sim/', '/v1/', '/.well-known/', '/llms.txt', '/whitepaper/cookwala', '/assets/')
@@ -540,7 +552,7 @@ class Builder:
                 f = tr_path(item)
                 if not f: continue
                 doc_id, src, title, title_ar, status = item
-                text = f.read_text(encoding='utf-8'); toc = []
+                text = fill_stats(f.read_text(encoding='utf-8')); toc = []
                 m_h1 = re.search(r'^# (.+)$', text, re.M); title_l = m_h1.group(1).strip() if m_h1 else (title_ar if lang == 'ar' else title)
                 body = md.render(text, self.doc_link_rewriter(src), collect=toc, lang=lang)
                 body = re.sub(r'href="/docs/([A-Z0-9-]+)/', lambda m: f'href="/{lang}/docs/{m.group(1)}/' if tr_path(DOC_INDEX[m.group(1)]) else m.group(0), body) if True else body
