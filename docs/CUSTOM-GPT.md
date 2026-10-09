@@ -35,7 +35,7 @@ The REST API at `https://mcp.cookwala.ai/api/*` is open, read-only and needs no 
 | Prep and cook time | `prep_time_max` (hands-on minutes), `cook_time_min` (unattended minutes: cooking, resting, waiting), `time_max` (total); sort `prep_time` |
 | Any combination of one recipe's parts | `getRecipe?include=ingredients,nutrition,cost,links` (parts: summary, ingredients, steps/recipe, nutrition, cost, equipment, notes, safety, links/video, all) |
 | Videos | `include=links` gives the creator's YouTube video where one exists (about 800 Fatma Abu Haty recipes); `has_video=true` finds them |
-| Another language | `lang=ar` (or `Arabic`, `fr`, `zh`, ...) on search and getRecipe: titles in 29 languages, ingredient names and step wording where published; `/api/languages` |
+| Another language | `lang=ar` (or `Arabic`, `fr`, `zh`, ...) on search and getRecipe: titles in {{stat:languages}} languages, ingredient names and step wording where published; `/api/languages` |
 | Can my robot cook it | `dryRun` (POST), `explainStep`, `checkTemperature` (POST), `listDevices` |
 
 `getFacets` lists every value a filter accepts. Step wording is published only where the source collection allows it (most V0 recipes

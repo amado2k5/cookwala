@@ -199,7 +199,7 @@
  "translated_notice": "Diese Seite wurde maschinell übersetzt und wurde noch nicht von einer Person überprüft. Englisch ist die Referenz; Korrekturen auf GitHub sind willkommen.",
  "recipes": {
   "title": "Rezepte",
-  "lead": "{{stat:publishedRecipes}} Rezepte im Index: {{stat:recipesV1}} für den Standard bei V1 geschrieben (strukturiert, nicht simuliert oder im Feld verifiziert) und {{stat:recipesV0}} von fifi.cooking bei V0 importiert (beschrieben, nicht maschinell verifiziert). Suche nach Name in einer von 25 Sprachen.",
+  "lead": "{{stat:publishedRecipes}} Rezepte im Index: {{stat:recipesV1}} für den Standard bei V1 geschrieben (strukturiert, nicht simuliert oder im Feld verifiziert) und {{stat:recipesV0}} von fifi.cooking bei V0 importiert (beschrieben, nicht maschinell verifiziert). Suche nach Name in einer von {{stat:languages}} Sprachen.",
   "search": "Rezepte suchen",
   "placeholder": "koshari, كشري, Linsen",
   "collection": "Sammlung",
@@ -425,7 +425,7 @@
  },
  "origin": {
   "h": "Es begann mit einem Familienkochbuch",
-  "p": "Cookwala begann mit einem Familienarchiv ägyptischer Hausmannskost, den Rezepten von Dr. Fatma Alkawokgy (1943 bis 2026), veröffentlicht auf fifi.cooking in 25 Sprachen. Sie wurden für Menschen geschrieben. „Goldbraun braten.“ „Mit Wasser bedecken.“ „Köcheln lassen, bis es fertig ist.“ Wer in dieser Küche aufgewachsen ist, weiß genau, was diese Zeilen bedeuten. Eine Maschine weiß es nicht, ein Fremder auch nicht. Als eines dieser Gerichte so beschrieben wurde, dass ein Ofen, ein Roboter oder eine Lebensmittelbank es vor dem Kochen prüfen kann, zeigte sich, dass niemand aufgeschrieben hatte, was „köcheln“ ist, wann Huhn sicher ist oder wann ein Schritt abgelehnt werden muss. Cookwala ist der Versuch, das aufzuschreiben, öffentlich, damit die Gerichte die Maschinen überdauern und die Maschinen ablehnen statt zu raten.",
+  "p": "Cookwala begann mit einem Familienarchiv ägyptischer Hausmannskost, den Rezepten von Dr. Fatma Alkawokgy (1943 bis 2026), veröffentlicht auf fifi.cooking in {{stat:languages}} Sprachen. Sie wurden für Menschen geschrieben. „Goldbraun braten.“ „Mit Wasser bedecken.“ „Köcheln lassen, bis es fertig ist.“ Wer in dieser Küche aufgewachsen ist, weiß genau, was diese Zeilen bedeuten. Eine Maschine weiß es nicht, ein Fremder auch nicht. Als eines dieser Gerichte so beschrieben wurde, dass ein Ofen, ein Roboter oder eine Lebensmittelbank es vor dem Kochen prüfen kann, zeigte sich, dass niemand aufgeschrieben hatte, was „köcheln“ ist, wann Huhn sicher ist oder wann ein Schritt abgelehnt werden muss. Cookwala ist der Versuch, das aufzuschreiben, öffentlich, damit die Gerichte die Maschinen überdauern und die Maschinen ablehnen statt zu raten.",
   "by": "der Gründer"
  },
  "try_dryrun": "Sehen Sie, wie ein unsicherer Schritt abgelehnt wird ↓",

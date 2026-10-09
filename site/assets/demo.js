@@ -37,12 +37,31 @@
   var recipe = null, ops = null, ar = AR, custom = null, touched = false;
 
   function caps(d) { return { capabilities: { ops: d.ops.map(function (o) { return { op: o }; }), sensors: d.sensors.map(function (s) { return { sensor: s }; }).concat([{ sensor: 'cw.sense.vision', visionCues: d.cues }]) } }; }
+  // Step names: the recipe's own sentence when it has one; otherwise the operation's label plus the
+  // ingredients the step names. Graph wires (e.g. "sauce_seasoned", "served") are internal, never shown.
+  var SENSOR_AR = { vision: 'الرؤية', pan_surface_temp: 'حرارة سطح المقلاة', liquid_temp: 'حرارة السائل', oil_temp: 'حرارة الزيت', oven_temp: 'حرارة الفرن', core_temp: 'حرارة القلب', boil_detect: 'كشف الغليان', color_vision: 'رؤية اللون', bubble_vision: 'رؤية الفقاعات' };
+  var REASON_AR = { missing_capability: 'قدرة ناقصة', envelope_out_of_range: 'خارج النطاق الآمن', needs_human_present: 'يحتاج شخصًا حاضرًا', missing_sensor_no_fallback: 'حساس ناقص بلا بديل', safety_limit: 'حدّ السلامة' };
+  var MEDIUM_AR = { air: 'الهواء', ambient: 'المحيط', oil: 'الزيت', pan_surface: 'سطح المقلاة', pressure: 'الضغط', product: 'الطعام', radiant: 'الإشعاع', steam: 'البخار', water: 'الماء' };
+  var WITH_EN = { 'cw.op.garnish': 'with ' };
+  function iso(n) { return AR ? '\u2066' + n + '\u2069' : String(n); }  // numbers inside Arabic text keep their own direction
+  function opName(id, forStep) {
+    var e = ops && ops[id], l = e && e.label && e.label[AR ? 'ar' : 'en'];
+    if (!l) return CookwalaDryRun.opLabel(id);
+    return forStep ? l.split(' / ')[0] : l;
+  }
   function stepText(node) {
     var txt = recipe.text && recipe.text[ar ? 'ar' : 'en'] && recipe.text[ar ? 'ar' : 'en'].steps && recipe.text[ar ? 'ar' : 'en'].steps[node.id];
     if (txt) return txt;
-    var verb = CookwalaDryRun.opLabel(node.op); return verb.charAt(0).toUpperCase() + verb.slice(1) + (node.inputs && node.inputs.length ? ' ' + node.inputs.join(', ').replace(/_/g, ' ') : '');
+    var byRef = {}; (recipe.ingredients || []).forEach(function (g) { byRef[g.ref] = (g.display && (g.display[ar ? 'ar' : 'en'] || g.display.en)) || g.ref.replace(/_/g, ' '); });
+    var objs = (node.inputs || []).filter(function (i) { return Object.prototype.hasOwnProperty.call(byRef, i); }).map(function (i) { return byRef[i]; });
+    var verb = opName(node.op, true), what = objs.join(ar ? '، ' : ', ');
+    if (what && verb.split(' ').pop().toLowerCase() && what.toLowerCase().indexOf(verb.split(' ').pop().toLowerCase()) !== -1) what = '';  // "Crack eggs" already names them
+    return verb + (what ? ' ' + (ar ? '' : WITH_EN[node.op] || '') + what : '');
   }
-  function band(env) { if (!env || !env.tempC) return env && env.unattended === false ? T.personNearby : '—'; return env.medium.replace('_', ' ') + ' ' + env.tempC.min + '–' + env.tempC.max + ' °C'; }
+  function band(env) {
+    if (!env || !env.tempC) return env && env.unattended === false ? T.personNearby : '—';
+    return (AR ? (MEDIUM_AR[env.medium] || env.medium) : env.medium.replace(/_/g, ' ')) + ' ' + iso(env.tempC.min) + '–' + iso(env.tempC.max) + (AR ? ' °م' : ' °C');
+  }
   function cell(row, text, cls) { var td = document.createElement('td'); if (cls) td.className = cls; if (text instanceof Node) td.append(text); else td.textContent = text; row.append(td); }
   function pill(text, cls) { var s = document.createElement('span'); s.className = 'pill ' + cls; s.textContent = text; return s; }
 
@@ -57,15 +76,15 @@
       var d = res.plan.filter(function (p) { return p.by === 'device'; }).length, watched = res.plan.filter(function (p) { return p.by === 'device' && p.verifiedBy === 'human'; }).length, est = res.plan.filter(function (p) { return p.verifiedBy === 'model'; }).length;
       v.append(T.can(dev.name.toLowerCase(), d, res.plan.length) + (watched ? T.watch(watched) : '') + (est ? T.est(est) : ''));
     } else {
-      v.append(T.before + res.refusal.detail + ' (' + T.step + ' ' + res.refusal.node + ', ' + T.reason + ' ' + res.refusal.reason + ').');
+      var rr = AR ? REASON_AR[res.refusal.reason] || res.refusal.reason : res.refusal.reason; v.append(T.before + (AR ? rr : res.refusal.detail) + ' (' + T.step + ' ' + res.refusal.node + ', ' + T.reason + ' ' + rr + ').');
     }
     var tb = $('#steps tbody'); tb.textContent = ''; var planned = new Map(res.plan.map(function (p) { return [p.node.id, p]; }));
     recipe.process.nodes.forEach(function (node) {
       var tr = document.createElement('tr'); var p = planned.get(node.id); var env = (ops[node.op] || {}).envelope; var refusedHere = res.state === 'refused' && res.refusal.node === node.id;
       if (refusedHere) tr.className = 'refused'; else if (!p) tr.className = 'pending';
-      cell(tr, stepText(node)); cell(tr, node.op.replace('cw.op.', ''), 'op'); cell(tr, band(env), 'band');
-      if (p) { cell(tr, pill(p.by === 'device' ? T.device : T.person, p.by)); cell(tr, RUNG[p.verifiedBy] + (p.rung && p.verifiedBy === 'sensor' ? ' · ' + p.rung.replace('cw.sense.', '') : '')); }
-      else if (refusedHere) { cell(tr, pill(T.refusedW, 'no')); cell(tr, res.refusal.reason.replace(/_/g, ' ')); }
+      cell(tr, stepText(node)); cell(tr, AR ? opName(node.op) : node.op.replace('cw.op.', ''), 'op'); cell(tr, band(env), 'band');
+      if (p) { cell(tr, pill(p.by === 'device' ? T.device : T.person, p.by)); cell(tr, RUNG[p.verifiedBy] + (p.rung && p.verifiedBy === 'sensor' ? ' · ' + (AR ? SENSOR_AR[p.rung.replace('cw.sense.', '')] || p.rung.replace('cw.sense.', '').replace(/_/g, ' ') : p.rung.replace('cw.sense.', '')) : '')); }
+      else if (refusedHere) { cell(tr, pill(T.refusedW, 'no')); cell(tr, AR ? REASON_AR[res.refusal.reason] || res.refusal.reason.replace(/_/g, ' ') : res.refusal.reason.replace(/_/g, ' ')); }
       else { cell(tr, '—'); cell(tr, T.notReached); }
       tb.append(tr);
     });

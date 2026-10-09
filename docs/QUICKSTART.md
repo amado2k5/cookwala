@@ -59,7 +59,7 @@ print(cw.convert(1, "cup", "g", 0.53))       # 127.2 (flour)
 
 ```bash
 python tools/validate_specs.py     # schemas, examples, recipe temperatures, API references
-python tools/run_conformance.py    # 137 vectors (Core and profiles), incl. RFC 8785 and RFC 8032 results
+python tools/run_conformance.py    # {{stat:conformanceVectors}} vectors (Core and profiles), incl. RFC 8785 and RFC 8032 results
 ```
 
 ## 6. Turn a cooking log into a trace or a dataset
@@ -83,5 +83,5 @@ recipe step for LeRobot-style datasets. Both refuse logs whose household didn't 
 
 ## 7. More
 
-- The recipe index: 2,439 documents at https://cookwala.ai/recipes/ (9 written for the standard at V1; 2,430 imported from fifi.cooking at V0, 50 of them the Cooking with Kids recipes, with text in 29 languages).
-- The SDK in your language and 100 executed scenarios: https://cookwala.ai/scenarios/ (`scenarios/OPERATIONS.md` lists the 25 operations; `python tools/scenarios/run.py` executes every scenario against a hub).
+- The recipe index: {{stat:publishedRecipes}} documents at https://cookwala.ai/recipes/ ({{stat:recipesV1}} written for the standard at V1; {{stat:recipesV0}} imported from fifi.cooking at V0, with names in {{stat:languages}} languages).
+- The SDK in your language and {{stat:scenarios}} executed scenarios: https://cookwala.ai/scenarios/ (`scenarios/OPERATIONS.md` lists the {{stat:sdkOperations}} operations; `python tools/scenarios/run.py` executes every scenario against a hub).

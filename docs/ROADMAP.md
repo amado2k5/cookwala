@@ -13,9 +13,9 @@ to done without the evidence named.
 | Reference library, Python package and CLI, TypeScript types, MCP server (Python script), reference hub, ROS 2 interface package | done (editable and source installs; registries next) |
 | MCP service for AI agents: `@cookwala/mcp` (24 read-only tools from 0.3.0, 16 in 0.2.0, stdio, reads the static catalog, no hosting), agent guide for Claude, Codex, Copilot, Cursor, Windsurf, Devin, Antigravity, fifi.cooking bridge | published: `npx -y @cookwala/mcp`, listed in the MCP Registry as `ai.cookwala/cookwala` |
 | Nine example recipes in English and Arabic | done (V1: structured, not field-verified) |
-| 2,430 fifi.cooking recipes imported at V0 (1,881 Egyptian family and book collections, 499 World Cuisines, 50 Cooking with Kids), text in 29 languages | done (RFC-0009; five collections publish facts only until rights are confirmed) |
-| SDK clients in 13 languages; 100 executed scenarios | done (Go, Rust, Kotlin, C#, PHP not yet compiled on CI) |
-| Site and documentation in 25 languages | in progress (English and Arabic by hand; the rest machine-translated and labelled) |
+| 2,430 fifi.cooking recipes imported at V0 (1,881 Egyptian family and book collections, 499 World Cuisines, 50 Cooking with Kids), text in {{stat:languages}} languages | done (RFC-0009; five collections publish facts only until rights are confirmed) |
+| SDK clients in {{stat:sdkLanguages}} languages; {{stat:scenarios}} executed scenarios | done (Go, Rust, Kotlin, C#, PHP not yet compiled on CI) |
+| Site and documentation in {{stat:siteLanguages}} languages | in progress (English and Arabic by hand; the rest machine-translated and labelled) |
 | Humanitarian Profile 0.2: surplus to plate, SMS grammar and parser, four worked flows, impact summaries, pilot protocol, concept note | done (draft) |
 | Health rule packs (basic, care for vulnerable groups, school meals, sodium reduction) with a review template | done (drafts awaiting professional review) |
 | Household Context Profile with a 139-type facet registry and disclosure vectors | done (draft) |

@@ -250,6 +250,7 @@ table.steps-t tr.refused td { background: color-mix(in srgb, var(--bad) 10%, tra
 .dg-boxes rect { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; } .dg-boxes text { fill: var(--ink); } .dg-boxes .dg-h { font-weight: 600; font-size: 17px; }
 .dg-steps { color: var(--ink); text-align: center; line-height: 1.4; overflow-wrap: anywhere; } .dg-boxes rect.dg-check { stroke: var(--ember, #c84a2a); stroke-width: 2; } .dg-warn { fill: var(--ember, #c84a2a) !important; font-weight: 600; }
 .dg-arrows line, .dg-dashed { stroke: var(--ink-2); stroke-width: 2; } .dg-dashed { stroke-dasharray: 6 6; } .dg-labels text, text.dg-labels { fill: var(--ink-2); font-size: 14px; }
+.dg-wrap { color: var(--ink-2); font-size: 14px; line-height: 1.3; text-align: center; overflow-wrap: anywhere; }
 .four { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; } .four h3 { margin-bottom: 6px; } @media (max-width: 900px) { .four { grid-template-columns: repeat(2, minmax(0, 1fr)); } } @media (max-width: 520px) { .four { grid-template-columns: 1fr; } }
 [dir="rtl"] .diagram svg text { direction: rtl; unicode-bidi: plaintext; }
 .deck .diagram { margin: 6px 0 10px; } .deck .diagram svg { max-height: 28vh; width: auto; max-width: 100%; display: block; margin: 0 auto; } .deck .slide { overflow-y: auto; } .deck .slide:has(.diagram) .big { font-size: 1.15em; line-height: 1.35; } .deck .slide:has(.diagram) ul { font-size: 15px; }

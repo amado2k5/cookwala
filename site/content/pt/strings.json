@@ -199,7 +199,7 @@
  "translated_notice": "Esta página foi traduzida por máquina e ainda não foi revisada por uma pessoa. O inglês é a referência; correções são bem-vindas no GitHub.",
  "recipes": {
   "title": "Receitas",
-  "lead": "{{stat:publishedRecipes}} receitas no índice: {{stat:recipesV1}} escritas para o padrão em V1 (estruturadas, não simuladas ou verificadas em campo) e {{stat:recipesV0}} importadas de fifi.cooking em V0 (descritas, não verificadas por máquina). Pesquise por nome em qualquer um dos 25 idiomas.",
+  "lead": "{{stat:publishedRecipes}} receitas no índice: {{stat:recipesV1}} escritas para o padrão em V1 (estruturadas, não simuladas ou verificadas em campo) e {{stat:recipesV0}} importadas de fifi.cooking em V0 (descritas, não verificadas por máquina). Pesquise por nome em qualquer um dos {{stat:languages}} idiomas.",
   "search": "Pesquisar receitas",
   "placeholder": "koshari, كشري, lentil",
   "collection": "Coleção",
@@ -425,7 +425,7 @@
  },
  "origin": {
   "h": "Começou com um livro de receitas da família",
-  "p": "Cookwala começou com um arquivo familiar de cozinha caseira egípcia, as receitas da Dra. Fatma Alkawokgy (1943 a 2026), publicado em fifi.cooking em 25 idiomas. Foram escritas para pessoas. \"Fritar até dourar.\" \"Cobrir com água.\" \"Deixar em fogo brando até ficar pronto.\" Quem cresceu naquela cozinha sabe exatamente o que essas linhas querem dizer. Uma máquina não sabe, nem um estranho. Quando um desses pratos foi descrito para que um forno, um robô ou um banco de alimentos pudesse verificá-lo antes de cozinhar, descobriu-se que ninguém havia escrito o que é \"fogo brando\", quando o frango é seguro ou quando um passo deve ser recusado. Cookwala é a tentativa de escrever isso, em aberto, para que os pratos sobrevivam às máquinas e as máquinas recusem em vez de adivinhar.",
+  "p": "Cookwala começou com um arquivo familiar de cozinha caseira egípcia, as receitas da Dra. Fatma Alkawokgy (1943 a 2026), publicado em fifi.cooking em {{stat:languages}} idiomas. Foram escritas para pessoas. \"Fritar até dourar.\" \"Cobrir com água.\" \"Deixar em fogo brando até ficar pronto.\" Quem cresceu naquela cozinha sabe exatamente o que essas linhas querem dizer. Uma máquina não sabe, nem um estranho. Quando um desses pratos foi descrito para que um forno, um robô ou um banco de alimentos pudesse verificá-lo antes de cozinhar, descobriu-se que ninguém havia escrito o que é \"fogo brando\", quando o frango é seguro ou quando um passo deve ser recusado. Cookwala é a tentativa de escrever isso, em aberto, para que os pratos sobrevivam às máquinas e as máquinas recusem em vez de adivinhar.",
   "by": "o fundador"
  },
  "try_dryrun": "Veja-o recusar um passo inseguro ↓",
