@@ -1,3 +1,6 @@
+interface:
+  display_name: "Cookwala recipes"
+  short_description: "Find, scale and plan catalog recipes"
 dependencies:
   tools:
     - type: "mcp"

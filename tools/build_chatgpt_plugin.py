@@ -10,6 +10,7 @@ writes build/cookwala-chatgpt-plugin-<version>.zip with the plugin folder conten
 """
 import json, re, sys, zipfile
 from pathlib import Path
+import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 PKG = ROOT / 'plugins' / 'chatgpt' / 'cookwala'
@@ -135,6 +136,20 @@ def check(final):
     for s in skills:
         fm = re.match(r'---\n(.*?)\n---\n', s.read_text(encoding='utf-8'), re.S)
         need(bool(fm) and re.search(r'^name: \S', fm.group(1), re.M) and re.search(r'^description: \S', fm.group(1), re.M), f'{s.relative_to(PKG)}: front matter needs name and description')
+        agent = s.parent / 'agents' / 'openai.yaml'
+        if agent.is_file():
+            label = agent.relative_to(PKG)
+            try:
+                metadata = yaml.safe_load(agent.read_text(encoding='utf-8'))
+            except (yaml.YAMLError, UnicodeError) as e:
+                err(f'{label}: invalid YAML: {e}')
+                continue
+            need(isinstance(metadata, dict), f'{label}: must be a YAML mapping')
+            interface = metadata.get('interface') if isinstance(metadata, dict) else None
+            need(isinstance(interface, dict), f'{label}: interface must be a mapping')
+            for field in ('display_name', 'short_description'):
+                value = interface.get(field) if isinstance(interface, dict) else None
+                need(isinstance(value, str) and bool(value.strip()), f'{label}: interface.{field} must be a nonblank string')
     dep = PKG / 'skills' / 'cookwala' / 'agents' / 'openai.yaml'
     need(dep.is_file() and 'streamable_http' in dep.read_text(encoding='utf-8') and servers_url(mcp) in dep.read_text(encoding='utf-8'), 'skills/cookwala/agents/openai.yaml must declare the MCP dependency with the same URL as mcp.json')
     for f in PKG.rglob('*'):

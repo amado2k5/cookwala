@@ -112,3 +112,15 @@ test('only the fifi bridge tools are open-world', async () => {
   const open = (await client.listTools()).tools.filter((t) => t.annotations.openWorldHint).map((t) => t.name).sort();
   assert.deepEqual(open, ['fifi_search', 'fifi_source']);
 });
+
+test('all tools reject unknown arguments instead of stripping them', async () => {
+  const fx = buildFixture();
+  const { client } = await connect({ baseUrl: fx.dir, cacheDir: fs.mkdtempSync(path.join(os.tmpdir(), 'cwc-')) });
+  for (const tool of (await client.listTools()).tools) {
+    assert.equal(tool.inputSchema.additionalProperties, false, tool.name);
+    const args = tool.name === 'get_recipe' ? { id: fx.entries[0].id, unexpected: true } : { unexpected: true };
+    const result = await client.callTool({ name: tool.name, arguments: args });
+    assert.equal(result.isError, true, tool.name);
+    assert.match(result.content[0].text, /Unrecognized key.*unexpected/, tool.name);
+  }
+});

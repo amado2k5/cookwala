@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "cookwala",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Find, scale and plan recipes from the open Cookwala catalog. Search by cuisine, ingredient, nutrition, cost, cooking method, time, diet, allergen and language. Read-only: it never starts a kitchen device.",
   "author": {
     "name": "Cookwala",
@@ -63,7 +63,7 @@
               "description": "Nutrition and diet filters together",
               "prompt": "Suggest high-protein vegetarian dinners under 500 kcal per serving.",
               "tools_triggered": "query_recipes",
-              "expected_behavior": "Returns three to five recipes with kcal and protein per serving that satisfy both limits, each marked as an inferred vegetarian screen and not a certification."
+              "expected_behavior": "Returns three to five recipes with kcal and protein per serving that satisfy the chosen high-protein threshold and the 500 kcal limit. Explains whether each vegetarian screen comes from published claims or ingredient inference, matching the returned diet_basis and dietary_claims; never presents it as a certification."
             },
             {
               "description": "Cook from what is at home",
