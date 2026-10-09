@@ -53,6 +53,17 @@ Things only the account owner can do are marked **You**.
 - Changes to listing text, icons or skills need a new version in `plugin.json`, a new ZIP, review and Publish.
 - After editing a skill that names tools, deploy the server and rescan before submitting.
 
+## Reinstalling in the ChatGPT desktop app (observed 2026-10-08, not documented by OpenAI)
+
+"Add, Upload plugin archive" in the ChatGPT desktop app (Customize, Plugins) installs a ZIP of this package for testing. After a plugin is uninstalled, a ZIP with the **same
+`name` in `plugin.json`** failed every time with "Couldn't add plugin. Try again.", whatever it contained: the original `cookwala`, and later a test copy named `cookwala-test`, both failed
+once they had been installed and removed. The identical content under a never-used `name` installed straight away, so the installer seems to remember a removed plugin's name, on OpenAI's side
+(there was no trace on the Mac). The ZIP's **file name does not matter**, only `name` inside `plugin.json`; the listing shows `interface.displayName` ("Cookwala").
+
+- To record a fresh install, build the package with a new `name` (for example `cookwala-demo-b`) and do not uninstall it afterwards.
+- Do not use the name `cookwala` for ad-hoc tests: it may now be unusable in that installer. The review submission in the developer portal is a different route and may behave differently.
+- If an upload fails, change `name` and try once more before suspecting the contents. The local validator (`python tools/build_chatgpt_plugin.py --check`) does not know about this behaviour.
+
 ## Known risks and decisions
 
 - **Health content.** The guidelines have no dedicated rule for allergy, diet or diabetes information, but results must be accurate and relevant and plugins may not collect protected health information. Cookwala collects none; the labels are screens, worded as "no allergen found" and "diabetic-friendly estimate", with advice to read labels and consult a clinician. The thresholds are not dietitian-reviewed.
