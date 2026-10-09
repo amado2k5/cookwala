@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "cookwala",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Find, scale and plan recipes from the open Cookwala catalog. Search by cuisine, ingredient, nutrition, cost, cooking method, time, diet, allergen and language. Read-only: it never starts a kitchen device.",
   "author": {
     "name": "Cookwala",
@@ -103,7 +103,8 @@
           ]
         },
         "commerce": false,
-        "commerce_description": "This plugin does not sell products or process payments. It only reads recipe data."
+        "commerce_description": "This plugin does not sell products or process payments. It only reads recipe data.",
+        "demo_recording_url": "https://youtu.be/ysAsOm_m6XU"
       },
       "publication": {
         "release_notes": "First release: recipe search, recipe details, pantry matching, diet, allergen and diabetic screens, meal plans and shopping lists. Read-only.",
