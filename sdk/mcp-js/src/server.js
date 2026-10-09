@@ -323,7 +323,7 @@ export function createServer(opts = {}) {
   const cat = opts.catalog || new Catalog(opts);
   const server = new McpServer({ name: 'cookwala', version: opts.version || VERSION }, { instructions: INSTRUCTIONS });
   const tools = buildTools(cat);
-  for (const t of tools) server.registerTool(t.name, { title: t.title, description: t.description, inputSchema: t.name === 'compare_recipes' ? z.object(t.shape).strict() : t.shape, outputSchema: OUTPUT[t.name], annotations: { title: t.title, ...t.annotations }, _meta: toolMeta(t.name) }, wrap(t.run));
+  for (const t of tools) server.registerTool(t.name, { title: t.title, description: t.description, inputSchema: z.object(t.shape).strict(), outputSchema: OUTPUT[t.name], annotations: { title: t.title, ...t.annotations }, _meta: toolMeta(t.name) }, wrap(t.run));
 
   const res = (uri, mimeType, text) => ({ contents: [{ uri: uri.href, mimeType, text }] });
   const guard = (fn) => async (uri, vars) => { try { return await fn(uri, vars); } catch (e) { if (e instanceof CatalogError) throw new Error(`${e.code}: ${e.detail}`); throw e; } };
