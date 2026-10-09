@@ -17,7 +17,7 @@ or "is not deployed", check the live source:
 
 | What | Where it lives | How to check |
 |---|---|---|
-| MCP server `@cookwala/mcp` | npm, published since 0.1.0 (2026-10-06); 0.2.0 on 2026-10-07; 0.3.0 on 2026-10-08 (24 tools, the REST API); 0.3.1 (Cooking with Kids, `kids_age`) is in the repository and is on npm once `publish-mcp` has run, with provenance | `npm view @cookwala/mcp version` or https://registry.npmjs.org/@cookwala/mcp |
+| MCP server `@cookwala/mcp` | npm, published since 0.1.0 (2026-10-06); 0.2.0 on 2026-10-07; 0.3.0 on 2026-10-08 (24 tools, the REST API); 0.3.1 on 2026-10-09 (Cooking with Kids, `kids_age`); 0.3.2 (output schemas, parameter descriptions, status text, plain not-found errors, `compare_recipes` 2 to 6 ids) is in the repository and is on npm once `publish-mcp` has run, with provenance | `npm view @cookwala/mcp version` or https://registry.npmjs.org/@cookwala/mcp |
 | MCP Registry entry `ai.cookwala/cookwala` | official MCP Registry, listed since 2026-10-06 (domain proof at `/.well-known/mcp-registry-auth`) | `curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=ai.cookwala"` |
 | Release secrets `MCP_PRIVATE_KEY`, `NPM_TOKEN` | repository secrets, set; they match the live domain proof (the 0.2.0 registry login succeeded) | the last run of the `publish-mcp` workflow |
 | Hosted MCP endpoint `https://mcp.cookwala.ai/mcp` | Cloudflare Worker `cookwala-mcp` (source `sdk/mcp-js/worker/`), live since 2026-10-08; `/mcp` needs the gateway token, `/health` is public. Listed at [mcprush.com](https://mcprush.com/cookwala/cookwala-mcp) (claim CLM-0139) | `curl https://mcp.cookwala.ai/health`; a `POST /mcp` without the token must answer 401 |
