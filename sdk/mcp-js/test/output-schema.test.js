@@ -7,6 +7,7 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { buildFixture, ROOT } from './helpers.js';
 import { createServer, OUTPUT_SCHEMAS } from '../src/server.js';
+import { compare } from '../src/core/query.js';
 
 async function connect(opts) {
   const { server, tools } = createServer(opts);
@@ -71,10 +72,38 @@ test('compare_recipes needs 2 to 6 different ids and says so instead of truncati
   const ids = JSON.parse(fs.readFileSync(path.join(fx.dir, 'v1/index/en/0.json'), 'utf8')).items.map((e) => e.id);
   const call = (v) => client.callTool({ name: 'compare_recipes', arguments: { ids: v } });
   assert.equal((await call([ids[0], ids[1]])).isError, undefined);
+  const repeated = await call([ids[0], ids[1], ids[0], ids[1], ids[0], ids[1], ids[0]]);
+  assert.equal(repeated.structuredContent.items.length, 2);
+  const unexpected = await client.callTool({ name: 'compare_recipes', arguments: { ids: [ids[0], ids[1]], unexpected: true } });
+  assert.equal(unexpected.isError, true);
+  assert.match(unexpected.content[0].text, /unexpected/);
   assert.equal((await call(`${ids[0]},${ids[1]}`)).isError, undefined);
   assert.equal((await call([ids[0]])).isError, true);
   assert.equal((await call([ids[0], ids[0]])).isError, true); // duplicates count once
   assert.equal((await call([...ids, 'a', 'b', 'c', 'd'])).isError, true);
+});
+
+test('comparison schemas require typed success fields and document normalized bounds', async () => {
+  const fx = buildFixture();
+  const { client } = await connect({ baseUrl: fx.dir, cacheDir: fs.mkdtempSync(path.join(os.tmpdir(), 'cwc-')) });
+  const tool = (await client.listTools()).tools.find((t) => t.name === 'compare_recipes');
+  assert.equal(tool.inputSchema.additionalProperties, false);
+  assert.match(tool.inputSchema.properties.ids.description, /comma-separated.*duplicates.*normalization/);
+  assert.equal(tool.inputSchema.properties.ids.anyOf.find((s) => s.type === 'array').minItems, 2);
+  assert.deepEqual(tool.outputSchema.required.sort(), ['best', 'items', 'missing']);
+  assert.equal(OUTPUT_SCHEMAS.compare_recipes.safeParse({ error: 'bad', detail: 'bad' }).success, false);
+  assert.equal(OUTPUT_SCHEMAS.compare_recipes.safeParse({ missing: [42], items: [], best: {} }).success, false);
+  assert.equal(OUTPUT_SCHEMAS.compare_recipes.safeParse({ missing: [], items: [], best: { time_min: { lowest: 1, highest: 'b' } } }).success, false);
+});
+
+test('comparison ranks available cost and time values and lists servings without ranking them', () => {
+  const items = [{ id: 'a', t: 'A', cu: [], co: [], cps: 2, mn: 30, sv: 4 }, { id: 'b', t: 'B', cu: [], co: [], cps: 5, mn: 10, sv: 2 }];
+  const result = compare(items, ['a', 'b']);
+  assert.deepEqual(result.best.cost_per_serving, { lowest: 'a', highest: 'b' });
+  assert.deepEqual(result.best.time_min, { lowest: 'b', highest: 'a' });
+  assert.deepEqual(result.items.map((r) => r.servings), [4, 2]);
+  assert.equal(result.best.servings, undefined);
+  assert.equal(OUTPUT_SCHEMAS.compare_recipes.safeParse(result).success, true);
 });
 
 test('only the fifi bridge tools are open-world', async () => {

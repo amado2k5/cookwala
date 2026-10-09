@@ -26,7 +26,7 @@ export const INSTRUCTIONS = [
 ].join(' ');
 
 const READ = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
-// Every tool reads a fixed, first-party catalog (cookwala.ai, fifi.cooking) and never the open web, so none is open-world.
+// Catalog tools read the fixed first-party catalog on cookwala.ai.
 const NET = READ;
 // The two fifi bridge tools fetch live from https://fifi.cooking, a separate origin on the public internet, so they are open-world.
 const LIVE = { ...READ, openWorldHint: true };
@@ -229,7 +229,7 @@ export function buildTools(cat) {
       run: async (a) => ok(similarOp(await loadQuery(cat, { lang: a.lang, limit: a.limit }), a.id)) },
     { name: 'compare_recipes', title: 'Compare recipes side by side', annotations: NET,
       description: 'Compare 2 to 6 recipes: nutrition estimates per serving, ingredient and step counts (and cost or time where a recipe has them), with the lowest and highest of each (servings are listed per recipe), plus allergen and diabetic information. Allergen data can be incomplete; estimates are not medical advice.',
-      shape: { ids: csv.describe('2 to 6 different recipe ids, as an array or a comma list; repeated ids count once'), lang: z.string().optional().describe('Language code, for example en or ar') },
+      shape: { ids: z.union([z.string(), z.array(z.string()).min(2)]).describe('2 to 6 distinct recipe ids. Accepts an array or comma-separated string. Whitespace and empty entries are removed; duplicates count once. The 6-id maximum applies after normalization, not to raw array length.'), lang: z.string().optional().describe('Language code, for example en or ar') },
       run: async (a) => ok(compareOp(await loadQuery(cat, { lang: a.lang, ids: a.ids }))) },
     { name: 'ingredient_profile', title: 'About an ingredient', annotations: NET,
       description: 'How many recipes use an ingredient, which cuisines and courses, average calories, what it is often cooked with, and examples.',
@@ -254,8 +254,9 @@ export function buildTools(cat) {
   ];
 }
 
-// Output schemas. Deliberately loose: every property optional, unknown properties allowed, and nullable where a field can be null,
-// so a correct result never fails validation. They tell a client what to expect; test/output-schema.test.js checks them against real results.
+// Output schemas allow extra properties and nullable fields where appropriate. Most tools have optional view-dependent fields;
+// comparison success results require missing, items and best. Tool errors use isError and are not success-schema results.
+// test/output-schema.test.js checks these contracts against real results.
 // Factories, not shared instances: a reused zod object becomes a $ref in the JSON Schema, which some scanners reject.
 const T = { any: () => z.any().optional(), str: () => z.string().nullish(), num: () => z.number().nullish(), bool: () => z.boolean().nullish(), arr: () => z.array(z.any()).optional(), rec: () => z.record(z.any()).nullish() };
 
@@ -281,7 +282,11 @@ const OUTPUT = {
   fifi_source: obj({ id: T.str(), title: T.str(), titleEn: T.str(), inCatalog: T.bool(), pageUrl: T.str(), dataUrl: T.str(), textPolicy: T.any() }),
   query_recipes: obj({ total: T.num(), limit: T.num(), offset: T.num(), next_offset: T.num(), sort: T.str(), applied_filters: T.any(), items: T.arr(), note: T.str(), have: T.any(), max_missing: T.num() }),
   similar_recipes: obj({ of: T.any(), items: T.arr() }),
-  compare_recipes: obj({ missing: T.arr(), items: T.arr(), best: T.any() }),
+  compare_recipes: obj({
+    missing: z.array(z.string()),
+    items: z.array(obj({ id: z.string(), title: T.str(), ...Object.fromEntries(['kcal_per_serving', 'protein_g', 'fat_g', 'carbs_g', 'cost_per_serving', 'time_min', 'n_ingredients', 'n_steps', 'servings'].map((key) => [key, T.num()])) })),
+    best: z.object(Object.fromEntries(['kcal_per_serving', 'protein_g', 'fat_g', 'carbs_g', 'cost_per_serving', 'time_min', 'n_ingredients', 'n_steps'].map((key) => [key, obj({ lowest: z.string(), highest: z.string() }).optional()]))).passthrough(),
+  }),
   ingredient_profile: obj({ name: T.str(), count: T.num(), avg_kcal_per_serving: T.num(), cuisines: T.any(), courses: T.any(), often_with: T.any(), examples: T.any() }),
   catalog_stats: obj({ group_by: T.str(), metric: T.str(), applied_filters: T.any(), groups: T.arr() }),
   plan_meals: obj({ target_kcal: T.num(), planned_kcal: T.num(), items: T.arr(), note: T.str(), applied_filters: T.any() }),
@@ -318,7 +323,7 @@ export function createServer(opts = {}) {
   const cat = opts.catalog || new Catalog(opts);
   const server = new McpServer({ name: 'cookwala', version: opts.version || VERSION }, { instructions: INSTRUCTIONS });
   const tools = buildTools(cat);
-  for (const t of tools) server.registerTool(t.name, { title: t.title, description: t.description, inputSchema: t.shape, outputSchema: OUTPUT[t.name], annotations: { title: t.title, ...t.annotations }, _meta: toolMeta(t.name) }, wrap(t.run));
+  for (const t of tools) server.registerTool(t.name, { title: t.title, description: t.description, inputSchema: t.name === 'compare_recipes' ? z.object(t.shape).strict() : t.shape, outputSchema: OUTPUT[t.name], annotations: { title: t.title, ...t.annotations }, _meta: toolMeta(t.name) }, wrap(t.run));
 
   const res = (uri, mimeType, text) => ({ contents: [{ uri: uri.href, mimeType, text }] });
   const guard = (fn) => async (uri, vars) => { try { return await fn(uri, vars); } catch (e) { if (e instanceof CatalogError) throw new Error(`${e.code}: ${e.detail}`); throw e; } };
