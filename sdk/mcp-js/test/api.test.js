@@ -278,6 +278,9 @@ test('gluten and lactose: the published status is authoritative for diet=gluten_
   const { dietOk, normDiet, row } = await import('../src/core/query.js');
   assert.equal(normDiet('lactose-free'), 'lactose_free');
   assert.equal(normDiet('Lactose free'), 'lactose_free');
+  assert.equal(normDiet('lactose_free'), 'lactose_free');
+  assert.equal(normDiet('no lactose'), 'lactose_free');
+  assert.equal(normDiet('dairy free'), 'dairy_free');
   // published status wins over the ingredient screen, in both directions
   assert.equal(dietOk({ gx: 'contains', di: ['gluten_free'] }, 'gluten_free'), false);
   assert.equal(dietOk({ gx: 'check_labels', di: ['gluten_free'] }, 'gluten_free'), false);
