@@ -64,3 +64,22 @@ test('a missing recipe gives a plain message, not an internal URL', async () => 
   assert.match(r.structuredContent.detail, /search_recipes/);
   assert.doesNotMatch(r.structuredContent.detail, /https?:|returned 404|\.json/);
 });
+
+test('compare_recipes needs 2 to 6 different ids and says so instead of truncating', async () => {
+  const fx = buildFixture();
+  const { client } = await connect({ baseUrl: fx.dir, cacheDir: fs.mkdtempSync(path.join(os.tmpdir(), 'cwc-')) });
+  const ids = JSON.parse(fs.readFileSync(path.join(fx.dir, 'v1/index/en/0.json'), 'utf8')).items.map((e) => e.id);
+  const call = (v) => client.callTool({ name: 'compare_recipes', arguments: { ids: v } });
+  assert.equal((await call([ids[0], ids[1]])).isError, undefined);
+  assert.equal((await call(`${ids[0]},${ids[1]}`)).isError, undefined);
+  assert.equal((await call([ids[0]])).isError, true);
+  assert.equal((await call([ids[0], ids[0]])).isError, true); // duplicates count once
+  assert.equal((await call([...ids, 'a', 'b', 'c', 'd'])).isError, true);
+});
+
+test('only the fifi bridge tools are open-world', async () => {
+  const fx = buildFixture();
+  const { client } = await connect({ baseUrl: fx.dir, cacheDir: fs.mkdtempSync(path.join(os.tmpdir(), 'cwc-')) });
+  const open = (await client.listTools()).tools.filter((t) => t.annotations.openWorldHint).map((t) => t.name).sort();
+  assert.deepEqual(open, ['fifi_search', 'fifi_source']);
+});

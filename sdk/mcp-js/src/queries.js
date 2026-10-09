@@ -151,7 +151,7 @@ export function randomOp(ctx) {
   const n = Math.min(Math.max(Number(ctx.a.count) || 1, 1), 10);
   return { total_matching: matches.length, applied_filters: applied, items: matches.slice(0, n).map((m) => row(m.r)) };
 }
-export function compareOp(ctx) { const ids = list(ctx.a.ids).slice(0, 6); need(ids.length >= 2, 'give ids=id1,id2 (up to 6)'); return compare(ctx.items, ids); }
+export function compareOp(ctx) { const ids = [...new Set(list(ctx.a.ids))]; need(ids.length >= 2 && ids.length <= 6, 'give 2 to 6 different recipe ids, for example ids=id1,id2'); return compare(ctx.items, ids); }
 export const ingredientOp = (ctx) => { need(ctx.a.name, 'give name'); return ingredientProfile(ctx.items, ctx.staples, ctx.a.name); };
 export function aggregateOp(ctx) { const r = aggregate(ctx.items, ctx.a); if (r.error) throw new QueryError(400, r.error, 'unknown group_by', r); return r; }
 export const mealPlanOp = (ctx) => mealPlan(ctx.items, ctx.a);

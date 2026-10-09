@@ -28,6 +28,8 @@ export const INSTRUCTIONS = [
 const READ = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 // Every tool reads a fixed, first-party catalog (cookwala.ai, fifi.cooking) and never the open web, so none is open-world.
 const NET = READ;
+// The two fifi bridge tools fetch live from https://fifi.cooking, a separate origin on the public internet, so they are open-world.
+const LIVE = { ...READ, openWorldHint: true };
 const lang = z.string().regex(/^[a-z]{2,3}$/).default('en').describe('Language code, for example en or ar');
 
 // The query index (/v1/query/recipes.json) carries per-recipe allergen and nutrition facts; loaded only when a call needs them.
@@ -85,7 +87,7 @@ export function buildTools(cat) {
     { name: 'search_recipes', title: 'Search recipes', annotations: NET,
       description: 'Search the Cookwala catalog by words in titles, tags, cuisine or collection. Filters are ANDed, including no_allergens and diabetic_friendly (inferred, not medical advice). Returns summaries with hashes; use get_recipe for the document.',
       shape: { query: z.string().default('').describe('Words that must all appear; empty lists everything'), lang, cuisine: z.array(z.string()).optional().describe('ISO country codes, for example EG'),
-        course: z.string().optional().describe('Course, for example main, dessert, breakfast'), tags: z.array(z.string()).optional().describe('Tags that must all be present, for example vegetarian'), level: z.enum(['V0', 'V1', 'V2']).optional().describe('Verification level: V0 described, V1 and V2 progressively machine-checked'), allergen_free: z.array(z.string()).optional().describe('Exclude recipes declaring any of these allergens, for example milk'),
+        course: z.string().optional().describe('Course, for example main, dessert, breakfast'), tags: z.array(z.string()).optional().describe('Tags that must all be present, for example vegetarian'), level: z.enum(['V0', 'V1', 'V2']).optional().describe('Verification level: V0 described only, not machine-verified; V1 machine-checkable steps with end conditions and hazards, reviewed (structure, not a cooking or nutrition guarantee); V2 V1 plus conformance evidence from a certified executor'), allergen_free: z.array(z.string()).optional().describe('Exclude recipes declaring any of these allergens, for example milk'),
         supervision: z.string().optional().describe('Supervision needed, for example adult_required'), collection: z.string().optional().describe('Collection id, see list_collections'),
         no_allergens: z.boolean().optional().describe('Only recipes with no major allergen in the declared list or the ingredient names. Not a guarantee: allergen data is incomplete for some recipes.'),
         diabetic_friendly: z.boolean().optional().describe('Only recipes that look diabetic-friendly: a reviewed claim, or per serving sugar 5 g or less and carbohydrate 30 g or less (modelled estimate, not medical advice).'),
@@ -201,7 +203,7 @@ export function buildTools(cat) {
     { name: 'catalog_status', title: 'Catalog status', annotations: NET,
       description: 'Catalog origin, version, counts, languages, cache state and whether the server is running offline.',
       shape: {}, run: async () => ok(await cat.status()) },
-    { name: 'fifi_search', title: 'Search fifi.cooking', annotations: NET,
+    { name: 'fifi_search', title: 'Search fifi.cooking', annotations: LIVE,
       description: 'Search recipes live on fifi.cooking, including ones not yet exported to the catalog. Returns ids and whether each is in the Cookwala catalog. Titles for in-catalog recipes come from the catalog.',
       shape: { query: z.string().min(1).describe('Words to look for in recipe titles'), lang, limit: z.number().int().min(1).max(50).default(10).describe('Most results to return (1 to 50)'), offset: z.number().int().min(0).default(0).describe('Results to skip, for paging') },
       run: async (a) => {
@@ -209,7 +211,7 @@ export function buildTools(cat) {
         const byId = new Map((await cat.index(a.lang)).map((e) => [e.id, e]));
         return ok({ total: r.total, nextOffset: r.nextOffset, items: r.ids.map((id) => ({ id, inCatalog: byId.has(id), title: byId.get(id) && byId.get(id).title, pageUrl: `https://fifi.cooking/recipe/${id}/` })) });
       } },
-    { name: 'fifi_source', title: 'Read a fifi.cooking recipe', annotations: NET,
+    { name: 'fifi_source', title: 'Read a fifi.cooking recipe', annotations: LIVE,
       description: 'Read one recipe from fifi.cooking in its legacy format under the same rights rules as the Cookwala catalog: steps only where the collection allows, structured facts otherwise. The Cookwala document (get_recipe) is the standard form.',
       shape: { id: z.string().describe('fifi.cooking recipe id, from fifi_search') },
       run: async (a) => {
@@ -226,7 +228,7 @@ export function buildTools(cat) {
       shape: { id: z.string().describe('Recipe id to find similar ones for'), limit: z.number().int().min(1).max(25).optional().describe('Most results (1 to 25)'), lang: z.string().optional().describe('Language code, for example en or ar') },
       run: async (a) => ok(similarOp(await loadQuery(cat, { lang: a.lang, limit: a.limit }), a.id)) },
     { name: 'compare_recipes', title: 'Compare recipes side by side', annotations: NET,
-      description: 'Nutrition, cost, time and size of 2 to 6 recipes with the lowest and highest of each, plus allergen and diabetic information.',
+      description: 'Compare 2 to 6 recipes: nutrition estimates per serving, serving, ingredient and step counts (and cost or time where a recipe has them), with the lowest and highest of each, plus allergen and diabetic information. Allergen data can be incomplete; estimates are not medical advice.',
       shape: { ids: csv.describe('Recipe ids, 2 to 6'), lang: z.string().optional().describe('Language code, for example en or ar') },
       run: async (a) => ok(compareOp(await loadQuery(cat, { lang: a.lang, ids: a.ids }))) },
     { name: 'ingredient_profile', title: 'About an ingredient', annotations: NET,

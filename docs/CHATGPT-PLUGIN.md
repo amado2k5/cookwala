@@ -34,7 +34,7 @@ changed, so the hosted endpoint must be deployed before the portal Rescan shows 
 
 ## Why the server needs no changes for the review
 
-- Every tool declares `readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: true`, `openWorldHint: false` and a `title` (they read fixed first-party catalogs). OpenAI's scan imports these and a submission justification cannot override them.
+- Every tool declares `readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: true` and a `title`; `openWorldHint` is `false` except on `fifi_search` and `fifi_source`, which fetch live from https://fifi.cooking and are `true` (the other tools read the fixed catalog). OpenAI's scan imports these and a submission justification cannot override them.
 - No sign-in: reviewers need no account. Responses carry no personal data, session ids or logs.
 - The privacy policy ([/privacy/](https://cookwala.ai/privacy/)), terms ([/terms/](https://cookwala.ai/terms/)), support contact ([/contribute/](https://cookwala.ai/contribute/#contact)) and website ([/assistants/](https://cookwala.ai/assistants/)) are public.
 - The MCP **origin cannot change** between versions (`https://mcp.cookwala.ai`); only the path may. Do not move the endpoint to another host after publishing.
