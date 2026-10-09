@@ -87,6 +87,12 @@ The semantics of `dry_run`, `check_envelope` and `parse_sms` are those of
 `tools/cookwala_ref.py`; the JavaScript core passes the same conformance vectors
 (`conformance/`) and the Python and Node servers give identical answers.
 
+Every tool declares an `outputSchema` (loose: all properties optional, extra properties allowed), a description on
+every parameter, ChatGPT status text (`_meta["openai/toolInvocation/invoking"]` and `["openai/toolInvocation/invoked"]`,
+64 characters or fewer) and `_meta.securitySchemes: [{"type":"noauth"}]`. A missing recipe, certification, preset or
+fifi.cooking id answers `not_found` with a plain hint (for example "use search_recipes or query_recipes to find a valid id"),
+never an internal URL. `test/output-schema.test.js` checks real results against the schemas.
+
 ## fifi.cooking and fifirecipes
 
 fifi.cooking is where the recipes are written; Cookwala is the standard form they are published in.

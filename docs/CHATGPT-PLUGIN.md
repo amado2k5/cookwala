@@ -27,6 +27,11 @@ python tools/build_chatgpt_plugin.py --check    # validate only; runs in tools/b
 python tools/build_chatgpt_plugin.py --final    # also fails until review.demo_recording_url is filled in
 ```
 
+Version 1.0.2 (before the first submission): tool definitions gained output schemas, parameter descriptions, status text
+and an explicit `noauth` declaration, `get_recipe` and friends answer a missing id in plain words, and the skill description
+is narrower ("when the person asks for recipes, meal plans or shopping lists from the Cookwala catalog"). Tool definitions
+changed, so the hosted endpoint must be deployed before the portal Rescan shows them.
+
 ## Why the server needs no changes for the review
 
 - Every tool declares `readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: true`, `openWorldHint: false` and a `title` (they read fixed first-party catalogs). OpenAI's scan imports these and a submission justification cannot override them.
