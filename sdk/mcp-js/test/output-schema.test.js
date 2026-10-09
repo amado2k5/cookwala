@@ -25,6 +25,9 @@ test('every tool declares an output schema, parameter descriptions, status text 
   for (const t of tools) {
     assert.equal(t.outputSchema && t.outputSchema.type, 'object', `${t.name} outputSchema`);
     for (const [k, v] of Object.entries(t.inputSchema.properties || {})) assert.ok(v.description, `${t.name}.${k} has no description`);
+    const json = JSON.stringify(t.outputSchema);
+    assert.ok(!json.includes('$ref'), `${t.name} outputSchema uses $ref (scanners reject it)`);
+    assert.notEqual(t.outputSchema.additionalProperties, false, `${t.name} outputSchema must allow extra properties`);
     const m = t._meta || {};
     for (const key of ['openai/toolInvocation/invoking', 'openai/toolInvocation/invoked']) assert.ok(m[key] && m[key].length <= 64, `${t.name} ${key}`);
     assert.deepEqual(m.securitySchemes, [{ type: 'noauth' }], t.name);

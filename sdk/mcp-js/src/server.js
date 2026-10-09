@@ -254,37 +254,37 @@ export function buildTools(cat) {
 
 // Output schemas. Deliberately loose: every property optional, unknown properties allowed, and nullable where a field can be null,
 // so a correct result never fails validation. They tell a client what to expect; test/output-schema.test.js checks them against real results.
-const any = z.any().optional();
-const str = z.string().nullish(); const num = z.number().nullish(); const bool = z.boolean().nullish();
-const arr = z.array(z.any()).optional(); const rec = z.record(z.any()).nullish();
+// Factories, not shared instances: a reused zod object becomes a $ref in the JSON Schema, which some scanners reject.
+const T = { any: () => z.any().optional(), str: () => z.string().nullish(), num: () => z.number().nullish(), bool: () => z.boolean().nullish(), arr: () => z.array(z.any()).optional(), rec: () => z.record(z.any()).nullish() };
+
 const obj = (shape) => z.object(shape).passthrough();
-const ITEMS = { items: arr.describe('The results') };
-const PAGE = { total: num.describe('Matches before paging'), nextOffset: num.describe('Offset for the next page, absent on the last') };
+const ITEMS = { items: T.arr().describe('The results') };
+const PAGE = { total: T.num().describe('Matches before paging'), nextOffset: T.num().describe('Offset for the next page, absent on the last') };
 const OUTPUT = {
-  search_recipes: obj({ ...PAGE, items: arr.describe('Recipe summaries with id, title, hash, level') }),
-  get_recipe: obj({ id: str, documentId: str, hash: str, hashVerified: bool, level: str, levelNote: str, textIsData: bool, allergens: rec.describe('Allergen screen: status, contains, declared, note'), diabetic: rec.describe('Diabetic estimate: status, basis, reasons, per_serving'), recipe: any.describe('The recipe document or the chosen view'), lang: str, ingredients: rec, nutrition: rec, included: arr, note: str }),
+  search_recipes: obj({ ...PAGE, items: T.arr().describe('Recipe summaries with id, title, hash, level') }),
+  get_recipe: obj({ id: T.str(), documentId: T.str(), hash: T.str(), hashVerified: T.bool(), level: T.str(), levelNote: T.str(), textIsData: T.bool(), allergens: T.rec().describe('Allergen screen: status, contains, declared, note'), diabetic: T.rec().describe('Diabetic estimate: status, basis, reasons, per_serving'), recipe: T.any().describe('The recipe document or the chosen view'), lang: T.str(), ingredients: T.rec(), nutrition: T.rec(), included: T.arr(), note: T.str() }),
   list_collections: obj(ITEMS),
   list_operations: obj(ITEMS),
-  explain_step: obj({ node: str, op: str, label: str, definition: any, envelope: any, params: any, hazards: arr, unattendedAllowed: bool, instruction: str, instructionIsData: bool, error: str }),
-  list_device_presets: obj({ presets: arr.describe('Presets with id and name') }),
-  dry_run: obj({ state: str.describe('accepted or refused'), refusal: rec.describe('reason, node, detail of the first blocker'), plan: arr, note: str }),
-  check_envelope: obj({ envelopeOk: bool, targetOk: bool, reason: str }),
-  check_mandate: obj({ allowed: bool, needsConfirmation: bool, reasons: arr }),
-  parse_sms: obj({ ok: bool, error: str }),
-  verify_recipe: obj({ hash: str, declaredHash: str, matches: bool, level: str }),
-  verify_certification: obj({ id: str, scheme: str, authority: any, subject: any, status: str, validUntil: str, conditions: any, scope: any, valid: bool, reason: str, textIsData: bool }),
-  current_certifications: obj({ subjectHash: str, current: arr, rejected: any, textIsData: bool }),
-  catalog_status: obj({ baseUrl: str, catalogVersion: str, generatedAt: str, counts: rec, languages: arr, cache: rec, offline: bool, signature: any, fifiOrigin: str }),
-  fifi_search: obj({ ...PAGE, items: arr.describe('Ids with inCatalog, title, pageUrl') }),
-  fifi_source: obj({ id: str, title: str, titleEn: str, inCatalog: bool, pageUrl: str, dataUrl: str, textPolicy: any }),
-  query_recipes: obj({ total: num, limit: num, offset: num, next_offset: num, sort: str, applied_filters: any, items: arr, note: str, have: any, max_missing: num }),
-  similar_recipes: obj({ of: any, items: arr }),
-  compare_recipes: obj({ missing: arr, items: arr, best: any }),
-  ingredient_profile: obj({ name: str, count: num, avg_kcal_per_serving: num, cuisines: any, courses: any, often_with: any, examples: any }),
-  catalog_stats: obj({ group_by: str, metric: str, applied_filters: any, groups: arr }),
-  plan_meals: obj({ target_kcal: num, planned_kcal: num, items: arr, note: str, applied_filters: any }),
-  shopping_list: obj({ recipes: arr, servings: num, items: arr, no_quantity: arr, note: str }),
-  catalog_listing: obj({ note: str }),
+  explain_step: obj({ node: T.str(), op: T.str(), label: T.str(), definition: T.any(), envelope: T.any(), params: T.any(), hazards: T.arr(), unattendedAllowed: T.bool(), instruction: T.str(), instructionIsData: T.bool(), error: T.str() }),
+  list_device_presets: obj({ presets: T.arr().describe('Presets with id and name') }),
+  dry_run: obj({ state: T.str().describe('accepted or refused'), refusal: T.rec().describe('reason, node, detail of the first blocker'), plan: T.arr(), note: T.str() }),
+  check_envelope: obj({ envelopeOk: T.bool(), targetOk: T.bool(), reason: T.str() }),
+  check_mandate: obj({ allowed: T.bool(), needsConfirmation: T.bool(), reasons: T.arr() }),
+  parse_sms: obj({ ok: T.bool(), error: T.str() }),
+  verify_recipe: obj({ hash: T.str(), declaredHash: T.str(), matches: T.bool(), level: T.str() }),
+  verify_certification: obj({ id: T.str(), scheme: T.str(), authority: T.any(), subject: T.any(), status: T.str(), validUntil: T.str(), conditions: T.any(), scope: T.any(), valid: T.bool(), reason: T.str(), textIsData: T.bool() }),
+  current_certifications: obj({ subjectHash: T.str(), current: T.arr(), rejected: T.any(), textIsData: T.bool() }),
+  catalog_status: obj({ baseUrl: T.str(), catalogVersion: T.str(), generatedAt: T.str(), counts: T.rec(), languages: T.arr(), cache: T.rec(), offline: T.bool(), signature: T.any(), fifiOrigin: T.str() }),
+  fifi_search: obj({ ...PAGE, items: T.arr().describe('Ids with inCatalog, title, pageUrl') }),
+  fifi_source: obj({ id: T.str(), title: T.str(), titleEn: T.str(), inCatalog: T.bool(), pageUrl: T.str(), dataUrl: T.str(), textPolicy: T.any() }),
+  query_recipes: obj({ total: T.num(), limit: T.num(), offset: T.num(), next_offset: T.num(), sort: T.str(), applied_filters: T.any(), items: T.arr(), note: T.str(), have: T.any(), max_missing: T.num() }),
+  similar_recipes: obj({ of: T.any(), items: T.arr() }),
+  compare_recipes: obj({ missing: T.arr(), items: T.arr(), best: T.any() }),
+  ingredient_profile: obj({ name: T.str(), count: T.num(), avg_kcal_per_serving: T.num(), cuisines: T.any(), courses: T.any(), often_with: T.any(), examples: T.any() }),
+  catalog_stats: obj({ group_by: T.str(), metric: T.str(), applied_filters: T.any(), groups: T.arr() }),
+  plan_meals: obj({ target_kcal: T.num(), planned_kcal: T.num(), items: T.arr(), note: T.str(), applied_filters: T.any() }),
+  shopping_list: obj({ recipes: T.arr(), servings: T.num(), items: T.arr(), no_quantity: T.arr(), note: T.str() }),
+  catalog_listing: obj({ note: T.str() }),
 };
 // Status text ChatGPT shows while a tool runs (64 characters or fewer) and the explicit no-login declaration for the OpenAI plugin scanner.
 const STATUS = {
@@ -316,7 +316,7 @@ export function createServer(opts = {}) {
   const cat = opts.catalog || new Catalog(opts);
   const server = new McpServer({ name: 'cookwala', version: opts.version || VERSION }, { instructions: INSTRUCTIONS });
   const tools = buildTools(cat);
-  for (const t of tools) server.registerTool(t.name, { title: t.title, description: t.description, inputSchema: t.shape, outputSchema: OUTPUT[t.name].shape, annotations: { title: t.title, ...t.annotations }, _meta: toolMeta(t.name) }, wrap(t.run));
+  for (const t of tools) server.registerTool(t.name, { title: t.title, description: t.description, inputSchema: t.shape, outputSchema: OUTPUT[t.name], annotations: { title: t.title, ...t.annotations }, _meta: toolMeta(t.name) }, wrap(t.run));
 
   const res = (uri, mimeType, text) => ({ contents: [{ uri: uri.href, mimeType, text }] });
   const guard = (fn) => async (uri, vars) => { try { return await fn(uri, vars); } catch (e) { if (e instanceof CatalogError) throw new Error(`${e.code}: ${e.detail}`); throw e; } };
