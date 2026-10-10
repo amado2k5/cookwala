@@ -1,6 +1,6 @@
 # fifi.cooking export report
 
-Generated 2026-10-08 by `tools/export_fifi.py` (deterministic stages only; every document is V0, RFC-0009).
+Generated 2026-10-10 by `tools/export_fifi.py` (deterministic stages only; every document is V0, RFC-0009).
 
 | Collection | Documents | Licence | Text |
 |---|---|---|---|
@@ -10,10 +10,11 @@ Generated 2026-10-08 by `tools/export_fifi.py` (deterministic stages only; every
 | abdennour | 158 | `LicenseRef-source-credited` | facts |
 | abuhaty | 808 | `LicenseRef-source-credited` | facts |
 | world | 499 | `LicenseRef-source-credited` | facts |
+| kids | 0 | `CC-BY-4.0` | full |
 
 Ingredients: 23631 lines; parsed from English amounts 22636 (95.8%), from Arabic 834 (3.5%), fallback to 1 piece with the original text kept 161 (0.7%).
 
-Vocabulary: 5482 ingredient entries with labels in 29 languages.
+Vocabulary: 5482 ingredient entries with labels in 30 languages.
 
 Step operation hints (for the V1 conversion; never used for control):
 
@@ -57,4 +58,4 @@ Step operation hints (for the V1 conversion; never used for control):
 - cw.op.reduce: 28
 - cw.op.grill: 27
 
-Sidecar languages: bn, cs, de, el, es, fa, fr, he, hi, id, it, ja, ko, ku, nl, pl, ps, pt, ru, sq, sv, sw, te, tr, ur, vi, zh.
+Sidecar languages: bn, cs, de, el, es, fa, fr, he, hi, id, it, ja, ko, ku, nl, pl, ps, pt, ro, ru, sq, sv, sw, te, tr, ur, vi, zh.
