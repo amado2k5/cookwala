@@ -14,7 +14,7 @@ Inputs
   docs/essays/*.md                                    /ideas/<slug>/
 
 Outputs: HTML pages, /docs/<ID>/index.html, /docs/index.html (keeps ?p=NAME working), /llms.txt,
-/sitemap.xml. Existing URLs (/sim, /v1, /.well-known, /docs/md/*.md) are untouched.
+/sitemap.xml (an index of sitemap-<lang>.xml). Existing URLs (/sim, /v1, /.well-known, /docs/md/*.md) are untouched.
 """
 import datetime as dt
 import html
@@ -57,6 +57,31 @@ FONTS = {
     'ko': 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:wght@600&display=swap',
 }
 CONTACT_EMAIL = 'eat@cookwala.ai'  # forwarding address on Cloudflare Email Routing; empty falls back to the GitHub-only note
+SITE_GRAPH = [
+    {'@type': 'WebSite', '@id': f'{BASE_URL}/#website', 'url': f'{BASE_URL}/', 'name': 'Cookwala', 'publisher': {'@id': f'{BASE_URL}/#org'}},
+    {'@type': 'Organization', '@id': f'{BASE_URL}/#org', 'name': 'Cookwala', 'url': f'{BASE_URL}/', 'logo': f'{BASE_URL}/assets/icon.svg',
+     'sameAs': ['https://github.com/amado2k5/cookwala', 'https://www.npmjs.com/package/@cookwala/mcp', 'https://fifi.cooking']},
+]
+MCP_VERSION = json.loads((ROOT / 'sdk/mcp-js/package.json').read_text(encoding='utf-8'))['version']
+MCP_APP = {'@type': 'SoftwareApplication', '@id': f'{BASE_URL}/mcp/#app', 'name': 'Cookwala MCP server (@cookwala/mcp)', 'url': f'{BASE_URL}/mcp/',
+           'applicationCategory': 'DeveloperApplication', 'operatingSystem': 'Windows, macOS, Linux (Node.js)', 'softwareVersion': MCP_VERSION,
+           'downloadUrl': 'https://www.npmjs.com/package/@cookwala/mcp', 'license': 'https://www.apache.org/licenses/LICENSE-2.0',
+           'offers': {'@type': 'Offer', 'price': '0', 'priceCurrency': 'USD'}, 'publisher': {'@id': f'{BASE_URL}/#org'},
+           'sameAs': ['https://www.npmjs.com/package/@cookwala/mcp', 'https://github.com/amado2k5/cookwala/tree/main/sdk/mcp-js']}
+SISTER_SITES = [('fifi.cooking', 'https://fifi.cooking'), ('origins.faith', 'https://origins.faith')]
+
+
+def jsonld(extra=()):
+    """The page's JSON-LD block: WebSite and Organization on every page, plus page-specific nodes."""
+    graph = SITE_GRAPH + list(extra)
+    return '<script type="application/ld+json">' + json.dumps({'@context': 'https://schema.org', '@graph': graph}, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/') + '</script>'
+
+
+def docs_path(lang, path):
+    """Docs live at /docs/<ID>/ in English and /<lang>/docs/<ID>/ for a translation."""
+    return path if lang == 'en' else f'/{lang}{path}'
+
+
 GLOSSED_PAGES = {'/', '/why/', '/goals/', '/trust/', '/humanitarian/'}
 SCRIPT_OF = {'ar': 'arabic', 'ur': 'arabic', 'fa': 'arabic', 'ps': 'arabic', 'he': 'hebrew', 'ru': 'cyrillic', 'el': 'greek', 'hi': 'devanagari', 'te': 'telugu', 'ja': 'ja', 'zh': 'zh', 'ko': 'ko'}
 AUTONYM = {'en': 'English', 'ar': 'العربية', 'fr': 'Français', 'es': 'Español', 'ja': '日本語', 'hi': 'हिन्दी', 'pt': 'Português', 'ru': 'Русский', 'zh': '简体中文', 'de': 'Deutsch', 'it': 'Italiano', 'el': 'Ελληνικά', 'ur': 'اردو', 'fa': 'فارسی', 'tr': 'Türkçe', 'ku': 'Kurdî', 'id': 'Bahasa Indonesia', 'sw': 'Kiswahili', 'ko': '한국어', 'nl': 'Nederlands', 'ps': 'پښتو', 'he': 'עברית', 'pl': 'Polski', 'sv': 'Svenska', 'te': 'తెలుగు'}
@@ -405,7 +430,8 @@ class Builder:
             'lang': lang, 'dir': 'rtl' if lang in RTL else 'ltr', 'lang_menu': self.lang_menu(lang, path, meta.get('langs'), meta.get('path_fn')), 'alternates': self.alternates(path, meta.get('langs'), meta.get('path_fn')), 'title': html.escape(re.sub(r'\{\{stat:(\w+)\}\}', lambda m: self.stat(m.group(1)), meta.get('title', 'Cookwala'))), 'description': html.escape(re.sub(r'\{\{stat:(\w+)\}\}', lambda m: self.stat(m.group(1)), meta.get('description', S['tagline']))),
             'canonical': BASE_URL + self.path_for(lang, path), 'alt_lang': other, 'alt_url': BASE_URL + self.path_for(other, path), 'alt_label': S['switch'],
             'alt_href': self.path_for(other, path), 'nav': nav, 'more': more, 'more_label': S['more_label'], 'content': body, 'scripts': scripts, 'brand': S['brand'],
-            'tagline': S['tagline'], 'footer_origin': S['footer_origin'], 'footer_licences': S['footer_licences'], 'footer_links': ''.join(f'<a href="{self.path_for(lang, p) if p.startswith("/") and not p.startswith("/.well") else p}">{html.escape(l)}</a>' for l, p in S['footer']),
+            'tagline': S['tagline'], 'footer_origin': S['footer_origin'], 'footer_licences': S['footer_licences'], 'footer_links': ''.join(f'<a href="{self.path_for(lang, p) if p.startswith("/") and not p.startswith("/.well") else p}">{html.escape(l)}</a>' for l, p in S['footer']) + ''.join(f'<a href="{u}">{html.escape(l)}</a>' for l, u in SISTER_SITES if not any(fp.startswith(u + '/') or fp == u for _fl, fp in S['footer'])),
+            'jsonld': jsonld([MCP_APP] if path in ('/', '/mcp/') else []),
             'year': self.year, 'skip': S['skip'], 'menu': S['menu'], 'theme': S['theme'], 'font_link': S['font_link'], 'body_class': meta.get('bodyClass', ''), 'nav_label': S['nav_label'], 'discovery_title': S['discovery_title'], 'llms_title': S['llms_title'], 'home': self.path_for(lang, '/'), 'prev': S['prev'], 'next': S['next'],
         })
 
@@ -517,7 +543,7 @@ class Builder:
                 'crumb': f'{html.escape(S["docgroups"][group])} / {html.escape(title)}', 'content': body, 'onpage': onpage, 'pager': pager,
                 'edit': REPO + src, 'raw': f'/docs/md/{doc_id}.md', 'brand': S['brand'], 'skip': S['skip'], 'font_link': S['font_link'], 'year': self.year, 'home': '/', 'nav_label': S['nav_label'],
                 'status': self.status_tag(status), 'onpage_label': S['onpage'], 'filter_label': S['filter'], 'copy': S['copy'], 'edit_label': S['edit'], 'md_label': S['markdown'], 'menu': S['menu'], 'theme': S['theme'],
-                'nav': self.nav_html('en', '/docs/')[0], 'more': self.nav_html('en', '/docs/')[1], 'more_label': S['more_label'], 'notice': '', 'alternates': self.alternates(f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, (doc_id, src, title, title_ar, status))]), 'lang_menu': self.lang_menu('en', f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, (doc_id, src, title, title_ar, status))]),
+                'nav': self.nav_html('en', '/docs/')[0], 'more': self.nav_html('en', '/docs/')[1], 'more_label': S['more_label'], 'notice': '', 'jsonld': jsonld(), 'alternates': self.alternates(f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, (doc_id, src, title, title_ar, status))], docs_path), 'lang_menu': self.lang_menu('en', f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, (doc_id, src, title, title_ar, status))], docs_path),
             })
             (self.out / 'docs' / doc_id).mkdir(parents=True, exist_ok=True)
             (self.out / 'docs' / doc_id / 'index.html').write_text(page_html, encoding='utf-8')
@@ -528,7 +554,7 @@ class Builder:
         cards = ''.join(f'<section><h2>{html.escape(S["docgroups"][g])}</h2><ul class="doclist">' + ''.join(f'<li><a href="/docs/{i[0]}/">{html.escape(i[2])}</a>{self.status_tag(i[4])}</li>' for i in items) + '</ul></section>' for g, items in DOCS)
         landing = f'<div class="wrap docs-landing"><h1>{S["docs_title"]}</h1><p class="sub">{S["docs_lead"]}</p>{cards}</div>'
         redirect = '<script>(function(){var p=new URLSearchParams(location.search).get("p");if(p){location.replace("/docs/"+p.toUpperCase()+"/"+location.hash);}})();</script>'
-        meta = {'title': 'Cookwala Docs', 'description': S['docs_lead'], 'path': '/docs/'}
+        meta = {'title': 'Cookwala Docs', 'description': S['docs_lead'], 'path': '/docs/', 'path_fn': docs_path}
         self.write('en', '/docs/', self.page('en', meta, landing).replace('</head>', redirect + '</head>'))
         # every other language: a landing in that language; documents translated by machine where docs/i18n/<lang>/<DOC>.md exists, else the English page
         for lang in LANGS:
@@ -544,7 +570,7 @@ class Builder:
                 (f'<li><a href="/{lang}/docs/{i[0]}/">{html.escape(i[3] if lang == "ar" else i[2])}</a>{self.status_tag(i[4])}</li>' if tr_path(i) else f'<li><a href="/docs/{i[0]}/" hreflang="en">{html.escape(i[3] if lang == "ar" else i[2])}</a>{self.status_tag(i[4])} <span class="st">en</span></li>')
                 for i in items) + '</ul></section>' for g, items in DOCS)
             landing_l = f'<div class="wrap docs-landing"><h1>{Sl["docs_title"]}</h1><p class="sub">{Sl["docs_lead"]}</p>{cards_l}</div>'
-            page_l = self.page(lang, {'title': Sl['docs_title'], 'description': Sl['docs_lead'], 'path': '/docs/'}, landing_l).replace('<link rel="canonical" href="https://cookwala.ai/docs/">', f'<link rel="canonical" href="https://cookwala.ai/{lang}/docs/">')
+            page_l = self.page(lang, {'title': Sl['docs_title'], 'description': Sl['docs_lead'], 'path': '/docs/', 'path_fn': docs_path}, landing_l).replace('<link rel="canonical" href="https://cookwala.ai/docs/">', f'<link rel="canonical" href="https://cookwala.ai/{lang}/docs/">')
             (self.out / lang / 'docs').mkdir(parents=True, exist_ok=True)
             (self.out / lang / 'docs' / 'index.html').write_text(page_l, encoding='utf-8')
             self.urls.append((lang, f'/{lang}/docs/'))
@@ -560,7 +586,7 @@ class Builder:
                 group = next(g for g in DOCS if any(i[0] == doc_id for i in g[1]))[0]
                 page_html = fill(self.doc_layout, {
                     'lang': lang, 'dir': 'rtl' if lang in RTL else 'ltr', 'title': html.escape(title_l) + f' · Cookwala Docs ({AUTONYM.get(lang, lang)})', 'description': html.escape(self.first_para(text)),
-                    'canonical': f'{BASE_URL}/{lang}/docs/{doc_id}/', 'alternates': self.alternates(f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, item)]), 'lang_menu': self.lang_menu(lang, f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, item)]),
+                    'canonical': f'{BASE_URL}/{lang}/docs/{doc_id}/', 'jsonld': jsonld(), 'alternates': self.alternates(f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, item)], docs_path), 'lang_menu': self.lang_menu(lang, f'/docs/{doc_id}/', ['en'] + [l for l in LANGS if l != 'en' and self.doc_translated(l, item)], docs_path),
                     'sidebar': re.sub(r'href="/docs/([A-Z0-9-]+)/"', lambda m: f'href="/{lang}/docs/{m.group(1)}/"' if self.doc_translated(lang, DOC_INDEX[m.group(1)]) else m.group(0), sidebar).replace(f'data-id="{doc_id}"', f'data-id="{doc_id}" aria-current="page"'),
                     'crumb': f'{html.escape(Sl["docgroups"].get(group, group))} / {html.escape(title_l)}', 'content': body, 'onpage': onpage, 'pager': f'<a href="/docs/{doc_id}/" hreflang="en">English</a>',
                     'edit': REPO + f'docs/i18n/{lang}/{f.name}', 'raw': f'/docs/md/{doc_id}.md', 'brand': Sl['brand'], 'skip': Sl['skip'], 'font_link': Sl['font_link'], 'year': self.year, 'home': f'/{lang}/', 'nav_label': Sl['nav_label'],
@@ -631,18 +657,23 @@ class Builder:
         for g, items in DOCS:
             for i in items:
                 lines.append(f'- [{i[2]}](https://cookwala.ai/docs/md/{i[0]}.md)')
+        lines += ['', '## Sister sites', '', '- [fifi.cooking](https://fifi.cooking): the recipe collection Cookwala started from', '- [origins.faith](https://origins.faith): a reader for the books of Dr. Hamdy Abdel Aal']
         (self.out / 'llms.txt').write_text('\n'.join(lines) + '\n', encoding='utf-8')
 
     def build_sitemap(self):
-        urls = sorted(set(self.urls))
-        chunks = [urls[i:i + 40000] for i in range(0, len(urls), 40000)] or [[]]
+        """/sitemap.xml is an index; each language has its own urlset (sitemap-<lang>.xml, split at 40,000 URLs)."""
+        by_lang = {}
+        for lang, path in sorted(set(self.urls)):
+            by_lang.setdefault(lang, []).append(path)
+        today = dt.date.today().isoformat()
         names = []
-        for n, chunk in enumerate(chunks):
-            items = ''.join(f'<url><loc>{html.escape(BASE_URL + p)}</loc></url>' for _l, p in chunk)
-            name = 'sitemap.xml' if len(chunks) == 1 else f'sitemap-{n}.xml'; names.append(name)
-            (self.out / name).write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{items}</urlset>', encoding='utf-8')
-        if len(chunks) > 1:
-            (self.out / 'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join(f'<sitemap><loc>{BASE_URL}/{n}</loc></sitemap>' for n in names) + '</sitemapindex>', encoding='utf-8')
+        for lang in sorted(by_lang, key=lambda l: (l != 'en', l)):
+            paths = by_lang[lang]
+            for n in range(0, len(paths), 40000):
+                name = f'sitemap-{lang}.xml' if n == 0 else f'sitemap-{lang}-{n // 40000}.xml'; names.append(name)
+                items = ''.join(f'<url><loc>{html.escape(BASE_URL + p)}</loc></url>' for p in paths[n:n + 40000])
+                (self.out / name).write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{items}</urlset>', encoding='utf-8')
+        (self.out / 'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join(f'<sitemap><loc>{BASE_URL}/{n}</loc><lastmod>{today}</lastmod></sitemap>' for n in names) + '</sitemapindex>', encoding='utf-8')
         (self.out / 'robots.txt').write_text(f'User-agent: *\nAllow: /\nSitemap: {BASE_URL}/sitemap.xml\n', encoding='utf-8')
 
     def run(self):
