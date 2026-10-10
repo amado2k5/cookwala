@@ -8,6 +8,7 @@ cd "$ROOT"
 rm -rf "$OUT"
 mkdir -p "$OUT"/v1/{schemas,vocab,api,recipes,bindings,profiles} "$OUT"/docs/md "$OUT"/sim "$OUT"/assets
 cp site/CNAME "$OUT"/
+cp site/[0-9a-f]*.txt "$OUT"/   # IndexNow key file (tools/indexnow.py)
 cp -R site/.well-known "$OUT"/.well-known
 cp -R site/assets/. "$OUT"/assets/
 cp -R site/v1/. "$OUT"/v1/
@@ -33,5 +34,6 @@ python3 tools/scenarios/render.py > /dev/null
 python3 tools/build_chatgpt_plugin.py --check
 # pages, docs, whitepaper, essays, deck, llms.txt, sitemap (tools/build_site.py)
 python3 tools/build_site.py "$OUT"
+python3 tools/indexnow.py manifest "$OUT"   # page hashes, so a deploy can tell search engines which pages changed
 touch "$OUT"/.nojekyll
 echo "site built in $OUT ($(find "$OUT" -type f | wc -l | tr -d ' ') files)"

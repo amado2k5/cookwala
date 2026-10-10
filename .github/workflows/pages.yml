@@ -49,6 +49,14 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+      - name: List pages changed since the live site (IndexNow)
+        if: github.event_name != 'pull_request'
+        run: python tools/indexnow.py changed _site indexnow-urls.txt
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: indexnow-urls
+          path: indexnow-urls.txt
 
   deploy:
     if: github.event_name != 'pull_request'
@@ -60,3 +68,17 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  indexnow:
+    # Tell IndexNow search engines (Bing, Yandex, Naver, Seznam) which pages changed. Failure never blocks a deploy.
+    if: github.event_name != 'pull_request'
+    needs: deploy
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: indexnow-urls
+      - name: Submit changed pages
+        run: python3 tools/indexnow.py submit indexnow-urls.txt
