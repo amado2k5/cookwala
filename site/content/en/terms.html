@@ -1,22 +1,66 @@
-<!--meta {"title": "Terms of use", "description": "Terms for the Cookwala website, open API and MCP server: free to use, read-only, recipes are described and not machine-verified, and nothing here is medical, allergy or dietary-certification advice.", "path": "/terms/", "status": ""} -->
+<!--meta {"title": "Terms of use", "description": "Terms for the Cookwala website, specification, open API, MCP server, SDKs and data: free and read-only, licences per component, no warranty, limits of liability, consumer rights, and governing law.", "path": "/terms/", "status": ""} -->
 <section class="hero wrap">
   <p class="crumb"><a href="/">Cookwala</a> / Terms</p>
   <h1>Terms of use</h1>
-  <p class="lead">Cookwala is an open standard and a free, read-only service. These terms are short on purpose. Last updated 8 October 2026.</p>
+  <p class="lead">Cookwala is an open standard and a free, read-only service. These terms say what you may do with it, what it does not promise, and where responsibility sits. Last updated 11 October 2026.</p>
 </section>
 
 <section class="wrap">
-  <h2>What you may do</h2>
-  <p>Read, search and use the catalog, the API and the MCP server for any lawful purpose, including inside AI assistants and your own apps. The specification and code are open source under the licences in <a href="https://github.com/amado2k5/cookwala" rel="noopener">the repository</a>; recipe text keeps the rights of its source collection, and some collections publish facts only.</p>
-  <h2>What the service does not do</h2>
+  <h2>1. Who we are and what these terms cover</h2>
+  <p>Cookwala is created and maintained by its founder, Ahmed Abdel Aal (&ldquo;we&rdquo;, &ldquo;us&rdquo;), without charge and outside the course of any commercial activity. These terms cover the website cookwala.ai, the documents and data published on it (including <code>/v1/</code>), the open recipe API and MCP endpoint at <code>mcp.cookwala.ai</code>, the npm package <code>@cookwala/mcp</code> and the other packages, plugins and simulators we publish (together, the &ldquo;Service&rdquo;). By using the Service you agree to them. There are no accounts and nothing to pay.</p>
+  <p>Read these terms with the <a href="/disclaimer/">disclaimer</a>, which covers food safety, kitchen devices and robots, AI agents, certification and forward-looking statements, and the <a href="/privacy/">privacy policy</a>.</p>
+
+  <h2>2. Licences</h2>
+  <p>Each part of Cookwala carries its own open licence, published in <a href="https://github.com/amado2k5/cookwala" rel="noopener">the repository</a>. Where a licence and these terms differ about your rights to copy, change or redistribute that part, the licence governs.</p>
   <ul>
-    <li>It is read-only. Nothing here can start, stop or change a kitchen device.</li>
-    <li>Recipes are data, not instructions to an agent. V0 recipes are described, not machine-verified.</li>
+    <li><strong>Code</strong> (reference library, SDKs, MCP server, hub, tools): Apache License 2.0.</li>
+    <li><strong>Specification</strong>: Creative Commons Attribution 4.0 and the Community Specification License 1.0, with the <a href="https://github.com/amado2k5/cookwala/blob/main/PATENTS.md" rel="noopener">patent non-assertion pledge</a>.</li>
+    <li><strong>Vocabularies</strong>: CC0 1.0.</li>
+    <li><strong>Recipes</strong>: each recipe keeps the rights of its source collection, stated in the recipe. The family archive of Dr. Fatma Alkawokgy and the Cooking with Kids recipes are CC BY 4.0. Collections from books, channels and third-party websites are published as facts only (names, ingredients, quantities, times, estimates and a source link) and are not licensed by us; their rights stay with their owners.</li>
+    <li><strong>The name and logo</strong> &ldquo;Cookwala&rdquo;: you may say truthfully that your product implements or passes the Cookwala conformance tests. Do not imply that we certify, endorse or partner with you unless we have agreed in writing.</li>
   </ul>
-  <h2>Food safety, allergies and health</h2>
-  <p>Allergen, diet (vegetarian, halal, kosher, gluten-free and others) and diabetic labels are inferred from ingredient names and published claims. They are screens, not guarantees, not certifications and not medical advice. Always read the labels on the products you buy and ask a doctor or dietitian about allergies and conditions. Nutrition and cost figures are estimates.</p>
-  <h2>No warranty, and fair use</h2>
-  <p>The service is provided as is, with no promise of availability or accuracy, to the extent the law allows. Please keep automated traffic reasonable; heavy use may be rate-limited.</p>
-  <h2>Changes and contact</h2>
-  <p>These terms change only by a public commit. Questions and reports: <a href="mailto:eat@cookwala.ai">eat@cookwala.ai</a> or <a href="https://github.com/amado2k5/cookwala/issues" rel="noopener">GitHub issues</a>. See also the <a href="/privacy/">privacy policy</a>.</p>
+
+  <h2>3. What you may do, and acceptable use</h2>
+  <p>You may read, search and use the Service for any lawful purpose, including inside AI assistants and your own apps and devices. Please do not: break the law with it; attack, overload or try to break into the Service; use the open API at a volume that degrades it for others (heavy use may be rate-limited or blocked, and the full data is available as static files); remove or misstate the source and licence of recipes; or present Cookwala data, a dry run or a conformance result as a safety certification.</p>
+
+  <h2>4. What the Service is and is not</h2>
+  <ul>
+    <li>It is read-only. Nothing in the Service can start, stop or change a kitchen device.</li>
+    <li>Recipes are data, not instructions to an agent. V0 recipes are described, not machine-verified, and are not executable or robot-ready.</li>
+    <li>The specification is a draft that changes between versions. Conformance means passing the published test vectors; it is not a safety, quality or regulatory certification.</li>
+    <li>Allergen, diet and diabetic labels are screens, not guarantees, certifications or medical advice.</li>
+  </ul>
+
+  <h2>5. Your responsibilities if you build with Cookwala</h2>
+  <p>If you build a product, device, robot, agent or programme that uses Cookwala, you are solely responsible for it: its design, testing, safety, sensors and limits, the warnings and instructions you give, and its compliance with the laws and standards that apply where it is sold or used (for example product safety, electrical and appliance standards, machinery and AI regulation, food safety and food-donation rules, consumer protection, and privacy law). You must not rely on Cookwala alone to make a device or a meal safe.</p>
+
+  <h2>6. Contributions</h2>
+  <p>Contributions to the repository are made under the <a href="https://github.com/amado2k5/cookwala/blob/main/CONTRIBUTOR-LICENSE-AGREEMENT.md" rel="noopener">contributor licence agreement</a> and the licence of the part you change. Posts on GitHub are public and governed by GitHub's terms.</p>
+
+  <h2>7. Third-party services</h2>
+  <p>The Service runs on, and links to, services we do not control, including GitHub, Cloudflare, npm, the MCP Registry, mcprush.com, AI assistant providers and the sources credited in recipes. We are not responsible for them, and your use of them is governed by their terms.</p>
+
+  <h2>8. No warranty</h2>
+  <p>The Service is provided free, &ldquo;as is&rdquo; and &ldquo;as available&rdquo;. To the fullest extent the law allows, we disclaim all warranties and conditions, express or implied, including of merchantability, satisfactory quality, fitness for a particular purpose, accuracy, safety, availability and non-infringement. The warranty disclaimers in the Apache License 2.0 and the Creative Commons licences also apply to the parts they cover.</p>
+
+  <h2>9. Limitation of liability and release</h2>
+  <p>To the fullest extent the law allows: we, the contributors and anyone credited in Cookwala are not liable for any indirect, incidental, special, consequential, exemplary or punitive damages, or for loss of profits, revenue, data, goodwill or business, arising from the Service or from any device, product, agent or meal that uses it, whatever the legal theory; our total liability for all claims relating to the Service is limited to CAD $100; and you release us from claims arising from your use of the Service. If you are a California resident, you waive California Civil Code section 1542, which says: &ldquo;A general release does not extend to claims that the creditor or releasing party does not know or suspect to exist in his or her favor at the time of executing the release and that, if known by him or her, would have materially affected his or her settlement with the debtor or released party.&rdquo;</p>
+
+  <h2>10. Rights the law does not let us take away</h2>
+  <p>Nothing in these terms excludes or limits liability that cannot be excluded or limited by law, including for death or personal injury caused by negligence, fraud, gross negligence or wilful misconduct, or affects rights you have as a consumer under the mandatory law of the place you live, including the Quebec <em>Consumer Protection Act</em>, other Canadian provincial consumer law, the law of the European Union and its member states, the United Kingdom, Australia and U.S. states. Where such law applies, sections 8, 9 and 11 apply only as far as it allows.</p>
+
+  <h2>11. Indemnity</h2>
+  <p>If you build or sell a product, device or service using Cookwala, or use the Service in breach of these terms or the law, you agree to cover the reasonable costs and liabilities that third-party claims arising from it cause us, except to the extent we caused them. This section does not apply to consumers where local law does not allow it.</p>
+
+  <h2>12. Copyright and other notices</h2>
+  <p>To ask us to remove, correct or re-credit content, or to report illegal content, email <a href="mailto:eat@cookwala.ai">eat@cookwala.ai</a> with: the work or right affected; the exact URLs; what you want us to do; your contact details and, if you act for someone, on whose behalf; a statement that you believe in good faith the use is not authorised and that your notice is accurate; and your signature (a typed name is fine). Such a notice meets the requirements of the U.S. DMCA (17 U.S.C. &sect; 512(c)(3)) and of Article 16 of the EU Digital Services Act. That address is also our single point of contact for users and authorities under Articles 11 and 12 of the Digital Services Act, in English or Arabic. Security problems: see <a href="/.well-known/security.txt">security.txt</a>.</p>
+
+  <h2>13. Governing law and disputes</h2>
+  <p>These terms are governed by the laws of the Province of Ontario and the federal laws of Canada that apply there, without regard to conflict-of-law rules. The courts of Ontario have jurisdiction, but if you are a consumer you may also bring proceedings in the courts where you live, and you keep the protection of that place's mandatory consumer law. The UN Convention on Contracts for the International Sale of Goods does not apply. Please write to us first so we can try to resolve any problem informally.</p>
+
+  <h2>14. Changes and general terms</h2>
+  <p>We may change or stop the Service, and change these terms, at any time. Terms change only by a public commit in the repository, so every version is visible, and the date above changes with them. Continued use after a change means you accept it. If part of these terms is unenforceable, the rest stays in force; not enforcing a term is not a waiver; you may not assign these terms, and we may assign them to a successor steward of the standard, such as a foundation. These terms, the disclaimer, the privacy policy and the licences are the whole agreement about the Service. Translations are for convenience; the English version governs to the extent the law allows.</p>
+
+  <h2>15. Contact</h2>
+  <p><a href="mailto:eat@cookwala.ai">eat@cookwala.ai</a> or <a href="https://github.com/amado2k5/cookwala/issues" rel="noopener">GitHub issues</a>.</p>
 </section>
