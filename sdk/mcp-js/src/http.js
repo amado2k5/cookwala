@@ -40,7 +40,16 @@ export async function handleRequest(request, env = {}, opts = {}) {
   if (url.pathname !== '/mcp' && !open) return json(404, { error: 'not_found' });
   if (!open && !(await authorized(request, env))) return json(401, { error: 'unauthorized' }, { 'www-authenticate': 'Bearer' });
   // Stateless server: no sessions, no server-initiated stream, so only POST is meaningful.
-  if (request.method !== 'POST') return json(405, { jsonrpc: '2.0', error: { code: -32000, message: 'Method not allowed: POST JSON-RPC to /mcp' }, id: null }, { allow: 'POST' });
+  if (request.method !== 'POST') return json(405, { jsonrpc: '2.0', error: { code: -32000, message: `Method not allowed: POST JSON-RPC to ${url.pathname}` }, id: null }, { allow: 'POST' });
+  // Chat apps may send only Accept: application/json. Responses are plain JSON (enableJsonResponse), so accept both on the open route.
+  if (open) {
+    const accept = request.headers.get('accept') || '';
+    if (!(accept.includes('application/json') && accept.includes('text/event-stream'))) {
+      const headers = new Headers(request.headers);
+      headers.set('accept', 'application/json, text/event-stream');
+      request = new Request(request, { headers });
+    }
+  }
 
   const catalog = opts.catalog || new Catalog({ diskCache: false, baseUrl: env.COOKWALA_BASE_URL, offline: false, lang: 'en' });
   const { server } = createServer({ catalog, version: opts.version });
