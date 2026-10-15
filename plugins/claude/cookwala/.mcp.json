@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "cookwala": {
+      "type": "http",
+      "url": "https://mcp.cookwala.ai/open/mcp"
+    }
+  }
+}

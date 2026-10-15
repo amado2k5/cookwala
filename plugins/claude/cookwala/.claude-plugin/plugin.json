@@ -1,0 +1,15 @@
+{
+  "name": "cookwala",
+  "displayName": "Cookwala",
+  "version": "1.0.0",
+  "description": "Find, scale and plan recipes from the open Cookwala catalog. Search by cuisine, ingredient, nutrition, cost, cooking method, time, diet, allergen and language. Read-only: it never starts a kitchen device.",
+  "author": {
+    "name": "Cookwala",
+    "email": "eat@cookwala.ai",
+    "url": "https://cookwala.ai"
+  },
+  "homepage": "https://cookwala.ai/assistants/",
+  "repository": "https://github.com/amado2k5/cookwala",
+  "license": "Apache-2.0",
+  "keywords": ["recipes", "cooking", "nutrition", "diet", "allergens", "meal planning"]
+}

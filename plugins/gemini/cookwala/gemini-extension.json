@@ -1,0 +1,15 @@
+{
+  "name": "cookwala",
+  "version": "0.1.0",
+  "description": "Search recipes, scale ingredients, plan meals and explore the Cookwala cooking standard. Read-only.",
+  "contextFileName": "GEMINI.md",
+  "mcpServers": {
+    "cookwala": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@cookwala/mcp"
+      ]
+    }
+  }
+}

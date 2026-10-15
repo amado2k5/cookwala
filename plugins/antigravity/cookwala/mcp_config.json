@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "cookwala": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@cookwala/mcp"
+      ]
+    }
+  }
+}
