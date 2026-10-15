@@ -18,7 +18,7 @@ import urllib.request
 
 BASE_URL = 'https://cookwala.ai'
 HOST = 'cookwala.ai'
-KEY = '2d4d91dfaa0ad91c77bf2055b28ba4ed'
+KEY = 'f8d2c7b887b54e7fad47c1177f013a43'
 ENDPOINT = 'https://api.indexnow.org/indexnow'
 MANIFEST = 'indexnow-manifest.json'
 BATCH = 10000  # protocol limit per request
