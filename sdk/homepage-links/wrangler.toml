@@ -1,0 +1,8 @@
+# Adds Link headers to https://cookwala.ai/ (RFC 8288). Deploy: npx wrangler deploy -c sdk/homepage-links/wrangler.toml
+name = "cookwala-homepage-links"
+main = "index.js"
+compatibility_date = "2025-09-01"
+workers_dev = false
+
+# The route covers only the homepage; every other path is served by the origin untouched.
+routes = [{ pattern = "cookwala.ai/", zone_name = "cookwala.ai" }]
