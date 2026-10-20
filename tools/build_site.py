@@ -674,7 +674,8 @@ class Builder:
                 items = ''.join(f'<url><loc>{html.escape(BASE_URL + p)}</loc></url>' for p in paths[n:n + 40000])
                 (self.out / name).write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{items}</urlset>', encoding='utf-8')
         (self.out / 'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join(f'<sitemap><loc>{BASE_URL}/{n}</loc><lastmod>{today}</lastmod></sitemap>' for n in names) + '</sitemapindex>', encoding='utf-8')
-        (self.out / 'robots.txt').write_text(f'User-agent: *\nAllow: /\nSitemap: {BASE_URL}/sitemap.xml\n', encoding='utf-8')
+        # Content Signals (https://contentsignals.org/): no AI training on the site; search and AI input are welcome
+        (self.out / 'robots.txt').write_text(f'User-agent: *\nAllow: /\nContent-Signal: ai-train=no, search=yes, ai-input=yes\nSitemap: {BASE_URL}/sitemap.xml\n', encoding='utf-8')
 
     def run(self):
         self.build_pages(); self.build_for_pages(); self.build_docs(); self.build_whitepaper(); self.build_essays()
