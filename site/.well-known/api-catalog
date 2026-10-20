@@ -1,0 +1,40 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://mcp.cookwala.ai/api/",
+      "service-desc": [
+        {
+          "href": "https://mcp.cookwala.ai/api/openapi.json",
+          "type": "application/vnd.oai.openapi+json;version=3.1"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://cookwala.ai/docs/REST-API/",
+          "type": "text/html"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://mcp.cookwala.ai/health",
+          "type": "application/json"
+        }
+      ]
+    },
+    {
+      "anchor": "https://cookwala.ai/v1/",
+      "service-desc": [
+        {
+          "href": "https://cookwala.ai/v1/api/index.openapi.yaml",
+          "type": "application/yaml"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://cookwala.ai/docs/CORE/",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}
